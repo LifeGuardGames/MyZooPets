@@ -41,11 +41,11 @@ public class GameMaster : MiniPet {
 		}
 	}
 	private void giveOutMission(){
-		//WellapadMissionController.Instance.UnlockTask(PickMinigameMission());
-		WellapadMissionController.Instance.UnlockTask("NinjaS");
+		WellapadMissionController.Instance.UnlockTask(PickMinigameMission());
+		//WellapadMissionController.Instance.UnlockTask("NinjaS");
 		WellapadMissionController.Instance.needMission = true;
-		//WellapadMissionController.Instance.AddMission(PickMinigameMission());
-		WellapadMissionController.Instance.AddMission("NinjaS");
+		WellapadMissionController.Instance.AddMission(PickMinigameMission());
+		//WellapadMissionController.Instance.AddMission("NinjaS");
 	}
 
 	private string PickMinigameMission(){
@@ -101,6 +101,12 @@ public class GameMaster : MiniPet {
 				break;
 			}
 		}
+<<<<<<< HEAD
 		return null;
+=======
+		else{
+			return "NinjaS";
+		}
+>>>>>>> origin/development
 	}
 }

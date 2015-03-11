@@ -17,6 +17,7 @@ public class RetentionPet : MiniPet {
 	}
 	public override void FinishEating(){
 		base.FinishEating();
+
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.ShowTipMsg();
@@ -27,6 +28,7 @@ public class RetentionPet : MiniPet {
 
 	private void turnInMission(){
 		if(isFinishEating){
+		
 		MiniPetManager.Instance.IncreaseXP(id);
 		MutableDataMission mission = WellapadMissionController.Instance.GetMission("Critical");
 		
@@ -43,6 +45,9 @@ public class RetentionPet : MiniPet {
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Critical");
+		Hashtable has = new Hashtable();
+		has[0] = "Critical";
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
 	}
 
 

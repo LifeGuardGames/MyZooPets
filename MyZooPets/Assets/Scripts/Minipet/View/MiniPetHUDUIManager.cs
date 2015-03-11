@@ -70,7 +70,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		case MiniPetTypes.Rentention:
 			MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
 			// Get data from hash and put them in here
-			controller.Initialize("");
+			controller.Initialize(hash[0].ToString());
 			break;
 		case MiniPetTypes.GameMaster:
 			MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
@@ -99,6 +99,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		RoomArrowsUIManager.Instance.HidePanel();
 		PetAnimationManager.Instance.DisableVisibility();
 		PetAudioManager.Instance.EnableSound = false;
+		contentParent.SetActive(true);
 	}
 
 	protected override void _CloseUI(){
@@ -120,7 +121,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		if(ticklingTutorialObject != null)
 			Destroy(ticklingTutorialObject);
-
+		contentParent.SetActive(false);
 		CameraManager.Instance.ZoomOutMove();
 	}
 	#endregion

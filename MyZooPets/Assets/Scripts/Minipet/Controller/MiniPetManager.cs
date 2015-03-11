@@ -394,6 +394,10 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 							MiniPetTable.Add(miniPetID, goMiniPet);
 							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 						}
+					else{
+						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID,pos);
+						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID,partitionNumber);
+					}
 				}
 			else{
 				if (DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != new Vector3 (0,0,0)){

@@ -239,6 +239,7 @@ public class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
 		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
 		MiniPetHUDUIManager.Instance.OpenUI();
+
 		
 		//if pet not finish eating yet. finish eating logic
 		if(!isFinishEating){

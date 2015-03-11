@@ -100,13 +100,9 @@ public class GameMaster : MiniPet {
 				return "RunnerC";
 				break;
 			}
-		}
-<<<<<<< HEAD
-		return null;
-=======
+		}		
 		else{
 			return "NinjaS";
 		}
->>>>>>> origin/development
 	}
 }

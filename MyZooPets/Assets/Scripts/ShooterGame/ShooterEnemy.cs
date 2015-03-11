@@ -2,10 +2,11 @@ using UnityEngine;
 using System.Collections;
 
 public class ShooterEnemy : MonoBehaviour{
-	public float speed;
+	public float moveDuration = 2f;
 	public int scoreVal;
 	public int damage;
 	public int health;
+	public Animator animator;
 	protected GameObject player;
 
 	// Use this for initialization

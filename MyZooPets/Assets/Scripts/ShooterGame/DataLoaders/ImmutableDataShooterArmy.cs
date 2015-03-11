@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class ImmutableDataTriggerArmy{
+public class ImmutableDataShooterArmy{
 
 	private string id;
 	public string Id{
@@ -23,7 +23,7 @@ public class ImmutableDataTriggerArmy{
 		get{ return type;}
 	}
 
-	public ImmutableDataTriggerArmy(string id, IXMLNode xmlNode, string error){
+	public ImmutableDataShooterArmy(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.id = id;
 		name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);

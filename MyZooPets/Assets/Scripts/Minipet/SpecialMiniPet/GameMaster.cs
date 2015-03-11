@@ -49,7 +49,7 @@ public class GameMaster : MiniPet {
 	}
 
 	private string PickMinigameMission(){
-		if(minigameType = MinigameTypes.TriggerNinja){
+		if(minigameType == MinigameTypes.TriggerNinja){
 			int rand = Random.Range (0,2);
 			switch(rand){
 			case 0:
@@ -64,13 +64,13 @@ public class GameMaster : MiniPet {
 			}
 		}
 
-		if(minigameType = MinigameTypes.Memory){
+		if(minigameType == MinigameTypes.Memory){
 			return "MemoryS";
 		}
-		if(minigameType = MinigameTypes.Clinic){
+		if(minigameType == MinigameTypes.Clinic){
 			return "ClinicS";
 		}
-		if(minigameType = MinigameTypes.Shooter){
+		if(minigameType == MinigameTypes.Shooter){
 			int rand = Random.Range (0,2);
 			switch(rand){
 			case 0:
@@ -84,7 +84,7 @@ public class GameMaster : MiniPet {
 				break;
 			}
 		}
-		if(minigameType = MinigameTypes.Runner){
+		if(minigameType == MinigameTypes.Runner){
 			int rand = Random.Range (0,2);
 			switch(rand){
 			case 0:
@@ -101,5 +101,6 @@ public class GameMaster : MiniPet {
 				break;
 			}
 		}
+		return null;
 	}
 }

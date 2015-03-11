@@ -9,9 +9,9 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public float spawnTime;
 
 	public List<GameObject> posList;	//list of positions to spawn enemy from
-	public List<ImmutableDataTriggerArmy> spawningList;
 	public GameObject bulletPrefab;
 	public GameObject powerUpPrefab;
+	private List<ImmutableDataShooterArmy> spawningList;
 			
 	// Use this for initialization
 	void Start(){
@@ -42,7 +42,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		StopCoroutine("SpawnEnemies");
 	}
 
-	public void SpawnTriggers(){
+	public void SpawnTriggers(List<ImmutableDataShooterArmy> listToSpawn){
+		spawningList = listToSpawn;
 		StartCoroutine("SpawnEnemies");
 	}
 

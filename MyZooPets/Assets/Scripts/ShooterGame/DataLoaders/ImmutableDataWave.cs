@@ -8,39 +8,38 @@ public class ImmutableDataWave {
 	get{ return waveID;}
 	}
 
-	private string numOfEnemies;
-	public string NumOfEnemies{
-		get{ return numOfEnemies;}
+	private int totalEnemies;
+	public int TotalEnemies{
+		get{ return totalEnemies;}
 	}
 
-	private string begEnemies;
-	public string BegEnemies{
-		get{ return begEnemies;}
+	private int begEnemiesCount;
+	public int BegEnemiesCount{
+		get{ return begEnemiesCount;}
 	}
 
-	private string mediumEnemies;
-	public string MediumEnemies{
-		get{ return mediumEnemies;}
+	private int mediumEnemiesCount;
+	public int MediumEnemiesCount{
+		get{ return mediumEnemiesCount;}
 	}
 
-	private string hardEnemies;
-	public string HardEnemies{
-		get{ return hardEnemies;}
+	private int hardEnemiesCount;
+	public int HardEnemiesCount{
+		get{ return hardEnemiesCount;}
 	}
 
-	private string powerUp;
-	public string PowerUp{
-		get{ return powerUp;}
+	private int powerUpCount;
+	public int PowerUpCount{
+		get{ return powerUpCount;}
 	}
 
 	public ImmutableDataWave(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.waveID = id;
-		//wave = XMLUtils.GetString(hashElements["Wave"] as IXMLNode, null, error);
-		numOfEnemies = XMLUtils.GetString(hashElements["NumOfEnemies"] as IXMLNode, null, error);
-		begEnemies = XMLUtils.GetString(hashElements["BasicEnemies"] as IXMLNode, null, error);
-		mediumEnemies = XMLUtils.GetString(hashElements["MediumEnemies"] as IXMLNode, null, error);
-		hardEnemies = XMLUtils.GetString(hashElements["HardEnemies"] as IXMLNode, null, error);
-		powerUp = XMLUtils.GetString(hashElements["PowerUps"] as IXMLNode, null, error);
+		totalEnemies = XMLUtils.GetInt(hashElements["NumOfEnemies"] as IXMLNode, 0, error);
+		begEnemiesCount = XMLUtils.GetInt(hashElements["BasicEnemies"] as IXMLNode, 0, error);
+		mediumEnemiesCount = XMLUtils.GetInt(hashElements["MediumEnemies"] as IXMLNode, 0, error);
+		hardEnemiesCount = XMLUtils.GetInt(hashElements["HardEnemies"] as IXMLNode, 0, error);
+		powerUpCount = XMLUtils.GetInt(hashElements["PowerUps"] as IXMLNode, 0, error);
 	}
 }

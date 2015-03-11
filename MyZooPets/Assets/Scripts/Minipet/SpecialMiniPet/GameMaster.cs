@@ -101,8 +101,12 @@ public class GameMaster : MiniPet {
 				break;
 			}
 		}
+<<<<<<< HEAD
+		return null;
+=======
 		else{
 			return "NinjaS";
 		}
+>>>>>>> origin/development
 	}
 }

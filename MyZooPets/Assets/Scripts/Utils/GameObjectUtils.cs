@@ -25,9 +25,6 @@ public static class GameObjectUtils{
 		
 		if(go != null){
 			Transform t = go.transform;
-			t.localPosition = Vector3.zero;
-			t.localRotation = Quaternion.identity;
-			t.localScale = Vector3.one;
 
 			if(parent != null){
 				t.parent = parent.transform;
@@ -36,6 +33,10 @@ public static class GameObjectUtils{
 			else{
 				t.parent = null;	// Assign to root
 			}
+
+			t.localPosition = Vector3.zero;
+			t.localRotation = Quaternion.identity;
+			t.localScale = Vector3.one;
 		}
 		return go;
 	}

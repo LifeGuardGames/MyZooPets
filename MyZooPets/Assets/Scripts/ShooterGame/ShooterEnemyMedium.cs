@@ -7,18 +7,19 @@ public class ShooterEnemyMedium : ShooterEnemy{
 	
 	// Use this for initialization
 	void Start(){
+		animator.SetBool("IsSpitMode", false);
 		skyPos = GameObject.Find("Upper");
 		bottom = GameObject.Find("Lower");
 		if(Random.Range(0, 2) == 0){
-			LeanTween.move(this.gameObject, skyPos.transform.position, speed).setOnComplete(MoveAgain);
+			LeanTween.move(this.gameObject, skyPos.transform.position, moveDuration).setOnComplete(MoveAgain);
 		}
 		else{
-			LeanTween.move(this.gameObject, bottom.transform.position, speed).setOnComplete(MoveAgain);
+			LeanTween.move(this.gameObject, bottom.transform.position, moveDuration).setOnComplete(MoveAgain);
 		}
 	}
 
 	// moves once movement is complete makes a zigzag
 	void MoveAgain(){
-		LeanTween.move(this.gameObject, player.transform.position, speed);
+		LeanTween.move(this.gameObject, player.transform.position, moveDuration);
 	}
 }

@@ -23,13 +23,19 @@ public static class GameObjectUtils{
 	static public GameObject AddChild(GameObject parent, GameObject prefab){
 		GameObject go = GameObject.Instantiate(prefab) as GameObject;
 		
-		if(go != null && parent != null){
+		if(go != null){
 			Transform t = go.transform;
-			t.parent = parent.transform;
 			t.localPosition = Vector3.zero;
 			t.localRotation = Quaternion.identity;
 			t.localScale = Vector3.one;
-			go.layer = parent.layer;
+
+			if(parent != null){
+				t.parent = parent.transform;
+				go.layer = parent.layer;
+			}
+			else{
+				t.parent = null;	// Assign to root
+			}
 		}
 		return go;
 	}

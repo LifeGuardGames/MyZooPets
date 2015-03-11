@@ -3,32 +3,31 @@ using System.Collections;
 
 public class ImmutableDataTriggerArmy{
 
-	private string mober;
-	public string Mober{
-		get {return mober;}
+	private string id;
+	public string Id{
+		get {return id;}
 	}
+
 	private string name;
 	public string Name{
 		get{ return name;}
 	}
-	private string spriteName;
-	public string SpriteName{
-		get{ return spriteName;}
+
+	private string prefabName;
+	public string PrefabName{
+		get{ return prefabName;}
 	}
-	private string ai;
-	public string AI{
-		get{ return ai;}
+
+	private string type;
+	public string Type{
+		get{ return type;}
 	}
-	private string displayKey;
-	public string DisplayKey{
-		get{ return displayKey;}
-	}
+
 	public ImmutableDataTriggerArmy(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
-		this.mober = id;
+		this.id = id;
 		name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);
-		spriteName = XMLUtils.GetString(hashElements["SpriteName"] as IXMLNode, null, error);
-		ai = XMLUtils.GetString(hashElements["AI"] as IXMLNode, null, error);
-		displayKey = XMLUtils.GetString(hashElements["DisplayKey"] as IXMLNode, null, error);
+		prefabName = XMLUtils.GetString(hashElements["PrefabName"] as IXMLNode, null, error);
+		type = XMLUtils.GetString(hashElements["Type"] as IXMLNode, null, error);
 	}
 }

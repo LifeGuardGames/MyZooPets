@@ -73,6 +73,29 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
+	public void showChallengeMsg(MinigameTypes type){
+		Hashtable msgOption = new Hashtable();
+		switch(type){
+		case MinigameTypes.TriggerNinja:
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_NINJA"));
+			break;
+		case MinigameTypes.Clinic:
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_DOC"));
+			break;
+		case MinigameTypes.Memory:
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_MEMORY"));
+			break;
+		case MinigameTypes.Runner:
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_RUNNER"));
+			break;
+		case MinigameTypes.Shooter:
+			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_SHOOTER"));
+			break;
+		}
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
+	}
+
 	public void ShowFoodPreferenceMsg(string itemTextureName){
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.AtlasName, "ItemAtlas");

@@ -49,26 +49,57 @@ public class GameMaster : MiniPet {
 	}
 
 	private string PickMinigameMission(){
-		int rand = Random.Range (0,3);
-		switch (minigameType){
-		case MinigameTypes.TriggerNinja:
-			return "NinjaS";
-			break;
-		case MinigameTypes.Memory:
-			return "Memory";
-			break;
-		case MinigameTypes.Clinic:
-			return "Clinic";
-			break;
-		case MinigameTypes.Shooter:
-			return "Shooter";
-			break;
-		case MinigameTypes.Runner:
-			return "Runner";
-			break;
-		default:
-			return "Ninja";
-			break;
+		if(minigameType = MinigameTypes.TriggerNinja){
+			int rand = Random.Range (0,2);
+			switch(rand){
+			case 0:
+				return "NinjaS";
+				break;
+			case 1:
+				return "NinjaC";
+				break;
+			default:
+				return "NinjaC";
+				break;
+			}
+		}
+
+		if(minigameType = MinigameTypes.Memory){
+			return "MemoryS";
+		}
+		if(minigameType = MinigameTypes.Clinic){
+			return "ClinicS";
+		}
+		if(minigameType = MinigameTypes.Shooter){
+			int rand = Random.Range (0,2);
+			switch(rand){
+			case 0:
+				return "ShooterS";
+				break;
+			case 1:
+				return "ShooterH";
+				break;
+			default:
+				return "ShooterS";
+				break;
+			}
+		}
+		if(minigameType = MinigameTypes.Runner){
+			int rand = Random.Range (0,2);
+			switch(rand){
+			case 0:
+				return "RunnerS";
+				break;
+			case 1:
+				return "RunnerC";
+				break;
+			case 2:
+				return "RunnerD";
+				break;
+			default:
+				return "RunnerC";
+				break;
+			}
 		}
 	}
 }

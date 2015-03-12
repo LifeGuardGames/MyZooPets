@@ -18,6 +18,10 @@ public class ShooterEnemy : MonoBehaviour{
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 	}
 
+	void OnDestroy(){
+		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
+	}
+
 	// Update is called once per frame
 	void Update(){
 		// work around for enemies who spawn during a state change they seem to miss the event call when this happens
@@ -27,10 +31,6 @@ public class ShooterEnemy : MonoBehaviour{
 		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.GameOver){
 			StartCoroutine(DestroyEnemy());
 		}
-	}
-	
-	private void OnDisable(){
-		LeanTween.cancel(this.gameObject);
 	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){
@@ -43,9 +43,7 @@ public class ShooterEnemy : MonoBehaviour{
 			LeanTween.pause(this.gameObject);
 			break;
 		case MinigameStates.Playing:
-			if(this.gameObject != null){
-				LeanTween.resume(this.gameObject);
-			}
+			LeanTween.resume(this.gameObject);
 			break;
 		case MinigameStates.Restarting:
 			StartCoroutine(DestroyEnemy());

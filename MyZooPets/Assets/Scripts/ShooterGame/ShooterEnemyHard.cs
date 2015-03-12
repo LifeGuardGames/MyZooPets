@@ -49,4 +49,10 @@ public class ShooterEnemyHard:ShooterEnemy{
 		yield return new WaitForSeconds(1.0f);
 		AndAgain();
 	}
+
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "sdfsf")){
+//			ShootSmogBall();
+//		}
+//	}
 }

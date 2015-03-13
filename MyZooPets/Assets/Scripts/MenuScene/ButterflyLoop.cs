@@ -17,10 +17,10 @@ public class ButterflyLoop : MonoBehaviour {
 	public float startingY = 12f;
 
 	private bool flapToggle = true;
-	private SpriteRenderer renderer;
+	private SpriteRenderer spriteRenderer;
 
 	void Start(){
-		renderer = GetComponent<SpriteRenderer>();
+		spriteRenderer = GetComponent<SpriteRenderer>();
 		InvokeRepeating("FlapToggle", 0f, flapSpeed);
 		StartMovement();
 	}
@@ -31,7 +31,7 @@ public class ButterflyLoop : MonoBehaviour {
 	
 	private void FlapToggle(){
 		flapToggle = !flapToggle;
-		renderer.sprite = flapToggle ? butterflyUpSprite : butterflyDownSprite;
+		spriteRenderer.sprite = flapToggle ? butterflyUpSprite : butterflyDownSprite;
 	}
 
 	private void StartMovement(){

@@ -7,11 +7,6 @@ using System.Collections;
 /// This is the replacement for decoration nodes in V1.3.4 update
 /// This is the zone that the inventory will be dragged and dropped on.
 /// </summary>
-
-public enum DecorationZoneState{
-	Neutral, Inactive, Active, Hover
-}
-
 public abstract class DecorationZone : MonoBehaviour {
 
 	// what type of decorations can go on this node?
@@ -32,9 +27,7 @@ public abstract class DecorationZone : MonoBehaviour {
 
 	public Animation activeHoverAnimation;
 
-//	private bool isHovered = false;
 	private bool isAnimationPlaying = false;
-	private DecorationZoneState state;
 	private string nodeID;
 	private string placedDecoID = string.Empty;
 
@@ -233,8 +226,6 @@ public abstract class DecorationZone : MonoBehaviour {
 	private void SetState(string nodeTypeName){
 		// Neutral state, play idle state
 		if(nodeTypeName == null){
-			state = DecorationZoneState.Neutral;
-
 			isAnimationPlaying = false;
 			if(!isAnimationPlaying){
 				animation.Stop();
@@ -246,8 +237,6 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 		// Wrong state, play the inactive state
 		else if(nodeTypeName != nodeType.ToString()){
-			state = DecorationZoneState.Inactive;
-
 			isAnimationPlaying = false;
 			if(!isAnimationPlaying){
 				animation.Stop();
@@ -258,8 +247,6 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 		// Correct state, play the active state
 		else{
-			state = DecorationZoneState.Active;
-
 			animation.Play();
 			isAnimationPlaying = true;
 

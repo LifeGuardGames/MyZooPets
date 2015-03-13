@@ -20,7 +20,7 @@ public static class GameObjectUtils{
 	/// <summary>
 	/// Instantiate an object and add it to the specified parent.
 	/// </summary>
-	static public GameObject AddChild(GameObject parent, GameObject prefab){
+	static public GameObject AddChild(GameObject parent, GameObject prefab, bool isPreserveLayer = false){
 		GameObject go = GameObject.Instantiate(prefab) as GameObject;
 		
 		if(go != null){
@@ -28,7 +28,10 @@ public static class GameObjectUtils{
 
 			if(parent != null){
 				t.parent = parent.transform;
-				go.layer = parent.layer;
+
+				if(!isPreserveLayer){
+					go.layer = parent.layer;
+				}
 			}
 			else{
 				t.parent = null;	// Assign to root

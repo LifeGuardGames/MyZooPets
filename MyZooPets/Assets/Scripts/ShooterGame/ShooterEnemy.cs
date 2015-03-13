@@ -1,18 +1,25 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof(Collider2D))]
 public class ShooterEnemy : MonoBehaviour{
 	public float moveDuration = 2f;
 	public int scoreVal;
 	public int damage;
 	public int health;
 	public Animator animator;
+	public ParticleSystem particle;
 	protected GameObject player;
+
 
 	// Use this for initialization
 	void Awake(){
 		player = GameObject.FindWithTag("Player");
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
+	}
+
+	void OnDestroy(){
+		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
 	}
 
 	// Update is called once per frame
@@ -25,10 +32,6 @@ public class ShooterEnemy : MonoBehaviour{
 			StartCoroutine(DestroyEnemy());
 		}
 	}
-	
-	private void OnDisable(){
-		LeanTween.cancel(this.gameObject);
-	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){
 		MinigameStates eState = args.GetGameState();
@@ -40,9 +43,7 @@ public class ShooterEnemy : MonoBehaviour{
 			LeanTween.pause(this.gameObject);
 			break;
 		case MinigameStates.Playing:
-			if(this.gameObject != null){
 			LeanTween.resume(this.gameObject);
-			}
 			break;
 		case MinigameStates.Restarting:
 			StartCoroutine(DestroyEnemy());
@@ -68,13 +69,22 @@ public class ShooterEnemy : MonoBehaviour{
 		}
 	}
 
-	// this is a corutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
+	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
+		collider2D.enabled = false;
 		LeanTween.cancel(this.gameObject);
 		ShooterGameEnemyController.Instance.enemiesInWave--;
 		ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
-		Destroy(this.gameObject);
+		
+		// Visual changes
+		animator.gameObject.SetActive(false);
+		if(particle != null){
+			particle.Stop();
+		}
+
+		// Wait until the particles has finished clearing before you destroy
+		Destroy(this.gameObject, 2f);
 	}
 }

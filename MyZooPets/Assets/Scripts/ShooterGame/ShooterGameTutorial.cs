@@ -32,7 +32,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		case 2:
 			ShooterGameEnemyController.Instance.proceed -=MoveAlong;
 			ShooterInhalerManager.Instance.proceed +=MoveAlong;
-			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTut");
+			GameObject UseInhaler = (GameObject)Resources.Load("ShooterInhalerTutorial");
 			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
 			tutorialFinger =  (GameObject)Resources.Load("ShooterPressTut");
 			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
@@ -52,7 +52,7 @@ public class ShooterGameTutorial : MinigameTutorial {
 		case 4:
 			ShooterGameEnemyController.Instance.proceed -=MoveAlong;
 			ShooterInhalerManager.Instance.proceed +=MoveAlong;
-			UseInhaler = (GameObject)Resources.Load("ShooterInhalerTuT");
+			UseInhaler = (GameObject)Resources.Load("ShooterInhalerTutorial");
 			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-Center"),UseInhaler);
 			tutorialFinger =  (GameObject)Resources.Load("ShooterPressTut");
 			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);

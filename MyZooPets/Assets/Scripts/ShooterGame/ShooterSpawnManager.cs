@@ -60,7 +60,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			//so while one of the first waves has only one hard enemy in it it can spawn more than one
 			int randomSpawnIndex = Random.Range(0, spawningList.Count);
 			GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
-			GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab);
+			GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
 		}
 	}
 }

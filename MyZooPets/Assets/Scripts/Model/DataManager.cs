@@ -191,21 +191,6 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
-	void OnLoadedLevel()
-	{
-		if(Application.loadedLevelName == "ZoneYard"){
-			if(GameData.MiniPetLocations.GetPartition("MiniPet1") == 5){
-				ImmutableDataMiniPet data = DataLoaderMiniPet.GetData("MiniPet1");
-				GameObject goMiniPet;
-				GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
-				goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc("MiniPet1"), Quaternion.identity) as GameObject;
-				goMiniPet.name = prefab.name;
-				goMiniPet.GetComponent<MiniPet>().Init(data);
-				// Add the pet into the dictionary to keep track
-
-			}
-		}
-	}
 	
 	//Serialize the data whenever the game is paused
 	void OnApplicationPause(bool paused){

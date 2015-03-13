@@ -46,7 +46,7 @@ public class RetentionPet : MiniPet {
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Critical");
 		Hashtable has = new Hashtable();
-		has[0] = "Critical";
+		has[0] = "Do Daily Missions";
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
 	}
 

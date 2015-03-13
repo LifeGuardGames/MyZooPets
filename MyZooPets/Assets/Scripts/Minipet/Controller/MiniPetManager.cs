@@ -367,6 +367,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 //		}
 //		else 
 		if (data.Type == MiniPetTypes.Rentention){
+			if(Application.loadedLevelName == SceneUtils.BEDROOM){
 			Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
 			int partitionNumber  = 0;
 			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
@@ -375,6 +376,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.GetComponent<RetentionPet>().Init(data);
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
+			}
 		}
 		else if (data.Type == MiniPetTypes.GameMaster){
 			if(switchSpawn){
@@ -399,6 +401,23 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID,partitionNumber);
 					}
 				}
+				}
+			else if(Application.loadedLevelName == SceneUtils.YARD){
+				if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 || DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 6){
+					goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
+					goMiniPet.name = prefab.name;
+					if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 ){
+						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Runner;
+					}
+					else{
+						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Shooter;
+					}
+					goMiniPet.GetComponent<MiniPet>().Init(data);
+					MiniPetTable.Add(miniPetID, goMiniPet);
+					
+					// Add the pet into the dictionary to keep track
+				}
+			}
 			else{
 				if (DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != new Vector3 (0,0,0)){
 					goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
@@ -408,12 +427,12 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 					MiniPetTable.Add(miniPetID, goMiniPet);
 					}
 				}
-			}
 		}
 		else if (data.Type == MiniPetTypes.Merchant){
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGate == null || (latestGate.Partition - 1 == 2)){
 				if(switchSpawn){
+					if(Application.loadedLevelName == SceneUtils.BEDROOM){
 					if(UnityEngine.Random.Range (0,8) == 0){
 						LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 						int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -431,12 +450,15 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 						DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 						}
 					}
+					}
 				else{
+					if(Application.loadedLevelName == SceneUtils.BEDROOM){
 					goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
 					goMiniPet.name = prefab.name;
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					// Add the pet into the dictionary to keep track
 					MiniPetTable.Add(miniPetID, goMiniPet);
+					}
 				}
 			}
 		}

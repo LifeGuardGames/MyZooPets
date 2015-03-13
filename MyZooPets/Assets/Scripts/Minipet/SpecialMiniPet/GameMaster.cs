@@ -10,8 +10,6 @@ public class GameMaster : MiniPet {
 		//temp
 		timesBeatened = PlayerPrefs.GetInt("TimesBeatened");
 		name = "GameMaster";
-		Debug.Log(minigameType);
-		
 	}
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
@@ -21,7 +19,7 @@ public class GameMaster : MiniPet {
 		base.FinishEating();
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
-		miniPetSpeechAI.ShowTipMsg();
+		miniPetSpeechAI.showChallengeMsg(minigameType);
 		giveOutMission();
 	}
 	
@@ -45,6 +43,9 @@ public class GameMaster : MiniPet {
 		//WellapadMissionController.Instance.UnlockTask("NinjaS");
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission(PickMinigameMission());
+		Hashtable has = new Hashtable();
+		has[0] = minigameType.ToString() + " game";
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
 		//WellapadMissionController.Instance.AddMission("NinjaS");
 	}
 

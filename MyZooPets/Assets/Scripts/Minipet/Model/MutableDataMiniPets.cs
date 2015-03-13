@@ -33,7 +33,7 @@ public class MutableDataMiniPets{
 	/// key: MiniPetID, Value: Status
 	/// if miniPetID is not in this dictionary then it's not unlocked yet
 	/// </summary>
-	public Dictionary<string, Status> MiniPetProgress {get; set;} 
+	public Dictionary<string, Status> MiniPetProgress {get; set;}
 	//public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
 	//public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
 

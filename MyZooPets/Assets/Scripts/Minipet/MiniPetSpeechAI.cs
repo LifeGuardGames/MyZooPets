@@ -75,7 +75,6 @@ public class MiniPetSpeechAI : MonoBehaviour{
 
 	public void showChallengeMsg(MinigameTypes type){
 		Hashtable msgOption = new Hashtable();
-		Debug.Log(type.ToString());
 		switch(type){
 		case MinigameTypes.TriggerNinja:
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_NINJA"));

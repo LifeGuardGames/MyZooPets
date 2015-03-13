@@ -383,11 +383,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 				if(latestGate == null || (latestGate.Partition - 1 == 1)){
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
-					Debug.Log(type.ToString());
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 					int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 					Vector3 pos = locationTuple.Item1;
-					Debug.Log(partitionNumber);
 						if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 							goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 							goMiniPet.transform.localPosition = pos;
@@ -401,21 +399,17 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 					else{
 						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID,pos);
 						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID,partitionNumber);
-						Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID));
 					}
 				}
 				}
-			if(Application.loadedLevelName == SceneUtils.YARD){
+			else if(Application.loadedLevelName == SceneUtils.YARD){
 				if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 || DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 6){
-					Debug.Log(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID).ToString());
 					goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
 					goMiniPet.name = prefab.name;
 					if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 ){
-						Debug.Log("ikserugbis");
 						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Runner;
 					}
 					else{
-						Debug.Log("suegbfa");
 						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Shooter;
 					}
 					goMiniPet.GetComponent<MiniPet>().Init(data);

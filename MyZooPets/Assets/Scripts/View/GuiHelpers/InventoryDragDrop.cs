@@ -27,6 +27,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	private Vector3 savedLocalPosition;
 	private UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
 
+
 	/// <summary>
 	/// Update the table, if there is one.
 	/// </summary>
@@ -39,6 +40,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	//Update the position of the Grid when the item has been destroyed
 	void OnDestroy(){
 		UpdateGrid();
+		RewardManager.OnAllRewardsDone += reAddClick;
 	}
 
 	public void reAddClick(object sender, EventArgs args){

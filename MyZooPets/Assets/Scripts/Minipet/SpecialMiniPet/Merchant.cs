@@ -1,20 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Merchant : MiniPet {
 
 	private int timesVisited = 0;
 	private GameObject blackStoreButton;
 	public int itemsInList = 0;
+	private List<string> items;
 
 	void Awake(){
 		//temp
+		items = new List<string>();
 		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "Merchant";
 		blackStoreButton = GameObject.Find("BlackStoreButton");
-		if(itemsInList != PlayerPrefs.GetInt("merchantItemCount")){
-		//reload the list
-		}
+		/*if(itemsInList != PlayerPrefs.GetInt("merchantItemCount")){
+			items = DataLoaderMerchantItem.getMerchantList();
+			itemsInList = items.Count;
+		}*/
 	}
 
 	public override void FinishEating(){

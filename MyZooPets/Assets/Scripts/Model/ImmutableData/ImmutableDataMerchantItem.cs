@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ImmutableDataMerchantItem  {
 
-	private string type;
+	/*private string type;
 	private string id;
 	private string itemId;
 
@@ -25,5 +25,5 @@ public class ImmutableDataMerchantItem  {
 		this.id = id;
 		type = XMLUtils.GetString(hashElements["Type"] as IXMLNode, null, error);
 		itemId = XMLUtils.GetString(hashElements["itemId"] as IXMLNode, null,error);
-	}
+	}*/
 }

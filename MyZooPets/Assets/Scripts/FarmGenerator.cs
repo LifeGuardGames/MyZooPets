@@ -9,7 +9,6 @@ using System.Collections;
 /// </summary>
 [RequireComponent (typeof (Collider))]
 public class FarmGenerator : MonoBehaviour {
-	public int level;
 	public float capacity;
 	public float current = 0;
 	public float ratePerHour;
@@ -17,6 +16,7 @@ public class FarmGenerator : MonoBehaviour {
 	public float allowTapThreshold; // Amount in current when you are allowed to tap the collider
 
 	public GameObject buttonParent;
+	public Animation clickAnimation;
 
 	private bool isFull;
 	private TimeSpan lastTimeDurationAux;
@@ -62,6 +62,9 @@ public class FarmGenerator : MonoBehaviour {
 	}
 
 	public void ItemTapped(){
+		if(clickAnimation != null){
+			clickAnimation.Play();
+		}
 		if(current >= allowTapThreshold){
 			Debug.Log("spewing " + (int)current + " coins");
 			

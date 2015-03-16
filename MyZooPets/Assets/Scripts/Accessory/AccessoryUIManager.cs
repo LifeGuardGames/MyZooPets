@@ -76,6 +76,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
 		}
+		grid.Reposition();
 	}
 
 	protected override void OnDestroy(){

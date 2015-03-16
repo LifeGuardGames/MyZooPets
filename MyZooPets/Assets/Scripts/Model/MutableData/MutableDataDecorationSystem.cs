@@ -1,23 +1,26 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
 // DecorationSystemData
 // Save data script for the decoration system.
-// Mutable data.
 //---------------------------------------------------
 
 public class MutableDataDecorationSystem{
-    public Dictionary<string, string> PlacedDecorations {get; set;} // dictionary of placed decorations; Key: node ID, Value: item ID
+	// Dictionary of placed decorations - Key: node ID, Value: item ID
+    public Dictionary<string, string> PlacedDecorations {get; set;} 
 
-    //=======================Initialization==================
+	// Save refresh cycle types for farm decorations
+	public Dictionary<string, DateTime> FarmDecorationTimes {get; set;}
+
     public MutableDataDecorationSystem(){
         Init();    
     }
 
-    //Populate with dummy data
     private void Init(){
         PlacedDecorations = new Dictionary<string, string>();
+		FarmDecorationTimes = new Dictionary<string, DateTime>();
     }
 }

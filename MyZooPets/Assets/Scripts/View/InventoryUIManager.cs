@@ -139,17 +139,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	//Event listener. listening to when item is dragged out of the inventory on drop
 	//on something in the game
 	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-//		bool dropOnTarget = false;
-
-//		//delete tutorial GO if still alive
-//		if(fingerHintGO != null)
-//			Destroy(fingerHintGO);
 
 		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
 			currentDragDropItem = e.ParentTransform;
 
-			if(ItemDroppedOnTargetEvent != null)
+			if(ItemDroppedOnTargetEvent != null){
 				ItemDroppedOnTargetEvent(this, e);
+			}
 		}
 	}
 

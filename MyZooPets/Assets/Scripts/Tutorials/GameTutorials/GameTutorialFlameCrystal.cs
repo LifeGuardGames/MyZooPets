@@ -53,10 +53,9 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			                                                                    InterfaceAnchors.Center, 
 			                                                                    InterfaceAnchors.BottomRight);
 			fireButtonPosition.z = fireOrbFingerHint.transform.localPosition.z;
-			
-			Hashtable optional = new Hashtable();
-			optional.Add("repeat", 0);
-			LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 3f, optional);
+
+			LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 2f)
+				.setLoopClamp().setRepeat(-1).setEase(LeanTweenType.easeInOutQuad);
 		}
 		catch(NullReferenceException e){
 			Debug.LogError(e.Message);

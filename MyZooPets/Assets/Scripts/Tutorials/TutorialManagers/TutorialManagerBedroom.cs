@@ -104,7 +104,8 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
 		isQuestionaireCollected = true; // TODO remove this
 
-		if(PlayPeriodLogic.GetCurrentPlayPeriod() >= LastTutorial1DonePlayPeriod && isQuestionaireCollected){
+		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod && isQuestionaireCollected){
+			Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
 				// play the trigger tutorial

@@ -8,10 +8,9 @@ using System.Collections.Generic;
 /// Explain to user how to use fire orb and blow fire.
 /// </summary>
 public class GameTutorialFlame : GameTutorial{
-//	GameObject fireOrbFingerHint;
 
 	public GameTutorialFlame() : base(){		
-		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
+		FireMeter.OnMeterFilled += OnMeterFilled;					// set up callback for when the player fully charges their meter
 		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
 		PetAnimationManager.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	

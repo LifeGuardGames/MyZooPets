@@ -6,7 +6,7 @@ using System;
 /// Modified to work with UIDragPanelContents
 /// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 /// </summary>
-public class InventoryDragDrop : MonoBehaviour {
+public class InventoryDragDrop : MonoBehaviour{
 	public class InvDragDropArgs : EventArgs{
 		public bool IsValidTarget{get; set;}
 		public Transform ItemTransform{get; set;}
@@ -31,8 +31,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	/// <summary>
 	/// Update the table, if there is one.
 	/// </summary>
-	private void UpdateGrid ()
-	{
+	private void UpdateGrid(){
 		UIGrid grid = NGUITools.FindInParents<UIGrid>(mTrans.parent.gameObject);
 		if(grid != null) grid.repositionNow = true;
 	}
@@ -45,7 +44,7 @@ public class InventoryDragDrop : MonoBehaviour {
 
 	public void reAddClick(object sender, EventArgs args){
 		if(this.collider != null){
-		this.collider.enabled = true;
+			this.collider.enabled = true;
 		}
 	}
 
@@ -53,22 +52,21 @@ public class InventoryDragDrop : MonoBehaviour {
 	/// Drop the dragged object.
 	/// </summary>
 
-	private void Drop ()
-	{
+	private void Drop(){
 		if(!isScrolling && !isClickLock){	// Picked up drop
-
 			InvDragDropArgs args = new InvDragDropArgs();
 			args.IsValidTarget = false;
 			args.ItemTransform = gameObject.transform; 
 			args.ParentTransform = mParent;
 			args.TargetCollider = UICamera.lastHit.collider;
 
-
 			if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
 				args.IsValidTarget = false;
 			}
 			else{
-				if(OnItemDrop != null) OnItemDrop(this, args); //fire event!!
+				if(OnItemDrop != null){
+					OnItemDrop(this, args); //fire event!!
+				}
 			}
 			if(!args.IsValidTarget){
 				// No valid container under the mouse -- revert the item's parent
@@ -77,13 +75,14 @@ public class InventoryDragDrop : MonoBehaviour {
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
 				isClickLock = false;
 
-				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen())
+				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()){
 					PetAnimationManager.Instance.AbortFeeding();
-				else
+				}
+				else{
 					PetAnimationManager.Instance.AbortFeeding();
+				}
 			}
 			else{
-
 				mTrans.parent = mParent;	
 				gameObject.transform.localPosition = savedLocalPosition;		// Revert to original position
 				isClickLock = false;
@@ -99,10 +98,9 @@ public class InventoryDragDrop : MonoBehaviour {
 		else{
 			isScrolling = false;	// Done scrolling
 		}
-		
 	}
 
-	void Awake () { 
+	void Awake(){ 
 		mTrans = transform; 	
 	}
 
@@ -115,16 +113,13 @@ public class InventoryDragDrop : MonoBehaviour {
 	/// Start the drag event and perform the dragging.
 	/// </summary>
 
-	void OnDrag (Vector2 delta)
-	{
+	void OnDrag(Vector2 delta){
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
 			Drop();
 			return;
 		}
-		
-		if (enabled && UICamera.currentTouchID > -2)
-		{
-			if (!mIsDragging && !isScrolling &&
+		if(enabled && UICamera.currentTouchID > -2){
+			if(!mIsDragging && !isScrolling &&
 			    ((InventoryUIManager.Instance.IsInventoryScrollable() && delta.y > 0) ||	// If the delta has positive Y and scrollable, pick up
 			    (!InventoryUIManager.Instance.IsInventoryScrollable())))					// If not scrollable, just pick up
 			{
@@ -163,17 +158,17 @@ public class InventoryDragDrop : MonoBehaviour {
 
 				NGUITools.MarkParentAsChanged(gameObject);
 			}
-			else if(mIsDragging)
-			{
+			else if(mIsDragging){
 				// if item is being dragged and is not usable items play eat anticipation
 				string invItemID = this.gameObject.name;
 				InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 				if(invItem != null && invItem.ItemType != ItemType.Usables){
-
-					if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen())
+					if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()){
 						PetAnimationManager.Instance.WaitingToBeFed();
-					else
+					}
+					else{
 						PetAnimationManager.Instance.WaitingToBeFed();
+					}
 				}
 					
 
@@ -181,8 +176,9 @@ public class InventoryDragDrop : MonoBehaviour {
 				
 				mTrans.localPosition += newDelta;
 
-				if(OnItemDrag != null)
+				if(OnItemDrag != null){
 					OnItemDrag(this, EventArgs.Empty);
+				}
 			}
 			else{
 				isScrolling = true;
@@ -194,19 +190,18 @@ public class InventoryDragDrop : MonoBehaviour {
 	/// Start or stop the drag operation.
 	/// </summary>
 
-	void OnPress (bool isPressed)
-	{
-		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)) return;
+	void OnPress(bool isPressed){
+		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
+			return;
+		}
 
-		if(!mIsDragging)
+		if(!mIsDragging){
 			isClickLock = true;
+		}
 		
-		if (enabled)
-		{
-			if (isPressed)
-			{
-				if (!UICamera.current.stickyPress)
-				{
+		if(enabled){
+			if (isPressed){
+				if (!UICamera.current.stickyPress){
 					mSticky = true;
 					UICamera.current.stickyPress = true;
 				}
@@ -219,8 +214,7 @@ public class InventoryDragDrop : MonoBehaviour {
 					OnItemPress(this, args);
 				}
 			}
-			else if (mSticky)
-			{
+			else if(mSticky){
 				mSticky = false;
 				UICamera.current.stickyPress = false;
 			}

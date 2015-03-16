@@ -108,8 +108,9 @@ public class PetInteractionManager : MonoBehaviour{
 			if(ItemLogic.Instance.CanUseItem(invItemID)){
 				args.IsValidTarget = true;
 				
-				if(invItem != null && invItem.ItemType == ItemType.Foods)
-					ShowPetReceivedFoodAnimation();		
+				if(invItem != null && invItem.ItemType == ItemType.Foods){
+					ShowPetReceivedFoodAnimation();
+				}
 				
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UsePetItem(invItemID);

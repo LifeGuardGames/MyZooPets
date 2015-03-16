@@ -40,8 +40,7 @@ public class PanToMoveCamera : MonoBehaviour{
 	private Vector2 currentTouchPos; //Position of touch right now
 	private float startTime; //Time at when finger touches screen
 	private RoomDirection panDirection; //direction of the last finger gesture
-//	private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
-//	private bool touchCancelled = false; //True: touch shouldn't be handled
+
 	private Camera nguiCamera;
 	private Camera mainCamera;
 
@@ -49,12 +48,13 @@ public class PanToMoveCamera : MonoBehaviour{
 	void Start(){
 		//Move camera to the last saved partition
 		LoadSceneData sceneData = DataManager.Instance.SceneData;
-		if(sceneData != null)
-		if(sceneData.LastScene == Application.loadedLevelName)
-			SetCameraToPartition(sceneData.LastCameraPartition);
+		if(sceneData != null){
+			if(sceneData.LastScene == Application.loadedLevelName){
+				SetCameraToPartition(sceneData.LastCameraPartition);
+			}
+		}
 	}
 
-	
 	///////////////////////////////////////////
 	// SnapCamera()
 	// Snaps the camera to the current partition.
@@ -74,10 +74,9 @@ public class PanToMoveCamera : MonoBehaviour{
 		Hashtable completeParamHash = new Hashtable();
 		completeParamHash.Add("Old", oldPartition);			
 		optional.Add("onCompleteParam", completeParamHash);
-		optional.Add("ease", LeanTweenType.easeOutQuad);
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
 			
-		LeanTween.moveX(gameObject, moveTo, 0.35f, optional);
-//		normalizedTouchPosX = 0;		
+		LeanTween.moveX(gameObject, moveTo, 0.5f, optional);
 	}
 
 	/// <summary>

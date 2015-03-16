@@ -67,8 +67,13 @@ public class WellapadTaskUI : MonoBehaviour{
 			(eStatus == WellapadTaskCompletionStates.RecentlyCompleted && bPop)){
 			// mark this task as done
 			slash.gameObject.SetActive(true);
-			slash.Show();
-		}		
+			StartCoroutine(CheckboxSpriteShowHelper());	// Show after one frame
+		}
+	}
+
+	private IEnumerator CheckboxSpriteShowHelper(){
+		yield return 0;
+		slash.Show();
 	}
 	
 	//---------------------------------------------------

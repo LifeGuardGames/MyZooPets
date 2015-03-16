@@ -40,7 +40,7 @@ public class InventoryDragDrop : MonoBehaviour {
 	//Update the position of the Grid when the item has been destroyed
 	void OnDestroy(){
 		UpdateGrid();
-		RewardManager.OnAllRewardsDone += reAddClick;
+		RewardManager.OnAllRewardsDone -= reAddClick;
 	}
 
 	public void reAddClick(object sender, EventArgs args){

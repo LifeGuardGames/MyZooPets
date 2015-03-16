@@ -19,7 +19,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	private bool isOpenLocationsInitalized = false;
 	private bool isMinigameRandomCallLocked = false;
 
-	public void Start(){
+	public void Awake(){
 		// Populate the partition interactable parent dictionary, only for ones existing
 		foreach(Transform trans in partitionParent){
 			PartitionMetadata metadata = trans.GetComponent<PartitionMetadata>();

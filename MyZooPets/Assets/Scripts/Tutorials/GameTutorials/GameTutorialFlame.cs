@@ -36,11 +36,9 @@ public class GameTutorialFlame : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 
 		switch(step){
-
 		case 0:
-
 			TutorialManager.Instance.StartCoroutine(FocusOnFlameButton());
-			
+
 			// show a little popup message telling the user to hold down the flame button
 			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
 			break;
@@ -55,7 +53,9 @@ public class GameTutorialFlame : GameTutorial{
 			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
 			GatingManager.Instance.StartCoroutine(RemovePopupDelay());
 
-//			TutorialManagerBedroom.Instance.();
+			// Check off the time that tutorial1 is done for next play period
+			TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
+			tutorialManager.CheckOffTutorial1DoneTime();
 			break;
 		}
 	}

@@ -14,5 +14,6 @@ public class MutableDataPlayPeriod{
 	private void Init(){
 		LastPlayPeriod = DateTime.MinValue;
 		LastTimeUserPlayedGame = DateTime.MinValue;
+
 	}
 }

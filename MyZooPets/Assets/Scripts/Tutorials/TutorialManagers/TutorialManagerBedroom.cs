@@ -44,6 +44,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isChecking = base.Check();
 
 		if(isChecking){
+			Debug.Log("----- CHECKING TUTORIALS -----");
 			//Tutorial 1
 			TutorialPart1Check();
 
@@ -67,7 +68,6 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
 		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
-//		bool isFirstTime = DataManager.Instance.IsFirstTime; //first time launching app
 
 		//check why we need isFirstTime variable
 
@@ -91,17 +91,25 @@ public class TutorialManagerBedroom : TutorialManager{
 		}
 	}
 
+	public void CheckOffTutorial1DoneTime(){
+		DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
+	}
+
 	private void TutorialPart2Check(){
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
 		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
-		DateTime nextPlayPeriod = PlayPeriodLogic.Instance.NextPlayPeriod;
+		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
 
 		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
+		isQuestionaireCollected = true; // TODO remove this
+		Debug.Log("---- CHECKING flame:" + isFlameTutorialDone + " trigger:" + isTriggerTutorialDone + " deco:" + isDecoTutorialDone);
 
-		if(LgDateTime.GetTimeNow() >= nextPlayPeriod && isQuestionaireCollected){
+		if(PlayPeriodLogic.GetCurrentPlayPeriod() >= LastTutorial1DonePlayPeriod && isQuestionaireCollected){
+			Debug.Log("---- Passed first check");
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
+				Debug.Log("---- Passed second check");
 				// play the trigger tutorial
 				new GameTutorialTriggers();
 			}

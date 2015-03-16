@@ -54,6 +54,8 @@ public class GameTutorialFlame : GameTutorial{
 			// show a little popup message telling the user to let go to breath fire
 			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
 			GatingManager.Instance.StartCoroutine(RemovePopupDelay());
+
+//			TutorialManagerBedroom.Instance.();
 			break;
 		}
 	}

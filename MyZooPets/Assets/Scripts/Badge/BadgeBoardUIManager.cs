@@ -232,26 +232,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				badgeBoard.collider.enabled = true;
 			}
 
-			//Show other UI Objects
-			HUDUIManager.Instance.ShowPanel();
-
-			// Only run this chunk if in bedroom or yard scene
-			if((Application.loadedLevelName == SceneUtils.BEDROOM.ToString()
-			    || Application.loadedLevelName == SceneUtils.YARD.ToString())){
-
-				// Check if opened in editdeco mode, theres things we dont want to show
-				if(!ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){
-					if(NavigationUIManager.Instance != null){
-						NavigationUIManager.Instance.ShowPanel();
-					}
-					if(InventoryUIManager.Instance != null){
-						InventoryUIManager.Instance.ShowPanel();
-					}
-				}
-				if(RoomArrowsUIManager.Instance != null){
-					RoomArrowsUIManager.Instance.ShowPanel();
-				}
-			}
+			CloseUIOpenNext(UIModeTypes.None);
 		}
 	}
 

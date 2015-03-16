@@ -29,9 +29,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	public UISprite startCircle;	// For reference
 	public UISprite endCircle;		// For setting
 
-	void Awake(){
-	}
-
 	void Start(){
 		WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
 		// HUDAnimator.OnLevelUp += RefreshLevelProgressOnLevelUp;
@@ -76,7 +73,8 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
 			labelStartLevel.text = currentLevel.ToString();
 			labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
-		}else{
+		}
+		else{
 			labelMaxLevel.gameObject.SetActive(true);
 			labelStartLevel.text = "";
 			labelEndLevel.text = "";

@@ -94,7 +94,6 @@ public class DataLoaderItems{
 	/// <param name="type">Type.</param>
     public static Dictionary<string, Item> GetAllItemsOfType(ItemType type){
 		Dictionary<ItemType, Dictionary<string, Item>> dictItems = GetAllItems();
-		Debug.Log(type.ToString());
         return dictItems[type];
     }
 	

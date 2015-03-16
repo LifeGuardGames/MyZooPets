@@ -123,4 +123,48 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 	protected virtual List<ClickLockExceptions> GetClickLockExceptions(){
 		return null;
 	}
+
+	// When we exit UIMode, sometimes there are other modes in the stack,
+	// this opens them properly
+	protected void CloseUIOpenNext(UIModeTypes mode){
+		switch(mode){
+
+		default:	// Default to base mode
+			// Only run this chunk if in bedroom or yard scene
+			if((Application.loadedLevelName == SceneUtils.BEDROOM
+			    || Application.loadedLevelName == SceneUtils.YARD)){
+
+				//Show other UI Objects
+				HUDUIManager.Instance.ShowPanel();
+
+				GameObject fireButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
+
+				// Editdeco mode check
+				if(ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){
+					if(RoomArrowsUIManager.Instance != null){
+						RoomArrowsUIManager.Instance.ShowPanel();
+					}
+				}
+				// Fireblowing room check
+				else if(fireButton != null){
+					if(RoomArrowsUIManager.Instance != null){
+						RoomArrowsUIManager.Instance.ShowPanel();
+					}
+				}
+				// Default behaviour
+				else{
+					if(RoomArrowsUIManager.Instance != null){
+						RoomArrowsUIManager.Instance.ShowPanel();
+					}
+					if(NavigationUIManager.Instance != null){
+						NavigationUIManager.Instance.ShowPanel();
+					}
+					if(InventoryUIManager.Instance != null){
+						InventoryUIManager.Instance.ShowPanel();
+					}
+				}
+			}
+			break;
+		}
+	}
 }

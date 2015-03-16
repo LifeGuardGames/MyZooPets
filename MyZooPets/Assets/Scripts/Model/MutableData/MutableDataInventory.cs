@@ -25,6 +25,5 @@ public class MutableDataInventory{
 		AccessoryItems = new Dictionary<string, InventoryItem>();
         OneTimePurchasedItems = new List<string>();
 		UnopenedItemBoxes = new List<string>();
-		OneTimePurchasedItems.Add("Wallpaper0");
     }
 }

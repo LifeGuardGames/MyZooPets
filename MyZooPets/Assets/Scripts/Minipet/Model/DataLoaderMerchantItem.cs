@@ -3,9 +3,9 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class DataLoaderMerchantItem {
+public class DataLoaderMerchantItem:XMLLoaderGeneric<DataLoaderMerchantItem> {
 
-	/*private static Dictionary <string ,ImmutableDataMerchantItem> blackMerch;
+	private static Dictionary <string ,ImmutableDataMerchantItem> blackMerch;
 
 	public static ImmutableDataMerchantItem GetData(string id){
 		instance.InitXMLLoader();
@@ -13,6 +13,9 @@ public class DataLoaderMerchantItem {
 	}
 
 	public static List<string> getMerchantList(){
+		if(blackMerch == null){
+			SetupData();
+		}
 		List<string> merchTags = new List<string>(blackMerch.Keys); 
 		return merchTags;
 	}
@@ -35,7 +38,7 @@ public class DataLoaderMerchantItem {
 			XMLElement xmlElement = xmlParser.Parse();
 			
 			//Get item type                
-			ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), xmlElement.value);
+			//ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), xmlElement.value);
 			
 			//Create dictionary to store data
 			Dictionary<string, Item> categoryItem = new Dictionary<string, Item>();
@@ -71,5 +74,5 @@ public class DataLoaderMerchantItem {
 	}
 	protected override void InitXMLLoader(){
 		xmlFileFolderPath = "SecretMerchantItems";
-	}*/
+	}
 }

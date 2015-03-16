@@ -15,10 +15,10 @@ public class Merchant : MiniPet {
 		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "Merchant";
 		blackStoreButton = GameObject.Find("BlackStoreButton");
-		/*if(itemsInList != PlayerPrefs.GetInt("merchantItemCount")){
+		//if(itemsInList != PlayerPrefs.GetInt("merchantItemCount")){
 			items = DataLoaderMerchantItem.getMerchantList();
 			itemsInList = items.Count;
-		}*/
+		//}
 	}
 
 	public override void FinishEating(){
@@ -38,7 +38,11 @@ public class Merchant : MiniPet {
 
 	public void OpenStore(){
 		Hashtable has = new Hashtable();
-		has[0] = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems[0];
+		int max = items.Count;
+		int rand = Random.Range (0,max);
+		ImmutableDataMerchantItem itemData = DataLoaderMerchantItem.GetData(items[rand]);
+		has[0] = itemData.ItemId;
+		has[1] = itemData.Type;
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant,has); 
 	}
 	

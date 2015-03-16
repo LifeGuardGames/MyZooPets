@@ -36,7 +36,7 @@ public class MutableDataMiniPets{
 	public Dictionary<string, Status> MiniPetProgress {get; set;} 
 	//public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
 	//public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
-
+	public List<string> SecretMerchantSellList{get; set;}
 	/// <summary>
 	/// Unlocks the mini pet.
 	/// </summary>

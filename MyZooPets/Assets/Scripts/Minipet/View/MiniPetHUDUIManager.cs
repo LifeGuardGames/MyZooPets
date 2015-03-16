@@ -78,7 +78,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			break;
 		case MiniPetTypes.Merchant:
 			MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
-			controller3.Initialize("", false);
+			controller3.Initialize(hash[0].ToString(), false);
 			break;
 		default:
 			Debug.LogError("No controller found: " + type.ToString());

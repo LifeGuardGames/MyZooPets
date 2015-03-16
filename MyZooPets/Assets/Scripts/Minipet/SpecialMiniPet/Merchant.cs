@@ -5,12 +5,16 @@ public class Merchant : MiniPet {
 
 	private int timesVisited = 0;
 	private GameObject blackStoreButton;
+	public int itemsInList = 0;
 
 	void Awake(){
 		//temp
 		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "Merchant";
 		blackStoreButton = GameObject.Find("BlackStoreButton");
+		if(itemsInList != PlayerPrefs.GetInt("merchantItemCount")){
+		//reload the list
+		}
 	}
 
 	public override void FinishEating(){
@@ -20,7 +24,8 @@ public class Merchant : MiniPet {
 		miniPetSpeechAI.ShowTipMsg();
 		timesVisited++;
 		PlayerPrefs.SetInt("TimesVisited", timesVisited);
-		ShowStoreButton();
+		//ShowStoreButton();
+		OpenStore();
 	}
 
 	public void ShowStoreButton(){
@@ -28,7 +33,9 @@ public class Merchant : MiniPet {
 	}
 
 	public void OpenStore(){
-
+		Hashtable has = new Hashtable();
+		has[0] = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems[0];
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant,has); 
 	}
 	
 

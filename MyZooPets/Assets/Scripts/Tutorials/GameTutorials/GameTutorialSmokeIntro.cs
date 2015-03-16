@@ -33,7 +33,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 			break;
 			
 		case 1:
-				// open the wellapad to show the user what to do next
+			// open the wellapad to show the user what to do next
 			ShowWellapad();
 			break;
 
@@ -97,13 +97,9 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
 		float moveTo = scriptPan.partitionOffset;
 		float panTime = Constants.GetConstant<float>("SmokeIntroPanTime");
-		
-		/* // can't use lean tween callbacks because this is not a game object...curses
-        Hashtable optional = new Hashtable();
-		optional.Add ("onComplete", "OnRightPanDone");
-		optional.Add("onCompleteTarget", gameObject);
-		*/
-		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime);
+
+		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime)
+			.setEase(LeanTweenType.easeInOutQuad);
 		
 		yield return new WaitForSeconds(panTime);
 		
@@ -111,7 +107,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 	
 	private void OnRightPanDone(){
-		// 	begin pan to the left
+		// begin pan to the left
 		TutorialManager.Instance.StartCoroutine(BeginPanLeft());
 	}
 	
@@ -123,13 +119,9 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		// begin the pan right
 		float moveTo = 0f;
 		float panTime = Constants.GetConstant<float>("SmokeIntroPanTime");
-		
-		/* // can't use lean tween callbacks because this is not a game object...curses
-        Hashtable optional = new Hashtable();
-		optional.Add ("onComplete", "OnLeftPanDone");
-		optional.Add("onCompleteTarget", gameObject);
-			*/
-		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime); 
+
+		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime)
+			.setEase(LeanTweenType.easeInOutQuad); 
 		
 		OnLeftPanDone();
 	}

@@ -157,8 +157,6 @@ public class GameTutorialDecorations : GameTutorial{
 		Advance();		
 	}
 
-
-
 	/// <summary>
 	/// No deocration items yet, so make the user go to the store to buy some
 	/// </summary>
@@ -282,7 +280,7 @@ public class GameTutorialDecorations : GameTutorial{
 	private IEnumerator FocusOnDecorationUI(){
 		yield return new WaitForSeconds(1);
 
-		GameObject tutDecoNode = GameObject.Find("DecoNode_Starting_Rug");
+		GameObject tutDecoNode = GameObject.Find("DecoNode_0_Rug");
 		Vector3 tutDecoNodePosition = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 		                                                             tutDecoNode.transform.position);
 		tutDecoNodePosition = CameraManager.Instance.TransformAnchorPosition(tutDecoNodePosition, 
@@ -333,9 +331,8 @@ public class GameTutorialDecorations : GameTutorial{
 		NotificationUIManager.Instance.CleanupNotification();
 
 		decoModeBackButton = GameObject.Find("DecoExitButton");
-
-		// show finger hint
-		ShowFingerHint(decoModeBackButton, isGUI:true, anchor:InterfaceAnchors.BottomLeft, flipX:true);
+		SpotlightObject(decoModeBackButton, true, InterfaceAnchors.BottomLeft, fingerHint: true,
+		                fingerHintFlip: true, delay: 0.5f);
 
 		// show message
 		Vector3 popupLocation = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
@@ -363,8 +360,10 @@ public class GameTutorialDecorations : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void OnDecoModeExit(object sender, EventArgs args){
 		LgButton button = decoModeBackButton.GetComponent<LgButton>();
-		button.OnProcessed -= OnDecoModeExit;		
+		button.OnProcessed -= OnDecoModeExit;	
 
+		// clean up
+		RemoveSpotlight();
 		RemoveFingerHint();
 		RemovePopup();
 

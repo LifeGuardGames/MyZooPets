@@ -5,17 +5,12 @@ using System.Collections;
 /// <summary>
 /// Player age user interface manager.
 /// </summary>
-public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
+public class QuestionaireUIManager2 : MonoBehaviour{
+	public TweenToggle baseTweenToggle;
 	public TweenToggle finishButtonTweenToggle;
 
 	private bool hasAsthma;
 	private bool hasAsthmaOptionChecked = false;
-
-
-	protected override void Awake(){
-		base.Awake();
-		eModeType = UIModeTypes.CustomizePet;
-	}
 
 	/// <summary>
 	/// Event callback when yes radio button is clicked
@@ -45,33 +40,20 @@ public class QuestionaireUIManager2 : SingletonUI<QuestionaireUIManager2> {
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAsthma(hasAsthma);
-		QuestionaireManager.Instance.AsthmaInfoCollected();
+		QuestionaireManager.Instance.QuestionaireCollected();
 		CloseUI();
 	}
 
-	protected override void _OpenUI(){
-//		gameObject.GetComponent<TweenToggle>().Show();
+	public void OpenUI(){
+		baseTweenToggle.Show();
 	}
 
-	protected override void _CloseUI(){
-//		gameObject.GetComponent<TweenToggle>().Hide();
-
-		//once questionaire is done. let tutorial knows to continue
-		TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
-		tutorialManager.OnQuestionaireDone();
-
-		DestroyPanel();
+	public void CloseUI(){
+		baseTweenToggle.Hide();
 	}
 
-	/// <summary>
-	/// Callback for finish tweening
-	/// </summary>
-	public void DestroyPanel(){
-		Destroy(gameObject);
+	// Assigned callback
+	public void FinishedCloseFunction(){
+		QuestionaireManager.Instance.ContinueLoading();
 	}
-
-//	private IEnumerator ShowAgeSelector(){
-//		yield return new WaitForSeconds(1.5f);
-//		OpenUI();
-//	}
 }

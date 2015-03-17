@@ -19,11 +19,6 @@ public class MutableDataPetInfo : MutableData{
 	public bool IsHatched { get; set; }
 	public int FireBreaths { get; set; } // fire breathing status of the pet
 
-	/// <summary>
-	/// DEPRECATED in v1.3.1 don't use this.
-	/// </summary>
-	/// <value>The n fire breaths.</value>
-	public int nFireBreaths { get; set; } // Deprecated in 1.3.1
 	public bool IsQuestionaireCollected {get; set;}
 
 	/// <summary>

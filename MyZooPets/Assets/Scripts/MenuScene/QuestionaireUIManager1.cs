@@ -5,29 +5,15 @@ using System.Collections;
 /// <summary>
 /// Player age user interface manager.
 /// </summary>
-public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
-
+public class QuestionaireUIManager1 : MonoBehaviour{
 	public UISlider slider;
 	public UILabel label;
+	public TweenToggle baseTweenToggle;
 	public TweenToggle finishButtonTweenToggle;
 
 	private int age;
 	private bool hasMovedSlider = false;
 	private GameObject menuScenePet = null;
-
-	protected override void Awake(){
-		base.Awake();
-		eModeType = UIModeTypes.CustomizePet;
-	}
-
-	protected override void Start(){
-		base.Start();
-
-		//pet sprite need to be disable if it's in the scene because of layering issue
-		menuScenePet = GameObject.Find("MenuScenePet");
-		if(menuScenePet != null)
-			menuScenePet.SetActive(false);
-	}
 
 	/// <summary>
 	/// Called by the slider when the value has changed. Rounds up to the nearest integer for age
@@ -54,38 +40,20 @@ public class QuestionaireUIManager1 : SingletonUI<QuestionaireUIManager1> {
 
 	public void ButtonClickedFinish(){
 		Analytics.Instance.UserAge(age);
-		QuestionaireManager.Instance.AgeCollected();
-
+		QuestionaireManager.Instance.QuestionaireCollected();
 		CloseUI();
 	}
 
-	protected override void _OpenUI(){
-
+	public void OpenUI(){
+		baseTweenToggle.Show();
 	}
 
-	protected override void _CloseUI(){
-		DestroyPanel();
-		if(menuScenePet != null)
-			menuScenePet.SetActive(true);
+	public void CloseUI(){
+		baseTweenToggle.Hide();
 	}
 
-	/// <summary>
-	/// Callback for finish tweening
-	/// </summary>
-	public void DestroyPanel(){
-		Destroy(gameObject);
-	}
-
-	public void ButtonPrivacyPolicy(){
-		Application.OpenURL("http://www.wellapets.com/privacy");
-	}
-
-	public void ButtonTermsOfService(){
-		Application.OpenURL("http://www.wellapets.com/terms");
-	}
-
-	private IEnumerator ShowAgeSelector(){
-		yield return new WaitForSeconds(1.5f);
-		OpenUI();
+	// Assigned callback
+	public void FinishedCloseFunction(){
+		QuestionaireManager.Instance.questionaireManager2.OpenUI();
 	}
 }

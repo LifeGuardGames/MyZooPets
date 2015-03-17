@@ -44,7 +44,6 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isChecking = base.Check();
 
 		if(isChecking){
-			Debug.Log("----- CHECKING TUTORIALS -----");
 			//Tutorial 1
 			TutorialPart1Check();
 
@@ -140,15 +139,4 @@ public class TutorialManagerBedroom : TutorialManager{
 			new GameTutorialFlameCrystal();
 		}
 	}
-
-	public void OnQuestionaireDone(){
-		//check if pet in partition 0, if not force it to partition 0
-//		if(!args.Opening){
-			
-			CameraManager.Instance.PanScript.MoveToFirstPartition();
-			Check();
-//		}
-	}
-
-
 }

@@ -8,17 +8,21 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public UIImageButton buyButton;
 	public UILabel cost;
 	public UISprite sprite;
+	public GameObject itemSpritePrefab;
+	public TweenToggle tweenToggle;
+
 	private string itemId;
 	private Item secItem;
-	public GameObject itemSpritePrefab;
+	private ItemType itemType = ItemType.None;
 
-	public void Initialize(string itemID, bool isBoughtAlready){
+	public void Initialize(string itemID, bool isBoughtAlready, ItemType itemType){
 		Item secretItem = ItemLogic.Instance.GetItem(itemID);
 		secItem = secretItem;
 		itemId = itemID;
 		itemNameLocalize.key = secretItem.Name;
 		itemNameLocalize.Localize();
 		sprite.spriteName = DataLoaderItems.GetItemTextureName(itemID);
+		this.itemType = itemType;	// Cache the type
 
 		descriptionLocalize.key = secretItem.Description;
 		descriptionLocalize.Localize();
@@ -30,13 +34,24 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 
 			buyButton.enabled = false;
 		}
+
+		if(itemType == ItemType.Decorations){
+			DecoInventoryUIManager.Instance.ShowDecoInventory();
+			InventoryUIManager.Instance.HidePanel();
+		}
 	}
+
+	void Start(){
+		tweenToggle.Show();
+	}
+
 	public void BuyItem(){
-		buyButton.gameObject.SetActive( false);
+		buyButton.gameObject.SetActive(false);
 		InventoryLogic.Instance.AddItem(itemId, 1);
 		StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
 		OnBuyAnimation(secItem, sprite.gameObject);
 	}
+
 	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
 		string itemID = itemId;
@@ -64,9 +79,8 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		path[2] = origin;
 		path[3] = itemPosition;
 		
-		
 		Hashtable optional = new Hashtable();
-		GameObject animationSprite = NGUITools.AddChild(sprite, itemSpritePrefab);
+		GameObject animationSprite = NGUITools.AddChild(sprite.transform.parent.gameObject, itemSpritePrefab);
 		
 		// hashtable for completion params for the callback (stash the icon we are animating)
 		Hashtable completeParamHash = new Hashtable();
@@ -82,4 +96,11 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		LeanTween.move(animationSprite, path, speed, optional);
 	}
 
+	public void DestroySprite(Hashtable hash){
+		// delete the icon we moved
+		if(hash.ContainsKey("Icon")){
+			GameObject goSprite = (GameObject)hash["Icon"];
+			Destroy(goSprite);
+		}
+	}
 }

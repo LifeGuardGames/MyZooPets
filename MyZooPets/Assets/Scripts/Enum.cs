@@ -36,6 +36,7 @@ public enum AsthmaStage{
     Attack,
 }
 public enum ItemType{
+	None,
 	Foods,
 	Usables,
 	Decorations,

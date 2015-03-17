@@ -478,7 +478,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &100058
 GameObject:
   m_ObjectHideFlags: 1
@@ -768,6 +768,21 @@ GameObject:
   - 114: {fileID: 11400102}
   m_Layer: 10
   m_Name: MiniPetHUDPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100094
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400094}
+  m_Layer: 10
+  m_Name: ContentParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1294,7 +1309,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100046}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -112, y: 1, z: -7.62939453e-06}
+  m_LocalPosition: {x: -112, y: 1, z: -25.5599995}
   m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 400082}
@@ -1320,7 +1335,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100042}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 511.390503, y: 384.609558, z: -.00016784668}
+  m_LocalPosition: {x: 680.959961, y: 384.639954, z: -.00016784668}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 400040}
@@ -1333,7 +1348,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.609523892, y: 384.609558, z: .000106811523}
+  m_LocalPosition: {x: -1.27999997, y: 384.639954, z: .000106811523}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 400036}
@@ -1346,12 +1361,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -512.609497, y: 384.609558, z: 1.52587891e-05}
+  m_LocalPosition: {x: -682.240051, y: 384.639954, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400082}
   - {fileID: 400076}
   - {fileID: 400074}
+  - {fileID: 400094}
   m_Father: {fileID: 400090}
   m_RootOrder: 0
 --- !u!4 &400090
@@ -1377,12 +1393,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.609523892, y: .609558105, z: 1.52587891e-05}
+  m_LocalPosition: {x: -1.27999997, y: .639953613, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400026}
   m_Father: {fileID: 400090}
   m_RootOrder: 2
+--- !u!4 &400094
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 485.100037, y: -42.2799683, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400088}
+  m_RootOrder: 3
 --- !u!65 &6500000
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1875,11 +1903,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .609523892
+    e03: 1.27999997
     e10: 0
     e11: 384
     e12: 0
-    e13: 1764.84644
+    e13: 1764.81616
     e20: 0
     e21: 0
     e22: 384
@@ -2515,7 +2543,7 @@ MonoBehaviour:
   feedParent: {fileID: 11400066}
   storeButtonPulseAnim: {fileID: 11100002}
   storeButtonSunbeam: {fileID: 100074}
-  contentParent: {fileID: 0}
+  contentParent: {fileID: 100094}
   levelUpDropdown: {fileID: 11100000}
   tutorialParent: {fileID: 100032}
   petReference: {fileID: 0}

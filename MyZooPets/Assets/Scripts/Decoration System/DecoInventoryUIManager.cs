@@ -147,7 +147,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	public void UpdateBarPosition(bool isOnLoad = false){
 	
 		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
-		
+		Debug.Log("DECO COUNT: -- " + allDecoInventoryItemsCount);
 		// Normal case where you add item during game
 		if(!isOnLoad){
 		

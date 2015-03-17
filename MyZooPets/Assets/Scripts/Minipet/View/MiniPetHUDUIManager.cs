@@ -85,14 +85,14 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			{
 				case "deco":
 				id = hash[0].ToString();
-				//DataLoaderItems.GetItem(tempId);
+				DataLoaderItems.GetItem(tempId);
 				break;
 			default:
 				id = hash[0].ToString();
-				//DataLoaderItems.GetItem(tempId);
+				DataLoaderItems.GetItem(tempId);
 				break;
 			}
-			controller3.Initialize(id.ToString(), false);
+			controller3.Initialize(id.ToString(), false, ItemType.Decorations);
 			break;
 		default:
 			Debug.LogError("No controller found: " + type.ToString());
@@ -129,6 +129,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		RoomArrowsUIManager.Instance.ShowPanel();
 		PetAnimationManager.Instance.EnableVisibility();
 		PetAudioManager.Instance.EnableSound = true;
+		DecoInventoryUIManager.Instance.HideDecoInventory();
 
 		if(cleaningTutorialObject != null)
 			Destroy(cleaningTutorialObject);

@@ -128,6 +128,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// <param name="itemID">Item ID.</param>
 	/// <param name="count">Count.</param>
 	public void AddItem(string itemID, int count){
+
 		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		Item itemData = DataLoaderItems.GetItem(itemID);
 
@@ -170,6 +171,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		}
 
 		// Add the respective items to their respective UIs
+
 		if(itemData.Type == ItemType.Foods || itemData.Type == ItemType.Usables){
 			if(OnItemAddedToInventory != null){
 				InventoryEventArgs args = new InventoryEventArgs();
@@ -184,7 +186,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 				InventoryEventArgs args = new InventoryEventArgs();
 				args.IsItemNew = itemNew;
 				args.InvItem = invItem;
-
+				Debug.Log("saignvdrisfhjn");
 				OnItemAddedToDecoInventory(this, args);
 			}
 		}

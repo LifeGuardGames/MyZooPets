@@ -61,6 +61,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
+		Debug.Log("akaslbgseryigbiorthn");
 		InventoryLogic.OnItemAddedToDecoInventory -= OnItemAddedHandler;
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}
@@ -82,7 +83,9 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	//Event listener. listening to when new item is added to the deco inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
+
 		if(e.IsItemNew){
+			Debug.Log("sawiughseril");
 			SpawnInventoryItemInPanel(e.InvItem);
 		}
 		else{
@@ -112,7 +115,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
 		//Create inventory item
 		GameObject decoInventoryItemObject = NGUITools.AddChild(uiGridObject, decorationItemPrefab);
-		
+		Debug.Log("easrgbiserb");
 		//get reference to all the GO and scripts
 		Transform itemWrapper = decoInventoryItemObject.transform.Find("Icon");
 		UISprite itemSprite = decoInventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
@@ -142,10 +145,12 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
+	
 		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
 		
 		// Normal case where you add item during game
 		if(!isOnLoad){
+		
 			// Adjust the bar length based on how many items we want showing at all times
 			if(allDecoInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 				
@@ -192,7 +197,11 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		Vector3 decoInvItemPosition;
 		
 		// Use the position of the item in the inventory panel
+		Debug.Log(itemID);
 		Transform deocInvItemTrans = uiGridObject.transform.Find(itemID);
+		if(deocInvItemTrans == null){
+		Debug.Log("ksd");
+		}
 		InventoryItem decoInvItem = InventoryLogic.Instance.GetDecoInvItem(itemID);
 		decoInvItemPosition = deocInvItemTrans.position;
 		

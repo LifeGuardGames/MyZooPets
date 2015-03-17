@@ -374,6 +374,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
 			goMiniPet.GetComponent<RetentionPet>().Init(data);
+				if(CanSpawnNewMinipetLocations()){
+				goMiniPet.GetComponent<RetentionPet>().isFinishEating = false;
+				}
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
 			}
@@ -392,6 +395,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 							goMiniPet.name = prefab.name;
 							goMiniPet.GetComponent<GameMaster>().minigameType = type;
 							goMiniPet.GetComponent<MiniPet>().Init(data);
+						if(CanSpawnNewMinipetLocations()){
+							goMiniPet.GetComponent<GameMaster>().isFinishEating = false;
+						}
 							// Add the pet into the dictionary to keep track
 							MiniPetTable.Add(miniPetID, goMiniPet);
 							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
@@ -413,6 +419,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Shooter;
 					}
 					goMiniPet.GetComponent<MiniPet>().Init(data);
+					if(CanSpawnNewMinipetLocations()){
+						goMiniPet.GetComponent<GameMaster>().isFinishEating = false;
+					}
 					MiniPetTable.Add(miniPetID, goMiniPet);
 					
 					// Add the pet into the dictionary to keep track
@@ -443,6 +452,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 						goMiniPet.transform.localPosition = pos;
 						goMiniPet.name = prefab.name;
 						goMiniPet.GetComponent<MiniPet>().Init(data);
+						if(CanSpawnNewMinipetLocations()){
+							goMiniPet.GetComponent<Merchant>().isFinishEating = false;
+						}
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetID, goMiniPet);
 						DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);

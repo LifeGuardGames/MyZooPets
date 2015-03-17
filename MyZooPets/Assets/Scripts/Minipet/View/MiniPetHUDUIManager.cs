@@ -21,6 +21,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
+	private GameObject content;
 
 	private GameObject cleaningTutorialObject;
 	private GameObject ticklingTutorialObject;
@@ -64,7 +65,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			return;
 		}
 
-		GameObject content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+		 content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 
 		switch(type){
 		case MiniPetTypes.Rentention:
@@ -78,21 +79,17 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			break;
 		case MiniPetTypes.Merchant:
 			MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
-			string id;
-			string tempId = hash[0].ToString();
+			ItemType iType;
 			string itemType = hash[1].ToString();
-			switch (itemType)
-			{
-				case "deco":
-				id = hash[0].ToString();
-				DataLoaderItems.GetItem(tempId);
+			switch (itemType){
+			case "Decorations":
+				iType = ItemType.Decorations;
 				break;
 			default:
-				id = hash[0].ToString();
-				DataLoaderItems.GetItem(tempId);
+				iType = ItemType.Decorations;
 				break;
 			}
-			controller3.Initialize(id.ToString(), false, ItemType.Decorations);
+			controller3.Initialize(hash[0].ToString(), false, iType);
 			break;
 		default:
 			Debug.LogError("No controller found: " + type.ToString());
@@ -113,7 +110,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		RoomArrowsUIManager.Instance.HidePanel();
 		PetAnimationManager.Instance.DisableVisibility();
 		PetAudioManager.Instance.EnableSound = false;
-		contentParent.SetActive(true);
+		//contentParent.SetActive(true);
 	}
 
 	protected override void _CloseUI(){
@@ -130,13 +127,15 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		PetAnimationManager.Instance.EnableVisibility();
 		PetAudioManager.Instance.EnableSound = true;
 		DecoInventoryUIManager.Instance.HideDecoInventory();
-
+		if(content != null){
+		Destroy(content.gameObject);
+		}
 		if(cleaningTutorialObject != null)
 			Destroy(cleaningTutorialObject);
 
 		if(ticklingTutorialObject != null)
 			Destroy(ticklingTutorialObject);
-		contentParent.SetActive(false);
+		//contentParent.SetActive(false);
 		CameraManager.Instance.ZoomOutMove();
 	}
 	#endregion

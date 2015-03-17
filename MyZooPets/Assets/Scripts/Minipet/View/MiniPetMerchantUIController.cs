@@ -10,6 +10,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public UISprite sprite;
 	public GameObject itemSpritePrefab;
 	public TweenToggle tweenToggle;
+	private GameObject merchant;
 
 	private string itemId;
 	private Item secItem;
@@ -28,7 +29,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		descriptionLocalize.Localize();
 
 		cost.text = secretItem.Cost.ToString();
-
+		merchant = GameObject.Find("MiniPetPebbleDemon");
 		if(isBoughtAlready){
 			// Enable some game components here
 
@@ -47,9 +48,11 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 
 	public void BuyItem(){
 		buyButton.gameObject.SetActive(false);
+		merchant.GetComponent<Merchant>().removeItem();
 		InventoryLogic.Instance.AddItem(itemId, 1);
 		StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
 		OnBuyAnimation(secItem, sprite.gameObject);
+
 	}
 
 	public void OnBuyAnimation(Item itemData, GameObject sprite){

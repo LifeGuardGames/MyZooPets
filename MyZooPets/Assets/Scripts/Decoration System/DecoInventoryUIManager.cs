@@ -61,7 +61,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
-		Debug.Log("akaslbgseryigbiorthn");
 		InventoryLogic.OnItemAddedToDecoInventory -= OnItemAddedHandler;
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}
@@ -85,7 +84,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
 
 		if(e.IsItemNew){
-			Debug.Log("sawiughseril");
 			SpawnInventoryItemInPanel(e.InvItem);
 		}
 		else{
@@ -115,7 +113,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
 		//Create inventory item
 		GameObject decoInventoryItemObject = NGUITools.AddChild(uiGridObject, decorationItemPrefab);
-		Debug.Log("easrgbiserb");
+
 		//get reference to all the GO and scripts
 		Transform itemWrapper = decoInventoryItemObject.transform.Find("Icon");
 		UISprite itemSprite = decoInventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
@@ -147,7 +145,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	public void UpdateBarPosition(bool isOnLoad = false){
 	
 		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
-		Debug.Log("DECO COUNT: -- " + allDecoInventoryItemsCount);
 		// Normal case where you add item during game
 		if(!isOnLoad){
 		

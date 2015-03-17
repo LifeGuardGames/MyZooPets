@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 using System;
 using Parse;
@@ -282,3 +283,4 @@ public class MembershipCheck : Singleton<MembershipCheck> {
 		timeOutTimer = 0;
 	}
 }
+*/

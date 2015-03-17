@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -41,28 +42,28 @@ public class SubscriptionAlertController : Singleton<SubscriptionAlertController
 	public bool CheckMembershipError(){
 		bool retVal = false;
 
-		switch(MembershipCheck.Instance.MembershipCheckError){
-		case MembershipCheck.Errors.OverConnectionErrorLimit:
-			Debug.Log("connectionerror");
-			retVal = true;
-			ShowConnectToInternetAlert();
-			break;
-		case MembershipCheck.Errors.TrialExpired:
-			retVal = true;
-			ShowTrialExpiredAlert();
-			break;
-		case MembershipCheck.Errors.MembershipExpired:
-			retVal = true;
-			ShowMembershipExpiredAlert();
-			break;
-		default:
-			retVal = false;
-			HideAll();
-			break;
-		}
-		
-		MembershipCheck.Instance.MembershipCheckError = MembershipCheck.Errors.None;
-		return retVal;
+//		switch(MembershipCheck.Instance.MembershipCheckError){
+//		case MembershipCheck.Errors.OverConnectionErrorLimit:
+//			Debug.Log("connectionerror");
+//			retVal = true;
+//			ShowConnectToInternetAlert();
+//			break;
+//		case MembershipCheck.Errors.TrialExpired:
+//			retVal = true;
+//			ShowTrialExpiredAlert();
+//			break;
+//		case MembershipCheck.Errors.MembershipExpired:
+//			retVal = true;
+//			ShowMembershipExpiredAlert();
+//			break;
+//		default:
+//			retVal = false;
+//			HideAll();
+//			break;
+//		}
+//		
+//		MembershipCheck.Instance.MembershipCheckError = MembershipCheck.Errors.None;
+//		return retVal;
 	}
 
 	public void ShowTrialExpiredAlert(){
@@ -129,3 +130,4 @@ public class SubscriptionAlertController : Singleton<SubscriptionAlertController
 //		}
 //	}
 }
+*/

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -16,3 +17,4 @@ public class BeginMembershipCheck : MonoBehaviour {
 		MembershipCheck.Instance.StartCheck();
 	}
 }
+*/

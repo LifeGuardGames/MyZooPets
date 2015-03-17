@@ -33,46 +33,46 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 		SelectedPet = selectedPetGO;
 
 		// See if no-sync debug is turned on
-		if(Constants.GetConstant<bool>("IsMenusceneConnectionOn")){
-			//lock the UI to prevent user from spam clicking while waiting for membership
-			//check to finish
-			ClickManager.Instance.Lock(UIModeTypes.MembershipCheck);
-			StartMembershipCheck();
-		}
-		else{
-			// Skip into create pet
-			Debug.LogWarning("Connection debug turned off");
+//		if(Constants.GetConstant<bool>("IsMenusceneConnectionOn")){
+//			//lock the UI to prevent user from spam clicking while waiting for membership
+//			//check to finish
+//			ClickManager.Instance.Lock(UIModeTypes.MembershipCheck);
+//			StartMembershipCheck();
+//		}
+//		else{
+//			// Skip into create pet
+//			Debug.LogWarning("Connection debug turned off");
 			OpenCustomizationManager();
-		}
+//		}
 	}
 
 	/// <summary>
 	/// Starts the membership check.
 	/// </summary>
-	private void StartMembershipCheck(){
-		SubscriptionAlertController.Instance.ShowSpinner();
-		
-		if(MembershipCheck.Instance){
-			MembershipCheck.OnCheckDoneEvent += MembershipCheckDoneEventHandler;
-			MembershipCheck.Instance.StartCheck();
-		}
-	}
+//	private void StartMembershipCheck(){
+//		SubscriptionAlertController.Instance.ShowSpinner();
+//		
+//		if(MembershipCheck.Instance){
+//			MembershipCheck.OnCheckDoneEvent += MembershipCheckDoneEventHandler;
+//			MembershipCheck.Instance.StartCheck();
+//		}
+//	}
 
 	/// <summary>
 	/// Handles Membership Check Done event. Check if pet is hatched and load game
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void MembershipCheckDoneEventHandler(object sender, EventArgs args){
-		MembershipCheck.OnCheckDoneEvent -= MembershipCheckDoneEventHandler;
-		ClickManager.Instance.ReleaseLock();
-
-		bool hasMembershipError = SubscriptionAlertController.Instance.CheckMembershipError();
-		ParentPortalUIManager.Instance.ParentPortalTextCheck();
-		if(!hasMembershipError){
-			OpenCustomizationManager();
-		}
-	}
+//	private void MembershipCheckDoneEventHandler(object sender, EventArgs args){
+//		MembershipCheck.OnCheckDoneEvent -= MembershipCheckDoneEventHandler;
+//		ClickManager.Instance.ReleaseLock();
+//
+//		bool hasMembershipError = SubscriptionAlertController.Instance.CheckMembershipError();
+//		ParentPortalUIManager.Instance.ParentPortalTextCheck();
+//		if(!hasMembershipError){
+//			OpenCustomizationManager();
+//		}
+//	}
 
 	private void OpenCustomizationManager(){
 		MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;

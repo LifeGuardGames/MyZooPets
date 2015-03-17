@@ -19,8 +19,8 @@ public class DataManager : Singleton<DataManager>{
 
 	private static bool isCreated;
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
-	private float syncToParseTimer = 0f;
-	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
+//	private float syncToParseTimer = 0f;
+//	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
 	#region Properties
 	/// <summary>
@@ -39,7 +39,7 @@ public class DataManager : Singleton<DataManager>{
 
 //	/// <summary>
 //	/// If membership check failed a code will be passed from the LoadingScene to
-//	/// the MenuScene. 
+//	/// the MenuScene.
 //	/// </summary>
 //	/// <value>The membership check failed code.</value>
 //	public string MembershipCheckFailedCode{get; set;}
@@ -58,20 +58,19 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	/// <summary>
-	/// Gets a value indicating whether terms of service and privacy are accepted
-	/// by the user
+	/// Checks if the player 
 	/// </summary>
-	public bool IsAgeCollected{
+	public bool IsQuestionaireCollected{
 		get{
 			//default to false
-			bool isAccepted = PlayerPrefs.GetInt("IsAgeCollected", 0) > 0;
-
+			bool isAccepted = PlayerPrefs.GetInt("IsQuestionaireCollected", 0) > 0;
 			return isAccepted;
 		}
 		set{
 			bool isAccepted = value;
-			if(isAccepted)
-				PlayerPrefs.SetInt("IsAgeCollected", 1);
+			if(isAccepted){
+				PlayerPrefs.SetInt("IsQuestionaireCollected", 1);
+			}
 		}
 	}
 
@@ -81,69 +80,69 @@ public class DataManager : Singleton<DataManager>{
 	/// be reset if trialStatus == expired, membershipStatus == active || expired.
 	/// </summary>
 	/// <value>The membership check dates.</value>
-	public string MembershipCheckDates{
-		get{
-			return PlayerPrefs.GetString("MembershipCheckDates", "");
-		}
-		set{
-			PlayerPrefs.SetString("MembershipCheckDates", value);
-		}
-	}
+//	public string MembershipCheckDates{
+//		get{
+//			return PlayerPrefs.GetString("MembershipCheckDates", "");
+//		}
+//		set{
+//			PlayerPrefs.SetString("MembershipCheckDates", value);
+//		}
+//	}
 
 	/// <summary>
 	/// Adds the membership check date. Save date in a comma deliminated string
 	/// ex. 14908789,14908382,14i09090
 	/// </summary>
 	/// <param name="timestamp">Timestamp.</param>
-	public void AddMembershipCheckDate(string timestamp){
-		string currentDates = MembershipCheckDates;
-		if(!string.IsNullOrEmpty(timestamp)){
-			if(!string.IsNullOrEmpty(currentDates))
-				//Add new dates using a comma as the deliminating character
-				MembershipCheckDates = currentDates + "," + timestamp;
-			else
-				MembershipCheckDates = timestamp;
-		}
-	}
-
-	public void ResetMembershipCheckDates(){
-		MembershipCheckDates = "";
-	}
+//	public void AddMembershipCheckDate(string timestamp){
+//		string currentDates = MembershipCheckDates;
+//		if(!string.IsNullOrEmpty(timestamp)){
+//			if(!string.IsNullOrEmpty(currentDates))
+//				//Add new dates using a comma as the deliminating character
+//				MembershipCheckDates = currentDates + "," + timestamp;
+//			else
+//				MembershipCheckDates = timestamp;
+//		}
+//	}
+//
+//	public void ResetMembershipCheckDates(){
+//		MembershipCheckDates = "";
+//	}
 
 	/// <summary>
 	/// Tracks the connection error allowed before game is locked and user will 
 	/// be forced to go online before continue playing
 	/// </summary>
 	/// <value>The accumulated connection errors.</value>
-	public int AccumulatedConnectionErrors{
-		get{
-			return PlayerPrefs.GetInt("ConnectionErrors", 0);
-		}
-		set{
-			PlayerPrefs.SetInt("ConnectionErrors", value);
-		}
-	}
+//	public int AccumulatedConnectionErrors{
+//		get{
+//			return PlayerPrefs.GetInt("ConnectionErrors", 0);
+//		}
+//		set{
+//			PlayerPrefs.SetInt("ConnectionErrors", value);
+//		}
+//	}
 
 	/// <summary>
 	/// Gets or sets the last play session date. Use to determine whether the game
 	/// should be force start from LoadingScene.unity
 	/// </summary>
 	/// <value>The last play session date.</value>
-	public DateTime LastPlaySessionDate{
-		get{
-			string timeString = PlayerPrefs.GetString("LastPlaySessionDate", "");
-			DateTime lastSessionTime = LgDateTime.GetTimeNow();
-
-			if(!string.IsNullOrEmpty(timeString))
-				lastSessionTime = Convert.ToDateTime(timeString);
-		
-			return lastSessionTime;
-		}
-		set{
-			string timeString = value.ToString("o");
-			PlayerPrefs.SetString("LastPlaySessionDate", timeString);
-		}
-	}
+//	public DateTime LastPlaySessionDate{
+//		get{
+//			string timeString = PlayerPrefs.GetString("LastPlaySessionDate", "");
+//			DateTime lastSessionTime = LgDateTime.GetTimeNow();
+//
+//			if(!string.IsNullOrEmpty(timeString))
+//				lastSessionTime = Convert.ToDateTime(timeString);
+//		
+//			return lastSessionTime;
+//		}
+//		set{
+//			string timeString = value.ToString("o");
+//			PlayerPrefs.SetString("LastPlaySessionDate", timeString);
+//		}
+//	}
 
 	/// <summary>
 	/// Use this to check if there is data loaded into gameData at anypoint
@@ -181,11 +180,11 @@ public class DataManager : Singleton<DataManager>{
 				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
 				VersionCheck(new Version(currentDataVersionString));
 			}
-			else{
-				bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-				if(isSyncToServerOn)
-					ExtraParseLogic.Instance.UserCheck();
-			}
+//			else{
+//				bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+//				if(isSyncToServerOn)
+//					ExtraParseLogic.Instance.UserCheck();
+//			}
 
 			LoadGameData();
 		}
@@ -225,23 +224,23 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
-	void Update(){
-		//this is the timer that will be running to keep track of when to sync data
-		//to parse server
-		bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-		if(!isDebug && isSyncToServerOn){
-
-			//waiting till auto sync time
-			syncToParseTimer += Time.deltaTime;
-			if(syncToParseTimer >= syncToParseWaitTime){
-				syncToParseTimer = 0;
-				if(gameData != null){
-					Debug.Log("auto sync starting");
-					gameData.SaveAsyncToParse();
-				}
-			}
-		}
-	}
+//	void Update(){
+//		//this is the timer that will be running to keep track of when to sync data
+//		//to parse server
+//		bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+//		if(!isDebug && isSyncToServerOn){
+//
+//			//waiting till auto sync time
+//			syncToParseTimer += Time.deltaTime;
+//			if(syncToParseTimer >= syncToParseWaitTime){
+//				syncToParseTimer = 0;
+//				if(gameData != null){
+//					Debug.Log("auto sync starting");
+//					gameData.SaveAsyncToParse();
+//				}
+//			}
+//		}
+//	}
 	#endregion
 
 	#region Game Data

@@ -94,8 +94,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	// this handles mouse look the actual overall picture is spread across 3 scripts this section deals with getting the input position
 #if !UNITY_EDITOR
 		
-				Vector3 TouchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-				PlayerShooterController.Instance.shoot(TouchPos);
+				Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
+				PlayerShooterController.Instance.Shoot(touchPos);
 #endif
 #if UNITY_EDITOR
 				Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);

@@ -26,14 +26,24 @@ public class InventoryDragDrop : MonoBehaviour{
 	private Transform mParent;						// Store parent when dragging
 	private Vector3 savedLocalPosition;
 	private UIDragPanelContents dragScrollScript;	// The scroll script to turn disable when item picked up
-
+	
+	void Awake(){ 
+		mTrans = transform; 	
+	}
+	
+	void Start(){
+		dragScrollScript = GetComponent<UIDragPanelContents>();
+		RewardManager.OnAllRewardsDone += reAddClick;
+	}
 
 	/// <summary>
 	/// Update the table, if there is one.
 	/// </summary>
 	private void UpdateGrid(){
 		UIGrid grid = NGUITools.FindInParents<UIGrid>(mTrans.parent.gameObject);
-		if(grid != null) grid.repositionNow = true;
+		if(grid != null){
+			grid.repositionNow = true;
+		}
 	}
 
 	//Update the position of the Grid when the item has been destroyed
@@ -100,19 +110,9 @@ public class InventoryDragDrop : MonoBehaviour{
 		}
 	}
 
-	void Awake(){ 
-		mTrans = transform; 	
-	}
-
-	void Start(){
-		dragScrollScript = GetComponent<UIDragPanelContents>();
-		RewardManager.OnAllRewardsDone += reAddClick;
-	}
-
 	/// <summary>
 	/// Start the drag event and perform the dragging.
 	/// </summary>
-
 	void OnDrag(Vector2 delta){
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
 			Drop();

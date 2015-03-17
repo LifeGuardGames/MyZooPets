@@ -8,6 +8,9 @@ public class Merchant : MiniPet {
 	private GameObject blackStoreButton;
 	public int itemsInList = 0;
 	private List<string> items;
+	private ImmutableDataMerchantItem secItem;
+	private bool isItemBought;
+
 
 	void Awake(){
 		//temp
@@ -15,10 +18,21 @@ public class Merchant : MiniPet {
 		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "Merchant";
 		blackStoreButton = GameObject.Find("BlackStoreButton");
-		//if(itemsInList != PlayerPrefs.GetInt("merchantItemCount")){
+		if(PlayerPrefs.GetInt("merchantItemCount")==0){
 			items = DataLoaderMerchantItem.getMerchantList();
-			itemsInList = items.Count;
-		//}
+			//itemsInList = items.Count;
+			PlayerPrefs.SetInt("merchantItemCount",1);
+		}
+	}
+
+	protected override void OnTap(TapGesture gesture){	
+		base.OnTap(gesture);
+		if (isFinishEating && !isItemBought){
+			Hashtable has = new Hashtable();
+			has[0] = secItem.ItemId;
+			has[1] = secItem.Type;
+			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant,has); 
+		}
 	}
 
 	public override void FinishEating(){
@@ -41,10 +55,15 @@ public class Merchant : MiniPet {
 		int max = items.Count;
 		int rand = Random.Range (0,max);
 		ImmutableDataMerchantItem itemData = DataLoaderMerchantItem.GetData(items[rand]);
+		secItem = itemData;
 		has[0] = itemData.ItemId;
 		has[1] = itemData.Type;
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant,has); 
 	}
-	
+
+	public void removeItem(){
+		items.Remove(secItem.ItemId);
+		isItemBought = true;
+	}
 
 }

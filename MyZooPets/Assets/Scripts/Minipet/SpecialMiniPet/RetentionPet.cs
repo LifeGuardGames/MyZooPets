@@ -13,7 +13,12 @@ public class RetentionPet : MiniPet {
 	}
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
+		if(isFinishEating){
+		Hashtable has = new Hashtable();
+		has[0] = "Do Daily Missions";
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
 		turnInMission();
+		}
 	}
 	public override void FinishEating(){
 		base.FinishEating();

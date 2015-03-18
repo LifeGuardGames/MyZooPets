@@ -29,7 +29,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		descriptionLocalize.Localize();
 
 		cost.text = secretItem.Cost.ToString();
-		merchant = GameObject.Find("MiniPetPebbleDemon");
+		merchant = GameObject.Find("Merchant");
 		if(isBoughtAlready){
 			// Enable some game components here
 

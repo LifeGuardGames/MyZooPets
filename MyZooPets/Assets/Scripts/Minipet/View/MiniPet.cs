@@ -40,7 +40,7 @@ public class MiniPet : MonoBehaviour {
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
 
-	void Start(){
+	protected virtual void Start(){
 		nguiCamera = GameObject.Find("Camera").camera;
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;

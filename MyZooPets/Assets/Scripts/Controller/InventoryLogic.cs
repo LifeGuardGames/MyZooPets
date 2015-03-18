@@ -186,7 +186,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 				InventoryEventArgs args = new InventoryEventArgs();
 				args.IsItemNew = itemNew;
 				args.InvItem = invItem;
-				Debug.Log("saignvdrisfhjn");
 				OnItemAddedToDecoInventory(this, args);
 			}
 		}
@@ -238,7 +237,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		InventoryItem invItem = null;
 		listNeedsUpdate = true;
-
 		if(invItems.ContainsKey(itemID)){
 			invItem = invItems[itemID];
 			invItem.Amount--;

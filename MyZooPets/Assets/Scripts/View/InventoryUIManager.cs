@@ -75,7 +75,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
 		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
@@ -153,12 +152,15 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// Items the used event handler.
 	/// </summary>
 	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+
+		Debug.Log("jshbgisn");
 		if(currentDragDropItem != null){
 			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
 				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
 			}
 			else{ //destroy object if it has been used up
+				Debug.Log("waisgbsdrtib");
 				Destroy(currentDragDropItem.gameObject);
 				UpdateBarPosition();
 			}

@@ -15,6 +15,8 @@ public class MutableDataMiniPets{
 	//	public DateTime LastActionTime {get; set;}
 		public bool CanGiveMission{get; set;}
 		public bool isHatched{get; set;}
+		public List<string> SecretMerchantSellList{get; set;}
+		
 
 	
 		public Status(){
@@ -22,6 +24,7 @@ public class MutableDataMiniPets{
 			CurrentXP = 0;
 			CanGiveMission = false;
 			isHatched = false;
+			SecretMerchantSellList = new List<string>();
 			//IsTickled = false;
 			//IsCleaned = false;
 			//LastActionTime = LgDateTime.GetTimeNow();
@@ -36,7 +39,6 @@ public class MutableDataMiniPets{
 	public Dictionary<string, Status> MiniPetProgress {get; set;}
 	//public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
 	//public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
-	public List<string> SecretMerchantSellList{get; set;}
 	/// <summary>
 	/// Unlocks the mini pet.
 	/// </summary>
@@ -253,6 +255,27 @@ public class MutableDataMiniPets{
 		}
 		else{
 			return true;
+		}
+	}
+	public void saveMerchList(List<string> merch, string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.SecretMerchantSellList = merch;
+		}
+	}
+	public List<string> getMerchList(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			if(status.SecretMerchantSellList.Count != 0){
+				return status.SecretMerchantSellList;
+			}
+			else{
+				return null;
+			}
+		}
+		else {
+			return null;
 		}
 	}
 

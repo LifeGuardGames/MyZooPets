@@ -153,14 +153,12 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// </summary>
 	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
 
-		Debug.Log("jshbgisn");
 		if(currentDragDropItem != null){
 			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
 				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
 			}
 			else{ //destroy object if it has been used up
-				Debug.Log("waisgbsdrtib");
 				Destroy(currentDragDropItem.gameObject);
 				UpdateBarPosition();
 			}

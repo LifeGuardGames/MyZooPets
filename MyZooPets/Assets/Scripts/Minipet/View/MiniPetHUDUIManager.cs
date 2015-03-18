@@ -300,7 +300,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	public void RefreshFoodItemUI(){
 		if(SelectedMiniPetID != null){
-			Debug.Log(SelectedMiniPetID);
 			if(!DataManager.Instance.GameData.MiniPetLocations.GetHunger(SelectedMiniPetID)){
 				nameLabel.text = SelectedMiniPetName;
 				int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);

@@ -17,11 +17,13 @@ public class ComicPlayer : MonoBehaviour{
 	}
 
 	public void Init(string petColor){
-		// TODO Set the pet color here
-
 		// Hide all and dont play
 		for(int i = 0; i < pages.Count; i++){
-			pages[i].GetComponent<ComicPage>().ToggleActive(false);
+			ComicPage page = pages[i].GetComponent<ComicPage>();
+			// Set the pet color
+			page.Init(petColor);
+
+			page.ToggleActive(false);
 		}
 
 		// Call on next frame, wait for tween toggle to init!!!

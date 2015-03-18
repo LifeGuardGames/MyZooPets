@@ -41,7 +41,7 @@ public class Merchant : MiniPet {
 		base.FinishEating();
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
-		miniPetSpeechAI.ShowTipMsg();
+		miniPetSpeechAI.showBlackShopMessage();
 		timesVisited++;
 		PlayerPrefs.SetInt("TimesVisited", timesVisited);
 		//ShowStoreButton();

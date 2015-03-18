@@ -99,12 +99,9 @@ public class MiniPetSpeechAI : MonoBehaviour{
 	public void showBlackShopMessage(){
 		int rand = Random.Range (0, 5);
 		Hashtable msgOption = new Hashtable();
-		switch(rand){
-		case 0:
-			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MERCHANT_0"));
-			break;
-		}
-
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MERCHANT_" + rand.ToString()));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.Talk(msgOption);
 	}
 
 	public void ShowFoodPreferenceMsg(string itemTextureName){

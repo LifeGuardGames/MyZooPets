@@ -24,6 +24,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	private int combo = 0;
 	private bool isPaused = false;
 	public bool inTutorial = true;
+	public GameObject tutButton;
 
 	private MemoryGameUIManager memoryUI;
 
@@ -34,7 +35,6 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	#region Overridden Functions
 	protected override void _Start(){
 		MemoryGameManager.OnStateChanged += GameStateChange;
-
 		memoryUI = ui as MemoryGameUIManager;
 	}
 
@@ -50,6 +50,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		if(IsTutorialOn() && IsTutorialOverride()|| 
 		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
 			StartTutorial();
+			tutButton.SetActive(true);
 		}
 		else{
 			Reset();
@@ -205,11 +206,11 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	private void StartTutorial(){
 		SetTutorial(new MemoryGameTut());
-		StartCoroutine (StudyTime ());
+		//StartCoroutine (StudyTime ());
 	}
 
-	IEnumerator StudyTime(){
-		yield return new WaitForSeconds(4.0f);
+	public void MoveOn(){
+		tutButton.SetActive(false);
 		if(proceed != null)
 			proceed(this, EventArgs.Empty);
 	}

@@ -3,11 +3,7 @@ using System.Collections;
 
 public class RetentionPet : MiniPet {
 
-	private int timesVisited = 0;
-
 	void Awake(){
-		//temp
-		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "retention";
 
 	}
@@ -26,8 +22,6 @@ public class RetentionPet : MiniPet {
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.ShowTipMsg();
-		timesVisited++;
-		PlayerPrefs.SetInt("TimesVisited", timesVisited);
 		giveOutMission();
 	}
 

@@ -94,19 +94,19 @@ public class TutorialManagerBedroom : TutorialManager{
 		DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
 	}
 
-	private void TutorialPart2Check(){
+	private void TutorialPart2Check(){	// TODO this can be refactored, this is checked everytime you switch rooms....
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
 		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
 
-		bool isQuestionaireCollected = DataManager.Instance.GameData.PetInfo.IsQuestionaireCollected;
-		isQuestionaireCollected = true; // TODO remove this
+		bool isQuestionaireCollected = DataManager.Instance.IsQuestionaireCollected;
 
+//		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod + " QUESTIONAIRE " + isQuestionaireCollected);
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod && isQuestionaireCollected){
-			Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
+				Debug.Log("PASS");
 				// play the trigger tutorial
 				new GameTutorialTriggers();
 			}
@@ -115,7 +115,9 @@ public class TutorialManagerBedroom : TutorialManager{
 				// play the deco tutorial
 				new GameTutorialDecorations();
 			}
-			else{}
+			else{
+				Debug.Log("FAIL");
+			}
 		}
 	}
 

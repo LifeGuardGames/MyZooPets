@@ -140,7 +140,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		}
 		
 		// calculate changes in the pets mood
-		TimeSpan sinceLastPlayed = LgDateTime.GetTimeSpanSinceLastPlayed();
+//		TimeSpan sinceLastPlayed = LgDateTime.GetTimeSpanSinceLastPlayed();
 //		CalculateMoodDegradation(sinceLastPlayed);
 		CalculateHealthDegradation();
 	}
@@ -244,22 +244,22 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			degradationData.LastPlayPeriodTriggerSpawned = PlayPeriodLogic.GetCurrentPlayPeriod();
 		}
 		else{
-			int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
+			int playPeriodsOffset = GetNumPlayPeriodsOffset();
 
 			//There are missed play periods
-			if(numOfMissedPlayPeriod > 0){
+			if(playPeriodsOffset > 1){
 				//max of 2 missed play period will be accounted
-				if(numOfMissedPlayPeriod > 2){
-					numOfMissedPlayPeriod = 2;
+				if(playPeriodsOffset > 2){
+					playPeriodsOffset = 2;
 				}
 
 				//calculate num of new triggers
-				newTriggers = numOfMissedPlayPeriod * 3;
+				newTriggers = playPeriodsOffset * 3;
 
 				//update lastTriggerSpawnedPlayPeriod. Important that we update it here
 				//otherwise more triggers will be spawned if user return from pause
 				degradationData.LastPlayPeriodTriggerSpawned = PlayPeriodLogic.GetCurrentPlayPeriod();
-
+				Debug.Log("Missed play periods spawning " + newTriggers + "triggers");
 			}
 	        //No missed play periods. spawn triggers for Next Play Period
 	        else{
@@ -348,15 +348,15 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	private void CalculateHealthDegradation(){
 		// wait a frame, or else the notification manager won't work properly
 
-		int numOfMissedPlayPeriod = GetNumOfMissedPlayPeriod();
+		int numPlayPeriodOffset = GetNumPlayPeriodsOffset();
 
-		if(numOfMissedPlayPeriod > 0){
+		if(numPlayPeriodOffset > 1){
 			//max punishment is 2 play period
-			if(numOfMissedPlayPeriod > 2){
-				numOfMissedPlayPeriod = 2;
+			if(numPlayPeriodOffset > 3){
+				numPlayPeriodOffset = 3;
 			}
-
-			StatsController.Instance.ChangeStats(deltaHealth: numOfMissedPlayPeriod * -20);
+			Debug.Log("Missed play period, punishing user with " + ((numPlayPeriodOffset - 1) * -20) + " health");
+			StatsController.Instance.ChangeStats(deltaHealth: (numPlayPeriodOffset - 1) * -20);
 		}
 	}
 
@@ -376,11 +376,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 //		}
 //	}
 
-	//-------------------------------------------------------------------------- 
-	// GetNumOfMissedPlayPeriod()
-	//-------------------------------------------------------------------------- 
-	private int GetNumOfMissedPlayPeriod(){
-		int missedPlayPeriod = 0;
+	/// <summary>
+	/// Gets the number play periods offset
+	/// If number is 1, that means you did not miss any play periods
+	/// </summary>
+	/// <returns>The number play periods offset.</returns>
+	private int GetNumPlayPeriodsOffset(){
+		int playPeriodsOffset = 0;
 		DateTime lastPlayPeriod = PlayPeriodLogic.Instance.GetLastPlayPeriod();
 
 		// Difference in hours between now and next play period
@@ -388,8 +390,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 		//if within 12 hours no punishment
 		//if > 12 hrs punishment for every 12 hrs miss
-		missedPlayPeriod = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
+		playPeriodsOffset = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
 
-		return missedPlayPeriod;
+		Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + playPeriodsOffset);
+		return playPeriodsOffset;
 	}
 }

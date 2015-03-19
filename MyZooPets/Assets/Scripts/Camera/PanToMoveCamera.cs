@@ -87,12 +87,14 @@ public class PanToMoveCamera : MonoBehaviour{
 		int oldPartition = (int)hash["Old"];
 		
 		// if we were snapping back, don't send anything
-		if(oldPartition == currentPartition)
+		if(oldPartition == currentPartition){
 			return;
+		}
 
 		// camera is done snapping, so send the partition changed callback
-		if(OnPartitionChanged != null)
-			OnPartitionChanged(this, new PartitionChangedArgs(oldPartition, currentPartition));		
+		if(OnPartitionChanged != null){
+			OnPartitionChanged(this, new PartitionChangedArgs(oldPartition, currentPartition));
+		}
 	}
 
 	/// <summary>

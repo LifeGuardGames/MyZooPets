@@ -77,8 +77,9 @@ public class TutorialManager : Singleton<TutorialManager>{
 	protected virtual bool Check(){
 		bool retVal = true;
 
-		if(!isTutorialEnabled || tutorial != null)
+		if(!isTutorialEnabled || tutorial != null){
 			retVal = false;
+		}
 
 		return retVal;
 	}

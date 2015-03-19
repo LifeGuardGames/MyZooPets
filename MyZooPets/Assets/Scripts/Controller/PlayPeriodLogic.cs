@@ -37,8 +37,8 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 	}
 
-	public void SetLastPlayPeriod(DateTime playPeriod){
-		DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = playPeriod;
+	public void SetLastPlayPeriod(){
+		DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = GetCurrentPlayPeriod();
 	}
 
 	public DateTime GetLastPlayPeriod(){
@@ -48,8 +48,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
 			// Save current information
-			SetLastPlayPeriod(GetCurrentPlayPeriod());
-
+			SetLastPlayPeriod();
 
 			//calculate time diff since last play session ended and submit to game analytics
 			TimeSpan timeSinceLastSession = LgDateTime.GetTimeSpanSinceLastPlayed();
@@ -125,7 +124,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	public static DateTime GetCurrentPlayPeriod(){
 		//if the time now is morning, current play period = 12am
 		//if afternoon, current play period = 12pm
-		return (LgDateTime.GetTimeNow().Hour < 12) ? LgDateTime.Today : LgDateTime.Today.AddHours(12);;
+		return (LgDateTime.GetTimeNow().Hour < 12) ? LgDateTime.Today : LgDateTime.Today.AddHours(12);
 	}
 
 	/// <summary>

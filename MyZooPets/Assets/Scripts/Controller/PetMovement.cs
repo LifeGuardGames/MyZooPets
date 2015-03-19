@@ -70,7 +70,9 @@ public class PetMovement : Singleton<PetMovement>{
 		Ray initRay = Camera.main.ScreenPointToRay(new Vector2(Screen.width/2f, movementStaticScreenY));
 		// Debug.DrawRay(initRay.origin, initRay.direction * 50, Color.green, 5000f);
 		RaycastHit hit;
-		if(Physics.Raycast(initRay, out hit)){
+		int layerMask = 1 << 23;
+		layerMask = ~layerMask;
+		if(Physics.Raycast(initRay, out hit, Mathf.Infinity,layerMask)){
 			foreach(Collider walkingPathCollider in walkingPathColliders){
 				// This is the point where the ratio ray will hit the floor
 				if(hit.collider == walkingPathCollider){	// Assume one floor for now

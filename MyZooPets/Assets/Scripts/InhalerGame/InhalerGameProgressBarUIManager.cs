@@ -25,11 +25,15 @@ public class InhalerGameProgressBarUIManager : Singleton<InhalerGameProgressBarU
     void Start(){
         InhalerLogic.OnNextStep += UpdateProgressBar;
 		InhalerLogic.OnNextStep += UpdateNodeColors;
+		Inhale.finish += UpdateProgressBar;
+		Inhale.finish += UpdateNodeColors;
     }
     
     void OnDestroy(){
-        InhalerLogic.OnNextStep -= UpdateProgressBar;
+		InhalerLogic.OnNextStep -= UpdateProgressBar;
 		InhalerLogic.OnNextStep -= UpdateNodeColors;
+		Inhale.finish -= UpdateProgressBar;
+		Inhale.finish -= UpdateNodeColors;
     }
 
 	/// <summary>
@@ -65,10 +69,12 @@ public class InhalerGameProgressBarUIManager : Singleton<InhalerGameProgressBarU
 
 	// Incrase the node color by one step
     private void UpdateNodeColors(object sender, EventArgs args){
+		if(nodeStep < sliderNodes.Count){
 		GameObject nodeObject = sliderNodes[nodeStep];
 		GameObject nodeSpriteObject = nodeObject.transform.Find("Sprite").gameObject;
 		nodeSpriteObject.GetComponent<UISprite>().spriteName = "greenCircle";
 		nodeSpriteObject.GetComponent<ParticleSystemController>().Play();
 		nodeStep++;
+		}
     }
 }

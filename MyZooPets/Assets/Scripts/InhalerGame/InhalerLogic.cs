@@ -64,7 +64,8 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	// Put anything in here that should happen as a result
 	// of the pet using the daily inhaler.
 	//---------------------------------------------------		
-	private void GameDone(){		
+	private void GameDone(){
+
 		// play game over sound
 		AudioManager.Instance.PlayClip("inhalerDone");
 

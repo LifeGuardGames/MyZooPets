@@ -10,6 +10,7 @@ public class Inhale : InhalerPart{
 //	public Animator animator;
 	public Animation InhalerBodyMoveAnimation;
 
+	public static EventHandler<EventArgs> finish;
 	protected override void Awake(){
 		base.Awake();
 		gameStepID = 7;
@@ -37,7 +38,9 @@ public class Inhale : InhalerPart{
 				option.Add("color", Color.white);
 				
 				FloatyUtil.SpawnFloatyText(option);
-				
+				if(finish != null){
+					finish(this, EventArgs.Empty);
+				}
 				InhalerBodyMoveAnimation.Play();
 			}
 		}
@@ -67,7 +70,9 @@ public class Inhale : InhalerPart{
 				option.Add("color", Color.white);
 				
 				FloatyUtil.SpawnFloatyText(option);
-				
+				if(finish != null){
+					finish(this, EventArgs.Empty);
+				}
 				InhalerBodyMoveAnimation.Play();
 				}
 			}

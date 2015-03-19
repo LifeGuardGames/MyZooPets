@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 public class WellapadMissionDoneUIController : MonoBehaviour {
 	// label to update the timer
-	public UILabel labelTimer;
+	//public UILabel labelTimer;
 	public UILabel labelTimerMessage;
 	public UILabel labelStartLevel;
 	public UILabel labelEndLevel;
@@ -32,12 +32,12 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	void Start(){
 		WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
 		// HUDAnimator.OnLevelUp += RefreshLevelProgressOnLevelUp;
-		HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
+	//	HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
 
-		RefreshLevelProgress();
-		RefreshUnlockPredictions(this, EventArgs.Empty);
+		//RefreshLevelProgress();
+		//RefreshUnlockPredictions(this, EventArgs.Empty);
 
-		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
+		//PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 	}
 
 	void OnDestroy(){
@@ -45,9 +45,9 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			WellapadUIManager.Instance.OnManagerOpen -= RefreshLevelProgress;
 			
 		// HUDAnimator.OnLevelUp -= RefreshLevelProgressOnLevelUp;
-		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
+//		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 
-		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
+		//PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){
@@ -100,7 +100,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	// RefreshUnlockPredictions()
 	// Update the items/badge/flame that will be unlocked for next level
 	//----------------------------------------------
-	private void RefreshUnlockPredictions(object sender, EventArgs args){
+	/*private void RefreshUnlockPredictions(object sender, EventArgs args){
 		foreach(Transform child in gridUnlockPredictions.transform){
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
@@ -131,5 +131,5 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		}
 
 		gridUnlockPredictions.GetComponent<UIGrid>().Reposition();
-	}
+	}*/
 }

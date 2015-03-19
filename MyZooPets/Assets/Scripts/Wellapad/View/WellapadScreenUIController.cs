@@ -61,6 +61,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 		}else{
 			// otherwise, show the "come back later" screen
 			if(missionDoneGO == null){
+				Debug.Log("awkgbebiwsbg");
 				GameObject missionDonePrefab = (GameObject) Resources.Load(missionDonePrefabName);
 				missionDoneGO = GameObjectUtils.AddChildWithPositionAndScale(goWellapadScreen, missionDonePrefab);
 			}

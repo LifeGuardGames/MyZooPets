@@ -3,12 +3,9 @@ using System.Collections;
 
 public class GameMaster : MiniPet {
 
-	private int timesBeatened = 0;
 	public MinigameTypes minigameType;
 	
 	void Awake(){
-		//temp
-		timesBeatened = PlayerPrefs.GetInt("TimesBeatened");
 		name = "GameMaster";
 	}
 	protected override void OnTap(TapGesture gesture){	
@@ -37,8 +34,6 @@ public class GameMaster : MiniPet {
 				// claim the reward
 				WellapadMissionController.Instance.ClaimReward(PickMinigameMission());
 				WellapadMissionController.Instance.RefreshCheck();
-				timesBeatened++;
-				PlayerPrefs.SetInt("TimesBeatened", timesBeatened);
 				MiniPetManager.Instance.IncreaseXP(id);
 			}
 		}

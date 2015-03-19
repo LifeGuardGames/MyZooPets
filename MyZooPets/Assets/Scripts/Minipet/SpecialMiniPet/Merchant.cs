@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Merchant : MiniPet {
-
-	private int timesVisited = 0;
+	
 	private GameObject blackStoreButton;
 	public int itemsInList = 0;
 	private List<string> items;
@@ -16,7 +15,6 @@ public class Merchant : MiniPet {
 		base.Start();
 		//temp
 		items = new List<string>();
-		timesVisited = PlayerPrefs.GetInt("TimesVisited");
 		name = "Merchant";
 		blackStoreButton = GameObject.Find("BlackStoreButton");
 		items = DataManager.Instance.GameData.MiniPets.getMerchList(id);
@@ -42,8 +40,6 @@ public class Merchant : MiniPet {
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.showBlackShopMessage();
-		timesVisited++;
-		PlayerPrefs.SetInt("TimesVisited", timesVisited);
 		//ShowStoreButton();
 		StartCoroutine(WaitASec());
 	}
@@ -67,6 +63,7 @@ public class Merchant : MiniPet {
 	public void removeItem(){
 		items.Remove(secItem.ItemId);
 		isItemBought = true;
+		MiniPetManager.Instance.IncreaseXP(id);
 	}
 	IEnumerator WaitASec(){
 		yield return new WaitForSeconds(0.4f);

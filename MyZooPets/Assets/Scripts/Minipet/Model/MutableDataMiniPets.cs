@@ -16,8 +16,6 @@ public class MutableDataMiniPets{
 		public bool CanGiveMission{get; set;}
 		public bool isHatched{get; set;}
 		public List<string> SecretMerchantSellList{get; set;}
-		
-
 	
 		public Status(){
 			CurrentLevel = Level.Level1;

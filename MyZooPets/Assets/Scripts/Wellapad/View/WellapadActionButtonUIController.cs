@@ -22,21 +22,24 @@ public class WellapadActionButtonUIController : MonoBehaviour {
 
         //since we don't really use multiple missions in the wellapad right now. there will only be
         //one id in the list
+		if(currentMissionIDs.Count != 0){
         missionID = currentMissionIDs[0];
 
         //use GetMission(missionid) to get the mission data
         MutableDataMission mission = WellapadMissionController.Instance.GetMission(missionID);
-
+		
         if(mission != null){
             RewardStatuses status = mission.RewardStatus;
 
             //if reward status is claimed or unearned, so regular back button
            // if(status == RewardStatuses.Claimed || status == RewardStatuses.Unearned)
-                ShowBackButton();
+                
             //if reward status is unclaimed, so reward button
             //else
               //  ShowRewardButton();
         }
+		}
+		ShowBackButton();
 
     }
 

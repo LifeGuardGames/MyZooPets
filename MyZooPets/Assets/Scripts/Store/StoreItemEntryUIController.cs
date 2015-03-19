@@ -22,6 +22,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	}
 
 	public void StopWiggleAnimation(){
+		tutorialWiggleAnimation.resetAfterStop = true;
 		tutorialWiggleAnimation.Stop();
 	}
 

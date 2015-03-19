@@ -38,6 +38,12 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 		}
 	}
 	private IEnumerator Load(){
+
+		// Save the play period information before you change scenes
+		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD){
+			PlayPeriodLogic.Instance.SetLastPlayPeriod();
+		}
+
 #if UNITY_EDITOR
 		Debug.LogWarning("ASYNC LOAD STARTED - " + "DO NOT EXIT PLAY MODE UNTIL SCENE LOADS... UNITY WILL CRASH");
 #endif

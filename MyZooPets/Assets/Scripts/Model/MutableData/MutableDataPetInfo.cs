@@ -19,8 +19,6 @@ public class MutableDataPetInfo : MutableData{
 	public bool IsHatched { get; set; }
 	public int FireBreaths { get; set; } // fire breathing status of the pet
 
-	public bool IsQuestionaireCollected {get; set;}
-
 	/// <summary>
 	/// Changes the name.
 	/// </summary>
@@ -77,7 +75,6 @@ public class MutableDataPetInfo : MutableData{
 		PetColor = "OrangeYellow";
 		IsHatched = false;
 		FireBreaths = 0;
-		IsQuestionaireCollected = false;
 	}
 
 	public override void VersionCheck(Version currentDataVersion){

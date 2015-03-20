@@ -65,7 +65,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			return;
 		}
 
-		 content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+		content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 
 		switch(type){
 		case MiniPetTypes.Rentention:

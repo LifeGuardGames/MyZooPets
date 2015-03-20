@@ -35,7 +35,25 @@ public class GestureTrail : MonoBehaviour{
 	private bool CanGesture(){
 		return true;	
 	}
+
+	void Start(){
+		NinjaManager.OnStateChanged += GameStateChange;
+	}
 	
+	void OnDestroy(){
+		NinjaManager.OnStateChanged -= GameStateChange;
+	}
+
+	private void GameStateChange(object sender, GameStateArgs args){
+		switch(args.GetGameState()){
+		case MinigameStates.GameOver:
+			Destroy(goTrail);
+			break;
+		default:
+			break;
+		}
+	}
+
 	/// <summary>
 	/// Drags the started.
 	/// Function called when the user begins to drag their finger.

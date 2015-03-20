@@ -134,12 +134,15 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	/// <param name="numberOfShards">Number of shards.</param>
 	private IEnumerator StartFlyingShards(int numberOfShards, float delay){
 		if(IsOpen()){
+		//	if(numberOfShards == 1){
+		//		numberOfShards = 2;
+		//	}
 			// Wait before starting
 			yield return new WaitForSeconds(delay);
 
 			float delayBetweenShards = totalTimeTween / (float)numberOfShards;
 			
-			for(int i = 0; i < numberOfShards/2; i++){
+			for(float i = 0; i < (float)(numberOfShards/2.0); i++){
 				GameObject shardObject = GameObjectUtils.AddChild(shardParent, shardSpritePrefab);
 				// Place the shard object on a random point on a circle around center
 				shardObject.transform.localPosition = 

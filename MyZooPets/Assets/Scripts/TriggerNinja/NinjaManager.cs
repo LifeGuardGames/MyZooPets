@@ -8,7 +8,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public float comboMaxTime;		// max time between cuts for a combo
 	public GestureTrail trail; // the gesture trail that follows the user's finger around
 	public float timeBetweenSpawnGroups;	// time between spawn groups
-	public bool bonusRound=false;			// triggers Bonus round
+	public bool bonusRound = false;			// triggers Bonus round
 	private bool spawning = true;			//stops the spawning to prevent the play from being horibly murdered mid bonus round
 	public int chain = 0;			// number of enemies killed with out hitting a bomb 
 	public GameObject bonusLabel;

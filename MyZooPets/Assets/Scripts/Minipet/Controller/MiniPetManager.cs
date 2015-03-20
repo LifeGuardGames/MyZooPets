@@ -403,6 +403,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 						}
 					else{
+						Debug.Log(pos);
 						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID,pos);
 						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID,partitionNumber);
 					}
@@ -410,13 +411,19 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 				}
 			else if(Application.loadedLevelName == SceneUtils.YARD){
 				if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 || DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 6){
-					goMiniPet = Instantiate(prefab,DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
-					goMiniPet.name = prefab.name;
+					Vector3 pos = DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID);
 					if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 ){
+						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(5).gameObject, prefab);
+						goMiniPet.transform.localPosition = pos;
 						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Runner;
+						goMiniPet.name = prefab.name;
 					}
 					else{
+						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(6).gameObject, prefab);
+						Debug.Log(pos);
+						goMiniPet.transform.localPosition = pos;
 						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Shooter;
+						goMiniPet.name = prefab.name;
 					}
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					if(CanSpawnNewMinipetLocations()){

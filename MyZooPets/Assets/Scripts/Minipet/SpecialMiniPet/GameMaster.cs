@@ -27,11 +27,11 @@ public class GameMaster : MiniPet {
 	
 	private void turnInMission(){
 		if(isFinishEating){
-			MiniPetManager.Instance.IncreaseXP(id);
 			MutableDataMission mission = WellapadMissionController.Instance.GetMission(PickMinigameMission());
 			
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
+				MiniPetManager.Instance.IncreaseXP(id);
 				WellapadMissionController.Instance.ClaimReward(PickMinigameMission());
 				WellapadMissionController.Instance.RefreshCheck();
 				MiniPetManager.Instance.IncreaseXP(id);

@@ -331,6 +331,7 @@ public class GameTutorialDecorations : GameTutorial{
 		NotificationUIManager.Instance.CleanupNotification();
 
 		decoModeBackButton = GameObject.Find("DecoExitButton");
+		ShowFingerHint(decoModeBackButton);
 		SpotlightObject(decoModeBackButton, true, InterfaceAnchors.BottomLeft, fingerHint: true,
 		                fingerHintFlip: true, delay: 0.5f);
 

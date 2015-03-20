@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Entrance helper controller.
@@ -15,6 +16,7 @@ public class EntranceHelperController : MonoBehaviour {
 		if(string.IsNullOrEmpty(entranceKey)){
 			Debug.LogError("Entrance key at " + this.gameObject + " needs to be set");
 		}
+		GatingManager.OnDestroyedGate += OpenTheGates;
 	}
 
 	void Start(){
@@ -27,23 +29,30 @@ public class EntranceHelperController : MonoBehaviour {
 	void OnDestroy(){
 		if(MiniPetHUDUIManager.Instance)
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= OnManagerOpenEventHandler;
+		GatingManager.OnDestroyedGate -= OpenTheGates;
 	}
 
 	private void RefreshState(){
-		bool isFirstTime = DataManager.Instance.GameData.FirstTimeEntrance.IsFirstTimeEntrance(entranceKey);
+		//bool isFirstTime = DataManager.Instance.GameData.FirstTimeEntrance.IsFirstTimeEntrance(entranceKey);
 		
-		if(isFirstTime){
+		//if(isFirstTime){
+
 			spawnParticle.Play();
 			arrowGameObject.SetActive(false);
 			Invoke("ShowArrow", arrowShowDelay);
-		}
-		else{
-			arrowGameObject.SetActive(false);
-		}
+		//}
+	//	else{
+	//		arrowGameObject.SetActive(false);
+	//	}
+	}
+	public void OpenTheGates(object sender, EventArgs args){
+		Debug.Log("awoubgisbd g");
+		this.gameObject.transform.parent.gameObject.SetActive(true);
+		spawnParticle.Play();
 	}
 
 	public void ShowArrow(){
-		arrowGameObject.SetActive(true);
+		//arrowGameObject.SetActive(true);
 	}
 	
 	public void EntranceUsed(){

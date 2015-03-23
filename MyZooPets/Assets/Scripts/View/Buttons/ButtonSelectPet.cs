@@ -6,14 +6,17 @@ using System.Collections;
 // Button for the egg that appears when users first
 // hatch their pet.
 //---------------------------------------------------
-
-public class ButtonSelectPet : LgButton {
+public class ButtonSelectPet : LgButton{
     
     //---------------------------------------------------
     // ProcessClick()
     //---------------------------------------------------   
-    protected override void ProcessClick() {
-        SelectionUIManager.Instance.PetSelected(this.gameObject);
+    protected override void ProcessClick(){
+		if(CustomizationUIManager.Instance.canClickHatchPet){	// Third customization ui
+			CustomizationUIManager.Instance.ThirdUIEggTapped();
+		}
+		else{
+			SelectionUIManager.Instance.PetSelected(this.gameObject);	// First call into customization
+		}
     }
-
 }

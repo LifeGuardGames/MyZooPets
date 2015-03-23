@@ -18,6 +18,7 @@ public enum Level{
 }
 
 public enum PetColor{
+	None,
 	OrangeYellow,
 	PurpleLime,
 	BlueYellow

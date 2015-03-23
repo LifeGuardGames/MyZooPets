@@ -7,7 +7,7 @@ using System.Collections;
 // screen.
 //---------------------------------------------------
 
-public class ButtonChangeEggColor : LgButton {
+public class ButtonChangeEggColor : LgButton{
 	
 	// sprite name for the egg
 	public string strSprite;
@@ -15,11 +15,11 @@ public class ButtonChangeEggColor : LgButton {
 	// pet color name for the egg
 	public string strColor;
 	
-	protected override void _Awake() {
+	protected override void _Awake(){
 		buttonSound = "introChangeColor";	
 	}
 	
-	protected override void ProcessClick() {
-		CustomizationUIManager.Instance.ChangeEggColor( strSprite, strColor );
+	protected override void ProcessClick(){
+		CustomizationUIManager.Instance.ChangeEggColor(strSprite, strColor);
 	}
 }

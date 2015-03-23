@@ -89,7 +89,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public void OpenUIBasedOnScene(){
 		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
 			backdrop.enabled = false;	// Use the wellapad backdrop due to panel layering issues
-			Debug.Log("DISABLE");
 			WellapadUIManager.Instance.OpenUI();
 		}
 		else{

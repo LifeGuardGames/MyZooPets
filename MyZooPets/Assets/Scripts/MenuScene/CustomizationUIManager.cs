@@ -13,10 +13,13 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 	public Animation requireColorAnimation;
 	public ParticleSystem poofParticle;
 	public TweenToggle logoTitleTween;
+	public bool canClickHatchPet = false;
 
     private string petColor = null;
     private string petName; //Default pet name
     private Color currentRenderColor;
+
+	private int hatchClicksCount = 10;
 	
     protected override void Awake(){
 		base.Awake();
@@ -30,19 +33,18 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 	
 	// Used when pressing back button in the panel
 	protected override void _CloseUI(){
+		nameTweenParent.Hide();
 	}
     
     public void ChangeEggColor(string spriteName, string petColor){
-		GameObject selectedEgg = SelectionUIManager.Instance.SelectedPet;
 		poofParticle.Play();
-		Sprite sprite = Resources.Load<Sprite>(spriteName);
-        selectedEgg.transform.FindChild("SpriteGrandparent/SpriteParent (Animation)/Sprite").GetComponent<SpriteRenderer>().sprite = sprite;
-        this.petColor = petColor;     
+		EggController.Instance.ChangeColor(spriteName);
+		this.petColor = petColor;     
     }
 
 	private void ShowFirstChooseUI(){
-		SelectionUIManager.Instance.ToggleEggAnimation(false);
-		SelectionUIManager.Instance.EggCrack(1);
+		EggController.Instance.ToggleEggIdleAnimation(false);
+		EggController.Instance.EggCrack(1);
 		leafParticle.Stop();
 
 		colorTweenParent.Show();
@@ -51,7 +53,7 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 	public void FirstFinishClicked(){
 		if(petColor != null){
 			colorTweenParent.Hide();
-			SelectionUIManager.Instance.EggCrack(2);
+			EggController.Instance.EggCrack(2);
 		}
 		else{
 			requireColorAnimation.Play();
@@ -68,21 +70,13 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 	public void SecondFinishClicked(){
 		if(!String.IsNullOrEmpty(nameField.text)){
 			petName = nameField.text;
-			nameTweenParent.Hide();
+			CloseUI();
 
 			Analytics.Instance.PetColorChosen(this.petColor);
-			Analytics.Instance.StartGame();
+
 			
 			// Initialize data for new pet
 			DataManager.Instance.ModifyBasicPetInfo(petName:petName, petSpecies:"Basic", petColor:this.petColor);
-			
-			// Play the movie
-			if(Constants.GetConstant<bool>("IsComicIntroOn")){
-				Invoke("ShowIntroMovie", 1);
-			}
-			else{
-				LoadScene();
-			}
 		}
 		else{
 			// Play the animation to prompt user to enter name
@@ -90,29 +84,21 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 		}
 	}
 
-	private void ShowIntroMovie() {
-//		ClickManager.Instance.Lock(UIModeTypes.IntroComic);
+	/// <summary>
+	/// Shows the third choose UI, called from second finish callback
+	/// </summary>
+	public void ShowThirdChooseUI(){
+		canClickHatchPet = true;
 
-		if(DataManager.Instance.GameData.Cutscenes.ListViewed.Contains("Comic_Intro")){
-			LoadScene();
+		// Show the finger pointer here
+		EggController.Instance.ToggleFingerHint(true);
+	}
+
+	public void ThirdUIEggTapped(){
+		EggController.Instance.EggHatchingTapped();
+		hatchClicksCount--;
+		if(hatchClicksCount <= 0){	// Hatch the pet
+			SelectionUIManager.instance.PlayMovie(petColor);
 		}
-
-//		SelectionUIManager.Instance.ToggleEggAnimation(false);
-//		AudioManager.Instance.LowerBackgroundVolume(0.1f);
-		
-		GameObject comicPlayerPrefab = Resources.Load("IntroComicPlayer") as GameObject;
-		GameObject goComicPlayer = GameObjectUtils.AddChildWithPositionAndScale(null, comicPlayerPrefab) as GameObject;
-		goComicPlayer.GetComponent<ComicPlayer>().Init(petColor);
-		ComicPlayer.OnComicPlayerDone += IntroComicDone;
-	}
-
-	private void IntroComicDone(object sender, EventArgs args){
-		DataManager.Instance.GameData.Cutscenes.ListViewed.Add("Comic_Intro");
-		ComicPlayer.OnComicPlayerDone -= IntroComicDone;
-		LoadScene();
-	}
-	
-	private void LoadScene(){
-		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 	}
 }

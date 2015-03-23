@@ -195,8 +195,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		// the game is now playing!
 		// this is potentially not the best place to put this...
 		// right now I'd say NewGame() means the game is starting
-		SetGameState(MinigameStates.Playing);	
-		Debug.Log("sdg");
+		SetGameState(MinigameStates.Playing);
 		StatsController.Instance.ChangeStats(deltaMood: -10, isInternal: true);
 		_NewGame();		
 	}

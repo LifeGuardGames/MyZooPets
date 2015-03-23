@@ -22,6 +22,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public UIAnchor parentAnchor;	// Changes depending on which scene we are in
 	public TweenToggle parentTween;	// Changes depending on which scene we are in
 	public UISprite parentBG;
+	public UISprite backdrop;
 
 	private int totalSubdivisions = 100;
 	private float step = 0.005f;
@@ -61,6 +62,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		currentPercentage = (float)DataManager.Instance.GameData.Stats.Shards/(float)totalSubdivisions;
 		currentPercentage = Mathf.Min(currentPercentage, 1.0f);
 		spriteFireFill.fillAmount = currentPercentage;
+		backdrop.enabled = true; 	// backdrop enabled by default
 	}
 
 	public void PopupAndRewardShards(int numberOfShards){
@@ -86,9 +88,12 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	public void OpenUIBasedOnScene(){
 		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
+			backdrop.enabled = false;	// Use the wellapad backdrop due to panel layering issues
+			Debug.Log("DISABLE");
 			WellapadUIManager.Instance.OpenUI();
 		}
 		else{
+			backdrop.enabled = true;
 			OpenUI();
 		}
 	}

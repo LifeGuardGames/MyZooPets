@@ -106,7 +106,7 @@ public class TutorialManagerBedroom : TutorialManager{
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
-				Debug.Log("PASS");
+//				Debug.Log("PASS");
 				// play the trigger tutorial
 				new GameTutorialTriggers();
 			}
@@ -116,7 +116,7 @@ public class TutorialManagerBedroom : TutorialManager{
 				new GameTutorialDecorations();
 			}
 			else{
-				Debug.Log("FAIL");
+//				Debug.Log("FAIL");
 			}
 		}
 	}

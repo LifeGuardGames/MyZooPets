@@ -37,14 +37,11 @@ public class ButtonWellapad : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		//if game is lite version show promo add when button is clicked after tutorial is done
-		// if(tutDone && VersionManager.IsLite()){
-		// 	LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
-		// }else{
-		if(WellapadUIManager.Instance.IsOpen())
-			WellapadUIManager.Instance.CloseUI();
+		// Call from fire crystal ui manager > opens wellapad uimanager > opens fire crystal ui
+		if(FireCrystalUIManager.Instance.IsOpen())
+			FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 		else{
-			WellapadUIManager.Instance.OpenUI();
+			FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 			DisableButtonBounce();
 		}
 	}

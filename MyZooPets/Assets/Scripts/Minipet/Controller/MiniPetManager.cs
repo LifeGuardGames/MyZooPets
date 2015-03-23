@@ -370,6 +370,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
 			Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
 			int partitionNumber  = 0;
+			DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID, true);
 			goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
@@ -403,7 +404,6 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 						}
 					else{
-						Debug.Log(pos);
 						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID,pos);
 						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID,partitionNumber);
 					}
@@ -447,7 +447,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			if(latestGate == null || (latestGate.Partition - 1 == 2)){
 				if(switchSpawn){
 					if(Application.loadedLevelName == SceneUtils.BEDROOM){
-					if(UnityEngine.Random.Range (0,1) == 0){
+					if(UnityEngine.Random.Range (0,8) == 0){
 						LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 						int partitionNumber  = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 						while (!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){

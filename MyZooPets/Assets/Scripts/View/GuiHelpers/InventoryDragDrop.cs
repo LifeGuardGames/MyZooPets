@@ -34,6 +34,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	void Start(){
 		dragScrollScript = GetComponent<UIDragPanelContents>();
 		RewardManager.OnAllRewardsDone += reAddClick;
+
 	}
 
 	/// <summary>
@@ -115,9 +116,10 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// </summary>
 	void OnDrag(Vector2 delta){
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
-			Drop();
+			//Drop();
 			return;
 		}
+
 		if(enabled && UICamera.currentTouchID > -2){
 			if(!mIsDragging && !isScrolling &&
 			    ((InventoryUIManager.Instance.IsInventoryScrollable() && delta.y > 0) ||	// If the delta has positive Y and scrollable, pick up

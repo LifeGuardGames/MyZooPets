@@ -19,13 +19,14 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
-	public override void QuitGame(){
-		if(QuitEvent != null)
-			QuitEvent(this, EventArgs.Empty);
-		ShooterUIManager.Instance.Quit();
-		ShooterSpawnManager.Instance.Quit();
-		base.QuitGame();
-	}
+//	public override void QuitGame(){
+//		if(QuitEvent != null){
+//			QuitEvent(this, EventArgs.Empty);
+//		}
+//		ShooterUIManager.Instance.Quit();
+//		ShooterSpawnManager.Instance.Quit();
+//		base.QuitGame();
+//	}
 
 	protected override void _Start(){
 	}

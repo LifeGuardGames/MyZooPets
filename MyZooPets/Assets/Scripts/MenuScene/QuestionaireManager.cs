@@ -35,6 +35,9 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	/// Collected information about player
 	/// </summary>
 	public void QuestionaireCollected(){
+		if (Debug.isDebugBuild){
+			return;
+		}
 		DataManager.Instance.IsQuestionaireCollected = true;
 	}
 

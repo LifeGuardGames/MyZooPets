@@ -52,7 +52,7 @@ public class WellapadActionButtonUIController : MonoBehaviour {
     }
 
     private void BackButtonClicked(){
-        WellapadUIManager.Instance.CloseUI();
+		FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 
         HideBothButtons();
     }

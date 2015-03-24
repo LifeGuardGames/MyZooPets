@@ -40,8 +40,10 @@ public class GameTutorialFlame : GameTutorial{
 
 			// show a little popup message telling the user to hold down the flame button
 			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
+			ShowRetentionPet(false, new Vector3(270, -186, -160));
 			break;
 		case 1:
+			RemoveRetentionPet();
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
 			string stringKey = GetKey() + "_" + GetStep();
 			string tutMessage = String.Format(Localization.Localize(stringKey), petName);

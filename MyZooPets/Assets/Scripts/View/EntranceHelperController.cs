@@ -46,7 +46,6 @@ public class EntranceHelperController : MonoBehaviour {
 	//	}
 	}
 	public void OpenTheGates(object sender, EventArgs args){
-		Debug.Log("awoubgisbd g");
 		this.gameObject.transform.parent.gameObject.SetActive(true);
 		spawnParticle.Play();
 	}

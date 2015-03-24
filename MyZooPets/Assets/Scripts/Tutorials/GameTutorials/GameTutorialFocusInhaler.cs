@@ -30,7 +30,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		case 0:
 				// the start of the focus inhaler tutorial
 			FocusInhaler();
-			
+			ShowRetentionPet(true, new Vector3(-281, -86, -160));
 			break;
 			
 		case 1:
@@ -38,6 +38,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 			RemoveSpotlight();
 			RemoveFingerHint();
 			RemovePopup();
+			RemoveRetentionPet();
 			break;
 		}
 	}

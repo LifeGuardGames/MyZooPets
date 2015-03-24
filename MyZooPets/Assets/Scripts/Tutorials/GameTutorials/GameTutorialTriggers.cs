@@ -72,7 +72,7 @@ public class GameTutorialTriggers : GameTutorial{
 		WellapadMissionController.Instance.CreateTutorialPart2Missions();
 	
 		// show the wellapad
-		WellapadUIManager.Instance.OpenUI();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 	
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();

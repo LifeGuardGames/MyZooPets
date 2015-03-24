@@ -5,15 +5,15 @@ public class RetentionPet : MiniPet {
 
 	void Awake(){
 		name = "retention";
-
 	}
+
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
 		if(isFinishEating){
-		Hashtable has = new Hashtable();
-		has[0] = "Do Daily Missions";
-		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
-		turnInMission();
+			Hashtable has = new Hashtable();
+			has[0] = "Do Daily Missions";
+			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
+			turnInMission();
 		}
 	}
 	public override void FinishEating(){
@@ -21,7 +21,9 @@ public class RetentionPet : MiniPet {
 
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
+
 		miniPetSpeechAI.ShowTipMsg();
+
 		giveOutMission();
 	}
 

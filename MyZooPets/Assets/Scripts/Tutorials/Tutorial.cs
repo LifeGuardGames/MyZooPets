@@ -31,6 +31,7 @@ public abstract class Tutorial{
 	private GameObject goSpotlight;	// current (and only) spotlight object this tutorial is highlighting
 	private GameObject goPopup; // current (and only) tutorial popup
 	private GameObject goFingerHint; //current finger hint
+	private GameObject goRetentionPet;	// Current retention pet sprite
 	private int currentStep; // step the tutorial is currently on
 
 	
@@ -142,6 +143,7 @@ public abstract class Tutorial{
 	protected void SpotlightObject(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string spotlightPrefab = "TutorialSpotlight",
 		bool fingerHint = false, string fingerHintPrefab = "PressTut",
+	    float focusOffsetX = 0f, float focusOffsetY = 0f, 
 		float fingerHintOffsetX = 0f, float fingerHintOffsetY = 60f, 
 		bool fingerHintFlip = false, float delay = -1f){
 
@@ -154,13 +156,18 @@ public abstract class Tutorial{
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 		}
+
+		// Adjust for custom offset
+		focusPos = new Vector3(focusPos.x + focusOffsetX, focusPos.y + focusOffsetY, focusPos.z);
 		
 		// destroy the old object if it existed
-		if(goSpotlight != null)
+		if(goSpotlight != null){
 			GameObject.Destroy(goSpotlight);
+		}
 
-		if(goFingerHint != null)
+		if(goFingerHint != null){
 			GameObject.Destroy(goFingerHint);
+		}
 		
 		// create the spotlight
 		GameObject goResource = Resources.Load(spotlightPrefab) as GameObject;
@@ -229,11 +236,9 @@ public abstract class Tutorial{
 	}
 
 	protected void RemoveFingerHint(){
-		if(goFingerHint == null){
-			return;
+		if(goFingerHint != null){
+			GameObject.Destroy(goFingerHint);
 		}
-
-		GameObject.Destroy(goFingerHint);
 	}
 	
 	//---------------------------------------------------
@@ -241,11 +246,9 @@ public abstract class Tutorial{
 	// Removes the current spotlight object.
 	//---------------------------------------------------		
 	protected void RemoveSpotlight(){
-		if(goSpotlight == null){
-			return;
+		if(goSpotlight != null){
+			GameObject.Destroy(goSpotlight);
 		}
-		
-		GameObject.Destroy(goSpotlight);
 	}	
 	
 	//---------------------------------------------------
@@ -253,11 +256,9 @@ public abstract class Tutorial{
 	// Removes the current popup object.
 	//---------------------------------------------------		
 	protected void RemovePopup(){
-		if(goPopup == null){
-			return;
+		if(goPopup != null){
+			GameObject.Destroy(goPopup);
 		}
-		
-		GameObject.Destroy(goPopup);
 	}	
 
 	//---------------------------------------------------
@@ -298,5 +299,20 @@ public abstract class Tutorial{
 		//feed the script the option hashtable		
 		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
 		script.Init(option);
+	}
+
+	public void ShowRetentionPet(bool isFlipped, Vector3 position){
+		GameObject goResource = Resources.Load("TutorialRetentionPet") as GameObject;
+		goRetentionPet = GameObjectUtils.AddChild(GameObject.Find("Anchor-Center"), goResource);
+		goRetentionPet.transform.localPosition = position;
+		if(isFlipped){
+			goRetentionPet.transform.localScale = new Vector3(-1f, 1f, 1f);
+		}
+	}
+
+	public void RemoveRetentionPet(){
+		if(goRetentionPet != null){
+			GameObject.Destroy(goRetentionPet);
+		}
 	}
 }

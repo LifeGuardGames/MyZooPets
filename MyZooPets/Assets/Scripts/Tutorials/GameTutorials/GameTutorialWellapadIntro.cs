@@ -9,12 +9,13 @@ using System.Collections.Generic;
 public class GameTutorialWellapadIntro : GameTutorial{
 	// wellapad button
 	private GameObject goWellapadButton = GameObject.Find("WellapadButton");
-	
+	private GameObject retentionMinipet;
+
 	public GameTutorialWellapadIntro() : base(){	
 	}
 
 	protected override void SetMaxSteps(){
-		maxSteps = 2;
+		maxSteps = 3;
 	}
 
 	protected override void SetKey(){
@@ -27,31 +28,27 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
+			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet());
+			break;
+		case 1:
 			// start by focusing on the wellapad button
 			FocusWellapadButton();
 			break;
 			
-		case 1:
+		case 2:
 			TutorialManager.Instance.StartCoroutine(OpeningWellapad());
 			break;
 		}
 	}
-	
-	//---------------------------------------------------
-	// OpeningWellapad()
-	//---------------------------------------------------		
-	private IEnumerator OpeningWellapad(){
-		// destroy the spotlight we created for the button
-		RemoveSpotlight();		
-	
-		// also, set the correct tutorial tasks in the wellapad
-		WellapadMissionController.Instance.CreateTutorialPart1Missions();	
-	
-		// wait a frame for the new UI elements to create themselves
+	private IEnumerator FocusOnRetentionMinipet(){
 		yield return 0;
-	
-		// listen for when the wellapad is closed
-		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;
+		retentionMinipet = GameObject.Find("MiniPetPebbleDemon");
+		Debug.Log(retentionMinipet);
+		// spotlight the wellapad
+		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
+		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
+
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked;
 	}
 	
 	private void FocusWellapadButton(){
@@ -61,14 +58,15 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		
 		// spotlight the wellapad
 		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
-			fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 2f);
+			fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 0.5f);
 
 		TutorialManager.Instance.StartCoroutine(CreateWellapadButtonTutMessage());
+		ShowRetentionPet(false, new Vector3(208, -177, -160));
 	}
 
 	//using this to deplay ShowPopup call for 2 seconds
 	private IEnumerator CreateWellapadButtonTutMessage(){
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(0.5f);
 
 		// the wellapad is the only object that can be clicked
 		// only allow the button to be clicked after all the tutorial components
@@ -84,10 +82,30 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		Hashtable option = new Hashtable();
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
-
 		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
 	}
-	
+
+	private IEnumerator OpeningWellapad(){
+		// destroy the spotlight we created for the button
+		RemoveSpotlight();		
+		
+		// also, set the correct tutorial tasks in the wellapad
+		WellapadMissionController.Instance.CreateTutorialPart1Missions();	
+		
+		// wait a frame for the new UI elements to create themselves
+		yield return 0;
+		
+		// listen for when the wellapad is closed
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;
+	}
+
+	private void RetentionPetClicked(object sender, EventArgs args){
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked;
+		RemoveSpotlight();
+		RemoveFingerHint();
+		Advance();
+	}
+
 	//---------------------------------------------------
 	// ButtonClicked()
 	// Callback for when the wellapad object is clicked;
@@ -106,6 +124,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		RemoveSpotlight();
 		RemoveFingerHint();
 		RemovePopup();
+		RemoveRetentionPet();
 		
 		// go to the next step
 		Advance();

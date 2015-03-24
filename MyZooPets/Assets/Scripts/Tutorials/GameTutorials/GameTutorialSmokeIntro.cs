@@ -45,7 +45,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	
 	private void ShowWellapad(){
 		// show the wellapad
-		WellapadUIManager.Instance.OpenUI();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 	
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
@@ -149,7 +149,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 		RoomArrowsUIManager.Instance.ShowRightArrow();
 
-		// spotlight the wellapad
+		// spotlight the arrow
 		SpotlightObject(rightArrowObject, true, InterfaceAnchors.Right, 
 		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 0f);
 
@@ -158,12 +158,13 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		// show message
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
 		string tutMessage = Localization.Localize(tutKey);
+
 		Hashtable option = new Hashtable();
-		
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
-		
 		ShowPopup(Tutorial.POPUP_STD, location, option: option);
+
+		ShowRetentionPet(true, new Vector3(-281, -86, -160));
 	}
 
 	private void RightArrowClicked(object sender, EventArgs args){
@@ -173,6 +174,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		RemoveSpotlight();
 		RemoveFingerHint();
 		RemovePopup();
+		RemoveRetentionPet();
 		Advance();
 	}
 }

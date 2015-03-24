@@ -82,7 +82,7 @@ public class GameTutorialDecorations : GameTutorial{
 		yield return new WaitForSeconds(1.5f);
 	
 		// show the wellapad
-		WellapadUIManager.Instance.OpenUI();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 	
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();

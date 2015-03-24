@@ -39,6 +39,7 @@ public class MiniPet : MonoBehaviour {
 	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
+	public EventHandler<EventArgs> OnTutorialMinipetClicked;	// event that fires when the user clicks on pet during tutorial
 
 	protected virtual void Start(){
 		nguiCamera = GameObject.Find("Camera").camera;
@@ -117,36 +118,42 @@ public class MiniPet : MonoBehaviour {
 	
 	protected virtual void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
-		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+			bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
-		if(!isMiniPetColliderLocked){
-			if(!isUIOpened && isModeLockEmpty){
-				ZoomInToMiniPet();
-			}
-			else{
+			if(!isMiniPetColliderLocked){
+				if(TutorialManagerBedroom.Instance.IsTutorialActive()){
+					if(OnTutorialMinipetClicked != null){
+						OnTutorialMinipetClicked(this, EventArgs.Empty);
+					}
+					return;
+				}
+				if(!isUIOpened && isModeLockEmpty){
+					ZoomInToMiniPet();
+				}
+				else{
 
-				UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
+					UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
 
-				if(currentLockMode == UIModeTypes.MiniPet){
-					string colliderName = gesture.Selection.collider.name;
-					//bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
-					
-					//only allow tap gesture if cleaning tutorial is finished
-				//	if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
-					if(colliderName == this.gameObject.name){
-						//if tickling animation is still playing reset timer
-						if(animationManager.IsTickling()){
-							tickleTimer = 0;
-						}
-						else{
-							animationManager.StartTickling();
-							
-						//	bool isTickled = MiniPetManager.Instance.IsTickled(id);
-						/*	if(!isTickled)
-								MiniPetManager.Instance.SetTickle(id, true);*/
-							
-							//MiniPetManager.Instance.IsFirstTimeTickling = false;
+					if(currentLockMode == UIModeTypes.MiniPet){
+						string colliderName = gesture.Selection.collider.name;
+						//bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
+						
+						//only allow tap gesture if cleaning tutorial is finished
+					//	if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
+						if(colliderName == this.gameObject.name){
+							//if tickling animation is still playing reset timer
+							if(animationManager.IsTickling()){
+								tickleTimer = 0;
+							}
+							else{
+								animationManager.StartTickling();
+								
+							//	bool isTickled = MiniPetManager.Instance.IsTickled(id);
+							/*	if(!isTickled)
+									MiniPetManager.Instance.SetTickle(id, true);*/
+								
+								//MiniPetManager.Instance.IsFirstTimeTickling = false;
 							}
 						}
 					}
@@ -252,8 +259,10 @@ public class MiniPet : MonoBehaviour {
 			/*bool isTickled = MiniPetManager.Instance.IsTickled(id);
 			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
 			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyXP(id)){*/
+			if(!TutorialManagerBedroom.Instance.IsTutorialActive()){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}
+		}
 		//}
 	}
 
@@ -320,8 +329,8 @@ public class MiniPet : MonoBehaviour {
 			MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
 			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
-				if(isForceHideFoodMsg && isFinishEating != true){
-						Invoke("ShowFoodPreferenceMessage", 1f);
+			if(isForceHideFoodMsg && isFinishEating != true && !TutorialManagerBedroom.Instance.IsTutorialActive()){
+				Invoke("ShowFoodPreferenceMessage", 1f);
 					//}
 			}
 		}

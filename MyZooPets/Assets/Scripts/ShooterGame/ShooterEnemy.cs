@@ -54,7 +54,7 @@ public class ShooterEnemy : MonoBehaviour{
 	// handles collision not too much special there
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "bullet"){
-			if(!collider.GetComponent<BulletScript>().isPierceing){
+			if(!collider.GetComponent<ShooterGameBulletScript>().isPierceing){
 				Destroy(collider.gameObject);
 			}
 			health--;

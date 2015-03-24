@@ -21,6 +21,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	// prevents finishing the last wave
 	public void Reset(){
 		StopCoroutine("SpawnEnemies");
+		spawningList = null;
+
 	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){

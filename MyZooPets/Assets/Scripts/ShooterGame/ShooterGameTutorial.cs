@@ -72,7 +72,8 @@ public class ShooterGameTutorial : MinigameTutorial {
 	protected override void _End(bool isFinished){
 		GameObject.Destroy(tutorialInhalerUse);
 		GameObject.Destroy(fingerPos);
-		ShooterGameManager.Instance.inTutorial=false;
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_KEY);
+		ShooterGameManager.Instance.inTutorial = false;
 		if(!isFinished){
 			ShooterGameManager.Instance.Reset();
 		}

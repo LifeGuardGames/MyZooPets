@@ -242,7 +242,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public void RestartGame(bool minusMood = true){
 		if(minusMood){
 			StatsController.Instance.ChangeStats(deltaMood: -10, isInternal: true);
-			Debug.Log ("SFSDFSF");
 		}
 		AudioManager.Instance.PauseBackground(false);
 

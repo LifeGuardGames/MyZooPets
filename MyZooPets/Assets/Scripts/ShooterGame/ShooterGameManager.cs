@@ -50,6 +50,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			}
 		}
 		else{
+			inTutorial = false;
 			PlayerShooterController.Instance.changeInHealth += HealthUpdate;
 			waveNum = 0;
 			missed = 0;
@@ -67,8 +68,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void Reset(){
+		inTutorial = false;
 		waveNum = 0;
 		missed = 0;
+		ShooterSpawnManager.Instance.Reset();
 		ShooterGameEnemyController.Instance.Reset();
 		ShooterUIManager.Instance.Reset();
 		PlayerShooterController.Instance.Reset();

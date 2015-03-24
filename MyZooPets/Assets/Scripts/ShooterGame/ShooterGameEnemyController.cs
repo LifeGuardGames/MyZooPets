@@ -14,6 +14,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 		if(enemyList != null){
 			enemyList.Clear();
 		}
+		currentWave = null;
 		BuildEnemyList();
 	}
 

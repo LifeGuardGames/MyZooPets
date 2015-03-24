@@ -75,19 +75,19 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
-		BulletScript bulletScript = instance.GetComponent<BulletScript>();
+		ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 		bulletScript.target = lookPos;
 		bulletScript.FindTarget();
 		bulletScript.isPierceing = isPiercing;
 		if(isTriple){
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
-			bulletScript = instance.GetComponent<BulletScript>();
+			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 			bulletScript.target = new Vector3(lookPos.x, lookPos.y+1, lookPos.z);
 			bulletScript.FindTarget();
 			bulletScript.isPierceing = isPiercing;
 
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
-			bulletScript = instance.GetComponent<BulletScript>();
+			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 			bulletScript.target = new Vector3(lookPos.x, lookPos.y-1, lookPos.z);
 			bulletScript.FindTarget();
 			bulletScript.isPierceing = isPiercing;

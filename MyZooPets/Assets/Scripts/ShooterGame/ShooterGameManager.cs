@@ -19,13 +19,14 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
-	public override void QuitGame(){
-		if(QuitEvent != null)
-			QuitEvent(this, EventArgs.Empty);
-		ShooterUIManager.Instance.Quit();
-		ShooterSpawnManager.Instance.Quit();
-		base.QuitGame();
-	}
+//	public override void QuitGame(){
+//		if(QuitEvent != null){
+//			QuitEvent(this, EventArgs.Empty);
+//		}
+//		ShooterUIManager.Instance.Quit();
+//		ShooterSpawnManager.Instance.Quit();
+//		base.QuitGame();
+//	}
 
 	protected override void _Start(){
 	}
@@ -49,6 +50,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			}
 		}
 		else{
+			inTutorial = false;
 			PlayerShooterController.Instance.changeInHealth += HealthUpdate;
 			waveNum = 0;
 			missed = 0;
@@ -66,8 +68,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	public void Reset(){
+		inTutorial = false;
 		waveNum = 0;
 		missed = 0;
+		ShooterSpawnManager.Instance.Reset();
 		ShooterGameEnemyController.Instance.Reset();
 		ShooterUIManager.Instance.Reset();
 		PlayerShooterController.Instance.Reset();

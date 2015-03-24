@@ -13,18 +13,18 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 	public void PowerUP(){
 		switch(powerUp){
 		case "normal":
-			Debug.Log("NORMAL");
+
 			PlayerShooterController.Instance.isPiercing = false;
 			PlayerShooterController.Instance.isTriple = false;
 			break;
 		case "triple":
 			PlayerShooterController.Instance.isTriple = true;
-			Debug.Log("TRIPLE");
+
 			StartCoroutine(ResetPowerUP());
 			break;
 		case "pierce":
 			PlayerShooterController.Instance.isPiercing = true;
-			Debug.Log("PIERCE");
+
 			StartCoroutine(ResetPowerUP());
 			break;
 		}
@@ -32,10 +32,8 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 
 	// Powering down form power up
 	private IEnumerator ResetPowerUP(){
-		Debug.Log("reaching");
 		yield return new WaitForSeconds(timer);
 		powerUp = "normal";
-		Debug.Log("working");
 		PowerUP();
 	}
 }

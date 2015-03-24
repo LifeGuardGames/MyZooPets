@@ -197,6 +197,11 @@ public class DataManager : Singleton<DataManager>{
 			#if DEVELOPMENT_BUILD
 				return;
 			#endif
+
+			if (Debug.isDebugBuild){
+				return;
+			}
+
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
 				Debug.Log("Auto save canceled because we are in a tutorial");

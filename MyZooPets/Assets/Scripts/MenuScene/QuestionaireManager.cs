@@ -10,6 +10,14 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	public QuestionaireUIManager2 questionaireManager2;
 
 	void Start(){
+		#if DEVELOPMENT_BUILD
+		PlayerPrefs.DeleteAll();
+		#endif
+		
+		if (Debug.isDebugBuild){
+			PlayerPrefs.DeleteAll();
+		}
+
 		CheckToOpenQuestionaire();
 	}
 

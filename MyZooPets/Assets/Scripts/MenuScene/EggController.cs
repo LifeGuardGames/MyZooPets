@@ -63,7 +63,7 @@ public class EggController : Singleton<EggController>{
 	}
 
 	public void EggHatchingTapped(){
-		eggAnimation.Play("eggClickMove");
+		eggAnimation.Play("eggClickCrack");
 		shellParticle.Play();
 	}
 }

@@ -1016,7 +1016,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 11400006}
-  fFillRate: .00999999978
+  fillTime: 2
+  fillSound: barAscend
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1045,7 +1046,7 @@ MonoBehaviour:
     e20: 0
     e21: 0
     e22: 384
-    e23: 100
+    e23: 100.000137
     e30: 0
     e31: 0
     e32: 0
@@ -1253,7 +1254,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5093322de04db04bb7595aa47397b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlaying: 1
   speed: 50
+  isIntervalOn: 0
+  intervalIncrement: 45
+  intervalSpeed: .200000003
 --- !u!114 &11400038
 MonoBehaviour:
   m_ObjectHideFlags: 1

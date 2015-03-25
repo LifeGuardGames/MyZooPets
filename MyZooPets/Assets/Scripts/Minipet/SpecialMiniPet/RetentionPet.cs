@@ -29,19 +29,18 @@ public class RetentionPet : MiniPet {
 
 	private void turnInMission(){
 		if(isFinishEating){
-		
-		
-		MutableDataMission mission = WellapadMissionController.Instance.GetMission("Critical");
-		
-		if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
-			// claim the reward
-			MiniPetManager.Instance.IncreaseXP(id);
-			WellapadMissionController.Instance.ClaimReward("Critical");
-			WellapadMissionController.Instance.RefreshCheck();
-			MiniPetManager.Instance.IncreaseXP(id);
+			MutableDataMission mission = WellapadMissionController.Instance.GetMission("Critical");
+			
+			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
+				// claim the reward
+				MiniPetManager.Instance.IncreaseXP(id);
+				WellapadMissionController.Instance.ClaimReward("Critical");
+				WellapadMissionController.Instance.RefreshCheck();
+				MiniPetManager.Instance.IncreaseXP(id);
+			}
 		}
 	}
-}
+
 	private void giveOutMission(){
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;
@@ -50,6 +49,4 @@ public class RetentionPet : MiniPet {
 		has[0] = "Do Daily Missions";
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
 	}
-
-
 }

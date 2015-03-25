@@ -11,7 +11,7 @@ using System.Collections;
 public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	public MemoryBoardController boardController;
 	public EventHandler<EventArgs> proceed;
-	public int startScoreValue = 1000;
+	public int startScoreValue = 500;
 	public int scoreDecrementValue = 10;
 	public int scoreDecrementTimer = 2;
 	public int comboMultiplier = 25;
@@ -157,7 +157,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 				// Increase the combo
 				combo++;
-				if(combo >= 2){
+				if(combo >= 1){
 					UpdateScore(combo * comboMultiplier);
 				}
 			}

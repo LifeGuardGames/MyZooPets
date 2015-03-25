@@ -64,7 +64,11 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		flip2 = null;
 		
 		cardsCount = MemoryBoardController.ROW_COUNT * MemoryBoardController.COLUMN_COUNT;
-		
+
+		// Reset the combo
+		combo = 0;
+		memoryUI.SetComboText(combo);
+
 		CancelInvoke("StartScoreCountdown");
 		SetScore(startScoreValue);
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);

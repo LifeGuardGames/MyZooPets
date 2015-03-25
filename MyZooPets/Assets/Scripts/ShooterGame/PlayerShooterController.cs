@@ -18,6 +18,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	public void Reset(){
 		playerHealth = 10;
 		ChangeState("neutral");
+		this.collider2D.enabled = true;
 	}
 	// change states
 	private void ChangeState(string _state){
@@ -49,6 +50,9 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		}
 		else if(playerHealth <= 5){
 			ChangeState("distressed");
+		}
+		else if (playerHealth <= 0){
+			this.collider2D.enabled = false;
 		}
 		// Also updates the lives in game manager as that is the true health
 		ShooterGameManager.Instance.UpdateLives((int)amount);

@@ -97,7 +97,6 @@ public class PetMovement : Singleton<PetMovement>{
 		gateDestroyed = true;
 		PetAnimationManager.Instance.Flipping();
 		MovePet(new Vector3(petSprite.transform.position.x + 15,petSprite.transform.position.y,petSprite.transform.position.z));	
-
 	}
 
 	// Update is called once per frame

@@ -14,14 +14,14 @@ using System.Collections.Generic;
 public class WellapadMissionDoneUIController : MonoBehaviour {
 	// label to update the timer
 	//public UILabel labelTimer;
-	public UILabel labelTimerMessage;
-	public UILabel labelStartLevel;
-	public UILabel labelEndLevel;
-	public UILabel labelMaxLevel;
+	//public UILabel labelTimerMessage;
+	//public UILabel labelStartLevel;
+	//public UILabel labelEndLevel;
+	//public UILabel labelMaxLevel;
 	public UIAtlas atlasBadge;
 	public UIAtlas atlasBedroom;
 	public UIAtlas atlasItem;
-	public UISlider sliderLevel;
+	//public UISlider sliderLevel;
 	public GameObject gridUnlockPredictions;
 	public GameObject unlockPredictionEntryPrefab;
 
@@ -30,24 +30,24 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 	public UISprite endCircle;		// For setting
 
 	void Start(){
-		WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
+		//WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
 		// HUDAnimator.OnLevelUp += RefreshLevelProgressOnLevelUp;
-	//	HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
+		HUDAnimator.OnLevelUp += RefreshUnlockPredictions;
 
 		//RefreshLevelProgress();
-		//RefreshUnlockPredictions(this, EventArgs.Empty);
+		RefreshUnlockPredictions(this, EventArgs.Empty);
 
-		//PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
+		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 	}
 
 	void OnDestroy(){
-		if(WellapadUIManager.Instance)
-			WellapadUIManager.Instance.OnManagerOpen -= RefreshLevelProgress;
+		//if(WellapadUIManager.Instance)
+		//	WellapadUIManager.Instance.OnManagerOpen -= RefreshLevelProgress;
 			
 		// HUDAnimator.OnLevelUp -= RefreshLevelProgressOnLevelUp;
-//		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
+		HUDAnimator.OnLevelUp -= RefreshUnlockPredictions;
 
-		//PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
+		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){
@@ -64,7 +64,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 //		labelTimer.text = String.Format(strLabel, strTime);
 	}
 
-	private void RefreshLevelProgress(){
+	/*private void RefreshLevelProgress(){
 		if(!LevelLogic.Instance.IsAtMaxLevel()){
 			int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
 			float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
@@ -91,16 +91,16 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			RefreshLevelProgress();	
 		}
 	}
-
-	private void RefreshLevelProgressOnLevelUp(object sender, EventArgs args){
+*/
+/*	private void RefreshLevelProgressOnLevelUp(object sender, EventArgs args){
 		RefreshLevelProgress();	
 	}
-
+*/
 	//----------------------------------------------
 	// RefreshUnlockPredictions()
 	// Update the items/badge/flame that will be unlocked for next level
 	//----------------------------------------------
-	/*private void RefreshUnlockPredictions(object sender, EventArgs args){
+	private void RefreshUnlockPredictions(object sender, EventArgs args){
 		foreach(Transform child in gridUnlockPredictions.transform){
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
@@ -131,5 +131,5 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		}
 
 		gridUnlockPredictions.GetComponent<UIGrid>().Reposition();
-	}*/
+	}
 }

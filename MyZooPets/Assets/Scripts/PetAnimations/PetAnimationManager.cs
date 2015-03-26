@@ -225,6 +225,10 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		animator.SetBool("IsWaitingToEat", false);
 	}
 
+	public void Flipping(){
+		animator.SetTrigger("Backflip");
+	}
+
 	/// <summary>
 	/// Starts the tickling. Tickle will be played until StopTickling() is called
 	/// </summary>

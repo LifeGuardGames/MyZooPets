@@ -28,6 +28,7 @@ public class PetMovement : Singleton<PetMovement>{
 	public float MovementStaticZ{
 		get{ return MovementStaticZ; }
 	}
+	public bool gateDestroyed = false; // bool to toggle movement after a pet is 
 	public bool canMove;
 	private Vector3 destinationPoint; //destination that the pet is going to move to
 	public bool moving; //Is Pet moving now or not
@@ -42,6 +43,7 @@ public class PetMovement : Singleton<PetMovement>{
 	private float verySickSpeed;
 
 	void Awake(){
+		GatingManager.OnDestroyedGate += MoveToCenter;
 		// set up camera variables
 		scriptPan = CameraManager.Instance.PanScript;
 		mainCamera = CameraManager.Instance.CameraMain;
@@ -90,6 +92,14 @@ public class PetMovement : Singleton<PetMovement>{
 		petSprite.transform.position = new Vector3(petPos.x, petPos.y, movementStaticZ);
 	}
 
+	private void MoveToCenter(object sender, EventArgs args){
+		canMove = true;
+		gateDestroyed = true;
+		PetAnimationManager.Instance.Flipping();
+		MovePet(new Vector3(petSprite.transform.position.x + 15,petSprite.transform.position.y,petSprite.transform.position.z));	
+
+	}
+
 	// Update is called once per frame
 	void Update(){
 		if(canMove){
@@ -114,6 +124,10 @@ public class PetMovement : Singleton<PetMovement>{
 
 				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
                     destinationPoint, movementSpeed * Time.deltaTime);
+			}
+			else if(moving && gateDestroyed){
+				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
+				                                                   destinationPoint, normalSpeed * Time.deltaTime);
 			}
 			else
 				StopMoving();
@@ -195,7 +209,6 @@ public class PetMovement : Singleton<PetMovement>{
 	
 	public void MovePet(Vector3 raycastHitPosition){
 		destinationPoint = raycastHitPosition;
-
 		// tell the pet animator script to start moving (but only if we aren't already moving)
 		if(!moving){
 			PetAnimationManager.Instance.StartWalking();

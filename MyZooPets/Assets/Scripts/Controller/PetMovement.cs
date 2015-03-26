@@ -93,6 +93,9 @@ public class PetMovement : Singleton<PetMovement>{
 	}
 
 	private void MoveToCenter(object sender, EventArgs args){
+		if(petSprite == null){
+			petSprite = GameObject.Find("Pet");
+		}
 		canMove = true;
 		gateDestroyed = true;
 		PetAnimationManager.Instance.Flipping();

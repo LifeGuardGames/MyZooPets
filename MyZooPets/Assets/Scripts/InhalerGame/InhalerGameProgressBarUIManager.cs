@@ -67,14 +67,14 @@ public class InhalerGameProgressBarUIManager : Singleton<InhalerGameProgressBarU
     	slider.sliderValue = sliderStep * increment;
     } 
 
-	// Incrase the node color by one step
+	// Increase the node color by one step
     private void UpdateNodeColors(object sender, EventArgs args){
 		if(nodeStep < sliderNodes.Count){
-		GameObject nodeObject = sliderNodes[nodeStep];
-		GameObject nodeSpriteObject = nodeObject.transform.Find("Sprite").gameObject;
-		nodeSpriteObject.GetComponent<UISprite>().spriteName = "greenCircle";
-		nodeSpriteObject.GetComponent<ParticleSystemController>().Play();
-		nodeStep++;
+			GameObject nodeObject = sliderNodes[nodeStep];
+			GameObject nodeSpriteObject = nodeObject.transform.Find("Sprite").gameObject;
+			nodeSpriteObject.GetComponent<UISprite>().spriteName = "greenCircle";
+			nodeSpriteObject.GetComponent<ParticleSystemController>().Play();
+			nodeStep++;
 		}
     }
 }

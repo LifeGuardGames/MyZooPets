@@ -194,13 +194,13 @@ public class DataManager : Singleton<DataManager>{
 	//Serialize the data whenever the game is paused
 	void OnApplicationPause(bool paused){
 		if(paused){
-			#if DEVELOPMENT_BUILD
-				return;
-			#endif
+//			#if DEVELOPMENT_BUILD
+//				return;
+//			#endif
 
-			if (Debug.isDebugBuild){
-				return;
-			}
+//			if (Debug.isDebugBuild){
+//				return;
+//			}
 
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){

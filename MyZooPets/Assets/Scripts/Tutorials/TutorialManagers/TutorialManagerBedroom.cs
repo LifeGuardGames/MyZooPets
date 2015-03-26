@@ -102,7 +102,9 @@ public class TutorialManagerBedroom : TutorialManager{
 
 		bool isQuestionaireCollected = DataManager.Instance.IsQuestionaireCollected;
 
-//		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod + " QUESTIONAIRE " + isQuestionaireCollected);
+		isQuestionaireCollected = true;
+		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod + " QUESTIONAIRE " + isQuestionaireCollected);
+
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod && isQuestionaireCollected){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){

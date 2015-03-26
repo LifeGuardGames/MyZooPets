@@ -54,16 +54,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		WellapadMissionController.Instance.RefreshCheck();
 	}
 
-	void Update(){
-		Debug.LogWarning("DANGING LOGIC HERE");
-//		TimeSpan timeLeft = args.TimeLeft;
-//		string strTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
-//		
-//		// set the label
-//		string strLabel = Localization.Localize("WELLAPAD_NO_MISSIONS_2");
-//		labelTimer.text = String.Format(strLabel, strTime);
-	}
-
 	/*private void RefreshLevelProgress(){
 		if(!LevelLogic.Instance.IsAtMaxLevel()){
 			int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();

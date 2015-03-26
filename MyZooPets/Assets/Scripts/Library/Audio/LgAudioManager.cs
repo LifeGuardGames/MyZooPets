@@ -26,8 +26,9 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	/// <param name="soundClip">Sound clip.</param>
 	/// <param name="hashOverrides">Hash overrides.</param>
 	public virtual void PlayClip(string clipName, Hashtable option = null){
-		if(option == null)
+		if(option == null){
 			option = new Hashtable();
+		}
 		
 		if(clipName == ""){
 			Debug.LogError("Something trying to play a sound with an empty sound id...");
@@ -42,8 +43,9 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 		}
 
 		bool isSoundClipManaged = false;	// Set the default to false
-		if(option.ContainsKey("IsSoundClipManaged"))
+		if(option.ContainsKey("IsSoundClipManaged")){
 			isSoundClipManaged = (bool) option["IsSoundClipManaged"];
+		}
 
 		//if multip sound mode is on. just play the clip
 		if(!isSoundClipManaged){

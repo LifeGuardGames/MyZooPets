@@ -7,6 +7,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	// the number of times the user has missed the optimal use window
 	//public int NumMissed=0;
 	public EventHandler<EventArgs> proceed;
+	public EventHandler<EventArgs> done;
 	public EventHandler<EventArgs> QuitEvent;
 	public Camera nguiCamera;
 	public float shootTime;
@@ -79,7 +80,12 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
 		}
 	}
-
+	public void MoveTut(){
+		if(inTutorial){
+			if(proceed != null)
+				proceed(this, EventArgs.Empty);
+		}
+	}
 	public override int GetReward(MinigameRewardTypes eType){
 		return GetStandardReward(eType);
 	}
@@ -90,8 +96,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	public void ClickIt(TapGesture e){
 		if(inTutorial){
-			if(proceed != null)
-				proceed(this, EventArgs.Empty);
+			if(done != null)
+				done(this, EventArgs.Empty);
 		}
 		if(startTime <= Time.time - shootTime){
 			if(!IsTouchingNGUI(e.Position)){

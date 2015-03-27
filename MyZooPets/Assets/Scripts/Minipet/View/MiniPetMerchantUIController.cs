@@ -3,8 +3,8 @@ using System.Collections;
 
 public class MiniPetMerchantUIController : MonoBehaviour {
 
-	public UILocalize itemNameLocalize;
-	public UILocalize descriptionLocalize;
+	public UILabel itemNameLabel;
+	public UILabel descriptionLabel;
 	public UIImageButton buyButton;
 	public UILabel cost;
 	public UISprite sprite;
@@ -20,13 +20,11 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		Item secretItem = ItemLogic.Instance.GetItem(itemID);
 		secItem = secretItem;
 		itemId = itemID;
-		itemNameLocalize.key = secretItem.Name;
-		itemNameLocalize.Localize();
+		itemNameLabel.text = secretItem.Name;
 		sprite.spriteName = DataLoaderItems.GetItemTextureName(itemID);
 		this.itemType = itemType;	// Cache the type
 
-		descriptionLocalize.key = secretItem.Description;
-		descriptionLocalize.Localize();
+		descriptionLabel.text = secretItem.Description;
 
 		cost.text = secretItem.Cost.ToString();
 		merchant = GameObject.Find("Merchant");
@@ -48,11 +46,10 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 
 	public void BuyItem(){
 		buyButton.gameObject.SetActive(false);
-		merchant.GetComponent<Merchant>().removeItem();
+		merchant.GetComponent<Merchant>().RemoveItem();
 		InventoryLogic.Instance.AddItem(itemId, 1);
 		StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
 		OnBuyAnimation(secItem, sprite.gameObject);
-
 	}
 
 	public void OnBuyAnimation(Item itemData, GameObject sprite){

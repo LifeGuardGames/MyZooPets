@@ -7,24 +7,23 @@ using System.Collections.Generic;
 // An item that is a decoration.
 //---------------------------------------------------
 
-public class DecorationItem : Item {
+public class DecorationItem : Item{
+
     // the type of decoration this is
-	private DecorationTypes eType;	
+	private DecorationTypes eType;
+	public DecorationTypes DecorationType{
+		get{ return eType; }
+	}
+
 	private string prefabName;
+	public string PrefabName{
+		get{ return prefabName; }
+	}
+
 	private string materialName;
-	
-	// decoration type property
-    public DecorationTypes DecorationType {
-        get{return eType;}
-    }
-
-    public string PrefabName{
-    	get{return prefabName;}
-    }
-
-    public string MaterialName{
-    	get{return materialName;}
-    }
+	public string MaterialName{
+		get{ return materialName; }
+	}
 	
     public DecorationItem(string id, ItemType type, Hashtable hashItemData) : base (id, type, hashItemData){
 		
@@ -32,10 +31,11 @@ public class DecorationItem : Item {
     	string strType = XMLUtils.GetString(hashItemData["DecorationType"] as IXMLNode);
 		eType = (DecorationTypes) System.Enum.Parse( typeof( DecorationTypes ), strType );
 
-		if(hashItemData.Contains("PrefabName"))
+		if(hashItemData.Contains("PrefabName")){
 			prefabName = XMLUtils.GetString(hashItemData["PrefabName"] as IXMLNode);
-
-		if(hashItemData.Contains("MaterialName"))
+		}
+		if(hashItemData.Contains("MaterialName")){
 			materialName = XMLUtils.GetString(hashItemData["MaterialName"] as IXMLNode);
+		}
     }
 }

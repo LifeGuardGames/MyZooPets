@@ -91,7 +91,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 114: {fileID: 11400018}
-  - 114: {fileID: 11400014}
   m_Layer: 10
   m_Name: LabelDescription
   m_TagString: Untagged
@@ -108,7 +107,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400012}
   - 114: {fileID: 11400020}
-  - 114: {fileID: 11400016}
   m_Layer: 10
   m_Name: LabelItemName
   m_TagString: Untagged
@@ -301,7 +299,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -86.000061, z: 0}
+  m_LocalPosition: {x: -682.755188, y: 298.796631, z: .000152587891}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400020}
@@ -465,30 +463,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: MINIPET_MERCHANT_TITLE
---- !u!114 &11400014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: 
---- !u!114 &11400016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: 
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -579,8 +553,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7e827612dd4014faa22623068a6f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemNameLocalize: {fileID: 11400016}
-  descriptionLocalize: {fileID: 11400014}
+  itemNameLabel: {fileID: 11400020}
+  descriptionLabel: {fileID: 11400018}
   buyButton: {fileID: 11400010}
   cost: {fileID: 11400002}
   sprite: {fileID: 11400022}

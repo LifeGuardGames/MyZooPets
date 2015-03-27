@@ -436,7 +436,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			List<Item> foodList = ItemLogic.Instance.FoodList;
 			
 			foreach(Item itemData in foodList){
-				if(!itemData.ItemBoxOnly && !itemData.UnbuyableItem){
+				if(!itemData.IsSecretItem){
 					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 				}
 			}
@@ -447,7 +447,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			List<Item> usableList = ItemLogic.Instance.UsableList;
 			
 			foreach(Item itemData in usableList){
-				if(!itemData.ItemBoxOnly && !itemData.UnbuyableItem){
+				if(!itemData.IsSecretItem){
 					// Need emergency inhaler shortcut, only show emergency inhaler
 					if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
 						if(itemData.ID == "Usable0"){
@@ -490,7 +490,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				imageButtonSeletected.enabled = true;
 
 				foreach(DecorationItem decoItemData in decoList){
-					if(!decoItemData.ItemBoxOnly && !decoItemData.UnbuyableItem){
+					if(!decoItemData.IsSecretItem){
 						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
 					}
 				}

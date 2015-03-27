@@ -5,17 +5,26 @@ public class RetentionPet : MiniPet {
 
 	void Awake(){
 		name = "retention";
+		if(PlayerPrefs.GetInt("FirstPP") == 0){
+			isFinishEating = true;
+		}
 	}
 
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
-		if(!MiniPetHUDUIManager.Instance.HasContent()){
-			if(isFinishEating){
-				Hashtable has = new Hashtable();
-				has[0] = "Do Daily Missions";
-				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
-				turnInMission();
+		if(PlayerPrefs.GetInt("FirstPP") == 1 ){
+			if(!MiniPetHUDUIManager.Instance.HasContent()){
+				if(isFinishEating){
+					Hashtable has = new Hashtable();
+					has[0] = "Do Daily Missions";
+					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
+					turnInMission();
+				}
 			}
+		}
+		else if (!TutorialManager.Instance.IsTutorialActive()){
+			isFinishEating = true;
+			DataManager.Instance.GameData.MiniPetLocations.SaveHunger(id, isFinishEating);
 		}
 	}
 	public override void FinishEating(){

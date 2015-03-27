@@ -102,6 +102,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		this.GetComponent<TweenToggleDemux>().Show();
 		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
 		RefreshUI(this, new MiniPetManager.StatusUpdateEventArgs());
+		
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -152,9 +153,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		//tickleCheckBox.SetActive(isTickled);
 		//cleanCheckBox.SetActive(isCleaned);
-
+		if(PlayerPrefs.GetInt("FirstPP") == 1){
 		RefreshFoodItemUI();
-
+		}
 		nameLabel.text = SelectedMiniPetName;
 		UpdateLevelUI();
 

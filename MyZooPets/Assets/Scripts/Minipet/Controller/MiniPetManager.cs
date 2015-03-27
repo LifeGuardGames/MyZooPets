@@ -88,7 +88,9 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	public bool CanSpawnNewMinipetLocations(){
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
-			Debug.Log("stuff");
+			if(!TutorialManager.Instance.IsTutorialActive()){
+				PlayerPrefs.SetInt("FirstPP",1);
+			}
 			return true;
 		}
 		else{

@@ -57,7 +57,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		// Also updates the lives in game manager as that is the true health
 		ShooterGameManager.Instance.UpdateLives((int)amount);
 
-		if(ShooterGameManager.Instance.GetLives() == 0){
+		if(ShooterGameManager.Instance.GetLives() <= 0){
 			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
 		}
 

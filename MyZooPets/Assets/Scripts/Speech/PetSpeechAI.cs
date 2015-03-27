@@ -94,7 +94,7 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("NO_FIRE_INHALER_1"));
 		msgOption.Add(PetSpeechManager.Keys.AtlasName, "BedroomAtlas");
-		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "itemInhalerMain");
+		msgOption.Add(PetSpeechManager.Keys.ImageTextureName, "progressFireCrystal");
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
 		PetSpeechManager.Instance.Talk(msgOption);
 	}

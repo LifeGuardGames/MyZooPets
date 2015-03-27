@@ -128,13 +128,14 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		PetAudioManager.Instance.EnableSound = true;
 		DecoInventoryUIManager.Instance.HideDecoInventory();
 		if(content != null){
-		Destroy(content.gameObject);
+			Destroy(content.gameObject);
 		}
-		if(cleaningTutorialObject != null)
+		if(cleaningTutorialObject != null){
 			Destroy(cleaningTutorialObject);
-
-		if(ticklingTutorialObject != null)
+		}
+		if(ticklingTutorialObject != null){
 			Destroy(ticklingTutorialObject);
+		}
 		//contentParent.SetActive(false);
 		CameraManager.Instance.ZoomOutMove();
 	}
@@ -276,6 +277,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void OpenFoodShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
 		StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.MinipetUIStoreButton);
+		if(content != null){
+			content.GetComponent<TweenToggle>().Hide();
+		}
 	}
 
 	private void CloseShop(object sender, EventArgs args){
@@ -285,6 +289,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
+			if(content != null){
+				content.GetComponent<TweenToggle>().Show();
+			}
 			if(!MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
 				feedParent.Show();
 			}
@@ -343,5 +350,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
 			storeButtonSunbeam.SetActive(false);
 		}
+	}
+
+	public bool HasContent(){
+		return content == null ? false : true;
 	}
 }

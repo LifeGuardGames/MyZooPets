@@ -528,6 +528,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				HUDUIManager.Instance.HidePanel();
 				break;
 
+			case StoreShortcutType.MinipetUIStoreButton:
+				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+				NavigationUIManager.Instance.HidePanel();
+				break;
+
 			// Exit back to fireblowing room UI
 			case StoreShortcutType.FlameCrystalNeededNotification:
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();

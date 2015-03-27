@@ -21,8 +21,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public GameObject accessoryEntryPrefab;
 	public GameObject backButton;
 	public GameObject zoomItem;
-	public EntranceHelperController entranceHelper;
-	
+
 	// related to zooming into the badge board
 	public float zoomTime;
 	public Vector3 zoomOffset;
@@ -116,8 +115,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	/// Show the ui once camera is done zooming in.
 	/// </summary>
 	private void CameraMoveDone(){
-		entranceHelper.EntranceUsed();	// Disable entrance highlight after zoomed in for the first time
-		
 		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
 		toggleDemux.Show();
 		toggleDemux.ShowTarget = this.gameObject;

@@ -402,7 +402,8 @@ public class GatingManager : Singleton<GatingManager>{
 	/// buy flame crystal from the store with gems
 	/// </summary>
 	private void FlameCrystalNotification(){
-		Debug.LogError("NEW NOTIFICATION HERE");
+		//Debug.LogError("NEW NOTIFICATION HERE");
+		PetSpeechAI.Instance.ShowOutOfFireMsg();
 //		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
 //			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
 //			

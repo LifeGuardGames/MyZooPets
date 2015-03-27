@@ -49,6 +49,10 @@ public class ShooterEnemyHard:ShooterEnemy{
 		yield return new WaitForSeconds(1.0f);
 		AndAgain();
 	}
+	void OnDestroy(){
+		LeanTween.cancel(this.gameObject);
+		Debug.Log("sucess");
+	}
 
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "sdfsf")){

@@ -71,7 +71,6 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 			waveEnemies.Add(enemyList[2]);
 		}
 		for(int i =0; i < currWave.PowerUpCount; i++){
-			Debug.Log(currWave.PowerUpCount);
 			int rand = UnityEngine.Random.Range(3, 5);
 			waveEnemies.Add(enemyList[rand]);
 		}

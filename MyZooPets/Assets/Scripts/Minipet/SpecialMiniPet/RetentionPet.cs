@@ -2,18 +2,29 @@
 using System.Collections;
 
 public class RetentionPet : MiniPet {
-
+	public bool firstPP;
 	void Awake(){
+		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(id);
 		name = "retention";
+		if(PlayerPrefs.GetInt("FirstPP") == 1){
+			firstPP = false;
+		}
+		else{
+			isFinishEating = true;
+
+		}
 	}
 
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
-		if(isFinishEating){
+		if(isFinishEating && !firstPP){
 			Hashtable has = new Hashtable();
 			has[0] = "Do Daily Missions";
 			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
 			turnInMission();
+		}
+		else if(MiniPetManager.Instance.CanSpawnNewMinipetLocations()){
+			PlayerPrefs.SetInt("FirstPP",1);
 		}
 	}
 	public override void FinishEating(){

@@ -329,7 +329,7 @@ public class MiniPet : MonoBehaviour {
 			MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
 			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
-			if(isForceHideFoodMsg && isFinishEating != true && !TutorialManagerBedroom.Instance.IsTutorialActive()){
+			if(isForceHideFoodMsg && isFinishEating != true && PlayerPrefs.GetInt("FirstPP") == 1){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 					//}
 			}
@@ -337,9 +337,11 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ShowFoodPreferenceMessage(){
-		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
-		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
-		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+		if(!TutorialManager.Instance.IsTutorialActive()){
+			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+		}
 	}
 
 	public void TryShowDirtyOrSadMessage(){

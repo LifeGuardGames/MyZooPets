@@ -88,6 +88,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 	public bool CanSpawnNewMinipetLocations(){
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
+			Debug.Log("stuff");
 			return true;
 		}
 		else{
@@ -367,6 +368,7 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 //		}
 //		else 
 		if (data.Type == MiniPetTypes.Rentention){
+			PlayerPrefs.SetInt("FirstPP",0);
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
 			Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
 			int partitionNumber  = 0;
@@ -375,9 +377,10 @@ public class MiniPetManager : Singleton<MiniPetManager> {
 			goMiniPet.transform.localPosition = pos;
 			goMiniPet.name = prefab.name;
 			goMiniPet.GetComponent<RetentionPet>().Init(data);
-				if(CanSpawnNewMinipetLocations()){
+				if(CanSpawnNewMinipetLocations() && PlayerPrefs.GetInt("FirstPP") == 1){
 				goMiniPet.GetComponent<RetentionPet>().isFinishEating = false;
 				}
+			
 			// Add the pet into the dictionary to keep track
 			MiniPetTable.Add(miniPetID, goMiniPet);
 			}

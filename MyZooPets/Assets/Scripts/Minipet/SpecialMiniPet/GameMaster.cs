@@ -10,11 +10,13 @@ public class GameMaster : MiniPet {
 	}
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
-		turnInMission();
-		if (isFinishEating){
-			Hashtable has = new Hashtable();
-			has[0] = minigameType.ToString() + " game";
-			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
+		if(!MiniPetHUDUIManager.Instance.HasContent()){
+			turnInMission();
+			if(isFinishEating){
+				Hashtable has = new Hashtable();
+				has[0] = minigameType.ToString() + " game";
+				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
+			}
 		}
 	}
 	public override void FinishEating(){

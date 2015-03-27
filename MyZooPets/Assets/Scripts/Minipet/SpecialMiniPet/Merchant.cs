@@ -2,14 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Merchant : MiniPet {
+public class Merchant : MiniPet{
 	
 	private GameObject blackStoreButton;
 	public int itemsInList = 0;
 	private List<string> items;
 	private ImmutableDataMerchantItem secItem;
 	private bool isItemBought;
-
 
 	protected override void Start(){
 		base.Start();
@@ -21,17 +20,19 @@ public class Merchant : MiniPet {
 		if(items == null){
 			items = DataLoaderMerchantItem.getMerchantList();
 			//itemsInList = items.Count;
-			DataManager.Instance.GameData.MiniPets.saveMerchList(items,id);
+			DataManager.Instance.GameData.MiniPets.saveMerchList(items, id);
 		}
 	}
 
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
-		if (isFinishEating && !isItemBought){
-			Hashtable has = new Hashtable();
-			has[0] = secItem.ItemId;
-			has[1] = secItem.Type;
-			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant,has); 
+		if(!MiniPetHUDUIManager.Instance.HasContent()){
+			if(isFinishEating && !isItemBought){
+				Hashtable hash = new Hashtable();
+				hash[0] = secItem.ItemId;
+				hash[1] = secItem.Type;
+				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash); 
+			}
 		}
 	}
 
@@ -44,30 +45,30 @@ public class Merchant : MiniPet {
 		StartCoroutine(WaitASec());
 	}
 
-	public void ShowStoreButton(){
-		blackStoreButton.SetActive(true);
-	}
-
-	public void OpenStore(){
-		Hashtable has = new Hashtable();
-		int max = items.Count;
-		int rand = Random.Range (0,max);
-		ImmutableDataMerchantItem itemData = DataLoaderMerchantItem.GetData(items[rand]);
-		secItem = itemData;
-		has[0] = itemData.ItemId;
-		has[1] = itemData.Type;
-
-		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant,has); 
-	}
-
-	public void removeItem(){
-		items.Remove(secItem.ItemId);
-		isItemBought = true;
-		MiniPetManager.Instance.IncreaseXP(id);
-	}
 	IEnumerator WaitASec(){
 		yield return new WaitForSeconds(0.4f);
 		OpenStore();
 	}
 
+	public void OpenStore(){
+		Hashtable hash = new Hashtable();
+		int max = items.Count;
+		int rand = Random.Range(0, max);
+		ImmutableDataMerchantItem itemData = DataLoaderMerchantItem.GetData(items[rand]);
+		secItem = itemData;
+		hash[0] = itemData.ItemId;
+		hash[1] = itemData.Type;
+
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash); 
+	}
+
+	public void RemoveItem(){
+		items.Remove(secItem.ItemId);
+		isItemBought = true;
+		MiniPetManager.Instance.IncreaseXP(id);
+	}
+
+	public void ShowStoreButton(){
+		blackStoreButton.SetActive(true);
+	}
 }

@@ -138,6 +138,10 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 		return timeTillNextPlayPeriod;
 	}
+
+	public bool IsFirstPlayPeriod(){
+		return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod == DateTime.MinValue;
+	}
 	
 	/// <summary>
 	/// Calculates the current play period.

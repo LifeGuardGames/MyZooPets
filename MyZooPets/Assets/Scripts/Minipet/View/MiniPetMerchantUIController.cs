@@ -41,7 +41,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	}
 
 	void Start(){
-		tweenToggle.Show();
+		//tweenToggle.Show();
 	}
 
 	public void BuyItem(){

@@ -186,6 +186,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
+				HUDUIManager.Instance.PlayNeedMoneyAnimation();
 				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;

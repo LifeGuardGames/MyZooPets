@@ -23,6 +23,8 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public AnimationControl animMoney;
 	public AnimationControl animXP;
 
+	public Animation needMoneyAnimation;
+
 	private float points;
 	private float mood;
 	private float health;
@@ -110,4 +112,15 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		healthLabel.gameObject.SetActive(false);
 		moodLabel.gameObject.SetActive(false);
 	}
+
+	public void PlayNeedMoneyAnimation(){
+		needMoneyAnimation.wrapMode = WrapMode.Once;
+		needMoneyAnimation.Play("moneyRequired");
+	}
+
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
+//			PlayNeedMoneyAnimation();
+//		}
+//	}
 }

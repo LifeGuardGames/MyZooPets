@@ -10,6 +10,7 @@ public class QuestionaireUIManager1 : MonoBehaviour{
 	public UILabel label;
 	public TweenToggle baseTweenToggle;
 	public TweenToggle finishButtonTweenToggle;
+	public int maxAge = 25;
 
 	private int age;
 	private bool hasMovedSlider = false;
@@ -24,11 +25,11 @@ public class QuestionaireUIManager1 : MonoBehaviour{
 			return; 
 		}
 		else if(percentage == 1){
-			age = 50;
-			label.text = "50+";
+			age = maxAge;
+			label.text = maxAge.ToString() + "+";
 		}
 		else{
-			age = Mathf.CeilToInt(percentage * 100f / 2f);	// Round up to the nearest 1-50 int
+			age = Mathf.CeilToInt(percentage * 100f / 4f);	// Round up to the nearest 1-50 int
 			label.text = age.ToString();
 		}
 

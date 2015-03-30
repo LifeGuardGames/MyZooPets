@@ -19,7 +19,7 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
     private string petName; //Default pet name
     private Color currentRenderColor;
 
-	private int hatchClicksCount = 10;
+	private int hatchClicksCount = 7;
 	
     protected override void Awake(){
 		base.Awake();

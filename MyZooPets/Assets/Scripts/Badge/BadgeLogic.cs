@@ -49,6 +49,16 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 		return DataManager.Instance.GameData.Badge.GetIsUnlocked(badgeID);
 	}
 
+	public int GetUnlockedBadgesCount(){
+		int count = 0;
+		foreach(Badge badge in allBadges){
+			if(IsBadgeUnlocked(badge.ID)){
+				count++;
+			}
+		}
+		return count;
+	}
+
 	/// <summary>
 	/// Gets the badge unlock at next level.
 	/// </summary>

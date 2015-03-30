@@ -84,8 +84,8 @@ public class GameTutorialFlame : GameTutorial{
 		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
 		if(goFlameButton != null){
 			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
-			                "TutorialSpotlightFlameButton", fingerHint: true, 
-			                fingerHintPrefab: "PressHoldTut", fingerHintOffsetY: 0f, 
+			                "TutorialSpotlightFlameButton", fingerHint: true,
+			                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 210f, fingerHintOffsetY: -40f,
 			                fingerHintFlip: true, delay: 0.5f);
 			
 			// add the fire button to the processable list

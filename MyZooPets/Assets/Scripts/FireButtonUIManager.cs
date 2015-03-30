@@ -14,8 +14,8 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public UIImageButton imageButton;
 	public Collider fireButtonCollider;
 
-	private string activeButtonSpriteName = "buttonFireFull";
-	private string inactiveButtonSpriteName = "buttonFireEmpty";
+	private string activeButtonSpriteName = "fireButtonOn";
+	private string inactiveButtonSpriteName = "fireButtonOff";
 
 	// Use this for initialization
 	void Start () {

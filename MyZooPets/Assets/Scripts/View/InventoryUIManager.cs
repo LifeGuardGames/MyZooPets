@@ -121,8 +121,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		invItemPosition = invItemTrans.position;
 		
 		//Offset position if the item is just added to the inventory
-		if(invItem.Amount == 1)
+		if(invItem.Amount == 1){
 			invItemPosition += new Vector3(-0.22f, 0, 0);
+		}
 		
 		return invItemPosition;
 	}

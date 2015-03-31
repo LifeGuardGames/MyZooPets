@@ -22,6 +22,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		itemId = itemID;
 		itemNameLabel.text = secretItem.Name;
 		sprite.spriteName = DataLoaderItems.GetItemTextureName(itemID);
+		sprite.MakePixelPerfect();
 		this.itemType = itemType;	// Cache the type
 
 		descriptionLabel.text = secretItem.Description;
@@ -38,10 +39,9 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 			DecoInventoryUIManager.Instance.ShowDecoInventory();
 			InventoryUIManager.Instance.HidePanel();
 		}
-	}
 
-	void Start(){
-		//tweenToggle.Show();
+		// Show the hud because we are buying stuff
+		HUDUIManager.Instance.ShowPanel();
 	}
 
 	public void BuyItem(){
@@ -60,18 +60,19 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 
 	public void OnBuyAnimation(Item itemData, GameObject sprite){
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
-		string itemID = itemId;
 		Vector3 itemPosition = origin;
 		
 		//-0.22
 		// depending on what type of item the user bought, the animation has the item going to different places
-		ItemType eType = itemData.Type;
-		switch(eType){
+		switch(itemData.Type){
 		case ItemType.Decorations:
-			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemID);
+			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemId);
 			break;
-		default:
-			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
+		case ItemType.Accessories:
+			 Debug.LogError("Not implemented yet!");
+			break;
+		default:	// Everything else
+			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemId);
 			break;
 		}
 		

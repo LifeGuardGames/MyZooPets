@@ -337,7 +337,7 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ShowFoodPreferenceMessage(){
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()&& !isFinishEating){
 			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);

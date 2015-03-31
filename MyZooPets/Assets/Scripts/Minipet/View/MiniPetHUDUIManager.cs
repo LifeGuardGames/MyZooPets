@@ -46,51 +46,53 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	}
 
 	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash){
-		GameObject contentPrefab;
-		switch(type){
-		case MiniPetTypes.Rentention:
-			contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
-			break;
-		case MiniPetTypes.GameMaster:
-			contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
-			break;
-		case MiniPetTypes.Merchant:
-			contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
-			break;
-		default:
-			Debug.LogError("No minipet type found: " + type.ToString());
-			return;
-		}
-
-		content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-
-		switch(type){
-		case MiniPetTypes.Rentention:
-			MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
-			// Get data from hash and put them in here
-			controller.Initialize(hash[0].ToString());
-			break;
-		case MiniPetTypes.GameMaster:
-			MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
-			controller2.Initialize();
-			break;
-		case MiniPetTypes.Merchant:
-			MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
-			ItemType iType;
-			string itemType = hash[1].ToString();
-			switch (itemType){
-			case "Decorations":
-				iType = ItemType.Decorations;
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+			GameObject contentPrefab;
+			switch(type){
+			case MiniPetTypes.Rentention:
+				contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
+				break;
+			case MiniPetTypes.GameMaster:
+				contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
+				break;
+			case MiniPetTypes.Merchant:
+				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
 				break;
 			default:
-				iType = ItemType.Decorations;
-				break;
+				Debug.LogError("No minipet type found: " + type.ToString());
+				return;
 			}
-			controller3.Initialize(hash[0].ToString(), false, iType);
-			break;
-		default:
-			Debug.LogError("No controller found: " + type.ToString());
-			return;
+
+			content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+
+			switch(type){
+			case MiniPetTypes.Rentention:
+				MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
+				// Get data from hash and put them in here
+				controller.Initialize(hash[0].ToString());
+				break;
+			case MiniPetTypes.GameMaster:
+				MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
+				controller2.Initialize();
+				break;
+			case MiniPetTypes.Merchant:
+				MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
+				ItemType iType;
+				string itemType = hash[1].ToString();
+				switch (itemType){
+				case "Decorations":
+					iType = ItemType.Decorations;
+					break;
+				default:
+					iType = ItemType.Decorations;
+					break;
+				}
+				controller3.Initialize(hash[0].ToString(), false, iType);
+				break;
+			default:
+				Debug.LogError("No controller found: " + type.ToString());
+				return;
+			}
 		}
 	}
 
@@ -241,10 +243,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	public void RefreshFoodItemUI(){
 		if(SelectedMiniPetID != null){
-			if(!DataManager.Instance.GameData.MiniPetLocations.GetHunger(SelectedMiniPetID)){
+			if(!DataManager.Instance.GameData.MiniPets.GetHunger(SelectedMiniPetID)){
 				nameLabel.text = SelectedMiniPetName;
-				int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
-				int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
+				//int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
+				//int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
 				//labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
 				labelFeedCount.text = (1).ToString();
 				labelFeedCount.gameObject.SetActive(true);
@@ -273,7 +275,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void CheckStoreButtonPulse(){
 		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
 		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
-		bool petFed = !DataManager.Instance.GameData.MiniPetLocations.GetHunger(SelectedMiniPetID);
+		bool petFed = !DataManager.Instance.GameData.MiniPets.GetHunger(SelectedMiniPetID);
 
 		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && petFed){
 			storeButtonPulseAnim.Play();

@@ -45,13 +45,11 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 	/// <summary>
 	/// Determines whether new minipet locations should be spawned, also flags the datetime automatically
+	/// Only call once per a play period all furture calls will be false
 	/// </summary>
 	public bool CanSpawnNewMinipetLocations(){
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
-			if(!TutorialManager.Instance.IsTutorialActive()){
-				PlayerPrefs.SetInt("FirstPP", 1);
-			}
 			return true;
 		}
 		else{
@@ -80,7 +78,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		//bool isCleaned = DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
 		bool canModify;
 		//	canModify = (currentLevel != maxLevel) && isTickled && isCleaned && canLevel;
-		canModify = (currentLevel != maxLevel) && canLevel && DataManager.Instance.GameData.MiniPetLocations.GetHunger(miniPetID);
+		canModify = (currentLevel != maxLevel) && canLevel && DataManager.Instance.GameData.MiniPets.GetHunger(miniPetID);
 		return canModify;
 	}
 
@@ -122,7 +120,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		if(currentLevel != maxLevel)
 			levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
 
-		return 1;
+		return levelUpCondition;
 	}
 
 	/// <summary>
@@ -137,13 +135,13 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		int currentFoodXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
 		//if(canLevel){
 		//Increase food xp                                                                         
-		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1, canLevel);
+		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, currentFoodXP, canLevel);
 		//}
 		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
 		args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
 
 		//check current food xp with that condition
-		if(1 >= 1){
+		if(currentFoodXP >= levelUpCondition){
 			args.UpdateStatus = UpdateStatuses.LevelUp;
 			canLevel = false;
 		}
@@ -221,9 +219,13 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
-		PlayerPrefs.SetInt("FirstPP",1);
 		if(data.Type == MiniPetTypes.Rentention){
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
+				Debug.Log(PlayPeriodLogic.Instance.IsFirstPlayPeriod());
+				if(PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+					Debug.Log("wsodjgbd");
+					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);
+				}
 				Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
 				int partitionNumber = 0;
 				DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID, true);
@@ -231,12 +233,12 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet.transform.localPosition = pos;
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<RetentionPet>().Init(data);
-				if(CanSpawnNewMinipetLocations() && PlayerPrefs.GetInt("FirstPP") == 1){
-					goMiniPet.GetComponent<RetentionPet>().isFinishEating = false;
-				}
 				
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
+				if(switchSpawn){
+					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
+				}
 			}
 		}
 		else if(data.Type == MiniPetTypes.GameMaster){
@@ -259,11 +261,13 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetID, goMiniPet);
 						DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
+						DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
 					}
 					else{
 						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID, pos);
 						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
 					}
+
 				}
 			}
 			else if(Application.loadedLevelName == SceneUtils.YARD){
@@ -283,7 +287,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						goMiniPet.name = prefab.name;
 					}
 					goMiniPet.GetComponent<MiniPet>().Init(data);
-					if(CanSpawnNewMinipetLocations()){
+					if(switchSpawn){
 						goMiniPet.GetComponent<GameMaster>().isFinishEating = false;
 					}
 					MiniPetTable.Add(miniPetID, goMiniPet);
@@ -316,9 +320,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 							goMiniPet.transform.localPosition = pos;
 							goMiniPet.name = prefab.name;
 							goMiniPet.GetComponent<MiniPet>().Init(data);
-							if(CanSpawnNewMinipetLocations()){
-								goMiniPet.GetComponent<Merchant>().isFinishEating = false;
-							}
+							goMiniPet.GetComponent<Merchant>().isFinishEating = false;
+							DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
 							// Add the pet into the dictionary to keep track
 							MiniPetTable.Add(miniPetID, goMiniPet);
 							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);

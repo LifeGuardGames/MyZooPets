@@ -38,7 +38,14 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
 	public void SetLastPlayPeriod(){
-		DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = GetCurrentPlayPeriod();
+		Debug.Log("SETTING LAST PLAY PERIOD");
+		if(!DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux){
+			DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux = true;
+			DataManager.Instance.GameData.PlayPeriod.FirstPlayPeriod = GetCurrentPlayPeriod();
+		}
+		else{
+			DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = GetCurrentPlayPeriod();
+		}
 	}
 
 	public DateTime GetLastPlayPeriod(){
@@ -144,7 +151,8 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			return false;
 		}
 		else{
-			return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod == DateTime.MinValue;
+			return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod == DateTime.MinValue ||
+				DataManager.Instance.GameData.PlayPeriod.FirstPlayPeriod == GetCurrentPlayPeriod();
 		}
 	}
 	

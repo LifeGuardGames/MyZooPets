@@ -48,7 +48,7 @@ public class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-		isFinishEating = DataManager.Instance.GameData.MiniPetLocations.GetHunger(id);
+		isFinishEating = DataManager.Instance.GameData.MiniPets.GetHunger(id);
 		
 		RefreshUnlockState();
 	}
@@ -277,7 +277,7 @@ public class MiniPet : MonoBehaviour {
 	}
 	public virtual void FinishEating(){
 		isFinishEating = true;
-		DataManager.Instance.GameData.MiniPetLocations.SaveHunger(id,isFinishEating);
+		DataManager.Instance.GameData.MiniPets.SaveHunger(id,isFinishEating);
 		RefreshMiniPetUIState();
 	}
 	/// <summary>
@@ -329,7 +329,7 @@ public class MiniPet : MonoBehaviour {
 			MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
 			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
-			if(isForceHideFoodMsg && isFinishEating != true && PlayerPrefs.GetInt("FirstPP") == 1){
+			if(isForceHideFoodMsg && isFinishEating != true ){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 					//}
 			}
@@ -337,7 +337,7 @@ public class MiniPet : MonoBehaviour {
 	}
 
 	private void ShowFoodPreferenceMessage(){
-		if(PlayerPrefs.GetInt("FirstPP") == 1){
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);

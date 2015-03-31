@@ -15,7 +15,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	}
 
 	protected override void SetMaxSteps(){
-		maxSteps = 3;
+		maxSteps = 4;
 	}
 
 	protected override void SetKey(){
@@ -31,7 +31,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet1());
 			break;
 		case 1: // TODO integrate pebble second click here
-			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet1());
+			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet2());
 			break;
 		case 2:
 			// start by focusing on the wellapad button
@@ -48,26 +48,38 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	private IEnumerator FocusOnRetentionMinipet1(){
 		yield return 0;
 		retentionMinipet = GameObject.Find("MiniPetPebbleDemon");
-		Debug.Log(retentionMinipet);
-		// spotlight the wellapad
+
+		// spotlight the minipet
 		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
 		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
 
-		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked;
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked1;
 	}
 
 	// Minipet introduction	TODO finish
 	private IEnumerator FocusOnRetentionMinipet2(){
-		yield return 0;
-		retentionMinipet = GameObject.Find("MiniPetPebbleDemon");
-		Debug.Log(retentionMinipet);
-		// spotlight the wellapad
-		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
-		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
+		yield return new WaitForSeconds(1f);
+
+		// Keep the spotlight from last step so only show finger
+		ShowFingerHint(retentionMinipet, flipX: true);
+
+		string tutKey = GetKey() + "_" + GetStep();
+		string tutMessage = Localization.Localize(tutKey);
 		
-		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked;
+		// Show popup message
+		Vector3 popupLoc = Constants.GetConstant<Vector3>("MinipetPopupLoc");
+		Hashtable option = new Hashtable();
+		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
+		option.Add(TutorialPopupFields.Message, tutMessage);
+		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
+		
+		ShowRetentionPet(false, new Vector3(208, -177, -160));
+
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked2;
 	}
-	
+
+	/////////
+
 	private void FocusWellapadButton(){
 		// begin listening for when the button is clicked
 		LgButton button = goWellapadButton.GetComponent<LgButton>();
@@ -81,7 +93,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		ShowRetentionPet(false, new Vector3(208, -177, -160));
 	}
 
-	//using this to deplay ShowPopup call for 2 seconds
+	//using this to deplay ShowPopup call for 0.5 seconds
 	private IEnumerator CreateWellapadButtonTutMessage(){
 		yield return new WaitForSeconds(0.5f);
 
@@ -102,6 +114,8 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
 	}
 
+	/////////
+
 	private IEnumerator OpeningWellapad(){
 		// destroy the spotlight we created for the button
 		RemoveSpotlight();		
@@ -116,10 +130,19 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;
 	}
 
-	private void RetentionPetClicked(object sender, EventArgs args){
-		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked;
+	private void RetentionPetClicked1(object sender, EventArgs args){
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked1;
+//		RemoveSpotlight();
+		RemoveFingerHint();
+		Advance();
+	}
+
+	private void RetentionPetClicked2(object sender, EventArgs args){
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked2;
 		RemoveSpotlight();
 		RemoveFingerHint();
+		RemovePopup();
+		RemoveRetentionPet();
 		Advance();
 	}
 

@@ -273,11 +273,13 @@ public abstract class Tutorial{
 	//	ShrinkBgToFitText(bool): default to T. background size is automatically adjusted to fit label
 	//---------------------------------------------------
 	protected void ShowPopup(string popupKey, Vector3 location, Hashtable option=null){
-		if(goPopup)
+		if(goPopup){
 			GameObject.Destroy(goPopup);
+		}
 
-		if(option == null)
+		if(option == null){
 			option = new Hashtable();
+		}
 
 		Vector3 newPos = location;
 
@@ -301,12 +303,26 @@ public abstract class Tutorial{
 		script.Init(option);
 	}
 
-	public void ShowRetentionPet(bool isFlipped, Vector3 position){
+	public void ShowRetentionPet(bool isFlipped, Vector3 position,
+	                             bool isButton = false, GameObject buttonTarget = null, string buttonFunctionName = null){
 		GameObject goResource = Resources.Load("TutorialRetentionPet") as GameObject;
 		goRetentionPet = GameObjectUtils.AddChild(GameObject.Find("Anchor-Center"), goResource);
 		goRetentionPet.transform.localPosition = position;
 		if(isFlipped){
 			goRetentionPet.transform.localScale = new Vector3(-1f, 1f, 1f);
+		}
+
+		if(isButton){
+			goRetentionPet.collider.enabled = true;
+			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
+			message.enabled = true;
+			message.target = buttonTarget;
+			message.functionName = buttonFunctionName;
+		}
+		else{
+			goRetentionPet.collider.enabled = false;
+			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
+			message.enabled = false;
 		}
 	}
 

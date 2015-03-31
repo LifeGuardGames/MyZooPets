@@ -45,11 +45,17 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	}
 
 	public void BuyItem(){
-		buyButton.gameObject.SetActive(false);
-		merchant.GetComponent<Merchant>().RemoveItem();
-		InventoryLogic.Instance.AddItem(itemId, 1);
-		StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
-		OnBuyAnimation(secItem, sprite.gameObject);
+		if(DataManager.Instance.GameData.Stats.Stars >= (int) secItem.Cost){
+			buyButton.gameObject.SetActive(false);
+			merchant.GetComponent<Merchant>().RemoveItem();
+			InventoryLogic.Instance.AddItem(itemId, 1);
+			StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
+			OnBuyAnimation(secItem, sprite.gameObject);
+		}
+		else{
+			HUDUIManager.Instance.PlayNeedMoneyAnimation();
+			AudioManager.Instance.PlayClip("buttonDontClick");
+		}
 	}
 
 	public void OnBuyAnimation(Item itemData, GameObject sprite){

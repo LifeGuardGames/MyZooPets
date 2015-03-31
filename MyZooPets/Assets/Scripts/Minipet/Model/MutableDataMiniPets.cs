@@ -15,6 +15,7 @@ public class MutableDataMiniPets{
 	//	public DateTime LastActionTime {get; set;}
 		public bool CanGiveMission{get; set;}
 		public bool isHatched{get; set;}
+		public bool IsFinishEating {get; set;}
 		public List<string> SecretMerchantSellList{get; set;}
 	
 		public Status(){
@@ -22,6 +23,7 @@ public class MutableDataMiniPets{
 			CurrentXP = 0;
 			CanGiveMission = false;
 			isHatched = false;
+			IsFinishEating =  false;
 			SecretMerchantSellList = new List<string>();
 			//IsTickled = false;
 			//IsCleaned = false;
@@ -277,7 +279,28 @@ public class MutableDataMiniPets{
 		}
 	}
 
+	public void SaveHunger(string miniPetID, bool _isFinishEating){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.IsFinishEating = _isFinishEating;
+			
+			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
 	public MutableDataMiniPets(){
 		MiniPetProgress = new Dictionary<string, Status>();
+	}
+
+	public bool GetHunger(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			return status.IsFinishEating;
+		}
+		else{
+			return false;
+		}
 	}
 }

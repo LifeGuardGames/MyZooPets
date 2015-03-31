@@ -6,12 +6,10 @@ using System.Collections.Generic;
 public class MutableDataMiniPetLocations {
 	public class Status{
 		public string Loc{get; set;}
-		public bool IsFinishEating {get; set;}
 		public int partition {get; set;}
 
 		public Status(){
 			Loc = new Vector3(0,0,0).ToString();
-			IsFinishEating =  false;
 			partition = 1;
 		}
 	}
@@ -55,15 +53,6 @@ public class MutableDataMiniPetLocations {
 		}
 	}
 
-	public void SaveHunger(string miniPetID, bool _isFinishEating){
-		if(MiniPetLoc.ContainsKey(miniPetID)){
-			Status status = MiniPetLoc[miniPetID];
-			
-			status.IsFinishEating = _isFinishEating;
-			
-			MiniPetLoc[miniPetID] = status;
-		}
-	}
 
 	public Vector3 GetLoc(string miniPetID){
 		if(MiniPetLoc.ContainsKey(miniPetID)){
@@ -93,14 +82,5 @@ public class MutableDataMiniPetLocations {
 			return 0;
 		}
 	}
-	public bool GetHunger(string miniPetID){
-		if(MiniPetLoc.ContainsKey(miniPetID)){
-			Status status = MiniPetLoc[miniPetID];
-			
-			return status.IsFinishEating;
-		}
-		else{
-			return false;
-		}
-	}
+
 }

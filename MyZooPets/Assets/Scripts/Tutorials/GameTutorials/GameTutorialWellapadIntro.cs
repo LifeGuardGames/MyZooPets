@@ -28,19 +28,24 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet());
+			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet1());
 			break;
-		case 1:
+		case 1: // TODO integrate pebble second click here
+			TutorialManager.Instance.StartCoroutine(FocusOnRetentionMinipet1());
+			break;
+		case 2:
 			// start by focusing on the wellapad button
 			FocusWellapadButton();
 			break;
 			
-		case 2:
+		case 3:
 			TutorialManager.Instance.StartCoroutine(OpeningWellapad());
 			break;
 		}
 	}
-	private IEnumerator FocusOnRetentionMinipet(){
+
+	// Prompt click on minipet
+	private IEnumerator FocusOnRetentionMinipet1(){
 		yield return 0;
 		retentionMinipet = GameObject.Find("MiniPetPebbleDemon");
 		Debug.Log(retentionMinipet);
@@ -48,6 +53,18 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
 		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
 
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked;
+	}
+
+	// Minipet introduction	TODO finish
+	private IEnumerator FocusOnRetentionMinipet2(){
+		yield return 0;
+		retentionMinipet = GameObject.Find("MiniPetPebbleDemon");
+		Debug.Log(retentionMinipet);
+		// spotlight the wellapad
+		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
+		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
+		
 		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked;
 	}
 	

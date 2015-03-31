@@ -362,10 +362,9 @@ public class MiniPet : MonoBehaviour {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
-		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
 		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 
-		if(args.TargetCollider.name == this.gameObject.name && !isLevelUpAnimationLockOn){
+		if(args.TargetCollider.name == this.gameObject.name){
 
 			invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
@@ -420,7 +419,7 @@ public class MiniPet : MonoBehaviour {
 	private void LevelUpEventHandler(object sender, EventArgs args){
 		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == id){
 			animationManager.Cheer();
-			Debug.Log("RECEIVING GIFT HERE");
+			Debug.LogWarning("RECEIVING GIFT HERE");
 //			StatsController.Instance.ChangeStats(deltaGems: 1, gemsLoc: transform.position, is3DObject: true, animDelay: 1.5f);
 		}
 	}

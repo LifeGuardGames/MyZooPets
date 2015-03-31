@@ -197,7 +197,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		Debug.Log(itemID);
 		Transform deocInvItemTrans = uiGridObject.transform.Find(itemID);
 		if(deocInvItemTrans == null){
-		Debug.Log("ksd");
+			Debug.Log("ksd");
 		}
 		InventoryItem decoInvItem = InventoryLogic.Instance.GetDecoInvItem(itemID);
 		decoInvItemPosition = deocInvItemTrans.position;

@@ -245,6 +245,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				if(latestGate == null || (latestGate.Partition - 1 == 1)){
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
+					Debug.Log(locationTuple);
 					int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 					Vector3 pos = locationTuple.Item1;
 					if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){

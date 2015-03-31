@@ -18,17 +18,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public GameObject storeButtonSunbeam;
 
 	public GameObject contentParent;
-	public Animation levelUpDropdown;
 	public GameObject tutorialParent;
 	public GameObject petReference;
 	private GameObject content;
-
-	/// <summary>
-	/// Gets or sets a value indicating whether feeding is lock because lv up
-	/// animation is happening right now.
-	/// </summary>
-	/// <value><c>true</c> if this instance is level up animation lock on; otherwise, <c>false</c>.</value>
-	public bool IsLevelUpAnimationLockOn {get; set;}
 
 	/// <summary>
 	/// Gets or sets the selected mini pet ID. Need to be set before the HUD
@@ -42,7 +34,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	protected override void Awake(){
 		base.Awake();
 		eModeType = UIModeTypes.MiniPet;
-		IsLevelUpAnimationLockOn = false;
 	}
 
 	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash){
@@ -76,17 +67,26 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			break;
 		case MiniPetTypes.Merchant:
 			MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
-			ItemType iType;
-			string itemType = hash[1].ToString();
-			switch (itemType){
+			ItemType itemType;
+			switch (hash[1].ToString()){	// Item type
 			case "Decorations":
-				iType = ItemType.Decorations;
+				itemType = ItemType.Decorations;
+				break;
+			case "Usables":
+				itemType = ItemType.Usables;
+				break;
+			case "Foods":
+				itemType = ItemType.Foods;
+				break;
+			case "Accessories":
+				itemType = ItemType.Accessories;
 				break;
 			default:
-				iType = ItemType.Decorations;
+				Debug.LogError("Failed to find item type : " + hash[1].ToString());
+				itemType = ItemType.Decorations;
 				break;
 			}
-			controller3.Initialize(hash[0].ToString(), false, iType);
+			controller3.Initialize(hash[0].ToString(), false, itemType);
 			break;
 		default:
 			Debug.LogError("No controller found: " + type.ToString());
@@ -150,11 +150,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		switch(args.UpdateStatus){
 		case MiniPetManager.UpdateStatuses.LevelUp:
-			// Start all level up logic here
-			CloseUI();
-
-			levelUpDropdown.Play();
-			IsLevelUpAnimationLockOn = true;
 
 			LevelUpAnimationCompleted();
 			break;
@@ -179,10 +174,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	public void LevelUpAnimationCompleted(){
 		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentXP(SelectedMiniPetID);
-		IsLevelUpAnimationLockOn = false;	// Unlocked immediately... save for future use
 
-		if(OnLevelUpAnimationCompleted != null)
+		if(OnLevelUpAnimationCompleted != null){
 			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
+		}
 	}
 
 	/// <summary>

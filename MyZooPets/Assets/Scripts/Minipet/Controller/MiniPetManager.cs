@@ -221,7 +221,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
-
+		PlayerPrefs.SetInt("FirstPP",1);
 		if(data.Type == MiniPetTypes.Rentention){
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
 				Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;

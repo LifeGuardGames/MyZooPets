@@ -140,7 +140,12 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
 	public bool IsFirstPlayPeriod(){
-		return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod == DateTime.MinValue;
+		if(Constants.GetConstant<bool>("OverrideFirstPlayPeriod")){
+			return false;
+		}
+		else{
+			return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod == DateTime.MinValue;
+		}
 	}
 	
 	/// <summary>

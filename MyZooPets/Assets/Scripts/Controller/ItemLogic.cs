@@ -12,6 +12,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
 	private List<Item> accessoryList; // List with only AccessoryItem. sorted by cost
 	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
+	private Dictionary<string, DateTime> farmTimeDictionary;	// Mutable dict for farm deco times
 
 	/// <summary>
 	/// Gets the food list. Sorted by cost
@@ -82,6 +83,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 										select groupedClass).ToDictionary(i => i.Key, i => i.ToList());
 			}
 			return decorationSubCatList;
+		}
+	}
+
+	public Dictionary<string, DateTime> FarmTimeDictionary{
+		get{
+			if(farmTimeDictionary == null){
+				farmTimeDictionary = DataManager.Instance.GameData.Decorations.FarmDecorationTimes;
+			}
+			return farmTimeDictionary;
 		}
 	}
 	
@@ -300,4 +310,28 @@ public class ItemLogic : Singleton<ItemLogic>{
 		                       select item).ToList();
 		return itemList;
 	}
+
+	#region Farm Decoration use
+	public DateTime GetFarmLastRedeemTime(string farmItemId){
+		return FarmTimeDictionary[farmItemId];
+	}
+
+	public void UpdateFarmLastRedeemTime(string farmItemId, DateTime lastRedeemTime){
+		if(FarmTimeDictionary.ContainsKey(farmItemId)){
+			FarmTimeDictionary[farmItemId] = lastRedeemTime;
+		}
+		else{
+			FarmTimeDictionary.Add(farmItemId, lastRedeemTime);
+		}
+	}
+
+	public void RemoveFarmItem(string farmItemId){
+		if(FarmTimeDictionary.ContainsKey(farmItemId)){
+			FarmTimeDictionary.Remove(farmItemId);
+		}
+		else{
+			Debug.LogWarning("Removing non-existant farmItemId from saved list - " + farmItemId);
+		}
+	}
+	#endregion
 }

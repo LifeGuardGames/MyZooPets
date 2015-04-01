@@ -10,7 +10,7 @@ public class DecorationZoneObject : DecorationZone{
 	/// Child override to set decoration
 	/// </summary>
 	/// <param name="strID">decoID</param>
-	protected override void _SetDecoration(string decoID){
+	protected override void _SetDecoration(string decoID, bool isPlacedFromDecoMode){
 		// Build the prefab from the id of the decoration
 		string strResource = ItemLogic.Instance.GetDecoItemPrefabName(decoID);
 		GameObject goPrefab = Resources.Load(strResource) as GameObject;
@@ -19,6 +19,12 @@ public class DecorationZoneObject : DecorationZone{
 			decoGameObject = Instantiate(goPrefab) as GameObject;
 			decoGameObject.transform.parent = placementNode;	// Put it in the hierachy of decorations in this room
 			GameObjectUtils.ResetLocalPosition(decoGameObject);	// Reset all transforms
+
+			// If the object is a farm deco, init some variables
+			FarmGenerator farmScript = decoGameObject.GetComponent<FarmGenerator>();
+			if(farmScript != null){
+				farmScript.Initialize(decoID, isPlacedFromDecoMode);
+			}
 		}
 		else
 			Debug.LogError("No such prefab for " + strResource);

@@ -64,7 +64,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				break;
 			case MiniPetTypes.GameMaster:
 				MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
-				controller2.Initialize();
+				controller2.Initialize(hash[0].ToString());
 				break;
 			case MiniPetTypes.Merchant:
 				MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();

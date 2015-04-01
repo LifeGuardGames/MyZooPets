@@ -122,11 +122,13 @@ public class MiniPet : MonoBehaviour {
 			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 			if(!isMiniPetColliderLocked){
-				if(TutorialManagerBedroom.Instance.IsTutorialActive()){
-					if(OnTutorialMinipetClicked != null){
-						OnTutorialMinipetClicked(this, EventArgs.Empty);
+				if(Application.loadedLevelName == "ZoneBedroom"){
+					if(TutorialManagerBedroom.Instance.IsTutorialActive()){
+						if(OnTutorialMinipetClicked != null){
+							OnTutorialMinipetClicked(this, EventArgs.Empty);
+						}
+						return;
 					}
-					return;
 				}
 				if(!isUIOpened && isModeLockEmpty){
 					ZoomInToMiniPet();

@@ -171,7 +171,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public void StartFillFireSprite(){
 		LeanTween.cancel(gameObject);
 		LeanTween.value(gameObject, UpdateValueCallback, currentPercentage, targetPercentage, totalTimeTween)
-			.setOnComplete(FinishedFillSpriteCallback);
+			.setOnComplete(FinishedFillSpriteCallback).setEase(LeanTweenType.easeOutCubic);
 	}
 
 	// Helper function for the value leantween

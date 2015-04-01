@@ -9,7 +9,7 @@ public class DecorationZoneMaterial : DecorationZone{
 	/// Child override to set decoration
 	/// </summary>
 	/// <param name="strID">decoID</param>
-	protected override void _SetDecoration(string decoID){
+	protected override void _SetDecoration(string decoID, bool isPlacedFromDecoMode){
 		// build the prefab from the id of the decoration
 		string strResource = ItemLogic.Instance.GetDecoItemMaterialName(decoID);
 		Material matPrefab = Resources.Load(strResource) as Material;

@@ -96,12 +96,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400010}
-  - 23: {fileID: 2300006}
-  - 33: {fileID: 3300006}
-  - 114: {fileID: 11400012}
+  - 33: {fileID: 3300002}
+  - 23: {fileID: 2300002}
   - 114: {fileID: 11400010}
   m_Layer: 0
-  m_Name: SpritePetShadow
+  m_Name: PetShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1956,7 +1955,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.90999985, y: .150000006, z: 26.6599998}
+  m_LocalPosition: {x: -9.22000027, y: .150000006, z: 26.6599998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
@@ -2008,8 +2007,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: -.202757835, y: -1.98811936, z: -.196533203}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -.49000001, y: -1.99000001, z: -.200000003}
+  m_LocalScale: {x: 6.68888617, y: 3.79831696, z: 6.68888855}
   m_Children: []
   m_Father: {fileID: 400024}
   m_RootOrder: 2
@@ -2097,7 +2096,7 @@ Transform:
   m_GameObject: {fileID: 100024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.02345753, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 400016}
   - {fileID: 400018}
@@ -3516,7 +3515,7 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!23 &2300006
+--- !u!23 &2300002
 Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -3528,13 +3527,13 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: eb40b0b650b4ede4d83179abea00c663, type: 2}
+  - {fileID: 2100000, guid: 2f04188d08374ac45bc9edee47c3af88, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_SortingLayerID: 2117205683
+  m_SortingLayerID: 0
   m_SortingOrder: 0
 --- !u!33 &3300000
 MeshFilter:
@@ -3543,13 +3542,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_Mesh: {fileID: 0}
---- !u!33 &3300006
+--- !u!33 &3300002
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &6500002
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -3663,29 +3662,6 @@ MonoBehaviour:
   overrideY: 0
   lockZ: 1
   overrideZ: 0
---- !u!114 &11400012
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fac570381f34f647b768dc5a5aa1364, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collection: {fileID: 11400000, guid: 91fe72f4e8e25754090d319e42094761, type: 2}
-  _color: {r: 1, g: 1, b: 1, a: .250980407}
-  _scale: {x: 3, y: 1.20000005, z: 1}
-  _spriteId: 2
-  boxCollider2D: {fileID: 0}
-  polygonCollider2D: []
-  edgeCollider2D: []
-  boxCollider: {fileID: 0}
-  meshCollider: {fileID: 0}
-  meshColliderPositions: []
-  meshColliderMesh: {fileID: 0}
-  renderLayer: 0
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3706,7 +3682,7 @@ MonoBehaviour:
     e00: 1
     e01: 0
     e02: 0
-    e03: -8.90999985
+    e03: 9.22000027
     e10: 0
     e11: 1
     e12: 0
@@ -3744,7 +3720,7 @@ MonoBehaviour:
     e00: 1
     e01: 0
     e02: 0
-    e03: -8.90999985
+    e03: 9.22000027
     e10: 0
     e11: 1
     e12: 0

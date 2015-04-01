@@ -31,8 +31,8 @@ public abstract class DecorationZone : MonoBehaviour {
 	private string nodeID;
 	private string placedDecoID = string.Empty;
 
-	protected abstract void _RemoveDecoration();						// removes the decoration
-	protected abstract void _SetDecoration(string strID);				// set the deco to this node
+	protected abstract void _RemoveDecoration();										// removes the decoration
+	protected abstract void _SetDecoration(string decoID, bool isPlacedFromDecoMode);	// set the deco to this node
 
 	void Start(){ 
 		DecoInventoryUIManager.OnDecoDroppedOnTarget += OnDecorationDroppedInZone;
@@ -85,7 +85,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		// If the saved data contains this node's id, it means there was a decoration placed here
 		if(DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey(nodeID)){
 			string savedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID];
-			SetDecoration(savedDeco);
+			SetDecoration(savedDeco, false);
 		}
 	}
 
@@ -116,12 +116,12 @@ public abstract class DecorationZone : MonoBehaviour {
 			DecorationItem decoItem = GetDecorationItemFromInventory(args.ItemTransform.gameObject.name);
 			if(args.TargetCollider.GetComponent<DecorationZone>().nodeType == decoItem.DecorationType){
 				args.IsValidTarget = true;
-				SetDecoration(args.ItemTransform.gameObject.name);	// TODO refactor this item Name???
+				SetDecoration(args.ItemTransform.gameObject.name, true);	// TODO refactor this item Name???
 			}
 		}
 	}
 
-	public void SetDecoration(string itemID){
+	public void SetDecoration(string itemID, bool isPlacedFromDecoMode){
 		// Do one last check
 		if(!CanPlaceDecoration(itemID)){
 			Debug.LogError("Illegal deco placement for " + itemID + " on node " + gameObject);
@@ -129,8 +129,9 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 
 		// If there was already a decoration here, remove it
-		if(HasDecoration())
-			RemoveDecoration();	
+		if(HasDecoration()){
+			RemoveDecoration();
+		}
 
 		placedDecoID = itemID;
 
@@ -140,7 +141,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		// Notify inventory logic that this item is being used
 		InventoryLogic.Instance.UsePetItem(itemID);
 
-		_SetDecoration(itemID);
+		_SetDecoration(itemID, isPlacedFromDecoMode);
 
 		// Play a sound
 		string sound = Constants.GetConstant<string>("Deco_PlaceSound");

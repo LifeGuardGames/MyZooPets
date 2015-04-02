@@ -71,10 +71,10 @@ public class PetMovement : Singleton<PetMovement>{
 		// Get the 3D Z-value where the pet will be locked to
 		Ray initRay = Camera.main.ScreenPointToRay(new Vector2(Screen.width/2f, movementStaticScreenY));
 		// Debug.DrawRay(initRay.origin, initRay.direction * 50, Color.green, 5000f);
+
 		RaycastHit hit;
-		int layerMask = 1 << 23;
-		layerMask = ~layerMask;
-		if(Physics.Raycast(initRay, out hit, Mathf.Infinity,layerMask)){
+		int layerMask = 1 << 11;	// Only tell it to detect the ground layer
+		if(Physics.Raycast(initRay, out hit, Mathf.Infinity, layerMask)){
 			foreach(Collider walkingPathCollider in walkingPathColliders){
 				// This is the point where the ratio ray will hit the floor
 				if(hit.collider == walkingPathCollider){	// Assume one floor for now

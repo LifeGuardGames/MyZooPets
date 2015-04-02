@@ -80,7 +80,7 @@ public class ButtonChangeScene : LgButton{
 	// CameraMoveDone()
 	// Callback for when the camera is done tweening to
 	// its target.
-	//---------------------------------------------------	
+	//---------------------------------------------------
 	private void CameraMoveDone(){
 		// the camera move is complete, so now let's start the transition (if it exists)
 		LoadLevelUIManager.Instance.StartLoadTransition(strScene);

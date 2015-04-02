@@ -6,11 +6,12 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	public GameObject backButton;
 	public GameObject highscoreBoard;
 	public UIGrid scoreBoardGrid;
-	
-	// related to zooming into the badge board
-	public float fZoomTime;
-	public Vector3 vOffset;
-	public Vector3 vRotation;
+
+	// related to the camera move
+	public Vector3 finalPosition;		// offset of camera on the target
+	public Vector3 finalRotation;		// how the camera should rotate
+	public float zoomTime = 1f;			// how long the tween should last
+
 	private bool isActive = false;
 
 	protected override void Start(){
@@ -32,9 +33,16 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	//When the highscore board is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
-			// zoom into the board
-			Vector3 vPos = highscoreBoard.transform.position + vOffset;
-			CameraManager.Instance.ZoomToTarget(vPos, vRotation, fZoomTime, null);
+			// if there is a camera move, do it -- otherwise, just skip to the move being complete
+			if(zoomTime > 0){
+				CameraManager.Callback cameraDoneFunction = delegate(){
+					CameraMoveDone();
+				};
+				CameraManager.Instance.ZoomToTarget(finalPosition, finalRotation, zoomTime, cameraDoneFunction);
+			}
+			else{
+				CameraMoveDone();
+			}
 			
 			//Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -47,6 +55,13 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			
 			backButton.SetActive(true);
 		}
+	}
+
+	/// <summary>
+	/// Callback for when the camera is done tweening to its target
+	/// </summary>
+	private void CameraMoveDone(){
+
 	}
 
 	//The back button on the left top corner is clicked to zoom out of the highscore board

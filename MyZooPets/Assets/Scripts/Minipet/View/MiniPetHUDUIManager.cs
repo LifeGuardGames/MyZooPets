@@ -60,7 +60,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			case MiniPetTypes.Rentention:
 				MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
 				// Get data from hash and put them in here
-				controller.Initialize(hash[0].ToString());
+				controller.Initialize();
 				break;
 			case MiniPetTypes.GameMaster:
 				MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
@@ -118,7 +118,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		feedParent.Hide();
 		CheckStoreButtonPulse();
 		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
-
+		PetSpeechManager.Instance.BeQuiet();
 		//Show other UI Objects
 		NavigationUIManager.Instance.ShowPanel();
 		HUDUIManager.Instance.ShowPanel();

@@ -15,7 +15,6 @@ public class RetentionPet : MiniPet {
 					Hashtable has = new Hashtable();
 					has[0] = "Do Daily Missions";
 					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
-					turnInMission();
 				}
 			}
 			else if (!TutorialManager.Instance.IsTutorialActive()){
@@ -44,7 +43,6 @@ public class RetentionPet : MiniPet {
 				MiniPetManager.Instance.IncreaseXP(id);
 				WellapadMissionController.Instance.ClaimReward("Critical");
 				WellapadMissionController.Instance.RefreshCheck();
-				MiniPetManager.Instance.IncreaseXP(id);
 			}
 		}
 	}

@@ -70,7 +70,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_RETENTION_TIP"));
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
-		PetSpeechManager.Instance.Talk(msgOption);
+		PetSpeechManager.Instance.TalkM(msgOption);
 	}
 
 	public void showChallengeMsg(MinigameTypes type){
@@ -93,7 +93,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 			break;
 		}
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
-		PetSpeechManager.Instance.Talk(msgOption);
+		PetSpeechManager.Instance.TalkM(msgOption);
 	}
 
 	public void showBlackShopMessage(){
@@ -101,7 +101,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MERCHANT_" + rand.ToString()));
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
-		PetSpeechManager.Instance.Talk(msgOption);
+		PetSpeechManager.Instance.TalkM(msgOption);
 	}
 
 	public void ShowFoodPreferenceMsg(string itemTextureName){

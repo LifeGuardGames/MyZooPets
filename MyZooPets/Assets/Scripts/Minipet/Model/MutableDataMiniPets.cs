@@ -17,6 +17,7 @@ public class MutableDataMiniPets{
 		public bool isHatched{get; set;}
 		public bool IsFinishEating {get; set;}
 		public List<string> SecretMerchantSellList{get; set;}
+		public MutableDataWellapadTask task {get; set;}
 	
 		public Status(){
 			CurrentLevel = Level.Level1;
@@ -301,6 +302,26 @@ public class MutableDataMiniPets{
 		}
 		else{
 			return false;
+		}
+	}
+
+	public MutableDataWellapadTask GetTask(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			return status.task;
+		}
+		else{
+			return null;
+		}
+	}
+
+	public void SetTask(string miniPetID, MutableDataWellapadTask Task){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.task = Task;
+			MiniPetProgress[miniPetID] = status;
 		}
 	}
 }

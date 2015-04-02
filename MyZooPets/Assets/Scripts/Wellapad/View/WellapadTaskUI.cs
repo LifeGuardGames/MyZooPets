@@ -19,6 +19,7 @@ public class WellapadTaskUI : MonoBehaviour{
 	public TweenToggle slash;
 	public Color tutTextHighlightOn;
 	public Color tutTextHighlightOff;
+	public GameObject RewardButton;
 	
 	//---------------------------------------------------
 	// Init()
@@ -44,8 +45,8 @@ public class WellapadTaskUI : MonoBehaviour{
 	private void SetDesc(){
 		// set the label showing what the task entails
 		ImmutableDataWellapadTask data = DataLoaderWellapadTasks.GetTask(task.TaskID);
+
 		string strDesc = data.GetText();
-		
 		// if the task has an amount, we want to integrate that into the string
 		if(task.Amount > 0)
 			strDesc = String.Format(strDesc, task.Amount);	

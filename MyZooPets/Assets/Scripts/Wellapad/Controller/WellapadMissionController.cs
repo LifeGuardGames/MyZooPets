@@ -166,9 +166,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		// the list needs to be refreshed if it has been more than 12 hours from creation OR the creation time frame (morning/evening)
 		// is different than the current time frame (morning/evening)
 		DateTime dateMissionsCreated = DataManager.Instance.GameData.Wellapad.DateMissionsCreated;	
-		/*bool IsRefresh = sinceCreated.TotalHours >= 12 || 
-			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);*/
-		bool IsRefresh = needMission;
+		bool IsRefresh = sinceCreated.TotalHours >= 12 || 
+			PlayPeriodLogic.GetTimeFrame(now) != PlayPeriodLogic.GetTimeFrame(dateMissionsCreated);
+		//bool IsRefresh = needMission;
 		// alert...if the user has not finished the last tutorial, no matter what, don't refresh
 		/*if(!DataManager.Instance.GameData.Tutorial.AreTutorialsFinished())
 			IsRefresh = false;*/
@@ -286,7 +286,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID) && 
 			DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks.ContainsKey(taskID)){
 			status = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed;
-		
 			
 			// if the status is recently completed and we are popping, "pop" it by setting it to just plain completed now
 			if(bPop && status == WellapadTaskCompletionStates.RecentlyCompleted)
@@ -329,8 +328,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// user has saved tasks...use those	
 			Dictionary<string, MutableDataWellapadTask> savedTasks = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks;
 			// loop through all saved tasks and add them to the list
-			foreach(KeyValuePair<string, MutableDataWellapadTask> pair in savedTasks)
+			foreach(KeyValuePair<string, MutableDataWellapadTask> pair in savedTasks){
 				listTasks.Add(pair.Value);
+			}
 		}
 		else
 			Debug.LogError("Something trying to create a mission in the UI that the user does not have...give it to them first!");
@@ -341,7 +341,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public void AddMission(string missionID){
 		List<ImmutableDataWellapadTask> listTasks = GetUnlockedTasks(missionID);
 		Dictionary<string, MutableDataWellapadTask> savedTasks = new Dictionary<string, MutableDataWellapadTask>();
-		
+	//	Debug.Log(listTasks.Count);
 		for(int i = 0; i < listTasks.Count; ++i){
 			ImmutableDataWellapadTask task = listTasks[i];
 			string taskID = task.GetTaskID();
@@ -364,7 +364,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		// (but also check to make sure the category is unlocked)
 		foreach(DictionaryEntry pair in taskHash){
 			string category = (string)pair.Key;
-
 			if(DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains(category)){
 				List<ImmutableDataWellapadTask> listTasks = (List<ImmutableDataWellapadTask>) pair.Value;
 				// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,

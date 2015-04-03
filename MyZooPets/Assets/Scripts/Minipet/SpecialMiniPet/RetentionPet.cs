@@ -12,6 +12,7 @@ public class RetentionPet : MiniPet {
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 			if(!MiniPetHUDUIManager.Instance.HasContent()){
 				if(isFinishEating){
+					miniPetSpeechAI.ShowRetentionIdelMsg();
 					Hashtable has = new Hashtable();
 					has[0] = "Do Daily Missions";
 					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 

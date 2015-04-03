@@ -33,6 +33,9 @@ public class Merchant : MiniPet{
 				hash[1] = secItem.Type;
 				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash); 
 			}
+			else if (isItemBought){
+				miniPetSpeechAI.ShowMerchantIdleMsg();
+			}
 		}
 	}
 

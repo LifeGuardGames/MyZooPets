@@ -16,6 +16,7 @@ public class GameMaster : MiniPet {
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 
 			if(isFinishEating){
+				miniPetSpeechAI.ShowGMIdleMsg();
 				Hashtable has = new Hashtable();
 				has[0] = miniGameTaskId;
 				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 

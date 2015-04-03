@@ -67,8 +67,32 @@ public class MiniPetSpeechAI : MonoBehaviour{
 	}
 
 	public void ShowTipMsg(){
+		int rand = Random.Range (0, 4);
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_RETENTION_TIP"));
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_RETENTION_TIP_"+ rand.ToString()));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.TalkM(msgOption);
+	}
+
+	public void ShowGMIdleMsg(){
+		int rand = Random.Range (0, 7);
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_IDLE_"+ rand.ToString()));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.TalkM(msgOption);
+	}
+	public void ShowRetentionIdelMsg(){
+		int rand = Random.Range (0, 7);
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_RETENTION_IDLE_"+ rand.ToString()));
+		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
+		PetSpeechManager.Instance.TalkM(msgOption);
+	}
+
+	public void ShowMerchantIdleMsg(){
+		int rand = Random.Range (0, 7);
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MERCHANT_IDLE_"+ rand.ToString()));
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
 		PetSpeechManager.Instance.TalkM(msgOption);
 	}

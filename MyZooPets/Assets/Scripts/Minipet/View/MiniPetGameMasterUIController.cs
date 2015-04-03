@@ -25,7 +25,7 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 			desc = String.Format(desc, task.Amount);
 		}
 		label.text = desc;
-	
+		SetCheckboxSprite(true);
 	}
 
 	//---------------------------------------------------
@@ -36,7 +36,9 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 	private void SetCheckboxSprite(bool bPop){
 		// get the status
 		WellapadTaskCompletionStates eStatus = WellapadMissionController.Instance.GetTaskStatus(task, bPop);
-		
+		Debug.Log(eStatus == WellapadTaskCompletionStates.Uncompleted);
+		Debug.Log(eStatus == WellapadTaskCompletionStates.Completed);
+		Debug.Log(eStatus == WellapadTaskCompletionStates.RecentlyCompleted);
 		// show the tween only if the status is complete OR the status is recently completed and we are popping the task status
 		if(eStatus == WellapadTaskCompletionStates.Completed ||
 		   (eStatus == WellapadTaskCompletionStates.RecentlyCompleted && bPop)){

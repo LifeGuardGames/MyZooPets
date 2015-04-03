@@ -14,12 +14,14 @@ public class GameMaster : MiniPet {
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
-
 			if(isFinishEating){
+				miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(id).MissionID;
+
 				miniPetSpeechAI.ShowGMIdleMsg();
 				Hashtable has = new Hashtable();
 				has[0] = miniGameTaskId;
 				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
+				Debug.Log("euirgnsrtig");
 			}
 		}
 	}
@@ -33,9 +35,7 @@ public class GameMaster : MiniPet {
 	
 	private void turnInMission(){
 		if(isFinishEating){
-			miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(id).MissionID;
 			MutableDataMission mission = WellapadMissionController.Instance.GetMission(miniGameTaskId);
-			
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
 				MiniPetManager.Instance.IncreaseXP(id);

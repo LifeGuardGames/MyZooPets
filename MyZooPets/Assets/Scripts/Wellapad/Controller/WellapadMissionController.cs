@@ -282,14 +282,16 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		
 		string missionID = task.MissionID;
 		string taskID = task.TaskID;
-		
+		Debug.Log(task.TaskID);
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID) && 
 			DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks.ContainsKey(taskID)){
 			status = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed;
 			
 			// if the status is recently completed and we are popping, "pop" it by setting it to just plain completed now
-			if(bPop && status == WellapadTaskCompletionStates.RecentlyCompleted)
+			if(bPop && status == WellapadTaskCompletionStates.RecentlyCompleted){
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed = WellapadTaskCompletionStates.Completed;
+				Debug.Log("oeirngrft");
+			}
 		}
 		else
 			Debug.LogError("Can't find task " + taskID + " in saved data");

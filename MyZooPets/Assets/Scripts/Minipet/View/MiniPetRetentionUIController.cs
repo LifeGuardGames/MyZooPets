@@ -62,8 +62,10 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 
 		}
 	}
+
 	private IEnumerator CheckboxSpriteShowHelper(TweenToggle slash){
 		yield return 0;
 		slash.Show();
 	}
+
 }

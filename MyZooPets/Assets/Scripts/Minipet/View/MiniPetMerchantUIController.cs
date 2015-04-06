@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MiniPetMerchantUIController : MonoBehaviour {
@@ -47,7 +47,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public void BuyItem(){
 		if(DataManager.Instance.GameData.Stats.Stars >= (int) secItem.Cost){
 			buyButton.gameObject.SetActive(false);
-			merchant.GetComponent<Merchant>().RemoveItem();
+			merchant.GetComponent<MiniPetMerchant>().RemoveItem();
 			InventoryLogic.Instance.AddItem(itemId, 1);
 			StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
 			OnBuyAnimation(secItem, sprite.gameObject);

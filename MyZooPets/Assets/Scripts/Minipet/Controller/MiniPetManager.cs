@@ -231,7 +231,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 				goMiniPet.transform.localPosition = pos;
 				goMiniPet.name = prefab.name;
-				goMiniPet.GetComponent<RetentionPet>().Init(data);
+				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
 				
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
@@ -253,10 +253,10 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 						goMiniPet.transform.localPosition = pos;
 						goMiniPet.name = prefab.name;
-						goMiniPet.GetComponent<GameMaster>().minigameType = type;
+						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = type;
 						goMiniPet.GetComponent<MiniPet>().Init(data);
 						if(CanSpawnNewMinipetLocations()){
-							goMiniPet.GetComponent<GameMaster>().isFinishEating = false;
+							goMiniPet.GetComponent<MiniPetGameMaster>().isFinishEating = false;
 						}
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetID, goMiniPet);
@@ -276,19 +276,19 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5){
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(5).gameObject, prefab);
 						goMiniPet.transform.localPosition = pos;
-						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Runner;
+						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = MinigameTypes.Runner;
 						goMiniPet.name = prefab.name;
 					}
 					else{
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(6).gameObject, prefab);
 						Debug.Log(pos);
 						goMiniPet.transform.localPosition = pos;
-						goMiniPet.GetComponent<GameMaster>().minigameType = MinigameTypes.Shooter;
+						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = MinigameTypes.Shooter;
 						goMiniPet.name = prefab.name;
 					}
 					goMiniPet.GetComponent<MiniPet>().Init(data);
 					if(switchSpawn){
-						goMiniPet.GetComponent<GameMaster>().isFinishEating = false;
+						goMiniPet.GetComponent<MiniPetGameMaster>().isFinishEating = false;
 					}
 					MiniPetTable.Add(miniPetID, goMiniPet);
 					
@@ -331,7 +331,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 							goMiniPet.transform.localPosition = pos;
 							goMiniPet.name = prefab.name;
 							goMiniPet.GetComponent<MiniPet>().Init(data);
-							goMiniPet.GetComponent<Merchant>().isFinishEating = false;
+							goMiniPet.GetComponent<MiniPetMerchant>().isFinishEating = false;
 							DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
 							// Add the pet into the dictionary to keep track
 							MiniPetTable.Add(miniPetID, goMiniPet);

@@ -20,7 +20,7 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 		task = listTasks[0];
 		ImmutableDataWellapadTask stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc = stuff.GetText();
-
+		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];
 		if(task.Amount > 0){
 			desc = String.Format(desc, task.Amount);
 		}

@@ -17,20 +17,23 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 		string taskID = "Critical";
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
 		task = listTasks[0];
+		SetCheckboxSprite(true);
 		ImmutableDataWellapadTask stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc = stuff.GetText();
-
+		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
 		task = listTasks[1];
+		SetCheckboxSprite(true);
 		stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc2 = stuff.GetText();
 		task = listTasks[2];
+		SetCheckboxSprite(true);
 		stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc3 = stuff.GetText();
 		if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 			rewardButton.SetActive(true);
 		}
 		mission.text = desc + "\n" + "\n" + desc2+ "\n" + "\n" + desc3;
-		SetCheckboxSprite(true);
+
 	}
 
 	//---------------------------------------------------

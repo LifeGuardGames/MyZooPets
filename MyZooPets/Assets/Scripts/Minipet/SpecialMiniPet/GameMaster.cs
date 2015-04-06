@@ -21,7 +21,6 @@ public class GameMaster : MiniPet {
 				Hashtable has = new Hashtable();
 				has[0] = miniGameTaskId;
 				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
-				Debug.Log("euirgnsrtig");
 			}
 		}
 	}

@@ -37,7 +37,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override string GetMinigameKey(){
-		return "ShooterGame";
+		return "Shooter";
 	}
 
 	protected override void _NewGame(){

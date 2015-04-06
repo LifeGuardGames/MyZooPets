@@ -43,7 +43,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	protected override string GetMinigameKey(){
-		return "MemoryGame";
+		return "Memory";
 	}
 
 	protected override void _NewGame(){
@@ -86,6 +86,9 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	protected override void _GameOver(){
 		memoryUI.FinishBoard();
+
+		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), GetScore());
+		Debug.Log("memory game setting task completed with score of " + GetScore());
 	}
 
 	private void GameStateChange(object sender, GameStateArgs args){

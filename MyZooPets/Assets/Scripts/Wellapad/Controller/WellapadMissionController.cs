@@ -107,7 +107,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}	
 
 	/// <summary>
-	/// Called from various parts of teh game when a task is completed that may
+	/// Called from various parts of the game when a task is completed that may
 	/// be an active mission for the player.
 	/// </summary>
 	/// <param name="completedTaskID">Completed task ID.</param>
@@ -117,6 +117,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
 			foreach(KeyValuePair<string, MutableDataWellapadTask> task in mission.Value.Tasks){
 				if(task.Value.WillComplete(completedTaskID, completeCondition)){
+					Debug.Log("++ valid task completed and set: " + completedTaskID);
+
 					string taskID = task.Value.TaskID;
 					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[taskID].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
 
@@ -272,7 +274,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}
 
 	/// <summary>
-	/// Gets the task status. Returns wheter the user has completed the incoming
+	/// Gets the task status. Returns whether the user has completed the incoming
 	/// task or not.
 	/// </summary>
 	/// <returns>The task status.</returns>
@@ -285,6 +287,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		Debug.Log(task.TaskID);
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID) && 
 			DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks.ContainsKey(taskID)){
+
 			status = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed;
 			
 			// if the status is recently completed and we are popping, "pop" it by setting it to just plain completed now
@@ -293,8 +296,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				Debug.Log("oeirngrft");
 			}
 		}
-		else
+		else{
 			Debug.LogError("Can't find task " + taskID + " in saved data");
+		}
 		
 		return status;
 	}

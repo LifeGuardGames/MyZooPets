@@ -45,7 +45,7 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic>{
 	/// <param name="skillID">Skill ID.</param>
 	public Skill GetSkillData(string skillID){
 		Skill data = DataLoaderSkills.GetData(skillID);
-		return data;
+	return data;
 	}
 
 	/// <summary>
@@ -85,7 +85,9 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic>{
 
 		int currentLevel = (int)LevelLogic.Instance.CurrentLevel;
 		foreach(Skill skill in allSkills){
-			if(skill.UnlockLevel == currentLevel){
+			Debug.Log(skill.Name);
+			Debug.Log(skill.UnlockLevel);
+			if(skill.UnlockLevel <= currentLevel){
 				if(!skill.IsUnlocked){
 					DataManager.Instance.GameData.Flame.UpdateSkillStatus(skill.ID, true);
 					DataManager.Instance.GameData.Flame.CurrentSkillID = skill.ID;

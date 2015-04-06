@@ -33,9 +33,13 @@ public class GameMaster : MiniPet {
 	}
 	
 	private void turnInMission(){
+		Debug.Log("optyhmtyjhn");
 		if(isFinishEating){
+			Debug.Log("wioegndfgb");
 			MutableDataMission mission = WellapadMissionController.Instance.GetMission(miniGameTaskId);
+			Debug.Log(mission.RewardStatus);
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
+				Debug.Log("cdvbggfb");
 				// claim the reward
 				MiniPetManager.Instance.IncreaseXP(id);
 				WellapadMissionController.Instance.ClaimReward(PickMinigameMission());

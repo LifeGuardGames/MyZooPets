@@ -6,34 +6,40 @@ using System;
 public class MiniPetRetentionUIController : MonoBehaviour {
 
 	public UILocalize missionLocalize;
-	public UILabel mission;
+	public UILabel mission1;
+	public UILabel mission2;
+	public UILabel mission3;
 	MutableDataWellapadTask task;
-	public TweenToggle slash;
+	public TweenToggle slash1;
+	public TweenToggle slash2;
+	public TweenToggle slash3;
 	public Color tutTextHighlightOn;
 	public Color tutTextHighlightOff;
 	public GameObject rewardButton;
+
 
 	public void Initialize(){
 		string taskID = "Critical";
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
 		task = listTasks[0];
-		SetCheckboxSprite(true);
+		SetCheckboxSprite(true, slash1);
 		ImmutableDataWellapadTask stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc = stuff.GetText();
 		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
 		task = listTasks[1];
-		SetCheckboxSprite(true);
+		SetCheckboxSprite(true, slash2);
 		stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc2 = stuff.GetText();
 		task = listTasks[2];
-		SetCheckboxSprite(true);
+		SetCheckboxSprite(true,slash3);
 		stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc3 = stuff.GetText();
 		if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 			rewardButton.SetActive(true);
 		}
-		mission.text = desc + "\n" + "\n" + desc2+ "\n" + "\n" + desc3;
-
+		mission1.text = desc;
+		mission2.text = desc2;
+		mission3.text = desc3;
 	}
 
 	//---------------------------------------------------
@@ -41,7 +47,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 	// Sets the sprite on this UI's checkbox based on
 	// the status of the task.
 	//---------------------------------------------------	
-	private void SetCheckboxSprite(bool bPop){
+	private void SetCheckboxSprite(bool bPop, TweenToggle slash){
 		// get the status
 		WellapadTaskCompletionStates eStatus = WellapadMissionController.Instance.GetTaskStatus(task, bPop);
 		Debug.Log(eStatus == WellapadTaskCompletionStates.Uncompleted);
@@ -52,11 +58,11 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 		   (eStatus == WellapadTaskCompletionStates.RecentlyCompleted && bPop)){
 			// mark this task as done
 			slash.gameObject.SetActive(true);
-			StartCoroutine(CheckboxSpriteShowHelper());	// Show after one frame
+			StartCoroutine(CheckboxSpriteShowHelper(slash));	// Show after one frame
 
 		}
 	}
-	private IEnumerator CheckboxSpriteShowHelper(){
+	private IEnumerator CheckboxSpriteShowHelper(TweenToggle slash){
 		yield return 0;
 		slash.Show();
 	}

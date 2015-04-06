@@ -94,10 +94,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				//Send analytics event
 				Analytics.Instance.ClaimWellapadBonusXP();
 				
-				if(OnRewardClaimed != null)
+				if(OnRewardClaimed != null){
 					OnRewardClaimed(this, EventArgs.Empty);
+				}
 				
-				//Debug.Log("Reward claimed for mission: " + strMissionID);
+//				Debug.Log("Reward claimed for mission: " + strMissionID);
 			}
 			else
 				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + missionID);

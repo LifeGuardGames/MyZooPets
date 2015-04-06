@@ -11,7 +11,6 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public GameObject itemSpritePrefab;
 	public TweenToggle tweenToggle;
 	private GameObject merchant;
-
 	private string itemId;
 	private Item secItem;
 	private ItemType itemType = ItemType.None;

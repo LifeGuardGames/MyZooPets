@@ -40,15 +40,15 @@ public class MiniPetGameMaster : MiniPet {
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
 				MiniPetManager.Instance.IncreaseXP(id);
-				WellapadMissionController.Instance.ClaimReward(PickMinigameMission());
+				WellapadMissionController.Instance.ClaimReward(miniGameTaskId);
 				WellapadMissionController.Instance.RefreshCheck();
 			}
 		}
 	}
 
 	private void GiveOutMission(){
-		//miniGameTaskId = PickMinigameMission();
-		miniGameTaskId = "NinjaS";
+		miniGameTaskId = PickMinigameMission();
+		//miniGameTaskId = "NinjaS";
 		WellapadMissionController.Instance.UnlockTask(miniGameTaskId);
 		//WellapadMissionController.Instance.UnlockTask("NinjaS");
 		WellapadMissionController.Instance.needMission = true;

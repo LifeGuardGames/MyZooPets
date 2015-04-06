@@ -10,8 +10,6 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 	public GameObject rewardButton;
 	// tween object for when the task is completed
 	public TweenToggle slash;
-	public Color tutTextHighlightOn;
-	public Color tutTextHighlightOff;
 	MutableDataWellapadTask task;
 
 	public void Initialize(string taskID){
@@ -55,6 +53,7 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 		yield return 0;
 		slash.Show();
 	}
+
 	//---------------------------------------------------
 	// OnTweenDone()
 	// Callback for when the wellapad UI is done tweening.

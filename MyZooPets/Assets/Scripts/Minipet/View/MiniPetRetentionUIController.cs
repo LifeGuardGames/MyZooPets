@@ -13,8 +13,6 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 	public TweenToggle slash1;
 	public TweenToggle slash2;
 	public TweenToggle slash3;
-	public Color tutTextHighlightOn;
-	public Color tutTextHighlightOff;
 	public GameObject rewardButton;
 
 

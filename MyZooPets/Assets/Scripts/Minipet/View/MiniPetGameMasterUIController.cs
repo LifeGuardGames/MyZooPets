@@ -50,6 +50,7 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 			rewardButton.SetActive(true);
 		}
 	}
+
 	private IEnumerator CheckboxSpriteShowHelper(){
 		yield return 0;
 		slash.Show();

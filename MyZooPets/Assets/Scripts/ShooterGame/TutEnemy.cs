@@ -2,7 +2,11 @@
 using System.Collections;
 
 public class TutEnemy : MonoBehaviour {
-	
+
+	void Start(){
+		this.gameObject.layer = 2;
+	}
+
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "bullet"){
 				Destroy(collider.gameObject);

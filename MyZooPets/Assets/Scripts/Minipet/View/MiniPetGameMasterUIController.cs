@@ -16,8 +16,8 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 		// Not sure what you want to pass in here grab sean to discuss
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
 		task = listTasks[0];
-		ImmutableDataWellapadTask stuff = DataLoaderWellapadTasks.GetTask(task.TaskID);
-		string desc = stuff.GetText();
+		ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
+		string desc = missionTask.GetText();
 		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];
 		if(task.Amount > 0){
 			desc = String.Format(desc, task.Amount);
@@ -34,11 +34,6 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 	private void SetCheckboxSprite(bool bPop){
 		// get the status
 		WellapadTaskCompletionStates eStatus = WellapadMissionController.Instance.GetTaskStatus(task, bPop);
-		Debug.Log("=== Checking status of checkbox ===");
-		Debug.Log("uncompleted " + (eStatus == WellapadTaskCompletionStates.Uncompleted));
-		Debug.Log("complete " + (eStatus == WellapadTaskCompletionStates.Completed));
-		Debug.Log("recently completed " + (eStatus == WellapadTaskCompletionStates.RecentlyCompleted));
-		Debug.Log("===                             ===");
 		// show the tween only if the status is complete OR the status is recently completed and we are popping the task status
 		if(eStatus == WellapadTaskCompletionStates.Completed ||
 		   (eStatus == WellapadTaskCompletionStates.RecentlyCompleted && bPop)){

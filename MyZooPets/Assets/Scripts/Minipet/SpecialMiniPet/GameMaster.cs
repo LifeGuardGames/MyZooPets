@@ -45,7 +45,8 @@ public class GameMaster : MiniPet {
 		}
 	}
 	private void giveOutMission(){
-		miniGameTaskId = PickMinigameMission();
+		//miniGameTaskId = PickMinigameMission();
+		miniGameTaskId = "NinjaS";
 		WellapadMissionController.Instance.UnlockTask(miniGameTaskId);
 		//WellapadMissionController.Instance.UnlockTask("NinjaS");
 		WellapadMissionController.Instance.needMission = true;

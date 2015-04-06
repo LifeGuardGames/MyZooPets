@@ -52,5 +52,22 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 		yield return 0;
 		slash.Show();
 	}
-
+	//---------------------------------------------------
+	// OnTweenDone()
+	// Callback for when the wellapad UI is done tweening.
+	//---------------------------------------------------		
+	private void OnTweenDone(object sender, UIManagerEventArgs args){
+		// if the UI is opening, update our task
+		if(args.Opening)
+			SetCheckboxSprite(true);
+	}
+	
+	//---------------------------------------------------
+	// OnDestroy()
+	//---------------------------------------------------		
+	void OnDestroy(){
+		if(WellapadUIManager.Instance){
+			WellapadUIManager.Instance.OnTweenDone -= OnTweenDone;
+		}
+	}
 }

@@ -9,25 +9,29 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public GestureTrail trail; // the gesture trail that follows the user's finger around
 	public float timeBetweenSpawnGroups;	// time between spawn groups
 	public bool bonusRound = false;			// triggers Bonus round
-	private bool spawning = true;			//stops the spawning to prevent the play from being horibly murdered mid bonus round
+	public int bonusRoundEnemies;
 	public int chain = 0;			// number of enemies killed with out hitting a bomb 
 	public GameObject bonusLabel;
+
+	private bool spawning = true;			//stops the spawning to prevent the play from being horibly murdered mid bonus round
 	private float comboTime = 0;	// time counter
 	private int combo = 0;			// the current combo level of the player
 	private int bestCombo = 0;		// player's best combo in one run
 	private float timeCount = 0; // used to count time between groups and between entries within a group
 	private Vector2 trailDeltaMove;
-	private Vector3 lastPos = new Vector3(0, 0, 0); // the last position of the user's trail
+	private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
+//	private Vector3 lastTrailPosition = Vector3.zero;	// The position of trail one frame ago
+//	private int lastTrailFrameCount
 	private List<NinjaDataEntry> currentTriggerEntries; // current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection; // record the last drag direction
-	public int bonusRoundEnemies;
 
 	void Awake(){
 		Application.targetFrameRate = 60;
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
-	protected override void _Start(){}	
+	protected override void _Start(){
+	}
 	
 	protected override void _OnDestroy(){
 		Application.targetFrameRate = 30;
@@ -41,12 +45,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// for now, just use the standard way
 		return GetStandardReward(eType);
 	}
+
 	public void increaseChain(){
 		chain++;
-		if(chain%25 == 0){
+		if(chain % 25 == 0){
 			bonusRound = true;
 		}
 	}
+
 	public void resetChain(){
 		chain = 0;
 	}
@@ -101,21 +107,22 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 
 	void OnDrag(DragGesture gesture){
 		// check is playing
-		if(GetGameState() != MinigameStates.Playing)
+		if(GetGameState() != MinigameStates.Playing){
 			return;
+		}
 		
 		// update the ninja gesture cut trail
 		UpdateTrail(gesture);
 		
-		//-----------Figure out the direction of the trail-------------
+		// Figure out the direction of the trail
 		Vector2 dir = gesture.TotalMove.normalized; // you could also use Gesture.DeltaMove to get the movement change since last frame
 		FingerGestures.SwipeDirection swipeDir = FingerGestures.GetSwipeDirection(dir);
 		
 		if(swipeDir != lastDirection &&
-		   swipeDir != FingerGestures.SwipeDirection.UpperLeftDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.UpperRightDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.LowerLeftDiagonal &&
-		   swipeDir != FingerGestures.SwipeDirection.LowerRightDiagonal){
+			swipeDir != FingerGestures.SwipeDirection.UpperLeftDiagonal &&
+			swipeDir != FingerGestures.SwipeDirection.UpperRightDiagonal &&
+			swipeDir != FingerGestures.SwipeDirection.LowerLeftDiagonal &&
+			swipeDir != FingerGestures.SwipeDirection.LowerRightDiagonal){
 			AudioManager.Instance.PlayClip("swordCut");
 		}
 		
@@ -124,17 +131,20 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		
 		switch(gesture.Phase){
 		case ContinuousGesturePhase.Updated:
+
 			GameObject go = gesture.Selection;
 			if(go){
 				//Debug.Log("Touching " + go.name);
 				NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
 				
 				// if the trigger is null, check the parent...a little hacky, but sue me!
-				if(trigger == null)
+				if(trigger == null){
 					trigger = go.transform.parent.gameObject.GetComponent<NinjaTrigger>();
+				}
 				
-				if(trigger)
+				if(trigger){
 					trigger.OnCut(gesture.Position);
+				}
 			}
 			break;
 		}
@@ -149,16 +159,17 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		currentTriggerEntries = null;
 
 		if(IsTutorialOn() && (IsTutorialOverride() || 
-			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)))
-			StartTutorial();
+			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY))){
 
+			StartTutorial();
+		}
 	}
 			
 	protected override void _GameOver(){
 		// send out combo task
 		int nBestCombo = GetComboBest();
 		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
-	}		
+	}
 
 	protected override string GetMinigameKey(){
 		return "Ninja";	
@@ -169,12 +180,15 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}
 
 	protected override void _Update(){
-		if(IsTutorialRunning()) return;
+		if(IsTutorialRunning()){
+			return;
+		}
 
 		float deltaTime = Time.deltaTime;
 		if(bonusRound == true){
-		StartCoroutine("BonusTime");
+			StartCoroutine("BonusTime");
 		}
+
 		// update the player's combo
 		UpdateComboTimer(deltaTime);
 		
@@ -203,22 +217,22 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			NinjaScoring scoreKey;
 			NinjaData data = null;
 			if(spawning){
-			scoreKey = GetScoringKey();
-			data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, scoreKey);
-			
-			
-			// cache the list -- ALMOST FOOLED ME....use new to copy the list
-			currentTriggerEntries = new List<NinjaDataEntry>(data.GetEntries());
+				scoreKey = GetScoringKey();
+				data = NinjaDataLoader.GetGroupToSpawn(NinjaModes.Classic, scoreKey);
+
+				// cache the list -- ALMOST FOOLED ME....use new to copy the list
+				currentTriggerEntries = new List<NinjaDataEntry>(data.GetEntries());
 			}
 		}
-		else
+		else{
 			timeCount -= deltaTime;	// otherwise, there is no group and we still need to countdown before spawning the next group
+		}
 	}
 
 	public GameObject SpawnTriggersTutorial(int num){
-		GameObject triggerPrefab = (GameObject) Resources.Load("NinjaTrigger"+ num.ToString());
+		GameObject triggerPrefab = (GameObject)Resources.Load("NinjaTrigger" + num.ToString());
 		Vector3 triggerLocation;
-		switch (num){
+		switch(num){
 		case 1:
 			triggerLocation = new Vector3(0, 1.8962f, 0);
 			break;
@@ -242,15 +256,15 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			break;
 		}
 		//instantiate trigger 
-		GameObject triggerObject = (GameObject) Instantiate(triggerPrefab, triggerLocation, 
+		GameObject triggerObject = (GameObject)Instantiate(triggerPrefab, triggerLocation, 
 		                                                    triggerPrefab.transform.localRotation);
 		Rigidbody triggerObjectRigidbody = triggerObject.GetComponent<Rigidbody>();
 		triggerObjectRigidbody.useGravity = false;
 		triggerObjectRigidbody.constraints = RigidbodyConstraints.None;
 		triggerObjectRigidbody.constraints = RigidbodyConstraints.FreezePositionX | 
 			RigidbodyConstraints.FreezePositionY | 
-				RigidbodyConstraints.FreezeRotationX |
-				RigidbodyConstraints.FreezeRotationY;
+			RigidbodyConstraints.FreezeRotationX |
+			RigidbodyConstraints.FreezeRotationY;
 
 		return triggerObject;
 	}
@@ -292,7 +306,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// create the proper list of objects to spawn
 		int numOfTriggers = entry.GetTriggers();
 		int numOfBombs = entry.GetBombs();
-		int numOfPowUps =  entry.GetPowUp();
+		int numOfPowUps = entry.GetPowUp();
 		List<string> listObjects = new List<string>();
 
 		for(int i = 0; i < numOfTriggers; ++i){
@@ -337,7 +351,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			break;	
 		case NinjaPatterns.Swarms:
 			// Random is ambiguous need to specify unity engine
-			int rand = UnityEngine.Random.Range (2,5);
+			int rand = UnityEngine.Random.Range(2, 5);
 			StartCoroutine(WaitASec(rand, listObjects));
 			break;
 		default:
@@ -356,7 +370,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		int nScore = GetScore();
 		NinjaScoring eScore;
 
-		if (bonusRound == true){
+		if(bonusRound == true){
 			eScore = NinjaScoring.Bonus;
 		}
 		else if(nScore == 0)
@@ -430,15 +444,16 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	
 	private void StartTutorial(){
 		SetTutorial(new NinjaTutorial());
-	}	
+	}
+
 	IEnumerator WaitASec(int _rand, List<string> listObjects){
-		for (int i = 0; i <= _rand; i++){
+		for(int i = 0; i <= _rand; i++){
 			yield return new WaitForSeconds(0.1f);
 			new SpawnGroupSwarms(listObjects);
 		}
 	}
 
-	public void checkBonusRound(){
+	public void CheckBonusRound(){
 		if(bonusRoundEnemies <= 0){
 			bonusLabel.SetActive(false);
 			bonusRound = false;

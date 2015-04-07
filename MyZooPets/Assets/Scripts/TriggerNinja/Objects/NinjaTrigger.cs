@@ -14,7 +14,7 @@ public class NinjaTrigger : MonoBehaviour{
 	public string strSoundMissed;
 
 	// number of children objects that are visible
-	private int nChildrenVis;
+	private int visibleChildrenCount;
 	
 	// saved velocities on this object for when it is paused/resumed
 	private Vector3 savedVelocity;
@@ -32,7 +32,7 @@ public class NinjaTrigger : MonoBehaviour{
 		// count the number of children that have NinjaTriggerChildren scripts -- this will be used when determining if the
 		// trigger is being shown by the camera or not.
 		NinjaTriggerChild[] children = gameObject.GetComponentsInChildren<NinjaTriggerChild>();
-		nChildrenVis = children.Length;
+		visibleChildrenCount = children.Length;
 		
 		// we don't want our objects colliding with each other
 		rigidbody.detectCollisions = false;	
@@ -55,15 +55,17 @@ public class NinjaTrigger : MonoBehaviour{
 	//---------------------------------------------------	
 	public void OnCut(Vector2 vHit){
 		// if this object was already cut, return.  This is possible because some objects use multiple primitive colliders
-		if(isCut)
+		if(isCut){
 			return;
+		}
 		
 		// mark the object as cut
 		isCut = true;
 		
 		// play a sound (if it exists)
-		if(!string.IsNullOrEmpty(strSoundHit))
-			AudioManager.Instance.PlayClip(strSoundHit);	
+		if(!string.IsNullOrEmpty(strSoundHit)){
+			AudioManager.Instance.PlayClip(strSoundHit);
+		}
 		
 		// also create a little explosion particle FX where the user's finger was
 		Vector3 vPosWorld = Camera.main.ScreenToWorldPoint(new Vector3(vHit.x, vHit.y, 10));
@@ -81,8 +83,9 @@ public class NinjaTrigger : MonoBehaviour{
 			dirParticle.GetComponent<XYComponentRotateObject>().y = trailMoveDelta.y;	
 		}
 
-		if(NinjaTriggerCut != null)
+		if(NinjaTriggerCut != null){
 			NinjaTriggerCut(this, EventArgs.Empty);
+		}
 		
 		// call child behaviour
 		_OnCut();
@@ -158,11 +161,12 @@ public class NinjaTrigger : MonoBehaviour{
 	// is currently the case.
 	//---------------------------------------------------	
 	public void ChildBecameInvis(){
-		nChildrenVis--;
+		visibleChildrenCount--;
 		
 		// if there are no more children visible...
-		if(nChildrenVis == 0)
+		if(visibleChildrenCount == 0){
 			TriggerOffScreen();
+		}
 	}
 	
 	//---------------------------------------------------

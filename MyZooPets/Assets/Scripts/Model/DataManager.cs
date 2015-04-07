@@ -300,6 +300,9 @@ public class DataManager : Singleton<DataManager>{
 				#endif
 				
 				gameData = newGameData;
+
+//				if(Constants.GetConstant<bool>()); TODO
+
 				LoadDataVersion();
 				
 				Deserialized();

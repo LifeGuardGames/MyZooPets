@@ -31,11 +31,13 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 		if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 			rewardButton.SetActive(true);
 		}
-		mission1Localize.key = missionTask.GetTaskID();
+		Debug.Log("Task_"+missionTask.GetTaskID());
+		Debug.Log(mission1Localize.key);
+		mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
 		mission1Localize.Localize();
-		mission2Localize.key = missionTask2.GetTaskID();
+		mission2Localize.key = "Task_"+missionTask2.GetTaskID();
 		mission2Localize.Localize();
-		mission3Localize.key = missionTask3.GetTaskID();
+		mission3Localize.key = "Task_"+missionTask3.GetTaskID();
 		mission3Localize.Localize();
 	}
 

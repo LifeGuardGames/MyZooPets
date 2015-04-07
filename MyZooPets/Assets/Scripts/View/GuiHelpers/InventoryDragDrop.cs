@@ -116,7 +116,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// </summary>
 	void OnDrag(Vector2 delta){
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
-			//Drop();
+			Drop();
 			return;
 		}
 

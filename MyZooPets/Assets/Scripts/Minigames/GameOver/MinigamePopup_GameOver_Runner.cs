@@ -23,6 +23,6 @@ public class MinigamePopup_GameOver_Runner : MinigamePopup_GameOver {
 	}
 
 	protected override void _RewardBadges(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, ScoreManager.Instance.Distance, true);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, RunnerGameManager.Instance.GetScore(), true);
 	}
 }

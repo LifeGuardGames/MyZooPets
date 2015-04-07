@@ -85,8 +85,6 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic>{
 
 		int currentLevel = (int)LevelLogic.Instance.CurrentLevel;
 		foreach(Skill skill in allSkills){
-			Debug.Log(skill.Name);
-			Debug.Log(skill.UnlockLevel);
 			if(skill.UnlockLevel <= currentLevel){
 				if(!skill.IsUnlocked){
 					DataManager.Instance.GameData.Flame.UpdateSkillStatus(skill.ID, true);

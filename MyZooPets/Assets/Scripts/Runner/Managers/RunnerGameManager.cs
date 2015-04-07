@@ -77,6 +77,10 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// game over. 
 	/// </summary>
 	protected override void _GameOver(){
+
+		int score = GetScore();
+		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
+
 		// send out distance task
 		int distance = ScoreManager.Instance.Distance;
 		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), distance);

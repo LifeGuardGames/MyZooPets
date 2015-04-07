@@ -26,6 +26,7 @@ GameObject:
   - 4: {fileID: 400002}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400002}
+  - 114: {fileID: 11400012}
   m_Layer: 10
   m_Name: ContentParentRetention
   m_TagString: Untagged
@@ -634,15 +635,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e63f6a10b49d50842829cd222ac38ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missionLocalize: {fileID: 11400042}
-  mission1: {fileID: 11400044}
-  mission2: {fileID: 11400030}
-  mission3: {fileID: 11400004}
+  mission1Localize: {fileID: 11400042}
+  mission2Localize: {fileID: 11400032}
+  mission3Localize: {fileID: 11400010}
   slash1: {fileID: 11400040}
   slash2: {fileID: 11400034}
   slash3: {fileID: 11425844}
-  tutTextHighlightOn: {r: .823529422, g: .0544982739, b: .0544982739, a: 0}
-  tutTextHighlightOff: {r: .272058845, g: .23781696, b: .126027271, a: 0}
   rewardButton: {fileID: 100008}
 --- !u!114 &11400008
 MonoBehaviour:
@@ -677,6 +675,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: 
+--- !u!114 &11400012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showInPanelTool: 1
+  generateNormals: 0
+  depthPass: 0
+  widgetsAreStatic: 0
+  cullWhileDragging: 0
+  worldToLocal:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  mAlpha: 1
+  mDebugInfo: 1
+  mClipping: 0
+  mClipRange: {x: 0, y: 0, z: 0, w: 0}
+  mClipSoftness: {x: 40, y: 40}
 --- !u!114 &11400014
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -29,6 +29,9 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 		RefreshScreen();
 	}
 
+	/// <summary>
+	/// NOTE: Called from Fire Crystal UI Manager!!!
+	/// </summary>
 	protected override void _OpenUI(){
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -45,9 +48,13 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 		RefreshScreen();
 	}
 
-	//---------------------------------------------------
-	// _CloseUI()
-	//---------------------------------------------------	
+	public void CloseUIProperly(){
+		FireCrystalUIManager.Instance.CloseUIBasedOnScene();
+	}
+
+	/// <summary>
+	/// NOTE: Called from Fire Crystal UI Manager!!!
+	/// </summary>
 	protected override void _CloseUI(){
 		//Show other UI objects
 		if(!ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){	// If in deco mode dont show these

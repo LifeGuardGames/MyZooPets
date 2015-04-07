@@ -5,29 +5,15 @@ using System.Collections.Generic;
 
 //---------------------------------------------------
 // WellapadCountdown
-// This script is on the Wellapad and, when the user
-// has completed all available missions/tasks and the
-// "Done" screen is showing, this script will update
-// the time remaining until new missions are available.
+// This script is on the Wellapad and, when the user has completed all available missions/tasks and the
+// "Done" screen is showing, this script will update the time remaining until new missions are available.
 //---------------------------------------------------
-
 public class WellapadMissionDoneUIController : MonoBehaviour {
-	// label to update the timer
-	//public UILabel labelTimer;
-	//public UILabel labelTimerMessage;
-	//public UILabel labelStartLevel;
-	//public UILabel labelEndLevel;
-	//public UILabel labelMaxLevel;
 	public UIAtlas atlasBadge;
 	public UIAtlas atlasBedroom;
 	public UIAtlas atlasItem;
-	//public UISlider sliderLevel;
 	public GameObject gridUnlockPredictions;
 	public GameObject unlockPredictionEntryPrefab;
-
-	// Sprite set color on max level
-	public UISprite startCircle;	// For reference
-	public UISprite endCircle;		// For setting
 
 	void Start(){
 		//WellapadUIManager.Instance.OnManagerOpen += RefreshLevelProgress;
@@ -54,38 +40,6 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		WellapadMissionController.Instance.RefreshCheck();
 	}
 
-	/*private void RefreshLevelProgress(){
-		if(!LevelLogic.Instance.IsAtMaxLevel()){
-			int nextLevelPoints = LevelLogic.Instance.NextLevelPoints();
-			float points = (float) StatsController.Instance.GetStat(HUDElementType.Points);
-			sliderLevel.sliderValue = points/nextLevelPoints;
-
-			int currentLevel = (int) LevelLogic.Instance.CurrentLevel;
-			labelStartLevel.text = currentLevel.ToString();
-			labelEndLevel.text = LevelLogic.Instance.NextLevel.ToString();
-		}
-		else{
-			labelMaxLevel.gameObject.SetActive(true);
-			labelStartLevel.text = "";
-			labelEndLevel.text = "";
-			sliderLevel.sliderValue = 1.0f;
-			endCircle.color = startCircle.color;
-		}
-	}
-	//----------------------------------------------
-	// RefreshLevelProgress
-	// Update the level progress bar
-	//----------------------------------------------
-	private void RefreshLevelProgress(object sender, UIManagerEventArgs args){
-		if(args != null && args.Opening){
-			RefreshLevelProgress();	
-		}
-	}
-*/
-/*	private void RefreshLevelProgressOnLevelUp(object sender, EventArgs args){
-		RefreshLevelProgress();	
-	}
-*/
 	//----------------------------------------------
 	// RefreshUnlockPredictions()
 	// Update the items/badge/flame that will be unlocked for next level
@@ -105,7 +59,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		}
 
 		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
-		if(skill != null)	{
+		if(skill != null){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();
 			sprite.atlas = atlasBedroom; 

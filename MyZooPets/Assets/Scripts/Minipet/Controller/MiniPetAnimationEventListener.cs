@@ -43,6 +43,7 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 
 	private void CheckMiniPetVisibleInPartition(string currentArea ,int currentPartition){
 		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().ID;
+		// Camera treats the yard as partition 00 and partition 01 instead of 05 and 06.... this is a work around
 		if( currentArea == "Yard"){
 			currentPartition += 5;
 		}

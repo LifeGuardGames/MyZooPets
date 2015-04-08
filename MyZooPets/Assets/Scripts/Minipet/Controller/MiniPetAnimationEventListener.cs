@@ -9,6 +9,7 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 
 		int currentPartition = CameraManager.Instance.PanScript.currentPartition;
 		string currentArea = GatingManager.Instance.currentArea;
+
 		CheckMiniPetVisibleInPartition(currentArea, currentPartition);
 	}
 
@@ -36,16 +37,16 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 
 	private void CheckMiniPetVisibleInPartition(object sender, PartitionChangedArgs args){
 		int currentPartition = args.newPartition;
-		string currentArea = GatingManager.Instance.currentArea;
-
-		CheckMiniPetVisibleInPartition(currentArea, currentPartition);
+		string currentArea = GatingManager.Instance.currentArea; 
+		CheckMiniPetVisibleInPartition(currentArea,currentPartition);
 	}
 
-	private void CheckMiniPetVisibleInPartition(string currentArea, int currentPartition){
-		ImmutableDataGate gate = DataLoaderGate.GetData(currentArea, currentPartition);
+	private void CheckMiniPetVisibleInPartition(string currentArea ,int currentPartition){
 		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().ID;
-		
-		if(gate != null && miniPetID == gate.MiniPetID){
+		if( currentArea == "Yard"){
+			currentPartition += 5;
+		}
+		if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == currentPartition){
 			isVisibleInScene = true;
 		}
 		else{

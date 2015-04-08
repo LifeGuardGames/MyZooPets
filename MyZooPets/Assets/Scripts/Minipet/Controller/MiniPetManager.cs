@@ -227,6 +227,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				}
 				Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
 				int partitionNumber = 0;
+				DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
 				DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID, true);
 				goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 				goMiniPet.transform.localPosition = pos;
@@ -248,6 +249,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					Debug.Log(type.ToString());
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 					int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
+					DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
 					Vector3 pos = locationTuple.Item1;
 					if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
@@ -265,7 +267,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					}
 					else{
 						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID, pos);
-						DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
 					}
 
 				}
@@ -322,6 +323,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
 							LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 							int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
+							DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
 							while(!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 								locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
 								partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;

@@ -37,12 +37,11 @@ public class TutorialManagerBedroom : TutorialManager{
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
 		
 		// do the first check for tutorials
-		Check();
+		IsPlayTutorial();
 	}
 
-	protected override bool Check(){
-		bool isChecking = base.Check();
-
+	protected override bool IsPlayTutorial(){
+		bool isChecking = base.IsPlayTutorial();
 		if(isChecking){
 			//Tutorial 1
 			TutorialPart1Check();
@@ -99,13 +98,10 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
 		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
 		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
+		
+		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 
-		bool isQuestionaireCollected = DataManager.Instance.IsQuestionaireCollected;
-
-		isQuestionaireCollected = true;
-		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod + " QUESTIONAIRE " + isQuestionaireCollected);
-
-		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod && isQuestionaireCollected){
+		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
 //				Debug.Log("PASS");

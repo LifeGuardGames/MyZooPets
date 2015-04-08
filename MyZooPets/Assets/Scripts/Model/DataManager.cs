@@ -51,9 +51,7 @@ public class DataManager : Singleton<DataManager>{
 	public bool IsFirstTime{
 		get{
 			//default to true
-			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
-		
-			return firstTime;
+			return PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		}
 	}
 
@@ -63,12 +61,10 @@ public class DataManager : Singleton<DataManager>{
 	public bool IsQuestionaireCollected{
 		get{
 			//default to false
-			bool isAccepted = PlayerPrefs.GetInt("IsQuestionaireCollected", 0) > 0;
-			return isAccepted;
+			return PlayerPrefs.GetInt("IsQuestionaireCollected", 0) > 0;
 		}
 		set{
-			bool isAccepted = value;
-			if(isAccepted){
+			if(value){
 				PlayerPrefs.SetInt("IsQuestionaireCollected", 1);
 			}
 		}
@@ -301,7 +297,10 @@ public class DataManager : Singleton<DataManager>{
 				
 				gameData = newGameData;
 
-//				if(Constants.GetConstant<bool>()); TODO
+				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+					Debug.Log("Setting dummy data for second play period");
+					SetDummyDataForSecondPlayPeriod();
+				}
 
 				LoadDataVersion();
 				
@@ -310,11 +309,27 @@ public class DataManager : Singleton<DataManager>{
 			else{
 				//initiate game data here because none is found in the PlayerPrefs
 				gameData = new PetGameData();
+
+				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+					Debug.Log("Setting dummy data for second play period");
+					SetDummyDataForSecondPlayPeriod();
+				}
+
 				Deserialized();
 			}
 		}
 	}
 	#endregion
+
+	public void SetDummyDataForSecondPlayPeriod(){
+		IsQuestionaireCollected = true;
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_SUPERWELLA_INHALER);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_WELLAPAD);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_SMOKE_INTRO);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FLAME_CRYSTAL);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FLAME);
+	}
 
 	/// <summary>
 	/// Modify Pet Info. Used in the MenuScene. Will trigger game data to be serialized
@@ -405,15 +420,17 @@ public class DataManager : Singleton<DataManager>{
 	/// Called when game data has been deserialized. Could be successful or failure
 	/// </summary>
 	private void Deserialized(){
-		if(OnGameDataLoaded != null)
+		if(OnGameDataLoaded != null){
 			OnGameDataLoaded(this, EventArgs.Empty);
+		}
 	}
 	
 	/// <summary>
 	/// Called when game data has been serialized
 	/// </summary>
 	private void Serialized(){
-		if(OnGameDataSaved != null)
+		if(OnGameDataSaved != null){
 			OnGameDataSaved(this, EventArgs.Empty);
+		}
 	}
 }

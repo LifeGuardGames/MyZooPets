@@ -105,11 +105,12 @@ public class GameTutorialTriggers : GameTutorial{
 		// game object here.  However, it's possible that the game has been shut off in between, so we may need to spawn it after all...
 		GameObject goTrigger = GameObject.Find(DegradationUIManager.TUT_TRIGGER);
 		
-		if(goTrigger == null)
+		if(goTrigger == null){
 			goTrigger = DegradationUIManager.Instance.PlaceTutorialTrigger().gameObject;
-			
+		}
+
 		scriptTrigger = goTrigger.GetComponent<DegradTrigger>();
-				
+
 		Advance();
 	}
 	

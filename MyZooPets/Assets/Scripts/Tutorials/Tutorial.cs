@@ -56,12 +56,15 @@ public abstract class Tutorial{
 	//Set the tutorial to a specific step
 	protected void SetStep(int num){
 		currentStep = num;
-		
 		// if we have exceeded max steps in this tutorial, end it
-		if(currentStep >= maxSteps)
+		if(currentStep >= maxSteps){
+			Debug.Log(" === tutorial ending");
 			End(true);
-		else
+		}
+		else{
+			Debug.Log(" === tutorial next step");
 			ProcessStep(currentStep);
+		}
 	}
 
 	//Return the key of this tutorial
@@ -112,12 +115,14 @@ public abstract class Tutorial{
 			Analytics.Instance.TutorialCompleted(GetKey());
 		}
 
-		if(goPopup != null)
+		if(goPopup != null){
 			GameObject.Destroy(goPopup);
+		}
 		
 		// activate tutorial end callback
-		if(OnTutorialEnd != null)
-			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));	
+		if(OnTutorialEnd != null){
+			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));
+		}
 	}
 	
 	/// <summary>

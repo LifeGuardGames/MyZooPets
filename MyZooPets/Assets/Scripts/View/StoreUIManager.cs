@@ -6,11 +6,12 @@ using System.Collections.Generic;
 // Shortcut mode types into store sub panel
 public enum StoreShortcutType{
 	None,
-	FlameCrystalNeededNotification,
+//	FlameCrystalNeededNotification,
 	DecorationUIStoreButton,
 	DecorationUIStoreButtonTutorial,
 	MinipetUIStoreButton,
 	NeedFoodPetSpeech,
+	NeedFoodTutorial,
 	NeedEmergencyInhalerPetSpeech,
 	SickNotification,
 }
@@ -421,8 +422,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		ResetUIPanelClipRange();
 		
 		//if the current page is not null, we are switching tabs, so play a sound
-		if(currentTab != null)
+		if(currentTab != null){
 			AudioManager.Instance.PlayClip(soundChangeTab);
+		}
 		
 		//set current tab
 		prevTab = GameObject.Find(currentTab);
@@ -441,7 +443,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
 				}
 			}
-			
 		}
 		else if(currentPage == "Items"){
 			//No sub category so retrieve a list of all item
@@ -535,14 +536,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				break;
 
 			// Exit back to fireblowing room UI
-			case StoreShortcutType.FlameCrystalNeededNotification:
-				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-				InventoryUIManager.Instance.ShowPanel();
-				RoomArrowsUIManager.Instance.ShowPanel();
-				DecoInventoryUIManager.Instance.HideDecoInventory();
-				break;
+//			case StoreShortcutType.FlameCrystalNeededNotification:
+//				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
+//				InventoryUIManager.Instance.ShowPanel();
+//				RoomArrowsUIManager.Instance.ShowPanel();
+//				DecoInventoryUIManager.Instance.HideDecoInventory();
+//				break;
 
 			// Exit back to default UI
+			case StoreShortcutType.NeedFoodTutorial:
 			case StoreShortcutType.NeedFoodPetSpeech:
 			case StoreShortcutType.NeedEmergencyInhalerPetSpeech:
 			case StoreShortcutType.SickNotification:

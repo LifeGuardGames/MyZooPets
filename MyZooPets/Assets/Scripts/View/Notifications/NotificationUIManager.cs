@@ -28,9 +28,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	public GameObject popupMiniGameQuitCheck;
 	public GameObject popupZeroHealth;
 
-	public GameObject popupInhalerRechargeMessage;
+//	public GameObject popupInhalerRechargeMessage;
 	public GameObject popupSuperWellaInhaler;
 	public GameObject popupSuperWellaSick;
+	public GameObject popupNeedFoodTutorial;
 
 	private bool isNotificationActive = false;
 	private GameObject anchorCenter; //parent of notificationCenterPanel
@@ -156,9 +157,15 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
-			case NotificationPopupType.InhalerRecharging:
-				ShowInhalerRechargingMessage(
-					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
+//			case NotificationPopupType.InhalerRecharging:
+//				ShowInhalerRechargingMessage(
+//					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
+//				);
+//				break;
+			case NotificationPopupType.NeedFoodTutorial:
+				ShowNeedFoodTutorialMessage(
+					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
+					(string)entry[NotificationPopupFields.Message]
 				);
 				break;
 			case NotificationPopupType.SuperWellaInhaler:
@@ -325,12 +332,21 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	/// Shows the inhaler recharging message.
 	/// </summary>
 	/// <param name="okButtonCallBack">Ok button call back.</param>
-	private void ShowInhalerRechargingMessage(PopupNotificationNGUI.Callback okButtonCallBack){
-		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupInhalerRechargeMessage);
-		Debug.Log("Inhaler recharging message");
+//	private void ShowInhalerRechargingMessage(PopupNotificationNGUI.Callback okButtonCallBack){
+//		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupInhalerRechargeMessage);
+//		Debug.Log("Inhaler recharging message");
+//		twoButtonMessage.Button1Callback = okButtonCallBack;
+//		twoButtonMessage.OnHideFinished += TryNextNotification;
+//
+//		StartCoroutine(DisplayAfterInit(twoButtonMessage));
+//	}
+
+	private void ShowNeedFoodTutorialMessage(PopupNotificationNGUI.Callback okButtonCallBack, string message){
+		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNeedFoodTutorial);
+		twoButtonMessage.Message = message;
 		twoButtonMessage.Button1Callback = okButtonCallBack;
 		twoButtonMessage.OnHideFinished += TryNextNotification;
-
+		
 		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 

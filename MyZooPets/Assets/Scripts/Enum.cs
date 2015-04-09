@@ -62,11 +62,12 @@ public enum NotificationPopupType{
 	LevelUp,
     BadgeUnlocked,
     FireLevelUp,
-	InhalerRecharging,
+//	InhalerRecharging,
 	SuperWellaInhaler,
 	SuperWellaSickReminder,
 	MiniGameQuitCheck,
-	ZeroHealth
+	ZeroHealth,
+	NeedFoodTutorial,
 }
 
 public enum NotificationPopupFields{

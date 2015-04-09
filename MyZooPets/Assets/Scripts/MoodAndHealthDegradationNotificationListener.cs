@@ -5,16 +5,16 @@ using System.Collections;
 public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 
 	void Start(){
-		RefreshNotifcationListener();
+		RefreshNotificationListener();
 	}
 
 	void OnApplicationPause(bool isPaused){
 		if(!isPaused){
-			RefreshNotifcationListener();
+			RefreshNotificationListener();
 		}
 	}
 
-	private void RefreshNotifcationListener(){
+	private void RefreshNotificationListener(){
 		//listen to health -> sick  or start out sick
 		//we will check this only once every play period for 3 consecutive play period
 		bool isRemindedThisPlayPeriod = DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod;
@@ -55,22 +55,28 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 	/// </summary>
 	private void ShowMoodDegradeMessage(){
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string timeMoodDecay1 = String.Format(Localization.Localize("TMD_1"), petName);
-		string timeMoodDecay2 = String.Format(Localization.Localize("TMD_2"), petName);
+		string moodDecayTutMessage = String.Format(Localization.Localize("MOOD_DECAY_TUT"), petName);
+
+		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
+			StoreUIManager.OnShortcutModeEnd += CloseShop;
+			
+			ClickManager.Instance.Lock(UIModeTypes.Store);
+			StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.NeedFoodTutorial);
+		};
 		
 		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.TipWithImage);
-		notificationEntry.Add(NotificationPopupFields.Message, timeMoodDecay1);
-		notificationEntry.Add(NotificationPopupFields.SpriteName, "Skull");
-		
+		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.NeedFoodTutorial);
+		notificationEntry.Add(NotificationPopupFields.Message, moodDecayTutMessage);
+		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
-		notificationEntry[NotificationPopupFields.Message] = timeMoodDecay2;
-		notificationEntry[NotificationPopupFields.SpriteName] = "guiPanelStatsHealth";
-		
-		NotificationUIManager.Instance.AddToQueue(notificationEntry);
-		
-		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_MOOD_DEGRADE);		
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_MOOD_DEGRADE);	
+	}
+
+	// Called from the shortcut mode in shop
+	private void CloseShop(){
+		StoreUIManager.OnShortcutModeEnd -= CloseShop;
+		ClickManager.Instance.ReleaseLock();
 	}
 
 	private void ShowSuperWellaSickReminder(){

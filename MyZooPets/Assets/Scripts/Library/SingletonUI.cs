@@ -134,33 +134,38 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 			if((Application.loadedLevelName == SceneUtils.BEDROOM
 			    || Application.loadedLevelName == SceneUtils.YARD)){
 
-				//Show other UI Objects
-				HUDUIManager.Instance.ShowPanel();
-
 				GameObject fireButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
 
 				// Editdeco mode check
 				if(ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){
 					if(RoomArrowsUIManager.Instance != null){
 						RoomArrowsUIManager.Instance.ShowPanel();
+						HUDUIManager.Instance.ShowPanel();
 					}
+				}
+				else if(ClickManager.Instance.IsStackContainsType(UIModeTypes.MiniPet)){
+					InventoryUIManager.Instance.ShowPanel();
 				}
 				// Fireblowing room check
 				else if(fireButton != null){
 					if(RoomArrowsUIManager.Instance != null){
 						RoomArrowsUIManager.Instance.ShowPanel();
+						HUDUIManager.Instance.ShowPanel();
 					}
 				}
 				// Default behaviour
 				else{
 					if(RoomArrowsUIManager.Instance != null){
 						RoomArrowsUIManager.Instance.ShowPanel();
+						HUDUIManager.Instance.ShowPanel();
 					}
 					if(NavigationUIManager.Instance != null){
 						NavigationUIManager.Instance.ShowPanel();
+						HUDUIManager.Instance.ShowPanel();
 					}
 					if(InventoryUIManager.Instance != null){
 						InventoryUIManager.Instance.ShowPanel();
+						HUDUIManager.Instance.ShowPanel();
 					}
 				}
 			}

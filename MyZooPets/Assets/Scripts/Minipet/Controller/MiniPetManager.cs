@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +41,11 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				CreateMiniPet(data.ID);	// TODO TEMPORARY TAKING THIS OUT FOR TESTING
 			}
 		}
+	}
+
+	public MiniPetTypes GetMinipetType(string petID){
+		ImmutableDataMiniPet minipetData = DataLoaderMiniPet.GetData(petID);
+		return minipetData.Type;
 	}
 
 	/// <summary>
@@ -219,7 +224,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
-		if(data.Type == MiniPetTypes.Rentention){
+		if(data.Type == MiniPetTypes.Retention){
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
 				if(PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 					Debug.Log("wsodjgbd");

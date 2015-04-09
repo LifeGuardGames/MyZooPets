@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MiniPetRetentionPet : MiniPet {
@@ -15,7 +15,7 @@ public class MiniPetRetentionPet : MiniPet {
 					miniPetSpeechAI.ShowRetentionIdelMsg();
 					Hashtable has = new Hashtable();
 					has[0] = "Do Daily Missions";
-					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
+					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
 				}
 			}
 			else if (!TutorialManager.Instance.IsTutorialActive()){
@@ -55,6 +55,6 @@ public class MiniPetRetentionPet : MiniPet {
 		WellapadMissionController.Instance.AddMission("Critical");
 		Hashtable has = new Hashtable();
 		has[0] = "Do Daily Missions";
-		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Rentention,has); 
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
 	}
 }

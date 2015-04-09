@@ -764,8 +764,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400090}
   - 114: {fileID: 11400106}
-  - 114: {fileID: 11400104}
   - 114: {fileID: 11400102}
+  - 114: {fileID: 11400104}
   m_Layer: 10
   m_Name: MiniPetHUDPanel
   m_TagString: Untagged
@@ -1335,7 +1335,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100042}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 681.161804, y: 384.796692, z: -.00016784668}
+  m_LocalPosition: {x: 511.328979, y: 384.503174, z: -.00016784668}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 400040}
@@ -1348,7 +1348,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.79668045, y: 384.796692, z: .000106811523}
+  m_LocalPosition: {x: -1.00655317, y: 384.503174, z: .000106811523}
   m_LocalScale: {x: .999935985, y: .999935985, z: .999935985}
   m_Children:
   - {fileID: 400036}
@@ -1361,7 +1361,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -682.755188, y: 384.796692, z: 1.52587891e-05}
+  m_LocalPosition: {x: -512.33551, y: 384.503174, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400082}
@@ -1393,7 +1393,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.79668045, y: .796691895, z: 1.52587891e-05}
+  m_LocalPosition: {x: -1.00655317, y: 1.00653076, z: 1.52587891e-05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400026}
@@ -1406,7 +1406,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -42.2799683, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400088}
@@ -1903,11 +1903,11 @@ MonoBehaviour:
     e00: 384
     e01: 0
     e02: 0
-    e03: .79668045
+    e03: 1.00655317
     e10: 0
     e11: 384
     e12: 0
-    e13: 1764.65942
+    e13: 1764.95288
     e20: 0
     e21: 0
     e22: 384
@@ -1978,9 +1978,9 @@ MonoBehaviour:
   hideDeltaX: 0
   hideDeltaY: 300
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .400000006
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: .100000001
   hideDelay: 0
   easeHide: 4
   easeShow: 27
@@ -2140,18 +2140,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isShown: 0
   ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
+  isUsingDemultiplexer: 0
   blockUI: 1
   startsHidden: 1
   hideDeltaX: -400
   hideDeltaY: 0
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .5
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: 0
   hideDelay: 0
-  easeHide: 4
-  easeShow: 27
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -2446,18 +2446,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isShown: 0
   ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
+  isUsingDemultiplexer: 0
   blockUI: 1
-  startsHidden: 0
+  startsHidden: 1
   hideDeltaX: -200
   hideDeltaY: 0
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
+  showDuration: .300000012
+  hideDuration: .300000012
   showDelay: 0
   hideDelay: 0
-  easeHide: 26
-  easeShow: 27
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -2506,12 +2506,12 @@ MonoBehaviour:
   hideDeltaX: -500
   hideDeltaY: 0
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .100000001
-  hideDelay: .300000012
-  easeHide: 4
-  easeShow: 27
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -2540,7 +2540,8 @@ MonoBehaviour:
   labelFeedCount: {fileID: 11400056}
   labelFeed: {fileID: 11400064}
   spriteFeed: {fileID: 11400060}
-  feedParent: {fileID: 11400066}
+  feedTweenParent: {fileID: 11400066}
+  storeTweenParent: {fileID: 11400096}
   storeButtonPulseAnim: {fileID: 11100002}
   storeButtonSunbeam: {fileID: 100074}
   contentParent: {fileID: 100094}
@@ -2560,7 +2561,6 @@ MonoBehaviour:
   GoList:
   - {fileID: 100084}
   - {fileID: 100088}
-  - {fileID: 100086}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1

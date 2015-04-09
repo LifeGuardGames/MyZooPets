@@ -5,19 +5,13 @@ public class MiniPetSpeechAI : MonoBehaviour{
 	
 	public void ShowDirtyMsg(string pet){
 		Hashtable msgOption = new Hashtable();
-		if(pet == "general"){
-		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
-		}
-		else if (pet == "rentention"){
+		if (pet == "retention"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
 		}
 		else if (pet == "gameMaster"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
 		}
 		else if (pet == "merch"){
-			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
-		}
-		else if (pet == "warrior"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
 		}
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
@@ -26,19 +20,13 @@ public class MiniPetSpeechAI : MonoBehaviour{
 
 	public void ShowSadMsg(string pet){
 		Hashtable msgOption = new Hashtable();
-		if(pet == "general"){
-			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
-		}
-		else if (pet == "rentention"){
+		if (pet == "retention"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
 		}
 		else if (pet == "gameMaster"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
 		}
 		else if (pet == "merch"){
-			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
-		}
-		else if (pet == "warrior"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_DIRTY_MSG"));
 		}
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
@@ -47,19 +35,13 @@ public class MiniPetSpeechAI : MonoBehaviour{
 
 	public void ShowMaxLevelMsg(string pet){
 		Hashtable msgOption = new Hashtable();
-		if(pet == "general"){
-			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
-		}
-		else if (pet == "rentention"){
+		if (pet == "retention"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
 		}
 		else if (pet == "gameMaster"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
 		}
 		else if (pet == "merch"){
-			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
-		}
-		else if (pet == "warrior"){
 			msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MAX_LEVEL_MSG"));
 		}
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
@@ -74,7 +56,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		PetSpeechManager.Instance.TalkM(msgOption);
 	}
 
-	public void ShowGMIdleMsg(){
+	public void ShowGameMasterIdleMsg(){
 		int rand = Random.Range (0, 7);
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_IDLE_"+ rand.ToString()));

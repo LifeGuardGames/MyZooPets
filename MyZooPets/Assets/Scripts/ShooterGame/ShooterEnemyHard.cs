@@ -7,6 +7,7 @@ public class ShooterEnemyHard:ShooterEnemy{
 	private GameObject midPoint;
 	public GameObject bulletPrefab;
 
+
 	// Use this for initialization
 	void Start(){
 		animator.SetBool("IsSpitMode", true);
@@ -40,9 +41,11 @@ public class ShooterEnemyHard:ShooterEnemy{
 	void ShootSmogBall(){
 		animator.SetBool("Spit",true);
 		animator.SetBool("IsSpitMode", false);
-		GameObject instance = Instantiate(bulletPrefab, this.gameObject.transform.position, bulletPrefab.transform.rotation)as GameObject;
-		LeanTween.move(instance.gameObject, player.transform.position, 2.0f);
-		StartCoroutine(WaitASecond());
+		if(!isDead){
+			GameObject instance = Instantiate(bulletPrefab, this.gameObject.transform.position, bulletPrefab.transform.rotation)as GameObject;
+			LeanTween.move(instance.gameObject, player.transform.position, 2.0f);
+			StartCoroutine(WaitASecond());
+		}
 	}
 
 	// gives a 2 sec breather between shots
@@ -52,6 +55,7 @@ public class ShooterEnemyHard:ShooterEnemy{
 	}
 	void OnDestroy(){
 		LeanTween.cancel(this.gameObject);
+
 		Debug.Log("sucess");
 	}
 

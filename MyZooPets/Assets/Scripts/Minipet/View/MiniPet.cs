@@ -13,6 +13,9 @@ public class MiniPet : MonoBehaviour {
 	public MiniPetSpeechAI miniPetSpeechAI;
 	public Transform spawnItemTransform;
 	public GameObject flippable;
+	public GameObject accessory1;
+	public GameObject accessory2;
+	public GameObject accessory3;
 	public GameObject eggParent;
 	public Animation eggAnimation;
 	public MinipetEggClickController eggClickController;
@@ -49,7 +52,23 @@ public class MiniPet : MonoBehaviour {
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 		isFinishEating = DataManager.Instance.GameData.MiniPets.GetHunger(id);
-		
+		Level currentLvl = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(id);
+		switch (currentLvl){
+		case Level.Level2:
+			accessory1.SetActive(true);
+			break;
+		case Level.Level3:
+			accessory1.SetActive(true);
+			accessory2.SetActive(true);
+			break;
+		case Level.Level4:
+			accessory1.SetActive(true);
+			accessory2.SetActive(true);
+			accessory3.SetActive(true);
+			break;
+		default:
+			break;
+		}
 		RefreshUnlockState();
 	}
 

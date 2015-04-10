@@ -52,6 +52,7 @@ public class MiniPet : MonoBehaviour {
 		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
 		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
 		isFinishEating = DataManager.Instance.GameData.MiniPets.GetHunger(id);
+		//Level currentLvl = Level.Level2;
 		Level currentLvl = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(id);
 		switch (currentLvl){
 		case Level.Level2:

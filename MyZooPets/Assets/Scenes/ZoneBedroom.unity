@@ -14566,8 +14566,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 420481003}
   - 114: {fileID: 420481006}
-  - 114: {fileID: 420481005}
   - 114: {fileID: 420481004}
+  - 114: {fileID: 420481005}
   m_Layer: 10
   m_Name: MiniPetHUDPanel
   m_TagString: Untagged
@@ -14610,7 +14610,8 @@ MonoBehaviour:
   labelFeedCount: {fileID: 1242015946}
   labelFeed: {fileID: 630830020}
   spriteFeed: {fileID: 1581906821}
-  feedParent: {fileID: 485814856}
+  feedTweenParent: {fileID: 485814856}
+  storeTweenParent: {fileID: 1234811757}
   storeButtonPulseAnim: {fileID: 2107141779}
   storeButtonSunbeam: {fileID: 968864784}
   contentParent: {fileID: 1435664490}
@@ -14631,7 +14632,6 @@ MonoBehaviour:
   GoList:
   - {fileID: 923278963}
   - {fileID: 1081454131}
-  - {fileID: 1234811755}
   testButtonPos: {x: 0, y: 0}
   isDebug: 0
   startsHidden: 1
@@ -16551,18 +16551,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isShown: 0
   ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
+  isUsingDemultiplexer: 0
   blockUI: 1
   startsHidden: 1
   hideDeltaX: -400
   hideDeltaY: 0
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .5
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: 0
   hideDelay: 0
-  easeHide: 4
-  easeShow: 27
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -26976,6 +26976,10 @@ Prefab:
       propertyPath: finalPosition.y
       value: 15.2799997
       objectReference: {fileID: 0}
+    - target: {fileID: 100020, guid: ce2319fd777a34810aa7bafdde7e2615, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ce2319fd777a34810aa7bafdde7e2615, type: 2}
   m_RootGameObject: {fileID: 737520537}
@@ -32058,7 +32062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &868722604
 Transform:
   m_ObjectHideFlags: 0
@@ -36714,9 +36718,9 @@ MonoBehaviour:
   hideDeltaX: 0
   hideDeltaY: 300
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .400000006
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: .100000001
   hideDelay: 0
   easeHide: 4
   easeShow: 27
@@ -41492,12 +41496,12 @@ MonoBehaviour:
   hideDeltaX: -500
   hideDeltaY: 0
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
-  showDelay: .100000001
-  hideDelay: .300000012
-  easeHide: 4
-  easeShow: 27
+  showDuration: .300000012
+  hideDuration: .300000012
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -47340,18 +47344,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isShown: 0
   ignoreTimeScale: 0
-  isUsingDemultiplexer: 1
+  isUsingDemultiplexer: 0
   blockUI: 1
-  startsHidden: 0
+  startsHidden: 1
   hideDeltaX: -200
   hideDeltaY: 0
   hideDeltaZ: 0
-  showDuration: .200000003
-  hideDuration: .200000003
+  showDuration: .300000012
+  hideDuration: .300000012
   showDelay: 0
   hideDelay: 0
-  easeHide: 26
-  easeShow: 27
+  easeHide: 3
+  easeShow: 2
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -53423,7 +53427,7 @@ Transform:
   m_PrefabInternal: {fileID: 1537654277}
   m_GameObject: {fileID: 1435664490}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -42.2799683, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2101400353}
@@ -86251,11 +86255,11 @@ MonoBehaviour:
   popupMiniGameQuitCheck: {fileID: 100018, guid: 4d30e86f84fd0e046866b921494b6c70,
     type: 2}
   popupZeroHealth: {fileID: 100014, guid: c7c733d835c108b44bbc216e54c24547, type: 2}
-  popupInhalerRechargeMessage: {fileID: 100012, guid: a18cca9c6872f304aa47f59786db23e5,
-    type: 2}
   popupSuperWellaInhaler: {fileID: 100004, guid: ec8057038d34d294db24d14523b07a9a,
     type: 2}
   popupSuperWellaSick: {fileID: 100018, guid: 1a05132f9425bb544a01b2ba8bd7e247, type: 2}
+  popupNeedFoodTutorial: {fileID: 100044, guid: 104f06555e827894488c9d37033c3a58,
+    type: 2}
 --- !u!1 &2138034910
 GameObject:
   m_ObjectHideFlags: 0

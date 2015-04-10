@@ -285,7 +285,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		
 		string missionID = task.MissionID;
 		string taskID = task.TaskID;
-		Debug.Log(task.TaskID);
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID) && 
 			DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks.ContainsKey(taskID)){
 
@@ -294,7 +293,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// if the status is recently completed and we are popping, "pop" it by setting it to just plain completed now
 			if(bPop && status == WellapadTaskCompletionStates.RecentlyCompleted){
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed = WellapadTaskCompletionStates.Completed;
-				Debug.Log("oeirngrft");
 			}
 		}
 		else{
@@ -339,20 +337,18 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				listTasks.Add(pair.Value);
 			}
 		}
-		else
+		else{
 			Debug.LogError("Something trying to create a mission in the UI that the user does not have...give it to them first!");
-
+		}
 		return listTasks;
 	}	
 
 	public void AddMission(string missionID){
 		List<ImmutableDataWellapadTask> listTasks = GetUnlockedTasks(missionID);
 		Dictionary<string, MutableDataWellapadTask> savedTasks = new Dictionary<string, MutableDataWellapadTask>();
-	//	Debug.Log(listTasks.Count);
 		for(int i = 0; i < listTasks.Count; ++i){
 			ImmutableDataWellapadTask task = listTasks[i];
 			string taskID = task.GetTaskID();
-			
 			savedTasks[taskID] = new MutableDataWellapadTask(task);
 		}
 		DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID] = new MutableDataMission(missionID, savedTasks);
@@ -360,8 +356,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		// reset the time -- I probably want to change this to a per mission basis at some point if we expand the system?
 		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = LgDateTime.GetTimeNow();
 		// send event
-		if(OnMissionsRefreshed != null) 
+		if(OnMissionsRefreshed != null){
 			OnMissionsRefreshed(this, EventArgs.Empty);
+		}
 	}
 
 	private List<ImmutableDataWellapadTask> GetUnlockedTasks(string missionID){
@@ -380,15 +377,16 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				
 				// this is a little weird...the random element thing is messing up the ordering of the tasks
 				List<ImmutableDataWellapadTask> tasks = listTasks;
-				if(numberOfTasks != listTasks.Count)
+				if(numberOfTasks != listTasks.Count){
 					tasks = ListUtils.GetRandomElements<ImmutableDataWellapadTask>(listTasks, numberOfTasks);
+				}
 				
 				// add each of our tasks to the final list
-				foreach(ImmutableDataWellapadTask task in tasks)
+				foreach(ImmutableDataWellapadTask task in tasks){
 					taskListFinal.Add(task);
+				}
 			}
 		}
-
 		return taskListFinal;
 	}
 }

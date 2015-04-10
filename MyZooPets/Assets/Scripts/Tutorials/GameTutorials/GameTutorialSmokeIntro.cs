@@ -11,7 +11,7 @@ using System.Collections.Generic;
 public class GameTutorialSmokeIntro : GameTutorial{
 //	private GameObject swipeGO; //reference to the swipe listener
 
-	public GameTutorialSmokeIntro() : base(){		
+	public GameTutorialSmokeIntro() : base(){
 	}
 
 	protected override void SetMaxSteps(){
@@ -29,6 +29,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
+
 			TutorialManager.Instance.StartCoroutine(BeginPanRight());
 			break;
 			
@@ -128,12 +129,6 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	
 	private void OnLeftPanDone(){
 		Advance();	
-	}
-
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "TEST")){
-			FocusOnRightArrow();
-		}
 	}
 
 	private void FocusOnRightArrow(){

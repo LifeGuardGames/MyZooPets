@@ -93,8 +93,9 @@ public class GameTutorialFlame : GameTutorial{
 			GameObject goButton = goFlameButton.transform.Find("ButtonParent/Button").gameObject;
 			AddToProcessList(goButton);
 		}
-		else
+		else{
 			Debug.LogError("No flame button...that means the game is going to break");
+		}
 	}
 
 	/// <summary>

@@ -45,7 +45,7 @@ public class StatsController : Singleton<StatsController>{
 	}	
 
 	#if UNITY_EDITOR || DEVELOPMENT_BUILD
-	void OnGUI(){
+//	void OnGUI(){
 //		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
 //			ChangeStats(deltaHealth: 10);
 //	 	}
@@ -79,16 +79,16 @@ public class StatsController : Singleton<StatsController>{
 //		if(GUI.Button(new Rect(300, 50, 100, 50), "-mood")){
 //			ChangeStats(deltaMood: -10);
 //		}
-		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
-			ChangeStats(deltaPoints: 100);
-		}
+//		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
+//			ChangeStats(deltaPoints: 100);
+//		}
 //		if(GUI.Button(new Rect(600, 50, 100, 50), "+Stars")){
 //			ChangeStats(deltaStars: 50);
 //		}
 //		if(GUI.Button(new Rect(700, 50, 100, 50), "-Stars")){
 //			ChangeStats(deltaStars: -40);
 //		}
-	}
+//	}
 	#endif
 
 	public int GetStat(HUDElementType stat){

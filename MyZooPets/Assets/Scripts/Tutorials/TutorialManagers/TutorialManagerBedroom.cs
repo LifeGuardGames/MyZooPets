@@ -33,6 +33,16 @@ public class TutorialManagerBedroom : TutorialManager{
 
 	protected override void Start(){
 		base.Start();
+		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_WELLAPAD);	
+		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
+
+		// Reset the to at most introSmokeMonster if they have not completed tutorial 1 and came back
+		if(isFocusWellapadTutorialDone && !isFlameTutorialDone){
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Remove(TUT_SMOKE_INTRO);
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Remove(TUT_FLAME_CRYSTAL);
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Remove(TUT_FLAME);
+		}
+
 		// listen for partition changing event; used for flame tutorial
 		GatingManager.Instance.OnReachedGate += OnReachedGate;
 		
@@ -60,15 +70,14 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	private void TutorialPart1Check(){
-		bool isFocusInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_INHALER);
 		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_WELLAPAD);	
+		bool isFocusInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_INHALER);
+		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
 		bool isSmokeIntroDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SMOKE_INTRO);
 		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
-		bool isSuperWellaInhalerDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_SUPERWELLA_INHALER);
 
 		//check why we need isFirstTime variable
-
 		if(!isFocusWellapadTutorialDone){
 			// start by highlighting the wellapad button
 			new GameTutorialWellapadIntro();
@@ -84,7 +93,7 @@ public class TutorialManagerBedroom : TutorialManager{
 			// play the smoke monster intro tutorial
 			new GameTutorialSmokeIntro();
 		}
-		else if(isFlameCrystalTutorialDone && !isFlameTutorialDone){
+		else if(isFlameCrystalTutorialDone && !isFlameTutorialDone){	// Hacky check skipping tutorial fire crystal
 			new GameTutorialFlame();
 		}
 	}
@@ -94,17 +103,16 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	private void TutorialPart2Check(){	// TODO this can be refactored, this is checked everytime you switch rooms....
-		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME);
-		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_TRIGGERS);
-		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_DECOS);
+		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
+		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_TRIGGERS);
+		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_DECOS);
 		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
 		
-		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
+//		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
-//				Debug.Log("PASS");
 				// play the trigger tutorial
 				new GameTutorialTriggers();
 			}
@@ -114,7 +122,6 @@ public class TutorialManagerBedroom : TutorialManager{
 				new GameTutorialDecorations();
 			}
 			else{
-//				Debug.Log("FAIL");
 			}
 		}
 	}
@@ -128,15 +135,21 @@ public class TutorialManagerBedroom : TutorialManager{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void OnReachedGate(object sender, EventArgs args){
-		if(!isTutorialEnabled)
+		if(!isTutorialEnabled){
 			return;
-		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TUT_FLAME_CRYSTAL);
+		}
+		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
 		GameObject fireOrbReference = InventoryUIManager.Instance.GetFireOrbReference();
-
 		if(fireOrbReference != null && !isFlameCrystalTutorialDone){
 			GatingManager.Instance.OnReachedGate -= OnReachedGate;
-
 			new GameTutorialFlameCrystal();
+		}
+		else if(fireOrbReference == null){	// Already complete, launch focus tutorial
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME_CRYSTAL);	// Hacky add so it passes future check
+			new GameTutorialFlame();
+		}
+		else{
+			Debug.LogError("Error with trying to reset tutorial");
 		}
 	}
 }

@@ -250,7 +250,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 				if(latestGate == null || (latestGate.Partition - 1 == 1)){
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
-					Debug.Log(type.ToString());
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 					int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 					DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
@@ -286,7 +285,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					}
 					else{
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(6).gameObject, prefab);
-						Debug.Log(pos);
 						goMiniPet.transform.localPosition = pos;
 						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = MinigameTypes.Shooter;
 						goMiniPet.name = prefab.name;

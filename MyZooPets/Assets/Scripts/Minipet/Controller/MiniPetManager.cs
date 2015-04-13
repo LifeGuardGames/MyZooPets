@@ -227,7 +227,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		if(data.Type == MiniPetTypes.Retention){
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
 				if(PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-					Debug.Log("wsodjgbd");
 					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);
 				}
 				Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;

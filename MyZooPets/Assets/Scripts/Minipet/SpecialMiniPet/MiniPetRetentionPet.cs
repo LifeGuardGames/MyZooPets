@@ -11,29 +11,18 @@ public class MiniPetRetentionPet : MiniPet {
 		base.OnTap(gesture);
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 			if(!MiniPetHUDUIManager.Instance.HasContent()){
-				if(isFinishEating){
+				//if(isFinishEating){
 					miniPetSpeechAI.ShowRetentionIdelMsg();
 					Hashtable has = new Hashtable();
 					has[0] = "Do Daily Missions";
 					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
-				}
+				//}
 			}
 			else if (!TutorialManager.Instance.IsTutorialActive()){
 				isFinishEating = true;
 				DataManager.Instance.GameData.MiniPets.SaveHunger(id, isFinishEating);
 			}
 		}
-	}
-
-	public override void FinishEating(){
-		base.FinishEating();
-
-		MiniPetManager.Instance.canLevel = true;
-		isFinishEating = true; 
-
-		miniPetSpeechAI.ShowTipMsg();
-
-		GiveOutMission();
 	}
 
 	private void TurnInMission(){
@@ -49,7 +38,9 @@ public class MiniPetRetentionPet : MiniPet {
 		}
 	}
 
-	private void GiveOutMission(){
+	public void GiveOutMission(){miniPetSpeechAI.ShowTipMsg();
+		isFinishEating = true; 
+		MiniPetManager.Instance.canLevel = true;
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Critical");

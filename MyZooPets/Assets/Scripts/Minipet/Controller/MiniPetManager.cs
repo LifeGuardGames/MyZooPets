@@ -237,7 +237,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet.transform.localPosition = pos;
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
-				
+				goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
 				if(switchSpawn){
@@ -343,7 +343,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						}
 					}
 				}
-				else if(Application.loadedLevelName == SceneUtils.BEDROOM ){
+				else if(Application.loadedLevelName == SceneUtils.BEDROOM && DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != new Vector3(0, 0, 0)){
 					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
 					goMiniPet.name = prefab.name;
 					goMiniPet.GetComponent<MiniPet>().Init(data);

@@ -7,7 +7,6 @@ public class ShooterEnemyHard:ShooterEnemy{
 	private GameObject midPoint;
 	public GameObject bulletPrefab;
 
-
 	// Use this for initialization
 	void Start(){
 		animator.SetBool("IsSpitMode", true);
@@ -53,6 +52,7 @@ public class ShooterEnemyHard:ShooterEnemy{
 		yield return new WaitForSeconds(1.0f);
 		AndAgain();
 	}
+
 	void OnDestroy(){
 		LeanTween.cancel(this.gameObject);
 

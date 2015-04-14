@@ -21,7 +21,8 @@ public enum PetColor{
 	None,
 	OrangeYellow,
 	PurpleLime,
-	BlueYellow
+	BlueYellow,
+	YellowPink,
 }
 
 public enum DosageRecord{

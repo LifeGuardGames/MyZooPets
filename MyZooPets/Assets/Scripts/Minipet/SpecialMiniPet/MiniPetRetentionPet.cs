@@ -9,13 +9,16 @@ public class MiniPetRetentionPet : MiniPet {
 
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
+		Hashtable has = new Hashtable();
+		has[0] = "Do Daily Missions";
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 			if(!MiniPetHUDUIManager.Instance.HasContent()){
 				//if(isFinishEating){
 					miniPetSpeechAI.ShowRetentionIdelMsg();
-					Hashtable has = new Hashtable();
-					has[0] = "Do Daily Missions";
-					MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
+					//Hashtable has = new Hashtable();
+					//has[0] = "Do Daily Missions";
+					//MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
 				//}
 			}
 			else if (!TutorialManager.Instance.IsTutorialActive()){
@@ -44,8 +47,6 @@ public class MiniPetRetentionPet : MiniPet {
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Critical");
-		Hashtable has = new Hashtable();
-		has[0] = "Do Daily Missions";
-		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
+
 	}
 }

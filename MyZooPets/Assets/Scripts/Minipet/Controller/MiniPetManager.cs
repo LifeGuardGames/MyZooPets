@@ -237,7 +237,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet.transform.localPosition = pos;
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
-				
+				goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
 				if(switchSpawn){

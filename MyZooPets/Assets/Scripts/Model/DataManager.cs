@@ -151,6 +151,15 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
+
+		#if DEVELOPMENT_BUILD
+		PlayerPrefs.DeleteAll();
+		#endif
+		
+		if (Debug.isDebugBuild){
+			PlayerPrefs.DeleteAll();
+		}
+
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;
 		JSON.Instance.Parameters.UseUTCDateTime = false; //turning utc off for now

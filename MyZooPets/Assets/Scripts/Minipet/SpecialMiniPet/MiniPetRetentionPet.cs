@@ -9,6 +9,7 @@ public class MiniPetRetentionPet : MiniPet {
 
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
+		miniPetSpeechAI.ShowTipMsg();
 		Hashtable has = new Hashtable();
 		has[0] = "Do Daily Missions";
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
@@ -41,7 +42,7 @@ public class MiniPetRetentionPet : MiniPet {
 		}
 	}
 
-	public void GiveOutMission(){miniPetSpeechAI.ShowTipMsg();
+	public void GiveOutMission(){
 		isFinishEating = true; 
 		MiniPetManager.Instance.canLevel = true;
 		WellapadMissionController.Instance.UnlockTask("Critical");

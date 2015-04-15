@@ -41,6 +41,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Update the table, if there is one.
 	/// </summary>
 	private void UpdateGrid(){
+		Debug.Log(this.name);
 		UIGrid grid = NGUITools.FindInParents<UIGrid>(mTrans.parent.gameObject);
 		if(grid != null){
 			grid.repositionNow = true;
@@ -115,6 +116,9 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Start the drag event and perform the dragging.
 	/// </summary>
 	void OnDrag(Vector2 delta){
+		if(StoreUIManager.Instance.IsOpen()){
+			return;
+		}
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
 			Drop();
 			return;
@@ -193,6 +197,9 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// </summary>
 
 	void OnPress(bool isPressed){
+		if(StoreUIManager.Instance.IsOpen()){
+			return;
+		}
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
 			return;
 		}

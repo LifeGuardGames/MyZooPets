@@ -10,6 +10,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public float timeBetweenSpawnGroups;	// time between spawn groups
 	public bool bonusRound = false;			// triggers Bonus round
 	public int bonusRoundEnemies;
+	public int bonusRoundCounter;			// tracks number of boss round
 	public int chain = 0;			// number of enemies killed with out hitting a bomb 
 	public GameObject bonusLabel;
 
@@ -50,6 +51,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		chain++;
 		if(chain % 25 == 0){
 			bonusRound = true;
+
 		}
 	}
 
@@ -170,6 +172,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		int nBestCombo = GetComboBest();
 		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
 		Analytics.Instance.NinjaHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		Analytics.Instance.NinjaBonusRounds(bonusRoundCounter);		
 	}
 
 	protected override string GetMinigameKey(){
@@ -187,6 +190,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 
 		float deltaTime = Time.deltaTime;
 		if(bonusRound == true){
+			bonusRoundCounter++;
 			StartCoroutine("BonusTime");
 		}
 

@@ -90,9 +90,9 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void ShooterPercentageMissed (string percentage){
+	public void ShooterPercentageMissed (int percentage){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", percentage);
+			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", (float) percentage);
 		}
 	}
 

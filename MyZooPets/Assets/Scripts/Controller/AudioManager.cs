@@ -44,12 +44,15 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	}
 
 	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName){
-		for(int i = 9; i > 0; i--){
+		for(int i = 9; i >= 0; i--){
 			backgroundSource.volume = i * .1f;
-			yield return new WaitForSeconds(.4f);
+			yield return new WaitForSeconds(.01f);
 		}
 		if(newAudioClipName != null){
-			PlayBackground();
+			backgroundSource.Stop();
+			backgroundSource.volume = 1f;
+			backgroundMusic = newAudioClipName;
+			StartCoroutine(PlayBackground());
 		}
 		else{
 			backgroundSource.Stop();

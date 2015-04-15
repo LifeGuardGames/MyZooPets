@@ -114,6 +114,9 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 		GameObject goComicPlayer = GameObjectUtils.AddChildWithPositionAndScale(null, comicPlayerPrefab) as GameObject;
 		goComicPlayer.GetComponent<ComicPlayer>().Init(petColor);
 		ComicPlayer.OnComicPlayerDone += IntroComicDone;
+
+		// Play the comic music
+		AudioManager.Instance.FadeOutPlayNewBackground("bgComic");
 	}
 	
 	private void IntroComicDone(object sender, EventArgs args){

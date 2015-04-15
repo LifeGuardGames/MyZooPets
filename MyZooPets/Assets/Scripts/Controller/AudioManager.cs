@@ -23,8 +23,9 @@ public class AudioManager : LgAudioManager<AudioManager>{
 		yield return new WaitForSeconds(0.5f);
 		if(isMusicOn){
 			AudioClip backgroundClip = null;
-			if(backgroundMusic != null)
+			if(backgroundMusic != null){
 				backgroundClip = Resources.Load(backgroundMusic) as AudioClip;
+			}
 
 			if(backgroundClip != null){
 				backgroundSource.clip = backgroundClip;
@@ -60,9 +61,11 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	/// </summary>
 	/// <param name="isPaused">If set to <c>true</c> is paused.</param>
 	public void PauseBackground(bool isPaused){	
-		if(isPaused)
+		if(isPaused){
 			backgroundSource.Pause();
-		else
+		}
+		else{
 			backgroundSource.Play();
+		}
 	}
 }

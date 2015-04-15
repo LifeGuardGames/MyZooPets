@@ -287,7 +287,7 @@ public class HUDAnimator : MonoBehaviour{
 		yield return new WaitForSeconds(waitTime);
 
 		if(!string.IsNullOrEmpty(strSound))
-			AudioManager.Instance.PlayClip(strSound, hashSoundOverrides);
+			AudioManager.Instance.PlayClip(strSound, option: hashSoundOverrides);
 
 		// Modify some tweening behaviors based on adding or subtracting a stat
 		if(isPlusAnimation){

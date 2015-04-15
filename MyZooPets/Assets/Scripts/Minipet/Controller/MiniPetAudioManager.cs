@@ -32,7 +32,7 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 	/// </summary>
 	/// <param name="clipName">Clip name.</param>
 	/// <param name="option">Option.</param>
-	public override void PlayClip(string clipName, Hashtable option = null){
+	public void PlayClip(string clipName, Hashtable option = null){
 		bool isInterruptingRecurringClip = false;
 		if(option != null && option.ContainsKey("IsInterruptingRecurringClip"))
 			isInterruptingRecurringClip = (bool) option["IsInterruptingRecurringClip"];
@@ -50,7 +50,7 @@ public class MiniPetAudioManager : LgAudioManager<MiniPetAudioManager> {
 		}
 		option.Add("IsSoundClipManaged", true);
 
-		base.PlayClip(clipName, option);
+		base.PlayClip(clipName, option: option);
 	}
 
 	public override void StopClip(string clipName){

@@ -50,12 +50,10 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		int rewardXP = GetReward(MinigameRewardTypes.XP) + nFreebie;
 		int rewardMoney = GetReward(MinigameRewardTypes.Money) + nFreebie;
 		int rewardShard = GetReward(MinigameRewardTypes.Shard) + nFreebie;
-		
-		string strXP = StringUtils.FormatNumber(rewardXP);
-		string strMoney = StringUtils.FormatNumber(rewardMoney);
-		
-		labelXP.text = strXP;
-		labelStars.text = strMoney;
+
+		labelXP.text = StringUtils.FormatNumber(rewardXP);
+		labelStars.text = StringUtils.FormatNumber(rewardMoney);
+		labelShards.text = StringUtils.FormatNumber(rewardShard);
 		
 		// actually award the money and xp
 		Vector3 vPosXP = LgNGUITools.GetScreenPosition(goIconXP);

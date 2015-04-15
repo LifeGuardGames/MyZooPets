@@ -63,7 +63,7 @@ public class PetAudioManager : LgAudioManager<PetAudioManager> {
 	/// </summary>
 	/// <param name="option">Hash overrides.</param>
 	/// <param name="clipName">Clip name.</param>
-	public override void PlayClip(string clipName, Hashtable option = null){
+	public void PlayClip(string clipName, Hashtable option = null){
 		if(enableSound){
 			StopClip(lastPlayedClip);
 			lastPlayedClip = clipName;
@@ -73,7 +73,7 @@ public class PetAudioManager : LgAudioManager<PetAudioManager> {
 			}
 			option.Add("IsSoundClipManaged", true);
 
-			base.PlayClip(clipName, option);
+			base.PlayClip(clipName, option: option);
 		}
 	}
 

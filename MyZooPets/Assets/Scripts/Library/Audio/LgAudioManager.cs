@@ -23,9 +23,10 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	/// finished, F: same sound can be played more than once and once the sound is played there's no
 	/// way to stop it until it finishes)</para>  
 	/// </summary>
-	/// <param name="soundClip">Sound clip.</param>
+	/// <param name="clipName">Sound clip name</param>
+	/// <param name="variations">Number of sounds for the same clip</param>
 	/// <param name="hashOverrides">Hash overrides.</param>
-	public virtual void PlayClip(string clipName, Hashtable option = null){
+	public virtual void PlayClip(string clipName, int variations = 1, Hashtable option = null){
 		if(option == null){
 			option = new Hashtable();
 		}
@@ -35,7 +36,7 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 			return;
 		}
 		
-		DataSound sound = DataSounds.GetSoundData(clipName);
+		DataSound sound = DataSounds.GetSoundData(clipName, variations);
 		
 		if(sound == null){
 			Debug.LogError("No such sound with id " + clipName);

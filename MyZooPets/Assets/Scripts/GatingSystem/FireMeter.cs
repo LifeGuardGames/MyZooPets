@@ -37,7 +37,7 @@ public class FireMeter : MonoBehaviour{
 
 		Hashtable option = new Hashtable();
 		option.Add("IsSoundClipManaged", true);
-		AudioManager.Instance.PlayClip(fillSound, option);
+		AudioManager.Instance.PlayClip(fillSound, option: option);
 	}
 
 	// Callback update value function for start filling

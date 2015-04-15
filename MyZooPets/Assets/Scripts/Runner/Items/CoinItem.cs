@@ -25,7 +25,7 @@ public class CoinItem : RunnerItem {
 		Hashtable hashOverride = new Hashtable();
 		hashOverride["Pitch"] = fPitch;
         hashOverride["Volume"] = 0.5f;
-		AudioManager.Instance.PlayClip( "StarSingle", hashOverride );
+		AudioManager.Instance.PlayClip( "StarSingle", option: hashOverride );
 
 
 

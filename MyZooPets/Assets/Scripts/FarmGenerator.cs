@@ -22,7 +22,6 @@ public class FarmGenerator : MonoBehaviour {
 	private bool isFull;
 	private TimeSpan lastTimeDurationAux;
 	private bool isFlagResetWhenStart = false;
-	private bool isOnPauseStartAux = true;
 
 	/// <summary>
 	/// Initialize variables before start is called, done on initalize

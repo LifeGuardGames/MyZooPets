@@ -67,13 +67,10 @@ public class MiniPetGameMaster : MiniPet {
 			switch(rand){
 			case 0:
 				return "NinjaS";
-				break;
 			case 1:
 				return "NinjaC";
-				break;
 			default:
 				return "NinjaC";
-				break;
 			}
 		}
 
@@ -88,13 +85,10 @@ public class MiniPetGameMaster : MiniPet {
 			switch(rand){
 			case 0:
 				return "ShooterS";
-				break;
 			case 1:
 				return "ShooterH";
-				break;
 			default:
 				return "ShooterS";
-				break;
 			}
 		}
 		if(minigameType == MinigameTypes.Runner){
@@ -102,16 +96,12 @@ public class MiniPetGameMaster : MiniPet {
 			switch(rand){
 			case 0:
 				return "RunnerS";
-				break;
 			case 1:
 				return "RunnerC";
-				break;
 			case 2:
 				return "RunnerD";
-				break;
 			default:
 				return "RunnerC";
-				break;
 			}
 		}		
 		else{

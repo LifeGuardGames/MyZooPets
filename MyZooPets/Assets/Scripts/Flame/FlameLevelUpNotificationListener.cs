@@ -32,9 +32,7 @@ public class FlameLevelUpNotificationListener : MonoBehaviour {
         notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
         
         NotificationUIManager.Instance.AddToQueue(notificationEntry);
-
-        //Sen Analytics event
-        Analytics.Instance.FlameUnlocked(skill.ID);
+		
     }
 	
 }

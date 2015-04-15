@@ -169,6 +169,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// send out combo task
 		int nBestCombo = GetComboBest();
 		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
+		Analytics.Instance.NinjaHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 	}
 
 	protected override string GetMinigameKey(){

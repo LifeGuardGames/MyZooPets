@@ -92,6 +92,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	protected override void _GameOver(){
 		//BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
+		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		Analytics.Instance.ShooterWave(waveNum);
+		Analytics.Instance.ShooterPercentageMissed((ShooterInhalerManager.Instance.missed / waveNum).ToString()+"%");
 	}
 
 	public void ClickIt(TapGesture e){

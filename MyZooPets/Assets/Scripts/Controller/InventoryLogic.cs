@@ -208,7 +208,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			ItemLogic.Instance.StatsEffect(itemID);
 			
 			//analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
+			//Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
 			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
 			                                         Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
 			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
@@ -242,7 +242,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			invItem.Amount--;
 
 			//analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
+			//Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
 			
 			//remove inv item if there is none left
 			if(invItem.Amount == 0)

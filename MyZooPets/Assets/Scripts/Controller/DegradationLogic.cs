@@ -98,7 +98,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 //			goDroppedItem.GetComponent<DroppedObject>().Appear();			
 
 			//send analytics event
-			Analytics.Instance.TriggersCleaned(triggerData.ID);
+			//Analytics.Instance.TriggersCleaned(triggerData.ID);
 		}	
 		
 		// DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
@@ -129,7 +129,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, isFloaty: true);
 
 		//Send analytics event
-		Analytics.Instance.TriggerHitPet();    
+	//	Analytics.Instance.TriggerHitPet();    
 	}
 
 	private void StatsDegradationCheck(){

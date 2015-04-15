@@ -98,7 +98,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			isActive = true;
 			PetAudioManager.Instance.EnableSound = false;
 
-			Analytics.Instance.EnterFriendTree();
+			//Analytics.Instance.EnterFriendTree();
 			entranceHelper.EntranceUsed();
 			
 			// Try internet connection
@@ -315,7 +315,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			SocialManager.Instance.SendFriendRequest(input);
 			codeInputConnectionDisplay.Play("FRIENDS_ADD_LOADING");
 		}
-		Analytics.Instance.AddFriend();
+		//Analytics.Instance.AddFriend();
 	}
 
 	public void FinishConnectionFriendCodeAdd(object obj, ServerEventArgs args){
@@ -365,7 +365,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		requestExitButton.SetActive(false);
 		requestConnectionDisplay.Play("FRIENDS_REQUESTS_ACCEPT_LOADING");
 
-		Analytics.Instance.AcceptFriendRequest();
+		//Analytics.Instance.AcceptFriendRequest();
 	}
 
 	public void RequestDecline(string requestId){

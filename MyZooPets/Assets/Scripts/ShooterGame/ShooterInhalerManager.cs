@@ -9,6 +9,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public bool hit = false;
 	public GameObject badTiming;
 	public GameObject[] goodFX;
+	public int missed = 0;
 	public bool CanUseInhalerButton{
 		get{
 			return canUseInhalerButton;
@@ -38,6 +39,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			}
 		}
 		else if(CanUseInhalerButton == true){
+			missed++;
 			badTiming.SetActive(true);
 			StartCoroutine(HoldIt());
 		}

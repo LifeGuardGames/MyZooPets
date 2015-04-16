@@ -138,6 +138,7 @@ public class MiniPet : MonoBehaviour {
 	
 	protected virtual void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
+			DataManager.Instance.GameData.MiniPets.SetVisits(id);
 			bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 

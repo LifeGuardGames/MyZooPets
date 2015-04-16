@@ -10,6 +10,7 @@ public class MutableDataMiniPets{
 	public class Status{
 		public Level CurrentLevel {get; set;}
 		public int CurrentXP {get; set;}
+		public int timesVisited {get; set;}
 	//	public bool IsTickled {get; set;}
 	//	public bool IsCleaned {get; set;}
 	//	public DateTime LastActionTime {get; set;}
@@ -26,6 +27,7 @@ public class MutableDataMiniPets{
 			isHatched = false;
 			IsFinishEating =  false;
 			SecretMerchantSellList = new List<string>();
+			timesVisited = 0;
 			//IsTickled = false;
 			//IsCleaned = false;
 			//LastActionTime = LgDateTime.GetTimeNow();
@@ -324,4 +326,25 @@ public class MutableDataMiniPets{
 			MiniPetProgress[miniPetID] = status;
 		}
 	}
+
+	public int GetVisits(string miniPetID){
+		int _timesVisited = 0;
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			_timesVisited = status.timesVisited;
+		}
+
+		return _timesVisited;
+	}
+
+	public void SetVisits(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.timesVisited++;
+			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
 }

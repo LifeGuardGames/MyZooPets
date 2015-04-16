@@ -22,6 +22,7 @@ public class EggController : Singleton<EggController>{
 	
 	public void EggCrack(int crackNumber){
 		shellParticle.Play();
+		AudioManager.Instance.PlayClip("eggCrack", variations:3);
 		switch(crackNumber){
 		case 1:
 			crack1.SetActive(true);
@@ -65,5 +66,6 @@ public class EggController : Singleton<EggController>{
 	public void EggHatchingTapped(){
 		eggAnimation.Play("eggClickCrack");
 		shellParticle.Play();
+		AudioManager.Instance.PlayClip("eggCrack", variations:3);
 	}
 }

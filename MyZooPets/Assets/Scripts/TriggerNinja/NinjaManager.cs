@@ -123,7 +123,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			swipeDir != FingerGestures.SwipeDirection.UpperRightDiagonal &&
 			swipeDir != FingerGestures.SwipeDirection.LowerLeftDiagonal &&
 			swipeDir != FingerGestures.SwipeDirection.LowerRightDiagonal){
-			AudioManager.Instance.PlayClip("swordCut");
+			AudioManager.Instance.PlayClip("ninjaWhoosh", variations:3);
 		}
 		
 		lastDirection = swipeDir;

@@ -16,7 +16,7 @@ public class MinipetEggClickController : MonoBehaviour {
 		eggAnimation.Play(clickAuxToggle ? click1Animation : click2Animation);
 		clickAuxToggle = !clickAuxToggle;
 		eggParticle.Play();
-		AudioManager.Instance.PlayClip("eggCrack");
+		AudioManager.Instance.PlayClip("eggCrack", variations:3);
 
 		if(--clicksUntilHatch <= 0){
 			MiniPetManager.Instance.StartHatchSequence(minipet.ID);

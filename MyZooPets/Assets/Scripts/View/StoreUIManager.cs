@@ -420,11 +420,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		//Reset clip range so scrolling will start from beginning again
 		ResetUIPanelClipRange();
-		
-		//if the current page is not null, we are switching tabs, so play a sound
-		if(currentTab != null){
-			AudioManager.Instance.PlayClip(soundChangeTab);
-		}
+
+		AudioManager.Instance.PlayClip(soundChangeTab);
 		
 		//set current tab
 		prevTab = GameObject.Find(currentTab);

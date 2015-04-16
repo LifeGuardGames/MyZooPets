@@ -144,8 +144,13 @@ public abstract class DecorationZone : MonoBehaviour {
 		_SetDecoration(itemID, isPlacedFromDecoMode);
 
 		// Play a sound
-		string sound = Constants.GetConstant<string>("Deco_PlaceSound");
-		AudioManager.Instance.PlayClip(sound);
+		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
+		if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper){
+			AudioManager.Instance.PlayClip("decoPlacePaper");
+		}
+		else{
+			AudioManager.Instance.PlayClip("decoPlaceFurniture");
+		}
 
 		// play an FX
 		Vector3 particlePos = transform.position;

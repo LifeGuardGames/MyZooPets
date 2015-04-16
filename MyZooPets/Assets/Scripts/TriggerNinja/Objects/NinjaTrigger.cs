@@ -64,7 +64,7 @@ public class NinjaTrigger : MonoBehaviour{
 		
 		// play a sound (if it exists)
 		if(!string.IsNullOrEmpty(strSoundHit)){
-			AudioManager.Instance.PlayClip(strSoundHit);
+			AudioManager.Instance.PlayClip(strSoundHit, variations:3);
 		}
 		
 		// also create a little explosion particle FX where the user's finger was

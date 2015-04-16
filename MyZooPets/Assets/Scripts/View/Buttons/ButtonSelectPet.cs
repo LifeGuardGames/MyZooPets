@@ -19,4 +19,9 @@ public class ButtonSelectPet : LgButton{
 			SelectionUIManager.Instance.PetSelected(this.gameObject);	// First call into customization
 		}
     }
+
+	protected override void PlayNotProcessSound(){
+		// Dont play anything
+		return;
+	}
 }

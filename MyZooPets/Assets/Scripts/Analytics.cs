@@ -198,6 +198,14 @@ public class Analytics : MonoBehaviour {
 			GA.API.Design.NewEvent("MiniPet:LevelUnlocked:" + levelString + ":" + miniPetID);
 		}
 	}
+
+	public void MiniPetVisited(string miniPetID, int timesVisted){
+		string visitString = timesVisted.ToString();
+		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(visitString) && isAnalyticsEnabled){
+			GA.API.Design.NewEvent("MiniPet:LevelUnlocked:" + visitString + ":" + miniPetID);
+		}
+	}
+
 	#endregion
 
 	#region Friend Network

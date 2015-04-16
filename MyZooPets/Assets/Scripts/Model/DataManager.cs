@@ -231,6 +231,8 @@ public class DataManager : Singleton<DataManager>{
 				Analytics.Instance.DoctorTimesPlayed(GameData.HighScore.timesPlayed["Clinic"]);
 				Analytics.Instance.RunnerTimesPlayed(GameData.HighScore.timesPlayed["Runner"]);
 				Analytics.Instance.MemoryTimesPlayed(GameData.HighScore.timesPlayed["Memory"]);
+				Analytics.Instance.MiniPetVisited("MiniPet0", GameData.MiniPets.GetVisits("MiniPet0"));
+				Analytics.Instance.MiniPetVisited("MiniPet1", GameData.MiniPets.GetVisits("MiniPet1"));
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
 			}

@@ -33,6 +33,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	//When the highscore board is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
+			FirstInteraction.Instance.SetString("HighScoreBoard");
 			// if there is a camera move, do it -- otherwise, just skip to the move being complete
 			if(zoomTime > 0){
 				CameraManager.Callback cameraDoneFunction = delegate(){

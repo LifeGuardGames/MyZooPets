@@ -224,6 +224,13 @@ public class Analytics : MonoBehaviour {
 
     //=======================General Analytics==================================
     //Will be use in different mini games
+
+	public void FirstInteraction(string firstInter){
+		if(!String.IsNullOrEmpty(firstInter) && isAnalyticsEnabled){
+			GA.API.Design.NewEvent("First Interaction:" + firstInter);
+		}
+	}
+
     public void PetColorChosen(string petColor){
         if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("PetColorChosen:" + petColor);

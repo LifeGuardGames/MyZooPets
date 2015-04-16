@@ -55,7 +55,7 @@ public class Analytics : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
         isCreated = true;
-
+		GA.API.User.NewUser(GA_User.Gender.Male, 1565,0);
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
     }
@@ -246,6 +246,12 @@ public class Analytics : MonoBehaviour {
         if(!String.IsNullOrEmpty(triggerID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("TriggersCleaned:" + triggerID);
     }*/
+
+	public void RemainingTriggers(int triggers){
+		if(isAnalyticsEnabled){
+			GA.API.Design.NewEvent("Uncleaned Triggers", (float) triggers);
+		}
+	}
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){

@@ -151,7 +151,6 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
-
 		#if DEVELOPMENT_BUILD
 		PlayerPrefs.DeleteAll();
 		#endif
@@ -227,7 +226,11 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
-
+				Analytics.Instance.ShooterTimesPlayed(GameData.HighScore.timesPlayed["Shooter"]);
+				Analytics.Instance.NinjaTimesPlayed(GameData.HighScore.timesPlayed["Ninja"]);
+				Analytics.Instance.DoctorTimesPlayed(GameData.HighScore.timesPlayed["Clinic"]);
+				Analytics.Instance.RunnerTimesPlayed(GameData.HighScore.timesPlayed["Runner"]);
+				Analytics.Instance.MemoryTimesPlayed(GameData.HighScore.timesPlayed["Memory"]);
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
 			}

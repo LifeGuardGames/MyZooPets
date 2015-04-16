@@ -74,6 +74,12 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
+	public void NinjaTimesPlayed(int played){
+	if(isAnalyticsEnabled){
+			GA.API.Design.NewEvent(NINJA_CATEGORY + "TimesPlayed", (float) played);
+		}
+	}
+
 	#endregion
 
 	#region Shooter Game
@@ -95,6 +101,11 @@ public class Analytics : MonoBehaviour {
 			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", (float) percentage);
 		}
 	}
+	public void ShooterTimesPlayed(int played){
+		if(isAnalyticsEnabled){
+			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "TimesPlayed", (float) played);
+		}
+	}
 
 	#endregion
 
@@ -103,6 +114,12 @@ public class Analytics : MonoBehaviour {
 	public void MemoryHighScore(int score){
 		if(isAnalyticsEnabled){
 			GA.API.Design.NewEvent(MEMORY_CATEGORY + "HighScore", (float) score);
+		}
+	}
+
+	public void MemoryTimesPlayed(int played){
+		if(isAnalyticsEnabled){
+			GA.API.Design.NewEvent(MEMORY_CATEGORY + "TimesPlayed", (float) played);
 		}
 	}
 
@@ -125,6 +142,13 @@ public class Analytics : MonoBehaviour {
         if(isAnalyticsEnabled)
             GA.API.Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
     }
+
+	public void RunnerTimesPlayed(int played){
+		if(isAnalyticsEnabled){
+			GA.API.Design.NewEvent(RUNNER_CATEGORY + "TimesPlayed", (float) played);
+		}
+	}
+
 	#endregion
 
 	#region Inhaler Game
@@ -156,6 +180,12 @@ public class Analytics : MonoBehaviour {
 	public void DoctorHighScore (int score){
 		if(isAnalyticsEnabled){
 			GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "HighScore", (float) score);
+		}
+	}
+
+	public void DoctorTimesPlayed(int played){
+		if(isAnalyticsEnabled){
+			GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "TimesPlayed", (float) played);
 		}
 	}
 

@@ -90,6 +90,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		// send out coins task
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
+		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
 	}		
 
 	/// <summary>

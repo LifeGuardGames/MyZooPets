@@ -200,6 +200,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 			GetComponent<TweenToggleDemux>().Show();
 
+			//FirstInteraction.Instance.SetString("Badges");
+
 			//Hide other UI objects
 			HUDUIManager.Instance.HidePanel();
 

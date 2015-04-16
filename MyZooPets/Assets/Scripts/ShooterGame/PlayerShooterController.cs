@@ -39,6 +39,10 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		}
 	}
 
+	private string CheckState(){
+		return state;
+	}
+
 	// removes health and then calculates state
 	public void RemoveHealth(float amount){
 		playerHealth += amount;
@@ -78,6 +82,12 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		characterController.Shoot();	// Tell the animator to shoot
 
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
+		if(isPiercing){
+			currentFireBall = fireBallPrefabs[3];
+		}
+		else{
+			ChangeState(CheckState());
+		}
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 		ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 		bulletScript.target = lookPos;

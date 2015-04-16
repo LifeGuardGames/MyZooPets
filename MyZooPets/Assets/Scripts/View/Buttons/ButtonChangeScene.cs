@@ -33,7 +33,7 @@ public class ButtonChangeScene : LgButton{
 		if(DataManager.Instance.GameData.Stats.GetMoodState() != PetMoods.Sad){
 			// lock the click manager
 			ClickManager.Instance.Lock();
-
+			FirstInteraction.Instance.SetString("MinigameEntrance");
 			//Hide other UI Objects
 			//Assuming that HUD is present at all scenes, so need to be hidden before scene change
 			if(HUDUIManager.Instance != null){

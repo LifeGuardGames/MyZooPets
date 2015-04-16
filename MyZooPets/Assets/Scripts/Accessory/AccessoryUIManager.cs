@@ -95,7 +95,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				CameraMoveDone();
 			};
 			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, zoomTime, cameraDoneFunction);
-			
+
+			FirstInteraction.Instance.SetString("Accessory");
+
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();

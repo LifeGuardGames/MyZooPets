@@ -44,6 +44,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 				RefreshCheck();
 			}
 		}
+		Analytics.Instance.RemainingTriggers(degradationTriggers.Count);
 	}
 
 	private void RefreshCheck(object sender, EventArgs args){

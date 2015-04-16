@@ -18,8 +18,7 @@ public class LoadingScreen : MonoBehaviour {
 	//---------------------------------------------------	
 	public void Init( string sceneName ) {
 		this.sceneName = sceneName;
-		
-		Analytics.Instance.ChangeScene(sceneName);
+
 		StartCoroutine(WaitAndLoad());
 	}
 

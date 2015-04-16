@@ -64,6 +64,8 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	protected override void _GameOver(){
+		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
 	}
 
 	protected override void _Update(){

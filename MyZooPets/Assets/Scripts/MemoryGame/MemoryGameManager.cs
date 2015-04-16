@@ -89,6 +89,8 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), GetScore());
 		Debug.Log("memory game setting task completed with score of " + GetScore());
+		Analytics.Instance.MemoryHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
 	}
 
 	private void GameStateChange(object sender, GameStateArgs args){

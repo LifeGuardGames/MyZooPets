@@ -80,6 +80,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 
 		int score = GetScore();
 		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
+		Analytics.Instance.RunnerHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 
 		// send out distance task
 		int distance = ScoreManager.Instance.Distance;
@@ -89,6 +90,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		// send out coins task
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
+		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
 	}		
 
 	/// <summary>

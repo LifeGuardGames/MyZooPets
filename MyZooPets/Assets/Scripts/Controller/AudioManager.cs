@@ -39,19 +39,24 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	}
 
 	// Pass in null if don't want new music
-	public void FadeOutPlayNewBackground(string newAudioClipName){
-		StartCoroutine(FadeOutPlayNewBackgroundHelper(newAudioClipName));
+	public void FadeOutPlayNewBackground(string newAudioClipName, bool isLoop = true){
+		StartCoroutine(FadeOutPlayNewBackgroundHelper(newAudioClipName, isLoop));
 	}
 
-	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName){
+	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName, bool isLoop){
 		for(int i = 9; i >= 0; i--){
 			backgroundSource.volume = i * .1f;
 			yield return new WaitForSeconds(.01f);
 		}
 		if(newAudioClipName != null){
 			backgroundSource.Stop();
-			backgroundSource.volume = 1f;
+			backgroundSource.volume = 0.6f;
 			backgroundMusic = newAudioClipName;
+
+			if(!isLoop){
+				backgroundSource.loop = false;
+			}
+
 			StartCoroutine(PlayBackground());
 		}
 		else{

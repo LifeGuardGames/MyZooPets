@@ -116,7 +116,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 		ComicPlayer.OnComicPlayerDone += IntroComicDone;
 
 		// Play the comic music
-		AudioManager.Instance.FadeOutPlayNewBackground("bgComic");
+		AudioManager.Instance.FadeOutPlayNewBackground("bgComic", isLoop:false);
 	}
 	
 	private void IntroComicDone(object sender, EventArgs args){

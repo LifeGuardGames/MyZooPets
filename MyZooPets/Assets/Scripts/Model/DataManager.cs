@@ -226,13 +226,13 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				SaveGameData();
-				Analytics.Instance.ShooterTimesPlayed(GameData.HighScore.timesPlayed["Shooter"]);
-				Analytics.Instance.NinjaTimesPlayed(GameData.HighScore.timesPlayed["Ninja"]);
-				Analytics.Instance.DoctorTimesPlayed(GameData.HighScore.timesPlayed["Clinic"]);
-				Analytics.Instance.RunnerTimesPlayed(GameData.HighScore.timesPlayed["Runner"]);
-				Analytics.Instance.MemoryTimesPlayed(GameData.HighScore.timesPlayed["Memory"]);
-				Analytics.Instance.MiniPetVisited("MiniPet0", GameData.MiniPets.GetVisits("MiniPet0"));
-				Analytics.Instance.MiniPetVisited("MiniPet1", GameData.MiniPets.GetVisits("MiniPet1"));
+				//Analytics.Instance.ShooterTimesPlayed(GameData.HighScore.timesPlayed["Shooter"]);
+				//Analytics.Instance.NinjaTimesPlayed(GameData.HighScore.timesPlayed["Ninja"]);
+				//Analytics.Instance.DoctorTimesPlayed(GameData.HighScore.timesPlayed["Clinic"]);
+				//Analytics.Instance.RunnerTimesPlayed(GameData.HighScore.timesPlayed["Runner"]);
+				//Analytics.Instance.MemoryTimesPlayed(GameData.HighScore.timesPlayed["Memory"]);
+				//Analytics.Instance.MiniPetVisited("MiniPet0", GameData.MiniPets.GetVisits("MiniPet0"));
+				//Analytics.Instance.MiniPetVisited("MiniPet1", GameData.MiniPets.GetVisits("MiniPet1"));
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
 			}

@@ -41,7 +41,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash){
 		Debug.Log("OPENING MINIPET TYPE");
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() || type == MiniPetTypes.Retention){
 			GameObject contentPrefab;
 			switch(type){
 			case MiniPetTypes.Retention:

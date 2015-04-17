@@ -86,7 +86,6 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 	protected override void _GameOver(){
 		memoryUI.FinishBoard();
-
 		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), GetScore());
 		Debug.Log("memory game setting task completed with score of " + GetScore());
 		Analytics.Instance.MemoryHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);

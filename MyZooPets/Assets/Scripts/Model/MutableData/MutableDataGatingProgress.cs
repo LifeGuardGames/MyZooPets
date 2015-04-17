@@ -145,9 +145,11 @@ public class MutableDataGatingProgress{
 	/// save data if it does not already exist.
 	/// </summary>
 	private void LoadFromXML(){
+		Debug.Log("loading from gates");
 		// init the data by filling the dictionary with xml data
 		List<ImmutableDataGate> gates = DataLoaderGate.GetAllData();
 		foreach(ImmutableDataGate gate in gates){
+			Debug.Log(gate.GateNumber);
 			string gateID = gate.GateID;
 
 			int hp = gate.GetMonster().MonsterHealth;

@@ -154,10 +154,6 @@ public class DataManager : Singleton<DataManager>{
 		#if DEVELOPMENT_BUILD
 		PlayerPrefs.DeleteAll();
 		#endif
-		
-		if (Debug.isDebugBuild){
-			PlayerPrefs.DeleteAll();
-		}
 
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;
@@ -201,10 +197,6 @@ public class DataManager : Singleton<DataManager>{
 //			#if DEVELOPMENT_BUILD
 //				return;
 //			#endif
-
-//			if (Debug.isDebugBuild){
-//				return;
-//			}
 
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){

@@ -13,10 +13,6 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 		#if DEVELOPMENT_BUILD
 		PlayerPrefs.DeleteAll();
 		#endif
-		
-		if (Debug.isDebugBuild){
-			PlayerPrefs.DeleteAll();
-		}
 
 		CheckToOpenQuestionaire();
 	}
@@ -26,11 +22,9 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	/// </summary>
 	private void CheckToOpenQuestionaire(){
 		if(!DataManager.Instance.IsQuestionaireCollected){
-			Debug.Log("Not Collected");
 			Invoke("ShowQuestionaire", 0.5f);
 		}
 		else{
-			Debug.Log("Collected");
 			ContinueLoading();
 		}
 	}
@@ -43,10 +37,9 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	/// Collected information about player
 	/// </summary>
 	public void QuestionaireCollected(){
-		if (Debug.isDebugBuild){
-			return;
-		}
+		Debug.Log("Setting questionaire");
 		DataManager.Instance.IsQuestionaireCollected = true;
+		Debug.Log("---- " + PlayerPrefs.GetInt("IsQuestionaireCollected"));
 	}
 
 	public void ContinueLoading(){

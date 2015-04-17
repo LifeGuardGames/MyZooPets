@@ -136,7 +136,6 @@ public class GatingManager : Singleton<GatingManager>{
 		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
 		foreach(DictionaryEntry entry in hashGates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
-			Debug.Log("SPAWNING " + entry);
 			int partition = dataGate.Partition;
 			
 			// if the gate is activate, spawn the monster at an offset 
@@ -163,7 +162,6 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 				
 			if(isGateActive && !isGateInSceneAlready){
-				Debug.Log("SPAWNINGzzzzz" + isGateActive + " " + isGateInSceneAlready);
 				int startingPartition = scriptPan.currentPartition;	// room the player is in
 				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
 				int partitionCountFromStartingPartition = dataGate.Partition - startingPartition;	// the distance between the starting room and this gate's room

@@ -4,14 +4,9 @@ using System.Collections;
 /// <summary>
 /// Gate monster.
 /// NOTE: This is a gate that is a monster.
-/// If we ever change which direction a monster is
-/// blocking, be sure to update the code where MOVE_DIR
-/// is placed.
 /// </summary>
 public class GateMonster : Gate{
-//	public float fMove; // the screen % this monster moves per % of health
 	public float tweenTime; // time it takes the monster to tween to its new position after taking damage
-	public Animator smokeMonsterAnimator; // script that controls the anims for this monster
 	public GameObject[] smokeMonsterHeads;	// Local locations of the heads, base head needs to be first!
 
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
@@ -30,22 +25,21 @@ public class GateMonster : Gate{
 	}
 
 	void OnApplicationPause(bool isPaused){
-		if(!isPaused)
+		if(!isPaused){
 			SetupHeads();
+		}
 	}
 
 	public void SetupHeads(){
-//		Debug.Log("setting up..." + gateID);
 		// New way to show monster health - having multiple heads
 		currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		if(currentHealth <= smokeMonsterHeads.Length){
 			for(int i = currentHealth; i <= smokeMonsterHeads.Length - 1; i++){
-//				Debug.Log("setting heads false in list: " + i + " current health: " + currentHealth);
 				smokeMonsterHeads[i].gameObject.SetActive(false);
 			}
 			// First head to move is always the last one on the list unless there are no more heads
 			if(currentHealth != 0){
-			nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
+				nextHeadToMove = smokeMonsterHeads[currentHealth - 1];
 			}
 			
 			// Assign the base head
@@ -61,8 +55,6 @@ public class GateMonster : Gate{
 	/// </summary>
 	/// <param name="damage">Damage.</param>
 	protected override void GateDamaged(int damage){
-
-
 //		AudioManager.Instance.PlayClip("coinDrop");
 //		int randomNumberOfCoins = Random.Range(2, 6);
 //		for(int i = 0; i < randomNumberOfCoins; ++i){
@@ -83,7 +75,7 @@ public class GateMonster : Gate{
 //			droppedObjectStat.Burst(isBurstToLeftOnly:true, burstStreamOrder : i);
 //		}
 
-		//drop some coins when the gate monster is attacked
+		// Drop some coins when the gate monster is attacked
 		StatsController.Instance.ChangeStats(deltaStars: 35, starsLoc: nextHeadToMove.transform.position, is3DObject: true);
 
 		// Move one of the heads out, ONLY applies to everything thats not the first head
@@ -92,7 +84,6 @@ public class GateMonster : Gate{
 			// Update the pointer to the next head
 			nextHeadToDestroy = nextHeadToMove;
 			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
-//			Debug.Log("Updating to next head " + nextHeadToMove);
 		}
 	}	
 
@@ -113,38 +104,30 @@ public class GateMonster : Gate{
 	private void MoveSubHead(){
 		Vector3 newLoc = nextHeadToMove.transform.localPosition;
 		newLoc.x += 80;
-		//Vector3 vNewLocWorld = Camera.main.ScreenToWorldPoint(newLoc);
-		
-		// play a hurt animation on the monster
-		nextHeadToMove.GetComponent<Animator>().Play("smokeMonsterHurt");
 
-		Hashtable optional = new Hashtable();
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "DisableSubHead");
-		LeanTween.moveLocal(nextHeadToMove.transform.parent.gameObject, newLoc, tweenTime, optional);
+		LeanTween.moveLocal(nextHeadToMove.transform.parent.gameObject, newLoc, tweenTime)
+			.setOnComplete(DisableSubHead).setEase(LeanTweenType.easeInQuad);
+
+		nextHeadToMove.GetComponent<Animator>().Play("smokeMonsterDie");
 	}
 
 	private void MoveBaseHead(){
-		// for monsters, just move them fast and far away MOVE_DIR
-		float monsterDeathMoveTime = Constants.GetConstant<float>("MonsterDeath_MoveTime");
+		// for monsters, just move them fast and far away
 		float monsterMoveDistance = CameraManager.Instance.PanScript.partitionOffset;
-		
-		// add hashtable params for alerting the parent object when the move anim is complete
-		Hashtable optional = new Hashtable();
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "OnDestroyAnimComplete");
 		
 		Vector3 targetPos = gameObject.transform.position;
 		targetPos.x += monsterMoveDistance;
-		
-		baseHeadToMove.GetComponent<Animator>().Play("smokeMonsterHurt");
-		
+
 		// Cancel the move tweens previous to this
 		LeanTween.cancel(gameObject);
-		LeanTween.moveLocal(gameObject, targetPos, monsterDeathMoveTime, optional);	
+		LeanTween.moveLocal(gameObject, targetPos, tweenTime)
+			.setOnComplete(OnDestroyAnimComplete).setEase(LeanTweenType.easeInQuad);
+
+		baseHeadToMove.GetComponent<Animator>().Play("smokeMonsterDie");
 	}
 
 	private void DisableSubHead(){
+		Debug.Log("DISABLING");
 		nextHeadToDestroy.SetActive(false);
 	}
 }

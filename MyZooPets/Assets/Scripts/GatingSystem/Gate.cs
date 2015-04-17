@@ -204,8 +204,8 @@ public abstract class Gate : MonoBehaviour{
 	/// the animation is complete, but the gate is already
 	/// marked as destroyed.
 	/// </summary>
-	private void OnDestroyAnimComplete(){		
+	protected void OnDestroyAnimComplete(){		
 		// destroy the object
-		Destroy(gameObject);			
+		Destroy(gameObject, 2f);
 	}
 }

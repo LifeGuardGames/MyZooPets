@@ -13,6 +13,8 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
+
+	public static EventHandler<EventArgs> OnDecoOpened;
 	public static EventHandler<InventoryDragDrop.InvDragDropArgs> OnDecoDroppedOnTarget;
 
 	public static EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
@@ -262,6 +264,10 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	protected override void _OpenUI(){
 		if(!isActive){
 			isActive = true;
+
+			if(OnDecoOpened != null){
+				OnDecoOpened(this, EventArgs.Empty);
+			}
 
 			this.GetComponent<TweenToggleDemux>().Show();
 			ShowDecoInventory();

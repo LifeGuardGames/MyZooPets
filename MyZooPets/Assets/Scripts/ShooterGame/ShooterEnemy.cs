@@ -9,6 +9,7 @@ public class ShooterEnemy : MonoBehaviour{
 	public int health;
 	public Animator animator;
 	public ParticleSystem particle;
+	public ParticleSystem particleDead;
 	protected GameObject player;
 	public bool isDead = false;
 
@@ -72,6 +73,7 @@ public class ShooterEnemy : MonoBehaviour{
 
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	IEnumerator DestroyEnemy(){
+		particleDead.gameObject.SetActive(true);
 		yield return new WaitForEndOfFrame();
 		isDead = true;
 		collider2D.enabled = false;

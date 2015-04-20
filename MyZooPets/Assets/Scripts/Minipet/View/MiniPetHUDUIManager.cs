@@ -45,16 +45,20 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			GameObject contentPrefab;
 			switch(type){
 			case MiniPetTypes.Retention:
-				contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
-				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-				MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
-				controller.Initialize();
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Critical")||DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")||DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
+					contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
+					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+					MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
+					controller.Initialize();
+				}
 				break;
 			case MiniPetTypes.GameMaster:
-				contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
-				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-				MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
-				controller2.Initialize(hash[0].ToString());
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString())){
+					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
+					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+					MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
+					controller2.Initialize(hash[0].ToString());
+				}
 				break;
 			case MiniPetTypes.Merchant:
 				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;

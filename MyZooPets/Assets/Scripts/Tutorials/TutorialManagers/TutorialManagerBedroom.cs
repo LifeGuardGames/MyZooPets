@@ -138,18 +138,20 @@ public class TutorialManagerBedroom : TutorialManager{
 		if(!isTutorialEnabled){
 			return;
 		}
-		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
-		GameObject fireOrbReference = InventoryUIManager.Instance.GetFireOrbReference();
-		if(fireOrbReference != null && !isFlameCrystalTutorialDone){
-			GatingManager.Instance.OnReachedGate -= OnReachedGate;
-			new GameTutorialFlameCrystal();
-		}
-		else if(fireOrbReference == null){	// Already complete, launch focus tutorial
-			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME_CRYSTAL);	// Hacky add so it passes future check
-			new GameTutorialFlame();
-		}
-		else{
-			Debug.LogError("Error with trying to reset tutorial");
+		if(PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+			bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
+			GameObject fireOrbReference = InventoryUIManager.Instance.GetFireOrbReference();
+			if(fireOrbReference != null && !isFlameCrystalTutorialDone){
+				GatingManager.Instance.OnReachedGate -= OnReachedGate;
+				new GameTutorialFlameCrystal();
+			}
+			else if(fireOrbReference == null){	// Already complete, launch focus tutorial
+				DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME_CRYSTAL);	// Hacky add so it passes future check
+				new GameTutorialFlame();
+			}
+			else{
+				Debug.LogError("Error with trying to reset tutorial");
+			}
 		}
 	}
 }

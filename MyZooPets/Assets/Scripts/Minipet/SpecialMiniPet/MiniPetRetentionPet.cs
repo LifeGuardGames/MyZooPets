@@ -32,7 +32,7 @@ public class MiniPetRetentionPet : MiniPet {
 	private void TurnInMission(){
 		if(isFinishEating){
 			string misson = "Critical";
-			MutableDataMission mission = WellapadMissionController.Instance.GetMission("Critical");
+			MutableDataMission mission;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 				mission = WellapadMissionController.Instance.GetMission("TutorialPart1");
 				misson = "TutorialPart1";

@@ -35,7 +35,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 			mission3Localize.gameObject.SetActive(false);
 			if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed){
 				rewardButton.SetActive(true);
-				rewardButton.GetComponent<LgButtonMessage>().target = GameObject.Find("MiniPetPebbleDemon");
+				rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
 			}
 		}
 		else if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
@@ -56,7 +56,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 			ImmutableDataWellapadTask missionTask4 = DataLoaderWellapadTasks.GetTask(task.TaskID);
 			if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed && WellapadMissionController.Instance.GetTaskStatus(listTasks[3]) == WellapadTaskCompletionStates.Completed){
 				rewardButton.SetActive(true);
-				rewardButton.GetComponent<LgButtonMessage>().target = GameObject.Find("MiniPetPebbleDemon");
+				rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
 			}
 			mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
 			mission1Localize.Localize();
@@ -83,7 +83,6 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 		ImmutableDataWellapadTask missionTask3 = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 			rewardButton.SetActive(true);
-			rewardButton.GetComponent<LgButtonMessage>().target = GameObject.Find("MiniPetPebbleDemon");
 		}
 		mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
 		mission1Localize.Localize();

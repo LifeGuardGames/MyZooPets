@@ -237,10 +237,9 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet.transform.localPosition = pos;
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
-				Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Always"));
+				goMiniPet.GetComponent<MiniPetRetentionPet>().FigureOutMissions();
 				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Always")){
 					Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Always"));
-					Debug.Log("ieudfhgbfhj");
 				goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
 				}
 				// Add the pet into the dictionary to keep track

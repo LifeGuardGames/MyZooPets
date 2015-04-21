@@ -109,19 +109,18 @@ public class TutorialManagerBedroom : TutorialManager{
 		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
 		
 //		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
-
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentPartition == 0){
+				Debug.Log("LAUNCHING TRIGGER TUTORIAL");
 				// play the trigger tutorial
-				new GameTutorialTriggers();
+				new GameTutorialTriggersNew();
 			}
-			else if(isFlameTutorialDone && !isDecoTutorialDone && 
+			else if(isFlameTutorialDone && !isDecoTutorialDone &&
 			        CameraManager.Instance.PanScript.currentPartition == 0){
+				Debug.Log("LAUNCHING DECO TUTORIAL");
 				// play the deco tutorial
-				new GameTutorialDecorations();
-			}
-			else{
+				new GameTutorialDecorationsNew();
 			}
 		}
 	}

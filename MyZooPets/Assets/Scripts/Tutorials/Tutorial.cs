@@ -58,11 +58,9 @@ public abstract class Tutorial{
 		currentStep = num;
 		// if we have exceeded max steps in this tutorial, end it
 		if(currentStep >= maxSteps){
-			Debug.Log(" === tutorial ending");
 			End(true);
 		}
 		else{
-			Debug.Log(" === tutorial next step");
 			ProcessStep(currentStep);
 		}
 	}

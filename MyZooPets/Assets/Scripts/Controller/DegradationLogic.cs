@@ -125,9 +125,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			OnPetHit(this, EventArgs.Empty);
 		
 		// damage the pet
-		int nDamage = trigger.GetDamage();
+		int damage = trigger.Damage;
 
-		StatsController.Instance.ChangeStats(deltaHealth: -nDamage, isFloaty: true);
+		StatsController.Instance.ChangeStats(deltaHealth: -damage, isFloaty: true);
 
 		//Send analytics event
 	//	Analytics.Instance.TriggerHitPet();    
@@ -177,13 +177,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 				if(i == 0){
 					location = DataLoaderTriggerLocations.GetTriggerLocation("TrigLoc_0", "Bedroom");
 					
-					if(location == null)
+					if(location == null){
 						Debug.LogError("Tutorial trigger location not set up correctly");
+					}
 					
 					randomTrigger = DataLoaderTriggers.GetTrigger("Trigger_3");
 				}
 			}
-
 			//spawn them at a pre define location ID is the order in which the data are created
 			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Partition, location.Position));
 		}                
@@ -393,7 +393,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		//if > 12 hrs punishment for every 12 hrs miss
 		playPeriodsOffset = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
 
-		Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + playPeriodsOffset);
+		//Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + playPeriodsOffset);
 		return playPeriodsOffset;
 	}
 }

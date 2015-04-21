@@ -58,7 +58,7 @@ public class LgParticleEmitterDegradation : LgParticleEmitter{
 		// set the proper degrad particle script
 		DegradParticle scriptParticle = emittedObject.GetComponent<DegradParticle>();
 		int nDamage = GetDamage();
-		scriptParticle.SetDamage(nDamage);
+		scriptParticle.Damage = nDamage;
 		
 		// add the tracking script to track the emitted particles
 //		TrackObject scriptTrack = emittedObject.AddComponent<TrackObject>();

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using System.Xml.Serialization;
 
+// Test time format: 2014-09-20 3:00:00
 public class LgDebugTool : EditorWindow{
 	#region constant values
     private const string CRITICAL_PATH = "/XML/Resources/Constants/_Critical.xml";

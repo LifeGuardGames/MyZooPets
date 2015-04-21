@@ -134,11 +134,12 @@ public class TutorialManagerBedroom : TutorialManager{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void OnReachedGate(object sender, EventArgs args){
-		if(!isTutorialEnabled){
+		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
+		if(!isTutorialEnabled||isFlameCrystalTutorialDone){
 			return;
 		}
 		if(PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-			bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
+			//bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME_CRYSTAL);
 			GameObject fireOrbReference = InventoryUIManager.Instance.GetFireOrbReference();
 			if(fireOrbReference != null && !isFlameCrystalTutorialDone){
 				GatingManager.Instance.OnReachedGate -= OnReachedGate;

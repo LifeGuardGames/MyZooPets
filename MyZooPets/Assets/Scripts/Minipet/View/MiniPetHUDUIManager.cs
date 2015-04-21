@@ -45,22 +45,27 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			GameObject contentPrefab;
 			switch(type){
 			case MiniPetTypes.Retention:
-				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed){
-					contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
-					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-					MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
-					controller.Initialize(hash[0].ToString());
-					if(!TutorialManager.Instance.IsTutorialActive()){
-						contentTweenParent = content.GetComponent<TweenToggle>();
-						//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
-						if (contentTweenParent != null){
-							StartCoroutine(ShowContentHelper());
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString())){
+					if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
+						contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
+						content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+						MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
+						controller.Initialize(hash[0].ToString());
+						if(!TutorialManager.Instance.IsTutorialActive()){
+							contentTweenParent = content.GetComponent<TweenToggle>();
+							//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
+							if (contentTweenParent != null){
+								StartCoroutine(ShowContentHelper());
+							}
 						}
 					}
 				}
 				break;
 			case MiniPetTypes.GameMaster:
-				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed){
+				Debug.Log(hash[0].ToString());
+				Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus);
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
+					Debug.Log("isgnvfjb");
 					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
 					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 					MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();

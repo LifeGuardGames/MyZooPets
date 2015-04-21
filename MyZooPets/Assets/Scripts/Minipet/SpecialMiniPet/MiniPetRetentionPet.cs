@@ -18,11 +18,11 @@ public class MiniPetRetentionPet : MiniPet {
 		else{
 			missionID = "Critical";
 		}
+		isFinishEating = true;
 	}
 
 	protected override void OnTap(TapGesture gesture){	
 		base.OnTap(gesture);
-		Debug.Log(TutorialManager.Instance.IsTutorialActive());
 		if(!TutorialManager.Instance.IsTutorialActive()){
 		miniPetSpeechAI.ShowTipMsg();
 		Hashtable has = new Hashtable();
@@ -66,7 +66,6 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void GiveOutMission(){
-		isFinishEating = true; 
 		MiniPetManager.Instance.canLevel = true;
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;

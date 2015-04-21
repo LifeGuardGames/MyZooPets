@@ -14,7 +14,6 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 
 	public void Initialize(string taskID){
 		// Not sure what you want to pass in here grab sean to discuss
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed){
 			List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
 			task = listTasks[0];
 			ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
@@ -25,10 +24,6 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 			}
 			label.text = desc;
 			SetCheckboxSprite(true);
-		}
-		else{
-			Destroy (this.gameObject);
-		}
 	}
 
 	//---------------------------------------------------

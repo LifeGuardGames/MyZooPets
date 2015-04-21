@@ -19,83 +19,95 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 
 	public void Initialize(){
 		string taskID;
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed){
+
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 				taskID = "TutorialPart1";
-				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
-				task = listTasks[0];
-				ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				SetCheckboxSprite(true, slash1);
-				task = listTasks[1];
-				SetCheckboxSprite(true, slash2);
-				ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
-				mission1Localize.Localize();
-				mission2Localize.key = "Task_"+missionTask2.GetTaskID().ToString();
-				mission2Localize.Localize();
-				mission3Localize.gameObject.SetActive(false);
-				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed){
-					rewardButton.SetActive(true);
-					rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
-				
-			}
-			else if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
-				taskID = "TutorialPart2";
-				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
-				task = listTasks[0];
-				SetCheckboxSprite(true, slash1);
-				ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
-				task = listTasks[1];
-				SetCheckboxSprite(true, slash2);
-				ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				task = listTasks[2];
-				SetCheckboxSprite(true,slash3);
-				ImmutableDataWellapadTask missionTask3 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				task = listTasks[3];
-				SetCheckboxSprite(true,slash4);
-				ImmutableDataWellapadTask missionTask4 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed && WellapadMissionController.Instance.GetTaskStatus(listTasks[3]) == WellapadTaskCompletionStates.Completed){
-					rewardButton.SetActive(true);
-					rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
-				}
-				mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
-				mission1Localize.Localize();
-				mission2Localize.key = "Task_"+missionTask2.GetTaskID();
-				mission2Localize.Localize();
-				mission3Localize.key = "Task_"+missionTask3.GetTaskID();
-				mission3Localize.Localize();
-				mission4Localize.key = "Task_"+missionTask3.GetTaskID();
-				mission4Localize.Localize();
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed){
+					List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
+					task = listTasks[0];
+					ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					SetCheckboxSprite(true, slash1);
+					task = listTasks[1];
+					SetCheckboxSprite(true, slash2);
+					ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
+					mission1Localize.Localize();
+					mission2Localize.key = "Task_"+missionTask2.GetTaskID().ToString();
+					mission2Localize.Localize();
+					mission3Localize.gameObject.SetActive(false);
+					if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed){
+						rewardButton.SetActive(true);
+						rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					}
 			}
 			else{
-				taskID = "Critical";
-				//Debug.Log(taskID);
-				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
-				task = listTasks[0];
-				SetCheckboxSprite(true, slash1);
-				ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
-				task = listTasks[1];
-				SetCheckboxSprite(true, slash2);
-				ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				task = listTasks[2];
-				SetCheckboxSprite(true,slash3);
-				ImmutableDataWellapadTask missionTask3 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
-					rewardButton.SetActive(true);
-				}
-				mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
-				mission1Localize.Localize();
-				mission2Localize.key = "Task_"+missionTask2.GetTaskID();
-				mission2Localize.Localize();
-				mission3Localize.key = "Task_"+missionTask3.GetTaskID();
-				mission3Localize.Localize();
+				Destroy (this.gameObject);
 			}
 		}
-		else{
-			Destroy (this.gameObject);
+			else if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
+				taskID = "TutorialPart2";
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed){
+					List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
+					task = listTasks[0];
+					SetCheckboxSprite(true, slash1);
+					ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					task = listTasks[1];
+					SetCheckboxSprite(true, slash2);
+					ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					task = listTasks[2];
+					SetCheckboxSprite(true,slash3);
+					ImmutableDataWellapadTask missionTask3 = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					task = listTasks[3];
+					SetCheckboxSprite(true,slash4);
+					ImmutableDataWellapadTask missionTask4 = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed && WellapadMissionController.Instance.GetTaskStatus(listTasks[3]) == WellapadTaskCompletionStates.Completed){
+						rewardButton.SetActive(true);
+						rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					}
+					mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
+					mission1Localize.Localize();
+					mission2Localize.key = "Task_"+missionTask2.GetTaskID();
+					mission2Localize.Localize();
+					mission3Localize.key = "Task_"+missionTask3.GetTaskID();
+					mission3Localize.Localize();
+					mission4Localize.key = "Task_"+missionTask3.GetTaskID();
+					mission4Localize.Localize();
+				}
+			else{
+				Destroy (this.gameObject);
+			}
 		}
+			else{
+				taskID = "Critical";
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed){
+					//Debug.Log(taskID);
+					List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
+					task = listTasks[0];
+					SetCheckboxSprite(true, slash1);
+					ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					task = listTasks[1];
+					SetCheckboxSprite(true, slash2);
+					ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					task = listTasks[2];
+					SetCheckboxSprite(true,slash3);
+					ImmutableDataWellapadTask missionTask3 = DataLoaderWellapadTasks.GetTask(task.TaskID);
+					if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
+						rewardButton.SetActive(true);
+					}
+					mission1Localize.key = "Task_"+missionTask.GetTaskID().ToString();
+					mission1Localize.Localize();
+					mission2Localize.key = "Task_"+missionTask2.GetTaskID();
+					mission2Localize.Localize();
+					mission3Localize.key = "Task_"+missionTask3.GetTaskID();
+					mission3Localize.Localize();
+			}
+			else{
+				Destroy (this.gameObject);
+			}
+		}
+
 	}
 
 	//---------------------------------------------------

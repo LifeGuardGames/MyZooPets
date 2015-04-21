@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -41,11 +41,11 @@ public class NinjaTriggerTarget : NinjaTrigger{
 		NinjaManager.Instance.UpdateScore(points);
 
 		if(!NinjaManager.Instance.bonusRound){
-			NinjaManager.Instance.increaseChain();
+			NinjaManager.Instance.IncreaseChain();
 		}
 		else if(NinjaManager.Instance.bonusRoundEnemies != 0){
 			NinjaManager.Instance.bonusRoundEnemies--;
-			NinjaManager.Instance.CheckBonusRound();
+			NinjaManager.Instance.CheckEndBonus();
 		}
 		// increase the player's combo
 		NinjaManager.Instance.IncreaseCombo(1);
@@ -64,12 +64,12 @@ public class NinjaTriggerTarget : NinjaTrigger{
 		if(!NinjaManager.Instance.IsTutorialRunning()){
 			// the player loses a life
 			if(NinjaManager.Instance.bonusRound == false){
-			NinjaManager.Instance.UpdateLives(-1);
-			NinjaManager.Instance.resetChain();
+				NinjaManager.Instance.UpdateLives(-1);
+				NinjaManager.Instance.ResetChain();
 			}
 			else if (NinjaManager.Instance.bonusRoundEnemies !=0){
 				NinjaManager.Instance.bonusRoundEnemies--;
-				NinjaManager.Instance.CheckBonusRound();
+				NinjaManager.Instance.CheckEndBonus();
 			}
 		}
 	}	

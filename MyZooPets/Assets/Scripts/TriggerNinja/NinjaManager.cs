@@ -12,7 +12,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public int bonusRoundEnemies;
 	public int bonusRoundCounter;			// tracks number of boss round
 	public int chain = 0;			// number of enemies killed with out hitting a bomb 
-	public GameObject bonusLabel;
+	public BonusVisualController bonusVisualController;	// Controller that controls the bonus UI
 
 	private bool spawning = true;			//stops the spawning to prevent the play from being horibly murdered mid bonus round
 	private float comboTime = 0;	// time counter
@@ -47,17 +47,18 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		return GetStandardReward(eType);
 	}
 
-	public void increaseChain(){
+	public void IncreaseChain(){
 		chain++;
 		if(chain % 25 == 0){
 			bonusRound = true;
-
+			StartBonusVisuals();
 		}
 	}
 
-	public void resetChain(){
+	public void ResetChain(){
 		chain = 0;
 	}
+
 	/// <summary>
 	/// Gets the current combo level.
 	/// </summary>
@@ -160,6 +161,11 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		timeCount = 0;
 		currentTriggerEntries = null;
 
+		// Reset all states
+		bonusVisualController.StopBonusVisuals();
+		bonusRound = false;
+		spawning = true;
+
 		if(IsTutorialOn() && (IsTutorialOverride() || 
 			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY))){
 
@@ -168,6 +174,11 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}
 			
 	protected override void _GameOver(){
+		// Reset all states - Remove any visuals for combos
+		bonusVisualController.StopBonusVisuals();
+		bonusRound = false;
+		spawning = true;
+
 		// send out combo task
 		int nBestCombo = GetComboBest();
 		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
@@ -190,10 +201,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 
 		float deltaTime = Time.deltaTime;
-		if(bonusRound == true){
-			bonusRoundCounter++;
-			StartCoroutine("BonusTime");
-		}
 
 		// update the player's combo
 		UpdateComboTimer(deltaTime);
@@ -459,21 +466,15 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 	}
 
-	public void CheckBonusRound(){
+	public void CheckEndBonus(){
 		if(bonusRoundEnemies <= 0){
-			bonusLabel.SetActive(false);
+			bonusVisualController.StopBonusVisuals();
 			bonusRound = false;
-			StopCoroutine("BonusTime");
-			//currentTriggerEntries.RemoveAt(0);
 			spawning = true;
 		}
 	}
 
-	// runs during a bonus round
-	IEnumerator BonusTime(){ 
-		// temp for visual
-		bonusLabel.SetActive(true);
-		// bonus round runs 10 seconds and then stop the spawns so the user can clean up
-		yield return new WaitForSeconds(10.0f);
+	public void StartBonusVisuals(){
+		bonusVisualController.PlayBonusVisuals();
 	}
 }

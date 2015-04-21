@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class NinjaTriggerBomb : NinjaTrigger {
@@ -16,7 +16,7 @@ public class NinjaTriggerBomb : NinjaTrigger {
 			// take lives from the player
 			int nLives = GetDamageValue();
 			NinjaManager.Instance.UpdateLives( -nLives );
-			NinjaManager.Instance.resetChain();
+			NinjaManager.Instance.ResetChain();
 		}
 		// then destroy the object
 		Destroy(gameObject);		

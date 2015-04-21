@@ -40,12 +40,14 @@ public class MiniPetMerchant : MiniPet{
 	}
 
 	public override void FinishEating(){
+		if(!isFinishEating){
 		base.FinishEating();
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.showBlackShopMessage();
 		//ShowStoreButton();
 		StartCoroutine(WaitASec());
+		}
 	}
 
 	IEnumerator WaitASec(){

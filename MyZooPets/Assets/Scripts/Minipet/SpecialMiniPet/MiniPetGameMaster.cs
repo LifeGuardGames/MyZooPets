@@ -27,11 +27,13 @@ public class MiniPetGameMaster : MiniPet {
 	}
 
 	public override void FinishEating(){
+		if(!isFinishEating){
 		base.FinishEating();
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.showChallengeMsg(minigameType);
 		GiveOutMission();
+		}
 	}
 	
 	private void TurnInMission(){

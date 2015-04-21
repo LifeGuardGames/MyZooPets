@@ -299,6 +299,10 @@ public class MiniPet : MonoBehaviour {
 		}
 	}
 	public virtual void FinishEating(){
+		Debug.Log(isFinishEating);
+		if (isFinishEating){
+			return;
+		}
 		isFinishEating = true;
 		DataManager.Instance.GameData.MiniPets.SaveHunger(id,isFinishEating);
 		RefreshMiniPetUIState();
@@ -394,7 +398,7 @@ public class MiniPet : MonoBehaviour {
 			string preferredFoodID = "";
 
 			//check if minipet needs food
-			if(!MiniPetManager.Instance.CanModifyXP(id)){
+			//if(!MiniPetManager.Instance.CanModifyXP(id)){
 				preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
 
 				//check if minipet wants this food
@@ -404,7 +408,7 @@ public class MiniPet : MonoBehaviour {
 
 					if(!isUIOpened){
 						ZoomInToMiniPet();
-						isFinishEating = false;
+						//isFinishEating = false;
 					}
 					else{
 						//notify inventory logic that this item is being used
@@ -413,11 +417,12 @@ public class MiniPet : MonoBehaviour {
 						FinishEating();
 						animationManager.Eat();
 					}
-				}
+			//	}
 				// show notification that the mp wants a specific food
-				else{
-					Item item = ItemLogic.Instance.GetItem(preferredFoodID);
-					miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+				if(!isFinishEating){
+						Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+						miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
+					}
 				}
 			}
 			else{
@@ -436,7 +441,6 @@ public class MiniPet : MonoBehaviour {
 				}
 				else{}
 			}
-		}
 	}
 
 	private void LevelUpEventHandler(object sender, EventArgs args){

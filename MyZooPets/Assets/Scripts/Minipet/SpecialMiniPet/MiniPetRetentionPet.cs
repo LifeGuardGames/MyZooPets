@@ -12,14 +12,12 @@ public class MiniPetRetentionPet : MiniPet {
 	public void FigureOutMissions(){
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 			missionID = "TutorialPart1";
-		}
-		else if (DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
-			missionID = "TutorialPart2";
+			Debug.Log("isingvfdn");
 		}
 		else{
 			missionID = "Critical";
+			Debug.Log("rhyujfgj");
 		}
-		isFinishEating = true;
 	}
 
 	protected override void OpenChildUI(){
@@ -51,9 +49,6 @@ public class MiniPetRetentionPet : MiniPet {
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 				mission = WellapadMissionController.Instance.GetMission("TutorialPart1");
 			}
-			else if (DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
-				mission = WellapadMissionController.Instance.GetMission("TutorialPart2");
-			}
 			else{
 				mission = WellapadMissionController.Instance.GetMission("Critical");
 			}
@@ -68,6 +63,7 @@ public class MiniPetRetentionPet : MiniPet {
 
 	public void GiveOutMission(){
 		MiniPetManager.Instance.canLevel = true;
+
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission("Critical");

@@ -128,7 +128,9 @@ public abstract class MiniPet : MonoBehaviour {
 	
 	private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
-			DataManager.Instance.GameData.MiniPets.SetVisits(minipetId);
+			if(!isFinishEating){
+				ShowFoodPreferenceMessage();
+			}
 			bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
@@ -251,7 +253,7 @@ public abstract class MiniPet : MonoBehaviour {
 	private void RefreshMiniPetUIState(bool isForceHideFoodMsg = false){
 		if(isHatchedAux){
 			animationManager.NotSad();
-			MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
+			//MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
 			if(isForceHideFoodMsg && isFinishEating != true ){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}

@@ -30,7 +30,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	}
 
 	void Start(){
-		WellapadMissionController.Instance.OnMissionsRefreshed += RefreshCheck;
+		//WellapadMissionController.Instance.OnMissionsRefreshed += RefreshCheck;
 	}
 
 	void OnApplicationPause(bool isPaused){

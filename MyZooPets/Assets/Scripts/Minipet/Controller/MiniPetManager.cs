@@ -236,10 +236,11 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 		if(data.Type == MiniPetTypes.Retention){
+			if(switchSpawn){
+				DataManager.Instance.GameData.Wellapad.ResetMissions();
+			}
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
-				if(PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);
-				}
+				DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);
 				Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
 				int partitionNumber = 0;
 				DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
@@ -249,17 +250,16 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet.name = prefab.name;
 				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
 				goMiniPet.GetComponent<MiniPetRetentionPet>().FigureOutMissions();
-				DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);
-				if(switchSpawn){
-					if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")&&!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart2")){
-						goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
+				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")&& !DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Critical")){
+					Debug.Log("dugndfkb");
+					goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
+					List<string> keys = new List<string>(DataManager.Instance.GameData.Wellapad.CurrentTasks.Keys);
+					for (int i = 0; i < keys.Count; i++){
+						Debug.Log(keys[i]);
 					}
 				}
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
-				if(switchSpawn){
-					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
-				}
 			}
 		}
 		else if(data.Type == MiniPetTypes.GameMaster){

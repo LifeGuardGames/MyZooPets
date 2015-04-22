@@ -120,6 +120,6 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		msgOption.Add(PetSpeechManager.Keys.ImageButtonModeType, UIModeTypes.MiniPet);
 		msgOption.Add(PetSpeechManager.Keys.ImageClickTarget, MiniPetHUDUIManager.Instance.gameObject);
 		msgOption.Add(PetSpeechManager.Keys.ImageClickFunctionName, "OpenShop");
-		PetSpeechManager.Instance.Talk(msgOption);
+		PetSpeechManager.Instance.TalkM(msgOption);
 	}
 }

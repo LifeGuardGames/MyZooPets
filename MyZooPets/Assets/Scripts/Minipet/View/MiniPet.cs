@@ -138,6 +138,9 @@ public class MiniPet : MonoBehaviour {
 	
 	protected virtual void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
+			if(!isFinishEating){
+				ShowFoodPreferenceMessage();
+			}
 			DataManager.Instance.GameData.MiniPets.SetVisits(id);
 			bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
@@ -353,7 +356,7 @@ public class MiniPet : MonoBehaviour {
 			//else{
 			//	dirtyParticle.Stop();
 		//	}
-			MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
+			//MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
 			//if(isTickled && isCleaned){
 				// Sometimes we want to control when the food message is hidden/shown
 			if(isForceHideFoodMsg && isFinishEating != true ){

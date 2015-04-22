@@ -173,12 +173,12 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+		/*if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 			RefreshFoodItemUI();
-		}
-		else{
+		}*/
+		/*else{
 			Debug.LogWarning("First playperiod, not showing HUD because of tutorial");
-		}
+		}*/
 		nameLabel.text = SelectedMiniPetName;
 		UpdateLevelUI();
 

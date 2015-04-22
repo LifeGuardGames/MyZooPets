@@ -130,7 +130,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		this.GetComponent<TweenToggleDemux>().Show();
 		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
 		RefreshUI(this, new MiniPetManager.StatusUpdateEventArgs());
-		
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -177,7 +176,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			RefreshFoodItemUI();
 		}
 		else{
-			Debug.LogWarning("First playperiod, not showing HUD because of tutorial");
+			Debug.LogWarning("First play period, not showing HUD because of tutorial");
 		}
 		nameLabel.text = SelectedMiniPetName;
 		UpdateLevelUI();

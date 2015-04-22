@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MinipetEggClickController : MonoBehaviour {
@@ -19,7 +19,7 @@ public class MinipetEggClickController : MonoBehaviour {
 		AudioManager.Instance.PlayClip("eggCrack", variations:3);
 
 		if(--clicksUntilHatch <= 0){
-			MiniPetManager.Instance.StartHatchSequence(minipet.ID);
+			MiniPetManager.Instance.StartHatchSequence(minipet.MinipetId);
 
 			// Tidy up
 			Destroy(this.collider);

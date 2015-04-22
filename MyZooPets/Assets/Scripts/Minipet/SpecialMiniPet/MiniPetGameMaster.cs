@@ -9,16 +9,15 @@ public class MiniPetGameMaster : MiniPet {
 	public string miniGameTaskId;
 
 	void Awake(){
-		name = "GameMaster";
+		minipetType = MiniPetTypes.GameMaster;
 	}
 
-	protected override void OnTap(TapGesture gesture){	
-		base.OnTap(gesture);
+	protected override void OpenChildUI(){
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 			if(isFinishEating){
-				miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(id).MissionID;
-
-				miniPetSpeechAI.ShowGameMasterIdleMsg();
+				miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).MissionID;
+				
+				miniPetSpeechAI.ShowIdleMessage(MinipetType);
 				Hashtable has = new Hashtable();
 				has[0] = miniGameTaskId;
 				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
@@ -31,7 +30,7 @@ public class MiniPetGameMaster : MiniPet {
 		base.FinishEating();
 		MiniPetManager.Instance.canLevel = true;
 		isFinishEating = true; 
-		miniPetSpeechAI.showChallengeMsg(minigameType);
+		miniPetSpeechAI.ShowChallengeMsg(minigameType);
 		GiveOutMission();
 		}
 	}
@@ -41,7 +40,7 @@ public class MiniPetGameMaster : MiniPet {
 			MutableDataMission mission = WellapadMissionController.Instance.GetMission(miniGameTaskId);
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
-				MiniPetManager.Instance.IncreaseXP(id);
+				MiniPetManager.Instance.IncreaseXP(minipetId);
 				WellapadMissionController.Instance.ClaimReward(miniGameTaskId);
 				WellapadMissionController.Instance.RefreshCheck();
 			}
@@ -56,7 +55,7 @@ public class MiniPetGameMaster : MiniPet {
 		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddMission(miniGameTaskId);
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(miniGameTaskId); 
-		DataManager.Instance.GameData.MiniPets.SetTask(id,listTasks[0]);
+		DataManager.Instance.GameData.MiniPets.SetTask(minipetId,listTasks[0]);
 		Hashtable has = new Hashtable();
 		has[0] = miniGameTaskId;
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 

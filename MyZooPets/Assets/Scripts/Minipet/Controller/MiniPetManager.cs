@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MiniPetManager : Singleton<MiniPetManager>{
 	public class StatusUpdateEventArgs : EventArgs{
 		public UpdateStatuses UpdateStatus { get; set; }
+		public string MinipetID { get; set; }
 	}
 
 	public enum UpdateStatuses{
@@ -128,25 +129,35 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		return levelUpCondition;
 	}
 
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "INCREASE XP")){
+			IncreaseXP("MiniPet2");
+		}
+	}
+
 	/// <summary>
 	/// Call this method when food has been fed to mp. Need to check if mp can be
 	/// fed first using CanModifyFoodXP
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseXP(string miniPetID){
-
+		Debug.Log("Increasing xp");
 		int levelUpCondition = GetNextLevelUpCondition(miniPetID);
-		//get current food xp
-		int currentFoodXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
+		int currentXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
 		//if(canLevel){
-		//Increase food xp                                                                         
-		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, currentFoodXP, canLevel);
+		//Increase food xp
+		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1); //currentXP);
 		//}
 		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+
 		args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
+		args.MinipetID = miniPetID;
+
+		Debug.Log(levelUpCondition + " " + currentXP);
 
 		//check current food xp with that condition
-		if(currentFoodXP >= levelUpCondition){
+		if(currentXP >= levelUpCondition){
+			Debug.Log("Leveled up");
 			args.UpdateStatus = UpdateStatuses.LevelUp;
 			canLevel = false;
 		}
@@ -161,17 +172,19 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseCurrentLevelAndResetCurrentXP(string miniPetID){
-		if(!IsMaxLevel(miniPetID))
+		if(!IsMaxLevel(miniPetID)){
 			DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
+		}
 
 		DataManager.Instance.GameData.MiniPets.ResetCurrentXP(miniPetID);
 		
 		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
 		args.UpdateStatus = UpdateStatuses.IncreaseCurrentLevel;
-		
-		if(MiniPetStatusUpdate != null)
+		args.MinipetID = miniPetID;
+
+		if(MiniPetStatusUpdate != null){
 			MiniPetStatusUpdate(this, args);
-		
+		}
 	}
 
 	/// <summary>
@@ -209,8 +222,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		yield return new WaitForSeconds(2f);
 		// Toggle the appearance of the actualy pet, its been unlocked
 		MiniPetTable[miniPetID].GetComponent<MiniPet>().RefreshUnlockState();
-		yield return new WaitForSeconds(6f);
-		MiniPetTable[miniPetID].GetComponent<MiniPet>().TryShowDirtyOrSadMessage();	// Show a message telling user to pay attention
 	}
 
 	/// <summary>

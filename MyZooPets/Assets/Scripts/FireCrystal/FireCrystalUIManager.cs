@@ -144,21 +144,26 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 			// Wait before starting
 			yield return new WaitForSeconds(delay);
 
-			float delayBetweenShards = totalTimeTween / (float)numberOfShards;
-			
-			for(float i = 0; i < (float)(numberOfShards/2.0); i++){
+			// 100 shards is too much... cap at 15
+			float numberOfShardsToShow = numberOfShards > 15 ? 15f : (float)numberOfShards;
+			float delayBetweenShards = totalTimeTween / numberOfShardsToShow;
+
+			for(float i = 0; i < numberOfShardsToShow; i++){
 				GameObject shardObject = GameObjectUtils.AddChild(shardParent, shardSpritePrefab);
 				// Place the shard object on a random point on a circle around center
 				shardObject.transform.localPosition = 
 					GameObjectUtils.GetRandomPointOnCircumference(Vector3.zero, UnityEngine.Random.Range(300f, 400f));
 				FireShardController shardController = shardObject.GetComponent<FireShardController>();
+
+				float pitchCount = 1f + (i / 5.0f);
+
 				if(i == 0){
 					// Move the shard into the center and call start filling sprite, first tween
-					shardController.StartMoving(Vector3.zero, 0.8f, isFirstSprite: true);
+					shardController.StartMoving(Vector3.zero, 0.8f, pitchCount, isFirstSprite: true);
 				}
 				else{
 					// Move the shard into the center
-					shardController.StartMoving(Vector3.zero, 0.8f);
+					shardController.StartMoving(Vector3.zero, 0.8f, pitchCount);
 				}
 				yield return new WaitForSeconds(delayBetweenShards);
 			}

@@ -475,6 +475,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}
 
 	public void StartBonusVisuals(){
+		AudioManager.Instance.PlayClip("ninjaBonus");
 		bonusVisualController.PlayBonusVisuals();
 	}
 }

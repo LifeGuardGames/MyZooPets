@@ -4,14 +4,21 @@ using System.Collections;
 public class BonusVisualController : MonoBehaviour {
 	public Animation labelAnimation;
 	public ParticleSystem bonusVisualParticle;
+	private bool isPlaying = false;
 
 	public void PlayBonusVisuals(){
-		labelAnimation.Play("BonusLabelPop");
-		bonusVisualParticle.Play();
+		if(!isPlaying){
+			isPlaying = true;
+			labelAnimation.Play("BonusLabelPop");
+			bonusVisualParticle.Play();
+		}
 	}
 
 	public void StopBonusVisuals(){
-		labelAnimation.Play("BonusLabelExit");
-		bonusVisualParticle.Stop();
+		if(isPlaying){
+			isPlaying = false;
+			labelAnimation.Play("BonusLabelExit");
+			bonusVisualParticle.Stop();
+		}
 	}
 }

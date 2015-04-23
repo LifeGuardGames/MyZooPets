@@ -32,7 +32,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		foreach(ImmutableDataMiniPet data in miniPetData){
 			if(data.Type != MiniPetTypes.None){
 				CreateMiniPet(data.ID);
-				Debug.Log(data.ID);
+				Debug.Log(data.ID + " " + data.Type.ToString());
 			}
 		}
 	}
@@ -71,7 +71,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		else if(data.Type == MiniPetTypes.GameMaster){
 			if(isSpawnNewLocations){
 				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
-				if(latestGate == null || (latestGate.Partition - 1 == 1)){
+				if(latestGate == null || (latestGate.Partition - 1 >= 1)){
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 					int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
@@ -141,7 +141,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		}
 		else if(data.Type == MiniPetTypes.Merchant){
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
-			if(latestGate == null || (latestGate.Partition - 1 == 2)){
+			if(latestGate == null || (latestGate.Partition - 1 >= 2)){
 				if(isSpawnNewLocations){
 					if(Application.loadedLevelName == SceneUtils.BEDROOM){
 						if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here

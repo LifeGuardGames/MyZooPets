@@ -11,9 +11,6 @@ public class MutableDataMiniPets{
 		public Level CurrentLevel {get; set;}
 		public int CurrentXP {get; set;}
 		public int timesVisited {get; set;}
-	//	public bool IsTickled {get; set;}
-	//	public bool IsCleaned {get; set;}
-	//	public DateTime LastActionTime {get; set;}
 		public bool CanGiveMission{get; set;}
 		public bool isHatched{get; set;}
 		public bool IsFinishEating {get; set;}
@@ -30,9 +27,6 @@ public class MutableDataMiniPets{
 			SecretMerchantSellList = new List<string>();
 			currItem = null;
 			timesVisited = 0;
-			//IsTickled = false;
-			//IsCleaned = false;
-			//LastActionTime = LgDateTime.GetTimeNow();
 		}
 	}
 
@@ -42,8 +36,7 @@ public class MutableDataMiniPets{
 	/// if miniPetID is not in this dictionary then it's not unlocked yet
 	/// </summary>
 	public Dictionary<string, Status> MiniPetProgress {get; set;}
-	//public bool IsFirstTimeCleaning {get; set;} //T: play cleaning tutorial
-	//public bool IsFirstTimeTickling {get; set;} //T: play tickling tutorial
+
 	/// <summary>
 	/// Unlocks the mini pet.
 	/// </summary>
@@ -51,7 +44,6 @@ public class MutableDataMiniPets{
 	public void UnlockMiniPet(string miniPetID){
 		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID)){
 			MiniPetProgress.Add(miniPetID, new Status());
-
 		}
 	}
 
@@ -73,7 +65,7 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	/// <param name="amount">Amount.</param>
-	public void IncreaseXP(string miniPetID, int amount, bool canLevel = false){
+	public void IncreaseXP(string miniPetID, int amount){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 

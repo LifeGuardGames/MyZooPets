@@ -4,9 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
-
-	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
-
 	public UILabel nameLabel;
 
 	public UILabel labelFeedCount;
@@ -128,9 +125,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	#region Overridden functions
 	protected override void _OpenUI(){
 		this.GetComponent<TweenToggleDemux>().Show();
-		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
-		RefreshUI(this, new MiniPetManager.StatusUpdateEventArgs());
-		
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -149,7 +143,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		storeTweenParent.Hide();
 
 		CheckStoreButtonPulse();
-		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
 		PetSpeechManager.Instance.BeQuiet();
 		//Show other UI Objects
 		NavigationUIManager.Instance.ShowPanel();

@@ -30,7 +30,6 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		merchant = GameObject.Find("Merchant");
 		if(isBoughtAlready){
 			// Enable some game components here
-
 			buyButton.enabled = false;
 		}
 

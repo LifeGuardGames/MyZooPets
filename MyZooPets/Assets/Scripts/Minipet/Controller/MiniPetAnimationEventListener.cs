@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MiniPetAnimationEventListener : MonoBehaviour {
@@ -42,7 +42,7 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 	}
 
 	private void CheckMiniPetVisibleInPartition(string currentArea ,int currentPartition){
-		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().ID;
+		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().MinipetId;
 		// Camera treats the yard as partition 00 and partition 01 instead of 05 and 06.... this is a work around
 		if( currentArea == "Yard"){
 			currentPartition += 5;

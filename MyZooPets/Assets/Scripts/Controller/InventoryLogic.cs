@@ -241,12 +241,10 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			invItem = invItems[itemID];
 			invItem.Amount--;
 
-			//analytics
-			//Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
-			
 			//remove inv item if there is none left
-			if(invItem.Amount == 0)
+			if(invItem.Amount == 0){
 				invItems.Remove(itemID);
+			}
 			
 			// fire item used event
 			if(OnItemUsed != null){

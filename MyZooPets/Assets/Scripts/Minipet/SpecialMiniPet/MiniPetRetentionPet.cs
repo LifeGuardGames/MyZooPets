@@ -4,8 +4,9 @@ using System.Collections;
 public class MiniPetRetentionPet : MiniPet {
 
 	string missionID;
+
 	void Awake(){
-		name = "retention";
+		minipetType = MiniPetTypes.Retention;
 	}
 
 	public void FigureOutMissions(){
@@ -17,24 +18,24 @@ public class MiniPetRetentionPet : MiniPet {
 		}
 	}
 
-	protected override void OnTap(TapGesture gesture){	
-		base.OnTap(gesture);
+	protected override void OpenChildUI(){
+		Debug.Log("Opening retention UI");
 		if(!TutorialManager.Instance.IsTutorialActive()){
-		miniPetSpeechAI.ShowTipMsg();
-		Hashtable has = new Hashtable();
-		has[0] = missionID;
-		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention,has); 
+			Debug.Log("1");
+			miniPetSpeechAI.ShowTipMsg();
+			Hashtable hash = new Hashtable();
+			hash[0] = missionID;
+			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention, hash); 
 		}
 		
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+			Debug.Log("2");
 			if(!MiniPetHUDUIManager.Instance.HasContent()){
-
-				miniPetSpeechAI.ShowRetentionIdelMsg();
-
+				miniPetSpeechAI.ShowIdleMessage(MinipetType);
 			}
 			else if (!TutorialManager.Instance.IsTutorialActive()){
 				isFinishEating = true;
-				DataManager.Instance.GameData.MiniPets.SaveHunger(id, isFinishEating);
+				DataManager.Instance.GameData.MiniPets.SaveHunger(minipetId, isFinishEating);
 			}
 		}
 	}
@@ -51,7 +52,7 @@ public class MiniPetRetentionPet : MiniPet {
 			}
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
-				MiniPetManager.Instance.IncreaseXP(id);
+				MiniPetManager.Instance.IncreaseXP(minipetId);
 				WellapadMissionController.Instance.ClaimReward(missionID);
 				WellapadMissionController.Instance.RefreshCheck();
 			}
@@ -59,7 +60,7 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void GiveOutMission(){
-		MiniPetManager.Instance.canLevel = true;
+		MiniPetManager.Instance.isPetCanLevel = true;
 
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;

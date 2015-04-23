@@ -60,7 +60,7 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void GiveOutMission(){
-		MiniPetManager.Instance.isPetCanLevel = true;
+		isPetCanGainXP = true;
 
 		WellapadMissionController.Instance.UnlockTask("Critical");
 		WellapadMissionController.Instance.needMission = true;

@@ -21,18 +21,15 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 	public Dictionary<string, GameObject> MiniPetTable = new Dictionary<string, GameObject>();
 	private Level maxLevel = Level.Level6;
-	public bool isPetCanLevel = false;
 	public bool isSpawnNewLocations = false;
 
 	void Start(){
 		// Load all minipet into the scene
 		isSpawnNewLocations = CanSpawnNewMinipetLocations();
-		isPetCanLevel = isSpawnNewLocations;
 		List<ImmutableDataMiniPet> miniPetData = DataLoaderMiniPet.GetDataList();
 		foreach(ImmutableDataMiniPet data in miniPetData){
 			if(data.Type != MiniPetTypes.None){
 				CreateMiniPet(data.ID);
-				Debug.Log(data.ID);
 			}
 		}
 	}
@@ -72,8 +69,10 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(isSpawnNewLocations){
 				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 				if(latestGate == null || (latestGate.Partition - 1 == 1)){
+
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
+
 					int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
 					DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
 					Vector3 pos = locationTuple.Item1;
@@ -165,7 +164,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						}
 					}
 				}
-				else if(Application.loadedLevelName == SceneUtils.BEDROOM && DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != new Vector3(0, 0, 0)){
+				else if(Application.loadedLevelName == SceneUtils.BEDROOM && DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != Vector3.zero){
 					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
 					goMiniPet.name = prefab.name;
 					goMiniPet.GetComponent<MiniPet>().Init(data);
@@ -208,11 +207,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	public bool CanModifyXP(string miniPetID){
 		//make sure current level is not at max level
 		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
-		//bool isTickled = DataManager.Instance.GameData.MiniPets.IsTickled(miniPetID);
-		//bool isCleaned = DataManager.Instance.GameData.MiniPets.IsCleaned(miniPetID);
-		bool canModify;
-		//	canModify = (currentLevel != maxLevel) && isTickled && isCleaned && canLevel;
-		canModify = (currentLevel != maxLevel) && isPetCanLevel && DataManager.Instance.GameData.MiniPets.GetHunger(miniPetID);
+		bool canModify = (currentLevel != maxLevel);
 		return canModify;
 	}
 
@@ -264,31 +259,31 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	}
 
 	/// <summary>
-	/// Call this method when food has been fed to mp. Need to check if mp can be
-	/// fed first using CanModifyFoodXP
+	/// Need to check if mp can be leveled first using CanModifyFoodXP
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseXP(string miniPetID){
 		Debug.Log("Increasing xp");
-		int levelUpCondition = GetNextLevelUpCondition(miniPetID);
-		int currentXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
-		//if(canLevel){
-		//Increase food xp
-		DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1); //currentXP);
-		//}
-		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
-
-		args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
-		args.MinipetID = miniPetID;
-
-		Debug.Log(levelUpCondition + " " + currentXP);
-
-		//check current food xp with that condition
-		if(currentXP >= levelUpCondition){
-			Debug.Log("Leveled up");
-			args.UpdateStatus = UpdateStatuses.LevelUp;
-			isPetCanLevel = false;
-			IncreaseCurrentLevelAndResetCurrentXP(miniPetID);	// TODO this before minipetstatus update?
+		if(CanModifyXP(miniPetID)){
+			int levelUpCondition = GetNextLevelUpCondition(miniPetID);
+			int currentXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
+			DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1);
+			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
+			
+			args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
+			args.MinipetID = miniPetID;
+			
+			Debug.Log(levelUpCondition + " " + currentXP);
+			
+			//check current food xp with that condition
+			if(currentXP >= levelUpCondition){
+				Debug.Log("Leveled up");
+				args.UpdateStatus = UpdateStatuses.LevelUp;
+				IncreaseCurrentLevelAndResetCurrentXP(miniPetID);	// TODO this before minipetstatus update?
+			}
+		}
+		else{
+			Debug.LogWarning("Can not modify XP any more for " + miniPetID);
 		}
 	}
 

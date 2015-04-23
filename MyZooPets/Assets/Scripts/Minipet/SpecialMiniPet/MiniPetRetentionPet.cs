@@ -11,11 +11,9 @@ public class MiniPetRetentionPet : MiniPet {
 	public void FigureOutMissions(){
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 			missionID = "TutorialPart1";
-			Debug.Log("isingvfdn");
 		}
 		else{
 			missionID = "Critical";
-			Debug.Log("rhyujfgj");
 		}
 	}
 

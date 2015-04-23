@@ -15,6 +15,7 @@ public class MutableDataMiniPets{
 		public bool isHatched{get; set;}
 		public bool IsFinishEating {get; set;}
 		public List<string> SecretMerchantSellList{get; set;}
+		public ImmutableDataMerchantItem currItem;
 		public MutableDataWellapadTask task {get; set;}
 	
 		public Status(){
@@ -24,6 +25,7 @@ public class MutableDataMiniPets{
 			isHatched = false;
 			IsFinishEating =  false;
 			SecretMerchantSellList = new List<string>();
+			currItem = null;
 			timesVisited = 0;
 		}
 	}
@@ -310,6 +312,26 @@ public class MutableDataMiniPets{
 		}
 	}
 
+	public void SetItem(string miniPetID, ImmutableDataMerchantItem item){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.currItem = item;
+			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
+	public ImmutableDataMerchantItem GetItem(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			return status.currItem;
+		}
+		else{
+			return null;
+		}
+	}
+	
 	public void SetTask(string miniPetID, MutableDataWellapadTask Task){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];

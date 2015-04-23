@@ -32,6 +32,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		foreach(ImmutableDataMiniPet data in miniPetData){
 			if(data.Type != MiniPetTypes.None){
 				CreateMiniPet(data.ID);
+				Debug.Log(data.ID);
 			}
 		}
 	}
@@ -62,9 +63,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					Debug.Log("dugndfkb");
 					goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
 					List<string> keys = new List<string>(DataManager.Instance.GameData.Wellapad.CurrentTasks.Keys);
-					for (int i = 0; i < keys.Count; i++){
-						Debug.Log(keys[i]);
-					}
 				}
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);

@@ -200,10 +200,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	public void LevelUpAnimationCompleted(){
 		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentXP(SelectedMiniPetID);
-
-		if(OnLevelUpAnimationCompleted != null){
-			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
-		}
 	}
 
 	/// <summary>

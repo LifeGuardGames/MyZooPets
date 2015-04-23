@@ -30,6 +30,10 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		foreach(ImmutableDataMiniPet data in miniPetData){
 			if(data.Type != MiniPetTypes.None){
 				CreateMiniPet(data.ID);
+<<<<<<< HEAD
+				Debug.Log(data.ID + " " + data.Type.ToString());
+=======
+>>>>>>> ae88e972f4214501814666708d90ce9dbe4ac00a
 			}
 		}
 	}
@@ -68,8 +72,12 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		else if(data.Type == MiniPetTypes.GameMaster){
 			if(isSpawnNewLocations){
 				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
+<<<<<<< HEAD
 				if(latestGate == null || (latestGate.Partition - 1 >= 1)){
+=======
+				if(latestGate == null || (latestGate.Partition - 1 == 1)){
 
+>>>>>>> ae88e972f4214501814666708d90ce9dbe4ac00a
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
 

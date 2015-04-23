@@ -244,10 +244,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			if(content != null){
 				content.GetComponent<TweenToggle>().Show();
 			}
-			if(!MiniPetManager.Instance.CanModifyXP(SelectedMiniPetID)){
-			//feedTweenParent.Show();
-				storeTweenParent.Show();
-			}
+			storeTweenParent.Show();
 			HUDUIManager.Instance.HidePanel();
 		}
 

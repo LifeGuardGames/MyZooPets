@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,7 +28,7 @@ public class MiniPetGameMaster : MiniPet {
 	public override void FinishEating(){
 		if(!isFinishEating){
 		base.FinishEating();
-		MiniPetManager.Instance.canLevel = true;
+		MiniPetManager.Instance.isPetCanLevel = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.ShowChallengeMsg(minigameType);
 		GiveOutMission();

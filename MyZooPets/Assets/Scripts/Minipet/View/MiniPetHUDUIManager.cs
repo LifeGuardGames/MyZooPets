@@ -4,9 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
-
-	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
-
 	public UILabel nameLabel;
 
 	public UILabel labelFeedCount;
@@ -128,8 +125,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	#region Overridden functions
 	protected override void _OpenUI(){
 		this.GetComponent<TweenToggleDemux>().Show();
-		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
-		RefreshUI(this, new MiniPetManager.StatusUpdateEventArgs());
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -148,7 +143,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		storeTweenParent.Hide();
 
 		CheckStoreButtonPulse();
-		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
 		PetSpeechManager.Instance.BeQuiet();
 		//Show other UI Objects
 		NavigationUIManager.Instance.ShowPanel();
@@ -165,52 +159,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		CameraManager.Instance.ZoomOutMove();
 	}
 	#endregion
-
-	/// <summary>
-	/// Refreshes the UI whenever MP data have been updated
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		/*if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-			RefreshFoodItemUI();
-		}*/
-		/*else{
-			Debug.LogWarning("First play period, not showing HUD because of tutorial");
-		}*/
-		nameLabel.text = SelectedMiniPetName;
-		UpdateLevelUI();
-
-		switch(args.UpdateStatus){
-		case MiniPetManager.UpdateStatuses.LevelUp:
-			LevelUpAnimationCompleted();
-			break;
-		}
-	}
-
-	private void UpdateLevelUI(){
-		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-
-		// update level slider
-		if(nextLevelUpCondition != -1){
-			//TODO Need this?
-		}
-		else{// Max level
-			//TODO Design what happens here
-		}
-	}
-
-	/// <summary>
-	/// Level up animation completed. 
-	/// Actually increase the level after level up animation is done.
-	/// </summary>
-	public void LevelUpAnimationCompleted(){
-		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentXP(SelectedMiniPetID);
-
-		if(OnLevelUpAnimationCompleted != null){
-			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
-		}
-	}
 
 	/// <summary>
 	/// Opens the shop. Store button calls this function

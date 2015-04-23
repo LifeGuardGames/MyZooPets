@@ -43,13 +43,21 @@ public abstract class MiniPet : MonoBehaviour {
 
 	public EventHandler<EventArgs> OnTutorialMinipetClicked;	// event that fires when the user clicks on pet during tutorial
 
+	/// <summary>
+	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated with the proper information.
+	/// </summary>
+	/// <param name="data">ImmutableDataMiniPet.</param>
+	public void Init(ImmutableDataMiniPet data){
+		this.minipetId = data.ID;
+		this.name = data.Name;
+	}
+
 	protected virtual void Start(){
 		nguiCamera = GameObject.Find("Camera").camera;
+		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
-		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
-		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
-		//MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
+		
 		isFinishEating = DataManager.Instance.GameData.MiniPets.GetHunger(minipetId);
 		//Level currentLvl = Level.Level2;
 		Level currentLvl = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(minipetId);
@@ -84,7 +92,6 @@ public abstract class MiniPet : MonoBehaviour {
 	// Check to see if you want to display pet or egg
 	public void RefreshUnlockState(){
 		ToggleHatched(DataManager.Instance.GameData.MiniPets.GetHatched(minipetId));
-		RefreshMiniPetUIState(isForceHideFoodMsg:true);
 	}
 
 	public void ToggleHatched(bool isHatched){
@@ -113,16 +120,6 @@ public abstract class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 		if(MiniPetHUDUIManager.Instance){
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
-		}
-		MiniPetHUDUIManager.OnLevelUpAnimationCompleted -= LevelUpEventHandler;
-		MiniPetManager.MiniPetStatusUpdate -= UpdateAnimation;
-	}
-
-	void OnApplicationPause(bool isPaused){
-		if(!isPaused){
-		//	MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-
-			RefreshMiniPetUIState(isForceHideFoodMsg:true);
 		}
 	}
 	
@@ -166,15 +163,7 @@ public abstract class MiniPet : MonoBehaviour {
 		isBeingTickled = false;
 	}
 
-	/// <summary>
-	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
-	/// with the proper information.
-	/// </summary>
-	/// <param name="data">ImmutableDataMiniPet.</param>
-	public void Init(ImmutableDataMiniPet data){
-		this.minipetId = data.ID;
-		this.name = data.Name;
-	}
+
 
 	private void ZoomInToMiniPet(){
 		Vector3 position = this.transform.position + zoomPositionOffset;
@@ -205,9 +194,6 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 		//else check if tickle and cleaning is done. if both done 
 		else{
-			/*bool isTickled = MiniPetManager.Instance.IsTickled(id);
-			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyXP(id)){*/
 			if(!TutorialManagerBedroom.Instance.IsTutorialActive()){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}
@@ -232,31 +218,6 @@ public abstract class MiniPet : MonoBehaviour {
 		else{
 			isFinishEating = true;
 			DataManager.Instance.GameData.MiniPets.SaveHunger(minipetId, isFinishEating);
-			RefreshMiniPetUIState();
-		}
-	}
-	/// <summary>
-	/// Updates the animation when minipet status is also updated
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void UpdateAnimation(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		MiniPetManager.UpdateStatuses status = args.UpdateStatus;
-		if(status == MiniPetManager.UpdateStatuses.Tickle){
-			RefreshMiniPetUIState();
-		}
-		else if(status == MiniPetManager.UpdateStatuses.LevelUp){
-			Debug.Log("LEVELED UPPPPPP : ");
-		}
-	}
-
-	private void RefreshMiniPetUIState(bool isForceHideFoodMsg = false){
-		if(isHatchedAux){
-			animationManager.NotSad();
-			//MiniPetHUDUIManager.Instance.RefreshFoodItemUI();
-			if(isForceHideFoodMsg && isFinishEating != true ){
-				Invoke("ShowFoodPreferenceMessage", 1f);
-			}
 		}
 	}
 
@@ -296,19 +257,11 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 	}
 
-	private void ShowFoodPreferenceMessage(){
+	protected void ShowFoodPreferenceMessage(){
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && !isFinishEating){
 			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
 			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
-		}
-	}
-
-	private void LevelUpEventHandler(object sender, EventArgs args){
-		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == minipetId){
-			animationManager.Cheer();
-			Debug.LogWarning("RECEIVING GIFT HERE");
-//			StatsController.Instance.ChangeStats(deltaGems: 1, gemsLoc: transform.position, is3DObject: true, animDelay: 1.5f);
 		}
 	}
 

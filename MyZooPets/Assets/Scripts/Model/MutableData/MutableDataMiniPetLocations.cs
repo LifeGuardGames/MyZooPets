@@ -73,6 +73,7 @@ public class MutableDataMiniPetLocations {
 			MiniPetLoc[miniPetID] = status;
 		}
 	}
+
 	public int GetPartition(string miniPetID){
 	if(MiniPetLoc.ContainsKey(miniPetID)){
 		Status status = MiniPetLoc[miniPetID];
@@ -82,5 +83,4 @@ public class MutableDataMiniPetLocations {
 			return 0;
 		}
 	}
-
 }

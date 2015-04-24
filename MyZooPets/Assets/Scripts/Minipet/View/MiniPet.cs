@@ -59,9 +59,9 @@ public abstract class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
-		isFinishEating = DataManager.Instance.GameData.MiniPets.GetHunger(minipetId);
-		//Level currentLvl = Level.Level2;
-		Level currentLvl = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(minipetId);
+		isFinishEating = MiniPetManager.Instance.IsPetFinishedEating(minipetId);
+		Level currentLvl = MiniPetManager.Instance.GetCurrentLevel(minipetId);
+
 		switch(currentLvl){
 		case Level.Level1:
 			accessory1.SetActive(false);

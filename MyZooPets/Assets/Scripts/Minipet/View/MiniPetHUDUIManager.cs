@@ -165,42 +165,34 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-			RefreshFoodItemUI();
-		}
-		else{
-			Debug.LogWarning("First playperiod, not showing HUD because of tutorial");
-		}
-		nameLabel.text = SelectedMiniPetName;
-		UpdateLevelUI();
+//	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
+//		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+//			RefreshFoodItemUI();
+//		}
+//		else{
+//			Debug.LogWarning("First playperiod, not showing HUD because of tutorial");
+//		}
+//		nameLabel.text = SelectedMiniPetName;
+//		UpdateLevelUI();
+//
+//		switch(args.UpdateStatus){
+//		case MiniPetManager.UpdateStatuses.LevelUp:
+//			LevelUpAnimationCompleted();
+//			break;
+//		}
+//	}
 
-		switch(args.UpdateStatus){
-		case MiniPetManager.UpdateStatuses.LevelUp:
-			LevelUpAnimationCompleted();
-			break;
-		}
-	}
-
-	private void UpdateLevelUI(){
-		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-
-		// update level slider
-		if(nextLevelUpCondition != -1){
-			//TODO Need this?
-		}
-		else{// Max level
-			//TODO Design what happens here
-		}
-	}
-
-	/// <summary>
-	/// Level up animation completed. 
-	/// Actually increase the level after level up animation is done.
-	/// </summary>
-	public void LevelUpAnimationCompleted(){
-		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentXP(SelectedMiniPetID);
-	}
+//	private void UpdateLevelUI(){
+//		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
+//
+//		// update level slider
+//		if(nextLevelUpCondition != -1){
+//			//TODO Need this?
+//		}
+//		else{// Max level
+//			//TODO Design what happens here
+//		}
+//	}
 
 	/// <summary>
 	/// Opens the shop. Store button calls this function
@@ -257,7 +249,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	public void RefreshFoodItemUI(){
 		if(SelectedMiniPetID != null){
-			if(!DataManager.Instance.GameData.MiniPets.GetHunger(SelectedMiniPetID)){
+			if(!DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID)){
 				//nameLabel.text = SelectedMiniPetName;
 				//int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
 				//int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
@@ -302,7 +294,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void CheckStoreButtonPulse(){
 		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
 		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
-		bool petFed = !DataManager.Instance.GameData.MiniPets.GetHunger(SelectedMiniPetID);
+		bool petFed = !DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID);
 
 		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && petFed){
 			storeButtonPulseAnim.Play();

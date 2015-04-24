@@ -19,11 +19,11 @@ public class MiniPetMerchant : MiniPet{
 		//temp
 		items = new List<string>();
 		blackStoreButton = GameObject.Find("BlackStoreButton");
-		items = DataManager.Instance.GameData.MiniPets.getMerchList(minipetId);
+		items = DataManager.Instance.GameData.MiniPets.GetMerchantList(minipetId);
 		if(items == null){
 			items = DataLoaderMerchantItem.getMerchantList();
 			//itemsInList = items.Count;
-			DataManager.Instance.GameData.MiniPets.saveMerchList(items, minipetId);
+			DataManager.Instance.GameData.MiniPets.SaveMerchantList(items, minipetId);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class MiniPetMerchant : MiniPet{
 	public void RemoveItem(){
 		items.Remove(secItem.ItemId);
 		isItemBought = true;
-		MiniPetManager.Instance.IncreaseXP(minipetId);
+		MiniPetManager.Instance.IncreaseXp(minipetId);
 	}
 
 	public void ShowStoreButton(){

@@ -12,7 +12,7 @@ public class ImmutableDataMiniPetLevelUpConditions{
 	/// </summary>
 	/// <returns>The level up condition.</returns>
 	/// <param name="level">Level.</param>
-	public int GetLevelUpCondition(Level level){
+	public int GetXpNeededForLevel(Level level){
 		int retVal = -1;
 
 		if(levelUpConditions.ContainsKey(level)){

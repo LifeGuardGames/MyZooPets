@@ -47,7 +47,7 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 		if( currentArea == "Yard"){
 			currentPartition += 5;
 		}
-		if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == currentPartition){
+		if(MiniPetManager.Instance.GetPartitionNumberForMinipet(miniPetID) == currentPartition){
 			isVisibleInScene = true;
 		}
 		else{

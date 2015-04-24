@@ -2,11 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MiniPetGameMaster : MiniPet {
+public class MiniPetGameMaster : MiniPet{
 
 	public MinigameTypes minigameType;
-
-	public string miniGameTaskId;
+	public string minigameTaskId;
 
 	void Awake(){
 		minipetType = MiniPetTypes.GameMaster;
@@ -15,11 +14,11 @@ public class MiniPetGameMaster : MiniPet {
 	protected override void OpenChildUI(){
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 			if(isFinishEating){
-				miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).MissionID;
+				minigameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).MissionID;
 				
 				miniPetSpeechAI.ShowIdleMessage(MinipetType);
 				Hashtable has = new Hashtable();
-				has[0] = miniGameTaskId;
+				has[0] = minigameTaskId;
 				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
 			}
 		}
@@ -37,27 +36,27 @@ public class MiniPetGameMaster : MiniPet {
 	
 	private void TurnInMission(){
 		if(isFinishEating){
-			MutableDataMission mission = WellapadMissionController.Instance.GetMission(miniGameTaskId);
+			MutableDataMission mission = WellapadMissionController.Instance.GetMission(minigameTaskId);
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
-				MiniPetManager.Instance.IncreaseXP(minipetId);
-				WellapadMissionController.Instance.ClaimReward(miniGameTaskId);
+				MiniPetManager.Instance.IncreaseXp(minipetId);
+				WellapadMissionController.Instance.ClaimReward(minigameTaskId);
 				WellapadMissionController.Instance.RefreshCheck();
 			}
 		}
 	}
 
 	private void GiveOutMission(){
-		miniGameTaskId = PickMinigameMission();
+		minigameTaskId = PickMinigameMission();
 		//miniGameTaskId = "NinjaS";
-		WellapadMissionController.Instance.UnlockTask(miniGameTaskId);
+		WellapadMissionController.Instance.UnlockTask(minigameTaskId);
 		//WellapadMissionController.Instance.UnlockTask("NinjaS");
 		WellapadMissionController.Instance.needMission = true;
-		WellapadMissionController.Instance.AddMission(miniGameTaskId);
-		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(miniGameTaskId); 
+		WellapadMissionController.Instance.AddMission(minigameTaskId);
+		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(minigameTaskId); 
 		DataManager.Instance.GameData.MiniPets.SetTask(minipetId,listTasks[0]);
 		Hashtable has = new Hashtable();
-		has[0] = miniGameTaskId;
+		has[0] = minigameTaskId;
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster,has); 
 		//WellapadMissionController.Instance.AddMission("NinjaS");
 	}

@@ -52,7 +52,7 @@ public class MiniPetRetentionPet : MiniPet {
 			}
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
-				MiniPetManager.Instance.IncreaseXP(minipetId);
+				MiniPetManager.Instance.IncreaseXp(minipetId);
 				WellapadMissionController.Instance.ClaimReward(missionID);
 				WellapadMissionController.Instance.RefreshCheck();
 			}

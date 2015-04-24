@@ -4,23 +4,22 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetManager : Singleton<MiniPetManager>{
-	public class StatusUpdateEventArgs : EventArgs{
-		public UpdateStatuses UpdateStatus { get; set; }
-		public string MinipetID { get; set; }
-	}
+//	public class StatusUpdateEventArgs : EventArgs{
+//		public UpdateStatuses UpdateStatus { get; set; }
+//		public string MinipetID { get; set; }
+//	}
 
-	public enum UpdateStatuses{
-		None,
-		Tickle,
-		IncreaseFoodXP,
-		IncreaseCurrentLevel,
-		LevelUp
-	}
+//	public enum UpdateStatuses{
+//		None,
+//		IncreaseFoodXP,
+//		IncreaseCurrentLevel,
+//		LevelUp
+//	}
 
-	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate; //send event to UI when data have been updated
+//	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate; //send event to UI when data have been updated
 
 	public Dictionary<string, GameObject> MiniPetTable = new Dictionary<string, GameObject>();
-	private Level maxLevel = Level.Level6;
+	private Level maxLevel = Level.Level4;
 	public bool isSpawnNewLocations = false;
 
 	void Start(){
@@ -34,71 +33,105 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		}
 	}
 
+	#region Spawning minipet
+	/// <summary>
+	/// Determines whether new minipet locations should be spawned, also flags the datetime automatically
+	/// Only call once per a play period all furture calls will be false
+	/// </summary>
+	public bool CanSpawnNewMinipetLocations(){
+		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
+			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 	private void CreateMiniPet(string miniPetID){
+		GameObject goMiniPet = null;
+
 		// Unlock in data manager
 		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
 		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetID);
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
-		GameObject goMiniPet;
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
-		if(data.Type == MiniPetTypes.Retention){
+
+		switch(data.Type){
+		case MiniPetTypes.Retention:
+			// Check if mp needs new locations
 			if(isSpawnNewLocations){
 				DataManager.Instance.GameData.Wellapad.ResetMissions();
 			}
+
+			// Check if mp spawns in this zone
 			if(Application.loadedLevelName == SceneUtils.BEDROOM){
-				DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);
-				Vector3 pos = PartitionManager.Instance.GetBasePositionInBedroom().Item1;
+
+				// Calculate the MP location
+				LgTuple<Vector3, string> retentionLocation = PartitionManager.Instance.GetBasePositionInBedroom();
+				Vector3 locationPosition = retentionLocation.Item1;
+				string locationId = retentionLocation.Item2;
 				int partitionNumber = 0;
-				DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
-				DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID, true);
+
+				DataManager.Instance.GameData.MiniPets.SetIsHatched(miniPetID, true);
+				DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetID, locationId);	// locationId from tuple
+				DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);	// Set to always full
+
 				goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
-				goMiniPet.transform.localPosition = pos;
+				goMiniPet.transform.localPosition = locationPosition;	// vector3 from tuple
 				goMiniPet.name = prefab.name;
-				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
-				goMiniPet.GetComponent<MiniPetRetentionPet>().FigureOutMissions();
+
+				MiniPetRetentionPet retentionScript = goMiniPet.GetComponent<MiniPetRetentionPet>();
+				retentionScript.Init(data);
+				retentionScript.FigureOutMissions();
 				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")&& !DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Critical")){
-					Debug.Log("dugndfkb");
-					goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
-					List<string> keys = new List<string>(DataManager.Instance.GameData.Wellapad.CurrentTasks.Keys);
+					retentionScript.GiveOutMission();
 				}
+
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);
 			}
-		}
-		else if(data.Type == MiniPetTypes.GameMaster){
+			break;
+
+		case MiniPetTypes.GameMaster:
+			// Check if mp needs new locations
 			if(isSpawnNewLocations){
 				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 				if(latestGate == null || (latestGate.Partition - 1 >= 1)){
 
+					// Calculate the MP location
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
-					LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetUnusedPositionNextToMinigame(type);
+					LgTuple<Vector3, string> gameMasterLocation = PartitionManager.Instance.GetPositionNextToMinigame(type);
+					Vector3 locationPosition = gameMasterLocation.Item1;
+					string locationId = gameMasterLocation.Item2;
+					int partitionNumber = PartitionManager.Instance.GetPartitionNumberFromLocationId(locationId);
 
-					int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
-					DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
-					Vector3 pos = locationTuple.Item1;
+					DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetID, locationId);
+					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
+
+					// Check if mp spawns in this zone
 					if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
-						goMiniPet.transform.localPosition = pos;
+						goMiniPet.transform.localPosition = locationPosition;
 						goMiniPet.name = prefab.name;
-						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = type;
-						goMiniPet.GetComponent<MiniPet>().Init(data);
+
+						MiniPetGameMaster gameMasterScript = goMiniPet.GetComponent<MiniPetGameMaster>();
+						gameMasterScript.minigameType = type;
+						gameMasterScript.Init(data);
 						if(CanSpawnNewMinipetLocations()){
-							goMiniPet.GetComponent<MiniPetGameMaster>().isFinishEating = false;
+							gameMasterScript.isFinishEating = false;
 						}
+
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetID, goMiniPet);
-						DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
-						DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
-					}
-					else{
-						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID, pos);
 					}
 				}
-			}
+			}// TODO finish this
 			else if(Application.loadedLevelName == SceneUtils.YARD){
-				if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5 || DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 6){
-					Vector3 pos = DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID);
-					if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 5){
+				if(GetPartitionNumberForMinipet(miniPetID) == 5 || GetPartitionNumberForMinipet(miniPetID) == 6){
+					string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID);
+					Vector3 pos = DataLoaderPartitionLocations.GetData(locationId).Offset;
+					if(GetPartitionNumberForMinipet(miniPetID) == 5){
 						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(5).gameObject, prefab);
 						goMiniPet.transform.localPosition = pos;
 						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = MinigameTypes.Runner;
@@ -119,255 +152,213 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					// Add the pet into the dictionary to keep track
 				}
 			}
-			else if(DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != new Vector3(0, 0, 0)){
-				if(Application.loadedLevelName ==  SceneUtils.BEDROOM){
-					if(DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 1 || DataManager.Instance.GameData.MiniPetLocations.GetPartition(miniPetID) == 2){
-						goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
-						goMiniPet.name = prefab.name;
-						goMiniPet.GetComponent<MiniPet>().Init(data);
-						// Add the pet into the dictionary to keep track
-						MiniPetTable.Add(miniPetID, goMiniPet);
-					}
-				}
-				else{
-					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
-					goMiniPet.name = prefab.name;
-					goMiniPet.GetComponent<MiniPet>().Init(data);
-					// Add the pet into the dictionary to keep track
-					MiniPetTable.Add(miniPetID, goMiniPet);
-				}
-			}
-		}
-		else if(data.Type == MiniPetTypes.Merchant){
-			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
-			if(latestGate == null || (latestGate.Partition - 1 >= 2)){
+			// TODO sometimes it will spawn in vector3.zero, handle here
+//			else if(DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID) != new Vector3(0, 0, 0)){
+//				if(Application.loadedLevelName ==  SceneUtils.BEDROOM){
+//					if(GetPartitionNumberForMinipet(miniPetID) == 1 || GetPartitionNumberForMinipet(miniPetID) == 2){
+//						goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID), Quaternion.identity) as GameObject;
+//						goMiniPet.name = prefab.name;
+//						goMiniPet.GetComponent<MiniPet>().Init(data);
+//						// Add the pet into the dictionary to keep track
+//						MiniPetTable.Add(miniPetID, goMiniPet);
+//					}
+//				}
+//				else{
+//					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID), Quaternion.identity) as GameObject;
+//					goMiniPet.name = prefab.name;
+//					goMiniPet.GetComponent<MiniPet>().Init(data);
+//					// Add the pet into the dictionary to keep track
+//					MiniPetTable.Add(miniPetID, goMiniPet);
+//				}
+//			}
+			break;
+
+		case MiniPetTypes.Merchant:
+			ImmutableDataGate latestGateAux = GatingManager.Instance.GetLatestLockedGate();
+			if(latestGateAux == null || (latestGateAux.Partition - 1 >= 2)){
+				// Check if mp needs new locations
 				if(isSpawnNewLocations){
 					if(Application.loadedLevelName == SceneUtils.BEDROOM){
 						if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
-							LgTuple<Vector3, string> locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
-							int partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
-							DataManager.Instance.GameData.MiniPetLocations.SavePartition(miniPetID, partitionNumber);
-							while(!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
-								locationTuple = PartitionManager.Instance.GetRandomUnusedPosition();
-								partitionNumber = DataLoaderPartitionLocations.GetData(locationTuple.Item2).Partition;
-							}
-							Vector3 pos = locationTuple.Item1;
+							// Calculate the MP location
+							LgTuple<Vector3, string> merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
+
+							// Force the location to be in the yard TODO REFECTOR THIS
+//							while(!PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
+//								merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
+//							}
+
+							Vector3 locationPosition = merchantLocation.Item1;
+							string locationId = merchantLocation.Item2;
+							int partitionNumber = PartitionManager.Instance.GetPartitionNumberFromLocationId(locationId);
+
 							goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
-							goMiniPet.transform.localPosition = pos;
+							goMiniPet.transform.localPosition = locationPosition;
 							goMiniPet.name = prefab.name;
-							goMiniPet.GetComponent<MiniPet>().Init(data);
-							goMiniPet.GetComponent<MiniPetMerchant>().isFinishEating = false;
+
+							DataManager.instance.GameData.MiniPetLocations.SaveLocationId(miniPetID, locationId);
 							DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
+
+							MiniPetMerchant merchantScript = goMiniPet.GetComponent<MiniPetMerchant>();
+							merchantScript.Init(data);
+							merchantScript.isFinishEating = false;
+
 							// Add the pet into the dictionary to keep track
 							MiniPetTable.Add(miniPetID, goMiniPet);
-							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 						}
 					}
-				}
-				else if(Application.loadedLevelName == SceneUtils.BEDROOM && DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID) != Vector3.zero){
-					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLoc(miniPetID), Quaternion.identity) as GameObject;
-					goMiniPet.name = prefab.name;
-					goMiniPet.GetComponent<MiniPet>().Init(data);
-					// Add the pet into the dictionary to keep track
-					MiniPetTable.Add(miniPetID, goMiniPet);
-				}
+				}//TODO finish this same 000 bug as gamemaster
+//				else if(Application.loadedLevelName == SceneUtils.BEDROOM && DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID) != Vector3.zero){
+//					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID), Quaternion.identity) as GameObject;
+//					goMiniPet.name = prefab.name;
+//					goMiniPet.GetComponent<MiniPet>().Init(data);
+//					// Add the pet into the dictionary to keep track
+//					MiniPetTable.Add(miniPetID, goMiniPet);
+//				}
+			}
+			break;
+
+		default:
+			Debug.LogError("Bad minipet type specified: " + data.Type.ToString());
+			break;
+		}
+	}
+	#endregion
+
+	#region XP and leveling
+	/// <summary>
+	/// Need to check if mp can be leveled first using CanModifyFoodXP
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public void IncreaseXp(string miniPetID){
+		Debug.Log("Increasing xp called");
+		if(CanModifyXp(miniPetID)){
+			int xpNeededForLevelUp = GetXpNeededForNextLevel(miniPetID);
+			int currentXp = GetCurrentXp(miniPetID);
+			DataManager.Instance.GameData.MiniPets.IncreaseXp(miniPetID, 1);
+			
+			Debug.Log(xpNeededForLevelUp + " " + currentXp);
+			
+			// Check current xp with that condition
+			if(currentXp >= xpNeededForLevelUp){
+				Debug.Log("Leveled up!!");
+				IncreaseCurrentLevelAndResetCurrentXP(miniPetID);
 			}
 		}
-	}
-
-	public MiniPetTypes GetMinipetType(string petID){
-		ImmutableDataMiniPet minipetData = DataLoaderMiniPet.GetData(petID);
-		return minipetData.Type;
-	}
-
-	/// <summary>
-	/// Determines whether new minipet locations should be spawned, also flags the datetime automatically
-	/// Only call once per a play period all furture calls will be false
-	/// </summary>
-	public bool CanSpawnNewMinipetLocations(){
-		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
-			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-	public bool IsMaxLevel(string miniPetID){
-		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
-		return currentLevel == maxLevel;
-	}
-
-	/// <summary>
-	/// Determine whether mp can be fed. 
-	/// </summary>
-	/// <returns><c>true</c> if mp can be fed; otherwise, <c>false</c>.</returns>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	public bool CanModifyXP(string miniPetID){
-		//make sure current level is not at max level
-		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
-		bool canModify = (currentLevel != maxLevel);
-		return canModify;
 	}
 
 	/// <summary>
 	/// Gets the current level.
 	/// </summary>
-	/// <returns>The current level.</returns>
-	/// <param name="miniPetID">Mini pet ID.</param>
 	public Level GetCurrentLevel(string miniPetID){
 		return DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
 	}
-
+	
 	/// <summary>
 	/// Gets the current food XP.
 	/// </summary>
-	/// <returns>The current food XP.</returns>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	public int GetCurrentXP(string miniPetID){
-		return DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
+	private int GetCurrentXp(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.GetCurrentXp(miniPetID);
 	}
 
 	/// <summary>
-	/// Gets the next level up condition.
+	/// Determine whether mp can be leveled
+	/// </summary>
+	private bool CanModifyXp(string miniPetID){
+		// Make sure current level is not at max level
+		Level currentLevel = GetCurrentLevel(miniPetID);
+		bool canModify = ((int)currentLevel < (int)maxLevel);
+		return canModify;
+	}
+
+	private bool IsMaxLevel(string miniPetID){
+		Level currentLevel = GetCurrentLevel(miniPetID);
+		return currentLevel == maxLevel;
+	}
+
+	/// <summary>
+	/// Gets xp required for next level up 
 	/// </summary>
 	/// <returns>The next level up condition. -1 if at max level already</returns>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	public int GetNextLevelUpCondition(string miniPetID){
-		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
-		ImmutableDataMiniPetLevelUpConditions levelUpConditionData = 
-			DataLoaderLevelUpConditions.GetData(data.LevelUpConditionID);
-
-		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+	private int GetXpNeededForNextLevel(string miniPetID){
+		// Get the next level of minipet
+		Level currentLevel = GetCurrentLevel(miniPetID);
+		int currentLevelNum = (int)currentLevel;
+		Level nextLevel = (Level)(currentLevelNum + 1);
 		
-		//get next level
-		Level nextLevel = GetNextLevel(currentLevel);
-		
-		//get next level up condition
-		int levelUpCondition = -1;
-		if(currentLevel != maxLevel)
-			levelUpCondition = levelUpConditionData.GetLevelUpCondition(nextLevel);
-
-		return levelUpCondition;
-	}
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "INCREASE XP")){
-//			IncreaseXP("MiniPet2");
-//		}
-//	}
-
-	/// <summary>
-	/// Need to check if mp can be leveled first using CanModifyFoodXP
-	/// </summary>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	public void IncreaseXP(string miniPetID){
-		Debug.Log("Increasing xp");
-		if(CanModifyXP(miniPetID)){
-			int levelUpCondition = GetNextLevelUpCondition(miniPetID);
-			int currentXP = DataManager.Instance.GameData.MiniPets.GetCurrentXP(miniPetID);
-			DataManager.Instance.GameData.MiniPets.IncreaseXP(miniPetID, 1);
-			StatusUpdateEventArgs args = new StatusUpdateEventArgs();
-			
-			args.UpdateStatus = UpdateStatuses.IncreaseFoodXP;
-			args.MinipetID = miniPetID;
-			
-			Debug.Log(levelUpCondition + " " + currentXP);
-			
-			//check current food xp with that condition
-			if(currentXP >= levelUpCondition){
-				Debug.Log("Leveled up");
-				args.UpdateStatus = UpdateStatuses.LevelUp;
-				IncreaseCurrentLevelAndResetCurrentXP(miniPetID);	// TODO this before minipetstatus update?
-			}
+		// Get the xp needed for next level
+		int xpNeededForNextLevel = -1;
+		if((int)currentLevel < (int)maxLevel){
+			ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
+			ImmutableDataMiniPetLevelUpConditions levelUpConditionData = DataLoaderLevelUpConditions.GetData(data.LevelUpConditionID);
+			xpNeededForNextLevel = levelUpConditionData.GetXpNeededForLevel(nextLevel);
 		}
-		else{
-			Debug.LogWarning("Can not modify XP any more for " + miniPetID);
-		}
+		return xpNeededForNextLevel;
 	}
 
 	/// <summary>
-	/// Increases the current level and reset current food XP.
+	/// Increases the current level and reset current xp.
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
-	public void IncreaseCurrentLevelAndResetCurrentXP(string miniPetID){
+	private void IncreaseCurrentLevelAndResetCurrentXP(string miniPetID){
 		if(!IsMaxLevel(miniPetID)){
-			DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevel(miniPetID);
+			DataManager.Instance.GameData.MiniPets.IncreaseCurrentLevelAndResetXp(miniPetID);
 		}
+	}
+	#endregion
 
-		DataManager.Instance.GameData.MiniPets.ResetCurrentXP(miniPetID);
-		
-		StatusUpdateEventArgs args = new StatusUpdateEventArgs();
-		args.UpdateStatus = UpdateStatuses.IncreaseCurrentLevel;
-		args.MinipetID = miniPetID;
+	public MiniPetTypes GetMinipetType(string miniPetID){
+		ImmutableDataMiniPet miniPetData = DataLoaderMiniPet.GetData(miniPetID);
+		return miniPetData.Type;
+	}
+
+	public bool IsPetFinishedEating(string miniPetID){
+		return DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(miniPetID);
 	}
 
 	/// <summary>
 	/// Gets the food preference of this minipet at the current level
 	/// </summary>
-	/// <returns>The food preference food ID.</returns>
-	/// <param name="miniPetID">Mini pet ID.</param>
 	public string GetFoodPreference(string miniPetID){
-		Level currentLevel = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(miniPetID);
+		Level currentLevel = GetCurrentLevel(miniPetID);
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		ImmutableDataFoodPreferences foodPreferenceData = DataLoaderFoodPreferences.GetData(data.FoodPreferenceID);
 		return foodPreferenceData.GetFoodPreference(currentLevel);;
 	}
 
-	public string GetHatchPrefabName(string miniPetID){
+	/// <summary>
+	/// Starts the hatch sequence for the requested pet
+	/// </summary>
+	public void StartHatchSequence(string miniPetID){
+		// Play the respective minipet hatch animation
+		CutsceneUIManager.Instance.PlayCutscene(GetHatchPrefabName(miniPetID));
+		DataManager.Instance.GameData.MiniPets.SetIsHatched(miniPetID, true);
+		StartCoroutine(RefreshUnlockState(miniPetID));
+	}
+
+	private string GetHatchPrefabName(string miniPetID){
 		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
 		return data.CutsceneHatchPrefabName;
 	}
 
-	/// <summary>
-	/// Starts the hatch sequence for the requested pet
-	/// </summary>
-	/// <param name="miniPetID">Mini pet ID</param>
-	public void StartHatchSequence(string miniPetID){
-		// Play the respective minipet hatch animation
-		CutsceneUIManager.Instance.PlayCutscene(GetHatchPrefabName(miniPetID));
-		DataManager.Instance.GameData.MiniPets.SetisHatched(miniPetID, true);
-		StartCoroutine(RefreshUnlockState(miniPetID));
-	}
-
-	IEnumerator RefreshUnlockState(string miniPetID){
+	private IEnumerator RefreshUnlockState(string miniPetID){
 		yield return new WaitForSeconds(2f);
-		// Toggle the appearance of the actualy pet, its been unlocked
+		// Toggle the appearance of the actual pet, its been unlocked
 		MiniPetTable[miniPetID].GetComponent<MiniPet>().RefreshUnlockState();
 	}
 
 	/// <summary>
-	/// Gets the next level.
+	/// Enables/disables all minipet visilibity. Used for deco mode, shows or hides all pets
 	/// </summary>
-	/// <returns>The next level.</returns>
-	/// <param name="currentLevel">Current level.</param>
-	private Level GetNextLevel(Level currentLevel){
-		int currentLevelNum = (int)currentLevel;
-		currentLevelNum++;
-		
-		return (Level)currentLevelNum;
-	}
-
-	/// <summary>
-	/// Enables all minipet visilibity.
-	/// This is used for deco mode, shows all pets
-	/// </summary>
-	public void EnableAllMinipetVisilibity(){
+	public void ToggleAllMinipetVisilibity(bool isVisible){
 		foreach(KeyValuePair<string, GameObject> entry in MiniPetTable){
 			GameObject minipetGO = entry.Value;
-			minipetGO.GetComponent<MiniPet>().ToggleVisibility(true);
+			minipetGO.GetComponent<MiniPet>().ToggleVisibility(isVisible);
 		}
 	}
 
-	/// <summary>
-	/// Disables all minipet visibility.
-	/// This is used for deco mode, hides all pets
-	/// </summary>
-	public void DisableAllMinipetVisibility(){
-		foreach(KeyValuePair<string, GameObject> entry in MiniPetTable){
-			GameObject minipetGO = entry.Value;
-			minipetGO.GetComponent<MiniPet>().ToggleVisibility(false);
-		}
+	public int GetPartitionNumberForMinipet(string minipetId){
+		string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(minipetId);
+		return PartitionManager.Instance.GetPartitionNumberFromLocationId(locationId);
 	}
 }

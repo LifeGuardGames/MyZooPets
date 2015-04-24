@@ -252,11 +252,11 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		return levelUpCondition;
 	}
 
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "INCREASE XP")){
-			IncreaseXP("MiniPet2");
-		}
-	}
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "INCREASE XP")){
+//			IncreaseXP("MiniPet2");
+//		}
+//	}
 
 	/// <summary>
 	/// Need to check if mp can be leveled first using CanModifyFoodXP

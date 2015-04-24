@@ -15,7 +15,8 @@ public class MutableDataMiniPets{
 		public bool isHatched{get; set;}
 		public bool IsFinishEating {get; set;}
 		public List<string> SecretMerchantSellList{get; set;}
-		public ImmutableDataMerchantItem currItem;
+		// array index of the item therefore should not be 0 for default
+		public int currItem;
 		public MutableDataWellapadTask task {get; set;}
 	
 		public Status(){
@@ -25,7 +26,7 @@ public class MutableDataMiniPets{
 			isHatched = false;
 			IsFinishEating =  false;
 			SecretMerchantSellList = new List<string>();
-			currItem = null;
+			currItem = 500;
 			timesVisited = 0;
 		}
 	}
@@ -312,7 +313,7 @@ public class MutableDataMiniPets{
 		}
 	}
 
-	public void SetItem(string miniPetID, ImmutableDataMerchantItem item){
+	public void SetItem(string miniPetID, int item){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 			
@@ -321,14 +322,14 @@ public class MutableDataMiniPets{
 		}
 	}
 
-	public ImmutableDataMerchantItem GetItem(string miniPetID){
+	public int GetItem(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 			
 			return status.currItem;
 		}
 		else{
-			return null;
+			return 500;
 		}
 	}
 	

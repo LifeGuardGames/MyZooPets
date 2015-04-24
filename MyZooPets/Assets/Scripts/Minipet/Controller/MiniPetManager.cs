@@ -57,9 +57,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				goMiniPet.GetComponent<MiniPetRetentionPet>().Init(data);
 				goMiniPet.GetComponent<MiniPetRetentionPet>().FigureOutMissions();
 				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")&& !DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Critical")){
-					Debug.Log("dugndfkb");
 					goMiniPet.GetComponent<MiniPetRetentionPet>().GiveOutMission();
-					List<string> keys = new List<string>(DataManager.Instance.GameData.Wellapad.CurrentTasks.Keys);
 				}
 				// Add the pet into the dictionary to keep track
 				MiniPetTable.Add(miniPetID, goMiniPet);

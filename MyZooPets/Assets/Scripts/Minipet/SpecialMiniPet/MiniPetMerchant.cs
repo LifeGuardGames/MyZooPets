@@ -60,14 +60,14 @@ public class MiniPetMerchant : MiniPet{
 	public void OpenStore(){
 		Hashtable hash = new Hashtable();
 		ImmutableDataMerchantItem itemData;
-		if(DataManager.Instance.GameData.MiniPets.GetItem(MinipetId) == null){
+		if(DataManager.Instance.GameData.MiniPets.GetItem(MinipetId) == 500){
 			int max = items.Count;
 			int rand = Random.Range(0, max);
 			itemData = DataLoaderMerchantItem.GetData(items[rand]);
-			DataManager.Instance.GameData.MiniPets.SetItem(MinipetId, itemData);
+			DataManager.Instance.GameData.MiniPets.SetItem(MinipetId, rand);
 		}
 		else{
-			itemData = DataManager.Instance.GameData.MiniPets.GetItem(MinipetId);
+			itemData = DataLoaderMerchantItem.GetData(items[DataManager.Instance.GameData.MiniPets.GetItem(MinipetId)]);
 		}
 		secItem = itemData;
 		hash[0] = itemData.ItemId;

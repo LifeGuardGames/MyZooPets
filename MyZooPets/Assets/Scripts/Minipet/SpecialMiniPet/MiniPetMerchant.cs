@@ -25,6 +25,15 @@ public class MiniPetMerchant : MiniPet{
 			//itemsInList = items.Count;
 			DataManager.Instance.GameData.MiniPets.saveMerchList(items, minipetId);
 		}
+		if(DataManager.Instance.GameData.MiniPets.GetItem(MinipetId) == -1){
+			int max = items.Count;
+			int rand = Random.Range(0, max);
+			secItem = DataLoaderMerchantItem.GetData(items[rand]);
+			DataManager.Instance.GameData.MiniPets.SetItem(MinipetId, rand);
+		}
+		else{
+			secItem = DataLoaderMerchantItem.GetData(items[DataManager.Instance.GameData.MiniPets.GetItem(MinipetId)]);
+		}
 	}
 
 	protected override void OpenChildUI(){
@@ -59,19 +68,9 @@ public class MiniPetMerchant : MiniPet{
 
 	public void OpenStore(){
 		Hashtable hash = new Hashtable();
-		ImmutableDataMerchantItem itemData;
-		if(DataManager.Instance.GameData.MiniPets.GetItem(MinipetId) == 500){
-			int max = items.Count;
-			int rand = Random.Range(0, max);
-			itemData = DataLoaderMerchantItem.GetData(items[rand]);
-			DataManager.Instance.GameData.MiniPets.SetItem(MinipetId, rand);
-		}
-		else{
-			itemData = DataLoaderMerchantItem.GetData(items[DataManager.Instance.GameData.MiniPets.GetItem(MinipetId)]);
-		}
-		secItem = itemData;
-		hash[0] = itemData.ItemId;
-		hash[1] = itemData.Type;
+
+		hash[0] = secItem.ItemId;
+		hash[1] = secItem.Type;
 
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash); 
 	}

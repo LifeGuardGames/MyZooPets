@@ -26,7 +26,7 @@ public class MutableDataMiniPets{
 			isHatched = false;
 			IsFinishEating =  false;
 			SecretMerchantSellList = new List<string>();
-			currItem = 500;
+			currItem = -1;
 			timesVisited = 0;
 		}
 	}
@@ -329,7 +329,7 @@ public class MutableDataMiniPets{
 			return status.currItem;
 		}
 		else{
-			return 500;
+			return -1;
 		}
 	}
 	

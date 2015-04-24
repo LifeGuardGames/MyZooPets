@@ -50,7 +50,7 @@ public abstract class MiniPet : MonoBehaviour {
 	/// <param name="data">ImmutableDataMiniPet.</param>
 	public void Init(ImmutableDataMiniPet data){
 		this.minipetId = data.ID;
-		this.name = data.Name;
+		this.name = data.Type;
 	}
 
 	protected virtual void Start(){

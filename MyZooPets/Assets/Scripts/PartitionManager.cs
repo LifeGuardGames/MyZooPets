@@ -220,23 +220,6 @@ public class PartitionManager : Singleton<PartitionManager> {
 		return new List<string>(partitionData.DecoCategoriesStore);
 	}
 
-	public int GetPartitionNumberFromLocationId(string locationId){
-		return DataLoaderPartitionLocations.GetData(locationId).Partition;
-	}
-
-	public MinigameTypes GetMinigameTypeFromLocationId(string locationId){
-		PartitionLocationTypes partitionLocType = DataLoaderPartitionLocations.GetData(locationId).Attribute;
-		if(partitionLocType == PartitionLocationTypes.Base){
-			// Not supported for parsing
-			return MinigameTypes.None;
-		}
-		else{
-			// Parse convert string to another enum
-			MinigameTypes minigameType = (MinigameTypes)Enum.Parse(typeof(MinigameTypes), partitionLocType.ToString());
-			return minigameType;
-		}
-	}
-
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "base")){
 //			Debug.Log(GetBasePositionInBedroom());

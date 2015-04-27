@@ -80,9 +80,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						goMiniPet.name = prefab.name;
 						goMiniPet.GetComponent<MiniPetGameMaster>().minigameType = type;
 						goMiniPet.GetComponent<MiniPet>().Init(data);
-						if(CanSpawnNewMinipetLocations()){
-							goMiniPet.GetComponent<MiniPetGameMaster>().isFinishEating = false;
-						}
+						goMiniPet.GetComponent<MiniPetGameMaster>().isFinishEating = false;
+						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID,new Vector3 (0,0,0));
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetID, goMiniPet);
 						DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
@@ -156,6 +155,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 							goMiniPet.GetComponent<MiniPet>().Init(data);
 							goMiniPet.GetComponent<MiniPetMerchant>().isFinishEating = false;
 							DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
+							DataManager.Instance.GameData.MiniPets.SetItem(miniPetID, -1);
 							// Add the pet into the dictionary to keep track
 							MiniPetTable.Add(miniPetID, goMiniPet);
 							DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);

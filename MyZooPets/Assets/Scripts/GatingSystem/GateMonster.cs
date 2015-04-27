@@ -8,7 +8,7 @@ using System.Collections;
 public class GateMonster : Gate{
 	public float tweenTime; // time it takes the monster to tween to its new position after taking damage
 	public GameObject[] smokeMonsterHeads;	// Local locations of the heads, base head needs to be first!
-
+	public bool isBoss = false;
 	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
 	private Vector3 idealPos;
 	private int currentHealth;
@@ -31,6 +31,9 @@ public class GateMonster : Gate{
 	}
 
 	public void SetupHeads(){
+		if(Application.loadedLevelName == SceneUtils.YARD){
+			isBoss = true;
+		}
 		// New way to show monster health - having multiple heads
 		currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		if(currentHealth <= smokeMonsterHeads.Length){
@@ -76,8 +79,12 @@ public class GateMonster : Gate{
 //		}
 
 		// Drop some coins when the gate monster is attacked
+		if(!isBoss){
 		StatsController.Instance.ChangeStats(deltaStars: 35, starsLoc: nextHeadToMove.transform.position, is3DObject: true);
-
+		}
+		else{
+			StatsController.Instance.ChangeStats(deltaStars: 150, starsLoc: nextHeadToMove.transform.position, is3DObject: true);
+		}
 		// Move one of the heads out, ONLY applies to everything thats not the first head
 		if(baseHeadToMove != nextHeadToMove){
 			MoveSubHead();

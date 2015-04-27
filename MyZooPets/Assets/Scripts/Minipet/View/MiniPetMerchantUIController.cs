@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class MiniPetMerchantUIController : MonoBehaviour {
-
 	public UILabel itemNameLabel;
 	public UILabel descriptionLabel;
 	public UIImageButton buyButton;
@@ -10,27 +9,22 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public UISprite sprite;
 	public GameObject itemSpritePrefab;
 	public TweenToggle tweenToggle;
-	private GameObject merchant;
-	private string itemId;
-	private Item secItem;
-	private ItemType itemType = ItemType.None;
+	private Item secretItem;
 
-	public void Initialize(string itemID, bool isBoughtAlready, ItemType itemType){
-		Item secretItem = ItemLogic.Instance.GetItem(itemID);
-		secItem = secretItem;
-		itemId = itemID;
+	private MiniPetMerchant merchantScript;		// Reference to minipet logic
+
+	public void InitializeContent(string itemID, bool isBoughtAlready, ItemType itemType, MiniPetMerchant merchantScript){
+		this.merchantScript = merchantScript;
+		secretItem = ItemLogic.Instance.GetItem(itemID);
+
 		itemNameLabel.text = secretItem.Name;
+		descriptionLabel.text = secretItem.Description;
 		sprite.spriteName = DataLoaderItems.GetItemTextureName(itemID);
 		sprite.MakePixelPerfect();
-		this.itemType = itemType;	// Cache the type
-
-		descriptionLabel.text = secretItem.Description;
-
 		cost.text = secretItem.Cost.ToString();
-		merchant = GameObject.Find("Merchant");
-		if(isBoughtAlready){
-			// Enable some game components here
-			buyButton.enabled = false;
+
+		if(isBoughtAlready){					// Enable some game components here
+			buyButton.gameObject.SetActive(false);
 		}
 
 		if(itemType == ItemType.Decorations){
@@ -38,17 +32,14 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 			InventoryUIManager.Instance.HidePanel();
 		}
 
-		// Show the hud because we are buying stuff
-		HUDUIManager.Instance.ShowPanel();
+		HUDUIManager.Instance.ShowPanel();		// Show the hud because we are buying stuff
 	}
 
 	public void BuyItem(){
-		if(DataManager.Instance.GameData.Stats.Stars >= (int) secItem.Cost){
+		if(DataManager.Instance.GameData.Stats.Stars >= secretItem.Cost){
+			merchantScript.BuyItem();
 			buyButton.gameObject.SetActive(false);
-			merchant.GetComponent<MiniPetMerchant>().RemoveItem();
-			InventoryLogic.Instance.AddItem(itemId, 1);
-			StatsController.Instance.ChangeStats(deltaStars: (int)secItem.Cost * -1);
-			OnBuyAnimation(secItem, sprite.gameObject);
+			OnBuyAnimation(secretItem, sprite.gameObject);
 		}
 		else{
 			HUDUIManager.Instance.PlayNeedMoneyAnimation();
@@ -64,13 +55,13 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		// depending on what type of item the user bought, the animation has the item going to different places
 		switch(itemData.Type){
 		case ItemType.Decorations:
-			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemId);
+			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(secretItem.ID);
 			break;
 		case ItemType.Accessories:
 			 Debug.LogError("Not implemented yet!");
 			break;
 		default:	// Everything else
-			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemId);
+			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(secretItem.ID);
 			break;
 		}
 		

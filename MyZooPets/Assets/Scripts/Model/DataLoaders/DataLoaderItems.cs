@@ -56,6 +56,11 @@ public class DataLoaderItems{
         Item item = GetItem(itemID);
         return item.TextureName;
     }
+
+	public static int GetCost(string itemID){
+		Item item = GetItem(itemID);
+		return item.Cost;
+	}
 	
 	/// <summary>
 	/// Gets the name of the deco item prefab.

@@ -25,7 +25,7 @@ public class MiniPetRetentionPet : MiniPet {
 			miniPetSpeechAI.ShowTipMsg();
 			Hashtable hash = new Hashtable();
 			hash[0] = missionID;
-			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention, hash); 
+			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention, hash, this); 
 		}
 		
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){

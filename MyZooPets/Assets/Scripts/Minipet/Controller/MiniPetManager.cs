@@ -48,13 +48,13 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		}
 	}
 
-	private void CreateMiniPet(string miniPetID){
+	private void CreateMiniPet(string miniPetId){
 		GameObject goMiniPet = null;
 
 		// Unlock in data manager
-		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
-		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetID);
-		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
+		DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetId);
+		DataManager.Instance.GameData.MiniPetLocations.UnlockMiniPet(miniPetId);
+		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetId);
 		GameObject prefab = Resources.Load(data.PrefabName) as GameObject;
 
 		switch(data.Type){
@@ -73,9 +73,9 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				string locationId = retentionLocation.Item2;
 				int partitionNumber = 0;
 
-				DataManager.Instance.GameData.MiniPets.SetIsHatched(miniPetID, true);
-				DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetID, locationId);	// locationId from tuple
-				DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, true);	// Set to always full
+				DataManager.Instance.GameData.MiniPets.SetIsHatched(miniPetId, true);
+				DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetId, locationId);	// locationId from tuple
+				DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetId, true);	// Set to always full
 
 				goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
 				goMiniPet.transform.localPosition = locationPosition;	// vector3 from tuple
@@ -89,7 +89,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				}
 
 				// Add the pet into the dictionary to keep track
-				MiniPetTable.Add(miniPetID, goMiniPet);
+				MiniPetTable.Add(miniPetId, goMiniPet);
 			}
 			break;
 
@@ -106,8 +106,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					int partitionNumber = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
 
 					// Save information for minipet
-					DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetID, locationId);
-					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
+					DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetId, locationId);
+					DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetId, false);
 
 					// Spawn the minipet if it is in current scene
 					if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
@@ -123,15 +123,15 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 //						}
 
 						// Add the pet into the dictionary to keep track
-						MiniPetTable.Add(miniPetID, goMiniPet);
+						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
 			}
 			// Spawn based on its saved location
 			else{
 				// If the saved minipet location is in the current zone
-				if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetID))){
-					string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID);
+				if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetId))){
+					string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 
 					// Get relevant info to populate with given saved location ID
 					int partition = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
@@ -147,7 +147,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					gameMasterScript.Init(data);
 
 					// Add the pet into the dictionary to keep track
-					MiniPetTable.Add(miniPetID, goMiniPet);
+					MiniPetTable.Add(miniPetId, goMiniPet);
 				}
 			}
 
@@ -185,8 +185,14 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						int partitionNumber = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
 
 						// Save information for minipet
-						DataManager.instance.GameData.MiniPetLocations.SaveLocationId(miniPetID, locationId);
-						DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
+						DataManager.instance.GameData.MiniPetLocations.SaveLocationId(miniPetId, locationId);
+						DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetId, false);
+
+						// Set new merchant item here only
+						List<ImmutableDataMerchantItem> merchantItemsList = DataLoaderMerchantItem.GetDataList();
+						ImmutableDataMerchantItem merchantItemData = DataLoaderMerchantItem.GetData(merchantItemsList[UnityEngine.Random.Range(0, merchantItemsList.Count)].ItemId);
+						DataManager.Instance.GameData.MiniPets.SetItem(miniPetId, merchantItemData);
+						DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(miniPetId, false);
 
 						// Spawn the minipet if it is in current scene
 						if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
@@ -199,16 +205,16 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 							merchantScript.isFinishEating = false;	// TODO why no other scripts have this??
 
 							// Add the pet into the dictionary to keep track
-							MiniPetTable.Add(miniPetID, goMiniPet);
+							MiniPetTable.Add(miniPetId, goMiniPet);
 						}
 					}
 				}
 				// Spawn based on its saved location
 				else{
 					// If the saved minipet location is in the current zone
-					Debug.Log(miniPetID);
-					if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetID))){
-						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID);
+					Debug.Log(miniPetId);
+					if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetId))){
+						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 						
 						// Get relevant info to populate with given saved location ID
 						int partition = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
@@ -223,7 +229,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						merchantScript.Init(data);
 						
 						// Add the pet into the dictionary to keep track
-						MiniPetTable.Add(miniPetID, goMiniPet);
+						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
 

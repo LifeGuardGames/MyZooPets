@@ -36,7 +36,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		eModeType = UIModeTypes.MiniPet;
 	}
 
-	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash){
+	// Called from minipet script children themselves
+	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash, MonoBehaviour baseScript){
 		Debug.Log("OPENING MINIPET TYPE");
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() || type == MiniPetTypes.Retention){
 			GameObject contentPrefab;
@@ -47,8 +48,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
 						contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
 						content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-						MiniPetRetentionUIController controller = content.GetComponent<MiniPetRetentionUIController>();
-						controller.Initialize(hash[0].ToString());
+						MiniPetRetentionUIController minipetRetentionUIController = content.GetComponent<MiniPetRetentionUIController>();
+						minipetRetentionUIController.InitializeContent(hash[0].ToString(), (MiniPetRetentionPet)baseScript);
 						if(!TutorialManager.Instance.IsTutorialActive()){
 							contentTweenParent = content.GetComponent<TweenToggle>();
 							//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
@@ -65,8 +66,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					Debug.Log("isgnvfjb");
 					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
 					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-					MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();
-					controller2.Initialize(hash[0].ToString());
+					MiniPetGameMasterUIController minipetGameMasterUIController = content.GetComponent<MiniPetGameMasterUIController>();
+					minipetGameMasterUIController.InitializeContent(hash[0].ToString(), (MiniPetGameMaster)baseScript);
 					if(!TutorialManager.Instance.IsTutorialActive()){
 						contentTweenParent = content.GetComponent<TweenToggle>();
 						//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
@@ -80,7 +81,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			case MiniPetTypes.Merchant:
 				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
 				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-				MiniPetMerchantUIController controller3 = content.GetComponent<MiniPetMerchantUIController>();
+				MiniPetMerchantUIController minipetMerchantUIController = content.GetComponent<MiniPetMerchantUIController>();
 				ItemType itemType;
 				switch (hash[1].ToString()){	// Item type
 				case "Decorations":
@@ -100,7 +101,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					itemType = ItemType.Decorations;
 					break;
 				}
-				controller3.Initialize(hash[0].ToString(), false, itemType);
+				minipetMerchantUIController.InitializeContent(hash[0].ToString(), false, itemType, (MiniPetMerchant)baseScript);
 				if(!TutorialManager.Instance.IsTutorialActive()){
 					contentTweenParent = content.GetComponent<TweenToggle>();
 					//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
@@ -125,6 +126,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	#region Overridden functions
 	protected override void _OpenUI(){
 		this.GetComponent<TweenToggleDemux>().Show();
+		storeTweenParent.Show();
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -182,17 +184,50 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 //		}
 //	}
 
-//	private void UpdateLevelUI(){
-//		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-//
-//		// update level slider
-//		if(nextLevelUpCondition != -1){
-//			//TODO Need this?
-//		}
-//		else{// Max level
-//			//TODO Design what happens here
+	/// <summary>
+	/// Refreshs the food item UI
+	/// This does all the check by itself so dont worry when calling this
+	/// </summary>
+//	public void RefreshFoodItemUI(){
+//		if(SelectedMiniPetID != null){
+//			if(!DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID)){
+//				storeTweenParent.Show();
+//			}
+//			else{
+//				storeTweenParent.Hide();
+//				Debug.Log("CHECKING OPEN MINIPET TYPE");
+//				if(contentTweenParent != null){
+//					contentTweenParent.Show();
+//				}
+//				
+//				// Only hide the inventory panel if it is not the merchant
+//				if(MiniPetManager.Instance.GetMinipetType(SelectedMiniPetID) != MiniPetTypes.Merchant){
+//					InventoryUIManager.Instance.HidePanel();
+//				}
+//			}
+//			CheckStoreButtonPulse();
 //		}
 //	}
+	
+	/// <summary>
+	/// Checks the store button pulse.
+	/// This does all the check by itself so dont worry when calling this
+	/// </summary>
+	public void CheckStoreButtonPulse(){
+		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
+		bool isPetFed = !DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID);
+		
+		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && isPetFed){
+			storeButtonPulseAnim.Play();
+			storeButtonSunbeam.SetActive(true);
+		}
+		else{
+			storeButtonPulseAnim.Stop();
+			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
+			storeButtonSunbeam.SetActive(false);
+		}
+	}
 
 	/// <summary>
 	/// Opens the shop. Store button calls this function
@@ -239,72 +274,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			storeTweenParent.Show();
 			HUDUIManager.Instance.HidePanel();
 		}
-
 		CheckStoreButtonPulse();
-	}
-
-	/// <summary>
-	/// Refreshs the food item UI
-	/// This does all the check by itself so dont worry when calling this
-	/// </summary>
-	public void RefreshFoodItemUI(){
-		if(SelectedMiniPetID != null){
-			if(!DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID)){
-				//nameLabel.text = SelectedMiniPetName;
-				//int currentFoodXP = MiniPetManager.Instance.GetCurrentXP(SelectedMiniPetID);
-				//int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-				//labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
-				//labelFeedCount.text = (1).ToString();
-			//	labelFeedCount.gameObject.SetActive(true);
-				//labelFeed.gameObject.SetActive(true);
-				//Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
-			//	spriteFeed.spriteName = item.TextureName;
-				//spriteFeed.gameObject.SetActive(true);
-				///spriteFeed.GetComponent<SpriteResizer>().Resize();
-
-				//feedTweenParent.Show();
-				storeTweenParent.Show();
-			}
-			else{
-				//feedTweenParent.Hide();
-				storeTweenParent.Hide();
-				Debug.Log("CHECKING OPEN MINIPET TYPE");
-				if(contentTweenParent != null){
-					contentTweenParent.Show();
-				}
-
-				// Only hide the inventory panel if it is not the merchant
-				if(MiniPetManager.Instance.GetMinipetType(SelectedMiniPetID) != MiniPetTypes.Merchant){
-					InventoryUIManager.Instance.HidePanel();
-				}
-
-				//labelFeedCount.gameObject.SetActive(false);
-				//labelFeed.gameObject.SetActive(false);
-				//spriteFeed.spriteName = null;
-				//spriteFeed.gameObject.SetActive(false);
-			}
-			CheckStoreButtonPulse();
-		}
-	}
-
-	/// <summary>
-	/// Checks the store button pulse.
-	/// This does all the check by itself so dont worry when calling this
-	/// </summary>
-	private void CheckStoreButtonPulse(){
-		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
-		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
-		bool petFed = !DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID);
-
-		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && petFed){
-			storeButtonPulseAnim.Play();
-			storeButtonSunbeam.SetActive(true);
-		}
-		else{
-			storeButtonPulseAnim.Stop();
-			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
-			storeButtonSunbeam.SetActive(false);
-		}
 	}
 
 	public bool HasContent(){

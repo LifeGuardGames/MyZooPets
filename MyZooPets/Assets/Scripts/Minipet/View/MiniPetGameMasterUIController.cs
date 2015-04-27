@@ -12,18 +12,20 @@ public class MiniPetGameMasterUIController : MonoBehaviour {
 	public TweenToggle slash;
 	MutableDataWellapadTask task;
 
-	public void Initialize(string taskID){
-		// Not sure what you want to pass in here grab sean to discuss
-			List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
-			task = listTasks[0];
-			ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
-			string desc = missionTask.GetText();
-			rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];
-			if(task.Amount > 0){
-				desc = String.Format(desc, task.Amount);
-			}
-			label.text = desc;
-			SetCheckboxSprite(true);
+	private MiniPetGameMaster gameMasterScript;		// Reference to minipet logic
+
+	public void InitializeContent(string taskID, MiniPetGameMaster gameMasterScript){
+		this.gameMasterScript = gameMasterScript;
+		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
+		task = listTasks[0];
+		ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
+		string desc = missionTask.GetText();
+		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];
+		if(task.Amount > 0){
+			desc = String.Format(desc, task.Amount);
+		}
+		label.text = desc;
+		SetCheckboxSprite(true);
 	}
 
 	//---------------------------------------------------

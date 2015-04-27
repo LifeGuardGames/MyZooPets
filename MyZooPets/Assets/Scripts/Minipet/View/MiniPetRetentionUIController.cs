@@ -16,9 +16,10 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 	public TweenToggle slash4;
 	public GameObject rewardButton;
 
+	private MiniPetRetentionPet retentionScript;	// Reference to minipet logic
 
-	public void Initialize(string _task){
-		Debug.Log("Init");
+	public void InitializeContent(string _task, MiniPetRetentionPet retentionScript){
+		this.retentionScript = retentionScript;
 		string taskID = _task;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 

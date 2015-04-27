@@ -64,8 +64,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		// fire callback
 		UIManagerEventArgs args = new UIManagerEventArgs();
 		args.Opening = true;
-		if(OnManagerOpen != null)
-			OnManagerOpen(this, args);		
+		if(OnManagerOpen != null){
+			OnManagerOpen(this, args);
+		}
 		
 		// the UI is now open
 		isOpen = true;

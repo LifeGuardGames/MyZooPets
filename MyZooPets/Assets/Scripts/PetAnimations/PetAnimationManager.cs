@@ -126,7 +126,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		foreach(string animationParameter in booleanParameters){
 			animator.SetBool(animationParameter, false);
 		}
-
+		//AudioManager.Instance.PlayClip("petMove", variations: 6);
 		currentAnimationState = PetAnimStates.Walking;
 		animator.SetBool("IsIdle", false);
 	}

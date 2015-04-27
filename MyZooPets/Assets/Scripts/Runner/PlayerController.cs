@@ -235,7 +235,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 	private void Jump(){
 		if(playerPhysics.Grounded){
-            AudioManager.Instance.PlayClip("runnerJumpUp");
+            AudioManager.Instance.PlayClip("runnerJumpUp", variations: 3);
 
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
 			playerPhysics.Jumping = true;

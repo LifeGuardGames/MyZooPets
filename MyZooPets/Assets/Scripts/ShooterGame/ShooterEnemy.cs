@@ -81,7 +81,7 @@ public class ShooterEnemy : MonoBehaviour{
 		ShooterGameEnemyController.Instance.enemiesInWave--;
 		ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
-		
+		//AudioManager.Instance.PlayClip("shooterEnemyDie", variations: 3);
 		// Visual changes
 		animator.gameObject.SetActive(false);
 		if(particle != null){

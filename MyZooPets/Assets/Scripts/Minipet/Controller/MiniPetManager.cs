@@ -177,6 +177,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(latestGateAux == null || (latestGateAux.Partition - 1 >= 2)){
 				// Check if mp needs new locations
 				if(isSpawnNewLocations){
+					Debug.Log("Merchant spawning new locations");
 					if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
 						// Calculate the MP location
 						LgTuple<Vector3, string> merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
@@ -190,9 +191,11 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 						// Set new merchant item here only
 						List<ImmutableDataMerchantItem> merchantItemsList = DataLoaderMerchantItem.GetDataList();
-						ImmutableDataMerchantItem merchantItemData = DataLoaderMerchantItem.GetData(merchantItemsList[UnityEngine.Random.Range(0, merchantItemsList.Count)].ItemId);
+						ImmutableDataMerchantItem merchantItemData = DataLoaderMerchantItem.GetData(merchantItemsList[UnityEngine.Random.Range(0, merchantItemsList.Count)].ID);
 						DataManager.Instance.GameData.MiniPets.SetItem(miniPetId, merchantItemData);
 						DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(miniPetId, false);
+
+						Debug.Log(merchantItemData.ItemId);
 
 						// Spawn the minipet if it is in current scene
 						if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){

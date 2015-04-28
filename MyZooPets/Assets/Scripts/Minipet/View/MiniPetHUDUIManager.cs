@@ -118,7 +118,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	#region Overridden functions
 	protected override void _OpenUI(){
-		nameLabel = SelectedMiniPetName;
+		nameLabel.text = SelectedMiniPetName;
 		this.GetComponent<TweenToggleDemux>().Show();
 		storeTweenParent.Show();
 

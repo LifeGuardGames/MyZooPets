@@ -124,30 +124,30 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
-			// Spawn based on its saved location
-			else{
-				// If the saved minipet location is in the current zone
-				if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetId))){
-					string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
+				// Spawn based on its saved location
+				else{
+					// If the saved minipet location is in the current zone
+					if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetId))){
+						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 
-					// Get relevant info to populate with given saved location ID
-					int partition = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
-					Vector3 pos = DataLoaderPartitionLocations.GetOffsetFromLocationId(locationId);
-					MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
+						// Get relevant info to populate with given saved location ID
+						int partition = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
+						Vector3 pos = DataLoaderPartitionLocations.GetOffsetFromLocationId(locationId);
+						MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
 
-					goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partition).gameObject, prefab);
-					goMiniPet.transform.localPosition = pos;
-					goMiniPet.name = prefab.name;
+						goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partition).gameObject, prefab);
+						goMiniPet.transform.localPosition = pos;
+						goMiniPet.name = prefab.name;
 
-					MiniPetGameMaster gameMasterScript = goMiniPet.GetComponent<MiniPetGameMaster>();
-					gameMasterScript.minigameType = minigameType;
-					gameMasterScript.Init(data);
+						MiniPetGameMaster gameMasterScript = goMiniPet.GetComponent<MiniPetGameMaster>();
+						gameMasterScript.minigameType = minigameType;
+						gameMasterScript.Init(data);
 
-					// Add the pet into the dictionary to keep track
-					MiniPetTable.Add(miniPetId, goMiniPet);
+						// Add the pet into the dictionary to keep track
+						MiniPetTable.Add(miniPetId, goMiniPet);
+					}
 				}
 			}
-		}
 			break;
 
 		case MiniPetTypes.Merchant:

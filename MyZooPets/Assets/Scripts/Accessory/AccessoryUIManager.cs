@@ -173,7 +173,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				buyButton.isEnabled = false;
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
+				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
 
 				// Change the state of the button
 				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);

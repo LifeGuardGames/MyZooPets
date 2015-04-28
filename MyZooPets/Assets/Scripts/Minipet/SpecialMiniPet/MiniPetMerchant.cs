@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetMerchant : MiniPet{
-	
-	private GameObject blackStoreButton;
 	public int itemsInList = 0;
-	private List<string> items;
-	private ImmutableDataMerchantItem secItem;
+
+	private ImmutableDataMerchantItem secretMerchantItem;
 	private bool isItemBought;
 
 	void Awake(){
@@ -16,15 +14,8 @@ public class MiniPetMerchant : MiniPet{
 
 	protected override void Start(){
 		base.Start();
-		//temp
-		items = new List<string>();
-		blackStoreButton = GameObject.Find("BlackStoreButton");
-		items = DataManager.Instance.GameData.MiniPets.getMerchList(minipetId);
-		if(items == null){
-			items = DataLoaderMerchantItem.getMerchantList();
-			//itemsInList = items.Count;
-			DataManager.Instance.GameData.MiniPets.saveMerchList(items, minipetId);
-		}
+		secretMerchantItem = DataManager.Instance.GameData.MiniPets.GetItem(MinipetId);
+		isItemBought = DataManager.Instance.GameData.MiniPets.IsItemBoughtInPP(MinipetId);
 		if(DataManager.Instance.GameData.MiniPets.GetItem(MinipetId) == -1){
 			int max = items.Count;
 			int rand = Random.Range(0, max);
@@ -39,10 +30,7 @@ public class MiniPetMerchant : MiniPet{
 	protected override void OpenChildUI(){
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 			if(isFinishEating && !isItemBought){
-				Hashtable hash = new Hashtable();
-				hash[0] = secItem.ItemId;
-				hash[1] = secItem.Type;
-				MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash); 
+				OpenMerchantContent();
 			}
 			else if(isItemBought){
 				miniPetSpeechAI.ShowIdleMessage(MinipetType);
@@ -55,33 +43,32 @@ public class MiniPetMerchant : MiniPet{
 			base.FinishEating();
 			isPetCanGainXP = true;
 			isFinishEating = true; 
-			miniPetSpeechAI.ShowBlackShopMessage();
-			//ShowStoreButton();
+			miniPetSpeechAI.ShowMerchantShopMessage();
 			StartCoroutine(WaitASec());
 		}
+		MiniPetHUDUIManager.Instance.CheckStoreButtonPulse();
 	}
-
+	
 	IEnumerator WaitASec(){
 		yield return new WaitForSeconds(0.4f);
-		OpenStore();
+		OpenMerchantContent();
 	}
 
-	public void OpenStore(){
+	private void OpenMerchantContent(){
 		Hashtable hash = new Hashtable();
-
-		hash[0] = secItem.ItemId;
-		hash[1] = secItem.Type;
-
-		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash); 
+		hash[0] = secretMerchantItem.ItemId;
+		hash[1] = secretMerchantItem.Type;
+		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Merchant, hash, this); 
 	}
 
-	public void RemoveItem(){
-		items.Remove(secItem.ItemId);
+	public void BuyItem(){
 		isItemBought = true;
-		MiniPetManager.Instance.IncreaseXP(minipetId);
-	}
+		DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(MinipetId, true);
+		InventoryLogic.Instance.AddItem(secretMerchantItem.ItemId, 1);
 
-	public void ShowStoreButton(){
-		blackStoreButton.SetActive(true);
+		int cost = DataLoaderItems.GetCost(secretMerchantItem.ItemId);
+		StatsController.Instance.ChangeStats(deltaStars: cost * -1);
+
+		MiniPetManager.Instance.IncreaseXp(MinipetId);
 	}
 }

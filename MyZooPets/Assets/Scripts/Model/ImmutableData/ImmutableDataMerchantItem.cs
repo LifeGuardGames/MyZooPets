@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ImmutableDataMerchantItem  {
+public class ImmutableDataMerchantItem {
 
 	private string type;
 	public string Type {

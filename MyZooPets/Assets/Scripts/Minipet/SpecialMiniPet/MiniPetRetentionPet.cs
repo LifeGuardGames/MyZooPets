@@ -25,7 +25,7 @@ public class MiniPetRetentionPet : MiniPet {
 			miniPetSpeechAI.ShowTipMsg();
 			Hashtable hash = new Hashtable();
 			hash[0] = missionID;
-			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention, hash); 
+			MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.Retention, hash, this); 
 		}
 		
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
@@ -52,7 +52,7 @@ public class MiniPetRetentionPet : MiniPet {
 			}
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 				// claim the reward
-				MiniPetManager.Instance.IncreaseXP(minipetId);
+				MiniPetManager.Instance.IncreaseXp(minipetId);
 				WellapadMissionController.Instance.ClaimReward(missionID);
 				WellapadMissionController.Instance.RefreshCheck();
 			}

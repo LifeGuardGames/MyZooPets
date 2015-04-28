@@ -121,7 +121,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// </summary>
 	/// <returns>The unused position next to minigame.</returns>
 	/// <param name="minigameType">Minigame type.</param>
-	public LgTuple<Vector3, string> GetUnusedPositionNextToMinigame(MinigameTypes minigameType){
+	public LgTuple<Vector3, string> GetPositionNextToMinigame(MinigameTypes minigameType){
 		CheckInitializeOpenLocations();
 
 		// Converting to the MinigameTypes to a PartitionLocationType

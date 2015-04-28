@@ -281,7 +281,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			// Hide the pet/minipet so it doesn't get in the way
 			PetAnimationManager.Instance.DisableVisibility();
 			if(MiniPetManager.Instance){
-				MiniPetManager.Instance.DisableAllMinipetVisibility();
+				MiniPetManager.Instance.ToggleAllMinipetVisilibity(false);
 			}
 
 			if(InventoryLogic.Instance.AllDecoInventoryItems.Count == 0){
@@ -307,7 +307,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			// Show the pet/minipet again
 			PetAnimationManager.Instance.EnableVisibility();
 			if(MiniPetManager.Instance){
-				MiniPetManager.Instance.EnableAllMinipetVisilibity();
+				MiniPetManager.Instance.ToggleAllMinipetVisilibity(true);
 			}
 
 			TogglePulseShopButton(false);

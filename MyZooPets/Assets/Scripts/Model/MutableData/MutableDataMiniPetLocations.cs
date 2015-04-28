@@ -5,12 +5,10 @@ using System.Collections.Generic;
 
 public class MutableDataMiniPetLocations {
 	public class Status{
-		public string Loc{get; set;}
-		public int partition {get; set;}
+		public string PartitionLocationID {get; set;}
 
 		public Status(){
-			Loc = new Vector3(0,0,0).ToString();
-			partition = 1;
+			PartitionLocationID = "";
 		}
 	}
 
@@ -27,8 +25,9 @@ public class MutableDataMiniPetLocations {
 	}
 
 	public void UnlockMiniPet(string miniPetID){
-		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetLoc.ContainsKey(miniPetID))
+		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetLoc.ContainsKey(miniPetID)){
 			MiniPetLoc.Add(miniPetID, new Status());
+		}
 	}
 	
 	/// <summary>
@@ -38,49 +37,29 @@ public class MutableDataMiniPetLocations {
 	public bool IsMiniPetUnlocked(string miniPetID){
 		bool retVal = false;
 		
-		if(!string.IsNullOrEmpty(miniPetID))
+		if(!string.IsNullOrEmpty(miniPetID)){
 			retVal = MiniPetLoc.ContainsKey(miniPetID);
-		
+		}
 		return retVal;
 	}
 
-	public void SaveLoc(string miniPetID, Vector3 _Loc){
+	public void SaveLocationId(string miniPetID, string locationID){
 		if(MiniPetLoc.ContainsKey(miniPetID)){
-			Status status = MiniPetLoc[miniPetID];
-			
-			status.Loc = _Loc.ToString();
-			MiniPetLoc[miniPetID] = status;
-		}
-	}
-
-
-	public Vector3 GetLoc(string miniPetID){
-		if(MiniPetLoc.ContainsKey(miniPetID)){
-			Status status = MiniPetLoc[miniPetID];
-			return StringUtils.ParseVector3(status.Loc);
+			MiniPetLoc[miniPetID].PartitionLocationID = locationID;
 		}
 		else{
-			return new Vector3(0,0,0);
+			Debug.LogError("Bad miniPetID " + miniPetID);
 		}
 	}
 
-	public void SavePartition(String miniPetID, int par){
+
+	public string GetLocationId(string miniPetID){
 		if(MiniPetLoc.ContainsKey(miniPetID)){
-			Status status = MiniPetLoc[miniPetID];
-			
-			status.partition = par;
-			
-			MiniPetLoc[miniPetID] = status;
-		}
-	}
-
-	public int GetPartition(string miniPetID){
-	if(MiniPetLoc.ContainsKey(miniPetID)){
-		Status status = MiniPetLoc[miniPetID];
-			return status.partition;
+			return MiniPetLoc[miniPetID].PartitionLocationID;
 		}
 		else{
-			return 0;
+			Debug.LogError("Bad miniPetID " + miniPetID);
+			return null;
 		}
 	}
 }

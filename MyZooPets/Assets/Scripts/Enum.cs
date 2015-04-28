@@ -316,7 +316,6 @@ public enum DroppedItemStates {
 
 public enum MiniPetTypes{
     None,
-	Basic,
 	Retention,
 	GameMaster,
 	Merchant,

@@ -7,16 +7,18 @@ using System.Collections.Generic;
 /// Mutable data mini pets.
 /// </summary>
 public class MutableDataMiniPets{
+
 	public class Status{
 		public Level CurrentLevel {get; set;}
 		public int CurrentXP {get; set;}
 		public int timesVisited {get; set;}
-		public bool CanGiveMission{get; set;}
-		public bool isHatched{get; set;}
+		public bool CanGiveMission {get; set;}
+		public bool IsHatched {get; set;}
 		public bool IsFinishEating {get; set;}
-		public List<string> SecretMerchantSellList{get; set;}
-		// array index of the item therefore should not be 0 for default
-		public int currItem;
+
+		public ImmutableDataMerchantItem CurrItem {get; set;}
+		public bool IsMerchanItemBoughtInPP {get; set;}
+
 		public MutableDataWellapadTask task {get; set;}
 		public MinigameTypes miniGameType;
 	
@@ -24,10 +26,10 @@ public class MutableDataMiniPets{
 			CurrentLevel = Level.Level1;
 			CurrentXP = 0;
 			CanGiveMission = false;
-			isHatched = false;
+			IsHatched = false;
 			IsFinishEating =  false;
-			SecretMerchantSellList = new List<string>();
-			currItem = -1;
+			CurrItem = null;
+			IsMerchanItemBoughtInPP = false;
 			timesVisited = 0;
 			miniGameType = MinigameTypes.None;
 		}
@@ -40,10 +42,13 @@ public class MutableDataMiniPets{
 	/// </summary>
 	public Dictionary<string, Status> MiniPetProgress {get; set;}
 
+	public MutableDataMiniPets(){
+		MiniPetProgress = new Dictionary<string, Status>();
+	}
+
 	/// <summary>
 	/// Unlocks the mini pet.
 	/// </summary>
-	/// <param name="miniPetID">Mini pet ID.</param>
 	public void UnlockMiniPet(string miniPetID){
 		if(!string.IsNullOrEmpty(miniPetID) && !MiniPetProgress.ContainsKey(miniPetID)){
 			MiniPetProgress.Add(miniPetID, new Status());
@@ -53,29 +58,12 @@ public class MutableDataMiniPets{
 	/// <summary>
 	/// Whether the minipet has been unlocked
 	/// </summary>
-	/// <param name="miniPetID">Mini pet ID.</param>
 	public bool IsMiniPetUnlocked(string miniPetID){
 		bool retVal = false;
-
-		if(!string.IsNullOrEmpty(miniPetID))
+		if(!string.IsNullOrEmpty(miniPetID)){
 			retVal = MiniPetProgress.ContainsKey(miniPetID);
-
-		return retVal;
-	}
-
-	/// <summary>
-	/// Increases the food XP by amount
-	/// </summary>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	/// <param name="amount">Amount.</param>
-	public void IncreaseXP(string miniPetID, int amount){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			status.CurrentXP += amount;
-
-			MiniPetProgress[miniPetID] = status;
 		}
+		return retVal;
 	}
 
 	/// <summary>
@@ -83,44 +71,44 @@ public class MutableDataMiniPets{
 	/// </summary>
 	/// <returns>The current food XP.</returns>
 	/// <param name="miniPetID">Mini pet ID.</param>
-	public int GetCurrentXP(string miniPetID){
-		int XP = -1;
-
+	public int GetCurrentXp(string miniPetID){
+		int xp = -1;
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
-			XP = status.CurrentXP;
+			xp = status.CurrentXP;
 		}
-
-		return XP;
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
+		}
+		return xp;
 	}
 
 	/// <summary>
-	/// Resets the current food XP.
-	/// </summary>
-	/// <param name="miniPetID">Mini pet I.</param>
-	public void ResetCurrentXP(string miniPetID){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			status.CurrentXP = 0;
-
-			MiniPetProgress[miniPetID] = status;
-		}
-	}
-
-	/// <summary>
-	/// Increases the current level by one level
+	/// Increases the XP by amount
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
-	public void IncreaseCurrentLevel(string miniPetID){
+	/// <param name="amount">Amount.</param>
+	public void IncreaseXp(string miniPetID, int amount){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
+			MiniPetProgress[miniPetID].CurrentXP += amount;
+		}
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
+		}
+	}
 
-			int currentLevelNum = (int)status.CurrentLevel;
-			currentLevelNum++;
-
-			status.CurrentLevel = (Level) currentLevelNum;
-
-			Analytics.Instance.MiniPetLevelUp(miniPetID, currentLevelNum);
+	/// <summary>
+	/// Increases the current level by one level and resets current xp
+	/// </summary>
+	/// <param name="miniPetID">Mini pet ID.</param>
+	public void IncreaseCurrentLevelAndResetXp(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			MiniPetProgress[miniPetID].CurrentLevel++;	// Increment level
+			MiniPetProgress[miniPetID].CurrentXP = 0;	// Reset xp
+			Analytics.Instance.MiniPetLevelUp(miniPetID, (int)MiniPetProgress[miniPetID].CurrentLevel);
+		}
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
 		}
 	}
 
@@ -131,236 +119,157 @@ public class MutableDataMiniPets{
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public Level GetCurrentLevel(string miniPetID){
 		Level currentLevel = Level.Level1;
-
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
 
 			currentLevel = status.CurrentLevel;
 		}
-
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
+		}
 		return currentLevel;
 	}
 
-	/// <summary>
-	/// Gets the last action time.
-	/// </summary>
-	/// <returns>The last action time.</returns>
-	/// <param name="miniPetID">Mini pet I.</param>
-	/*public DateTime GetLastActionTime(string miniPetID){
-		DateTime retVal = LgDateTime.GetTimeNow();
-
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			retVal = status.LastActionTime;
-		}
-
-		return retVal;
-	}*/
-
-	/// <summary>
-	/// Sets the last action time. last time the tickle or clean status 
-	/// </summary>
-	/// <param name="miniPetID">Mini pet I.</param>
-	/*public void UpdateLastActionTime(string miniPetID){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			status.LastActionTime = LgDateTime.GetTimeNow();
-		}
-	}*/
-
-	/// <summary>
-	/// Determines whether this mini pet is tickeld
-	/// </summary>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	/*public bool IsTickled(string miniPetID){
-		bool retVal = false;
-
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			retVal = status.IsTickled;
-		}
-
-		return retVal;
-	}
-*/
-	/// <summary>
-	/// Sets if MP is tickled
-	/// </summary>
-	/// <param name="miniPetID">Mini pet ID.</param>
-	/// <param name="isTickled">If set to <c>true</c> mp is tickled.</param>
-	/*public void SetIsTickled(string miniPetID, bool isTickled){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			status.IsTickled = isTickled;
-		}
-	}
-*/
-/*	public bool IsCleaned(string miniPetID){
-		bool retVal = false;
-
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-
-			retVal = status.IsCleaned;
-		}
-
-		return retVal;
-	}
-*/
 	public bool CanGiveMission(string miniPetID){
 		bool retVal = false;
-		
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
-			
 			retVal = status.CanGiveMission;
 		}
-		
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
+		}
 		return retVal;
 	}
-/*
-	public void SetIsCleaned(string miniPetID, bool isCleaned){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
 
-			status.IsCleaned = isCleaned;
-		}
-	}
-*/
 	public void SetCanGiveMission(string miniPetID, bool canGiveMission){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
-			
 			status.CanGiveMission = canGiveMission;
+		}
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
 		}
 	}
 
-	public void SetisHatched(string miniPetID, bool hatched){
+	public void SetIsHatched(string miniPetID, bool hatched){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			Status status = MiniPetProgress[miniPetID];
-			
-			status.isHatched = hatched;
+			status.IsHatched = hatched;
+		}
+		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
 		}
 	}
 
 	public bool GetHatched(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			return status.isHatched;
+			return MiniPetProgress[miniPetID].IsHatched;
 		}
 		else{
+			Debug.LogError("Bad miniPetID " + miniPetID);
 			return true;
 		}
 	}
-	public void saveMerchList(List<string> merch, string miniPetID){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			status.SecretMerchantSellList = merch;
-		}
-	}
-	public List<string> getMerchList(string miniPetID){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			if(status.SecretMerchantSellList.Count != 0){
-				return status.SecretMerchantSellList;
-			}
-			else{
-				return null;
-			}
-		}
-		else {
-			return null;
-		}
-	}
 
-	public void SaveHunger(string miniPetID, bool _isFinishEating){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			status.IsFinishEating = _isFinishEating;
-			
-			MiniPetProgress[miniPetID] = status;
-		}
-	}
+	// Taking this out for now, dont want to contrain user on items bought
+//	public void SaveMerchantList(List<string> merch, string miniPetID){
+//		if(MiniPetProgress.ContainsKey(miniPetID)){
+//			MiniPetProgress[miniPetID].SecretMerchantSellList = merch;
+//		}
+//		else{
+//			Debug.LogError("Bad miniPetID " + miniPetID);
+//		}
+//	}
+//
+//	public List<string> GetMerchantList(string miniPetID){
+//		if(MiniPetProgress.ContainsKey(miniPetID)){
+//			Status status = MiniPetProgress[miniPetID];
+//			if(status.SecretMerchantSellList.Count != 0){
+//				return status.SecretMerchantSellList;
+//			}
+//			else{
+//				return null;
+//			}
+//		}
+//		else{
+//			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+//			return null;
+//		}
+//	}
 
-	public MutableDataMiniPets(){
-		MiniPetProgress = new Dictionary<string, Status>();
-	}
-
-	public bool GetHunger(string miniPetID){
+	public void SaveHunger(string miniPetID, bool isFinishedEating){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			return status.IsFinishEating;
+			MiniPetProgress[miniPetID].IsFinishEating = isFinishedEating;
 		}
 		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+		}
+	}
+
+	public bool IsPetFinishedEating(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			return MiniPetProgress[miniPetID].IsFinishEating;
+		}
+		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
 			return false;
 		}
 	}
 
 	public MutableDataWellapadTask GetTask(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			return status.task;
+			return MiniPetProgress[miniPetID].task;
 		}
 		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
 			return null;
 		}
 	}
 
 	public void SetItem(string miniPetID, int item){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			status.currItem = item;
-			MiniPetProgress[miniPetID] = status;
+			MiniPetProgress[miniPetID].CurrItem = item;
+		}
+		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
 		}
 	}
 
 	public int GetItem(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			return status.currItem;
+			return MiniPetProgress[miniPetID].CurrItem;
 		}
 		else{
-			return -1;
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+		}
+	}
+
+	public void SetItemBoughtInPP(string miniPetID, bool isBought){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			MiniPetProgress[miniPetID].IsMerchanItemBoughtInPP = isBought;
+		}
+		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+		}
+	}
+
+	public bool IsItemBoughtInPP(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			return MiniPetProgress[miniPetID].IsMerchanItemBoughtInPP;
+		}
+		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+			return false;
 		}
 	}
 	
 	public void SetTask(string miniPetID, MutableDataWellapadTask Task){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			status.task = Task;
-			MiniPetProgress[miniPetID] = status;
+			MiniPetProgress[miniPetID].task = Task;
 		}
-	}
-
-	public int GetVisits(string miniPetID){
-		int _timesVisited = 0;
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			_timesVisited = status.timesVisited;
-		}
-
-		return _timesVisited;
-	}
-
-	public void SetVisits(string miniPetID){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			status.timesVisited++;
-			MiniPetProgress[miniPetID] = status;
+		else{
+			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
 		}
 	}
 
@@ -378,8 +287,25 @@ public class MutableDataMiniPets{
 			Status status = MiniPetProgress[miniPetID];
 			
 			status.miniGameType = type;
-			MiniPetProgress[miniPetID] = status;
 		}
 	}
 
+//	public int GetVisits(string miniPetID){
+//		if(MiniPetProgress.ContainsKey(miniPetID)){
+//			return MiniPetProgress[miniPetID].timesVisited;
+//		}
+//		else{
+//			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+//			return 0;
+//		}
+//	}
+//
+//	public void SetVisits(string miniPetID){
+//		if(MiniPetProgress.ContainsKey(miniPetID)){
+//			Status status = MiniPetProgress[miniPetID];
+//			
+//			status.timesVisited++;
+//			MiniPetProgress[miniPetID] = status;
+//		}
+//	}
 }

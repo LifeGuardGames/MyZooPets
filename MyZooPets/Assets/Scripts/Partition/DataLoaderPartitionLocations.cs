@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class DataLoaderPartitionLocations:XMLLoaderGeneric<DataLoaderPartitionLocations> {
 
@@ -13,7 +14,28 @@ public class DataLoaderPartitionLocations:XMLLoaderGeneric<DataLoaderPartitionLo
 		instance.InitXMLLoader();
 		return instance.GetDataList<ImmutableDataPartitionLocation>();
 	}
-	
+
+	public static int GetPartitionNumberFromLocationId(string locationId){
+		return GetData(locationId).Partition;
+	}
+
+	public static Vector3 GetOffsetFromLocationId(string locationId){
+		return GetData(locationId).Offset;
+	}
+
+	public static MinigameTypes GetMinigameTypeFromLocationId(string locationId){
+		PartitionLocationTypes partitionLocType = GetData(locationId).Attribute;
+		if(partitionLocType == PartitionLocationTypes.Base){
+			// Not supported for parsing
+			return MinigameTypes.None;
+		}
+		else{
+			// Parse convert string to another enum
+			MinigameTypes minigameType = (MinigameTypes)Enum.Parse(typeof(MinigameTypes), partitionLocType.ToString());
+			return minigameType;
+		}
+	}
+
 	#region Loading Functions
 	protected override void InitXMLLoader(){
 		xmlFileFolderPath = "PartitionLocations";

@@ -955,21 +955,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100122
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400122}
-  m_Layer: 0
-  m_Name: ItemSpawnPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &100124
 GameObject:
   m_ObjectHideFlags: 0
@@ -1869,27 +1854,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100120}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 54.9447479, y: -4.10900249e-17, z: 26.7779255}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400000}
-  - {fileID: 400122}
   - {fileID: 400124}
   - {fileID: 400132}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!4 &400122
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100122}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.39251256, z: -2.55043411}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400120}
-  m_RootOrder: 1
 --- !u!4 &400124
 Transform:
   m_ObjectHideFlags: 1
@@ -1905,7 +1877,7 @@ Transform:
   - {fileID: 400004}
   - {fileID: 400002}
   m_Father: {fileID: 400120}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!4 &400126
 Transform:
   m_ObjectHideFlags: 1
@@ -1957,7 +1929,7 @@ Transform:
   - {fileID: 400130}
   - {fileID: 400134}
   m_Father: {fileID: 400120}
-  m_RootOrder: 3
+  m_RootOrder: 2
 --- !u!4 &400134
 Transform:
   m_ObjectHideFlags: 1
@@ -2180,19 +2152,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationManager: {fileID: 11400014}
   miniPetSpeechAI: {fileID: 11400006}
-  spawnItemTransform: {fileID: 400122}
   flippable: {fileID: 100124}
-  accessory1: {fileID: 100136}
-  accessory2: {fileID: 100004}
-  accessory3: {fileID: 100002}
   eggParent: {fileID: 100132}
   eggAnimation: {fileID: 11100000}
   eggClickController: {fileID: 11400004}
   zoomPositionOffset: {x: -2.4000001, y: 8, z: -20}
   zoomRotation: {x: 12, y: 0, z: 0}
-  minipetName: general
   nguiCamera: {fileID: 0}
+  accessory1: {fileID: 100136}
+  accessory2: {fileID: 100004}
+  accessory3: {fileID: 100002}
   isFinishEating: 0
+  isPetCanGainXP: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

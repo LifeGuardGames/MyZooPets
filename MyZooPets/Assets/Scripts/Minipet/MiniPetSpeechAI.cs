@@ -59,7 +59,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 		PetSpeechManager.Instance.TalkM(msgOption);
 	}
 
-	public void ShowBlackShopMessage(){
+	public void ShowMerchantShopMessage(){
 		int rand = Random.Range (0, 5);
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_MERCHANT_" + rand.ToString()));

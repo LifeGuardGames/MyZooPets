@@ -20,7 +20,6 @@ public abstract class MiniPet : MonoBehaviour {
 
 	public MiniPetAnimationManager animationManager;
 	public MiniPetSpeechAI miniPetSpeechAI;
-	public Transform spawnItemTransform;
 	public GameObject flippable;
 	public GameObject eggParent;
 	public Animation eggAnimation;
@@ -59,9 +58,9 @@ public abstract class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
-		isFinishEating = DataManager.Instance.GameData.MiniPets.GetHunger(minipetId);
-		//Level currentLvl = Level.Level2;
-		Level currentLvl = DataManager.Instance.GameData.MiniPets.GetCurrentLevel(minipetId);
+		isFinishEating = MiniPetManager.Instance.IsPetFinishedEating(minipetId);
+		Level currentLvl = MiniPetManager.Instance.GetCurrentLevel(minipetId);
+
 		switch(currentLvl){
 		case Level.Level1:
 			accessory1.SetActive(false);
@@ -134,7 +133,7 @@ public abstract class MiniPet : MonoBehaviour {
 
 			if(!isMiniPetColliderLocked){
 				if(Application.loadedLevelName == "ZoneBedroom"){
-					if(TutorialManagerBedroom.Instance.IsTutorialActive()){
+					if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
 						if(OnTutorialMinipetClicked != null){
 							OnTutorialMinipetClicked(this, EventArgs.Empty);
 						}
@@ -195,7 +194,7 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 		//else check if tickle and cleaning is done. if both done 
 		else{
-			if(!TutorialManagerBedroom.Instance.IsTutorialActive()){
+			if(TutorialManagerBedroom.Instance == null || !TutorialManagerBedroom.Instance.IsTutorialActive()){
 				Invoke("ShowFoodPreferenceMessage", 1f);
 			}
 		}
@@ -228,9 +227,9 @@ public abstract class MiniPet : MonoBehaviour {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
-		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+		bool isUIOpen = MiniPetHUDUIManager.Instance.IsOpen();
 
-		if(args.TargetCollider.name == this.gameObject.name){
+		if(args.TargetCollider.name == this.gameObject.name && isUIOpen){
 			invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 			string preferredFoodID = "";
@@ -242,14 +241,14 @@ public abstract class MiniPet : MonoBehaviour {
 				//use item if so
 				args.IsValidTarget = true;
 
+//				if(!isUIOpened){
+//					ZoomInToMiniPet();
+//					OpenChildUI();	// Further child UI calls
+//				}
+
 				InventoryLogic.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();
-
-				if(!isUIOpened){
-					ZoomInToMiniPet();
-					OpenChildUI();	// Further child UI calls
-				}
 			}
 			// show notification that the mp wants a specific food
 			else{

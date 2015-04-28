@@ -47,7 +47,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	// Prompt click on minipet
 	private IEnumerator FocusOnRetentionMinipet1(){
 		yield return 0;
-		retentionMinipet = GameObject.Find("Retention");
+		retentionMinipet = GameObject.Find("Pebble");
 
 		// spotlight the minipet
 		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,

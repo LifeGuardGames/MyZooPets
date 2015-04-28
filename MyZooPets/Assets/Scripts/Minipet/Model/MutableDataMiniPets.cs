@@ -7,11 +7,9 @@ using System.Collections.Generic;
 /// Mutable data mini pets.
 /// </summary>
 public class MutableDataMiniPets{
-
 	public class Status{
 		public Level CurrentLevel {get; set;}
 		public int CurrentXP {get; set;}
-		public int timesVisited {get; set;}
 		public bool CanGiveMission {get; set;}
 		public bool IsHatched {get; set;}
 		public bool IsFinishEating {get; set;}
@@ -20,7 +18,6 @@ public class MutableDataMiniPets{
 		public bool IsMerchanItemBoughtInPP {get; set;}
 
 		public MutableDataWellapadTask Task {get; set;}
-		public MinigameTypes MiniGameType {get; set;}
 	
 		public Status(){
 			CurrentLevel = Level.Level1;
@@ -30,8 +27,6 @@ public class MutableDataMiniPets{
 			IsFinishEating =  false;
 			CurrItem = null;
 			IsMerchanItemBoughtInPP = false;
-			timesVisited = 0;
-			MiniGameType = MinigameTypes.None;
 		}
 	}
 
@@ -210,12 +205,13 @@ public class MutableDataMiniPets{
 		}
 	}
 
-	public int GetItem(string miniPetID){
+	public ImmutableDataMerchantItem GetItem(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			return MiniPetProgress[miniPetID].CurrItem;
 		}
 		else{
 			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
+			return null;
 		}
 	}
 
@@ -241,24 +237,6 @@ public class MutableDataMiniPets{
 	public void SetTask(string miniPetID, MutableDataWellapadTask Task){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			MiniPetProgress[miniPetID].Task = Task;
-		}
-		else{
-			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
-		}
-	}
-
-	public MinigameTypes GetMinigames(string miniPetID){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			Status status = MiniPetProgress[miniPetID];
-			
-			return status.MiniGameType;
-		}
-		return MinigameTypes.None;
-	}
-	
-	public void SetMinigames(string miniPetID, MinigameTypes type){
-		if(MiniPetProgress.ContainsKey(miniPetID)){
-			MiniPetProgress[miniPetID].MiniGameType = type;
 		}
 		else{
 			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);

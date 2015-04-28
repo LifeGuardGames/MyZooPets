@@ -15,15 +15,6 @@ public class MiniPetMerchant : MiniPet{
 		base.Start();
 		secretMerchantItem = DataManager.Instance.GameData.MiniPets.GetItem(MinipetId);
 		isItemBought = DataManager.Instance.GameData.MiniPets.IsItemBoughtInPP(MinipetId);
-		if(DataManager.Instance.GameData.MiniPets.GetItem(MinipetId) == -1){
-			int max = items.Count;
-			int rand = Random.Range(0, max);
-			secItem = DataLoaderMerchantItem.GetData(items[rand]);
-			DataManager.Instance.GameData.MiniPets.SetItem(MinipetId, rand);
-		}
-		else{
-			secItem = DataLoaderMerchantItem.GetData(items[DataManager.Instance.GameData.MiniPets.GetItem(MinipetId)]);
-		}
 	}
 
 	protected override void OpenChildUI(){
@@ -43,14 +34,9 @@ public class MiniPetMerchant : MiniPet{
 			isPetCanGainXP = true;
 			isFinishEating = true; 
 			miniPetSpeechAI.ShowMerchantShopMessage();
-			StartCoroutine(WaitASec());
+			OpenMerchantContent();
 		}
 		MiniPetHUDUIManager.Instance.CheckStoreButtonPulse();
-	}
-	
-	IEnumerator WaitASec(){
-		yield return new WaitForSeconds(0.4f);
-		OpenMerchantContent();
 	}
 
 	private void OpenMerchantContent(){

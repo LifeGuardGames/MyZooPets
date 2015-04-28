@@ -26,9 +26,6 @@ public class MiniPetGameMaster : MiniPet{
 	public override void FinishEating(){
 		if(!isFinishEating){
 			base.FinishEating();
-		if(minigameType == MinigameTypes.None){
-				minigameType = DataManager.Instance.GameData.MiniPets.GetMinigames(minipetId);
-		}
 			isPetCanGainXP = true;
 			isFinishEating = true; 
 			miniPetSpeechAI.ShowChallengeMsg(minigameType);

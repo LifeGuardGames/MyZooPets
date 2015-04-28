@@ -124,7 +124,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetId, goMiniPet);
-						DataManager.Instance.GameData.MiniPets.SetMinigames(miniPetId, type);
 					}
 				}
 			}
@@ -206,7 +205,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 							MiniPetMerchant merchantScript = goMiniPet.GetComponent<MiniPetMerchant>();
 							merchantScript.Init(data);
-							DataManager.Instance.GameData.MiniPets.SetItem(miniPetID, -1);
 							merchantScript.isFinishEating = false;	// TODO why no other scripts have this??
 
 							// Add the pet into the dictionary to keep track

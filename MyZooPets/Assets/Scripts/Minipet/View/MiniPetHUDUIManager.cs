@@ -62,7 +62,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			case MiniPetTypes.GameMaster:
 
 				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
-					Debug.Log("isgnvfjb");
 					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
 					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 					MiniPetGameMasterUIController controller2 = content.GetComponent<MiniPetGameMasterUIController>();

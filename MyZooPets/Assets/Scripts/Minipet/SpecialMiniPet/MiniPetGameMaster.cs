@@ -28,6 +28,9 @@ public class MiniPetGameMaster : MiniPet {
 	public override void FinishEating(){
 		if(!isFinishEating){
 		base.FinishEating();
+		if(minigameType == MinigameTypes.None){
+				minigameType = DataManager.Instance.GameData.MiniPets.GetMinigames(minipetId);
+		}
 		isPetCanGainXP = true;
 		isFinishEating = true; 
 		miniPetSpeechAI.ShowChallengeMsg(minigameType);
@@ -48,13 +51,7 @@ public class MiniPetGameMaster : MiniPet {
 	}
 
 	private void GiveOutMission(){
-		if(DataManager.Instance.GameData.MiniPets.GetMinigames(minipetId) == " "){
-			miniGameTaskId = PickMinigameMission();
-			DataManager.Instance.GameData.MiniPets.SetMinigames(minipetId,miniGameTaskId);
-		}
-		else{
-			miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetMinigames(minipetId);
-		}
+		miniGameTaskId = PickMinigameMission();
 		//miniGameTaskId = "NinjaS";
 		WellapadMissionController.Instance.UnlockTask(miniGameTaskId);
 		//WellapadMissionController.Instance.UnlockTask("NinjaS");

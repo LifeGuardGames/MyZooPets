@@ -86,7 +86,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetTable.Add(miniPetID, goMiniPet);
 						DataManager.instance.GameData.MiniPetLocations.SaveLoc(miniPetID, goMiniPet.transform.position);
 						DataManager.Instance.GameData.MiniPets.SaveHunger(miniPetID, false);
-						DataManager.Instance.GameData.MiniPets.SetMinigames(miniPetID, " ");
+						DataManager.Instance.GameData.MiniPets.SetMinigames(miniPetID, type);
 					}
 					else{
 						DataManager.Instance.GameData.MiniPetLocations.SaveLoc(miniPetID, pos);

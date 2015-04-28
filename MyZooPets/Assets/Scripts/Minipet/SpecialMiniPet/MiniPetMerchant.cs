@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetMerchant : MiniPet{
-	public int itemsInList = 0;
 
 	private ImmutableDataMerchantItem secretMerchantItem;
 	private bool isItemBought;

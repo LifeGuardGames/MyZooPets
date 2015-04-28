@@ -124,7 +124,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetId, goMiniPet);
-						DataManager.Instance.GameData.MiniPets.SetMinigames(miniPetID, type);
+						DataManager.Instance.GameData.MiniPets.SetMinigames(miniPetId, type);
 					}
 				}
 			}

@@ -18,7 +18,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	/// <summary>
 	/// Gets or sets the selected mini pet ID. Need to be set before the HUD
-	/// panel is opened. 
+	/// panel is opened.
 	/// </summary>
 	/// <value>The selected mini pet ID.</value>
 	public string SelectedMiniPetID {get; set;}
@@ -32,7 +32,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	// Called from minipet script children themselves
 	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash, MonoBehaviour baseScript){
-		Debug.Log("OPENING MINIPET TYPE");
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() || type == MiniPetTypes.Retention){
 			GameObject contentPrefab;
 			switch(type){
@@ -54,8 +53,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					}
 				}
 				break;
-			case MiniPetTypes.GameMaster:
 
+			case MiniPetTypes.GameMaster:
 				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
 				   ||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
 					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
@@ -70,8 +69,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 						}
 					}
 				}
-
 				break;
+
 			case MiniPetTypes.Merchant:
 				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
 				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
@@ -104,11 +103,11 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					}
 				}
 				break;
+
 			default:
 				Debug.LogError("No minipet type found: " + type.ToString());
 				return;
 			}
-
 		}
 	}
 
@@ -119,6 +118,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	#region Overridden functions
 	protected override void _OpenUI(){
+		nameLabel = SelectedMiniPetName;
 		this.GetComponent<TweenToggleDemux>().Show();
 		storeTweenParent.Show();
 
@@ -129,7 +129,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		RoomArrowsUIManager.Instance.HidePanel();
 		PetAnimationManager.Instance.DisableVisibility();
 		PetAudioManager.Instance.EnableSound = false;
-		//contentParent.SetActive(true);
 	}
 
 	protected override void _CloseUI(){
@@ -150,7 +149,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		if(content != null){
 			Destroy(content.gameObject);
 		}
-		//contentParent.SetActive(false);
 		CameraManager.Instance.ZoomOutMove();
 	}
 	#endregion
@@ -180,7 +178,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	private void OpenShop(){
 		this.GetComponent<TweenToggleDemux>().Hide();
-		//feedTweenParent.Hide();
 		storeTweenParent.Hide();
 
 		//sometimes this function will be called in a different mode, so we need

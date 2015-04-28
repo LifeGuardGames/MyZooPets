@@ -8,7 +8,7 @@ using System.Collections;
 /// </summary>
 public abstract class MiniPet : MonoBehaviour {
 
-	protected string minipetId; //pet id
+	protected string minipetId;
 	public string MinipetId{
 		get{ return minipetId; }
 	}

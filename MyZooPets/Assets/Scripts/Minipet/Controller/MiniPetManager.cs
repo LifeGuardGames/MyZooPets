@@ -118,9 +118,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetGameMaster gameMasterScript = goMiniPet.GetComponent<MiniPetGameMaster>();
 						gameMasterScript.minigameType = type;
 						gameMasterScript.Init(data);
-//						if(CanSpawnNewMinipetLocations()){ //TODO this needed here??? never reached
-//							gameMasterScript.isFinishEating = false;
-//						}
+						gameMasterScript.isFinishEating = false;
 
 						// Add the pet into the dictionary to keep track
 						MiniPetTable.Add(miniPetId, goMiniPet);
@@ -150,26 +148,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					MiniPetTable.Add(miniPetId, goMiniPet);
 				}
 			}
-
-			// TODO sometimes it will spawn in vector3.zero, handle here
-//			else if(DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID) != new Vector3(0, 0, 0)){
-//				if(Application.loadedLevelName ==  SceneUtils.BEDROOM){
-//					if(GetPartitionNumberForMinipet(miniPetID) == 1 || GetPartitionNumberForMinipet(miniPetID) == 2){
-//						goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID), Quaternion.identity) as GameObject;
-//						goMiniPet.name = prefab.name;
-//						goMiniPet.GetComponent<MiniPet>().Init(data);
-//						// Add the pet into the dictionary to keep track
-//						MiniPetTable.Add(miniPetID, goMiniPet);
-//					}
-//				}
-//				else{
-//					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID), Quaternion.identity) as GameObject;
-//					goMiniPet.name = prefab.name;
-//					goMiniPet.GetComponent<MiniPet>().Init(data);
-//					// Add the pet into the dictionary to keep track
-//					MiniPetTable.Add(miniPetID, goMiniPet);
-//				}
-//			}
 			break;
 
 		case MiniPetTypes.Merchant:
@@ -177,7 +155,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(latestGateAux == null || (latestGateAux.Partition - 1 >= 2)){
 				// Check if mp needs new locations
 				if(isSpawnNewLocations){
-					Debug.Log("Merchant spawning new locations");
 					if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
 						// Calculate the MP location
 						LgTuple<Vector3, string> merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
@@ -195,8 +172,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						DataManager.Instance.GameData.MiniPets.SetItem(miniPetId, merchantItemData);
 						DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(miniPetId, false);
 
-						Debug.Log(merchantItemData.ItemId);
-
 						// Spawn the minipet if it is in current scene
 						if(PartitionManager.Instance.IsPartitionInCurrentZone(partitionNumber)){
 							goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partitionNumber).gameObject, prefab);
@@ -205,7 +180,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 							MiniPetMerchant merchantScript = goMiniPet.GetComponent<MiniPetMerchant>();
 							merchantScript.Init(data);
-							merchantScript.isFinishEating = false;	// TODO why no other scripts have this??
+							merchantScript.isFinishEating = false;
 
 							// Add the pet into the dictionary to keep track
 							MiniPetTable.Add(miniPetId, goMiniPet);
@@ -235,15 +210,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
-
-				//TODO finish this same 000 bug as gamemaster
-//				else if(Application.loadedLevelName == SceneUtils.BEDROOM && DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID) != Vector3.zero){
-//					goMiniPet = Instantiate(prefab, DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID), Quaternion.identity) as GameObject;
-//					goMiniPet.name = prefab.name;
-//					goMiniPet.GetComponent<MiniPet>().Init(data);
-//					// Add the pet into the dictionary to keep track
-//					MiniPetTable.Add(miniPetID, goMiniPet);
-//				}
 			}
 			break;
 

@@ -41,7 +41,6 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Update the table, if there is one.
 	/// </summary>
 	private void UpdateGrid(){
-		Debug.Log(this.name);
 		UIGrid grid = NGUITools.FindInParents<UIGrid>(mTrans.parent.gameObject);
 		if(grid != null){
 			grid.repositionNow = true;

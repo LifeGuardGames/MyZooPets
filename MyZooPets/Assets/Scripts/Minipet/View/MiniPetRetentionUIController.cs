@@ -18,10 +18,6 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 
 	private MiniPetRetentionPet retentionScript;	// Reference to minipet logic
 
-	void Start(){
-		rewardButton.SetActive(false);
-	}
-
 	public void InitializeContent(string taskID, MiniPetRetentionPet retentionScript){
 		this.retentionScript = retentionScript;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){

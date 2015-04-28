@@ -13,10 +13,6 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 
 	private MiniPetGameMaster gameMasterScript;		// Reference to minipet logic
 
-	void Start(){
-		rewardButton.SetActive(false);
-	}
-
 	public void InitializeContent(string taskID, MiniPetGameMaster gameMasterScript){
 		this.gameMasterScript = gameMasterScript;
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
@@ -43,6 +39,8 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 			// mark this task as done
 			slash.gameObject.SetActive(true);
 			StartCoroutine(CheckboxSpriteShowHelper());	// Show after one frame
+
+			Debug.Log("SETTING REWARD GAME MASTER TRUE");
 			rewardButton.SetActive(true);
 		}
 	}
@@ -57,8 +55,9 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 	/// </summary>
 	private void OnTweenDone(object sender, UIManagerEventArgs args){
 		// if the UI is opening, update our task
-		if(args.Opening)
+		if(args.Opening){
 			SetCheckboxSprite(true);
+		}
 	}
 			
 	void OnDestroy(){

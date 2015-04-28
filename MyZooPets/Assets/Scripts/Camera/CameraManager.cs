@@ -283,7 +283,10 @@ public class CameraManager : Singleton<CameraManager>{
 		case InterfaceAnchors.BottomLeft:
 			transformedPosition.x -= nativeWidth / 2;
 			transformedPosition.y -= nativeHeight;
-			break;			
+			break;
+		case InterfaceAnchors.TopLeft:
+			transformedPosition.x -= nativeWidth / 2;
+			break;	
 		default:
 			Debug.LogError("Sorry not implemented yet.");
 			break;

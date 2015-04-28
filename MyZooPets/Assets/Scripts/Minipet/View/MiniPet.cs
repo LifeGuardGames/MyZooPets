@@ -163,8 +163,6 @@ public abstract class MiniPet : MonoBehaviour {
 		isBeingTickled = false;
 	}
 
-
-
 	private void ZoomInToMiniPet(){
 		Vector3 position = this.transform.position + zoomPositionOffset;
 

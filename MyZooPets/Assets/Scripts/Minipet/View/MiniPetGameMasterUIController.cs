@@ -65,4 +65,12 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 			WellapadUIManager.Instance.OnTweenDone -= OnTweenDone;
 		}
 	}
+
+	public GameObject GetRewardButton(){
+		return rewardButton;
+	}
+
+	public void HideRewardButton(){
+		rewardButton.SetActive(false);
+	}
 }

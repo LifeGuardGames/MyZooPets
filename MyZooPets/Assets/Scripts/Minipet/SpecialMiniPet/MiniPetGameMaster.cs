@@ -101,11 +101,15 @@ public class MiniPetGameMaster : MiniPet{
 		if(isFinishEating){
 			MutableDataMission mission = WellapadMissionController.Instance.GetMission(minigameTaskId);
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
-				// claim the reward
+				// Claim the reward
 				MiniPetManager.Instance.IncreaseXp(minipetId);
-				WellapadMissionController.Instance.ClaimReward(minigameTaskId);
+				MiniPetGameMasterUIController gameMasterUI = (MiniPetGameMasterUIController)MiniPetHUDUIManager.Instance.SelectedMiniPetContentUIScript;
+				WellapadMissionController.Instance.ClaimReward(minigameTaskId, rewardObject:gameMasterUI.GetRewardButton());
 				WellapadMissionController.Instance.RefreshCheck();
+				gameMasterUI.HideRewardButton();
 			}
 		}
 	}
+
+
 }

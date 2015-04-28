@@ -42,7 +42,6 @@ public class MiniPetRetentionPet : MiniPet {
 
 	private void TurnInMission(){
 		if(isFinishEating){
-
 			MutableDataMission mission;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
 				mission = WellapadMissionController.Instance.GetMission("TutorialPart1");
@@ -51,10 +50,12 @@ public class MiniPetRetentionPet : MiniPet {
 				mission = WellapadMissionController.Instance.GetMission("Critical");
 			}
 			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
-				// claim the reward
+				// Claim the reward
 				MiniPetManager.Instance.IncreaseXp(minipetId);
-				WellapadMissionController.Instance.ClaimReward(missionID);
+				MiniPetRetentionUIController retentionUI = (MiniPetRetentionUIController)MiniPetHUDUIManager.Instance.SelectedMiniPetContentUIScript;
+				WellapadMissionController.Instance.ClaimReward(missionID, rewardObject:retentionUI.GetRewardButton());
 				WellapadMissionController.Instance.RefreshCheck();
+				retentionUI.HideRewardButton();
 			}
 		}
 	}

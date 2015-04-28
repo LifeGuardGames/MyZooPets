@@ -74,25 +74,27 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	/// Claims the reward. Called when user successfully claimed reward from a mission
 	/// </summary>
 	/// <param name="missionID">Mission ID.</param>
-	public void ClaimReward(string missionID){
+	public void ClaimReward(string missionID, GameObject rewardObject = null){
 		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
 			// one final check just to be safe
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus == RewardStatuses.Unclaimed){
-				// for now the only reward is breathing fire
-				//StatsController.Instance.ChangeFireBreaths( 1 );
-				
-				int rewardXP = DataLoaderXpRewards.GetXP("WellapadBonus", new Hashtable());
-				
-				// get the position of the actual reward object because we want to stream the XP from it
-				//GameObject goReward = GameObject.Find("WellapadRewardButton");				
-				//Vector3 screenPos = LgNGUITools.GetScreenPosition(goReward);
-				//screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.Center, InterfaceAnchors.Top);
 
-				StatsController.Instance.ChangeStats(deltaPoints: rewardXP);
+				HUDUIManager.Instance.ShowPanel();
+
+				// get the position of the actual reward object because we want to stream the XP from it
+				if(rewardObject != null){
+					Vector3 screenPos = LgNGUITools.GetScreenPosition(rewardObject);
+					screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.TopLeft, InterfaceAnchors.Top);
+					StatsController.Instance.ChangeStats(deltaStars: 50, starsLoc: screenPos);
+				}
+				else{
+					StatsController.Instance.ChangeStats(deltaStars: 50);
+				}
+
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus = RewardStatuses.Claimed;
 
 				//Send analytics event
-				Analytics.Instance.ClaimWellapadBonusXP();
+				Analytics.Instance.ClaimWellapadReward();
 				
 				if(OnRewardClaimed != null){
 					OnRewardClaimed(this, EventArgs.Empty);
@@ -100,12 +102,14 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				
 //				Debug.Log("Reward claimed for mission: " + strMissionID);
 			}
-			else
+			else{
 				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + missionID);
+			}
 		}
-		else 
+		else{
 			Debug.LogError("Something trying to claim a reward for non-current mission: " + missionID);
-	}	
+		}
+	}
 
 	/// <summary>
 	/// Called from various parts of the game when a task is completed that may

@@ -232,7 +232,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			int currentXp = GetCurrentXp(miniPetID);
 			DataManager.Instance.GameData.MiniPets.IncreaseXp(miniPetID, 1);
 			
-			Debug.Log(xpNeededForLevelUp + " " + currentXp);
+//			Debug.Log(xpNeededForLevelUp + " " + currentXp);
 			
 			// Check current xp with that condition
 			if(currentXp >= xpNeededForLevelUp){

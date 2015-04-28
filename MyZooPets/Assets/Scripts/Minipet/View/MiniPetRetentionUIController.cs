@@ -89,4 +89,12 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 		yield return 0;
 		slash.Show();
 	}
+
+	public GameObject GetRewardButton(){
+		return rewardButton;
+	}
+
+	public void HideRewardButton(){
+		rewardButton.SetActive(false);
+	}
 }

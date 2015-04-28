@@ -282,9 +282,9 @@ public class Analytics : MonoBehaviour {
     }
 
     //Wellapad xp reward claim
-    public void ClaimWellapadBonusXP(){
+    public void ClaimWellapadReward(){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Wellapad:Collect:BonusXP");
+            GA.API.Design.NewEvent("Wellapad:Collect:Reward");
     }
 
     //Gating

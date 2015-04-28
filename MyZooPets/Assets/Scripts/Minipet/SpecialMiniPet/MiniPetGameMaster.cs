@@ -48,12 +48,12 @@ public class MiniPetGameMaster : MiniPet {
 	}
 
 	private void GiveOutMission(){
-		if(DataManager.Instance.GameData.MiniPets.GetMinigames == " "){
+		if(DataManager.Instance.GameData.MiniPets.GetMinigames(minipetId) == " "){
 			miniGameTaskId = PickMinigameMission();
-			DataManager.Instance.GameData.MiniPets.SetMinigames(miniGameTaskId);
+			DataManager.Instance.GameData.MiniPets.SetMinigames(minipetId,miniGameTaskId);
 		}
 		else{
-			miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetMinigames();
+			miniGameTaskId = DataManager.Instance.GameData.MiniPets.GetMinigames(minipetId);
 		}
 		//miniGameTaskId = "NinjaS";
 		WellapadMissionController.Instance.UnlockTask(miniGameTaskId);

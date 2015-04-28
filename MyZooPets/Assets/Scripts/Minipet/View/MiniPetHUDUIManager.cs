@@ -6,11 +6,6 @@ using System.Collections.Generic;
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public UILabel nameLabel;
 
-	public UILabel labelFeedCount;
-	public UILabel labelFeed;
-	public UISprite spriteFeed;
-
-	public TweenToggle feedTweenParent;	// Tweens dependent on state of pet
 	public TweenToggle storeTweenParent;
 	private TweenToggle contentTweenParent;
 
@@ -18,7 +13,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public GameObject storeButtonSunbeam;
 
 	public GameObject contentParent;
-	public GameObject tutorialParent;
 	public GameObject petReference;
 	private GameObject content;
 
@@ -141,7 +135,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
 
-		feedTweenParent.Hide();
 		storeTweenParent.Hide();
 
 		CheckStoreButtonPulse();
@@ -161,53 +154,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		CameraManager.Instance.ZoomOutMove();
 	}
 	#endregion
-
-	/// <summary>
-	/// Refreshes the UI whenever MP data have been updated
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-//	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
-//		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-//			RefreshFoodItemUI();
-//		}
-//		else{
-//			Debug.LogWarning("First playperiod, not showing HUD because of tutorial");
-//		}
-//		nameLabel.text = SelectedMiniPetName;
-//		UpdateLevelUI();
-//
-//		switch(args.UpdateStatus){
-//		case MiniPetManager.UpdateStatuses.LevelUp:
-//			LevelUpAnimationCompleted();
-//			break;
-//		}
-//	}
-
-	/// <summary>
-	/// Refreshs the food item UI
-	/// This does all the check by itself so dont worry when calling this
-	/// </summary>
-//	public void RefreshFoodItemUI(){
-//		if(SelectedMiniPetID != null){
-//			if(!DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID)){
-//				storeTweenParent.Show();
-//			}
-//			else{
-//				storeTweenParent.Hide();
-//				Debug.Log("CHECKING OPEN MINIPET TYPE");
-//				if(contentTweenParent != null){
-//					contentTweenParent.Show();
-//				}
-//				
-//				// Only hide the inventory panel if it is not the merchant
-//				if(MiniPetManager.Instance.GetMinipetType(SelectedMiniPetID) != MiniPetTypes.Merchant){
-//					InventoryUIManager.Instance.HidePanel();
-//				}
-//			}
-//			CheckStoreButtonPulse();
-//		}
-//	}
 	
 	/// <summary>
 	/// Checks the store button pulse.

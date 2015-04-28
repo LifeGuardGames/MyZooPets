@@ -50,7 +50,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 						content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 						MiniPetRetentionUIController minipetRetentionUIController = content.GetComponent<MiniPetRetentionUIController>();
 						minipetRetentionUIController.InitializeContent(hash[0].ToString(), (MiniPetRetentionPet)baseScript);
-						if(!TutorialManager.Instance.IsTutorialActive()){
+						if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){
 							contentTweenParent = content.GetComponent<TweenToggle>();
 							//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
 							if (contentTweenParent != null){
@@ -62,13 +62,13 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				break;
 			case MiniPetTypes.GameMaster:
 
-				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
-					Debug.Log("isgnvfjb");
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
+				   ||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
 					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
 					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 					MiniPetGameMasterUIController minipetGameMasterUIController = content.GetComponent<MiniPetGameMasterUIController>();
 					minipetGameMasterUIController.InitializeContent(hash[0].ToString(), (MiniPetGameMaster)baseScript);
-					if(!TutorialManager.Instance.IsTutorialActive()){
+					if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){
 						contentTweenParent = content.GetComponent<TweenToggle>();
 						//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
 						if (contentTweenParent != null){
@@ -102,7 +102,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					break;
 				}
 				minipetMerchantUIController.InitializeContent(hash[0].ToString(), false, itemType, (MiniPetMerchant)baseScript);
-				if(!TutorialManager.Instance.IsTutorialActive()){
+				if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){
 					contentTweenParent = content.GetComponent<TweenToggle>();
 					//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
 					if (contentTweenParent != null){

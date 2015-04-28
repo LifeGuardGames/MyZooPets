@@ -21,7 +21,7 @@ public class MiniPetMerchant : MiniPet{
 	protected override void OpenChildUI(){
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 			if(isFinishEating && !isItemBought){
-				OpenMerchantStore();
+				OpenMerchantContent();
 			}
 			else if(isItemBought){
 				miniPetSpeechAI.ShowIdleMessage(MinipetType);
@@ -34,7 +34,7 @@ public class MiniPetMerchant : MiniPet{
 			base.FinishEating();
 			isPetCanGainXP = true;
 			isFinishEating = true; 
-			miniPetSpeechAI.ShowBlackShopMessage();
+			miniPetSpeechAI.ShowMerchantShopMessage();
 			StartCoroutine(WaitASec());
 		}
 		MiniPetHUDUIManager.Instance.CheckStoreButtonPulse();
@@ -42,10 +42,10 @@ public class MiniPetMerchant : MiniPet{
 	
 	IEnumerator WaitASec(){
 		yield return new WaitForSeconds(0.4f);
-		OpenMerchantStore();
+		OpenMerchantContent();
 	}
 
-	private void OpenMerchantStore(){
+	private void OpenMerchantContent(){
 		Hashtable hash = new Hashtable();
 		hash[0] = secretMerchantItem.ItemId;
 		hash[1] = secretMerchantItem.Type;

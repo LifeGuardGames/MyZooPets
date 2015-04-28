@@ -95,9 +95,9 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 		case MiniPetTypes.GameMaster:
 			// Check if mp needs new locations
-			if(isSpawnNewLocations){
-				ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
-				if(latestGate == null || (latestGate.Partition - 1 >= 1)){
+			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
+			if(latestGate == null || (latestGate.Partition - 1 >= 1)){
+				if(isSpawnNewLocations){
 					// Calculate the MP location
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 					LgTuple<Vector3, string> gameMasterLocation = PartitionManager.Instance.GetPositionNextToMinigame(type);
@@ -126,7 +126,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
-			}
 			// Spawn based on its saved location
 			else{
 				// If the saved minipet location is in the current zone
@@ -150,6 +149,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					MiniPetTable.Add(miniPetId, goMiniPet);
 				}
 			}
+		}
 
 			// TODO sometimes it will spawn in vector3.zero, handle here
 //			else if(DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetID) != new Vector3(0, 0, 0)){

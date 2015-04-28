@@ -18,6 +18,7 @@ public class MutableDataMiniPets{
 		// array index of the item therefore should not be 0 for default
 		public int currItem;
 		public MutableDataWellapadTask task {get; set;}
+		public string miniGameTaskId;
 	
 		public Status(){
 			CurrentLevel = Level.Level1;
@@ -28,6 +29,7 @@ public class MutableDataMiniPets{
 			SecretMerchantSellList = new List<string>();
 			currItem = -1;
 			timesVisited = 0;
+			miniGameTaskId = " ";
 		}
 	}
 
@@ -358,6 +360,24 @@ public class MutableDataMiniPets{
 			Status status = MiniPetProgress[miniPetID];
 			
 			status.timesVisited++;
+			MiniPetProgress[miniPetID] = status;
+		}
+	}
+
+	public string GetMinigames(string miniPetID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			return status.miniGameTaskId;
+		}
+		return " ";
+	}
+	
+	public void SetMinigames(string miniPetID, string miniGameID){
+		if(MiniPetProgress.ContainsKey(miniPetID)){
+			Status status = MiniPetProgress[miniPetID];
+			
+			status.miniGameTaskId = miniGameID;
 			MiniPetProgress[miniPetID] = status;
 		}
 	}

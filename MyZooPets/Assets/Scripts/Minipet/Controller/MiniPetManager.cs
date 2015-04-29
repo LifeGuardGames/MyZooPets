@@ -207,6 +207,20 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	}
 	#endregion
 
+
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
+			IncreaseXp("MiniPet0");
+		}
+		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
+			IncreaseXp("MiniPet1");
+		}
+		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
+			IncreaseXp("MiniPet2");
+		}
+	}
+
+
 	#region XP and leveling
 	/// <summary>
 	/// Need to check if mp can be leveled first using CanModifyFoodXP
@@ -225,11 +239,11 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(currentXp >= xpNeededForLevelUp){
 				Debug.Log("Leveled up!!");
 				IncreaseCurrentLevelAndResetCurrentXP(miniPetID);
-				GetMinipetScript(MiniPetTable[miniPetID]).GainedLevel();		// Show animations/effects
+				GetMinipetScript(miniPetID).GainedLevel();		// Show animations/effects
 				MiniPetHUDUIManager.Instance.GainedLevel();
 			}
 			else{	// Play gain experience animation
-				GetMinipetScript(MiniPetTable[miniPetID]).GainedExperience();	// Show animations/effects
+				GetMinipetScript(miniPetID).GainedExperience();	// Show animations/effects
 				MiniPetHUDUIManager.Instance.GainedExperience();
 			}
 		}

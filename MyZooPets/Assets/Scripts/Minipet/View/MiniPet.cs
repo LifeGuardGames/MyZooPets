@@ -298,7 +298,6 @@ public abstract class MiniPet : MonoBehaviour {
 			accessory2.SetActive(false);
 			accessory3.SetActive(false);
 			if(isJustGained){
-				getAccessoryParticle.transform.position = accessory1.transform.position;
 				getAccessoryParticle.Play();
 			}
 			break;
@@ -307,7 +306,6 @@ public abstract class MiniPet : MonoBehaviour {
 			accessory2.SetActive(true);
 			accessory3.SetActive(false);
 			if(isJustGained){
-				getAccessoryParticle.transform.position = accessory2.transform.position;
 				getAccessoryParticle.Play();
 			}
 			break;
@@ -316,7 +314,6 @@ public abstract class MiniPet : MonoBehaviour {
 			accessory2.SetActive(true);
 			accessory3.SetActive(true);
 			if(isJustGained){
-				getAccessoryParticle.transform.position = accessory3.transform.position;
 				getAccessoryParticle.Play();
 			}
 			break;

@@ -168,8 +168,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 						// Set new merchant item here only
 						List<ImmutableDataMerchantItem> merchantItemsList = DataLoaderMerchantItem.GetDataList();
-						ImmutableDataMerchantItem merchantItemData = DataLoaderMerchantItem.GetData(merchantItemsList[UnityEngine.Random.Range(0, merchantItemsList.Count)].ID);
-						DataManager.Instance.GameData.MiniPets.SetItem(miniPetId, merchantItemData);
+						int rand = UnityEngine.Random.Range(0, merchantItemsList.Count);
+						DataManager.Instance.GameData.MiniPets.SetItem(miniPetId, rand);
 						DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(miniPetId, false);
 
 						// Spawn the minipet if it is in current scene
@@ -210,6 +210,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
+
 			}
 			break;
 

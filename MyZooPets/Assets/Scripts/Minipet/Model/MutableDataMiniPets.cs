@@ -14,7 +14,7 @@ public class MutableDataMiniPets{
 		public bool IsHatched {get; set;}
 		public bool IsFinishEating {get; set;}
 
-		public ImmutableDataMerchantItem CurrItem {get; set;}
+		public int CurrItem {get; set;}
 		public bool IsMerchanItemBoughtInPP {get; set;}
 
 		public MutableDataWellapadTask Task {get; set;}
@@ -25,7 +25,7 @@ public class MutableDataMiniPets{
 			CanGiveMission = false;
 			IsHatched = false;
 			IsFinishEating =  false;
-			CurrItem = null;
+			CurrItem =  -1;
 			IsMerchanItemBoughtInPP = false;
 		}
 	}
@@ -196,7 +196,7 @@ public class MutableDataMiniPets{
 		}
 	}
 
-	public void SetItem(string miniPetID, ImmutableDataMerchantItem item){
+	public void SetItem(string miniPetID, int item){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			MiniPetProgress[miniPetID].CurrItem = item;
 		}
@@ -205,13 +205,13 @@ public class MutableDataMiniPets{
 		}
 	}
 
-	public ImmutableDataMerchantItem GetItem(string miniPetID){
+	public int GetItem(string miniPetID){
 		if(MiniPetProgress.ContainsKey(miniPetID)){
 			return MiniPetProgress[miniPetID].CurrItem;
 		}
 		else{
 			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
-			return null;
+			return -1;
 		}
 	}
 

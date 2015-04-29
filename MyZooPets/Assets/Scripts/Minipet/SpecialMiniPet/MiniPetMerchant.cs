@@ -13,7 +13,8 @@ public class MiniPetMerchant : MiniPet{
 
 	protected override void Start(){
 		base.Start();
-		secretMerchantItem = DataManager.Instance.GameData.MiniPets.GetItem(MinipetId);
+		List<ImmutableDataMerchantItem> merchantItemsList = DataLoaderMerchantItem.GetDataList();
+		secretMerchantItem = DataLoaderMerchantItem.GetData(merchantItemsList[DataManager.Instance.GameData.MiniPets.GetItem(minipetId)].ID);
 		isItemBought = DataManager.Instance.GameData.MiniPets.IsItemBoughtInPP(MinipetId);
 	}
 

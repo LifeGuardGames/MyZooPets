@@ -41,6 +41,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}	
 	
 	protected override void _OnDestroy(){
+		OnCharacterScoredRight = null;
 	}
 
 	public override int GetReward(MinigameRewardTypes eType){
@@ -94,7 +95,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		}
 	
 		// Play appropriate sound
-		AudioManager.Instance.PlayClip("clinicCorrect");
+	//	AudioManager.Instance.PlayClip("clinicCorrect");
 
 		if(OnCharacterScoredRight != null)
 			OnCharacterScoredRight(this, EventArgs.Empty);

@@ -159,6 +159,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		combo = 0;
 		bestCombo = 0;
 		timeCount = 0;
+		ResetChain();
 		currentTriggerEntries = null;
 
 		// Reset all states

@@ -32,6 +32,7 @@ public abstract class MiniPet : MonoBehaviour {
 	private bool isBeingTickled = false;
 	public Camera nguiCamera;
 
+	public ParticleSystem getAccessoryParticle;
 	public GameObject accessory1;
 	public GameObject accessory2;
 	public GameObject accessory3;
@@ -59,33 +60,8 @@ public abstract class MiniPet : MonoBehaviour {
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
 		isFinishEating = MiniPetManager.Instance.IsPetFinishedEating(minipetId);
-		Level currentLvl = MiniPetManager.Instance.GetCurrentLevel(minipetId);
 
-		switch(currentLvl){
-		case Level.Level1:
-			accessory1.SetActive(false);
-			accessory2.SetActive(false);
-			accessory3.SetActive(false);
-			break;
-		case Level.Level2:
-			accessory1.SetActive(true);
-			accessory2.SetActive(false);
-			accessory3.SetActive(false);
-			break;
-		case Level.Level3:
-			accessory1.SetActive(true);
-			accessory2.SetActive(true);
-			accessory3.SetActive(false);
-			break;
-		case Level.Level4:
-			accessory1.SetActive(true);
-			accessory2.SetActive(true);
-			accessory3.SetActive(true);
-			break;
-		default:
-			Debug.LogError("Level limit exceeded, something wrong with minipets");
-			break;
-		}
+		AccessoriesCheck(false);
 		RefreshUnlockState();
 	}
 
@@ -238,12 +214,6 @@ public abstract class MiniPet : MonoBehaviour {
 			if(preferredFoodID == invItem.ItemID){
 				//use item if so
 				args.IsValidTarget = true;
-
-//				if(!isUIOpened){
-//					ZoomInToMiniPet();
-//					OpenChildUI();	// Further child UI calls
-//				}
-
 				InventoryLogic.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();
@@ -292,5 +262,67 @@ public abstract class MiniPet : MonoBehaviour {
 			isOnNGUILayer = true;
 		}
 		return isOnNGUILayer;
+	}
+
+	// Called from minipet manager, handle animations and ui effects here
+	public void GainedExperience(){
+		Debug.Log("GAINED EXPERIENCE MP");
+		animationManager.Cheer();
+	}
+
+	// Called from minipet manager, handle animations and ui effects here
+	public void GainedLevel(){
+		Debug.Log("GAINED LEVEL MP");
+		AccessoriesCheck(true);
+		Invoke("GainedLeveledHelper", 0.7f);
+	}
+
+	private void GainedLevelHelper(){
+		animationManager.Cheer();
+	}
+
+	/// <summary>
+	/// Check enable the correct accessories according to the pet level
+	/// </summary>
+	/// <param name="isJustGained">If set to <c>true</c> is just gained from getting experience, play some fancy particles</param>
+	private void AccessoriesCheck(bool isJustGained){
+		Level currentLvl = MiniPetManager.Instance.GetCurrentLevel(minipetId);
+		switch(currentLvl){
+		case Level.Level1:
+			accessory1.SetActive(false);
+			accessory2.SetActive(false);
+			accessory3.SetActive(false);
+			break;
+		case Level.Level2:
+			accessory1.SetActive(true);
+			accessory2.SetActive(false);
+			accessory3.SetActive(false);
+			if(isJustGained){
+				getAccessoryParticle.transform.position = accessory1.transform.position;
+				getAccessoryParticle.Play();
+			}
+			break;
+		case Level.Level3:
+			accessory1.SetActive(true);
+			accessory2.SetActive(true);
+			accessory3.SetActive(false);
+			if(isJustGained){
+				getAccessoryParticle.transform.position = accessory2.transform.position;
+				getAccessoryParticle.Play();
+			}
+			break;
+		case Level.Level4:
+			accessory1.SetActive(true);
+			accessory2.SetActive(true);
+			accessory3.SetActive(true);
+			if(isJustGained){
+				getAccessoryParticle.transform.position = accessory3.transform.position;
+				getAccessoryParticle.Play();
+			}
+			break;
+		default:
+			Debug.LogError("Level limit exceeded, something wrong with minipets");
+			break;
+		}
 	}
 }

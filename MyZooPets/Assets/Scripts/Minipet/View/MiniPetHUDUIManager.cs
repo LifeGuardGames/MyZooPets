@@ -218,4 +218,12 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public bool HasContent(){
 		return content == null ? false : true;
 	}
+
+	public void GainedExperience(){
+		Debug.Log("GAINED EXPERIENCE UI");
+	}
+
+	public void GainedLevel(){
+		Debug.Log("GAINED LEVEL UI");
+	}
 }

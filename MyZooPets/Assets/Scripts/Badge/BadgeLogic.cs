@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Badge logic.Checks and manages when a badge should be unlocked
 /// </summary>
-public class BadgeLogic : Singleton<BadgeLogic> {
+public class BadgeLogic : Singleton<BadgeLogic>{
     public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked; //Event fires when new badge has been added
     public class BadgeEventArgs : EventArgs{
         private Badge unlockedBadge;

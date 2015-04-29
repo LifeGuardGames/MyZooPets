@@ -238,12 +238,6 @@ public abstract class MiniPet : MonoBehaviour {
 			if(preferredFoodID == invItem.ItemID){
 				//use item if so
 				args.IsValidTarget = true;
-
-//				if(!isUIOpened){
-//					ZoomInToMiniPet();
-//					OpenChildUI();	// Further child UI calls
-//				}
-
 				InventoryLogic.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();
@@ -292,5 +286,15 @@ public abstract class MiniPet : MonoBehaviour {
 			isOnNGUILayer = true;
 		}
 		return isOnNGUILayer;
+	}
+
+	// Called from minipet manager, handle animations and ui effects here
+	public void GainedExperience(){
+		Debug.Log("GAINED EXPERIENCE MP");
+	}
+
+	// Called from minipet manager, handle animations and ui effects here
+	public void GainedLevel(){
+		Debug.Log("GAINED LEVEL MP");
 	}
 }

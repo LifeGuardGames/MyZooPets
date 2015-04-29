@@ -4,20 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetManager : Singleton<MiniPetManager>{
-//	public class StatusUpdateEventArgs : EventArgs{
-//		public UpdateStatuses UpdateStatus { get; set; }
-//		public string MinipetID { get; set; }
-//	}
-
-//	public enum UpdateStatuses{
-//		None,
-//		IncreaseFoodXP,
-//		IncreaseCurrentLevel,
-//		LevelUp
-//	}
-
-//	public static EventHandler<StatusUpdateEventArgs> MiniPetStatusUpdate; //send event to UI when data have been updated
-
 	public Dictionary<string, GameObject> MiniPetTable = new Dictionary<string, GameObject>();
 	private Level maxLevel = Level.Level4;
 	private bool isSpawnNewLocations = false;
@@ -238,6 +224,12 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(currentXp >= xpNeededForLevelUp){
 				Debug.Log("Leveled up!!");
 				IncreaseCurrentLevelAndResetCurrentXP(miniPetID);
+				GetMinipetScript(MiniPetTable[miniPetID]).GainedLevel();		// Show animations/effects
+				MiniPetHUDUIManager.Instance.GainedLevel();
+			}
+			else{	// Play gain experience animation
+				GetMinipetScript(MiniPetTable[miniPetID]).GainedExperience();	// Show animations/effects
+				MiniPetHUDUIManager.Instance.GainedExperience();
 			}
 		}
 	}

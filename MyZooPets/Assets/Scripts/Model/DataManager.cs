@@ -261,7 +261,7 @@ public class DataManager : Singleton<DataManager>{
 		}
 		
 		#if UNITY_EDITOR
-		Debug.Log("Game is saving");
+//		Debug.Log("Game is saving");
 		#endif
 
 		//Data will not be saved if gameData is empty

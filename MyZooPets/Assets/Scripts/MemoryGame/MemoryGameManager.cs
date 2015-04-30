@@ -97,11 +97,9 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		case MinigameStates.GameOver:
 			break;
 		case MinigameStates.Paused:
-			Debug.Log("Paused");
 			isPaused = true;
 			break;
 		case MinigameStates.Playing:
-			Debug.Log("Playing");
 			isPaused = false;
 			break;
 		}

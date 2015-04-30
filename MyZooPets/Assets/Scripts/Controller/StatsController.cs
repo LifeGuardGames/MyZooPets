@@ -33,9 +33,11 @@ public class StatsController : Singleton<StatsController>{
 	void Start(){
 		// Check if hud animator is assigned already
 		if(hudAnimator == null){
-			Debug.LogWarning("Manually assigning HUD animator, please assign in this scene");
 			GameObject hudAnimatorObject = GameObject.Find("HUDPanelUI");
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
+		}
+		else{
+			Debug.LogWarning("Could not find a hud animator! please assign in this scene");
 		}
 		
 		isPetAnimationManagerPresent = PetAnimationManager.Instance;

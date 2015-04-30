@@ -104,7 +104,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 
 	//Change the game state	
 	private void SetGameState(MinigameStates eNewState){
-		Debug.Log("Setting game state " + eNewState.ToString());
+//		Debug.Log("Setting game state " + eNewState.ToString());
 		if(currentState == eNewState){
 			Debug.LogError("Minigame(" + GetMinigameKey() + ") is getting set to a state it's already at: " + eNewState);
 			return;

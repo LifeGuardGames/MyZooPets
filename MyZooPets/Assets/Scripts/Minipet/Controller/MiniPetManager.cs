@@ -82,7 +82,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		case MiniPetTypes.GameMaster:
 			// Check if mp needs new locations
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
-			if(latestGate == null || (latestGate.Partition - 1 >= 1)){
+			if(latestGate.Partition - 1 >= 1){
 				if(isSpawnNewLocations){
 					// Calculate the MP location
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
@@ -138,7 +138,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 		case MiniPetTypes.Merchant:
 			ImmutableDataGate latestGateAux = GatingManager.Instance.GetLatestLockedGate();
-			if(latestGateAux == null || (latestGateAux.Partition - 1 >= 2)){
+			if(latestGateAux.Partition - 1 >= 2){
 				// Check if mp needs new locations
 				if(isSpawnNewLocations){
 					if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here

@@ -82,7 +82,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		case MiniPetTypes.GameMaster:
 			// Check if mp needs new locations
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
-			if(latestGate.Partition - 1 >= 1){
+			if(latestGate == null || (latestGate.Partition - 1 >= 1)){
 				if(isSpawnNewLocations){
 					// Calculate the MP location
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
@@ -138,7 +138,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 		case MiniPetTypes.Merchant:
 			ImmutableDataGate latestGateAux = GatingManager.Instance.GetLatestLockedGate();
-			if(latestGateAux.Partition - 1 >= 2){
+			if(latestGateAux == null || (latestGateAux.Partition - 1 >= 2)){
 				// Check if mp needs new locations
 				if(isSpawnNewLocations){
 					if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
@@ -176,6 +176,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				// Spawn based on its saved location
 				else{
 					// If the saved minipet location is in the current zone
+					Debug.Log(miniPetId);
 					if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetId))){
 						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 						
@@ -205,6 +206,20 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		}
 	}
 	#endregion
+
+
+	void OnGUI(){
+		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
+			IncreaseXp("MiniPet0");
+		}
+		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
+			IncreaseXp("MiniPet1");
+		}
+		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
+			IncreaseXp("MiniPet2");
+		}
+	}
+
 
 	#region XP and leveling
 	/// <summary>

@@ -98,7 +98,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					contentTweenParent = content.GetComponent<TweenToggle>();
 					//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
 					if (contentTweenParent != null){
-						StartCoroutine(ShowContentHelper());
+						StartCoroutine("ShowContentHelper");
 					}
 				}
 				break;
@@ -134,7 +134,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		this.GetComponent<TweenToggleDemux>().Hide();
 
 		storeTweenParent.Hide();
-
+		StopCoroutine("ShowContentHelper");
 		CheckStoreButtonPulse();
 		PetSpeechManager.Instance.BeQuiet();
 		//Show other UI Objects

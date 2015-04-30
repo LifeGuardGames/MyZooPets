@@ -176,7 +176,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				// Spawn based on its saved location
 				else{
 					// If the saved minipet location is in the current zone
-					Debug.Log(miniPetId);
 					if(PartitionManager.Instance.IsPartitionInCurrentZone(GetPartitionNumberForMinipet(miniPetId))){
 						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 						

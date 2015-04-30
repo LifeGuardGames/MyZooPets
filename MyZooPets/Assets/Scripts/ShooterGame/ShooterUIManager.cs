@@ -55,7 +55,6 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	}
 
 	public void Reset(){
-		Debug.Log("RESETTING");
 		sun = GameObject.Find("SpriteSun");
 		moon = GameObject.Find("SpriteMoon");
 		sun.transform.position = posSky.position;

@@ -192,7 +192,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 			RewardFireCrystal();
 		}
 		else{
-			Debug.Log("Fire is not full");
 			Invoke("CloseUIBasedOnScene", 1f);
 		}
 	}

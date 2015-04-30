@@ -14,6 +14,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	public GameObject contentParent;
 	public GameObject petReference;
+
+	public ParticleSystem experienceParticle;
+	public ParticleSystem levelUpParticle;
+
 	private GameObject content;
 
 	/// <summary>
@@ -220,10 +224,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	}
 
 	public void GainedExperience(){
-		Debug.Log("GAINED EXPERIENCE UI");
+		experienceParticle.Play();
 	}
 
 	public void GainedLevel(){
-		Debug.Log("GAINED LEVEL UI");
+		levelUpParticle.Play();
 	}
 }

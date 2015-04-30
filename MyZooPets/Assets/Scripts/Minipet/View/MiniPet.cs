@@ -274,10 +274,11 @@ public abstract class MiniPet : MonoBehaviour {
 	public void GainedLevel(){
 		Debug.Log("GAINED LEVEL MP");
 		AccessoriesCheck(true);
-		Invoke("GainedLeveledHelper", 0.7f);
+		Invoke("GainedLevelHelper", 0.5f);
 	}
 
 	private void GainedLevelHelper(){
+
 		animationManager.Cheer();
 	}
 

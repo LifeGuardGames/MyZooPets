@@ -298,9 +298,7 @@ public class Analytics : MonoBehaviour {
         if(!String.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
             GA.API.Design.NewEvent("Tutorial:Completed:" + tutorialID);
     }
-
-
-
+	
     //Pet level up
     public void LevelUnlocked(Level levelID){
         if(isAnalyticsEnabled)

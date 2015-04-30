@@ -63,7 +63,6 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		vPosMoney = CameraManager.Instance.TransformAnchorPosition(vPosMoney, InterfaceAnchors.Center, InterfaceAnchors.Top);
 		
 		// award the actual xp and money
-		Debug.Log("Reward money and xp");
 		StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: vPosXP,
 		                                     deltaStars: rewardMoney, starsLoc: vPosMoney,
 		                                     animDelay: 0.5f);
@@ -80,7 +79,6 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void ShowButtons(object obj, EventArgs e){
-		Debug.Log("SHOWING BUTTONS");
 		tweenButtons.Show();
 	}
 	

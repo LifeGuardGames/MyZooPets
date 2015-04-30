@@ -37,9 +37,7 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	/// Collected information about player
 	/// </summary>
 	public void QuestionaireCollected(){
-		Debug.Log("Setting questionaire");
 		DataManager.Instance.IsQuestionaireCollected = true;
-		Debug.Log("---- " + PlayerPrefs.GetInt("IsQuestionaireCollected"));
 	}
 
 	public void ContinueLoading(){

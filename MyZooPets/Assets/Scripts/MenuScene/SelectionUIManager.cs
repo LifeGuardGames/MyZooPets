@@ -60,7 +60,6 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 	/// </summary>
 	/// <param name="selectedPetGO">Selected pet</param>
 	public void PetSelected(GameObject selectedPetGO){
-		Debug.Log("Pet selected");
 		SelectedPet = selectedPetGO;
 
 		MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;

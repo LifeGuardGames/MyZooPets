@@ -122,7 +122,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
 			foreach(KeyValuePair<string, MutableDataWellapadTask> task in mission.Value.Tasks){
 				if(task.Value.WillComplete(completedTaskID, completeCondition)){
-					Debug.Log("++ valid task completed and set: " + completedTaskID);
+//					Debug.Log("++ valid task completed and set: " + completedTaskID);
 
 					string taskID = task.Value.TaskID;
 					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[taskID].Completed = WellapadTaskCompletionStates.RecentlyCompleted;

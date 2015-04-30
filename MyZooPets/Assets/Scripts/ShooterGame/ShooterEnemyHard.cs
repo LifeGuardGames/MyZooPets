@@ -55,8 +55,6 @@ public class ShooterEnemyHard:ShooterEnemy{
 
 	void OnDestroy(){
 		LeanTween.cancel(this.gameObject);
-
-		Debug.Log("sucess");
 	}
 
 //	void OnGUI(){

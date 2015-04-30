@@ -42,7 +42,6 @@ public class DataLoaderNinjaTriggersAndBombs{
 
 	// Gets a PowerUp from the list given index
 	private static string GetPowUp(int index){
-		Debug.Log(index);
 		if(powUpList == null){
 			SetupData();
 		}

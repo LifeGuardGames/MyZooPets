@@ -19,6 +19,10 @@ public class ParticleColorChange : MonoBehaviour{
 	public string color5Name;
 	public Color color5;
 
+	public string color6Name;
+	public Color color6;
+
+
 	public void ChangeColor(string colorName){
 		if(string.Equals(colorName, color1Name)){
 			particle.startColor = color1;
@@ -34,6 +38,9 @@ public class ParticleColorChange : MonoBehaviour{
 		}
 		else if(string.Equals(colorName, color5Name)){
 			particle.startColor = color5;
+		}
+		else if(string.Equals(colorName, color6Name)){
+			particle.startColor = color6;
 		}
 		else{
 			Debug.LogWarning("No valid colors detected!");

@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * Description:
  * The sort of 'center' of the game.
  * However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
@@ -90,7 +90,8 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		// send out coins task
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
-		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
+
+		Analytics.Instance.RunnerTimesPlayedTick();
 	}		
 
 	/// <summary>

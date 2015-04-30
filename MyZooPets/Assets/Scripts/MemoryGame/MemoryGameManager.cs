@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -87,9 +87,9 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	protected override void _GameOver(){
 		memoryUI.FinishBoard();
 		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), GetScore());
-		Debug.Log("memory game setting task completed with score of " + GetScore());
+
 		Analytics.Instance.MemoryHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
+		Analytics.Instance.MemoryTimesPlayedTick();
 	}
 
 	private void GameStateChange(object sender, GameStateArgs args){

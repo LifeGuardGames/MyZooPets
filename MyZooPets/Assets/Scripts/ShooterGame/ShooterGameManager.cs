@@ -95,7 +95,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.ShooterWave(waveNum);
 		Analytics.Instance.ShooterPercentageMissed(ShooterInhalerManager.Instance.missed / waveNum);
-		DataManager.Instance.GameData.HighScore.timesPlayed[GetMinigameKey()]++;
+		Analytics.Instance.ShooterTimesPlayedTick();
 	}
 
 	public void ClickIt(TapGesture e){

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class MutableDataHighScore{
 	public Dictionary<string, int> MinigameHighScore { get; set; } //Key: Minigame Key, Value: Minigame highscore
-	public Dictionary<string, int> timesPlayed { get; set; }
+
 	public void UpdateMinigameHighScore(string miniGameKey, int highScore){
 		//if exist a mini game high score compare them and store the highest one
 		if(MinigameHighScore.ContainsKey(miniGameKey)){
@@ -13,8 +13,8 @@ public class MutableDataHighScore{
 			if(highScore > serializedHighScore){
 				MinigameHighScore[miniGameKey] = highScore;
 			}
-			//if no mini game high score then add it
 		}
+		//if no mini game high score then add it
 		else{
 			MinigameHighScore.Add(miniGameKey, highScore);
 		}
@@ -23,6 +23,5 @@ public class MutableDataHighScore{
 	//============================Initialization===============================
 	public MutableDataHighScore(){
 		MinigameHighScore = new Dictionary<string, int>();
-		timesPlayed = new Dictionary<string, int>();
 	}
 }

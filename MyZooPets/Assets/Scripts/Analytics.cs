@@ -73,55 +73,50 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void NinjaTimesPlayed(int played){
+	public void NinjaTimesPlayedTick(){
 	if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(NINJA_CATEGORY + "TimesPlayed", (float) played);
+			GA.API.Design.NewEvent(NINJA_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
-
 	#endregion
 
 	#region Shooter Game
-
 	public void ShooterHighScore(int score){
 		if(isAnalyticsEnabled){
 			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
-	public void ShooterWave (int wave){
+	public void ShooterWave(int wave){
 	if(isAnalyticsEnabled){
 			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Failed at Wave: ", (float) wave);
 		}
 	}
 
-	public void ShooterPercentageMissed (int percentage){
+	public void ShooterPercentageMissed(int percentage){
 		if(isAnalyticsEnabled){
 			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", (float) percentage);
 		}
 	}
-	public void ShooterTimesPlayed(int played){
+	public void ShooterTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "TimesPlayed", (float) played);
+			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
-
 	#endregion
 
 	#region Memory Game
-
 	public void MemoryHighScore(int score){
 		if(isAnalyticsEnabled){
 			GA.API.Design.NewEvent(MEMORY_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
-	public void MemoryTimesPlayed(int played){
+	public void MemoryTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(MEMORY_CATEGORY + "TimesPlayed", (float) played);
+			GA.API.Design.NewEvent(MEMORY_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
-
 	#endregion
 
 	#region Runner Game
@@ -142,9 +137,9 @@ public class Analytics : MonoBehaviour {
             GA.API.Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
     }
 
-	public void RunnerTimesPlayed(int played){
+	public void RunnerTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(RUNNER_CATEGORY + "TimesPlayed", (float) played);
+			GA.API.Design.NewEvent(RUNNER_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 
@@ -182,9 +177,9 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void DoctorTimesPlayed(int played){
+	public void DoctorTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "TimesPlayed", (float) played);
+			GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 

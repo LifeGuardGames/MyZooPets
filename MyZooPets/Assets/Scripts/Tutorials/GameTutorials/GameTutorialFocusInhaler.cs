@@ -28,13 +28,13 @@ public class GameTutorialFocusInhaler : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-				// the start of the focus inhaler tutorial
+			// the start of the focus inhaler tutorial
 			FocusInhaler();
 			ShowRetentionPet(true, new Vector3(-281, -86, -160));
 			break;
 			
 		case 1:
-				// destroy the spotlight we created for the inhaler
+			// destroy the spotlight we created for the inhaler
 			RemoveSpotlight();
 			RemoveFingerHint();
 			RemovePopup();

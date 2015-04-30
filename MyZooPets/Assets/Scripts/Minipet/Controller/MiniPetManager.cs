@@ -207,20 +207,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	}
 	#endregion
 
-
-	void OnGUI(){
-		if(GUI.Button(new Rect(100, 100, 100, 100), "1")){
-			IncreaseXp("MiniPet0");
-		}
-		if(GUI.Button(new Rect(200, 100, 100, 100), "2")){
-			IncreaseXp("MiniPet1");
-		}
-		if(GUI.Button(new Rect(300, 100, 100, 100), "3")){
-			IncreaseXp("MiniPet2");
-		}
-	}
-
-
 	#region XP and leveling
 	/// <summary>
 	/// Need to check if mp can be leveled first using CanModifyFoodXP

@@ -20,6 +20,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_TRIGGERS = "TUT_TRIGGERS";
 	public const string TUT_DECOS = "TUT_DECOS";
 	public const string TUT_MOOD_DEGRADE = "TUT_TIME_DECAY";
+	public bool spawnedTutorial;
 
 	// tutorial that's is not related to the intro tutorial 
 	public const string TUT_FEED_PET = "TUT_FEED_PET";
@@ -64,7 +65,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	}
 
 	void OnApplicationPause(bool isPaused){
-		if(!isPaused){
+		if(!isPaused && !spawnedTutorial){
 			TutorialPart2Check();
 		}
 	}
@@ -111,10 +112,11 @@ public class TutorialManagerBedroom : TutorialManager{
 //		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
-			   CameraManager.Instance.PanScript.currentPartition == 0){
+			   CameraManager.Instance.PanScript.currentPartition == 0 ){
 				Debug.Log("LAUNCHING TRIGGER TUTORIAL");
 				// play the trigger tutorial
 				new GameTutorialTriggersNew();
+				spawnedTutorial = true;
 			}
 			else if(isFlameTutorialDone && !isDecoTutorialDone &&
 			        CameraManager.Instance.PanScript.currentPartition == 0){

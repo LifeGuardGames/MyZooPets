@@ -13,7 +13,6 @@ public class ShooterEnemy : MonoBehaviour{
 	protected GameObject player;
 	public bool isDead = false;
 
-
 	// Use this for initialization
 	void Awake(){
 		player = GameObject.FindWithTag("Player");
@@ -74,14 +73,15 @@ public class ShooterEnemy : MonoBehaviour{
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	IEnumerator DestroyEnemy(){
 		particleDead.gameObject.SetActive(true);
+		AudioManager.Instance.PlayClip("shooterEnemyDie", variations:3);
 		yield return new WaitForEndOfFrame();
+
 		isDead = true;
 		collider2D.enabled = false;
 		LeanTween.cancel(this.gameObject);
 		ShooterGameEnemyController.Instance.enemiesInWave--;
 		ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
-		//AudioManager.Instance.PlayClip("shooterEnemyDie", variations: 3);
 		// Visual changes
 		animator.gameObject.SetActive(false);
 		if(particle != null){

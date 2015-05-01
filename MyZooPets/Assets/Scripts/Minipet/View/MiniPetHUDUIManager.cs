@@ -98,7 +98,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					contentTweenParent = content.GetComponent<TweenToggle>();
 					//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
 					if (contentTweenParent != null){
-						StartCoroutine("ShowContentHelper");
+						StartCoroutine(ShowContentHelper());
 					}
 				}
 				break;
@@ -112,7 +112,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	private IEnumerator ShowContentHelper(){
 		yield return new WaitForSeconds(1.0f);
-		contentTweenParent.Show();
+		if(contentTweenParent != null){
+			contentTweenParent.Show();
+		}
 	}
 
 	#region Overridden functions
@@ -134,7 +136,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		this.GetComponent<TweenToggleDemux>().Hide();
 
 		storeTweenParent.Hide();
-		StopCoroutine("ShowContentHelper");
 		CheckStoreButtonPulse();
 		PetSpeechManager.Instance.BeQuiet();
 		//Show other UI Objects

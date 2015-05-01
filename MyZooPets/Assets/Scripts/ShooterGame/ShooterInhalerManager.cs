@@ -7,7 +7,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
 	public bool hit = false;
-	public GameObject badTiming;
+	public GameObject badTimingObject;
 	public ParticleSystem goodTimingParticle;
 	public int missed = 0;
 	public bool CanUseInhalerButton{
@@ -40,7 +40,8 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 		}
 		else if(CanUseInhalerButton == true){
 			missed++;
-			badTiming.SetActive(true);
+			Debug.Log(badTimingObject.name);
+			badTimingObject.SetActive(true);
 
 			AudioManager.Instance.PlayClip("minigameError");
 			StartCoroutine(DeactivateText());
@@ -49,6 +50,6 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 
 	IEnumerator DeactivateText(){
 		yield return new WaitForSeconds (2.0f);
-		badTiming.SetActive(false);
+		badTimingObject.SetActive(false);
 	}
 }

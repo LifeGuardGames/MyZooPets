@@ -78,7 +78,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 	// shoots a bullet at the current position of the mouse or touch
 	public void Shoot(Vector3 dir){
-	//	AudioManager.Instance.PlayClip("shooterFire", variations: 3);
+		AudioManager.Instance.PlayClip("shooterFire", variations: 3);
 		characterController.Shoot();	// Tell the animator to shoot
 
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);

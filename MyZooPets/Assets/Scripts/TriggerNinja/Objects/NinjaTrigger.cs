@@ -11,7 +11,9 @@ public class NinjaTrigger : MonoBehaviour{
 
 	// sounds
 	public string strSoundHit;
+	public int soundHitVariations;
 	public string strSoundMissed;
+	public string strSoundLaunch;
 
 	// number of children objects that are visible
 	private int visibleChildrenCount;
@@ -39,7 +41,9 @@ public class NinjaTrigger : MonoBehaviour{
 		
 		// event listeners
 		NinjaManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
-		NinjaManager.OnNewGame += OnNewGame;				// new game		
+		NinjaManager.OnNewGame += OnNewGame;				// new game	
+
+		AudioManager.Instance.PlayClip(strSoundLaunch, variations:3);
 	}
 	
 	void OnDestroy(){
@@ -64,7 +68,7 @@ public class NinjaTrigger : MonoBehaviour{
 		
 		// play a sound (if it exists)
 		if(!string.IsNullOrEmpty(strSoundHit)){
-			AudioManager.Instance.PlayClip(strSoundHit, variations:3);
+			AudioManager.Instance.PlayClip(strSoundHit, variations:soundHitVariations);
 		}
 		
 		// also create a little explosion particle FX where the user's finger was

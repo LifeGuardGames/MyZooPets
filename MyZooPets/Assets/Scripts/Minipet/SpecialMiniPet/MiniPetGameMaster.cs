@@ -28,6 +28,7 @@ public class MiniPetGameMaster : MiniPet{
 			base.FinishEating();
 			isPetCanGainXP = true;
 			isFinishEating = true; 
+			PetSpeechManager.Instance.BeQuiet();
 			miniPetSpeechAI.ShowChallengeMsg(minigameType);
 			minigameTaskId = PickMinigameMissionKey(minigameType);
 			

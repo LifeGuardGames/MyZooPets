@@ -34,6 +34,7 @@ public class MiniPetMerchant : MiniPet{
 			base.FinishEating();
 			isPetCanGainXP = true;
 			isFinishEating = true; 
+			PetSpeechManager.Instance.BeQuiet();
 			miniPetSpeechAI.ShowMerchantShopMessage();
 			OpenMerchantContent();
 		}

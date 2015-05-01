@@ -178,6 +178,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		SetTutorial(new ShooterGameTutorial());
 	}
 
+	// we subtract 1 as a work around as minigame manager won't let you go above max without losing health first
 	public void HealthUpdate(object sender, EventArgs args){
 		UpdateLives(-1);
 		UpdateLives(4);

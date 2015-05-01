@@ -19,27 +19,27 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		switch(eState){
 		case MinigameStates.GameOver:
 			if(sun != null)
-			LeanTween.cancel(sun);
+				LeanTween.cancel(sun);
 			if(moon != null)
-			LeanTween.cancel(moon);
+				LeanTween.cancel(moon);
 			break;
 		case MinigameStates.Paused:
 			if(sun != null)
-			LeanTween.pause(sun);
+				LeanTween.pause(sun);
 			if(moon != null)
-			LeanTween.pause(moon);
+				LeanTween.pause(moon);
 			break;
 		case MinigameStates.Playing:
 			if(sun != null)
-			LeanTween.resume(sun);
+				LeanTween.resume(sun);
 			if(moon != null)
-			LeanTween.resume(moon);
+				LeanTween.resume(moon);
 			break;
 		case MinigameStates.Restarting:
 			if(sun != null)
-			LeanTween.cancel(sun);
+				LeanTween.cancel(sun);
 			if(moon != null)
-			LeanTween.cancel(moon);
+				LeanTween.cancel(moon);
 			break;
 		}
 	}
@@ -86,13 +86,13 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 			}
 		}
 		else{
-			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(tutChange).setEase(LeanTweenType.easeInQuad);
+			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(TutChange).setEase(LeanTweenType.easeInQuad);
 			nightTween.Show();
 			dayTween.Hide();
 		}
 	}
 
-	public void tutChange(){
+	public void TutChange(){
 		// if its the tutorial go to next step
 		LeanTween.move(moon, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
 	}

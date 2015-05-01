@@ -8,7 +8,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public bool canUseInhalerButton = true;
 	public bool hit = false;
 	public GameObject badTiming;
-	public GameObject[] goodFX;
+	public ParticleSystem goodTimingParticle;
 	public int missed = 0;
 	public bool CanUseInhalerButton{
 		get{
@@ -34,18 +34,20 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.RemoveHealth(3);
 			CanUseInhalerButton =! CanUseInhalerButton;
-			foreach (GameObject boom in goodFX){
-				boom.SetActive(true);
-			}
+			goodTimingParticle.Play();
+
+			AudioManager.Instance.PlayClip("shooterButtonSuccess");
 		}
 		else if(CanUseInhalerButton == true){
 			missed++;
 			badTiming.SetActive(true);
-			StartCoroutine(HoldIt());
+
+			AudioManager.Instance.PlayClip("minigameError");
+			StartCoroutine(DeactivateText());
 		}
 	}
 
-	IEnumerator HoldIt(){
+	IEnumerator DeactivateText(){
 		yield return new WaitForSeconds (2.0f);
 		badTiming.SetActive(false);
 	}

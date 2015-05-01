@@ -388,7 +388,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	protected void GameOver(){
 		// send out a completion task
 //		WellapadMissionController.Instance.TaskCompleted("Play" + GetMinigameKey());
-
 		AudioManager.Instance.PlayClip(gameOverAudioClip);
 
 		// send out score task

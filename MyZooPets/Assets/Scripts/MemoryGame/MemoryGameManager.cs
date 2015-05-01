@@ -177,7 +177,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	}
 
 	private void UnlockDelaySuccess(){
-		AudioManager.Instance.PlayClip("MemoryGood");
+		AudioManager.Instance.PlayClip("memorySuccess");
 
 		// Tell cards to play success state
 		flip1.FlipResult(true);

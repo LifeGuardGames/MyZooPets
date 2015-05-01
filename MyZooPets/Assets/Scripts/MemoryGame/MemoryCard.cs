@@ -90,7 +90,7 @@ public class MemoryCard : MonoBehaviour {
 	}
 
 	private void PlayFlipSquenceOpen(){
-		AudioManager.Instance.PlayClip("MemoryCard1");
+		AudioManager.Instance.PlayClip("memoryCard1");
 
 		// Zoom in on the whole object
 		LeanTween.scale(gameObject, new Vector3(activeTweenScale, activeTweenScale, 1), activeTweenTime);
@@ -111,7 +111,7 @@ public class MemoryCard : MonoBehaviour {
 	}
 
 	private void PlayFlipSequenceClose(){
-		AudioManager.Instance.PlayClip("MemoryCard2");
+		AudioManager.Instance.PlayClip("memoryCard2");
 		tweeningContentParent.GetComponent<AnimationControl>().Stop();
 		triggerTypeParticle.Stop();
 

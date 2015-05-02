@@ -58,7 +58,6 @@ public class MutableDataMiniPetLocations {
 			return MiniPetLoc[miniPetID].PartitionLocationID;
 		}
 		else{
-			Debug.LogError("Bad miniPetID " + miniPetID);
 			return null;
 		}
 	}

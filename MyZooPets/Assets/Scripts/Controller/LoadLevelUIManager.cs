@@ -31,26 +31,27 @@ public class LoadLevelUIManager : Singleton<LoadLevelUIManager> {
 	public void StartLoadCoroutine(){
 		if(levelName != null){
 			// UNDONE load the loading screen here
-			StartCoroutine(Load());
+			Application.LoadLevel(levelName);	// Changing back to regular load level
+//			StartCoroutine(Load());
 		}
 		else{
 			Debug.LogError("No level name specified");
 		}
 	}
-	private IEnumerator Load(){
-
-		// Save the play period information before you change scenes
-		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD){
-			PlayPeriodLogic.Instance.SetLastPlayPeriod();
-		}
-
-#if UNITY_EDITOR
-		Debug.LogWarning("ASYNC LOAD STARTED - " + "DO NOT EXIT PLAY MODE UNTIL SCENE LOADS... UNITY WILL CRASH");
-#endif
-		async = Application.LoadLevelAsync(levelName);
-		async.allowSceneActivation = true;
-		yield return async;
-	}
+//	private IEnumerator Load(){
+//
+//		// Save the play period information before you change scenes
+//		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD){
+//			PlayPeriodLogic.Instance.SetLastPlayPeriod();
+//		}
+//
+//#if UNITY_EDITOR
+//		Debug.LogWarning("ASYNC LOAD STARTED - " + "DO NOT EXIT PLAY MODE UNTIL SCENE LOADS... UNITY WILL CRASH");
+//#endif
+//		async = Application.LoadLevelAsync(levelName);
+//		async.allowSceneActivation = true;
+//		yield return async;
+//	}
 
 	/// <summary>
 	/// This is tells unity when the scene can be loaded, either immediately / when the loading is finished

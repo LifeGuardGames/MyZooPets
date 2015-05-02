@@ -25,11 +25,14 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// Only call once per a play period all furture calls will be false
 	/// </summary>
 	public bool CanSpawnNewMinipetLocations(){
+//		Debug.Log(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
+//			Debug.Log("SPAWN NEW LOCATIONS?: YES");
 			return true;
 		}
 		else{
+//			Debug.Log("SPAWN NEW LOCATIONS?: NO");
 			return false;
 		}
 	}
@@ -83,7 +86,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			// Check if mp needs new locations
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGate == null || (latestGate.Partition - 1 >= 1)){
-				if(isSpawnNewLocations){
+				// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check
+				if(isSpawnNewLocations || GetPartitionNumberForMinipet(miniPetId) == -1){
 					// Calculate the MP location
 					MinigameTypes type = PartitionManager.Instance.GetRandomUnlockedMinigameType();
 					LgTuple<Vector3, string> gameMasterLocation = PartitionManager.Instance.GetPositionNextToMinigame(type);
@@ -140,7 +144,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			ImmutableDataGate latestGateAux = GatingManager.Instance.GetLatestLockedGate();
 			if(latestGateAux == null || (latestGateAux.Partition - 1 >= 2)){
 				// Check if mp needs new locations
-				if(isSpawnNewLocations){
+				// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check
+				if(isSpawnNewLocations || GetPartitionNumberForMinipet(miniPetId) == -1){
 					if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
 						// Calculate the MP location
 						LgTuple<Vector3, string> merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
@@ -347,7 +352,8 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	public int GetPartitionNumberForMinipet(string minipetId){
 		string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(minipetId);
 		if(string.IsNullOrEmpty(locationId)){
-			Debug.LogError("Null location detected");
+			Debug.LogWarning("Null location detected");
+			return -1;
 		}
 		return DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
 	}

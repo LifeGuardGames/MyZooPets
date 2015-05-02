@@ -145,17 +145,19 @@ public abstract class DecorationZone : MonoBehaviour {
 
 		// Play a sound
 		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
-		if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper){
-			AudioManager.Instance.PlayClip("decoPlacePaper");
-		}
-		else{
-			AudioManager.Instance.PlayClip("decoPlaceFurniture");
-		}
+		if(isPlacedFromDecoMode){
+			if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper){
+				AudioManager.Instance.PlayClip("decoPlacePaper");
+			}
+			else{
+				AudioManager.Instance.PlayClip("decoPlaceFurniture");
+			}
 
-		// play an FX
-		Vector3 particlePos = transform.position;
-		string particlePrefabName = Constants.GetConstant<string>("Deco_PlaceParticle");
-		ParticleUtils.CreateParticle(particlePrefabName, particlePos);	
+			// play an FX
+			Vector3 particlePos = transform.position;
+			string particlePrefabName = Constants.GetConstant<string>("Deco_PlaceParticle");
+			ParticleUtils.CreateParticle(particlePrefabName, particlePos);	
+		}
 
 		//Check for badge unlock
 		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;

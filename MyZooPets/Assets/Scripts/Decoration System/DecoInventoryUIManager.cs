@@ -196,7 +196,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		Vector3 decoInvItemPosition;
 		
 		// Use the position of the item in the inventory panel
-		Debug.Log(itemID);
 		Transform deocInvItemTrans = uiGridObject.transform.Find(itemID);
 		if(deocInvItemTrans == null){
 			Debug.Log("ksd");

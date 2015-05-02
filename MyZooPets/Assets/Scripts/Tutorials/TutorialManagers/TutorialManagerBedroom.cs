@@ -26,7 +26,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_FEED_PET = "TUT_FEED_PET";
 	
 	// last tutorial
-	public const string TUT_LAST = TUT_DECOS;
+	public const string TUT_LAST = TUT_TRIGGERS;		//UNDONE Take out for now TUT_DECOS
 
 	protected override void Awake(){
 		base.Awake();
@@ -106,7 +106,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	private void TutorialPart2Check(){	// TODO this can be refactored, this is checked everytime you switch rooms....
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
 		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_TRIGGERS);
-		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_DECOS);
+//		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_DECOS); //UNDONE Take out for now
 		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
 		
 //		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
@@ -118,12 +118,12 @@ public class TutorialManagerBedroom : TutorialManager{
 				new GameTutorialTriggersNew();
 				spawnedTutorial = true;
 			}
-			else if(isFlameTutorialDone && !isDecoTutorialDone &&
-			        CameraManager.Instance.PanScript.currentPartition == 0){
-				Debug.Log("LAUNCHING DECO TUTORIAL");
-				// play the deco tutorial
-				new GameTutorialDecorationsNew();
-			}
+//			else if(isFlameTutorialDone && !isDecoTutorialDone &&		//UNDONE Take out for now
+//			        CameraManager.Instance.PanScript.currentPartition == 0){
+//				Debug.Log("LAUNCHING DECO TUTORIAL");
+//				// play the deco tutorial
+//				new GameTutorialDecorationsNew();
+//			}
 		}
 	}
 

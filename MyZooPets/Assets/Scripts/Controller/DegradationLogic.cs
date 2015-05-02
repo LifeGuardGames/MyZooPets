@@ -160,7 +160,6 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		int numToSpawn = GetNumTriggersToSpawn();
 
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
-
 		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
 		//create trigger data to be spawned

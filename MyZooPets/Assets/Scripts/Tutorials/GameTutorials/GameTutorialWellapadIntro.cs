@@ -10,6 +10,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	// wellapad button
 	private GameObject goWellapadButton = GameObject.Find("WellapadButton");
 	private GameObject retentionMinipet;
+	private Vector3 minipetOldColliderSize;
 
 	public GameTutorialWellapadIntro() : base(){	
 	}
@@ -49,6 +50,8 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		yield return 0;
 		retentionMinipet = GameObject.Find("Pebble");
 
+		minipetOldColliderSize = retentionMinipet.GetComponent<BoxCollider>().size;
+
 		// spotlight the minipet
 		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
 		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
@@ -74,8 +77,25 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
 		
 		ShowRetentionPet(false, new Vector3(208, -177, -160));
-
+		retentionMinipet.GetComponent<BoxCollider>().size = new Vector3(18, 14, 1);	// increase the collider size
 		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked2;
+	}
+
+	private void RetentionPetClicked1(object sender, EventArgs args){
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked1;
+		//		RemoveSpotlight();
+		RemoveFingerHint();
+		Advance();
+	}
+	
+	private void RetentionPetClicked2(object sender, EventArgs args){
+		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked2;
+		retentionMinipet.GetComponent<BoxCollider>().size = minipetOldColliderSize;
+		RemoveSpotlight();
+		RemoveFingerHint();
+		RemovePopup();
+		RemoveRetentionPet();
+		Advance();
 	}
 
 	/////////
@@ -128,22 +148,6 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		
 		// listen for when the wellapad is closed
 		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;
-	}
-
-	private void RetentionPetClicked1(object sender, EventArgs args){
-		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked1;
-//		RemoveSpotlight();
-		RemoveFingerHint();
-		Advance();
-	}
-
-	private void RetentionPetClicked2(object sender, EventArgs args){
-		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked2;
-		RemoveSpotlight();
-		RemoveFingerHint();
-		RemovePopup();
-		RemoveRetentionPet();
-		Advance();
 	}
 
 	//---------------------------------------------------

@@ -47,6 +47,7 @@ public class MiniPetGameMaster : MiniPet{
 	private void OpenGameMasterContent(){
 		Hashtable hash = new Hashtable();
 		hash[0] = minigameTaskId;
+		hash[1] = minigameType.ToString();
 		MiniPetHUDUIManager.Instance.OpenUIMinipetType(MiniPetTypes.GameMaster, hash, this);
 	}
 

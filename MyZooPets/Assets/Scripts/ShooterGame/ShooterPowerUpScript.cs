@@ -23,7 +23,7 @@ public class ShooterPowerUpScript : MonoBehaviour{
 			Destroy(this.gameObject);
 		}
 		else{
-			Debug.LogWarning("Foreign object collision deteted");
+			Debug.LogWarning("Foreign object collision deteted " + collider.name);
 		}
 	}
 }

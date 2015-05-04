@@ -71,8 +71,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
 					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 
+					MinigameTypes minigameType = (MinigameTypes)Enum.Parse(typeof(MinigameTypes), hash[1].ToString());
+
 					MiniPetGameMasterUIController minipetGameMasterUIController = content.GetComponent<MiniPetGameMasterUIController>();
-					minipetGameMasterUIController.InitializeContent(hash[0].ToString(), (MiniPetGameMaster)baseScript);
+					minipetGameMasterUIController.InitializeContent(hash[0].ToString(), minigameType, (MiniPetGameMaster)baseScript);
 					SelectedMiniPetContentUIScript = minipetGameMasterUIController;
 
 					if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){

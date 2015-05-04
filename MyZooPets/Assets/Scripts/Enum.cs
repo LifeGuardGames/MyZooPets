@@ -38,6 +38,7 @@ public enum AsthmaStage{
     Sick,
     Attack,
 }
+
 public enum ItemType{
 	None,
 	Foods,
@@ -45,11 +46,13 @@ public enum ItemType{
 	Decorations,
 	Accessories,
 }
+
 public enum StatType{
     Mood,
     Health,
 	Fire
 }
+
 public enum ChallengeType{
     Weekly,
     Daily,

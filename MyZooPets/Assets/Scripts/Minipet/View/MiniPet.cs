@@ -266,19 +266,16 @@ public abstract class MiniPet : MonoBehaviour {
 
 	// Called from minipet manager, handle animations and ui effects here
 	public void GainedExperience(){
-		Debug.Log("GAINED EXPERIENCE MP");
 		animationManager.Cheer();
 	}
 
 	// Called from minipet manager, handle animations and ui effects here
 	public void GainedLevel(){
-		Debug.Log("GAINED LEVEL MP");
 		AccessoriesCheck(true);
 		Invoke("GainedLevelHelper", 0.5f);
 	}
 
 	private void GainedLevelHelper(){
-
 		animationManager.Cheer();
 	}
 

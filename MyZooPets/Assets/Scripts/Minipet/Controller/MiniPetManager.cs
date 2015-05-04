@@ -217,7 +217,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// </summary>
 	/// <param name="miniPetID">Mini pet ID.</param>
 	public void IncreaseXp(string miniPetID){
-		Debug.Log("Increasing xp called");
 		if(CanModifyXp(miniPetID)){
 			int xpNeededForLevelUp = GetXpNeededForNextLevel(miniPetID);
 			int currentXp = GetCurrentXp(miniPetID);

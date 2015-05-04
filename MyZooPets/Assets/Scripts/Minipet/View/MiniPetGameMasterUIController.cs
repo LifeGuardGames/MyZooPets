@@ -5,15 +5,16 @@ using System;
 
 public class MiniPetGameMasterUIController : MonoBehaviour{
 	public UILabel label;
+	public UISprite spriteIcon;
 	public GameObject rewardButton;
 
 	// tween object for when the task is completed
-	public TweenToggle slash;
+	public TweenToggle checkTween;
 	MutableDataWellapadTask task;
 
 	private MiniPetGameMaster gameMasterScript;		// Reference to minipet logic
 
-	public void InitializeContent(string taskID, MiniPetGameMaster gameMasterScript){
+	public void InitializeContent(string taskID, MinigameTypes type, MiniPetGameMaster gameMasterScript){
 		this.gameMasterScript = gameMasterScript;
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
 		task = listTasks[0];
@@ -24,6 +25,10 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 			desc = String.Format(desc, task.Amount);
 		}
 		label.text = desc;
+
+		spriteIcon.spriteName = "mapIcons" + type.ToString();
+		spriteIcon.MakePixelPerfect();
+
 		SetCheckboxSprite(true);
 	}
 
@@ -37,17 +42,15 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 		if(status == WellapadTaskCompletionStates.Completed ||
 		   (status == WellapadTaskCompletionStates.RecentlyCompleted && bPop)){
 			// mark this task as done
-			slash.gameObject.SetActive(true);
+			checkTween.gameObject.SetActive(true);
 			StartCoroutine(CheckboxSpriteShowHelper());	// Show after one frame
-
-			Debug.Log("SETTING REWARD GAME MASTER TRUE");
 			rewardButton.SetActive(true);
 		}
 	}
 
 	private IEnumerator CheckboxSpriteShowHelper(){
 		yield return 0;
-		slash.Show();
+		checkTween.Show();
 	}
 
 	/// </summary>

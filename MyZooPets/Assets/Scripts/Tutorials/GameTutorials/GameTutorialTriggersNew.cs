@@ -77,6 +77,7 @@ public class GameTutorialTriggersNew : GameTutorial{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void OnDustCleaned(object sender, EventArgs args){
+		RoomArrowsUIManager.Instance.ShowRightArrow();
 		TutorialManager.Instance.StartCoroutine(CleanupFinished());
 	}
 	
@@ -92,7 +93,7 @@ public class GameTutorialTriggersNew : GameTutorial{
 		
 		// send out completion message here, because for tutorial, the normal way won't proc
 		WellapadMissionController.Instance.TaskCompleted("CleanRoom");
-		
+
 		// advance the tutorial
 		Advance();			
 	}

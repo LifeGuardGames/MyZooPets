@@ -22,8 +22,5 @@ public class ShooterPowerUpScript : MonoBehaviour{
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 			Destroy(this.gameObject);
 		}
-		else{
-			Debug.LogWarning("Foreign object collision deteted " + collider.name);
-		}
 	}
 }

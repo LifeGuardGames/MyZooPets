@@ -95,7 +95,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		}
 	
 		// Play appropriate sound
-	//	AudioManager.Instance.PlayClip("clinicCorrect");
+		AudioManager.Instance.PlayClip("clinicCorrect");
 
 		if(OnCharacterScoredRight != null)
 			OnCharacterScoredRight(this, EventArgs.Empty);
@@ -106,7 +106,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		UpdateLives(-1);
 
 		// play an incorrect sound
-		AudioManager.Instance.PlayClip("clinicWrong");
+		AudioManager.Instance.PlayClip("minigameError");
 
 		// also slow down the game, if this didn't cause us to have a game over
 		MinigameStates eState = GetGameState();

@@ -38,7 +38,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
 	public void SetLastPlayPeriod(){
-//		Debug.Log("SETTING LAST PLAY PERIOD");
+		Debug.Log("======SETTING LAST PLAY PERIOD");
 		if(!DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux){
 			DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux = true;
 			DataManager.Instance.GameData.PlayPeriod.FirstPlayPeriod = GetCurrentPlayPeriod();
@@ -63,6 +63,11 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 			
 			Analytics.Instance.TimeBetweenPlaySession(timeDifference);
 		}
+	}
+
+	void OnDestroy(){
+		// Save current information on scene change
+		SetLastPlayPeriod();
 	}
 
 	#region Inhaler use functions

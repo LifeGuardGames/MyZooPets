@@ -153,12 +153,14 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	/// spawned from the DegradationUIManager.
 	/// </summary>
 	private void SetUpTriggers(){
+
+		Debug.Log("===SETTING UP TRIGGERS");
 		// get list of available locations to spawn triggers
 		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
-
+		Debug.Log("===Spawning " + numToSpawn);
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
@@ -245,7 +247,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		}
 		else{
 			int playPeriodsOffset = GetNumPlayPeriodsOffset();
-
+			Debug.Log("===Play periods offset: " + playPeriodsOffset);
 			//There are missed play periods
 			if(playPeriodsOffset > 1){
 				//max of 2 missed play period will be accounted
@@ -392,7 +394,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		//if > 12 hrs punishment for every 12 hrs miss
 		playPeriodsOffset = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
 
-		//Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + playPeriodsOffset);
+		Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + (playPeriodsOffset-1));
 		return playPeriodsOffset;
 	}
 }

@@ -65,7 +65,7 @@ public class ShooterEnemy : MonoBehaviour{
 			}
 		}
 		else if(collider.gameObject.tag == "Player"){
-			PlayerShooterController.Instance.RemoveHealth(-damage);
+			PlayerShooterController.Instance.ChangeHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
 	}

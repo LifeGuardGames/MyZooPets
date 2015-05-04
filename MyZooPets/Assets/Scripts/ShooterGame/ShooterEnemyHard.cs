@@ -38,9 +38,9 @@ public class ShooterEnemyHard:ShooterEnemy{
 
 	// shoots a smog ball at the player
 	void ShootSmogBall(){
-		animator.SetBool("Spit",true);
-		animator.SetBool("IsSpitMode", false);
-		if(!isDead){
+		if(!isDead){	
+			animator.SetBool("Spit",true);
+			animator.SetBool("IsSpitMode", false);
 			GameObject instance = Instantiate(bulletPrefab, this.gameObject.transform.position, bulletPrefab.transform.rotation)as GameObject;
 			LeanTween.move(instance.gameObject, player.transform.position, 2.0f);
 			StartCoroutine(WaitASecond());

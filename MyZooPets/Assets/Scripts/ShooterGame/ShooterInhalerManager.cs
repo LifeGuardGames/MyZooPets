@@ -32,7 +32,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 				Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
 			}
 			ShooterGameManager.Instance.AddScore(10);
-			PlayerShooterController.Instance.RemoveHealth(3);
+			PlayerShooterController.Instance.ChangeHealth(3);
 			CanUseInhalerButton =! CanUseInhalerButton;
 			goodTimingParticle.Play();
 

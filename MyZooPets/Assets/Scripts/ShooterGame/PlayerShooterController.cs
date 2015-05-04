@@ -44,7 +44,8 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	// removes health and then calculates state
-	public void RemoveHealth(float amount){
+	public void ChangeHealth(float amount){
+		if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 		playerHealth += amount;
 		if(playerHealth >= 11){
 			ChangeState("happy");
@@ -58,12 +59,15 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		else if (playerHealth <= 0){
 			this.collider2D.enabled = false;
 		}
-		// Also updates the lives in game manager as that is the true health
-		ShooterGameManager.Instance.UpdateLives((int)amount);
 
-		if(ShooterGameManager.Instance.GetLives() <= 0){
-			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
-		}
+
+	
+			// Also updates the lives in game manager as that is the true health
+			ShooterGameManager.Instance.UpdateLives((int)amount);
+			if(ShooterGameManager.Instance.GetLives() == 0){ 
+				characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
+			}
+		
 
 		if(amount > 0){ 
 			// work around for increaseing health above max 
@@ -73,6 +77,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		// amount is 0 or less remove the listener
 		else{
 			changeInHealth -= ShooterGameManager.Instance.HealthUpdate;
+		}
 		}
 	}
 
@@ -111,7 +116,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	// removes health from player when hit by an enemy bullet // written this way to avoid making a mundane script
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "EnemyBullet"){
-			RemoveHealth(-1);
+			ChangeHealth(-1);
 			Destroy(collider.gameObject);
 		}
 	}

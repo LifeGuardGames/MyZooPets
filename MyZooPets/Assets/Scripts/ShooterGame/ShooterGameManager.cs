@@ -95,7 +95,8 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.ShooterWave(waveNum);
 		if(waveNum != 0){	// HACK patching this up for now, please fix dylan, when wave num is 0 -> division by zero
-			Analytics.Instance.ShooterPercentageMissed(ShooterInhalerManager.Instance.missed / waveNum);
+			Analytics.Instance.ShooterPercentageMissed(ShooterInhalerManager.Instance.missed / waveNum+1);
+			WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
 		}
 		Analytics.Instance.ShooterTimesPlayedTick();
 	}

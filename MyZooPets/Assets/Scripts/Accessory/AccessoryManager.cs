@@ -2,17 +2,6 @@
 using System.Collections;
 
 public class AccessoryManager : Singleton<AccessoryManager> {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	/// <summary>
 	/// Gets the type of the accessory node.
 	/// Given a accessory(ID), check the xml to see which type it is.

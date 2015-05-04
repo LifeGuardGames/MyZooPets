@@ -13,7 +13,7 @@ public class BadgeLogic : Singleton<BadgeLogic>{
         private Badge unlockedBadge;
 
         public Badge UnlockedBadge{
-            get{return unlockedBadge;}
+            get{ return unlockedBadge; }
         }
 
         public BadgeEventArgs(Badge badge){
@@ -24,7 +24,7 @@ public class BadgeLogic : Singleton<BadgeLogic>{
     private List<Badge> allBadges; //List of all badges
 
     public List<Badge> AllBadges{
-        get{return allBadges;}
+        get{ return allBadges; }
     }
 
     void Awake(){

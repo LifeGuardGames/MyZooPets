@@ -83,8 +83,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
 
-
-
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
@@ -183,7 +181,11 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-				
+
+				//Check for badge unlock
+				int totalNumOfAccessories = DataManager.Instance.GameData.Inventory.AccessoryItems.Count;
+				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
+
 				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);
 			}

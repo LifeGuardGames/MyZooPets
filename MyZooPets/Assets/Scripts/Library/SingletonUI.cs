@@ -147,6 +147,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 				else if(ClickManager.Instance.IsStackContainsType(UIModeTypes.MiniPet)){
 					InventoryUIManager.Instance.ShowPanel();
 				}
+				else if(ClickManager.Instance.IsStackContainsType(UIModeTypes.Accessory)){
+					HUDUIManager.Instance.ShowPanel();
+				}
 				// Fireblowing room check
 				else if(fireButton != null){
 					if(RoomArrowsUIManager.Instance != null){

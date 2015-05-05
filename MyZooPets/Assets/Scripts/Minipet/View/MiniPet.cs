@@ -101,36 +101,37 @@ public abstract class MiniPet : MonoBehaviour {
 	
 	private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
-			if(!isFinishEating){
-				ShowFoodPreferenceMessage();
-			}
-			bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
-
-			if(!isMiniPetColliderLocked){
-				if(Application.loadedLevelName == "ZoneBedroom"){
-					if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
-						if(OnTutorialMinipetClicked != null){
-							OnTutorialMinipetClicked(this, EventArgs.Empty);
-						}
-						return;
+			if(ClickManager.Instance.stackPeek != "MiniPet"){
+					if(!isFinishEating){
+						ShowFoodPreferenceMessage();
 					}
-				}
-				if(!isUIOpened && isModeLockEmpty){
-					ZoomInToMiniPet();
-					OpenChildUI();	// Further child UI calls
-				}
-				else if(ClickManager.Instance.CurrentMode == UIModeTypes.MiniPet){
-					if(!isBeingTickled){
-						animationManager.StartTickling();
-						isBeingTickled = true;
-						Invoke("StartTicklingTimer", 2f);
+				bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+
+				if(!isMiniPetColliderLocked){
+					if(Application.loadedLevelName == "ZoneBedroom"){
+						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
+							if(OnTutorialMinipetClicked != null){
+								OnTutorialMinipetClicked(this, EventArgs.Empty);
+							}
+							return;
+						}
+					}
+					if(!isUIOpened && isModeLockEmpty){
+						ZoomInToMiniPet();
+						OpenChildUI();	// Further child UI calls
+					}
+					else if(ClickManager.Instance.CurrentMode == UIModeTypes.MiniPet){
+						if(!isBeingTickled){
+							animationManager.StartTickling();
+							isBeingTickled = true;
+							Invoke("StartTicklingTimer", 2f);
+						}
 					}
 				}
 			}
 		}
 	}
-
 	// Further code to run in children if tapped and zoom into minipet
 	protected abstract void OpenChildUI();
 

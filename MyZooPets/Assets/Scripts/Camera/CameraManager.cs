@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -74,7 +74,7 @@ public class CameraManager : Singleton<CameraManager>{
 		}
 
 		GameObject goParent = transform.parent.gameObject;
-		float targetX = scriptPan.partitionOffset * scriptPan.currentPartition;
+		float targetX = scriptPan.partitionOffset * scriptPan.currentLocalPartition;
 		float fX = goParent.transform.position.x;
 		
 		// Check if the camera is moving horizontally or zooming

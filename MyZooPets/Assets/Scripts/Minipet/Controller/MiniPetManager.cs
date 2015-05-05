@@ -89,9 +89,9 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(latestGate == null)
 				Debug.Log("-----Spawning GameMaster: " + (latestGate == null) + " gate null");
 			else
-				Debug.Log("-----Spawning GameMaster: " + (latestGate.Partition - 1 >= 1) + " || latest gate " + latestGate.Partition);
+				Debug.Log("-----Spawning GameMaster: " + (latestGate.AbsolutePartition - 1 >= 1) + " || latest gate " + latestGate.AbsolutePartition);
 
-			if(latestGate == null || (latestGate.Partition - 1 >= 1)){
+			if(latestGate == null || (latestGate.AbsolutePartition - 1 >= 1)){
 				// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check
 				if(isSpawnNewLocations || GetPartitionNumberForMinipet(miniPetId) == -1){
 					// Calculate the MP location
@@ -99,7 +99,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					LgTuple<Vector3, string> gameMasterLocation = PartitionManager.Instance.GetPositionNextToMinigame(type);
 					Vector3 locationPosition = gameMasterLocation.Item1;
 					string locationId = gameMasterLocation.Item2;
-					int partitionNumber = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
+					int partitionNumber = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 
 					// Save information for minipet
 					DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetId, locationId);
@@ -127,7 +127,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 
 						// Get relevant info to populate with given saved location ID
-						int partition = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
+						int partition = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 						Vector3 pos = DataLoaderPartitionLocations.GetOffsetFromLocationId(locationId);
 						MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
 
@@ -152,9 +152,9 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			if(latestGate2 == null)
 				Debug.Log("-----Spawning merchant: " + (latestGate2 == null) + " gate null");
 			else
-				Debug.Log("-----Spawning merchant: " + (latestGate2.Partition - 1 >= 2) + " || latest gate " + latestGate2.Partition);
+				Debug.Log("-----Spawning merchant: " + (latestGate2.AbsolutePartition - 1 >= 2) + " || latest gate " + latestGate2.AbsolutePartition);
 
-	        if(latestGate2 == null || (latestGate2.Partition - 1 >= 2)){
+			if(latestGate2 == null || (latestGate2.AbsolutePartition - 1 >= 2)){
 				// Check if mp needs new locations
 				// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check
 				if(isSpawnNewLocations || GetPartitionNumberForMinipet(miniPetId) == -1){
@@ -163,7 +163,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						LgTuple<Vector3, string> merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
 						Vector3 locationPosition = merchantLocation.Item1;
 						string locationId = merchantLocation.Item2;
-						int partitionNumber = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
+						int partitionNumber = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 
 						// Save information for minipet
 						DataManager.instance.GameData.MiniPetLocations.SaveLocationId(miniPetId, locationId);
@@ -197,7 +197,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						string locationId = DataManager.Instance.GameData.MiniPetLocations.GetLocationId(miniPetId);
 						
 						// Get relevant info to populate with given saved location ID
-						int partition = DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
+						int partition = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 						Vector3 pos = DataLoaderPartitionLocations.GetOffsetFromLocationId(locationId);
 						MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
 						
@@ -365,7 +365,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			Debug.LogWarning("Null location detected");
 			return -1;
 		}
-		return DataLoaderPartitionLocations.GetPartitionNumberFromLocationId(locationId);
+		return DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 	}
 
 	private MiniPet GetMinipetScript(string miniPetID){

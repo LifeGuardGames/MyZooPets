@@ -15,8 +15,8 @@ public class DataLoaderPartitionLocations:XMLLoaderGeneric<DataLoaderPartitionLo
 		return instance.GetDataList<ImmutableDataPartitionLocation>();
 	}
 
-	public static int GetPartitionNumberFromLocationId(string locationId){
-		return GetData(locationId).Partition;
+	public static int GetAbsolutePartitionNumberFromLocationId(string locationId){
+		return GetData(locationId).AbsolutePartition;
 	}
 
 	public static Vector3 GetOffsetFromLocationId(string locationId){

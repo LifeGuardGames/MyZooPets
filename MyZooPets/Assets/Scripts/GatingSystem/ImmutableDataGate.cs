@@ -7,8 +7,8 @@ public class ImmutableDataGate{
 	private int gateNumber ;// sequential order of the gates, used for gate comparison
 	private string zone; // location of the gate
 	private float screenPercentage; //stronger gate covers more screen space //DEPRECATED
-	private int partition; // partition id of the gate
-	private int partitionZoneOffset; //Offset for calculating partitions in different scenes
+	private int absolutePartition; // abolsolute partition id of the gate across all zones
+	private int localPartition; // local partition id of the gate within zone
 	private string monsterID; // id of the monster at this gate
 	private RoomDirection swipeDirection; // the swipe direction that this monster is blocking
 	private string[] taskUnlocks; // list of wellapad unlocks removing this makes available
@@ -39,12 +39,12 @@ public class ImmutableDataGate{
 		get{ return screenPercentage / 100f; }
 	}
 
-	public int Partition{
-		get{ return partition; }
+	public int LocalPartition{
+		get{ return localPartition; }
 	}
 
-	public int PartitionZoneOffset{
-		get{ return partitionZoneOffset; }
+	public int AbsolutePartition{
+		get{ return absolutePartition; }
 	}
 
 	/// <summary>
@@ -72,24 +72,14 @@ public class ImmutableDataGate{
 
 		gateID = id;
 
-		// get gate number
 		gateNumber = XMLUtils.GetInt(hashElements["GateNumber"] as IXMLNode, -1, error);
 
-		// get location
 		zone = XMLUtils.GetString(hashElements["Zone"] as IXMLNode, null, error);
-		
-		// get partition
-		partition = XMLUtils.GetInt(hashElements["Partition"] as IXMLNode, 0, error);
 
-		// get partition zone offset
-		if(hashElements.ContainsKey("PartitionZoneOffset")){
-			partitionZoneOffset = XMLUtils.GetInt(hashElements["PartitionZoneOffset"] as IXMLNode, -1, error);
-		}
-		else{
-			partitionZoneOffset = -1;
-		}
+		absolutePartition = XMLUtils.GetInt(hashElements["AbsolutePartition"] as IXMLNode, 0, error);
 
-		// get screen percentage
+		localPartition = XMLUtils.GetInt(hashElements["LocalPartition"] as IXMLNode, 0, error);
+
 		screenPercentage = XMLUtils.GetFloat(hashElements["ScreenPercentage"] as IXMLNode, 30, error);
 		
 		// get monster

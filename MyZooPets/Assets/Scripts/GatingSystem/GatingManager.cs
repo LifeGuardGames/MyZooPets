@@ -16,14 +16,20 @@ using System.Collections.Generic;
 
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
-	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
-	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
-	public static EventHandler<EventArgs> OnDestroyedGate; // When a specific gate has been destroyed
+	public EventHandler<EventArgs> OnReachedGate;   		// When the player gets to the gate
+	public static EventHandler<EventArgs> OnDamageGate; 	// When player damages the gate
+	public static EventHandler<EventArgs> OnDestroyedGate;	// When a specific gate has been destroyed
 	//=====================================================
 	private GameObject body;
-	public string currentArea; // area that this manager is in
-	public Vector3 startingLocation; // starting location for the gates -- might differ from area to area
-	public ImmutableDataGate latestUnlockedGate; 
+
+	public Vector3 startingLocation;	 // starting location for the gates -- might differ from area to area
+
+	private string currentZone; // area that this manager is in
+	public string CurrentZone{
+		get{ return currentZone; }
+	}
+
+	private ImmutableDataGate latestUnlockedGate; 
 	public ImmutableDataGate LatestUnlockedGate{
 		get{ return latestUnlockedGate; }
 	}
@@ -44,7 +50,10 @@ public class GatingManager : Singleton<GatingManager>{
 		scriptPan = CameraManager.Instance.PanScript;
 	}
 
-	void Start(){		
+	void Start(){
+		// Get current zone
+		currentZone = SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName).ToString();
+
 		// see if the gating system is enabled
 		if(!DataManager.Instance.GameData.GatingProgress.IsEnabled())
 			return;
@@ -120,7 +129,7 @@ public class GatingManager : Singleton<GatingManager>{
 
 		// Next play period. refresh recurring gate
 		if(timeSinceLastSpawned.TotalHours >= 12){
-			Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
+			Hashtable gates = DataLoaderGate.GetZoneGates(currentZone);
 			Debug.Log("RECURRING GATE REFRESH");
 			foreach(DictionaryEntry entry in gates){
 				ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
@@ -139,10 +148,10 @@ public class GatingManager : Singleton<GatingManager>{
 	/// Spawns the gates.
 	/// </summary>
 	private void SpawnGates(){
-		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
+		Hashtable hashGates = DataLoaderGate.GetZoneGates(currentZone);
 		foreach(DictionaryEntry entry in hashGates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
-			int partition = dataGate.Partition;
+			int partition = dataGate.LocalPartition;
 			
 			// if the gate is activate, spawn the monster at an offset 
 			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID);
@@ -168,12 +177,9 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 				
 			if(isGateActive && !isGateInSceneAlready){
-				int startingPartition = scriptPan.currentPartition;			// room the player is in
+				int startingCurrentPartition = scriptPan.currentLocalPartition;			// room the player is in
 				float roomPartitionOffset = scriptPan.partitionOffset; 		// the distance between each room
-				int partitionCountFromStartingPartition = dataGate.Partition - startingPartition;	// the distance between the starting room and this gate's room
-//				if(dataGate.PartitionZoneOffset > 0){	// HACK Gate may be in different zone, calculate adjustment, This is hacky, gates not calculated nicely with pan script...
-//					partitionCountFromStartingPartition -= dataGate.PartitionZoneOffset;
-//				}
+				int partitionCountFromStartingPartition = dataGate.LocalPartition - startingCurrentPartition;	// the distance between the starting room and this gate's room
 				float distanceFromStartingPartition = partitionCountFromStartingPartition * roomPartitionOffset; // offset of the gate
 
 				// how much screen space should the gate be moved by
@@ -207,19 +213,6 @@ public class GatingManager : Singleton<GatingManager>{
 				// hash the gate based on the room, for easier access
 				activeGates[partition] = scriptGate;
 			}
-			// if gate is not active that means it has been completely unlocked
-			else{
-				//if this gate unlocks minipet, we should double check if the minipet is unlocked.
-				//this is mainly for backward compatibility. Old users with the gates unlocked
-				//already should be awarded the minipets right away
-//				string miniPetID = dataGate.MiniPetID;
-//				if(!string.IsNullOrEmpty(miniPetID)){
-//					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
-//
-//					if(!isUnlocked)
-//						DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
-//				}
-			}
 		}		
 	}
 
@@ -240,8 +233,8 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	/// <returns><c>true</c> if this instance is in gated room; otherwise, <c>false</c>.</returns>
 	public bool IsInGatedRoom(){
-		int currentPartition = scriptPan.currentPartition;
-		bool isGated = HasActiveGate(currentArea, currentPartition);
+		int currentPartition = scriptPan.currentLocalPartition;
+		bool isGated = HasActiveGate(currentZone, currentPartition);
 		return isGated;
 	}
 
@@ -251,7 +244,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c> if there is active gate the specified partition; otherwise, <c>false</c>.</returns>
 	/// <param name="partition">Partition.</param>
 	public bool HasActiveGate(int partition){
-		bool hasGate = HasActiveGate(currentArea, partition);
+		bool hasGate = HasActiveGate(currentZone, partition);
 		return hasGate;
 	}
 
@@ -261,10 +254,10 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c> if there is active gate at the specified area roomPartition; otherwise, <c>false</c>.</returns>
 	/// <param name="area">Area.</param>
 	/// <param name="roomPartition">Room partition.</param>
-	public bool HasActiveGate(string area, int roomPartition){
+	public bool HasActiveGate(string zone, int localParition){
 		bool isActive = false;
 		
-		ImmutableDataGate data = DataLoaderGate.GetData(area, roomPartition);
+		ImmutableDataGate data = DataLoaderGate.GetData(zone, localParition);
 		if(data != null) 
 			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GateID);
 		
@@ -277,7 +270,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c> if player can enter room ; otherwise, <c>false</c>.</returns>
 	/// <param name="currentRoom">Current room.</param>
 	/// <param name="eSwipeDirection">E swipe direction.</param>
-	public bool CanEnterRoom(int currentRoom, RoomDirection swipeDirection){
+	public bool CanEnterRoom(int currentLocalPartition, RoomDirection swipeDirection){
 		// early out if click manager is tweening
 		// WTF is this?? this messes up with the check logic. -- Jason
 //		if(ClickManager.Instance.IsTweeningUI())
@@ -287,7 +280,7 @@ public class GatingManager : Singleton<GatingManager>{
 		bool isAllowed = true;
 		
 		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
-		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
+		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentZone, currentLocalPartition);
 		if(dataGate != null && 
 			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID) && 
 			dataGate.DoesBlock(swipeDirection))
@@ -307,8 +300,8 @@ public class GatingManager : Singleton<GatingManager>{
 		int leavingPartitionNumber = args.oldPartition;
 		int enteringPartitionNumber = args.newPartition;
 		
-		bool isGateLeavingActive = HasActiveGate(currentArea, leavingPartitionNumber);
-		bool isGateEnteringActive = HasActiveGate(currentArea, enteringPartitionNumber);
+		bool isGateLeavingActive = HasActiveGate(currentZone, leavingPartitionNumber);
+		bool isGateEnteringActive = HasActiveGate(currentZone, enteringPartitionNumber);
 		
 		if(isGateEnteringActive){
 			// if the player is entering a gated room, hide some ui and lock the click manager
@@ -515,7 +508,7 @@ public class GatingManager : Singleton<GatingManager>{
 		goFireButton.name = ButtonMonster.FIRE_BUTTON;
 		
 		// get the gate in this room
-		Gate gate = activeGates[scriptPan.currentPartition];
+		Gate gate = activeGates[scriptPan.currentLocalPartition];
 		if(gate){
 			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
 			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");

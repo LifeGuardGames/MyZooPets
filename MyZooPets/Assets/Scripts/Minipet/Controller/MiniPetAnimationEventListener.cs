@@ -7,8 +7,8 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 	void Start(){
 		CameraManager.Instance.PanScript.OnPartitionChanged += CheckMiniPetVisibleInPartition;
 
-		int currentPartition = CameraManager.Instance.PanScript.currentPartition;
-		string currentArea = GatingManager.Instance.currentArea;
+		int currentPartition = CameraManager.Instance.PanScript.currentLocalPartition;
+		string currentArea = GatingManager.Instance.CurrentZone;
 
 		CheckMiniPetVisibleInPartition(currentArea, currentPartition);
 	}
@@ -37,7 +37,7 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 
 	private void CheckMiniPetVisibleInPartition(object sender, PartitionChangedArgs args){
 		int currentPartition = args.newPartition;
-		string currentArea = GatingManager.Instance.currentArea; 
+		string currentArea = GatingManager.Instance.CurrentZone; 
 		CheckMiniPetVisibleInPartition(currentArea,currentPartition);
 	}
 

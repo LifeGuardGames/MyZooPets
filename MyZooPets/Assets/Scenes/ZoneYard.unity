@@ -12561,7 +12561,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: isDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnDestroy
@@ -12569,7 +12569,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: removeDataOnApplicationQuit
@@ -26769,6 +26769,10 @@ Prefab:
     - target: {fileID: 400000, guid: d1da047d8cb8a4633bef1234edf29bcb, type: 2}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: d1da047d8cb8a4633bef1234edf29bcb, type: 2}
+      propertyPath: currentZone
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1da047d8cb8a4633bef1234edf29bcb, type: 2}
@@ -60771,14 +60775,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1facb5b8165444eaa875e8845b8f7666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOfPartitions: 2
   firstPartition: 0
   lastPartition: 1
   partitionOffset: 80
-  currentPartition: 0
-  minNormalizedPanDistance: .0500000007
-  maxSwipeTime: .300000012
-  panDistanceToChange: .5
+  currentLocalPartition: 0
 --- !u!4 &1991924278
 Transform:
   m_ObjectHideFlags: 0
@@ -62857,7 +62857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf5b0a3b0debf4599886c8b3c7c48b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentArea: Yard
+  currentZone: 
   startingLocation: {x: -5, y: 12, z: 30}
   startingScreenPosition: {x: 333.299988, y: 439, z: 29.2999992}
 --- !u!1 &2078955964
@@ -62939,7 +62939,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2081998767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62952,7 +62952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c235dfeba71374033b791cbf28056a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebug: 1
+  isDebug: 0
 --- !u!4 &2081998768
 Transform:
   m_ObjectHideFlags: 0

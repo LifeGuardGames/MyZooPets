@@ -20,9 +20,9 @@ public class ImmutableDataPartitionLocation{
 		get{ return id; }
 	}
 
-	private int partition;
-	public int Partition{
-		get{ return partition; }
+	private int absolutePartition;
+	public int AbsolutePartition{
+		get{ return absolutePartition; }
 	}
 
 	private Vector3 offset;
@@ -39,7 +39,7 @@ public class ImmutableDataPartitionLocation{
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.id = id;
 		offset = StringUtils.ParseVector3(XMLUtils.GetString(hashElements["Offset"] as IXMLNode, null, error));
-		partition = XMLUtils.GetInt(hashElements["Partition"] as IXMLNode, 0, error);
+		absolutePartition = XMLUtils.GetInt(hashElements["AbsolutePartition"] as IXMLNode, 0, error);
 		attribute = (PartitionLocationTypes)Enum.Parse(typeof(PartitionLocationTypes),
 		                                               XMLUtils.GetString(hashElements["Attribute"] as IXMLNode, null, error));
 	}

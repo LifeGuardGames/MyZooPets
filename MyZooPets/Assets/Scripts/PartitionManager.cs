@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,9 +36,9 @@ public class PartitionManager : Singleton<PartitionManager> {
 		// Initialize it if havent yet
 		if(!isOpenLocationsInitalized){
 			openMinipetLocationsList = new List<ImmutableDataPartitionLocation>();
-			int latestPartition = GetLatestUnlockedPartition();
+			int latestAbsolutePartition = GetLatestUnlockedAbsolutePartition();
 			foreach(ImmutableDataPartitionLocation location in DataLoaderPartitionLocations.GetDataList()){
-				if(location.Partition <= latestPartition){
+				if(location.AbsolutePartition <= latestAbsolutePartition){
 					openMinipetLocationsList.Add(location);
 				}
 			}
@@ -51,12 +51,12 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// </summary>
 	/// <returns>Parent transform for interactables</returns>
 	/// <param name="partitionNumber">Partition number</param>
-	public Transform GetInteractableParent(int partitionNumber){
-		if(partitionInteractableDictionary.ContainsKey(partitionNumber)){
-			return partitionInteractableDictionary[partitionNumber];
+	public Transform GetInteractableParent(int absolutePartitionNumber){
+		if(partitionInteractableDictionary.ContainsKey(absolutePartitionNumber)){
+			return partitionInteractableDictionary[absolutePartitionNumber];
 		}
 		else{
-			Debug.LogError("Partition " + partitionNumber + " does not exist, double check your zone!");
+			Debug.LogError("Partition " + absolutePartitionNumber + " does not exist, double check your zone!");
 			return null;
 		}
 	}
@@ -92,10 +92,10 @@ public class PartitionManager : Singleton<PartitionManager> {
 	public MinigameTypes GetRandomUnlockedMinigameType(){
 		if(!isMinigameRandomCallLocked){
 			isMinigameRandomCallLocked = true;	// Lock the function call so its not called again
-			int lastestPartition = GetLatestUnlockedPartition();
+			int latestAbsolutePartition = GetLatestUnlockedAbsolutePartition();
 			List<MinigameTypes> minigameAux = new List<MinigameTypes>();
 			foreach(ImmutableDataPartition partitionData in DataLoaderPartitions.GetDataList()){
-				if(partitionData.Number <= lastestPartition && partitionData.MinigameList != null){
+				if(partitionData.Number <= latestAbsolutePartition && partitionData.MinigameList != null){
 					foreach(MinigameTypes minigameType in partitionData.MinigameList){
 						minigameAux.Add(minigameType);
 					}
@@ -192,10 +192,10 @@ public class PartitionManager : Singleton<PartitionManager> {
 	}
 	#endregion
 
-	private int GetLatestUnlockedPartition(){
+	private int GetLatestUnlockedAbsolutePartition(){
 		ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 		if(latestGate != null){	// All gates unlocked
-			return latestGate.Partition - 1;	// Get latest gate and subtract 1
+			return latestGate.AbsolutePartition - 1;	// Get latest gate and subtract 1
 		}
 		else{
 			// All gates unlocked
@@ -203,8 +203,8 @@ public class PartitionManager : Singleton<PartitionManager> {
 		}
 	}
 
-	public bool IsPartitionInCurrentZone(int partitionNumber){
-		string craftedId = "Partition" + StringUtils.FormatIntToDoubleDigitString(partitionNumber);
+	public bool IsPartitionInCurrentZone(int absolutePartitionNumber){
+		string craftedId = "Partition" + StringUtils.FormatIntToDoubleDigitString(absolutePartitionNumber);
 		ImmutableDataPartition partition = DataLoaderPartitions.GetData(craftedId);
 		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
 	}
@@ -215,7 +215,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// </summary>
 	/// <returns>The allowed deco type from latest unlocked gate.</returns>
 	public List<string> GetAllowedDecoTypeFromLatestPartition(){
-		string preparedPartitionString = "Partition" + StringUtils.FormatIntToDoubleDigitString(GetLatestUnlockedPartition());
+		string preparedPartitionString = "Partition" + StringUtils.FormatIntToDoubleDigitString(GetLatestUnlockedAbsolutePartition());
 		ImmutableDataPartition partitionData = DataLoaderPartitions.GetData(preparedPartitionString);
 		return new List<string>(partitionData.DecoCategoriesStore);
 	}

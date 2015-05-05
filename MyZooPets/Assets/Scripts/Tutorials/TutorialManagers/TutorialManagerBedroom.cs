@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -112,7 +112,7 @@ public class TutorialManagerBedroom : TutorialManager{
 //		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
-			   CameraManager.Instance.PanScript.currentPartition == 0 ){
+			   CameraManager.Instance.PanScript.currentLocalPartition == 0 ){
 				Debug.Log("LAUNCHING TRIGGER TUTORIAL");
 				// play the trigger tutorial
 				new GameTutorialTriggersNew();

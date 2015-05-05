@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -97,7 +97,7 @@ public class ButtonChangeScene : LgButton{
 	//---------------------------------------------------
 	private void RememberCurrentScene(){
 		if(shouldSaveSceneData){
-			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentPartition;
+			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentLocalPartition;
 			Vector3 petPos = petObject.transform.position;
 			DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
 		}

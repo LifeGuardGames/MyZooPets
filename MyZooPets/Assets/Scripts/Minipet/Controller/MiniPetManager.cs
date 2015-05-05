@@ -212,7 +212,6 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 						MiniPetTable.Add(miniPetId, goMiniPet);
 					}
 				}
-
 			}
 			break;
 

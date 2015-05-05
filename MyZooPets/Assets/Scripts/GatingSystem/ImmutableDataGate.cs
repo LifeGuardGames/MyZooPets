@@ -8,12 +8,11 @@ public class ImmutableDataGate{
 	private string zone; // location of the gate
 	private float screenPercentage; //stronger gate covers more screen space //DEPRECATED
 	private int partition; // partition id of the gate
+	private int partitionZoneOffset; //Offset for calculating partitions in different scenes
 	private string monsterID; // id of the monster at this gate
 	private RoomDirection swipeDirection; // the swipe direction that this monster is blocking
 	private string[] taskUnlocks; // list of wellapad unlocks removing this makes available
 	private bool isRecurring; // is this gate recurring? i.e. comes back to life after a set amount of time
-	private string itemBoxID; // item box id this gate leaves behind once destroyed
-	private float itemBoxPositionOffset; // offset from the position of the gate
 	private string miniPetID; // id of the miniPet that will be unlocked when this gate is destroyed
 
 	public string GateID{
@@ -44,6 +43,10 @@ public class ImmutableDataGate{
 		get{ return partition; }
 	}
 
+	public int PartitionZoneOffset{
+		get{ return partitionZoneOffset; }
+	}
+
 	/// <summary>
 	/// Gets the monster.
 	/// </summary>
@@ -64,14 +67,6 @@ public class ImmutableDataGate{
 		get{ return isRecurring; }
 	}
 
-	public string ItemBoxID{
-		get{ return itemBoxID; }
-	}
-
-	public float ItemBoxPositionOffset{
-		get{ return itemBoxPositionOffset; }
-	}
-
 	public ImmutableDataGate(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 
@@ -86,6 +81,14 @@ public class ImmutableDataGate{
 		// get partition
 		partition = XMLUtils.GetInt(hashElements["Partition"] as IXMLNode, 0, error);
 
+		// get partition zone offset
+		if(hashElements.ContainsKey("PartitionZoneOffset")){
+			partitionZoneOffset = XMLUtils.GetInt(hashElements["PartitionZoneOffset"] as IXMLNode, -1, error);
+		}
+		else{
+			partitionZoneOffset = -1;
+		}
+
 		// get screen percentage
 		screenPercentage = XMLUtils.GetFloat(hashElements["ScreenPercentage"] as IXMLNode, 30, error);
 		
@@ -94,14 +97,7 @@ public class ImmutableDataGate{
 		
 		// get whether or not the gate recurs
 		isRecurring = XMLUtils.GetBool(hashElements["Recurring"] as IXMLNode, false);
-		
-		// get an item box id gate leaves behind (if any)
-		if(hashElements.ContainsKey("ItemBoxID"))
-			itemBoxID = XMLUtils.GetString(hashElements["ItemBoxID"] as IXMLNode, null, error);
 
-		if(hashElements.ContainsKey("ItemBoxPositionOffset"))
-			itemBoxPositionOffset = XMLUtils.GetFloat(hashElements["ItemBoxPositionOffset"] as IXMLNode, 0, error);
-		
 		// get the direction the gate is blocking
 		swipeDirection = (RoomDirection)System.Enum.Parse(typeof(RoomDirection), 
 		                  	XMLUtils.GetString(hashElements["Blocking"] as IXMLNode, null, error));

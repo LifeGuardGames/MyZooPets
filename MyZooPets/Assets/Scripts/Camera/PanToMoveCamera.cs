@@ -25,22 +25,13 @@ public class PanToMoveCamera : MonoBehaviour{
 	public EventHandler<PartitionChangedArgs> OnPartitionChanged;   // when the partition has changed (and the camera has finished moving)
 	public EventHandler<PartitionChangedArgs> OnPartitionChanging;  // when the partition is changing (i.e. camera is still moving)
 	//========================================================
-	
-	public int numOfPartitions = 4; //number of partitions allowed
-	public int firstPartition = -1; //Set this to negative numbers if you want to open a partition
+
+	public int firstPartition = -1;			//Set this to negative numbers if you want to open a partition
 	//on the left of the starting partition(always 0)
 	public int lastPartition = 2;
-	public float partitionOffset = 80.0f; //How big each partition is in world position
+	public float partitionOffset = 80.0f;	//How big each partition is in world position
 	public int currentPartition = 0;
-	public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
-	public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
-	public float panDistanceToChange = 0.5f;    // distance to pan before the camera will snap to the next partition
-
-	private Vector2 startTouchPos; //Position of touch when finger touches the screen
-	private Vector2 currentTouchPos; //Position of touch right now
-	private float startTime; //Time at when finger touches screen
-	private RoomDirection panDirection; //direction of the last finger gesture
-
+	
 	private Camera nguiCamera;
 	private Camera mainCamera;
 
@@ -124,7 +115,7 @@ public class PanToMoveCamera : MonoBehaviour{
 	/// <param name="targetPartition">Target partition.</param>
 	/// <param name="panDirection">Pan direction.</param>
 	/// <param name="swipeTime">Swipe time.</param>
-	private bool CanMoveToPartition(int targetPartition, RoomDirection panDirection, float swipeTime){	
+	private bool CanMoveToPartition(int targetPartition, RoomDirection panDirection){	
 		bool retVal = true;
 			
 		// then check to make sure the gating manager is okay with the move
@@ -153,26 +144,26 @@ public class PanToMoveCamera : MonoBehaviour{
 	//It doesn't check click manager because we need the user to swipe left during
 	//the tutorial. 
 	public void TutorialSwipeLeft(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)){
 			ChangePartition(GetTargetPartition(1, RoomDirection.Left));
 		}
 	}
 
 	public void MoveOneRoomToRight(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)){
 			ChangePartition(GetTargetPartition(1, RoomDirection.Left));
 		}
 	}
 
 	public void MoveOneRoomToLeft(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right, -1)){
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right)){
 			ChangePartition(GetTargetPartition(1, RoomDirection.Right));
 		}
 	}
 
 	public void MoveToFirstPartition(){
 		int targetPartition = GetTargetPartition(currentPartition, RoomDirection.Right);
-		bool isAllowedToMoveToPartition = CanMoveToPartition(targetPartition, RoomDirection.Right, -1);
+		bool isAllowedToMoveToPartition = CanMoveToPartition(targetPartition, RoomDirection.Right);
 
 		if(isAllowedToMoveToPartition)
 			ChangePartition(targetPartition);
@@ -195,12 +186,12 @@ public class PanToMoveCamera : MonoBehaviour{
 			return;
 			
 		if(Input.GetKeyDown(KeyCode.RightArrow)){
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
+			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)){
 				ChangePartition(GetTargetPartition(1, RoomDirection.Left));
 			}
 		}
 		else if(Input.GetKeyDown(KeyCode.LeftArrow)){
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right, -1)){
+			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right)){
 				ChangePartition(GetTargetPartition(1, RoomDirection.Right));       
 			}
 		}

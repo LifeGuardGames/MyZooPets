@@ -81,6 +81,12 @@ public class GatingManager : Singleton<GatingManager>{
 		return latestGateSoFar;
 	}
 
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
+//			Debug.Log(GetLatestLockedGate().GateNumber);
+//		}
+//	}
+
 	public ImmutableDataGate GetLatestLockedGate(){
 		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
 		int minLockedGateNumberSoFar = 999;
@@ -162,9 +168,12 @@ public class GatingManager : Singleton<GatingManager>{
 			}
 				
 			if(isGateActive && !isGateInSceneAlready){
-				int startingPartition = scriptPan.currentPartition;	// room the player is in
-				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
+				int startingPartition = scriptPan.currentPartition;			// room the player is in
+				float roomPartitionOffset = scriptPan.partitionOffset; 		// the distance between each room
 				int partitionCountFromStartingPartition = dataGate.Partition - startingPartition;	// the distance between the starting room and this gate's room
+//				if(dataGate.PartitionZoneOffset > 0){	// HACK Gate may be in different zone, calculate adjustment, This is hacky, gates not calculated nicely with pan script...
+//					partitionCountFromStartingPartition -= dataGate.PartitionZoneOffset;
+//				}
 				float distanceFromStartingPartition = partitionCountFromStartingPartition * roomPartitionOffset; // offset of the gate
 
 				// how much screen space should the gate be moved by
@@ -233,7 +242,6 @@ public class GatingManager : Singleton<GatingManager>{
 	public bool IsInGatedRoom(){
 		int currentPartition = scriptPan.currentPartition;
 		bool isGated = HasActiveGate(currentArea, currentPartition);
-		
 		return isGated;
 	}
 

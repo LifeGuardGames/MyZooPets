@@ -65,7 +65,7 @@ public class FarmGenerator : MonoBehaviour {
 	private void RefreshLastTimeSinceLastPlayed(DateTime lastRedeemTime){
 		lastTimeDurationAux = LgDateTime.GetTimeNow() - lastRedeemTime;
 		// Initialize current
-		current = ratePerHour / 3600f * lastTimeDurationAux.Seconds;
+		current = ratePerHour / 3600f * (float)lastTimeDurationAux.TotalSeconds;
 		if(current >= capacity){
 			current = capacity;
 			isFull = true;

@@ -48,12 +48,12 @@ public class GatingManager : Singleton<GatingManager>{
 	void Awake(){
 		// set pan script
 		scriptPan = CameraManager.Instance.PanScript;
+
+		// Get current zone
+		currentZone = SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName).ToString();
 	}
 
 	void Start(){
-		// Get current zone
-		currentZone = SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName).ToString();
-
 		// see if the gating system is enabled
 		if(!DataManager.Instance.GameData.GatingProgress.IsEnabled())
 			return;
@@ -256,7 +256,6 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="roomPartition">Room partition.</param>
 	public bool HasActiveGate(string zone, int localParition){
 		bool isActive = false;
-		
 		ImmutableDataGate data = DataLoaderGate.GetData(zone, localParition);
 		if(data != null) 
 			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GateID);

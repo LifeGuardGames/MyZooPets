@@ -217,6 +217,9 @@ public class DataManager : Singleton<DataManager>{
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
 				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
+				// Save last play period here again..
+				PlayPeriodLogic.Instance.SetLastPlayPeriod();
+
 				SaveGameData();
 				//Analytics.Instance.ShooterTimesPlayed(GameData.HighScore.timesPlayed["Shooter"]);
 				//Analytics.Instance.NinjaTimesPlayed(GameData.HighScore.timesPlayed["Ninja"]);
@@ -271,7 +274,7 @@ public class DataManager : Singleton<DataManager>{
 			#if UNITY_EDITOR
 			Debug.Log("SERIALIZED: " + jsonString);
 			#endif
-			
+
 			PlayerPrefs.SetString("GameData", jsonString);
 			SaveDataVersion();
 			Serialized();

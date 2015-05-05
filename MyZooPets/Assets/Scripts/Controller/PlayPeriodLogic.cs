@@ -45,6 +45,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		}
 		else{
 			DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = GetCurrentPlayPeriod();
+			Debug.Log(DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod + " gets " + GetCurrentPlayPeriod());
 		}
 	}
 

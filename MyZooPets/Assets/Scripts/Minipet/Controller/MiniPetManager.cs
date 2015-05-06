@@ -25,14 +25,14 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// Only call once per a play period all furture calls will be false
 	/// </summary>
 	public bool CanSpawnNewMinipetLocations(){
-		Debug.Log("---Checking can spawn minipets " + DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
+//		Debug.Log("---Checking can spawn minipets " + DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
-			Debug.Log("----SPAWN NEW LOCATIONS?: YES");
+//			Debug.Log("----SPAWN NEW LOCATIONS?: YES");
 			return true;
 		}
 		else{
-			Debug.Log("----SPAWN NEW LOCATIONS?: NO");
+//			Debug.Log("----SPAWN NEW LOCATIONS?: NO");
 			return false;
 		}
 	}
@@ -86,10 +86,10 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			// Check if mp needs new locations
 			ImmutableDataGate latestGate = GatingManager.Instance.GetLatestLockedGate();
 
-			if(latestGate == null)
-				Debug.Log("-----Spawning GameMaster: " + (latestGate == null) + " gate null");
-			else
-				Debug.Log("-----Spawning GameMaster: " + (latestGate.AbsolutePartition - 1 >= 1) + " || latest gate " + latestGate.AbsolutePartition);
+//			if(latestGate == null)
+//				Debug.Log("-----Spawning GameMaster: " + (latestGate == null) + " gate null");
+//			else
+//				Debug.Log("-----Spawning GameMaster: " + (latestGate.AbsolutePartition - 1 >= 1) + " || latest gate " + latestGate.AbsolutePartition);
 
 			if(latestGate == null || (latestGate.AbsolutePartition - 1 >= 1)){
 				// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check
@@ -149,16 +149,16 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		case MiniPetTypes.Merchant:
 			ImmutableDataGate latestGate2 = GatingManager.Instance.GetLatestLockedGate();
 
-			if(latestGate2 == null)
-				Debug.Log("-----Spawning merchant: " + (latestGate2 == null) + " gate null");
-			else
-				Debug.Log("-----Spawning merchant: " + (latestGate2.AbsolutePartition - 1 >= 2) + " || latest gate " + latestGate2.AbsolutePartition);
+//			if(latestGate2 == null)
+//				Debug.Log("-----Spawning merchant: " + (latestGate2 == null) + " gate null");
+//			else
+//				Debug.Log("-----Spawning merchant: " + (latestGate2.AbsolutePartition - 1 >= 2) + " || latest gate " + latestGate2.AbsolutePartition);
 
 			if(latestGate2 == null || (latestGate2.AbsolutePartition - 1 >= 2)){
 				// Check if mp needs new locations
 				// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check
 				if(isSpawnNewLocations || GetPartitionNumberForMinipet(miniPetId) == -1){
-					if(UnityEngine.Random.Range(0, 1) == 0){	// TODO Change the spawn rate here
+					if(UnityEngine.Random.Range(0, 4) == 0){	// TODO Change the spawn rate here
 						// Calculate the MP location
 						LgTuple<Vector3, string> merchantLocation = PartitionManager.Instance.GetRandomUnusedPosition();
 						Vector3 locationPosition = merchantLocation.Item1;

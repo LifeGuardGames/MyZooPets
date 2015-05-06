@@ -119,7 +119,9 @@ public class InventoryDragDrop : MonoBehaviour{
 			return;
 		}
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
-			Drop();
+			if(!ClickManager.Instance.IsTweeningUI()){
+				Drop();
+			}
 			return;
 		}
 

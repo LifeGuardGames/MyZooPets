@@ -68,7 +68,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 
 		// play game over sound
 		AudioManager.Instance.PlayClip("inhalerDone");
-		StatsController.Instance.ChangeStats(deltaHealth: 5, isInternal: true);
+		StatsController.Instance.ChangeStats(deltaHealth: 5, deltaMood: 30,isInternal: true);
 		// Save settings into data manager
 		IsFirstTimeRescue = false;
 		DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();

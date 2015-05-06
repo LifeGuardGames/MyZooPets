@@ -59,15 +59,14 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		else if (playerHealth <= 0){
 			this.collider2D.enabled = false;
 		}
-
-
-	
+			//being super redundent to fix a game crashing bug
+			if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 			// Also updates the lives in game manager as that is the true health
 			ShooterGameManager.Instance.UpdateLives((int)amount);
 			if(ShooterGameManager.Instance.GetLives() == 0){ 
 				characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
 			}
-		
+			}
 
 		if(amount > 0){ 
 			// work around for increaseing health above max 

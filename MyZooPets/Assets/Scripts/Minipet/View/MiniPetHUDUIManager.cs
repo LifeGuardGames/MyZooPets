@@ -19,6 +19,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public ParticleSystem levelUpParticle;
 
 	private GameObject content;
+	private MiniPetTypes minipetType = MiniPetTypes.None;
 
 	/// <summary>
 	/// Gets or sets the selected mini pet ID. Need to be set before the HUD
@@ -41,6 +42,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			GameObject contentPrefab;
 			switch(type){
 			case MiniPetTypes.Retention:
+				minipetType = MiniPetTypes.Retention;
 				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString())){
 					Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus);
 					if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
@@ -65,6 +67,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				break;
 
 			case MiniPetTypes.GameMaster:
+				minipetType = MiniPetTypes.GameMaster;
 				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
 				   ||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
 
@@ -88,6 +91,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				break;
 
 			case MiniPetTypes.Merchant:
+				minipetType = MiniPetTypes.Merchant;
 				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
 				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
 
@@ -106,6 +110,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				break;
 
 			default:
+				minipetType = MiniPetTypes.None;
 				Debug.LogError("No minipet type found: " + type.ToString());
 				return;
 			}
@@ -136,6 +141,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
+		minipetType = MiniPetTypes.None;
 
 		storeTweenParent.Hide();
 		CheckStoreButtonPulse();
@@ -213,11 +219,20 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
-			if(content != null){
+			if(content != null && minipetType == MiniPetTypes.Merchant){	// Keep the hud and open deco inventory
 				content.GetComponent<TweenToggle>().Show();
+				MiniPetMerchantUIController merchantUI = (MiniPetMerchantUIController)SelectedMiniPetContentUIScript;
+				merchantUI.ShowDecoInventoryHelper();
+			}
+			else if(content != null){
+				content.GetComponent<TweenToggle>().Show();
+				HUDUIManager.Instance.HidePanel();
+
+			}
+			else{
+				HUDUIManager.Instance.HidePanel();
 			}
 			storeTweenParent.Show();
-			HUDUIManager.Instance.HidePanel();
 		}
 		CheckStoreButtonPulse();
 	}

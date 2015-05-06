@@ -23,16 +23,24 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		sprite.MakePixelPerfect();
 		cost.text = secretItem.Cost.ToString();
 
-		if(isBoughtAlready){					// Enable some game components here
+		if(isBoughtAlready){						// Enable some game components here
 			buyButton.gameObject.SetActive(false);
 		}
 
 		if(itemType == ItemType.Decorations){
-			DecoInventoryUIManager.Instance.ShowDecoInventory();
-			InventoryUIManager.Instance.HidePanel();
+			Invoke("ShowDecoInventoryHelper", 1f);	// NOTE: Special invoke delay needed for update position
 		}
 
-		HUDUIManager.Instance.ShowPanel();		// Show the hud because we are buying stuff
+		HUDUIManager.Instance.ShowPanel();			// Show the hud because we are buying stuff
+	}
+
+	/// <summary>
+	/// This needs a helper because the inventory needs to
+	/// update its new position (after eating food) before it should be hidden
+	/// </summary>
+	public void ShowDecoInventoryHelper(){
+		DecoInventoryUIManager.Instance.ShowDecoInventory();
+		InventoryUIManager.Instance.HidePanel();
 	}
 
 	public void BuyItem(){

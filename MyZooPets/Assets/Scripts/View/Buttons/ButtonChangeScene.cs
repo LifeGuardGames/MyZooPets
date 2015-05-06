@@ -27,12 +27,13 @@ public class ButtonChangeScene : LgButton{
 	public EntranceHelperController entranceHelper;
 
 	public bool isCheckMood = true;
+	private int moodThreshold = 19;
 	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick(){
-		if(!isCheckMood || DataManager.Instance.GameData.Stats.GetMoodState() != PetMoods.Sad){
+		if(!isCheckMood || DataManager.Instance.GameData.Stats.Mood > moodThreshold){
 			// lock the click manager
 			ClickManager.Instance.Lock();
 			if(Application.loadedLevelName != SceneUtils.YARD){

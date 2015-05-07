@@ -19,9 +19,7 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	protected override void OpenChildUI(){
-		Debug.Log("Opening retention UI");
 		if(!TutorialManager.Instance.IsTutorialActive()){
-			Debug.Log("1");
 			miniPetSpeechAI.ShowTipMsg();
 			Hashtable hash = new Hashtable();
 			hash[0] = missionID;
@@ -29,7 +27,6 @@ public class MiniPetRetentionPet : MiniPet {
 		}
 		
 		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-			Debug.Log("2");
 			if(!MiniPetHUDUIManager.Instance.HasContent()){
 				miniPetSpeechAI.ShowIdleMessage(MinipetType);
 			}

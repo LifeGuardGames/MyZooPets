@@ -57,15 +57,24 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		GameObject retVal = null;
 		foreach(Transform item in uiGridObject.transform){
 			if(item.name == "Usable1"){
-				try{
-					retVal = item.Find("Usable1").gameObject;
-				}
-				catch(NullReferenceException e){
-					Debug.LogException(e);
-					retVal = null;
+				Transform trans = item.Find("Usable1");
+				if(trans != null){
+					retVal = trans.gameObject;
 				}
 			}
 		}
+
+		// Check if user is dragging it as well...
+		if(retVal == null){
+			GameObject dragPanel = GameObject.Find("ItemDragPanel");
+			if(dragPanel != null){
+				Transform trans = dragPanel.transform.Find("Usable1");
+				if(trans != null){
+					retVal = trans.gameObject;
+				}
+			}
+		}
+
 		return retVal;
 	}
 

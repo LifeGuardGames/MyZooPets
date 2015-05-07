@@ -119,7 +119,7 @@ public class InventoryDragDrop : MonoBehaviour{
 			return;
 		}
 		if(!ClickManager.Instance.CanRespondToTap(goCaller: this.gameObject)){
-			if(!ClickManager.Instance.IsTweeningUI()){
+			if(RewardManager.Instance.IsRewardingActive){
 				Drop();
 			}
 			return;

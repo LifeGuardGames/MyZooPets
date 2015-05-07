@@ -32,7 +32,7 @@ public class MutableDataStats{
         Health = 80;
         Mood = 80;
         Points = 0;
-		Stars = 7000;
+		Stars = 100;
 		Shards = 0;
     }
 	

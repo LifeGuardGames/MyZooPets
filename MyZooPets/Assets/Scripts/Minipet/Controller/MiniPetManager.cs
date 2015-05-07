@@ -26,15 +26,17 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// Only call once per a play period all furture calls will be false
 	/// </summary>
 	public bool CanSpawnNewMinipetLocations(){
-//		Debug.Log("---Checking can spawn minipets " + DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
+		Debug.Log("---Checking can spawn minipets " + DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
 //			Debug.Log("----SPAWN NEW LOCATIONS?: YES");
 			if(UnityEngine.Random.Range(0, 4) == 0){
 				merchantSpawnChance = true;
+				DataManager.Instance.GameData.MiniPetLocations.SetMerchantSpawning(merchantSpawnChance);
 			}
 			else{
 				merchantSpawnChance = false;
+				DataManager.Instance.GameData.MiniPetLocations.SetMerchantSpawning(merchantSpawnChance);
 			}
 			return true;
 		}
@@ -160,7 +162,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 //				Debug.Log("-----Spawning merchant: " + (latestGate2 == null) + " gate null");
 //			else
 //				Debug.Log("-----Spawning merchant: " + (latestGate2.AbsolutePartition - 1 >= 2) + " || latest gate " + latestGate2.AbsolutePartition);
-			if(merchantSpawnChance){
+			if(DataManager.Instance.GameData.MiniPetLocations.IsMerchantSpawning()){
 				if(latestGate2 == null || (latestGate2.AbsolutePartition - 1 >= 2)){
 					// Check if mp needs new locations
 					// NOTE: Besides spawning new locations, there may not be any data for a minipet when coming back to same PP, do or check

@@ -7,11 +7,12 @@ public class MutableDataMiniPetLocations {
 	public class Status{
 		public string PartitionLocationID {get; set;}
 
+
 		public Status(){
 			PartitionLocationID = "";
 		}
 	}
-
+	public bool IsSpawnMerchant {get; set;}
 	public Dictionary<string, Status> MiniPetLoc {get; set;}
 	public DateTime LastestPlayPeriodUpdated {get; set;}	// This is to check if you need to refresh dictionary coming back into scene
 
@@ -22,6 +23,7 @@ public class MutableDataMiniPetLocations {
 	private void Init(){
 		MiniPetLoc = new Dictionary<string, Status>();
 		LastestPlayPeriodUpdated = DateTime.MinValue;
+		IsSpawnMerchant = false;
 	}
 
 	public void UnlockMiniPet(string miniPetID){
@@ -60,5 +62,13 @@ public class MutableDataMiniPetLocations {
 		else{
 			return null;
 		}
+	}
+
+	public void SetMerchantSpawning(bool isSpawning){
+		IsSpawnMerchant = isSpawning;
+	}
+	
+	public bool IsMerchantSpawning(){
+		return IsSpawnMerchant;
 	}
 }

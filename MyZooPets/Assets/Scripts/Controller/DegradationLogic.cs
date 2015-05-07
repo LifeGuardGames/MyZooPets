@@ -154,13 +154,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	/// </summary>
 	private void SetUpTriggers(){
 
-		Debug.Log("===SETTING UP TRIGGERS");
+//		Debug.Log("===SETTING UP TRIGGERS");
 		// get list of available locations to spawn triggers
 		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
-		Debug.Log("===Spawning " + numToSpawn);
+//		Debug.Log("===Spawning " + numToSpawn);
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         

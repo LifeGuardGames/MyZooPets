@@ -67,6 +67,15 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
 	}
 
+	/// <summary>
+	/// Check if the deco inventory is scrollable
+	/// If the item types in invetory is greater than the max display item type count, make it scrollable
+	/// </summary>
+	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
+	public bool IsDecoInventoryScrollable(){
+		return InventoryLogic.Instance.AllDecoInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+	}
+
 	public GameObject GetTutorialItem(){
 		GameObject tutorialObject = null;
 

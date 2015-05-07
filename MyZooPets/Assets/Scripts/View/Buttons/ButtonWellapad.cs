@@ -9,7 +9,7 @@ using System.Collections;
 
 public class ButtonWellapad : LgButton {
 
-	public GameObject sunBeam;
+//	public GameObject sunBeam;
 	private bool tutDone = false;
 
 	//---------------------------------------------------
@@ -58,23 +58,22 @@ public class ButtonWellapad : LgButton {
 	}
 
 	private void EnableButtonBounce(object sender, EventArgs args){
-		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl != null){
-			animControl.Play("smallBounceHard");
-		}
-		if(sunBeam){
-			sunBeam.SetActive(true);
-		}
+//		AnimationControl animControl = GetComponent<AnimationControl>(); 	// TODO Disable this for now
+//		if(animControl != null){
+//			animControl.Play("smallBounceHard");
+//		}
+//		if(sunBeam){
+//			sunBeam.SetActive(true);
+//		}
 	}
 
 	private void DisableButtonBounce(){
-		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl.IsPlaying("smallBounceHard")){
-			animControl.StopAndResetFrame("zeroPointEight");
-		}
-		if(sunBeam){
-			sunBeam.SetActive(false);
-		}
-
+//		AnimationControl animControl = GetComponent<AnimationControl>();
+//		if(animControl.IsPlaying("smallBounceHard")){
+//			animControl.StopAndResetFrame("zeroPointEight");
+//		}
+//		if(sunBeam){
+//			sunBeam.SetActive(false);
+//		}
 	}
 }

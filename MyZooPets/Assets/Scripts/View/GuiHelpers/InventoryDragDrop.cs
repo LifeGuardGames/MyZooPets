@@ -18,6 +18,8 @@ public class InventoryDragDrop : MonoBehaviour{
 	public event EventHandler<InvDragDropArgs> OnItemPress; //Event will be fired when item is pressed
 	public event EventHandler<EventArgs> OnItemDrag;
 
+	public bool isDecorationItem = false;
+
 	private Transform mTrans;
 	private bool mIsDragging = false;
 	private bool mSticky = false;
@@ -126,10 +128,20 @@ public class InventoryDragDrop : MonoBehaviour{
 		}
 
 		if(enabled && UICamera.currentTouchID > -2){
-			if(!mIsDragging && !isScrolling &&
-			    ((InventoryUIManager.Instance.IsInventoryScrollable() && delta.y > 0) ||	// If the delta has positive Y and scrollable, pick up
-			    (!InventoryUIManager.Instance.IsInventoryScrollable())))					// If not scrollable, just pick up
-			{
+			// NOTE: There are 2 types of inventories, either regular or deco, prep each for later check
+			bool isAbleToStartDrag = false;
+			if(isDecorationItem){
+				// If the delta has positive Y and scrollable, pick up, If not scrollable, just pick up
+				isAbleToStartDrag = (DecoInventoryUIManager.Instance.IsDecoInventoryScrollable() && delta.y > 0) ||	
+									(!DecoInventoryUIManager.Instance.IsDecoInventoryScrollable());
+			}
+			else{
+				// If the delta has positive Y and scrollable, pick up, If not scrollable, just pick up
+				isAbleToStartDrag = (InventoryUIManager.Instance.IsInventoryScrollable() && delta.y > 0) ||	
+									(!InventoryUIManager.Instance.IsInventoryScrollable());
+			}
+
+			if(!mIsDragging && !isScrolling && isAbleToStartDrag){
 				isClickLock = false;
 				dragScrollScript.enabled = false;
 				savedLocalPosition = gameObject.transform.localPosition;	// Save original position detection failed

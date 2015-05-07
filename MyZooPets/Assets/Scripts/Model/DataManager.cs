@@ -369,12 +369,17 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	#region Data Version
-
 	/// <summary>
 	/// Checks the version. Handles any major data schema changes to the DataManager
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
+		//Deleting all data that is less than 2.0.0
+		Version version200 = new Version("2.0.0");
+		if(currentDataVersion < version200){
+			PlayerPrefs.DeleteKey("GameData");
+		}
+
 		/*
 		Version version140 = new Version("1.4.0");
 		Version version142 = new Version("1.4.2");
@@ -402,7 +407,7 @@ public class DataManager : Singleton<DataManager>{
 	private void LoadDataVersion(){
 		//don't change the default value
 		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
-		
+
 		if(!IsFirstTime){
 			gameData.VersionCheck(new Version(currentDataVersionString));
 		}

@@ -35,9 +35,10 @@ public class StatsController : Singleton<StatsController>{
 		if(hudAnimator == null){
 			GameObject hudAnimatorObject = GameObject.Find("HUDPanelUI");
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-		}
-		else{
-			Debug.LogWarning("Could not find a hud animator! please assign in this scene");
+
+			if(hudAnimator == null){
+				Debug.LogError("Hud Animator can not be found in " + Application.loadedLevelName);
+			}
 		}
 		
 		isPetAnimationManagerPresent = PetAnimationManager.Instance;

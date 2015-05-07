@@ -41,7 +41,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 				}
 			}
 			else {
-			Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus);
+//			Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus);
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed
 			   || DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unearned){
 					//Debug.Log(taskID);

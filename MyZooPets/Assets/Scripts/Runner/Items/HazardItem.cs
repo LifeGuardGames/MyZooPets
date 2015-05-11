@@ -20,9 +20,6 @@ public class HazardItem : RunnerItem {
         // Player, sloooooowwww downnnnnnnn
         PlayerController.Instance.TriggerSlowdown(SlowdownDivisor);
 
-        // Send Analytics event
-        Analytics.Instance.RunnerPlayerCrashIntoTrigger(ID);
-
 		GameObject.Destroy(gameObject);
 	}
 }

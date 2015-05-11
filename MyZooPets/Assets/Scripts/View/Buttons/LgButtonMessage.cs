@@ -14,7 +14,7 @@ public class LgButtonMessage : LgButton {
     //---------------------------------------------------
     // ProcessClick()
     //---------------------------------------------------   
-    protected override void ProcessClick() {
+    protected override void ProcessClick(){
         Send();
     }
 

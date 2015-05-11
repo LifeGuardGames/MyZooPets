@@ -49,7 +49,7 @@ public class TweenToggleDemux : MonoBehaviour {
 
 		foreach(GameObject go in GoList){
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
-			if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
+			if(toggle != null){
 				if(startsHidden){
 					toggle.startsHidden = true;	// TweenToggle Start() will take care of setting position
 				}
@@ -58,6 +58,9 @@ public class TweenToggleDemux : MonoBehaviour {
 				}
 
 				toggle.isDebug = false;	// Turn all the other debug off
+			}
+			else{
+				Debug.LogError("No TweenToggle script for " + go.name);
 			}
 		}
 		
@@ -154,8 +157,11 @@ public class TweenToggleDemux : MonoBehaviour {
 		
 		foreach(GameObject go in GoList){
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
-			if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
+			if(toggle != null){
 				toggle.Show();
+			}
+			else{
+				Debug.LogError("No TweenToggle script for " + go.name);
 			}
 		}
 		
@@ -170,7 +176,7 @@ public class TweenToggleDemux : MonoBehaviour {
 		
 		foreach(GameObject go in GoList){
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
-			if(D.Assert(toggle != null, "No TweenToggle script for " + go.name)){
+			if(toggle != null){
 				if(hideImmediately){
 					//Debug.Log(" -- - - HIDE BOOLEAN TRUE");
 					// TODO Need to call last hide object last!!!!
@@ -178,6 +184,9 @@ public class TweenToggleDemux : MonoBehaviour {
 					toggle.hideDelay = 0f;
 				}
 				toggle.Hide();
+			}
+			else{
+				Debug.LogError("No TweenToggle script for " + go.name);
 			}
 		}
 		

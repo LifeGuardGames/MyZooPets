@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * Description:
  * The sort of 'center' of the game.
  * However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
@@ -15,6 +15,19 @@ using System.Collections.Generic;
 
 public class RunnerGameManager : MinigameManager<RunnerGameManager>{
     
+	void Awake(){
+		quitGameScene = SceneUtils.BEDROOM;
+	}
+	
+	// Use this for initialization
+	protected override void _Start(){
+		Application.targetFrameRate = 60;
+	}
+	
+	protected override void _OnDestroy(){
+		Application.targetFrameRate = 30;
+	}
+
 	//public SceneTransition scriptTransition;
 	public bool GameRunning{
 		get { return GetGameState() == MinigameStates.Playing; }
@@ -43,16 +56,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	protected override bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsRunnerTutorialOn");
 	}
-	
-	// Use this for initialization
-	protected override void _Start(){
-		Application.targetFrameRate = 60;
-	}
 
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
-	
 	/// <summary>
 	/// Starts a new game.
 	/// </summary>
@@ -65,7 +69,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 			ResetGameTutorial();
 		}
 		else{
-
 			ResetGame();
 		}
 	}	
@@ -74,6 +77,11 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// game over. 
 	/// </summary>
 	protected override void _GameOver(){
+
+		int score = GetScore();
+		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
+		Analytics.Instance.RunnerHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+
 		// send out distance task
 		int distance = ScoreManager.Instance.Distance;
 		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), distance);
@@ -83,9 +91,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
 
-		// check for badge unlock;
-		UpdateBadgeProgress();
-
+		Analytics.Instance.RunnerTimesPlayedTick();
 	}		
 
 	/// <summary>
@@ -153,14 +159,6 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	public override int GetReward(MinigameRewardTypes rewardType){
 		// for now, just use the standard way
 		return GetStandardReward(rewardType);
-	}   
-	
-	/// <summary>
-	/// Updates the badge progress. Check with BadgeLogic to see if any badges 
-	/// </summary>
-	private void UpdateBadgeProgress(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.RunnerDistance, 
-            ScoreManager.Instance.Distance, true);
 	}
 
 	/// <summary>

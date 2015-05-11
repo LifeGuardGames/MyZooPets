@@ -9,7 +9,7 @@ using System.Collections;
 
 public class ButtonWellapad : LgButton {
 
-	public GameObject sunBeam;
+//	public GameObject sunBeam;
 	private bool tutDone = false;
 
 	//---------------------------------------------------
@@ -24,8 +24,8 @@ public class ButtonWellapad : LgButton {
 		tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
 		if(tutDone){
 			//Listens to update event from wellapad mission controller
-			WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
-			WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
+			//WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;
+			//WellapadMissionController.Instance.OnMissionsRefreshed += EnableButtonBounce;
 
 			//Start bouncing if there are active tasks
 			if(WellapadMissionController.Instance.HasActiveTasks())
@@ -37,14 +37,11 @@ public class ButtonWellapad : LgButton {
 	// ProcessClick()
 	//---------------------------------------------------	
 	protected override void ProcessClick() {
-		//if game is lite version show promo add when button is clicked after tutorial is done
-		// if(tutDone && VersionManager.IsLite()){
-		// 	LgCrossPromo.ShowInterstitial(LgCrossPromo.WELLAPAD);
-		// }else{
-		if(WellapadUIManager.Instance.IsOpen())
-			WellapadUIManager.Instance.CloseUI();
+		// Call from fire crystal ui manager > opens wellapad uimanager > opens fire crystal ui
+		if(FireCrystalUIManager.Instance.IsOpen())
+			FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 		else{
-			WellapadUIManager.Instance.OpenUI();
+			FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 			DisableButtonBounce();
 		}
 	}
@@ -61,23 +58,22 @@ public class ButtonWellapad : LgButton {
 	}
 
 	private void EnableButtonBounce(object sender, EventArgs args){
-		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl != null){
-			animControl.Play("smallBounceSoftNavWellapad");
-		}
-		if(sunBeam){
-			sunBeam.SetActive(true);
-		}
+//		AnimationControl animControl = GetComponent<AnimationControl>(); 	// TODO Disable this for now
+//		if(animControl != null){
+//			animControl.Play("smallBounceHard");
+//		}
+//		if(sunBeam){
+//			sunBeam.SetActive(true);
+//		}
 	}
 
 	private void DisableButtonBounce(){
-		AnimationControl animControl = GetComponent<AnimationControl>();
-		if(animControl.IsPlaying("smallBounceSoftNavWellapad")){
-			animControl.StopAndResetFrame("zero");
-		}
-		if(sunBeam){
-			sunBeam.SetActive(false);
-		}
-
+//		AnimationControl animControl = GetComponent<AnimationControl>();
+//		if(animControl.IsPlaying("smallBounceHard")){
+//			animControl.StopAndResetFrame("zeroPointEight");
+//		}
+//		if(sunBeam){
+//			sunBeam.SetActive(false);
+//		}
 	}
 }

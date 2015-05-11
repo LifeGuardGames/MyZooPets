@@ -7,20 +7,6 @@ using System.Collections;
 public static class LgNGUITools{
 
 	/// <summary>
-	/// Instantiate an object and add it to the specified parent. use the position of the prefab
-	/// </summary>
-	static public GameObject AddChildWithPositionAndScale(GameObject parent, GameObject prefab){
-		GameObject go = NGUITools.AddChild(parent, prefab);
-		if(go != null){
-			Transform t = go.transform;
-			t.localPosition = prefab.transform.localPosition;
-			t.localScale = prefab.transform.localScale;
-		}
-       
-		return go;
-	}
-
-	/// <summary>
 	/// <para>Gets the screen position.</para>
 	/// 
 	/// <para>Returns the screen position of the incoming NGUI

@@ -31,6 +31,7 @@ public abstract class Tutorial{
 	private GameObject goSpotlight;	// current (and only) spotlight object this tutorial is highlighting
 	private GameObject goPopup; // current (and only) tutorial popup
 	private GameObject goFingerHint; //current finger hint
+	private GameObject goRetentionPet;	// Current retention pet sprite
 	private int currentStep; // step the tutorial is currently on
 
 	
@@ -55,12 +56,13 @@ public abstract class Tutorial{
 	//Set the tutorial to a specific step
 	protected void SetStep(int num){
 		currentStep = num;
-		
 		// if we have exceeded max steps in this tutorial, end it
-		if(currentStep >= maxSteps)
+		if(currentStep >= maxSteps){
 			End(true);
-		else
+		}
+		else{
 			ProcessStep(currentStep);
+		}
 	}
 
 	//Return the key of this tutorial
@@ -111,12 +113,14 @@ public abstract class Tutorial{
 			Analytics.Instance.TutorialCompleted(GetKey());
 		}
 
-		if(goPopup != null)
+		if(goPopup != null){
 			GameObject.Destroy(goPopup);
+		}
 		
 		// activate tutorial end callback
-		if(OnTutorialEnd != null)
-			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));	
+		if(OnTutorialEnd != null){
+			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));
+		}
 	}
 	
 	/// <summary>
@@ -142,6 +146,7 @@ public abstract class Tutorial{
 	protected void SpotlightObject(GameObject goTarget, bool isGUI = false, 
 		InterfaceAnchors anchor = InterfaceAnchors.Center, string spotlightPrefab = "TutorialSpotlight",
 		bool fingerHint = false, string fingerHintPrefab = "PressTut",
+	    float focusOffsetX = 0f, float focusOffsetY = 0f, 
 		float fingerHintOffsetX = 0f, float fingerHintOffsetY = 60f, 
 		bool fingerHintFlip = false, float delay = -1f){
 
@@ -151,24 +156,26 @@ public abstract class Tutorial{
 			focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
-			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
-			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
-
-			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, 
-				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
+			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
+			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 		}
+
+		// Adjust for custom offset
+		focusPos = new Vector3(focusPos.x + focusOffsetX, focusPos.y + focusOffsetY, focusPos.z);
 		
 		// destroy the old object if it existed
-		if(goSpotlight != null)
+		if(goSpotlight != null){
 			GameObject.Destroy(goSpotlight);
+		}
 
-		if(goFingerHint != null)
+		if(goFingerHint != null){
 			GameObject.Destroy(goFingerHint);
+		}
 		
 		// create the spotlight
 		GameObject goResource = Resources.Load(spotlightPrefab) as GameObject;
 		string anchorName = "Anchor-" + anchor.ToString();
-		goSpotlight = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find(anchorName), goResource);
+		goSpotlight = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), goResource);
 		
 		// Set the delay if defined
 		if(delay > 0){
@@ -182,7 +189,7 @@ public abstract class Tutorial{
 		// spawn finger hint
 		if(fingerHint){
 			GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-			goFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
+			goFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
 			focusPos.z = goFingerHint.transform.localPosition.z;
 			focusPos.y = focusPos.y + fingerHintOffsetY; //offset in Y so the finger hint doesn't overlap the image
 			focusPos.x = focusPos.x + fingerHintOffsetX;
@@ -209,7 +216,7 @@ public abstract class Tutorial{
 			focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
-			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, goTarget.transform.position);
+			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
 
 			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, 
@@ -220,7 +227,7 @@ public abstract class Tutorial{
 			GameObject.Destroy(goFingerHint);
 
 		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-		goFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
+		goFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
 		focusPos.x = focusPos.x + offsetFromCenterX;
 		focusPos.y = focusPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
 		focusPos.z = goFingerHint.transform.localPosition.z;
@@ -232,11 +239,9 @@ public abstract class Tutorial{
 	}
 
 	protected void RemoveFingerHint(){
-		if(goFingerHint == null){
-			return;
+		if(goFingerHint != null){
+			GameObject.Destroy(goFingerHint);
 		}
-
-		GameObject.Destroy(goFingerHint);
 	}
 	
 	//---------------------------------------------------
@@ -244,11 +249,9 @@ public abstract class Tutorial{
 	// Removes the current spotlight object.
 	//---------------------------------------------------		
 	protected void RemoveSpotlight(){
-		if(goSpotlight == null){
-			return;
+		if(goSpotlight != null){
+			GameObject.Destroy(goSpotlight);
 		}
-		
-		GameObject.Destroy(goSpotlight);
 	}	
 	
 	//---------------------------------------------------
@@ -256,11 +259,9 @@ public abstract class Tutorial{
 	// Removes the current popup object.
 	//---------------------------------------------------		
 	protected void RemovePopup(){
-		if(goPopup == null){
-			return;
+		if(goPopup != null){
+			GameObject.Destroy(goPopup);
 		}
-		
-		GameObject.Destroy(goPopup);
 	}	
 
 	//---------------------------------------------------
@@ -274,12 +275,14 @@ public abstract class Tutorial{
 	//	Button1Label(string): what does the button say
 	//	ShrinkBgToFitText(bool): default to T. background size is automatically adjusted to fit label
 	//---------------------------------------------------
-	protected void ShowPopup(string popupKey, Vector3 location, bool useViewPort=true, Hashtable option=null){
-		if(goPopup)
+	protected void ShowPopup(string popupKey, Vector3 location, Hashtable option=null){
+		if(goPopup){
 			GameObject.Destroy(goPopup);
+		}
 
-		if(option == null)
+		if(option == null){
 			option = new Hashtable();
+		}
 
 		Vector3 newPos = location;
 
@@ -292,22 +295,43 @@ public abstract class Tutorial{
 		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
 			option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
 
-		//viewport kind of broken..... don't use
-		if(useViewPort){
-			// transform viewport location to screen position, then from bottom left to center
-			newPos = CameraManager.Instance.ViewportToScreen(CameraManager.Instance.cameraMain, location);
-			newPos = CameraManager.Instance.TransformAnchorPosition(newPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
-			//Debug.Log("Viewport: " + vLoc + " to Screen: " + vPos );
-		}
-
 		// create the popup
 		GameObject goResource = Resources.Load(popupKey) as GameObject;
-		goPopup = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), goResource);
+		goPopup = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), goResource);
 //		newPos.z = goPopup.transform.position.z; // keep the default z-value
-		goPopup.transform.localPosition = newPos;				
+		goPopup.transform.localPosition = newPos;
 		
 		//feed the script the option hashtable		
 		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
 		script.Init(option);
+	}
+
+	public void ShowRetentionPet(bool isFlipped, Vector3 position,
+	                             bool isButton = false, GameObject buttonTarget = null, string buttonFunctionName = null){
+		GameObject goResource = Resources.Load("TutorialRetentionPet") as GameObject;
+		goRetentionPet = GameObjectUtils.AddChild(GameObject.Find("Anchor-Center"), goResource);
+		goRetentionPet.transform.localPosition = position;
+		if(isFlipped){
+			goRetentionPet.transform.localScale = new Vector3(-1f, 1f, 1f);
+		}
+
+		if(isButton){
+			goRetentionPet.collider.enabled = true;
+			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
+			message.enabled = true;
+			message.target = buttonTarget;
+			message.functionName = buttonFunctionName;
+		}
+		else{
+			goRetentionPet.collider.enabled = false;
+			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
+			message.enabled = false;
+		}
+	}
+
+	public void RemoveRetentionPet(){
+		if(goRetentionPet != null){
+			GameObject.Destroy(goRetentionPet);
+		}
 	}
 }

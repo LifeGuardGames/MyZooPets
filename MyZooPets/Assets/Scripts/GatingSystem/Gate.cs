@@ -49,11 +49,11 @@ public abstract class Gate : MonoBehaviour{
 		
 //		// since this gate is getting created, if it is guarding an item box, create the box
 //		ImmutableDataGate dataGate = GetGateData();
-//		string itemBoxID = dataGate.GetItemBoxID();
+//		string itemBoxID = dataGate.ItemBoxID;
 //		if(!string.IsNullOrEmpty(itemBoxID)){
 //			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
 //			GameObject goBox = Instantiate(goResource, 
-//			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), transform.position.y, goResource.transform.position.z), 
+//			                               new Vector3(transform.position.x + dataGate.ItemBoxPositionOffset, transform.position.y, goResource.transform.position.z), 
 //			                               Quaternion.identity) as GameObject;
 //			goBox = goBox.FindInChildren("Button");
 //			
@@ -147,8 +147,6 @@ public abstract class Gate : MonoBehaviour{
 		// let the gating manager know
 		GatingManager.Instance.GateCleared();
 
-		UnlockItemBox();
-
 		Invoke("UnlockRoomArrows", 0.5f);
 		
 		// gates might do their own thing upon destruction
@@ -156,7 +154,7 @@ public abstract class Gate : MonoBehaviour{
 		
 		// add any appropriate task unlocks
 		ImmutableDataGate data = GetGateData();
-		string[] arrayUnlocks = data.GetTaskUnlocks();
+		string[] arrayUnlocks = data.TaskUnlocks;
 
 		if(arrayUnlocks != null){
 			for(int i = 0; i < arrayUnlocks.Length; ++i){
@@ -170,33 +168,6 @@ public abstract class Gate : MonoBehaviour{
 	}
 
 	/// <summary>
-	/// Unlocks the item box.
-	/// </summary>
-	private void UnlockItemBox(){
-		// since this gate is getting created, if it is guarding an item box, create the box
-		ImmutableDataGate dataGate = GetGateData();
-		string itemBoxID = dataGate.GetItemBoxID();
-
-		if(!string.IsNullOrEmpty(itemBoxID)){
-			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
-			GameObject goBox = Instantiate(goResource, 
-			                               new Vector3(transform.position.x + dataGate.GetItemBoxPositionOffset(), 
-			            								goResource.transform.position.y, 
-			            								goResource.transform.position.z), 
-			                               Quaternion.identity) as GameObject;
-			
-			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
-			if(scriptItemBox)
-				scriptItemBox.SetItemBoxID(itemBoxID);
-			else
-				Debug.LogError("No logic script on box", goBox);
-		}
-
-		if(scriptItemBox != null)
-			scriptItemBox.NowAvailable();
-	}
-
-	/// <summary>
 	/// It's up for child gates to properly call this 
 	/// function when their destroy animation is complete.
 	/// NOTE: I don't think anything important should go
@@ -204,8 +175,8 @@ public abstract class Gate : MonoBehaviour{
 	/// the animation is complete, but the gate is already
 	/// marked as destroyed.
 	/// </summary>
-	private void OnDestroyAnimComplete(){		
+	protected void OnDestroyAnimComplete(){		
 		// destroy the object
-		Destroy(gameObject);			
+		Destroy(gameObject, 2f);
 	}
 }

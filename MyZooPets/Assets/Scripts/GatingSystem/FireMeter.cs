@@ -10,81 +10,57 @@ using System.Collections.Generic;
 // pet breathing fire.
 //---------------------------------------------------	
 
-public class FireMeter : MonoBehaviour {
+public class FireMeter : MonoBehaviour{
 	//=======================Events========================
-	//these events are fired during Update() so the listeners will probably have to
+	//listeners will probably have to
 	//unregister themselves when they receive the event; otherwise, the listeners will
 	//keep getting the event
-    public static EventHandler<EventArgs> OnMeterFilled;   // when the meter is 100% full
-    public static EventHandler<EventArgs> OnMeterStartFilling;   // when meter is filling up 
+	public static EventHandler<EventArgs> OnMeterFilled;   		// when the meter is 100% full
+	public static EventHandler<EventArgs> OnMeterStartFilling;	// when meter is filling up 
 
-	public UISlider slider; // the slider that the meter fills up
-	public float fFillRate; // every frame, the meter will fill this %
-	
-	private bool bShouldFill = false; // should this meter be filling?
+	public UISlider slider;				// the slider that the meter fills up
+	public float fillTime = 2f;
+	public string fillSound;
 
-	private void SetFillStatus(bool bStatus) {
-		bShouldFill = bStatus;	
-	}	
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
 	void Start(){
-		// reset the slider vlaue
-		slider.sliderValue = 0;	
+		slider.sliderValue = 0;		// reset the slider vlaue
 	}
 	
-	//---------------------------------------------------
-	// StartFilling()
-	// Call this function when the meter should start
-	// filling.
-	//---------------------------------------------------		
+	// Call this function when the meter should start filling.	
 	public void StartFilling(){
-		SetFillStatus( true );
-	}
-	
-	//---------------------------------------------------
-	// Empty()
-	// Stops filling the meter and empties it.
-	//---------------------------------------------------	
-	public void Empty(){
-		SetFillStatus( false );
-		slider.sliderValue = 0;
-	}
-	
-	//---------------------------------------------------
-	// Update()
-	//---------------------------------------------------
-	void Update () {
-		// if the meter shouldn't be filling, don't run the update
-		if(!bShouldFill)
-			return;
-		
-		if(OnMeterStartFilling != null)
+		LeanTween.value(gameObject, UpdateSliderValueCallback, 0f, 1f, fillTime)
+			.setEase(LeanTweenType.easeInQuad).setOnComplete(OnFillComplete);
+
+		if(OnMeterStartFilling != null){
 			OnMeterStartFilling(this, EventArgs.Empty);
-
-		// fill the slider by the fill rate
-		slider.sliderValue += fFillRate;
-
-		if(slider.sliderValue >= 1){
-			// process any callbacks for when the meter is full
-			if(OnMeterFilled != null)
-				OnMeterFilled(this, EventArgs.Empty);
-			
-			// stop filling
-			SetFillStatus(false);
-
-			AudioManager.Instance.StopClip("barAscend");
 		}
+
+		Hashtable option = new Hashtable();
+		option.Add("IsSoundClipManaged", true);
+		AudioManager.Instance.PlayClip(fillSound, option: option);
 	}
-	
-	//---------------------------------------------------
-	// IsFull()
+
+	// Callback update value function for start filling
+	public void UpdateSliderValueCallback(float value){
+		slider.sliderValue = value;
+	}
+
+	// Stops filling the meter and empties it.
+	public void Empty(){
+		LeanTween.cancel(gameObject);	// Cancel any leantweens going on
+		slider.sliderValue = 0;
+		AudioManager.Instance.StopClip(fillSound);
+	}
+
+	public void OnFillComplete(){
+		if(OnMeterFilled != null){		// Process any callbacks for when the meter is full
+			OnMeterFilled(this, EventArgs.Empty);
+		}
+		AudioManager.Instance.StopClip(fillSound);
+	}
+
 	// Returns whether or not this meter is full.
-	//---------------------------------------------------	
-	public bool IsFull(){
-		bool bFull = slider.sliderValue >= 1;
-		return bFull;
+	public bool IsMeterFull(){
+		return slider.sliderValue >= 1;
 	}
 }

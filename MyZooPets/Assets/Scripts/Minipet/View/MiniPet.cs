@@ -6,196 +6,174 @@ using System.Collections;
 /// Script to control Minipet and contains the basic properties of a minipet.
 /// Should attach this script to the highest parent in the minipet prefab
 /// </summary>
-public class MiniPet : MonoBehaviour {
+public abstract class MiniPet : MonoBehaviour {
+
+	protected string minipetId;
+	public string MinipetId{
+		get{ return minipetId; }
+	}
+
+	protected MiniPetTypes minipetType;
+	public MiniPetTypes MinipetType{
+		get{ return minipetType; }
+	}
+
 	public MiniPetAnimationManager animationManager;
-	public ParticleSystem bubbleParticle;
-	public ParticleSystem dirtyParticle;
 	public MiniPetSpeechAI miniPetSpeechAI;
-	public Transform spawnItemTransform;
 	public GameObject flippable;
 	public GameObject eggParent;
 	public Animation eggAnimation;
+	public MinipetEggClickController eggClickController;
 
 	public Vector3 zoomPositionOffset = new Vector3(-3, 4, -11);
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
-
 	private bool isVisible;
 	private bool isHatchedAux;
-	private string id; //pet id
-	private new string name;
-	
-	private float currentDistanceInCentimeters = 0;
-	private float targetDistanceInCentimetersForCleanGesture = 300; //clean gestures will be recognized after the finger moved 300cm (both x and y position)
+	private bool isBeingTickled = false;
+	public Camera nguiCamera;
 
-	private float tickleTimer = 0;
-	private float timeBeforeTickleAnimationStops = 3f; //tickle animation will be stopped in 3 seconds
+	public ParticleSystem getAccessoryParticle;
+	public GameObject accessory1;
+	public GameObject accessory2;
+	public GameObject accessory3;
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
-	private bool isFinishEating = true; //F: Need to finish the eating logic after camera zooms in
+	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
+	public bool isPetCanGainXP = false;	// If the pet can get experience
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
-	public string ID{
-		get{return id;}
+	public EventHandler<EventArgs> OnTutorialMinipetClicked;	// event that fires when the user clicks on pet during tutorial
+
+	/// <summary>
+	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated with the proper information.
+	/// </summary>
+	/// <param name="data">ImmutableDataMiniPet.</param>
+	public void Init(ImmutableDataMiniPet data){
+		this.minipetId = data.ID;
+		this.name = data.Name;
 	}
 
-	void Start(){
+	protected virtual void Start(){
+		nguiCamera = GameObject.Find("Camera").camera;
+		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
-		MiniPetHUDUIManager.OnLevelUpAnimationCompleted += LevelUpEventHandler;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
-		MiniPetManager.MiniPetStatusUpdate += UpdateAnimation;
+		
+		isFinishEating = MiniPetManager.Instance.IsPetFinishedEating(minipetId);
 
-		MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-
+		AccessoriesCheck(false);
 		RefreshUnlockState();
 	}
 
 	// Check to see if you want to display pet or egg
 	public void RefreshUnlockState(){
+		ToggleHatched(DataManager.Instance.GameData.MiniPets.GetHatched(minipetId));
+	}
 
-		ToggleHatched(DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(ID));
-	
-		RefreshMiniPetUIState();
+	public void ToggleHatched(bool isHatched){
+		isHatchedAux = isHatched;
+		if(isHatched){
+			eggParent.SetActive(false);
+			eggAnimation.animation.Stop();
+			flippable.SetActive(true);
+			gameObject.collider.enabled = true;
+			if(eggClickController != null){		// Remove unused components on the egg parent
+				Destroy(eggClickController);
+				Destroy(eggClickController.collider);
+			}
+			isVisible = true;
+		}
+		else{	// Not hatched yet
+			eggParent.SetActive(true);
+			eggAnimation.animation.Play();
+			flippable.SetActive(false);
+			gameObject.collider.enabled = false;
+			isVisible = false;
+		}
 	}
 	
 	void OnDestroy(){
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
-		if(MiniPetHUDUIManager.Instance)
+		if(MiniPetHUDUIManager.Instance){
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
-		MiniPetHUDUIManager.OnLevelUpAnimationCompleted -= LevelUpEventHandler;
-		MiniPetManager.MiniPetStatusUpdate -= UpdateAnimation;
-	}
-
-	void Update(){
-		if(isVisible){
-			//count down starts if tickling animation is playing.
-			if(animationManager.IsTickling()){
-				tickleTimer += Time.deltaTime;
-
-				//turn tickling animation off after certain time
-				if(tickleTimer > timeBeforeTickleAnimationStops){
-					tickleTimer = 0;
-					animationManager.StopTickling();
-				}
-			}
-		}
-	}
-
-	void OnApplicationPause(bool isPaused){
-		if(!isPaused){
-			MiniPetManager.Instance.CheckToRefreshMiniPetStatus(id);
-
-			RefreshMiniPetUIState();
 		}
 	}
 	
-	void OnTap(TapGesture gesture){
-		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-		bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+	private void OnTap(TapGesture gesture){
+		if(!IsTouchingNGUI(gesture.Position)){
+			if(ClickManager.Instance.stackPeek != "MiniPet"){
+					if(!isFinishEating){
+						ShowFoodPreferenceMessage();
+					}
+				bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
-		if(!isMiniPetColliderLocked){
-			if(!isUIOpened && isModeLockEmpty){
-				ZoomInToMiniPet();
-			}
-			else{
-
-				UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
-
-				if(currentLockMode == UIModeTypes.MiniPet){
-					string colliderName = gesture.Selection.collider.name;
-					bool isFirstTimeCleaning = DataManager.Instance.GameData.MiniPets.IsFirstTimeCleaning;
-					
-					//only allow tap gesture if cleaning tutorial is finished
-					if(colliderName == this.gameObject.name && !isFirstTimeCleaning){
-						
-						//if tickling animation is still playing reset timer
-						if(animationManager.IsTickling()){
-							tickleTimer = 0;
+				if(!isMiniPetColliderLocked){
+					if(Application.loadedLevelName == "ZoneBedroom"){
+						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
+							if(OnTutorialMinipetClicked != null){
+								OnTutorialMinipetClicked(this, EventArgs.Empty);
+							}
+							return;
 						}
-						else{
+					}
+					if(!isUIOpened && isModeLockEmpty){
+						ZoomInToMiniPet();
+						OpenChildUI();	// Further child UI calls
+					}
+					else if(ClickManager.Instance.CurrentMode == UIModeTypes.MiniPet){
+						if(!isBeingTickled){
 							animationManager.StartTickling();
-							
-							bool isTickled = MiniPetManager.Instance.IsTickled(id);
-							if(!isTickled)
-								MiniPetManager.Instance.SetTickle(id, true);
-							
-							MiniPetManager.Instance.IsFirstTimeTickling = false;
+							isBeingTickled = true;
+							Invoke("StartTicklingTimer", 2f);
 						}
 					}
 				}
 			}
 		}
 	}
+	// Further code to run in children if tapped and zoom into minipet
+	protected abstract void OpenChildUI();
 
-	/// <summary>
-	/// Raises the drag event.
-	/// Note: This needs to be here so it catches the OnDrag event sent out by UICamera
-	/// which belongs to NGUI. Finger Gesture also send out the same event so they
-	/// need to be specified otherwise error will be thrown
-	/// </summary>
-	/// <param name="delta">Delta.</param>
-	void OnDrag(Vector2 delta){}
-
-	void OnDrag(DragGesture gesture){
-		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
-		if(!isUIOpened || currentLockMode != UIModeTypes.MiniPet) return;
-
-		string colliderName = "";
-		if(gesture.Selection)
-			 colliderName = gesture.Selection.collider.name;
-
-		if(colliderName == this.gameObject.name){
-			switch(gesture.Phase){
-			case ContinuousGesturePhase.Started:
-				bubbleParticle.Play();
-				MoveBubbleParticleWithUserTouch(gesture);
-				break;
-			case ContinuousGesturePhase.Updated:
-				if(!bubbleParticle.isPlaying)
-					bubbleParticle.Play();
-
-				MoveBubbleParticleWithUserTouch(gesture);
-				
-				float totalMoveXInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().x);
-				float totalMoveYInCentimeters = Mathf.Abs(gesture.TotalMove.Centimeters().y);
-				
-				currentDistanceInCentimeters += (totalMoveXInCentimeters + totalMoveYInCentimeters);
-				
-				//if clean gesture is recognized. stop dirty particle and play happy animation
-				if(currentDistanceInCentimeters >= targetDistanceInCentimetersForCleanGesture){
-					MiniPetManager.Instance.SetCleaned(id, true);
-					MiniPetManager.Instance.IsFirstTimeCleaning = false;
-					dirtyParticle.Stop();
-					animationManager.Cheer();
-					currentDistanceInCentimeters = 0;
-				}
-				break;
-			case ContinuousGesturePhase.Ended:
-				bubbleParticle.Stop();
-				break;
-			}
-		}
-		else{
-			bubbleParticle.Stop();
-		}
-	}
-
-	/// <summary>
-	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated
-	/// with the proper information.
-	/// </summary>
-	/// <param name="data">ImmutableDataMiniPet.</param>
-	public void Init(ImmutableDataMiniPet data){
-		this.id = data.ID;
-		this.name = data.Name;
+	private void StartTicklingTimer(){
+		animationManager.StopTickling();
+		isBeingTickled = false;
 	}
 
 	private void ZoomInToMiniPet(){
 		Vector3 position = this.transform.position + zoomPositionOffset;
-		
+
 		isMiniPetColliderLocked = true;
-		ClickManager.Instance.Lock(mode: UIModeTypes.MiniPet);
-		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 1f, this.gameObject);
+
+		CameraManager.Callback cameraDoneFunction = delegate(){
+			CameraMoveDone();
+		};
+		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 1f, cameraDoneFunction);
+	}
+
+	/// <summary>
+	/// Logic to run after the camera has zoomed into the minipet
+	/// </summary>
+	private void CameraMoveDone(){
+		isMiniPetColliderLocked = false;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetID = minipetId;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
+		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
+		MiniPetHUDUIManager.Instance.OpenUI();
+
+		//if pet not finish eating yet. finish eating logic
+		if(!isFinishEating){
+			//InventoryLogic.Instance.UseMiniPetItem(invItemID);
+			//MiniPetManager.Instance.IncreaseXP(id);
+			//animationManager.Eat();
+		}
+		//else check if tickle and cleaning is done. if both done 
+		else{
+			if(TutorialManagerBedroom.Instance == null || !TutorialManagerBedroom.Instance.IsTutorialActive()){
+				Invoke("ShowFoodPreferenceMessage", 1f);
+			}
+		}
+		//}
 	}
 
 	private void ShouldPauseIdleAnimations(object sender, UIManagerEventArgs args){
@@ -207,104 +185,14 @@ public class MiniPet : MonoBehaviour {
 				animationManager.IsRunningIdleAnimations = true;
 		}
 	}
-
-	/// <summary>
-	/// Updates the animation when minipet status is also updated
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void UpdateAnimation(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		MiniPetManager.UpdateStatuses status = args.UpdateStatus;
-	
-		if(status == MiniPetManager.UpdateStatuses.Tickle){
-			RefreshMiniPetUIState();
-		}
-	}
-
-	private void MoveBubbleParticleWithUserTouch(DragGesture gesture){
-		bool isDraggingOnMP = gesture.Raycast.Hit3D.collider &&
-			gesture.Raycast.Hit3D.collider.name == this.gameObject.name;
-
-		if(isDraggingOnMP){
-			//z position is constant
-			Vector3 touchPositionInWorld = 
-				Camera.main.ScreenToWorldPoint(new Vector3(gesture.Position.x, gesture.Position.y, 10));
-			
-			bubbleParticle.transform.position = touchPositionInWorld;
+	public virtual void FinishEating(){
+		// If it is finished eating already, dont change anything when fed more
+		if(isFinishEating){
+			return;
 		}
 		else{
-			bubbleParticle.Stop();
-		}
-	}
-
-	private void RefreshMiniPetUIState(){
-		if(isHatchedAux){
-			//check if pet is sad and dirty
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
-			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			
-			if(!isTickled)
-				animationManager.Sad();
-			else
-				animationManager.NotSad();
-			
-			if(!isCleaned){
-				dirtyParticle.Play();
-			}
-			else{
-				dirtyParticle.Stop();
-			}
-
-			if(isTickled && isCleaned){
-				if(MiniPetManager.Instance.CanModifyFoodXP(id))
-					Invoke("ShowFoodPreferenceMessage", 1f);
-			}
-		}
-	}
-
-	private void ShowFoodPreferenceMessage(){
-		string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
-		Item item = ItemLogic.Instance.GetItem(preferredFoodID);
-		miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
-	}
-
-	public void TryShowDirtyOrSadMessage(){
-		bool isTickled = MiniPetManager.Instance.IsTickled(id);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-
-		if(!isTickled){
-			miniPetSpeechAI.ShowSadMsg();
-		}
-		else if(!isCleaned){
-			miniPetSpeechAI.ShowDirtyMsg();
-		}
-	}
-
-	/// <summary>
-	/// Logic to run after the camera has zoomed into the minipet
-	/// </summary>
-	private void CameraMoveDone() {
-		isMiniPetColliderLocked = false;
-		ClickManager.Instance.ReleaseLock();
-		MiniPetHUDUIManager.Instance.SelectedMiniPetID = id;
-		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
-		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
-		MiniPetHUDUIManager.Instance.OpenUI();
-
-		//if pet not finish eating yet. finish eating logic
-		if(!isFinishEating){
-			InventoryLogic.Instance.UseMiniPetItem(invItemID);
-			MiniPetManager.Instance.IncreaseFoodXP(id);
 			isFinishEating = true;
-			animationManager.Eat();
-		}
-		//else check if tickle and cleaning is done. if both done 
-		else{
-			bool isTickled = MiniPetManager.Instance.IsTickled(id);
-			bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-			if(isTickled && isCleaned && MiniPetManager.Instance.CanModifyFoodXP(id)){
-				Invoke("ShowFoodPreferenceMessage", 1f);
-			}
+			DataManager.Instance.GameData.MiniPets.SaveHunger(minipetId, isFinishEating);
 		}
 	}
 
@@ -314,123 +202,123 @@ public class MiniPet : MonoBehaviour {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
-		bool isLevelUpAnimationLockOn = MiniPetHUDUIManager.Instance.IsLevelUpAnimationLockOn;
-		bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+		bool isUIOpen = MiniPetHUDUIManager.Instance.IsOpen();
 
-		if(args.TargetCollider.name == this.gameObject.name && !isLevelUpAnimationLockOn){
-
+		if(args.TargetCollider.name == this.gameObject.name && isUIOpen){
 			invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 			string preferredFoodID = "";
 
-			//check if minipet needs food
-			if(MiniPetManager.Instance.CanModifyFoodXP(id)){
-				preferredFoodID = MiniPetManager.Instance.GetFoodPreference(id);
+			preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
 
-				//check if minipet wants this food
-				if(preferredFoodID == invItem.ItemID){
-					//use item if so
-					args.IsValidTarget = true;
-
-					if(!isUIOpened){
-						ZoomInToMiniPet();
-						isFinishEating = false;
-					}
-					else{
-						//notify inventory logic that this item is being used
-						InventoryLogic.Instance.UseMiniPetItem(invItemID);
-						MiniPetManager.Instance.IncreaseFoodXP(id);
-						animationManager.Eat();
-					}
-				}
-				// show notification that the mp wants a specific food
-				else{
-					Item item = ItemLogic.Instance.GetItem(preferredFoodID);
-					miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
-				}
+			//check if minipet wants this food
+			if(preferredFoodID == invItem.ItemID){
+				//use item if so
+				args.IsValidTarget = true;
+				InventoryLogic.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
+				FinishEating();
+				animationManager.Eat();
 			}
+			// show notification that the mp wants a specific food
 			else{
-				bool isTickled = MiniPetManager.Instance.IsTickled(id);
-				bool isCleaned = MiniPetManager.Instance.IsCleaned(id);
-				bool isMaxLevel = MiniPetManager.Instance.IsMaxLevel(id);
-
-				if(!isTickled){
-					miniPetSpeechAI.ShowSadMsg();
-				}
-				else if(!isCleaned){
-					miniPetSpeechAI.ShowDirtyMsg();
-				}
-				else if(isMaxLevel){
-					miniPetSpeechAI.ShowMaxLevelMsg();
-				}
-				else{}
+				ShowFoodPreferenceMessage();
 			}
 		}
 	}
 
-	private void LevelUpEventHandler(object sender, EventArgs args){
-		if(MiniPetHUDUIManager.Instance.SelectedMiniPetID == id){
-			animationManager.Cheer();
-			GameObject droppedStatPrefab = Resources.Load("DroppedStat") as GameObject;
-			GameObject droppedItem = Instantiate(droppedStatPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-			droppedItem.transform.parent = spawnItemTransform;
-			droppedItem.transform.localPosition = Vector3.zero;
-			droppedItem.transform.localScale = Vector3.one;
-			droppedItem.transform.localEulerAngles = Vector3.zero;
-
-			DroppedObjectStat droppedObjectStat = droppedItem.GetComponent<DroppedObjectStat>();
-			
-			droppedObjectStat.Init(HUDElementType.Gems, 1);
-			droppedObjectStat.modeTypes.Add(UIModeTypes.MiniPet);
-			
-			// set the position of the newly spawned item to be wherever this item box is
-//			Vector3 position = gameObject.transform.position;
-//			droppedItem.transform.position = position;
-			
-			// make the item "burst" out
-			droppedObjectStat.Burst(isXOverride: true, xOverride: -7f);
+	protected void ShowFoodPreferenceMessage(){
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && !isFinishEating){
+			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
+			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 		}
 	}
-
-	public void ToggleHatched(bool isHatched){
-		isHatchedAux = isHatched;
-		if(isHatched){
-			eggParent.SetActive(false);
-			flippable.SetActive(true);
-			gameObject.collider.enabled = true;
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
-			eggAnimation.animation.Stop();
-			isVisible = true;
-		}
-		else{
-			eggParent.SetActive(true);
-			eggAnimation.animation.Play();
-			flippable.SetActive(false);
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
-			isVisible = false;
-		}
-	}
-
 
 	public void ToggleVisibility(bool isVisible){
-
 		this.isVisible = isVisible;
-//		Debug.Log("visible: " + this.isVisible);
-
 		if(this.isVisible){
-			bubbleParticle.gameObject.SetActive(true);
-			dirtyParticle.gameObject.SetActive(true);
-
 			ToggleHatched(isHatchedAux);	// Keep track of it internally already DWID
 		}
 		else{
-			bubbleParticle.gameObject.SetActive(false);
-			dirtyParticle.gameObject.SetActive(false);
 			flippable.SetActive(false);
 			eggParent.SetActive(false);
 			gameObject.collider.enabled = false;
+		}
+	}
+
+	//True: if finger touches NGUI 
+	/// <summary>
+	/// Determines whether if the touch is touching NGUI element
+	/// </summary>
+	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
+	/// <param name="screenPos">Screen position.</param>
+	protected bool IsTouchingNGUI(Vector2 screenPos){
+		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
+		RaycastHit hit;
+		int layerMask = 1 << 10; 
+		bool isOnNGUILayer = false;
+		
+		// Raycast
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+			isOnNGUILayer = true;
+		}
+		return isOnNGUILayer;
+	}
+
+	// Called from minipet manager, handle animations and ui effects here
+	public void GainedExperience(){
+		animationManager.Cheer();
+	}
+
+	// Called from minipet manager, handle animations and ui effects here
+	public void GainedLevel(){
+		AccessoriesCheck(true);
+		Invoke("GainedLevelHelper", 0.5f);
+	}
+
+	private void GainedLevelHelper(){
+		animationManager.Cheer();
+	}
+
+	/// <summary>
+	/// Check enable the correct accessories according to the pet level
+	/// </summary>
+	/// <param name="isJustGained">If set to <c>true</c> is just gained from getting experience, play some fancy particles</param>
+	private void AccessoriesCheck(bool isJustGained){
+		Level currentLvl = MiniPetManager.Instance.GetCurrentLevel(minipetId);
+		switch(currentLvl){
+		case Level.Level1:
+			accessory1.SetActive(false);
+			accessory2.SetActive(false);
+			accessory3.SetActive(false);
+			break;
+		case Level.Level2:
+			accessory1.SetActive(true);
+			accessory2.SetActive(false);
+			accessory3.SetActive(false);
+			if(isJustGained){
+				getAccessoryParticle.Play();
+			}
+			break;
+		case Level.Level3:
+			accessory1.SetActive(true);
+			accessory2.SetActive(true);
+			accessory3.SetActive(false);
+			if(isJustGained){
+				getAccessoryParticle.Play();
+			}
+			break;
+		case Level.Level4:
+			accessory1.SetActive(true);
+			accessory2.SetActive(true);
+			accessory3.SetActive(true);
+			if(isJustGained){
+				getAccessoryParticle.Play();
+			}
+			break;
+		default:
+			Debug.LogError("Level limit exceeded, something wrong with minipets");
+			break;
 		}
 	}
 }

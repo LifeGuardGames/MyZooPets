@@ -13,6 +13,8 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
+
+	public static EventHandler<EventArgs> OnDecoOpened;
 	public static EventHandler<InventoryDragDrop.InvDragDropArgs> OnDecoDroppedOnTarget;
 
 	public static EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
@@ -33,11 +35,13 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	public Transform currentDragDropItem;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.EditDecos;
 	}
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		InventoryLogic.OnItemAddedToDecoInventory += OnItemAddedHandler;
 		InventoryLogic.OnItemUsed += OnItemUsedHandler;
 
@@ -57,9 +61,19 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		HideDecoInventory();
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		InventoryLogic.OnItemAddedToDecoInventory -= OnItemAddedHandler;
 		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
+	}
+
+	/// <summary>
+	/// Check if the deco inventory is scrollable
+	/// If the item types in invetory is greater than the max display item type count, make it scrollable
+	/// </summary>
+	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
+	public bool IsDecoInventoryScrollable(){
+		return InventoryLogic.Instance.AllDecoInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 	}
 
 	public GameObject GetTutorialItem(){
@@ -79,6 +93,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	//Event listener. listening to when new item is added to the deco inventory
 	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
+
 		if(e.IsItemNew){
 			SpawnInventoryItemInPanel(e.InvItem);
 		}
@@ -109,7 +124,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
 		//Create inventory item
 		GameObject decoInventoryItemObject = NGUITools.AddChild(uiGridObject, decorationItemPrefab);
-		
+
 		//get reference to all the GO and scripts
 		Transform itemWrapper = decoInventoryItemObject.transform.Find("Icon");
 		UISprite itemSprite = decoInventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
@@ -139,10 +154,11 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
+	
 		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
-		
 		// Normal case where you add item during game
 		if(!isOnLoad){
+		
 			// Adjust the bar length based on how many items we want showing at all times
 			if(allDecoInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 				
@@ -190,6 +206,9 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		
 		// Use the position of the item in the inventory panel
 		Transform deocInvItemTrans = uiGridObject.transform.Find(itemID);
+		if(deocInvItemTrans == null){
+			Debug.Log("ksd");
+		}
 		InventoryItem decoInvItem = InventoryLogic.Instance.GetDecoInvItem(itemID);
 		decoInvItemPosition = deocInvItemTrans.position;
 		
@@ -254,6 +273,10 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		if(!isActive){
 			isActive = true;
 
+			if(OnDecoOpened != null){
+				OnDecoOpened(this, EventArgs.Empty);
+			}
+
 			this.GetComponent<TweenToggleDemux>().Show();
 			ShowDecoInventory();
 			RoomArrowsUIManager.Instance.ShowPanel();
@@ -266,7 +289,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			// Hide the pet/minipet so it doesn't get in the way
 			PetAnimationManager.Instance.DisableVisibility();
 			if(MiniPetManager.Instance){
-				MiniPetManager.Instance.DisableAllMinipetVisibility();
+				MiniPetManager.Instance.ToggleAllMinipetVisilibity(false);
 			}
 
 			if(InventoryLogic.Instance.AllDecoInventoryItems.Count == 0){
@@ -292,7 +315,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			// Show the pet/minipet again
 			PetAnimationManager.Instance.EnableVisibility();
 			if(MiniPetManager.Instance){
-				MiniPetManager.Instance.EnableAllMinipetVisilibity();
+				MiniPetManager.Instance.ToggleAllMinipetVisilibity(true);
 			}
 
 			TogglePulseShopButton(false);

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 
 //----------------------------------------------------------
-// ImmutableDadta_Trigger
+// ImmutableData_Trigger
 // Data for each individual trigger.
 // Immutable data
 //----------------------------------------------------------

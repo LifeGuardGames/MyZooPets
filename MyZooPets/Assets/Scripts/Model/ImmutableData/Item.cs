@@ -11,11 +11,12 @@ public class Item{
 	private string name; //name of item
 	private string textureName; //name of texture in the atlas
 	private ItemType type;
-	private double cost; //cost of item
+	private int cost; //cost of item
 	private CurrencyTypes currencyType;
 	protected string description;
 	private int unlockAtLevel = 0; //the level when item is unlocked
 	private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
+	private bool isSecretItem = false;
 	private int sortCategory;	// Options, use for category sorting (ie. accessories)
 
 	//F: available in store as well
@@ -38,7 +39,7 @@ public class Item{
 		get{ return type;}
 	}
 
-	public double Cost{
+	public int Cost{
 		get{ return cost;}
 	}
 
@@ -65,8 +66,8 @@ public class Item{
 		get{ return soundUsed;}	
 	}
 
-	public bool ItemBoxOnly{
-		get{ return itemBoxOnly;}
+	public bool IsSecretItem{
+		get{ return isSecretItem;}
 	}
 
 	public int SortCategory{
@@ -91,28 +92,27 @@ public class Item{
 		textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
 
 		Hashtable costAttributes = XMLUtils.GetAttributes(hashItemData["Cost"] as IXMLNode);
-
-//		cost = XMLUtils.GetInt(hashItemData["Cost"] as IXMLNode);
-
+		
 		currencyType = (CurrencyTypes)Enum.Parse(typeof(CurrencyTypes), 
 		                  HashUtils.GetHashValue<string>(costAttributes, "CurrencyType", ""));
 
-		cost = (double)Double.Parse(HashUtils.GetHashValue<string>(costAttributes, "Amount", ""));
+		cost = int.Parse(HashUtils.GetHashValue<string>(costAttributes, "Amount", ""));
 
 		description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode, "");
     
 		// optional for now
-		if(hashItemData.Contains("UnlockAtLevel"))
+		if(hashItemData.Contains("UnlockAtLevel")){
 			unlockAtLevel = XMLUtils.GetInt(hashItemData["UnlockAtLevel"] as IXMLNode, 0);
-
-		if(hashItemData.Contains("SortCategory"))
+		}
+		if(hashItemData.Contains("SortCategory")){
 			sortCategory = XMLUtils.GetInt(hashItemData["SortCategory"] as IXMLNode, 0);
-
-		if(hashItemData.Contains("Sound"))
+		}
+		if(hashItemData.Contains("Sound")){
 			soundUsed = XMLUtils.GetString(hashItemData["Sound"] as IXMLNode, "");
-
-		if(hashItemData.Contains("ItemBoxOnly"))
-			itemBoxOnly = XMLUtils.GetBool(hashItemData["ItemBoxOnly"] as IXMLNode, false);
+		}
+		if(hashItemData.Contains("IsSecretItem")){
+			isSecretItem = XMLUtils.GetBool(hashItemData["IsSecretItem"] as IXMLNode, false);
+		}
 	}
 	
 	/// <summary>

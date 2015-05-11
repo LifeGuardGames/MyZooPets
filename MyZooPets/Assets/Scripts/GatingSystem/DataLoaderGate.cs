@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Collections.Generic;
 /// Hash -- Key: GateID, Value: ImmutableDataGate
 /// </summary>
 public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
-	//Key: area name (Bedroom, yard), Value: Dictionary
-	//Key: room partition number, Value: instance of ImmutableDataGate
-	private static Hashtable areaPartitionGates;
+	//Key: zone name (Bedroom, yard), Value: Dictionary
+		//Key: room partition number, Value: instance of ImmutableDataGate
+	private static Hashtable zoneDictionary;
 	
 	/// <summary>
 	/// Gets the gate data.
@@ -20,7 +20,6 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 	/// <param name="id">Identifier.</param>
 	public static ImmutableDataGate GetData(string id){
 		instance.InitXMLLoader();
-
 		return instance.GetData<ImmutableDataGate>(id);;
 	}
 
@@ -30,35 +29,34 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 	/// <returns>The data.</returns>
 	/// <param name="area">Area.</param>
 	/// <param name="roomPartition">Room partition.</param>
-	public static ImmutableDataGate GetData(string areaID, int roomPartition){
+	public static ImmutableDataGate GetData(string zoneID, int localPartition){
 		instance.InitXMLLoader();
 		instance.ForceSetup();
 		
 		ImmutableDataGate dataGate = null;
 		
-		if(areaPartitionGates.ContainsKey(areaID)){
-			Hashtable area = (Hashtable) areaPartitionGates[areaID];
-			if(area.ContainsKey(roomPartition))
-				dataGate = (ImmutableDataGate) area[roomPartition];
+		if(zoneDictionary.ContainsKey(zoneID)){
+			Hashtable zone = (Hashtable) zoneDictionary[zoneID];
+			if(zone.ContainsKey(localPartition)){
+				dataGate = (ImmutableDataGate) zone[localPartition];
+			}
 		}
-		
 		return dataGate;
 	}
 
 	/// <summary>
-	/// Gets the area gates.
+	/// Gets the gates inside the zone(area).
 	/// </summary>
 	/// <returns>The area gates.</returns>
 	/// <param name="area">Area.</param>
-	public static Hashtable GetAreaGates(string areaID){
-		Hashtable area = new Hashtable();
-		
-		if(areaPartitionGates.ContainsKey(areaID))
-			area = (Hashtable) areaPartitionGates[areaID];
-		else
-			Debug.LogError("No such area in the gates hash: " + areaID);
-		
-		return area;
+	public static Hashtable GetZoneGates(string zoneID){
+		if(zoneDictionary.ContainsKey(zoneID)){
+			return (Hashtable)zoneDictionary[zoneID];
+		}
+		else{
+			Debug.LogError("No such zone in the gates hash: " + zoneID);
+			return null;
+		}
 	}
 	
 	public static List<ImmutableDataGate> GetAllData(){
@@ -86,27 +84,30 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 	}
 
 	/// <summary>
-	/// Stores the gate in a hash of areas to partition 
-	/// ids to the actual data.
+	/// Stores the gate in a hash of areas to partition ids to the actual data.
 	/// </summary>
 	/// <param name="dataGate">Data gate.</param>
 	private void SortGate(ImmutableDataGate dataGate){
-		if(areaPartitionGates == null)
-			areaPartitionGates = new Hashtable();
+		if(zoneDictionary == null){
+			zoneDictionary = new Hashtable();
+		}
 
-		string areaID = dataGate.GetArea();
-		int roomPartition = dataGate.GetPartition();
+		string zoneID = dataGate.Zone;
+		int localPartition = dataGate.LocalPartition;
 		
 		// if the area isn't in the hash yet, create it
-		if(!areaPartitionGates.ContainsKey(areaID))
-			areaPartitionGates[areaID] = new Hashtable();
+		if(!zoneDictionary.ContainsKey(zoneID)){
+			zoneDictionary[zoneID] = new Hashtable();
+		}
 		
-		Hashtable area = (Hashtable) areaPartitionGates[areaID];
+		Hashtable zone = (Hashtable) zoneDictionary[zoneID];
 		
-		if(area.ContainsKey(roomPartition))
-			Debug.LogError("Duplicate gate for room " + roomPartition + " in area " + areaID);
-		else
-			area[roomPartition] = dataGate;
+		if(zone.ContainsKey(localPartition)){
+			Debug.LogError("Duplicate gate for room " + localPartition + " in area " + zone);
+		}
+		else{
+			zone[localPartition] = dataGate;
+		}
 	}
 }
 

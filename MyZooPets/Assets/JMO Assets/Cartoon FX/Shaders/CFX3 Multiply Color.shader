@@ -1,5 +1,5 @@
 // CartoonFX 3 Shader
-// (c) 2013, Jean Moreno
+// (c) 2015, Jean Moreno
 
 Shader "Cartoon FX/Particle Multiply Colored"
 {

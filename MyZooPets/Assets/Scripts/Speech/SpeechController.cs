@@ -39,6 +39,17 @@ public abstract class SpeechController<T> : Singleton<T> where T : MonoBehaviour
 			}
 		}
 	}
+	// for minipet for longer last messages
+	public void TalkM(Hashtable message){
+		SetActive();
+		speechQueue.Enqueue(message);
+		speechDuration = 3000.25f;
+	}
+
+	public void BeQuiet(){
+		UnlockQueue();
+		speechDuration = 0.7f;
+	}
 
 	/// <summary>
 	/// Talk the specified message.

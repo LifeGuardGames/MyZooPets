@@ -32,8 +32,6 @@ public abstract class RunnerItem : MonoBehaviour {
 			//Add to minus points depending on trigger
             ScoreManager.Instance.AddPoints(pointValue);
 
-	        //Send Analytics info
-	        Analytics.Instance.RunnerPlayerItemPickUp(ID);
 
             //Play sound
 			if ( !string.IsNullOrEmpty(strSoundPickup) )

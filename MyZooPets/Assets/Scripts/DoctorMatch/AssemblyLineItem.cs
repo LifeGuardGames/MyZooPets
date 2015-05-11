@@ -72,7 +72,7 @@ public class AssemblyLineItem : MonoBehaviour {
 		// Gesture in progress, make sure that this event comes from the finger that is dragging our dragObject
 		else if(finger.Index == dragFingerIndex){
 			if(gesture.Phase == ContinuousGesturePhase.Updated){	// Drag continued
-				Vector3 worldPoint = CameraManager.Instance.cameraMain.ScreenToWorldPoint(new Vector3(gesture.Position.x, gesture.Position.y, 0f));
+				Vector3 worldPoint = CameraManager.Instance.CameraMain.ScreenToWorldPoint(new Vector3(gesture.Position.x, gesture.Position.y, 0f));
 				gameObject.transform.position = new Vector3(worldPoint.x, worldPoint.y, 0f);
 			}
 			else{	// End drag

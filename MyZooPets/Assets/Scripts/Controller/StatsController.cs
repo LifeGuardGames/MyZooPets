@@ -27,17 +27,18 @@ public class StatsController : Singleton<StatsController>{
 	public static EventHandler<EventArgs> OnZeroHealth;
 	//-------------------------------------------------	
 
-	private GameObject hudAnimatorObject;
-	private HUDAnimator hudAnimator;
+	public HUDAnimator hudAnimator;
 	private bool isPetAnimationManagerPresent;
 	
 	void Start(){
-		hudAnimatorObject = GameObject.Find("HUDPanel");
-		hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-		
-		if(D.Assert(hudAnimatorObject != null, "Please attach hudanimator object")){
+		// Check if hud animator is assigned already
+		if(hudAnimator == null){
+			GameObject hudAnimatorObject = GameObject.Find("HUDPanelUI");
 			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-			D.Assert(hudAnimator != null, "No HUDAnimator script attached");
+
+			if(hudAnimator == null){
+				Debug.LogError("Hud Animator can not be found in " + Application.loadedLevelName);
+			}
 		}
 		
 		isPetAnimationManagerPresent = PetAnimationManager.Instance;
@@ -63,13 +64,31 @@ public class StatsController : Singleton<StatsController>{
 //		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
 //			ChangeStats(deltaPoints: 100);
 //		}
-//		if(GUI.Button(new Rect(500, 0, 100, 50), "+Gems")){
-//			ChangeStats(deltaGems: 5);
-//		}
 //		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
 //			ChangeStats(deltaStars: 50);
 //		}
 //		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
+//			ChangeStats(deltaStars: -40);
+//		}
+//
+//
+//		if(GUI.Button(new Rect(0, 50, 100, 50), "+health")){
+//			ChangeStats(deltaHealth: 100);
+//		}
+
+//		if(GUI.Button(new Rect(200, 50, 100, 50), "+mood")){
+//			ChangeStats(deltaMood: 10);
+//		}
+//		if(GUI.Button(new Rect(300, 50, 100, 50), "-mood")){
+//			ChangeStats(deltaMood: -10);
+//		}
+//		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
+//			ChangeStats(deltaPoints: 100);
+//		}
+//		if(GUI.Button(new Rect(600, 50, 100, 50), "+Stars")){
+//			ChangeStats(deltaStars: 50);
+//		}
+//		if(GUI.Button(new Rect(700, 50, 100, 50), "-Stars")){
 //			ChangeStats(deltaStars: -40);
 //		}
 //	}
@@ -90,9 +109,6 @@ public class StatsController : Singleton<StatsController>{
 		case HUDElementType.Stars:
 			statNumber = DataManager.Instance.GameData.Stats.Stars;
 			break;
-		case HUDElementType.Gems:
-			statNumber = DataManager.Instance.GameData.Stats.Gems;
-			break;
 		default:
 			Debug.LogError("No such display target for " + stat);
 			break;
@@ -100,22 +116,15 @@ public class StatsController : Singleton<StatsController>{
 
 		return statNumber;
 	}
-
-	// Locations are on screen space
-	// public void ChangeStats(int deltaPoints, Vector3 pointsLoc, int deltaStars, 
-	// 	Vector3 starsLoc, int deltaHealth, Vector3 healthLoc, int deltaMood, Vector3 moodLoc){
-	// 	ChangeStats(deltaPoints, pointsLoc, deltaStars, starsLoc, deltaHealth, healthLoc, deltaMood, moodLoc, true);
-	// }
 	
 	/// <summary>
 	/// Changes the stats.
+	/// Locations are on screen space
 	/// </summary>
 	/// <param name="deltaPoints">Delta points.</param>
 	/// <param name="pointsLoc">Points location.</param>
 	/// <param name="deltaStars">Delta stars.</param>
 	/// <param name="starsLoc">Stars location.</param>
-	/// <param name="deltaGems">Delta gems.</param>
-	/// <param name="gemsLoc">Gems location.</param>
 	/// <param name="deltaHealth">Delta health.</param>
 	/// <param name="healthLoc">Health location.</param>
 	/// <param name="deltaMood">Delta mood.</param>
@@ -123,39 +132,30 @@ public class StatsController : Singleton<StatsController>{
 	/// <param name="bPlaySounds">If set to <c>true</c> play sounds.</param>
 	/// <param name="bAtOnce">If set to <c>true</c> animate all stats at once.</param>
 	/// <param name="bFloaty">If set to <c>true</c> spawn floaty on the pet. (this will not play sound)</param>
-	public void ChangeStats(int deltaPoints = 0, Vector3 pointsLoc = default(Vector3), 
+	/// <param name="isInternal">If set to <c>true</c> skip all animations / rewarding</param>
+	public void ChangeStats(int deltaPoints = 0, Vector3 pointsLoc = default(Vector3),
 	                        int deltaStars = 0, Vector3 starsLoc = default(Vector3),
-	                        int deltaGems = 0, Vector3 gemsLoc = default(Vector3),
 	                        int deltaHealth = 0, Vector3 healthLoc = default(Vector3), 
-	    					int deltaMood = 0, Vector3 moodLoc = default(Vector3), 
-							bool bPlaySounds = true, bool bAtOnce = false, bool bFloaty = false){
-
+	    					int deltaMood = 0, Vector3 moodLoc = default(Vector3),
+							bool isPlaySounds = true, bool isAllAtOnce = false, bool isFloaty = false,
+	                        bool isDisableStream = false, bool is3DObject = false, float animDelay = 0f,
+	                        bool isInternal = false){;
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(deltaPoints != 0){
-			if(deltaPoints > 0)
+			if(deltaPoints > 0){
 				DataManager.Instance.GameData.Stats.AddPoints(deltaPoints);
-			else if(deltaPoints < 0)
+			}
+			else if(deltaPoints < 0){
 				DataManager.Instance.GameData.Stats.SubtractPoints(-1 * deltaPoints);	// Wonky logic, accomodating here
+			}
 		}
 	
 		if(deltaStars != 0){
 			if(deltaStars > 0){
 				DataManager.Instance.GameData.Stats.AddStars(deltaStars);
-
-				//Check if there are enough coins/stars to unlock badge
-				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, 
-					GetStat(HUDElementType.Stars), true);
 			}
-			else if(deltaStars < 0)
+			else if(deltaStars < 0){
 				DataManager.Instance.GameData.Stats.SubtractStars(-1 * deltaStars);
-		}
-
-		if(deltaGems != 0){
-			if(deltaGems > 0){
-				DataManager.Instance.GameData.Stats.AddGems(deltaGems);
-			}
-			else if(deltaGems < 0){
-				DataManager.Instance.GameData.Stats.SubstractGems(-1 * deltaGems);
 			}
 		}
 		
@@ -180,10 +180,12 @@ public class StatsController : Singleton<StatsController>{
 		if(deltaHealth != 0){
 			PetHealthStates oldHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 
-			if(deltaHealth > 0)
+			if(deltaHealth > 0){
 				DataManager.Instance.GameData.Stats.AddHealth(deltaHealth);
-			else if(deltaHealth < 0)
+			}
+			else if(deltaHealth < 0){
 				DataManager.Instance.GameData.Stats.SubtractHealth(-1 * deltaHealth);
+			}
 
 			PetHealthStates newHealth = DataManager.Instance.GameData.Stats.GetHealthState();
 			
@@ -192,27 +194,67 @@ public class StatsController : Singleton<StatsController>{
 				CheckForZeroHealth();
 			}
 		}
-		
-		if(bFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
-			PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
-		}
 
-		//when stats are modified make sure PetAnimationManager knows about it
-		if(isPetAnimationManagerPresent)
-			PetAnimationManager.Instance.PetStatsModified(DataManager.Instance.GameData.Stats.Health,
-			                                              DataManager.Instance.GameData.Stats.Mood);
+		// If internal checked, skip all animations and reward checking
+		if(isInternal == false){
+			if(isFloaty && !bBeingDestroyed && PetFloatyUIManager.Instance){
+				PetFloatyUIManager.Instance.CreateStatsFloaty(deltaPoints, deltaHealth, deltaMood, deltaStars);
+			}
+
+			//when stats are modified make sure PetAnimationManager knows about it
+			if(isPetAnimationManagerPresent){
+				PetAnimationManager.Instance.PetStatsModified(DataManager.Instance.GameData.Stats.Health,
+				                                              DataManager.Instance.GameData.Stats.Mood);
+			}
+
+			// Adjust for custom positions using screen position for 3D objects
+			if(is3DObject){
+				if(pointsLoc != default(Vector3)){
+					// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into respective NGUI Anchors
+					pointsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, pointsLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
+					pointsLoc = CameraManager.Instance.TransformAnchorPosition(pointsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+				if(starsLoc != default(Vector3)){
+					starsLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, starsLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
+					starsLoc = CameraManager.Instance.TransformAnchorPosition(starsLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+				if(healthLoc != default(Vector3)){
+					healthLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Health_Anchor"));
+					healthLoc = CameraManager.Instance.TransformAnchorPosition(healthLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+				if(moodLoc != default(Vector3)){
+					moodLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, moodLoc);
+					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Mood_Anchor"));
+					moodLoc = CameraManager.Instance.TransformAnchorPosition(moodLoc, InterfaceAnchors.BottomLeft, endAnchor);
+				}
+			}
+			// Adjust for custom position using screen position for NGUI objects
+			else{
+				// Not needed yet
+			}
+
+			// Tell HUDAnimator to animate and change
+			List<StatPair> listStats = new List<StatPair>();
+			listStats.Add(new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ? hudAnimator.soundXP : null));
+			listStats.Add(new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ? hudAnimator.soundStars : null));
+			listStats.Add(new StatPair(HUDElementType.Health, deltaHealth, healthLoc));
+			listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
 			
-		// Tell HUDAnimator to animate and change
-		List<StatPair> listStats = new List<StatPair>();
-		listStats.Add(new StatPair(HUDElementType.Points, deltaPoints, pointsLoc, deltaPoints > 0 ? hudAnimator.soundXP : null));
-		listStats.Add(new StatPair(HUDElementType.Stars, deltaStars, starsLoc, deltaStars > 0 ? hudAnimator.soundStars : null));
-		listStats.Add(new StatPair(HUDElementType.Gems, deltaGems, gemsLoc, deltaGems > 0 ? hudAnimator.soundStars : null));
-		listStats.Add(new StatPair(HUDElementType.Health, deltaHealth, healthLoc));
-		listStats.Add(new StatPair(HUDElementType.Mood, deltaMood, moodLoc));
-		
-		if(hudAnimator != null && !bBeingDestroyed)
-			StartCoroutine(hudAnimator.StartCurveStats(listStats, bPlaySounds, bAtOnce, bFloaty));
-	}	
+			if(hudAnimator != null && !bBeingDestroyed){
+				// Push this into the reward queue
+				RewardQueueData.GenericDelegate function1 = delegate{
+					StartCoroutine(hudAnimator.StartCurveStats(listStats, isPlaySounds, isAllAtOnce, isFloaty, animDelay));
+				};
+				RewardManager.Instance.AddToRewardQueue(function1);
+			}
+
+		//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, GetStat(HUDElementType.Stars), true);
+		}
+	}
 
 	//---------------------------------------------------
 	// CheckForMoodTransition()

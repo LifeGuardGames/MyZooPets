@@ -9,7 +9,7 @@ public class TutorialSwipeListener : MonoBehaviour{
        FingerGestures.SwipeDirection direction = gesture.Direction; 
 
        if(direction == FingerGestures.SwipeDirection.Left){
-            PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+            PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
             scriptPan.TutorialSwipeLeft();
 
             if(OnTutorialSwiped != null)

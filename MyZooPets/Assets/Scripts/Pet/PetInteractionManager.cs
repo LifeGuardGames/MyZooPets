@@ -5,7 +5,7 @@ using System.Collections;
 //change this to PetInteraction Manager to handle item drop as well
 public class PetInteractionManager : MonoBehaviour{
 //	public PetAnimator petAnimator;
-
+	public bool isInteractable = true;
 	void Start(){
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 	}
@@ -15,6 +15,7 @@ public class PetInteractionManager : MonoBehaviour{
 	}
 
 	void OnTap(TapGesture gesture){
+		if(isInteractable){
 		try{
 			string colliderName = gesture.Selection.collider.name;
 			
@@ -31,7 +32,10 @@ public class PetInteractionManager : MonoBehaviour{
 				}else{}
 			}
 		}
-		catch(NullReferenceException e){}
+		catch(NullReferenceException e){
+			Debug.LogException(e);
+		}
+		}
 	}
 	
 	/// <summary>
@@ -44,37 +48,46 @@ public class PetInteractionManager : MonoBehaviour{
 	void OnDrag(Vector2 delta){}
 
 	void OnDrag(DragGesture gesture){
-		try{
-			string colliderName = gesture.Selection.collider.name;
-			
-			if(colliderName == this.gameObject.name){
-				switch(gesture.Phase){
-				case ContinuousGesturePhase.Started:
-					
-					if(colliderName == "HeadCollider")
-						PetAnimationManager.Instance.StartRubbing();
-					else
-						PetAnimationManager.Instance.StartTickling();
-					
-					break;
-				case ContinuousGesturePhase.Ended:
-					
-					if(colliderName == "HeadCollider")
-						PetAnimationManager.Instance.StopRubbing();
-					else
-						PetAnimationManager.Instance.StopTickling();
-					
-					break;
+		if(isInteractable){
+			try{
+				if(gesture.Selection == null){
+					PetAnimationManager.Instance.StopRubbing();
+					PetAnimationManager.Instance.StopTickling();
+					return;
+				}
+
+				string colliderName = gesture.Selection.collider.name;
+				
+				if(colliderName == this.gameObject.name){
+					switch(gesture.Phase){
+					case ContinuousGesturePhase.Started:
+						
+						if(colliderName == "HeadCollider")
+							PetAnimationManager.Instance.StartRubbing();
+						else
+							PetAnimationManager.Instance.StartTickling();
+						
+						break;
+					case ContinuousGesturePhase.Ended:
+						
+						if(colliderName == "HeadCollider")
+							PetAnimationManager.Instance.StopRubbing();
+						else
+							PetAnimationManager.Instance.StopTickling();
+						
+						break;
+					}
+				}
+				else{
+					PetAnimationManager.Instance.StopRubbing();
+					PetAnimationManager.Instance.StopTickling();
 				}
 			}
-			else{
+			catch(NullReferenceException e){
+				Debug.LogException(e);
 				PetAnimationManager.Instance.StopRubbing();
 				PetAnimationManager.Instance.StopTickling();
 			}
-		}
-		catch(NullReferenceException e){
-			PetAnimationManager.Instance.StopRubbing();
-			PetAnimationManager.Instance.StopTickling();
 		}
 	}
 
@@ -95,8 +108,9 @@ public class PetInteractionManager : MonoBehaviour{
 			if(ItemLogic.Instance.CanUseItem(invItemID)){
 				args.IsValidTarget = true;
 				
-				if(invItem != null && invItem.ItemType == ItemType.Foods)
-					ShowPetReceivedFoodAnimation();		
+				if(invItem != null && invItem.ItemType == ItemType.Foods){
+					ShowPetReceivedFoodAnimation();
+				}
 				
 				//notify inventory logic that this item is being used
 				InventoryLogic.Instance.UsePetItem(invItemID);

@@ -12,8 +12,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public GameObject uiGridObject;
 	public GameObject spritePet;
 	public GameObject inventoryItemPrefab;
+	public Transform itemFlyToTransform;
 	private float collapsedPos = -164f;
-	private GameObject fingerHintGO;
 	private Transform currentDragDropItem;
 
 	void Start(){
@@ -44,6 +44,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		return InventoryLogic.Instance.AllInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 	}
 
+	public Vector3 GetItemFlyToPosition(){
+		return itemFlyToTransform.position;
+	}
+
 	/// <summary>
 	/// Gets the fire orb reference.
 	/// Use for the tutorial to get the fire orb gameobject.
@@ -53,14 +57,24 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		GameObject retVal = null;
 		foreach(Transform item in uiGridObject.transform){
 			if(item.name == "Usable1"){
-				try{
-					retVal = item.Find("Usable1").gameObject;
-				}
-				catch(NullReferenceException e){
-					retVal = null;
+				Transform trans = item.Find("Usable1");
+				if(trans != null){
+					retVal = trans.gameObject;
 				}
 			}
 		}
+
+		// Check if user is dragging it as well...
+		if(retVal == null){
+			GameObject dragPanel = GameObject.Find("ItemDragPanel");
+			if(dragPanel != null){
+				Transform trans = dragPanel.transform.Find("Usable1");
+				if(trans != null){
+					retVal = trans.gameObject;
+				}
+			}
+		}
+
 		return retVal;
 	}
 
@@ -70,7 +84,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
 		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
-
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
@@ -117,8 +130,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		invItemPosition = invItemTrans.position;
 		
 		//Offset position if the item is just added to the inventory
-		if(invItem.Amount == 1)
+		if(invItem.Amount == 1){
 			invItemPosition += new Vector3(-0.22f, 0, 0);
+		}
 		
 		return invItemPosition;
 	}
@@ -134,17 +148,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	//Event listener. listening to when item is dragged out of the inventory on drop
 	//on something in the game
 	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-		bool dropOnTarget = false;
-
-		//delete tutorial GO if still alive
-		if(fingerHintGO != null)
-			Destroy(fingerHintGO);
 
 		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
 			currentDragDropItem = e.ParentTransform;
 
-			if(ItemDroppedOnTargetEvent != null)
+			if(ItemDroppedOnTargetEvent != null){
 				ItemDroppedOnTargetEvent(this, e);
+			}
 		}
 	}
 
@@ -152,6 +162,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// Items the used event handler.
 	/// </summary>
 	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+
 		if(currentDragDropItem != null){
 			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0

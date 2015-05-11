@@ -68,7 +68,7 @@ public class DroppedObjectItem : DroppedObject{
 		SetState(DroppedItemStates.Awarded);
 		
 		// Analytics
-		Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_RECEIVED, dataItem.Type, dataItem.ID);
+		//Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_RECEIVED, dataItem.Type, dataItem.ID);
 
 		// add it to the player's inventory
 		InventoryLogic.Instance.AddItem(dataItem.ID, 1);

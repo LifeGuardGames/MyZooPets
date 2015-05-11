@@ -7,18 +7,15 @@ using System.Collections;
 //---------------------------------------------------
 
 public class MinigamePopup_GameOver_Ninja : MinigamePopup_GameOver {
-
-	//---------------------------------------------------
-	// GetReward()
-	//---------------------------------------------------		
 	protected override int GetReward (MinigameRewardTypes eType) {
 		return NinjaManager.Instance.GetReward( eType );
 	}
-	
-	//---------------------------------------------------
-	// GetScore()
-	//---------------------------------------------------		
+
 	protected override int GetScore () {
 		return NinjaManager.Instance.GetScore();
-	}	
+	}
+
+	protected override void _RewardBadges(){
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Ninja, NinjaManager.Instance.GetScore(), true);
+	}
 }

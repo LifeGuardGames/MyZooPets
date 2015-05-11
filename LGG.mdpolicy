@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PolicySet name="Sean">
-  <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="text/plain" />
-  <VersionControlPolicy inheritsSet="Mono" />
-  <ChangeLogPolicy inheritsSet="Mono" />
+<PolicySet name="LGG.mdpolicy">
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp">
+    <TabsToSpaces>False</TabsToSpaces>
+  </TextStylePolicy>
   <CSharpFormattingPolicy inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp">
     <NamespaceBraceStyle>EndOfLineWithoutSpace</NamespaceBraceStyle>
     <ClassBraceStyle>EndOfLineWithoutSpace</ClassBraceStyle>
@@ -37,6 +37,11 @@
     <UsingParentheses>False</UsingParentheses>
     <SpacesBeforeBrackets>False</SpacesBeforeBrackets>
   </CSharpFormattingPolicy>
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain">
+    <TabsToSpaces>False</TabsToSpaces>
+  </TextStylePolicy>
+  <VersionControlPolicy inheritsSet="Mono" />
+  <ChangeLogPolicy inheritsSet="Mono" />
   <NameConventionPolicy>
     <Rules>
       <NamingRule>
@@ -216,11 +221,19 @@
       </NamingRule>
     </Rules>
   </NameConventionPolicy>
-  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp">
-    <TabsToSpaces>False</TabsToSpaces>
-  </TextStylePolicy>
   <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="application/xml">
     <TabsToSpaces>False</TabsToSpaces>
   </TextStylePolicy>
   <XmlFormattingPolicy inheritsSet="Mono" inheritsScope="application/xml" scope="application/xml" />
+  <DotNetNamingPolicy>
+    <DirectoryNamespaceAssociation>None</DirectoryNamespaceAssociation>
+    <ResourceNamePolicy>FileFormatDefault</ResourceNamePolicy>
+  </DotNetNamingPolicy>
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-shader">
+    <TabsToSpaces>False</TabsToSpaces>
+  </TextStylePolicy>
+  <TextStylePolicy inheritsSet="Mono" inheritsScope="text/plain" scope="text/x-unitytxt" />
+  <TextStylePolicy inheritsSet="VisualStudio" inheritsScope="text/plain" scope="application/javascript">
+    <TabsToSpaces>False</TabsToSpaces>
+  </TextStylePolicy>
 </PolicySet>

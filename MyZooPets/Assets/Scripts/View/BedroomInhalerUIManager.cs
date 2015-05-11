@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 
 public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
-
 	public Animation inhalerAnimationController;
 	public GameObject fireOrbParent;
 	public GameObject starParticle;
@@ -13,17 +12,12 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	public UILabel coolDownLabel;
 	public UISprite coolDownSprite;
 
-	private GameObject fireOrbObject;
-
-	public GameObject FireOrbReference{
-		get{
-			return fireOrbObject;
-		}
-	}
+	private bool isCoolDownMode = false;
+	private bool isInitialCalculatedOffsetCached = false;
+	private TimeSpan initialCalculatedOffset;
 
 	// Start the correct animations based on its state
 	void Start(){
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod += OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 
 		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
@@ -31,62 +25,18 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		}
 		else{
 			CoolDownMode();
-
-			if(!TutorialManager.Instance.IsTutorialActive())
-				CheckToDropFireOrb();
 		}
 	}
 
 	void OnDestroy(){
-		PlayPeriodLogic.OnUpdateTimeLeftTillNextPlayPeriod -= OnUpdateTimeLeft;
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
-	}
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(0, 0, 100, 100), "start")){
-//			CheckToDropFireOrb();
-//		}
-//	}
-
-	/// <summary>
-	/// Checks to drop fire orb.
-	/// If user hasn't received fire orb after using inhaler, a fire orb will be 
-	/// dropped from the inhaler
-	/// </summary>
-	public void CheckToDropFireOrb(){
-		bool hasReceivedFireOrb = DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb;
-		if(!hasReceivedFireOrb){
-			//spawn fire orb
-			GameObject fireOrbPrefab = Resources.Load("DroppedItemFireOrb") as GameObject;
-			fireOrbObject = NGUITools.AddChild(fireOrbParent, fireOrbPrefab);
-
-			fireOrbObject.layer = LayerMask.NameToLayer("Default");
-			fireOrbObject.transform.parent = fireOrbParent.transform;
-			DroppedObjectItem droppedObjectItem = fireOrbObject.GetComponent<DroppedObjectItem>();
-
-			Item fireOrbData = DataLoaderItems.GetItem("Usable1");
-
-			droppedObjectItem.Init(fireOrbData);
-			droppedObjectItem.ChangeAutoCollectTime(15f);
-
-			fireOrbObject.SetActive(false);
-
-			//Activate animation here
-			Invoke("SpawnFireOrb", 1.5f);
-
-			DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = true;
-		}
-	}
-
-	private void SpawnFireOrb(){
-		inhalerAnimationController.Play("SpawnFireOrb");
-		fireOrbObject.SetActive(true);
 	}
 
 	/// <summary>
 	/// Cools down mode.
 	/// </summary>
 	private void CoolDownMode(){
+		isCoolDownMode = true;
 		inhalerAnimationController.Stop();
 		starParticle.SetActive(false);
 		rechargeParticle.SetActive(true);
@@ -94,12 +44,15 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		coolDownLabel.enabled = true;
 		progressBar3D.animation.Stop();
 		progressBar3D.transform.localScale = Vector3.one;
+		
+		isInitialCalculatedOffsetCached = false;	// Force recalculate the cache
 	}
 
 	/// <summary>
 	/// Readies to use mode.
 	/// </summary>
 	private void ReadyToUseMode(){
+		isCoolDownMode = false;
 		inhalerAnimationController.Play("roomEntrance");
 		starParticle.SetActive(true);
 		rechargeParticle.SetActive(false);
@@ -107,38 +60,29 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		coolDownLabel.enabled = false;
 		coolDownSprite.fillAmount = 1f;
 		progressBar3D.animation.Play();
-
-		DataManager.Instance.GameData.Inhaler.HasReceivedFireOrb = false;
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){
 		ReadyToUseMode();
 	}
 
-	/// <summary>
-	/// Raises the update time left event. Keep updating the cool down timer
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnUpdateTimeLeft(object sender, PlayPeriodEventArgs args){
-		TimeSpan timeLeft = args.TimeLeft;
-		string displayTime = "";
+	void Update(){
+		if(isCoolDownMode){
+			// Update the cool down timer
+			TimeSpan timeLeft = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
+			coolDownLabel.text = StringUtils.FormatTimeLeft(timeLeft);
 
-		if(timeLeft.Hours > 0)
-			displayTime = string.Format("{0}[FFFF33]h[-] {1}[FFFF33]m[-] {2}[FFFF33]s[-]", 
-			                            timeLeft.Hours, timeLeft.Minutes, timeLeft.Seconds);
-		else if(timeLeft.Minutes > 0)
-			displayTime = string.Format("{0}[FFFF33]m[-] {1}[FFFF33]s[-]", timeLeft.Minutes, timeLeft.Seconds);
-		else
-			displayTime = string.Format("{0}[FFFF33]s[-]", timeLeft.Seconds);
+			DateTime initialSavedTime = PlayPeriodLogic.Instance.GetLastInhalerTime();
+			TimeSpan timeOffset = LgDateTime.GetTimeNow() - initialSavedTime;
 
-		
-		// set the label
-		coolDownLabel.text = displayTime;
+			// Calculate the denomicator once and cache it
+			if(!isInitialCalculatedOffsetCached){
+				initialCalculatedOffset = PlayPeriodLogic.Instance.NextPlayPeriod - initialSavedTime;
+				isInitialCalculatedOffsetCached = true;
+			}
 
-		TimeSpan totalRemainTime = PlayPeriodLogic.Instance.TotalTimeRemain;
-		float completePercentage = ((float)totalRemainTime.TotalMinutes - (float)timeLeft.TotalMinutes) / (float)totalRemainTime.TotalMinutes;
-		coolDownSprite.fillAmount = completePercentage;
+			float completePercentage = (float)timeOffset.TotalMinutes / (float)initialCalculatedOffset.TotalMinutes;
+			coolDownSprite.fillAmount = completePercentage;
+		}
 	}
-	
 }

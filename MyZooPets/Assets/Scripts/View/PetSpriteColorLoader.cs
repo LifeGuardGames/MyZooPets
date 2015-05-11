@@ -18,10 +18,8 @@ public class PetSpriteColorLoader : MonoBehaviour {
 					Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
 				}
 				else{
-					if(Application.loadedLevelName == "MenuScene"){
-						string petID = transform.parent.parent.name;
-						MutableDataPetMenuInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
-
+					if(Application.loadedLevelName == SceneUtils.MENU){
+						MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
 						LoadAndSetColor(petMenuInfo.PetColor);
 					}
 					else{

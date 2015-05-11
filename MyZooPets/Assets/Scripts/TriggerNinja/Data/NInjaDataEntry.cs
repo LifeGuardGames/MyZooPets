@@ -25,6 +25,12 @@ public class NinjaDataEntry {
 	public int GetBombs() {
 		return nBombs;
 	}
+
+	// # of powerUps in the entry
+	private int nPowUp;
+	public int GetPowUp() {
+		return nPowUp;
+	}
 	
 	// time this entry should go off
 	private float fTime;
@@ -42,7 +48,10 @@ public class NinjaDataEntry {
 		
 		// # of bombs in the entry
 		nBombs = int.Parse( HashUtils.GetHashValue<string>( hashAttr, "Bombs", "0" ) );
-		
+
+		// # of bombs in the entry
+		nPowUp = int.Parse( HashUtils.GetHashValue<string>( hashAttr, "PowerUp", "0" ) );
+
 		// time this entry should be spawned
 		fTime = float.Parse( HashUtils.GetHashValue<string>( hashAttr, "Time", "0", strError ) );
 	}

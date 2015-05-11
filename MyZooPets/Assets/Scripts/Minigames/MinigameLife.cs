@@ -31,10 +31,6 @@ public class MinigameLife : MonoBehaviour{
 			NinjaManager.OnNewGame += OnNewGame;
 			NinjaManager.OnLivesChanged += OnLivesChanged;			
 		}
-		else if(DGTManager.Instance != null){
-			DGTManager.OnNewGame += OnNewGame;
-			DGTManager.OnLivesChanged += OnLivesChanged;			
-		}
 		else if(DoctorMatchManager.Instance != null){
 			DoctorMatchManager.OnNewGame += OnNewGame;
 			DoctorMatchManager.OnLivesChanged += OnLivesChanged;			
@@ -82,9 +78,6 @@ public class MinigameLife : MonoBehaviour{
 		int nLives = 0;
 		if(NinjaManager.Instance != null){
 			nLives = NinjaManager.Instance.GetLives();
-		}
-		else if(DGTManager.Instance != null){
-			nLives = DGTManager.Instance.GetLives();
 		}
 		else if(DoctorMatchManager.Instance != null){
 			nLives = DoctorMatchManager.Instance.GetLives();

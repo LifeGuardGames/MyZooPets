@@ -40,8 +40,9 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			
 			AddToProcessList(fireOrbItemReference);
 			
-			fireOrbFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
-			                                                     (GameObject)Resources.Load("FireOrbFingerHint"));
+			fireOrbFingerHint = GameObjectUtils.AddChildWithPositionAndScale(
+				GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
+             	(GameObject)Resources.Load("FireOrbFingerHint"));
 			
 			// set the hint to the right spawn location
 			Vector3 hintPosition = fireOrbItemPosition;
@@ -53,10 +54,9 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			                                                                    InterfaceAnchors.Center, 
 			                                                                    InterfaceAnchors.BottomRight);
 			fireButtonPosition.z = fireOrbFingerHint.transform.localPosition.z;
-			
-			Hashtable optional = new Hashtable();
-			optional.Add("repeat", 0);
-			LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 3f, optional);
+
+			LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 2f)
+				.setLoopClamp().setRepeat(-1).setEase(LeanTweenType.easeInOutQuad);
 		}
 		catch(NullReferenceException e){
 			Debug.LogError(e.Message);

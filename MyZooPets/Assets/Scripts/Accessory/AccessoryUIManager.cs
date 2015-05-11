@@ -15,31 +15,32 @@ using System.Collections.Generic;
 /// 	AccessoryUIManager -> AccessoryNodeController -> AccessoryNode
 /// 
 /// </summary>
-public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
+public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public UIGrid grid;
 	public GameObject accessoryTitlePrefab;
 	public GameObject accessoryEntryPrefab;
 	public GameObject backButton;
 	public GameObject zoomItem;
-	public EntranceHelperController entranceHelper;
-	
+
 	// related to zooming into the badge board
-	public float ZoomTime;
+	public float zoomTime;
 	public Vector3 zoomOffset;
 	public Vector3 zoomRotation;
-
 	public string soundBuy;
 	public string soundUnequip;
 	public string soundEquip;
-
 	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
 	private bool isActive = false;
+	//temp variable for pet scale
+	private Vector3 petScale;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.Accessory;
 	}
 
-	void Start(){
+	protected override void Start(){
+		base.Start();
 		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
 
 		// Populate the entries with loaded data
@@ -50,7 +51,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			// Create a new accessory type label if lastCategory has changed
 			if(lastCategory != accessory.AccessoryType || isFirstTitle){
 				isFirstTitle = false;
-				GameObject itemUIObject = LgNGUITools.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
+				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
 				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
 
 				switch((AccessoryTypes)accessory.AccessoryType){
@@ -74,21 +75,27 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
 		}
+		grid.Reposition();
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
-
-
 
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
 			// Zoom into the item
 			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
-			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, ZoomTime, this.gameObject);
-			
+
+			CameraManager.Callback cameraDoneFunction = delegate(){
+				CameraMoveDone();
+			};
+			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, zoomTime, cameraDoneFunction);
+
+			FirstInteraction.Instance.SetString("Accessory");
+
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
@@ -96,7 +103,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 			//need to disable more things here
 			PetAnimationManager.Instance.DisableIdleAnimation();
-			
+			PetMovement.Instance.canMove = false;
 			isActive = true;
 			zoomItem.collider.enabled = false;
 			
@@ -104,14 +111,24 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 		}
 	}
 
+	/// <summary>
+	/// Show the ui once camera is done zooming in.
+	/// </summary>
+	private void CameraMoveDone(){
+		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
+		toggleDemux.Show();
+		toggleDemux.ShowTarget = this.gameObject;
+		toggleDemux.ShowFunctionName = "MovePet";
+	}
+
 	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){
 		if(isActive){
 			this.GetComponent<TweenToggleDemux>().Hide();
-			
+			PetMovement.Instance.canMove = true;
 			isActive = false;
 			zoomItem.collider.enabled = true;
-			
+
 			CameraManager.Instance.ZoomOutMove();
 			PetAnimationManager.Instance.EnableIdleAnimation();
 			
@@ -125,26 +142,15 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 	}
 
 	/// <summary>
-	/// show the ui once camera is done zooming in.
-	/// </summary>
-	private void CameraMoveDone(){
-
-		// disable entrance highlight after zoomed in for the first time
-		entranceHelper.EntranceUsed();
-
-		TweenToggleDemux toggleDemux = this.GetComponent<TweenToggleDemux>();
-		toggleDemux.Show();
-		toggleDemux.ShowTarget = this.gameObject;
-		toggleDemux.ShowFunctionName = "MovePet";
-	}
-
-	/// <summary>
 	/// Move pet into accessory view after camera is done zooming in
 	/// </summary>
 	private void MovePet(){
+		GameObject pet = GameObject.Find("Pet");
 		//teleport first then walk into view
-		PetMovement.Instance.petSprite.transform.position = new Vector3(-13f, 0, 33f);
-		PetMovement.Instance.MovePet(new Vector3(-17f, 0, 33f));
+		if(!pet.renderer.isVisible)
+		PetMovement.Instance.petSprite.transform.position = new Vector3(-4f, 0, 26.65529f);
+		PetMovement.Instance.MovePet(new Vector3(-8f, 0, 26.65529f));
+
 	}
 
 	/// <summary>
@@ -165,7 +171,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 				buyButton.isEnabled = false;
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
+				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
 
 				// Change the state of the button
 				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
@@ -175,37 +181,16 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager> {
 
 				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-				
+
+				//Check for badge unlock
+				int totalNumOfAccessories = DataManager.Instance.GameData.Inventory.AccessoryItems.Count;
+				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
+
 				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
-				AudioManager.Instance.PlayClip("buttonDontClick");
-			}
-			break;
-		case CurrencyTypes.Gem:
-			if(StatsController.Instance.GetStat(HUDElementType.Gems) >= itemData.Cost){
-				
-				//Disable the buy button so user can't buy the same wallpaper anymore 
-				UIImageButton buyButton = button.GetComponent<UIImageButton>();
-				buyButton.isEnabled = false;
-				
-				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: (int)itemData.Cost * -1);
-				
-				// Change the state of the button
-				button.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
-
-				// Equip item
-				Equip(itemID);
-
-				//Analytics
-				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-				
-				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
-			}
-			else{
+				HUDUIManager.Instance.PlayNeedMoneyAnimation();
 				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;

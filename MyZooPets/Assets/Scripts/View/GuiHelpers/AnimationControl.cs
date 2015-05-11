@@ -7,12 +7,14 @@ using System.Collections;
 /// </summary>
 
 public class AnimationControl : MonoBehaviour {
-	
+	public Animation thisAnimation;
 	public bool resetAfterStop = false;
 	private Vector3 originalPostion;
 	private Quaternion originalRotation;
 	private Vector3 originalScale;
-	
+	public GameObject optionalToggle;	// for use on SunBeamRotating and things like that
+	public ParticleSystem optionalParticle;
+
 	public bool debug = false;
 	
 	private bool isPlay = false;
@@ -24,32 +26,73 @@ public class AnimationControl : MonoBehaviour {
 		originalRotation = gameObject.transform.localRotation;
 		originalScale = gameObject.transform.localScale;
 	}
-	
+
+	void Start(){
+		if(optionalToggle){
+			optionalToggle.SetActive(false);
+		}
+
+		if(thisAnimation == null){
+			thisAnimation = animation;
+		}
+	}
+
 	void Update(){
-		if(isLooping && isPlay && !animation.isPlaying){
-			animation.Play();
+		if(isLooping && isPlay && !thisAnimation.isPlaying){
+			thisAnimation.Play();
 		}
 	}
 	
 	public void Play(string animationName){
 		isPlay = true;
-		animation.Play(animationName);
+		thisAnimation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		thisAnimation.Play(animationName);
+
+		if(optionalToggle){
+			optionalToggle.SetActive(true);
+		}
 	}
 	
+	public void Play(bool isPlayParticle){
+		isPlay = true;
+		thisAnimation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		thisAnimation.Play();
+
+		if(optionalToggle){
+			optionalToggle.SetActive(true);
+		}
+
+		if(optionalParticle && isPlayParticle){
+			optionalParticle.Play();
+		}
+	}
+
 	public void Play(){
 		isPlay = true;
-		animation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
-		animation.Play();
+		thisAnimation.wrapMode = isLooping ? WrapMode.Loop : WrapMode.Once;
+		thisAnimation.Play();
+		
+		if(optionalToggle){
+			optionalToggle.SetActive(true);
+		}
+		
+		if(optionalParticle){
+			optionalParticle.Play();
+		}
 	}
 
 	public bool IsPlaying(string animName){
-		return animation.IsPlaying(animName);
+		return thisAnimation.IsPlaying(animName);
 	}
-		
+
 	public void Stop(){
 		isPlay = false;
-		animation.Stop();
-		
+		thisAnimation.Stop();
+
+		if(optionalToggle){
+			optionalToggle.SetActive(false);
+		}
+
 		if(resetAfterStop){
 			gameObject.transform.localPosition = originalPostion;
 			gameObject.transform.localRotation = originalRotation;
@@ -74,7 +117,7 @@ public class AnimationControl : MonoBehaviour {
 //				Play();
 //			}
 //			if(GUI.Button(new Rect(200, 100, 100, 100), "Stop + Reset")){
-//				//Play("smallBounceSoftWellapad");
+//					//Play("smallBounceHard");
 //				StopAndResetFrame("zero");
 //			}
 //		}

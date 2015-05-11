@@ -139,13 +139,12 @@ public class LgButton : MonoBehaviour{
 	protected virtual void ProcessClick(){
 	}
 
-	protected void PlayNotProcessSound(){
+	protected virtual void PlayNotProcessSound(){
 		string sound = "buttonDontClick";
 		
 		if(!string.IsNullOrEmpty(sound)){
 			AudioManager.Instance.PlayClip(sound);
 		}
-			
 	}
 
 	/// <summary>

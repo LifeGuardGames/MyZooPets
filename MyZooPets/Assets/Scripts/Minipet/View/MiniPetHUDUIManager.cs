@@ -4,54 +4,131 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
-
-	public static EventHandler<EventArgs> OnLevelUpAnimationCompleted;
-
 	public UILabel nameLabel;
-	public GameObject tickleCheckBox;
-	public GameObject cleanCheckBox;
 
-	public UILabel labelFeedCount;
-	public UILabel labelFeed;
-	public UISprite spriteFeed;
-	public TweenToggle feedParent;
+	public TweenToggle storeTweenParent;
+	private TweenToggle contentTweenParent;
 
 	public Animation storeButtonPulseAnim;
 	public GameObject storeButtonSunbeam;
 
-	public Animation levelUpDropdown;
-	public GameObject tutorialParent;
+	public GameObject contentParent;
 	public GameObject petReference;
 
-	private GameObject cleaningTutorialObject;
-	private GameObject ticklingTutorialObject;
+	public ParticleSystem experienceParticle;
+	public ParticleSystem levelUpParticle;
 
-	/// <summary>
-	/// Gets or sets a value indicating whether feeding is lock because lv up
-	/// animation is happening right now.
-	/// </summary>
-	/// <value><c>true</c> if this instance is level up animation lock on; otherwise, <c>false</c>.</value>
-	public bool IsLevelUpAnimationLockOn {get; set;}
+	private GameObject content;
+	private MiniPetTypes minipetType = MiniPetTypes.None;
 
 	/// <summary>
 	/// Gets or sets the selected mini pet ID. Need to be set before the HUD
-	/// panel is opened. 
+	/// panel is opened.
 	/// </summary>
 	/// <value>The selected mini pet ID.</value>
 	public string SelectedMiniPetID {get; set;}
 	public string SelectedMiniPetName {get; set;}
 	public GameObject SelectedMiniPetGameObject {get; set;}
+	public MonoBehaviour SelectedMiniPetContentUIScript {get; set;}
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.MiniPet;
-		IsLevelUpAnimationLockOn = false;
+	}
+
+	// Called from minipet script children themselves
+	public void OpenUIMinipetType(MiniPetTypes type, Hashtable hash, MonoBehaviour baseScript){
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() || type == MiniPetTypes.Retention){
+			GameObject contentPrefab;
+			switch(type){
+			case MiniPetTypes.Retention:
+				minipetType = MiniPetTypes.Retention;
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString())){
+//					Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus);
+					if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
+					   || DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
+
+						contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
+						content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+
+						MiniPetRetentionUIController minipetRetentionUIController = content.GetComponent<MiniPetRetentionUIController>();
+						minipetRetentionUIController.InitializeContent(hash[0].ToString(), (MiniPetRetentionPet)baseScript);
+						SelectedMiniPetContentUIScript = minipetRetentionUIController;
+
+						if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){
+							contentTweenParent = content.GetComponent<TweenToggle>();
+							//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
+							if (contentTweenParent != null){
+								StartCoroutine(ShowContentHelper());
+							}
+						}
+					}
+				}
+				break;
+
+			case MiniPetTypes.GameMaster:
+				minipetType = MiniPetTypes.GameMaster;
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
+				   ||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
+
+					contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
+					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+
+					MinigameTypes minigameType = (MinigameTypes)Enum.Parse(typeof(MinigameTypes), hash[1].ToString());
+
+					MiniPetGameMasterUIController minipetGameMasterUIController = content.GetComponent<MiniPetGameMasterUIController>();
+					minipetGameMasterUIController.InitializeContent(hash[0].ToString(), minigameType, (MiniPetGameMaster)baseScript);
+					SelectedMiniPetContentUIScript = minipetGameMasterUIController;
+
+					if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){
+						contentTweenParent = content.GetComponent<TweenToggle>();
+						//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
+						if (contentTweenParent != null){
+							StartCoroutine(ShowContentHelper());
+						}
+					}
+				}
+				break;
+
+			case MiniPetTypes.Merchant:
+				minipetType = MiniPetTypes.Merchant;
+				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
+				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
+
+				ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), hash[1].ToString());
+				MiniPetMerchantUIController minipetMerchantUIController = content.GetComponent<MiniPetMerchantUIController>();
+				minipetMerchantUIController.InitializeContent(hash[0].ToString(), false, itemType, (MiniPetMerchant)baseScript);
+				SelectedMiniPetContentUIScript = minipetMerchantUIController;
+
+				if(TutorialManager.Instance == null || !TutorialManager.Instance.IsTutorialActive()){
+					contentTweenParent = content.GetComponent<TweenToggle>();
+					//if(IsOpen() && (contentTweenParent != null)){	// Pet just finished eating, show asap HACK
+					if (contentTweenParent != null){
+						StartCoroutine(ShowContentHelper());
+					}
+				}
+				break;
+
+			default:
+				minipetType = MiniPetTypes.None;
+				Debug.LogError("No minipet type found: " + type.ToString());
+				return;
+			}
+		}
+	}
+
+	private IEnumerator ShowContentHelper(){
+		yield return new WaitForSeconds(1.0f);
+		if(contentTweenParent != null){
+			contentTweenParent.Show();
+		}
 	}
 
 	#region Overridden functions
 	protected override void _OpenUI(){
+		nameLabel.text = SelectedMiniPetName;
 		this.GetComponent<TweenToggleDemux>().Show();
-		MiniPetManager.MiniPetStatusUpdate += RefreshUI;
-		RefreshUI(this, new MiniPetManager.StatusUpdateEventArgs());
+		storeTweenParent.Show();
 
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
@@ -64,10 +141,11 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	protected override void _CloseUI(){
 		this.GetComponent<TweenToggleDemux>().Hide();
-		feedParent.Hide();
-		CheckStoreButtonPulse();
-		MiniPetManager.MiniPetStatusUpdate -= RefreshUI;
+		minipetType = MiniPetTypes.None;
 
+		storeTweenParent.Hide();
+		CheckStoreButtonPulse();
+		PetSpeechManager.Instance.BeQuiet();
 		//Show other UI Objects
 		NavigationUIManager.Instance.ShowPanel();
 		HUDUIManager.Instance.ShowPanel();
@@ -75,151 +153,31 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		RoomArrowsUIManager.Instance.ShowPanel();
 		PetAnimationManager.Instance.EnableVisibility();
 		PetAudioManager.Instance.EnableSound = true;
-
-		if(cleaningTutorialObject != null)
-			Destroy(cleaningTutorialObject);
-
-		if(ticklingTutorialObject != null)
-			Destroy(ticklingTutorialObject);
-
+		DecoInventoryUIManager.Instance.HideDecoInventory();
+		if(content != null){
+			Destroy(content.gameObject);
+		}
 		CameraManager.Instance.ZoomOutMove();
 	}
 	#endregion
-
-	/// <summary>
-	/// Refreshs the UI whenever MP data have been updated
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void RefreshUI(object sender, MiniPetManager.StatusUpdateEventArgs args){
-		bool isTickled = MiniPetManager.Instance.IsTickled(SelectedMiniPetID);
-		bool isCleaned = MiniPetManager.Instance.IsCleaned(SelectedMiniPetID);
-
-		tickleCheckBox.SetActive(isTickled);
-		cleanCheckBox.SetActive(isCleaned);
-
-		RefreshFoodItemUI();
-
-		nameLabel.text = SelectedMiniPetName;
-		UpdateLevelUI();
-
-		switch(args.UpdateStatus){
-		case MiniPetManager.UpdateStatuses.LevelUp:
-			// Start all level up logic here
-			CloseUI();
-
-			levelUpDropdown.Play();
-			IsLevelUpAnimationLockOn = true;
-
-			LevelUpAnimationCompleted();
-			break;
-		case MiniPetManager.UpdateStatuses.FirstTimeCleaning:
-			if(cleaningTutorialObject != null){
-				Destroy(cleaningTutorialObject.gameObject);
-			}
-
-			Invoke("CheckForTicklingTutorial", 2f);
-
-			break;
-		case MiniPetManager.UpdateStatuses.FirstTimeTickling:
-			if(ticklingTutorialObject != null)
-				Destroy(ticklingTutorialObject.gameObject);
-			break;
-		}
-		CheckForCleaningTutorial();
-	}
-
-	private void UpdateLevelUI(){
-		int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-
-		// update level slider
-		if(nextLevelUpCondition != -1){
-			//TODO Need this?
-		}
-		else{// Max level
-			//TODO Design what happens here
-		}
-	}
-
-	/// <summary>
-	/// Level up animation completed. 
-	/// Actually increase the level after level up animation is done.
-	/// </summary>
-	public void LevelUpAnimationCompleted(){
-		MiniPetManager.Instance.IncreaseCurrentLevelAndResetCurrentFoodXP(SelectedMiniPetID);
-		IsLevelUpAnimationLockOn = false;	// Unlocked immediately... save for future use
-		
-		Invoke("CheckIfFirstTimeReceivingGems", 4f);
-		
-		if(OnLevelUpAnimationCompleted != null)
-			OnLevelUpAnimationCompleted(this, EventArgs.Empty);
-	}
-
-	/// <summary>
-	/// Checks if first time receiving gems. Show intro notification if first time
-	/// </summary>
-	private void CheckIfFirstTimeReceivingGems(){
-		bool isFirstTime = MiniPetManager.Instance.IsFirstTimeReceivingGems;
-		if(isFirstTime){
-			Hashtable notificationEntry = new Hashtable();
-			
-			PopupNotificationNGUI.Callback button1Function = delegate(){
-				OpenItemShop();
-				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
-			};
-			
-			PopupNotificationNGUI.Callback button2Function = delegate(){
-				MiniPetManager.Instance.IsFirstTimeReceivingGems = false;
-			};
-			
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.GemIntro);
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-			notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
-			
-			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-		}
-	}
-
-	private void CheckForTicklingTutorial(){
-		//check if tickling tutorial needs to be started
-		bool isFirstTimeTickling = MiniPetManager.Instance.IsFirstTimeTickling;
-		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
-		if(!isFirstTimeCleaning && isFirstTimeTickling){
-			//spawn tutorial here
-			if(ticklingTutorialObject == null){
-				GameObject ticklingTutorial = (GameObject) Resources.Load("PressTut");
-				
-				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
-				                                                                       SelectedMiniPetGameObject.transform.position);
-				selectedMiniPetLocation = CameraManager.Instance.TransformAnchorPosition(selectedMiniPetLocation, 
-				                                                                         InterfaceAnchors.BottomLeft, 
-				                                                                         InterfaceAnchors.Center);
-				selectedMiniPetLocation.z = 0;
-				ticklingTutorialObject = NGUITools.AddChild(tutorialParent, ticklingTutorial);
-				ticklingTutorialObject.transform.localPosition = selectedMiniPetLocation;
-			}
-		}
-	}
 	
 	/// <summary>
-	/// Check if cleaning tutorial needs to be spawned.
+	/// Checks the store button pulse.
+	/// This does all the check by itself so dont worry when calling this
 	/// </summary>
-	private void CheckForCleaningTutorial(){
-		bool isFirstTimeCleaning = MiniPetManager.Instance.IsFirstTimeCleaning;
-
-		if(isFirstTimeCleaning){
-			if(cleaningTutorialObject == null){
-				GameObject cleaningTutorial = (GameObject) Resources.Load("SwirlTut");
-				
-				Vector3 selectedMiniPetLocation = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
-				                                                                       SelectedMiniPetGameObject.transform.position);
-				selectedMiniPetLocation = CameraManager.Instance.TransformAnchorPosition(selectedMiniPetLocation, 
-				                                                                         InterfaceAnchors.BottomLeft, 
-				                                                                         InterfaceAnchors.Center);
-				selectedMiniPetLocation.z = 0;
-				cleaningTutorialObject = NGUITools.AddChild(tutorialParent, cleaningTutorial);
-				cleaningTutorialObject.transform.localPosition = selectedMiniPetLocation;
-			}
+	public void CheckStoreButtonPulse(){
+		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
+		bool isPetFed = !DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID);
+		
+		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && isPetFed){
+			storeButtonPulseAnim.Play();
+			storeButtonSunbeam.SetActive(true);
+		}
+		else{
+			storeButtonPulseAnim.Stop();
+			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
+			storeButtonSunbeam.SetActive(false);
 		}
 	}
 
@@ -228,7 +186,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// </summary>
 	private void OpenShop(){
 		this.GetComponent<TweenToggleDemux>().Hide();
-		feedParent.Hide();
+		storeTweenParent.Hide();
 
 		//sometimes this function will be called in a different mode, so we need
 		//to make sure the UIs are handled appropriately
@@ -249,16 +207,9 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	private void OpenFoodShopAfterWaiting(){
 		StoreUIManager.OnShortcutModeEnd += CloseShop;	
 		StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.MinipetUIStoreButton);
-	}
-
-	/// <summary>
-	/// Opens the item shop.
-	/// </summary>
-	private void OpenItemShop(){
-		this.GetComponent<TweenToggleDemux>().Hide();
-		ClickManager.Instance.Lock(UIModeTypes.Store);
-		StoreUIManager.OnShortcutModeEnd += CloseShop;
-		StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.GemExplanationNotification);
+		if(content != null){
+			content.GetComponent<TweenToggle>().Hide();
+		}
 	}
 
 	private void CloseShop(object sender, EventArgs args){
@@ -268,59 +219,33 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;
 		if(currentMode == UIModeTypes.MiniPet){
 			this.GetComponent<TweenToggleDemux>().Show();
-			if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
-				feedParent.Show();
+			if(content != null && minipetType == MiniPetTypes.Merchant){	// Keep the hud and open deco inventory
+				content.GetComponent<TweenToggle>().Show();
+				MiniPetMerchantUIController merchantUI = (MiniPetMerchantUIController)SelectedMiniPetContentUIScript;
+				merchantUI.ShowDecoInventoryHelper();
 			}
-			HUDUIManager.Instance.HidePanel();
-		}
+			else if(content != null){
+				content.GetComponent<TweenToggle>().Show();
+				HUDUIManager.Instance.HidePanel();
 
-		CheckStoreButtonPulse();
-	}
-
-	/// <summary>
-	/// Refreshs the food item UI
-	/// This does all the check by itself so dont worry when calling this
-	/// </summary>
-	public void RefreshFoodItemUI(){
-		if(MiniPetManager.Instance.CanModifyFoodXP(SelectedMiniPetID)){
-			int currentFoodXP = MiniPetManager.Instance.GetCurrentFoodXP(SelectedMiniPetID);
-			int nextLevelUpCondition = MiniPetManager.Instance.GetNextLevelUpCondition(SelectedMiniPetID);
-			labelFeedCount.text = (nextLevelUpCondition - currentFoodXP).ToString();
-			
-			labelFeedCount.gameObject.SetActive(true);
-			labelFeed.gameObject.SetActive(true);
-			Item item = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
-			spriteFeed.spriteName = item.TextureName;
-			spriteFeed.gameObject.SetActive(true);
-			spriteFeed.GetComponent<SpriteResizer>().Resize();
-			feedParent.Show();
-		}
-		else{
-			feedParent.Hide();
-			labelFeedCount.gameObject.SetActive(false);
-			labelFeed.gameObject.SetActive(false);
-			spriteFeed.spriteName = null;
-			spriteFeed.gameObject.SetActive(false);
+			}
+			else{
+				HUDUIManager.Instance.HidePanel();
+			}
+			storeTweenParent.Show();
 		}
 		CheckStoreButtonPulse();
 	}
 
-	/// <summary>
-	/// Checks the store button pulse.
-	/// This does all the check by itself so dont worry when calling this
-	/// </summary>
-	private void CheckStoreButtonPulse(){
-		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
-		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
+	public bool HasContent(){
+		return content == null ? false : true;
+	}
 
-		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen()){
-			storeButtonPulseAnim.Play();
-			storeButtonSunbeam.SetActive(true);
-		}
-		else{
-			storeButtonPulseAnim.Stop();
-			GameObjectUtils.ResetLocalScale(storeButtonPulseAnim.gameObject);
-			storeButtonSunbeam.SetActive(false);
-		}
+	public void GainedExperience(){
+		experienceParticle.Play();
+	}
+
+	public void GainedLevel(){
+		levelUpParticle.Play();
 	}
 }

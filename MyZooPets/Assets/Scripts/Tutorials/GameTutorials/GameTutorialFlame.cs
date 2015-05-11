@@ -8,10 +8,9 @@ using System.Collections.Generic;
 /// Explain to user how to use fire orb and blow fire.
 /// </summary>
 public class GameTutorialFlame : GameTutorial{
-//	GameObject fireOrbFingerHint;
 
 	public GameTutorialFlame() : base(){		
-		FireMeter.OnMeterFilled += OnMeterFilled;			// set up callback for when the player fully charges their meter
+		FireMeter.OnMeterFilled += OnMeterFilled;					// set up callback for when the player fully charges their meter
 		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
 		PetAnimationManager.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
 	}	
@@ -36,15 +35,15 @@ public class GameTutorialFlame : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 
 		switch(step){
-
 		case 0:
-
 			TutorialManager.Instance.StartCoroutine(FocusOnFlameButton());
-			
+
 			// show a little popup message telling the user to hold down the flame button
-			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, useViewPort: false, option: option);
+			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
+			ShowRetentionPet(false, new Vector3(270, -186, -160));
 			break;
 		case 1:
+			RemoveRetentionPet();
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
 			string stringKey = GetKey() + "_" + GetStep();
 			string tutMessage = String.Format(Localization.Localize(stringKey), petName);
@@ -52,8 +51,12 @@ public class GameTutorialFlame : GameTutorial{
 			option.Add(TutorialPopupFields.Message, tutMessage);
 			
 			// show a little popup message telling the user to let go to breath fire
-			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, useViewPort: false, option: option);
+			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
 			GatingManager.Instance.StartCoroutine(RemovePopupDelay());
+
+			// Check off the time that tutorial1 is done for next play period
+			TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
+			tutorialManager.CheckOffTutorial1DoneTime();
 			break;
 		}
 	}
@@ -81,8 +84,8 @@ public class GameTutorialFlame : GameTutorial{
 		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
 		if(goFlameButton != null){
 			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
-			                "TutorialSpotlightFlameButton", fingerHint: true, 
-			                fingerHintPrefab: "PressHoldTut", fingerHintOffsetY: 0f, 
+			                "TutorialSpotlightFlameButton", fingerHint: true,
+			                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 210f, fingerHintOffsetY: -40f,
 			                fingerHintFlip: true, delay: 0.5f);
 			
 			// add the fire button to the processable list
@@ -90,8 +93,9 @@ public class GameTutorialFlame : GameTutorial{
 			GameObject goButton = goFlameButton.transform.Find("ButtonParent/Button").gameObject;
 			AddToProcessList(goButton);
 		}
-		else
+		else{
 			Debug.LogError("No flame button...that means the game is going to break");
+		}
 	}
 
 	/// <summary>
@@ -130,9 +134,6 @@ public class GameTutorialFlame : GameTutorial{
 	private void OnBreathEnded(object sender, EventArgs args){
 		// unsub from callback
 		PetAnimationManager.OnBreathEnded -= OnBreathEnded;
-		
-		// at this point the user has done battle with the smoke monster, so I'm going to call highlight on a bogus task here just to unhighlight everything
-		WellapadMissionController.Instance.HighlightTask("");
 		
 		// pet began to breath fire, so advance the tut
 		Advance();

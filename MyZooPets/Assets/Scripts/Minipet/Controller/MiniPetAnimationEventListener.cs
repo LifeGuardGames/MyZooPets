@@ -1,19 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MiniPetAnimationEventListener : MonoBehaviour {
 	private bool isVisibleInScene = false; //T: allow sound cilp to be played
 
 	void Start(){
-		CameraManager.Instance.GetPanScript().OnPartitionChanged += CheckMiniPetVisibleInPartition;
+		CameraManager.Instance.PanScript.OnPartitionChanged += CheckMiniPetVisibleInPartition;
 
-		int currentPartition = CameraManager.Instance.GetPanScript().currentPartition;
-		string currentArea = GatingManager.Instance.currentArea;
+		int currentPartition = CameraManager.Instance.PanScript.currentLocalPartition;
+		string currentArea = GatingManager.Instance.CurrentZone;
+
 		CheckMiniPetVisibleInPartition(currentArea, currentPartition);
 	}
 
 	void OnDestroy(){
-//		CameraManager.Instance.GetPanScript().OnPartitionChanged -= CheckMiniPetVisibleInPartition;
+//		CameraManager.Instance.PanScript.OnPartitionChanged -= CheckMiniPetVisibleInPartition;
 	}
 
 	public void PlaySoundClip(string clipName){
@@ -36,18 +37,21 @@ public class MiniPetAnimationEventListener : MonoBehaviour {
 
 	private void CheckMiniPetVisibleInPartition(object sender, PartitionChangedArgs args){
 		int currentPartition = args.newPartition;
-		string currentArea = GatingManager.Instance.currentArea;
-
-		CheckMiniPetVisibleInPartition(currentArea, currentPartition);
+		string currentArea = GatingManager.Instance.CurrentZone; 
+		CheckMiniPetVisibleInPartition(currentArea,currentPartition);
 	}
 
-	private void CheckMiniPetVisibleInPartition(string currentArea, int currentPartition){
-		ImmutableDataGate gate = DataLoaderGate.GetData(currentArea, currentPartition);
-		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().ID;
-		
-		if(gate != null && miniPetID == gate.GetMiniPetID())
+	private void CheckMiniPetVisibleInPartition(string currentArea ,int currentPartition){
+		string miniPetID = this.transform.parent.parent.GetComponent<MiniPet>().MinipetId;
+		// Camera treats the yard as partition 00 and partition 01 instead of 05 and 06.... this is a work around
+		if( currentArea == "Yard"){
+			currentPartition += 5;
+		}
+		if(MiniPetManager.Instance.GetPartitionNumberForMinipet(miniPetID) == currentPartition){
 			isVisibleInScene = true;
-		else
+		}
+		else{
 			isVisibleInScene = false;
+		}
 	}
 }

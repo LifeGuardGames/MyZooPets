@@ -1,22 +1,19 @@
 <Sounds>
-	<Sound ID="petStart"> </Sound>
-	
-	<Sound ID="badgesClicked" Volume="1"> </Sound>
-	<Sound ID="badgesView"> </Sound>	
+	<Sound ID="badgeClicked"> </Sound>
+	<Sound ID="badgeView"> </Sound>
+	<Sound ID="badgeSlam"> </Sound>									<!-- || -->
 
-	<Sound ID="shopBuy"> </Sound>
-	<Sound ID="shopChangeTab"> </Sound>
-	<Sound ID="shopOpen"> </Sound>	
+	<Sound ID="shopBuy"> </Sound>									<!-- || -->
+	<Sound ID="shopChangeTab"> </Sound>								<!-- || -->
+	<Sound ID="shopOpen"> </Sound>									<!-- || -->
 	
 	<Sound ID="inhalerGive"> </Sound>
-	
-	<Sound ID="houseEntrance"> </Sound>
-	<Sound ID="notesOpen"> </Sound>
-	<Sound ID="invSound"> </Sound>	
-	<Sound ID="unlockRoom"> </Sound>	
+
+	<Sound ID="unlockRoom"> </Sound>
 	
 	<Sound ID="decoEnter"> </Sound>
-	<Sound ID="decoPlace"> </Sound>	
+	<Sound ID="decoPlaceFurniture" Volume="1"> </Sound>						<!-- || -->
+	<Sound ID="decoPlacePaper" Volume="1"> </Sound>							<!-- || -->
 	
 	<Sound ID="tutorialNext"> </Sound>
 	<Sound ID="tutorialFinished"> </Sound>	
@@ -26,24 +23,32 @@
 	<Sound ID="introClickEgg"> </Sound>
 	<Sound ID="introDoneNaming"> </Sound>
 	<Sound ID="introOpenLocalization"> </Sound>
-	<Sound ID="introSelectLanguage"> </Sound>
 	<Sound ID="introEggBounce" Volume="0.3"></Sound>
 	
-	<Sound ID="minigameGameOver"> </Sound>
-
-	<Sound ID="clinicCorrect" Volume="0.2"> </Sound>
-	<Sound ID="clinicGameOver"> </Sound>
-	<Sound ID="clinicSpeedUp"> </Sound>
-	<Sound ID="clinicSwitchTracks"> </Sound>
-	<Sound ID="clinicWrong" Volume="0.2"> </Sound>
-	<Sound ID="clinicReachedPivot" Volume="0.3"> </Sound>
+	<!--Egg sounds-->
+	<Sound ID="eggCrack1"> </Sound>									<!-- || -->
+	<Sound ID="eggCrack2"> </Sound>									<!-- || -->
+	<Sound ID="eggCrack3"> </Sound>									<!-- || -->
 	
-	<Sound ID="ninjaTargetHit"> </Sound>
-	<Sound ID="ninjaBombHit"> </Sound>
-	<Sound ID="ninjaTargetMissed"> </Sound>	
-	<Sound ID="swordCut"> </Sound>
+	<Sound ID="minigameGameOver" Volume="1.0"> </Sound>				<!-- || -->
+	<Sound ID="minigameError"> </Sound>								<!-- || -->
 	
-	<Sound ID="LevelUp"> </Sound>
+	<Sound ID="ninjaSlice1"> </Sound>								<!-- || -->
+	<Sound ID="ninjaSlice2"> </Sound>								<!-- || -->
+	<Sound ID="ninjaSlice3"> </Sound>								<!-- || -->
+	<Sound ID="ninjaBonus"> </Sound>								<!-- || -->
+	<Sound ID="ninjaTargetMissed"> </Sound>							<!-- || -->
+	<Sound ID="ninjaWhoosh1"> </Sound>								<!-- || -->
+	<Sound ID="ninjaWhoosh2"> </Sound>								<!-- || -->
+	<Sound ID="ninjaWhoosh3"> </Sound>								<!-- || -->
+	<Sound ID="ninjaLaunch1"> </Sound>								<!-- || -->
+	<Sound ID="ninjaLaunch2"> </Sound>								<!-- || -->
+	<Sound ID="ninjaLaunch3"> </Sound>								<!-- || -->
+	
+	<Sound ID="fanfare1"> </Sound>									<!-- || -->
+	<Sound ID="fanfare2"> </Sound>									<!-- || -->
+	<Sound ID="fanfare3"> </Sound>									<!-- || -->
+			
 	<Sound ID="CleanCockroach"> </Sound>
 	<Sound ID="CleanDust"> </Sound>
 	<Sound ID="StarsGain"> </Sound>
@@ -58,8 +63,22 @@
 	<Sound ID="runnerGameOver"> </Sound>
 	<Sound ID="runnerJumpUp" Volume="0.5"> </Sound>
 	<Sound ID="runnerJumpDown"> </Sound>
-	<Sound ID="runnerPowerup"> </Sound>	
-	<Sound ID="runnerSmokeHit"> </Sound>	
+	<Sound ID="runnerPowerup"> </Sound>
+	<Sound ID="runnerSmokeHit"> </Sound>
+	
+	<Sound ID="memoryCard1" Volume="0.8"></Sound>							<!-- || -->
+	<Sound ID="memoryCard2" Volume="0.8"></Sound>							<!-- || -->
+	<Sound ID="memorySuccess" Volume="1.0"></Sound>							<!-- || -->
+	
+	<Sound ID="shooterFire1"></Sound>										<!-- || -->
+	<Sound ID="shooterFire2"></Sound>										<!-- || -->
+	<Sound ID="shooterFire3"></Sound>										<!-- || -->
+	<Sound ID="shooterEnemyDie1"></Sound>									<!-- || -->
+	<Sound ID="shooterEnemyDie2"></Sound>									<!-- || -->
+	<Sound ID="shooterEnemyDie3"></Sound>									<!-- || -->
+	<Sound ID="shooterButtonSuccess"></Sound>								<!-- || -->
+	
+	<Sound ID="clinicCorrect"></Sound>								<!-- || -->
 	
 	<Sound ID="inhalerAttachSpacer"> </Sound>
 	<Sound ID="inhalerDone"> </Sound>
@@ -69,38 +88,23 @@
 	<Sound ID="inhalerShake"> </Sound>
 	<Sound ID="inhalerSqueeze"> </Sound>
 	<Sound ID="inhalerToMouth"> </Sound>
-	<Sound ID="inhalerFireFlow" Volume="0.5"></Sound>
-	<Sound ID="inhalerShiningFireIcon"></Sound>
 	
 	<Sound ID="DamageSmokeMonster"> </Sound>
 	<Sound ID="DefeatSmokeMonster"> </Sound>
 	<Sound ID="EnterSmokeMonster"> </Sound>	
 
-	<Sound ID="comicPetBurstsOut"></Sound>
-	<Sound ID="cantBlowFire"></Sound>
-	<Sound ID="comicPetInhales"></Sound>
-	<Sound ID="comicPetCoughs"></Sound>
-	<Sound ID="comicEggCracks"></Sound>
-	<Sound ID="comicPetSeesMonster"></Sound>
-	<Sound ID="comicReceivesWellapad"></Sound>
-	<Sound ID="seeSmogFactory"></Sound>
-	<Sound ID="comicSeesWellapad"></Sound>
-	<Sound ID="comicExplosionSuperwella"></Sound>
-	<Sound ID="comicSuperwellaFire"></Sound>
-
 	<!-- UIButton sounds -->
-	<Sound ID="buttonGeneric2" Volume="1.0"> </Sound>
-	<Sound ID="buttonDontClick" Volume="0.5"> </Sound>
+	<Sound ID="buttonGeneric2"> </Sound>
+	<Sound ID="buttonDontClick"> </Sound>
 	<Sound ID="effectXylophoneTing" Volume="0.9"> </Sound>
+	<Sound ID="fireShardGet"> </Sound>
+	<Sound ID="changeZone" Volume="0.9"> </Sound>
 
 	<!-- Super Wella -->
 	<Sound ID="superWellaInhalerTutorial" Volume="1.0"> </Sound>
 	<Sound ID="superWellaInhalerTonight" Volume="1.0"> </Sound>
 	<Sound ID="superWellaInhalerMorning" Volume="1.0"> </Sound>
 	<Sound ID="superWellaSick" Volume="1.0"> </Sound>
-	
-	<!-- Flame crystal spawn sounds -->
-	<Sound ID="crystalDrop" Volume="1.0"> </Sound>
 	
 	<!-- Fire button sounds -->
 	<Sound ID="fireCharge" Volume="1.0"> </Sound>
@@ -171,7 +175,6 @@
 	<Sound ID="yesHighFive2"> </Sound>
 	<Sound ID="yesHighFive3"> </Sound>
 	
-	<!--Minipet sounds-->
 	<!--Hatch Cutscene-->
 	<Sound ID="drumRoll"> </Sound>
 	<Sound ID="petHatch"> </Sound>

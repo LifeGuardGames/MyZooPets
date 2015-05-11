@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,20 +17,57 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	private int sequenceCount = 1;
 	private int answerSoFar;
 
+	public UILocalize parentPortalText;
 	public ParticleSystemController leafParticle;
-
 	public TweenToggle parentPortalTween;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.ParentPortal;
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		ParentPortalManager.OnDataRefreshed -= DataRefreshedHandler;
 	}
 
 	protected override void Start(){
 		ParentPortalManager.OnDataRefreshed += DataRefreshedHandler;
+
+		ParentPortalTextCheck();
+	}
+
+	/// <summary>
+	/// Check the trial status and membership status and display the appropriate text
+	/// </summary>
+	public void ParentPortalTextCheck(){
+		if(!Constants.GetConstant<bool>("IsMenusceneConnectionOn")){
+			Debug.LogWarning("Connection debug turned off");
+			return;
+		}
+
+		Debug.Log("Parent portal check");
+		MembershipCheck.Status membershipStatus = MembershipCheck.Instance.MembershipStatus;
+		MembershipCheck.Status trialStatus = MembershipCheck.Instance.TrialStatus;
+		
+		//Display trial message in parent portal
+		if(membershipStatus == MembershipCheck.Status.None){
+			if(trialStatus == MembershipCheck.Status.Active){
+				SetParentPortalText("PARENT_PORTAL_TEXT_TRIAL");
+			}
+			else{
+				SetParentPortalText("PARENT_PORTAL_TEXT_TRIAL_EXPIRED");
+			}
+		}
+		//Display membership message in parent portal
+		else{
+			if(membershipStatus == MembershipCheck.Status.Active){
+				SetParentPortalText("PARENT_PORTAL_TEXT_MEMBERSHIP_ACTIVE");
+			}
+			else{
+				SetParentPortalText("PARENT_PORTAL_TEXT_MEMBERSHIP_EXPIRED");
+			}
+		}
 	}
 
 	private void DataRefreshedHandler(object sender, ServerEventArgs args){
@@ -39,6 +77,7 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 
 	protected override void _OpenUI(){
 		leafParticle.Stop();
+		SubscriptionAlertController.Instance.HideAll();
 
 		OpenBackground();
 		OpenMathQuestion();
@@ -82,6 +121,12 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 		parentPortalTween.Hide();
 	}
 
+
+	private void SetParentPortalText(string key){
+		parentPortalText.key = key;
+		parentPortalText.Localize();
+	}
+
 	/// <summary>
 	/// Generates the math question.
 	/// NOTE: Answer will always be a 3 digit number
@@ -122,13 +167,11 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 	private void CheckAnswer(){
 		if(answerSoFar == answerToMath){
 			// Success, go into parent portal
-			Debug.Log("Success!");
 			parentPortalTween.Show();
 			mathTween.Hide();
 		}
 		else{
 			// Fail, start over
-			Debug.Log("You're stupid!");
 			GenerateMathQuestion();
 		}
 	}
@@ -153,3 +196,4 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 //		}
 //	}
 }
+*/

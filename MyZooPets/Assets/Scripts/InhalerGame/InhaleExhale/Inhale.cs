@@ -10,6 +10,7 @@ public class Inhale : InhalerPart{
 //	public Animator animator;
 	public Animation InhalerBodyMoveAnimation;
 
+	public static EventHandler<EventArgs> finish;
 	protected override void Awake(){
 		base.Awake();
 		gameStepID = 7;
@@ -19,7 +20,7 @@ public class Inhale : InhalerPart{
 	void OnSwipe(SwipeGesture gesture){
 		FingerGestures.SwipeDirection direction = gesture.Direction; 
 
-		if(direction == FingerGestures.SwipeDirection.Up){
+		if(direction == FingerGestures.SwipeDirection.Left){
 			if(!isGestureRecognized){
 				isGestureRecognized = true;
 
@@ -37,8 +38,43 @@ public class Inhale : InhalerPart{
 				option.Add("color", Color.white);
 				
 				FloatyUtil.SpawnFloatyText(option);
-				
+				if(finish != null){
+					finish(this, EventArgs.Empty);
+				}
 				InhalerBodyMoveAnimation.Play();
+			}
+		}
+	}
+	void OnDrag(DragGesture gesture){
+		if(!isGestureRecognized){
+			Vector3 begin = new Vector3 (0,0,0);
+			Vector3 ended;
+
+			if(gesture.Phase == ContinuousGesturePhase.Ended){
+				ended = gesture.Position;
+				begin = gesture.StartPosition;
+				if(begin.x > ended.x){
+				isGestureRecognized = true;
+				
+				//Disable hint when swipe gesture is registered. 
+				GetComponent<HintController>().DisableHint(false);
+				
+				LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
+				AudioManager.Instance.PlayClip("inhalerInhale"); 
+				petAnimator.SetTrigger("BreatheIn");
+				
+				Hashtable option = new Hashtable();
+				option.Add("parent", GameObject.Find("Anchor-Center"));
+				option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+				option.Add("textSize", 100f);
+				option.Add("color", Color.white);
+				
+				FloatyUtil.SpawnFloatyText(option);
+				if(finish != null){
+					finish(this, EventArgs.Empty);
+				}
+				InhalerBodyMoveAnimation.Play();
+				}
 			}
 		}
 	}
@@ -54,7 +90,6 @@ public class Inhale : InhalerPart{
 	protected override void NextStep(){
 		base.NextStep();
 		Destroy(gameObject);
-
 	}
 
 	private void BreatheInEndEventHandler(object sender, EventArgs args){
@@ -62,13 +97,9 @@ public class Inhale : InhalerPart{
 		InhalerGameProgressBarUIManager.Instance.UpdateNodeColors();
 		petAnimator.SetTrigger("Backflip");
 
-//		// Hide the inhaler
+		// Hide the inhaler
 		InhalerGameUIManager.Instance.HideInhaler();
 
-		//using invoke instead of listening to animationController callback
-		//because LWFAnimator sometimes sends callback prematurely. Don't
-		//want to debug LWFAnimator since we are switching away from it soon
-		Invoke("NextStep", 3.5f);
+		NextStep();
 	}
-	
 }

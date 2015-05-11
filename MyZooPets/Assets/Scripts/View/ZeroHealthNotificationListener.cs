@@ -23,7 +23,7 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
 
 			StatsController.Instance.ChangeStats(deltaStars: -1 * hospitalBillCost,
 			                                     deltaHealth: 100, deltaMood: -1 * moodPunishment,
-			                                     bPlaySounds: true, bFloaty: false);
+			                                     isPlaySounds: true, isFloaty: false);
 
             //Register the handler again after the notification has been cleared
             StatsController.OnZeroHealth += OnZeroHealthNotification;

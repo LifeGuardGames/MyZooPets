@@ -21,6 +21,6 @@ public class CutsceneControllerMinipetHatchPebble : CutsceneController {
 	}
 	
 	public void playHatchAudio(){
-		AudioManager.Instance.PlayClip("petHatch");
+		AudioManager.Instance.PlayClip("fanfare3");
 	}
 }

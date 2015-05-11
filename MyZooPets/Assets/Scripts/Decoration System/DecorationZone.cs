@@ -7,11 +7,6 @@ using System.Collections;
 /// This is the replacement for decoration nodes in V1.3.4 update
 /// This is the zone that the inventory will be dragged and dropped on.
 /// </summary>
-
-public enum DecorationZoneState{
-	Neutral, Inactive, Active, Hover
-}
-
 public abstract class DecorationZone : MonoBehaviour {
 
 	// what type of decorations can go on this node?
@@ -32,14 +27,12 @@ public abstract class DecorationZone : MonoBehaviour {
 
 	public Animation activeHoverAnimation;
 
-	private bool isHovered = false;
 	private bool isAnimationPlaying = false;
-	private DecorationZoneState state;
 	private string nodeID;
 	private string placedDecoID = string.Empty;
 
-	protected abstract void _RemoveDecoration();						// removes the decoration
-	protected abstract void _SetDecoration(string strID);				// set the deco to this node
+	protected abstract void _RemoveDecoration();										// removes the decoration
+	protected abstract void _SetDecoration(string decoID, bool isPlacedFromDecoMode);	// set the deco to this node
 
 	void Start(){ 
 		DecoInventoryUIManager.OnDecoDroppedOnTarget += OnDecorationDroppedInZone;
@@ -92,7 +85,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		// If the saved data contains this node's id, it means there was a decoration placed here
 		if(DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey(nodeID)){
 			string savedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID];
-			SetDecoration(savedDeco);
+			SetDecoration(savedDeco, false);
 		}
 	}
 
@@ -123,12 +116,12 @@ public abstract class DecorationZone : MonoBehaviour {
 			DecorationItem decoItem = GetDecorationItemFromInventory(args.ItemTransform.gameObject.name);
 			if(args.TargetCollider.GetComponent<DecorationZone>().nodeType == decoItem.DecorationType){
 				args.IsValidTarget = true;
-				SetDecoration(args.ItemTransform.gameObject.name);	// TODO refactor this item Name???
+				SetDecoration(args.ItemTransform.gameObject.name, true);	// TODO refactor this item Name???
 			}
 		}
 	}
 
-	public void SetDecoration(string itemID){
+	public void SetDecoration(string itemID, bool isPlacedFromDecoMode){
 		// Do one last check
 		if(!CanPlaceDecoration(itemID)){
 			Debug.LogError("Illegal deco placement for " + itemID + " on node " + gameObject);
@@ -136,8 +129,9 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 
 		// If there was already a decoration here, remove it
-		if(HasDecoration())
-			RemoveDecoration();	
+		if(HasDecoration()){
+			RemoveDecoration();
+		}
 
 		placedDecoID = itemID;
 
@@ -147,16 +141,23 @@ public abstract class DecorationZone : MonoBehaviour {
 		// Notify inventory logic that this item is being used
 		InventoryLogic.Instance.UsePetItem(itemID);
 
-		_SetDecoration(itemID);
+		_SetDecoration(itemID, isPlacedFromDecoMode);
 
 		// Play a sound
-		string sound = Constants.GetConstant<string>("Deco_PlaceSound");
-		AudioManager.Instance.PlayClip(sound);
+		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
+		if(isPlacedFromDecoMode){
+			if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper){
+				AudioManager.Instance.PlayClip("decoPlacePaper");
+			}
+			else{
+				AudioManager.Instance.PlayClip("decoPlaceFurniture");
+			}
 
-		// play an FX
-		Vector3 particlePos = transform.position;
-		string particlePrefabName = Constants.GetConstant<string>("Deco_PlaceParticle");
-		ParticleUtils.CreateParticle(particlePrefabName, particlePos);	
+			// play an FX
+			Vector3 particlePos = transform.position;
+			string particlePrefabName = Constants.GetConstant<string>("Deco_PlaceParticle");
+			ParticleUtils.CreateParticle(particlePrefabName, particlePos);	
+		}
 
 		//Check for badge unlock
 		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;
@@ -233,8 +234,6 @@ public abstract class DecorationZone : MonoBehaviour {
 	private void SetState(string nodeTypeName){
 		// Neutral state, play idle state
 		if(nodeTypeName == null){
-			state = DecorationZoneState.Neutral;
-
 			isAnimationPlaying = false;
 			if(!isAnimationPlaying){
 				animation.Stop();
@@ -246,8 +245,6 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 		// Wrong state, play the inactive state
 		else if(nodeTypeName != nodeType.ToString()){
-			state = DecorationZoneState.Inactive;
-
 			isAnimationPlaying = false;
 			if(!isAnimationPlaying){
 				animation.Stop();
@@ -258,8 +255,6 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 		// Correct state, play the active state
 		else{
-			state = DecorationZoneState.Active;
-
 			animation.Play();
 			isAnimationPlaying = true;
 

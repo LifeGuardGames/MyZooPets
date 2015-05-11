@@ -13,8 +13,8 @@ public class MutableDataHighScore{
 			if(highScore > serializedHighScore){
 				MinigameHighScore[miniGameKey] = highScore;
 			}
-			//if no mini game high score then add it
 		}
+		//if no mini game high score then add it
 		else{
 			MinigameHighScore.Add(miniGameKey, highScore);
 		}

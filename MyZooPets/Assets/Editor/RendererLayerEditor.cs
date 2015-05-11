@@ -31,16 +31,18 @@ public class RendererLayerEditor : Editor
 		sortingLayerNames = GetSortingLayerNames(); //First we load the name of our layers
 		l_particleSystems = (target as RendererLayer).gameObject.GetComponentsInChildren<ParticleSystem>();//Then we load our ParticleSystems
 		l_renderers = new Renderer[l_particleSystems.Length];//and Initialize our renderers array with the right size
-		
-		for (int i = 0; i<l_particleSystems.Length;i++) //here we loads all renderers to our renderersarray
-		{
-			l_renderers[i] = l_particleSystems[i].renderer;
-		}
-		
-		for (int i = 0; i<sortingLayerNames.Length;i++) //here we initialize our popupMenuIndex with the current Sort Layer Name
-		{
-			if (sortingLayerNames[i] == l_particleSystems[0].renderer.sortingLayerName)
-				popupMenuIndex = i;
+
+		if(l_particleSystems.Length > 0){ // SEAN EDITED
+			for (int i = 0; i<l_particleSystems.Length;i++) //here we loads all renderers to our renderersarray
+			{
+				l_renderers[i] = l_particleSystems[i].renderer;
+			}
+			
+			for (int i = 0; i<sortingLayerNames.Length;i++) //here we initialize our popupMenuIndex with the current Sort Layer Name
+			{
+				if (sortingLayerNames[i] == l_particleSystems[0].renderer.sortingLayerName)
+					popupMenuIndex = i;
+			}
 		}
 	}
 	

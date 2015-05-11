@@ -7,12 +7,6 @@ public class ParseObjectPetInfo : ParseObject {
 	
 	public ParseObjectPetInfo(){}
 
-	[ParseFieldName("petId")]
-	public string ID{
-		get{ return GetProperty<string>("ID");}
-		set{ SetProperty<string>(value, "ID");}
-	}
-
 	[ParseFieldName("name")]
 	public string Name{
 		get{ return GetProperty<string>("Name");}

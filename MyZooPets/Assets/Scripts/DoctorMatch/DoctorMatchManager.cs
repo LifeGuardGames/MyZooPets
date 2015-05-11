@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,17 +26,27 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	public Sprite[] spriteList;
 
-	private int numOfCorrectDiagnose; //keep track of the number of correct diagnose
+	private int numOfCorrectDiagnose;
+	public int NumOfCorrectDiagnose{
+		get{ return numOfCorrectDiagnose; }
+	}
 
-	public override int GetReward(MinigameRewardTypes eType){
-		// for now, just use the standard way
-		return GetStandardReward(eType);
+ //keep track of the number of correct diagnose
+
+	void Awake(){
+		quitGameScene = SceneUtils.BEDROOM;
 	}
 	
 	protected override void _Start(){
 	}	
-
+	
 	protected override void _OnDestroy(){
+		OnCharacterScoredRight = null;
+	}
+
+	public override int GetReward(MinigameRewardTypes eType){
+		// for now, just use the standard way
+		return GetStandardReward(eType);
 	}
 
 	protected override void _NewGame(){
@@ -55,7 +65,8 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	protected override void _GameOver(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.PatientNumber, numOfCorrectDiagnose, true);
+		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		Analytics.Instance.DoctorTimesPlayedTick();
 	}
 
 	protected override void _Update(){
@@ -83,7 +94,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 			}
 		}
 	
-		// play appropriate sound
+		// Play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");
 
 		if(OnCharacterScoredRight != null)
@@ -95,7 +106,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		UpdateLives(-1);
 
 		// play an incorrect sound
-		AudioManager.Instance.PlayClip("clinicWrong");
+		AudioManager.Instance.PlayClip("minigameError");
 
 		// also slow down the game, if this didn't cause us to have a game over
 		MinigameStates eState = GetGameState();
@@ -159,18 +170,48 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		switch(randomNum){
 		case 1:
 			item.itemKey = "green";
-//			Debug.Log("GREEN : " + chooseSpriteRandom);
 			sprite.sprite = spriteList[chooseSpriteRandom];
 			break;
 		case 2:
 			item.itemKey = "yellow";
-//			Debug.Log("YELLOW : " + (5+chooseSpriteRandom));
 			sprite.sprite = spriteList[5+chooseSpriteRandom];
 			break;
 		case 3:
 			item.itemKey = "red";
-//			Debug.Log("RED : " + (9+chooseSpriteRandom));
 			sprite.sprite = spriteList[10+chooseSpriteRandom];
+			break;
+		default:
+			Debug.LogError("Not valid item group");
+			break;
+		}
+	}
+
+	/// <summary>
+	/// Sets up assembly item sprite.
+	/// For itemGroupNumber
+	/// 0: random, 1: green, 2: yellow, 3: red
+	/// </summary>
+	/// <param name="assemblyLineItemObject">Assembly line item object.</param>
+	/// <param name="itemGroupNumber">Item group number. </param>
+	/// seperated for tutorials as those sprites arn't random
+	public void SetUpAssemblyItemSpriteTutorial(GameObject assemblyLineItemObject,int spriteNum, int itemGroupNumber = 0){
+		AssemblyLineItem item = assemblyLineItemObject.GetComponent<AssemblyLineItem>();
+		item.Speed = assemblyLineController.Speed;
+		
+		SpriteRenderer sprite = assemblyLineItemObject.transform.Find("Sprite").gameObject.GetComponent<SpriteRenderer>();
+		
+		switch(itemGroupNumber){
+		case 1:
+			item.itemKey = "green";
+			sprite.sprite = spriteList[spriteNum];
+			break;
+		case 2:
+			item.itemKey = "yellow";
+			sprite.sprite = spriteList[5+spriteNum];
+			break;
+		case 3:
+			item.itemKey = "red";
+			sprite.sprite = spriteList[10+spriteNum];
 			break;
 		default:
 			Debug.LogError("Not valid item group");

@@ -1,4 +1,5 @@
-using UnityEngine;
+/*
+ * using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -70,12 +71,9 @@ public class GameTutorialTriggers : GameTutorial{
 
 		//Create new tasks for tutorial part2
 		WellapadMissionController.Instance.CreateTutorialPart2Missions();
-
-		// highlight the fight task
-		WellapadMissionController.Instance.HighlightTask("CleanRoom");
 	
 		// show the wellapad
-		WellapadUIManager.Instance.OpenUI();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 	
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
@@ -108,11 +106,12 @@ public class GameTutorialTriggers : GameTutorial{
 		// game object here.  However, it's possible that the game has been shut off in between, so we may need to spawn it after all...
 		GameObject goTrigger = GameObject.Find(DegradationUIManager.TUT_TRIGGER);
 		
-		if(goTrigger == null)
+		if(goTrigger == null){
 			goTrigger = DegradationUIManager.Instance.PlaceTutorialTrigger().gameObject;
-			
+		}
+
 		scriptTrigger = goTrigger.GetComponent<DegradTrigger>();
-				
+
 		Advance();
 	}
 	
@@ -144,7 +143,7 @@ public class GameTutorialTriggers : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, option: option);
 	
 		// spotlight the dust
 		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);
@@ -182,3 +181,4 @@ public class GameTutorialTriggers : GameTutorial{
 		Advance();			
 	}
 }
+*/

@@ -79,11 +79,10 @@ public class MinigameUI : MonoBehaviour{
 	
 	//---------------------------------------------------
 	// IsPopupShowing()
-	//---------------------------------------------------	
+	//---------------------------------------------------
 	public bool IsPopupShowing(MinigamePopups ePopup){
 		MinigamePopup popup = hashPopups[ePopup];
 		bool bShowing = popup.IsShowing();
-		
 		return bShowing;
 	}
 }

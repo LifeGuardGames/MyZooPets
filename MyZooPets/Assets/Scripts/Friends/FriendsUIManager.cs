@@ -49,20 +49,21 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 	private bool isActive = false;
 	#endregion
 
-	#region Unity MonoBehaviour Functions
-	void Awake(){
+	#region Protected Overrides
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.Friends;
 	}
-
-	void OnDestroy(){
+	
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		SocialManager.OnDataRefreshed -= FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded -= FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed -= FinishConnectionRequestRefresh;
 	}
-	#endregion
 
-	#region Protected Overrides
 	protected override void Start(){
+		base.Start();
 		SocialManager.OnDataRefreshed += FinishConnectionUIRefresh;
 		SocialManager.OnFriendCodeAdded += FinishConnectionFriendCodeAdd;
 		SocialManager.OnFriendRequestRefreshed += FinishConnectionRequestRefresh;
@@ -97,7 +98,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			isActive = true;
 			PetAudioManager.Instance.EnableSound = false;
 
-			Analytics.Instance.EnterFriendTree();
+			//Analytics.Instance.EnterFriendTree();
 			entranceHelper.EntranceUsed();
 			
 			// Try internet connection
@@ -132,7 +133,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		UIPanel friendAreaPanel = friendArea.GetComponent<UIPanel>();
 		Vector4 oldRange = friendAreaPanel.clipRange;
 		friendAreaPanel.transform.localPosition = new Vector3(0, friendAreaPanel.transform.localPosition.y, 0f);
-		friendAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.GetNativeWidth()), oldRange.w);
+		friendAreaPanel.clipRange = new Vector4(0, oldRange.y, (float)(CameraManager.Instance.NativeWidth), oldRange.w);
 
 		// Position the grid origin to the left of the screen
 		grid.transform.localPosition = new Vector3(0f, 0f, 0f);
@@ -182,7 +183,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 
 				ParseObjectPetInfo friendPetInfo = friendAccount.PetInfo;
 				string friendName = "";
-				string friendColor = "OrangeYellow";
+				string friendColor = PetColor.OrangeYellow.ToString();	// Set default
 				Hashtable petInitHash = null;
 				if(friendPetInfo != null && friendPetInfo.IsDataAvailable){
 					friendName = friendPetInfo.Name;
@@ -314,7 +315,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 			SocialManager.Instance.SendFriendRequest(input);
 			codeInputConnectionDisplay.Play("FRIENDS_ADD_LOADING");
 		}
-		Analytics.Instance.AddFriend();
+		//Analytics.Instance.AddFriend();
 	}
 
 	public void FinishConnectionFriendCodeAdd(object obj, ServerEventArgs args){
@@ -364,7 +365,7 @@ public class FriendsUIManager : SingletonUI<FriendsUIManager> {
 		requestExitButton.SetActive(false);
 		requestConnectionDisplay.Play("FRIENDS_REQUESTS_ACCEPT_LOADING");
 
-		Analytics.Instance.AcceptFriendRequest();
+		//Analytics.Instance.AcceptFriendRequest();
 	}
 
 	public void RequestDecline(string requestId){

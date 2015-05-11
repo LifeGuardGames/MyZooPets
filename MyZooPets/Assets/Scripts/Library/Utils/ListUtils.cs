@@ -33,7 +33,7 @@ public static class ListUtils{
 	public static List<T> GetRandomElements<T>(List<T> list, int nCount){
 		// simple check to make sure we aren't trying to get more elements than are in the array
 		if(nCount < 0 || nCount > list.Count){
-			Debug.LogError("Attempted to get random # of elements from an array too small!  Shrinking elements to match array length.");
+			Debug.LogWarning("Attempted to get random # of elements from an array too small!  Shrinking elements to match array length.");
 			nCount = list.Count;
 		}
 		

@@ -7,9 +7,6 @@ using System.Collections;
     Listens to swipe gesture. 
 */
 public class Exhale : InhalerPart {
-//    public InhalerAnimationController animationController;
-//	public Animator animator;
-
     protected override void Awake(){
         base.Awake();
         gameStepID = 4;
@@ -17,9 +14,7 @@ public class Exhale : InhalerPart {
 
     void OnSwipe(SwipeGesture gesture){
        FingerGestures.SwipeDirection direction = gesture.Direction; 
-
-       if(direction == FingerGestures.SwipeDirection.Down){
-
+       if(direction == FingerGestures.SwipeDirection.Right){
        		if(!isGestureRecognized){
 				isGestureRecognized = true;
 
@@ -32,6 +27,28 @@ public class Exhale : InhalerPart {
 			}
        }
     }
+
+	void OnDrag(DragGesture gesture){
+		if(!isGestureRecognized){
+			Vector3 begin = new Vector3 (0,0,0);
+			Vector3 ended;
+			if(gesture.Phase == ContinuousGesturePhase.Ended){
+				ended = gesture.Position;
+				begin = gesture.StartPosition;
+				if(begin.x < ended.x){
+					isGestureRecognized = true;
+					
+					//Disable hint when swipe gesture is registered. 
+					GetComponent<HintController>().DisableHint(false);
+					
+					AudioManager.Instance.PlayClip("inhalerExhale");
+					LgInhalerAnimationEventHandler.BreatheOutEndEvent += BreatheOutEndEventHandler;	
+					petAnimator.SetTrigger("BreatheOut");
+				}
+			}
+
+		}
+	}
 
 	private void BreatheOutEndEventHandler(object sender, EventArgs args){
 		LgInhalerAnimationEventHandler.BreatheOutEndEvent -= BreatheOutEndEventHandler;
@@ -50,5 +67,4 @@ public class Exhale : InhalerPart {
         base.NextStep();
         Destroy(gameObject);
     }
-	
 }

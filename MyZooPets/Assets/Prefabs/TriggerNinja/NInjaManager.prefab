@@ -27,6 +27,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -39,12 +40,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 0}
-  scriptTransition: {fileID: 0}
   nStartingLives: 3
-  bRunTut: 1
-  fComboMaxTime: .25
-  fMax: 3
+  gameOverAudioClip: minigameGameOver
+  comboMaxTime: .25
   trail: {fileID: 0}
+  timeBetweenSpawnGroups: 3
+  bonusRound: 0
+  bonusRoundEnemies: 0
+  bonusRoundCounter: 0
+  chain: 0
+  bonusLabel: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

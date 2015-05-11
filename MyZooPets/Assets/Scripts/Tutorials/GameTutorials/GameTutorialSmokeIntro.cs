@@ -9,9 +9,9 @@ using System.Collections.Generic;
 //---------------------------------------------------
 
 public class GameTutorialSmokeIntro : GameTutorial{
-	private GameObject swipeGO; //reference to the swipe listener
+//	private GameObject swipeGO; //reference to the swipe listener
 
-	public GameTutorialSmokeIntro() : base(){		
+	public GameTutorialSmokeIntro() : base(){
 	}
 
 	protected override void SetMaxSteps(){
@@ -29,11 +29,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
+
 			TutorialManager.Instance.StartCoroutine(BeginPanRight());
 			break;
 			
 		case 1:
-				// open the wellapad to show the user what to do next
+			// open the wellapad to show the user what to do next
 			ShowWellapad();
 			break;
 
@@ -44,11 +45,8 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 	
 	private void ShowWellapad(){
-		// highlight the fight task
-		WellapadMissionController.Instance.HighlightTask("FightMonster");
-	
 		// show the wellapad
-		WellapadUIManager.Instance.OpenUI();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 	
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
@@ -97,16 +95,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		yield return new WaitForSeconds(waitTime);
 		
 		// begin the pan right
-		PanToMoveCamera scriptPan = CameraManager.Instance.GetPanScript();
+		PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
 		float moveTo = scriptPan.partitionOffset;
 		float panTime = Constants.GetConstant<float>("SmokeIntroPanTime");
-		
-		/* // can't use lean tween callbacks because this is not a game object...curses
-        Hashtable optional = new Hashtable();
-		optional.Add ("onComplete", "OnRightPanDone");
-		optional.Add("onCompleteTarget", gameObject);
-		*/
-		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime);
+
+		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime)
+			.setEase(LeanTweenType.easeInOutQuad);
 		
 		yield return new WaitForSeconds(panTime);
 		
@@ -114,7 +108,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 	
 	private void OnRightPanDone(){
-		// 	begin pan to the left
+		// begin pan to the left
 		TutorialManager.Instance.StartCoroutine(BeginPanLeft());
 	}
 	
@@ -126,62 +120,15 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		// begin the pan right
 		float moveTo = 0f;
 		float panTime = Constants.GetConstant<float>("SmokeIntroPanTime");
-		
-		/* // can't use lean tween callbacks because this is not a game object...curses
-        Hashtable optional = new Hashtable();
-		optional.Add ("onComplete", "OnLeftPanDone");
-		optional.Add("onCompleteTarget", gameObject);
-			*/
-		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime); 
+
+		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime)
+			.setEase(LeanTweenType.easeInOutQuad); 
 		
 		OnLeftPanDone();
 	}
 	
 	private void OnLeftPanDone(){
 		Advance();	
-	}
-	
-	/// <summary>
-	/// Setups the swipe listener.
-	/// Creates a giant collider on the screen that listens to the swipe event.
-	/// This is an easier way to do swipe during tutorial
-	/// </summary>
-//	private void SetupSwipeListener(){
-//		//check for right anchor
-//		GameObject anchorRight = GameObject.Find("Anchor-Right");
-//		string tutKey = GetKey() + "_" + GetStep();
-//
-//		if(anchorRight == null)
-//			Debug.LogError(tutKey + " Needs anchor right");
-//
-//		//spawn the giant collider
-//		GameObject swipeResource = (GameObject)Resources.Load("TutorialSwipeListener");
-//		swipeGO = NGUITools.AddChild(anchorRight, swipeResource);
-//		swipeGO.GetComponent<TutorialSwipeListener>().OnTutorialSwiped += OnTutorialSwiped;
-//
-//		//show finger hint
-//		ShowFingerHint(anchorRight, true, fingerHintPrefab: "PressHoldSwipeTut", offsetFromCenterX: -40f);
-//
-//		// show message
-//		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
-//		string tutMessage = Localization.Localize(tutKey);
-//		Hashtable option = new Hashtable();
-//
-//		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-//		option.Add(TutorialPopupFields.Message, tutMessage);
-//
-//		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
-//	}
-
-	private void OnTutorialSwiped(object sender, EventArgs args){
-		//clean up
-		RemoveFingerHint();
-
-		if(swipeGO != null)
-			GameObject.Destroy(swipeGO);
-
-		//advance in tutorial
-		Advance();
 	}
 
 	private void FocusOnRightArrow(){
@@ -196,25 +143,33 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		AddToProcessList(rightArrowObject);
 
 		RoomArrowsUIManager.Instance.ShowRightArrow();
+
+		// spotlight the arrow
+		SpotlightObject(rightArrowObject, true, InterfaceAnchors.Right, 
+		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 0f);
+
 		ShowFingerHint(rightArrowObject, isGUI: true, anchor: InterfaceAnchors.Right);
 
 		// show message
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
 		string tutMessage = Localization.Localize(tutKey);
+
 		Hashtable option = new Hashtable();
-		
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
-		
-		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, location, option: option);
+
+		ShowRetentionPet(true, new Vector3(-281, -86, -160));
 	}
 
 	private void RightArrowClicked(object sender, EventArgs args){
 		LgButton button = (LgButton)sender;
 		button.OnProcessed -= RightArrowClicked;
 
+		RemoveSpotlight();
 		RemoveFingerHint();
 		RemovePopup();
+		RemoveRetentionPet();
 		Advance();
 	}
 }

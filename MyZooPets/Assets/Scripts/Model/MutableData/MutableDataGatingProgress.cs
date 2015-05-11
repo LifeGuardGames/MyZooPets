@@ -37,7 +37,7 @@ public class MutableDataGatingProgress{
 	/// </summary>
 	/// <param name="data">Data.</param>
 	public void RefreshGate(ImmutableDataGate data){
-		string gateID = data.GetGateID();
+		string gateID = data.GateID;
 		if(GatingProgress.ContainsKey(gateID)){
 			int hp = data.GetMonster().MonsterHealth;
 			GatingProgress[gateID] = hp;
@@ -85,7 +85,8 @@ public class MutableDataGatingProgress{
 		// load all our gating data from xml
 		LoadFromXML();		
 	}
-	
+
+	/*
 	public void VersionCheck(Version currentDataVersion){
 		Version version131 = new Version("1.3.1");
 
@@ -104,7 +105,6 @@ public class MutableDataGatingProgress{
 	/// have left
 	/// </summary>
 	private void ConvertGateHP(){
-
 		string[] convertingGateIDs = new string[]{"Gate_Bedroom_1", "Gate_Bedroom_2", "Gate_Bedroom_3", "Gate_Yard_R"};
 		int[] oldFullHealths = new int[]{10, 40, 80, 5};
 
@@ -138,6 +138,7 @@ public class MutableDataGatingProgress{
 			}
 		}
 	}
+	*/
 
 	/// <summary>
 	/// Loads gating data from XML and copies it into our
@@ -147,7 +148,7 @@ public class MutableDataGatingProgress{
 		// init the data by filling the dictionary with xml data
 		List<ImmutableDataGate> gates = DataLoaderGate.GetAllData();
 		foreach(ImmutableDataGate gate in gates){
-			string gateID = gate.GetGateID();
+			string gateID = gate.GateID;
 
 			int hp = gate.GetMonster().MonsterHealth;
 			

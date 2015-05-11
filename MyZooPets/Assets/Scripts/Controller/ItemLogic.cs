@@ -11,8 +11,8 @@ public class ItemLogic : Singleton<ItemLogic>{
 	private List<Item> usableList; //list with only UsableItem. sorted by cost
 	private List<Item> decorationList; //list with only DecorationItem. sorted by cost
 	private List<Item> accessoryList; // List with only AccessoryItem. sorted by cost
-	private List<Item> premiumList;
 	private Dictionary<DecorationTypes, List<DecorationItem>> decorationSubCatList; //decoration grouped by deco type
+	private Dictionary<string, DateTime> farmTimeDictionary;	// Mutable dict for farm deco times
 
 	/// <summary>
 	/// Gets the food list. Sorted by cost
@@ -70,28 +70,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 		}
 	}
 
-	/// <summary>
-	/// Gets the premium list. Sorted by cost
-	/// </summary>
-	/// <value>The premium list.</value>
-	public List<Item> PremiumList{
-		get{
-			if(premiumList == null){
-				premiumList = new List<Item>();
-				Dictionary<string, Item> premiumDict = DataLoaderItems.GetAllItemsOfType(ItemType.Premiums);
-				premiumList = ListFromDictionarySortByCost(premiumDict);
-
-//				var items = from keyValuePair in premiumDict 
-//					select keyValuePair.Value;
-//				premiumList = (from item in items 
-//				                       orderby item.Cost.ToString() ascending
-//				                       select item).ToList();
-			}
-
-			return premiumList;
-		}
-	}
-
 	public Dictionary<DecorationTypes, List<DecorationItem>> DecorationSubCatList{
 		get{
 			if(decorationSubCatList == null){
@@ -105,6 +83,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 										select groupedClass).ToDictionary(i => i.Key, i => i.ToList());
 			}
 			return decorationSubCatList;
+		}
+	}
+
+	public Dictionary<string, DateTime> FarmTimeDictionary{
+		get{
+			if(farmTimeDictionary == null){
+				farmTimeDictionary = DataManager.Instance.GameData.Decorations.FarmDecorationTimes;
+			}
+			return farmTimeDictionary;
 		}
 	}
 	
@@ -199,7 +186,15 @@ public class ItemLogic : Singleton<ItemLogic>{
 				isUsable = false;
 			else if(healthAmount > 0 && currentHealth == 100)
 				isUsable = false;
+
+			// Custom check for emergency inhaler, dont want to apply if not sick
+			if(itemID == "Usable0"){	
+				if(currentHealth > 60){
+					isUsable = false;
+				}
+			}
 		}
+
 		
 		return isUsable;
 	}
@@ -223,12 +218,12 @@ public class ItemLogic : Singleton<ItemLogic>{
 		//ItemBoxOnly == false
 		//UnlockAtLevel == nextLevel
 		foreach(Item item in FoodList){
-			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+			if(!item.IsSecretItem && item.UnlockAtLevel == nextLevel)
 				itemsUnlock.Add(item);
 		}
 
 		foreach(Item item in DecorationList){
-			if(!item.ItemBoxOnly && item.UnlockAtLevel == nextLevel)
+			if(!item.IsSecretItem && item.UnlockAtLevel == nextLevel)
 				itemsUnlock.Add(item);
 		}
 
@@ -282,7 +277,7 @@ public class ItemLogic : Singleton<ItemLogic>{
 			StatsController.Instance.ChangeFireBreaths(fireBreath);
 		}
 
-		StatsController.Instance.ChangeStats(deltaHealth: healthAmount, deltaMood: moodAmount, bFloaty: true);
+		StatsController.Instance.ChangeStats(deltaHealth: healthAmount, deltaMood: moodAmount, isFloaty: true);
 	}
 
 	/// <summary>
@@ -315,4 +310,28 @@ public class ItemLogic : Singleton<ItemLogic>{
 		                       select item).ToList();
 		return itemList;
 	}
+
+	#region Farm Decoration use
+	public DateTime GetFarmLastRedeemTime(string farmItemId){
+		return FarmTimeDictionary[farmItemId];
+	}
+
+	public void UpdateFarmLastRedeemTime(string farmItemId, DateTime lastRedeemTime){
+		if(FarmTimeDictionary.ContainsKey(farmItemId)){
+			FarmTimeDictionary[farmItemId] = lastRedeemTime;
+		}
+		else{
+			FarmTimeDictionary.Add(farmItemId, lastRedeemTime);
+		}
+	}
+
+	public void RemoveFarmItem(string farmItemId){
+		if(FarmTimeDictionary.ContainsKey(farmItemId)){
+			FarmTimeDictionary.Remove(farmItemId);
+		}
+		else{
+			Debug.LogWarning("Removing non-existant farmItemId from saved list - " + farmItemId);
+		}
+	}
+	#endregion
 }

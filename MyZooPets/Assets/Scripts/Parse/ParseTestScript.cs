@@ -84,7 +84,7 @@ public class ParseTestScript : MonoBehaviour {
 				GUILayout.Label("MenuScene Test");
 					
 				if(GUILayout.Button("Initialize game data")){
-					DataManager.Instance.InitializeGameDataForNewPet();
+					DataManager.Instance.InitGameDataForDebug();
 					FakeTutorial();
 				}
 			GUILayout.EndHorizontal();
@@ -112,16 +112,27 @@ public class ParseTestScript : MonoBehaviour {
 		#endregion
 
 		#region Pet Info save test
-		GUILayout.BeginHorizontal();
-		GUILayout.Label("Pet Info save Test");
+//		GUILayout.BeginHorizontal();
+//		GUILayout.Label("Pet Info save Test");
 //		if(GUILayout.Button("add pet accessory")){
 //			DataManager.Instance.GameData.Accessories.SetAccessoryAtNode("testnode1", "testItem1" + DateTime.Now);
 //		}
 //		if(GUILayout.Button("remove pet accessory")){
 //			DataManager.Instance.GameData.Accessories.RemoveAccessoryAtNode("testnode1");
 //		}
+//		GUILayout.EndHorizontal();
+		#endregion
+
+		#region Trial And Membership status check
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Trial And Membership Check");
+		if(GUILayout.Button("check trial and membership")){
+//			GameObject.Find("MembershipCheck").GetComponent<MembershipCheck>().StartCheck();
+		}
 		GUILayout.EndHorizontal();
 		#endregion
+
+
 		if(GUILayout.Button("sync to parse test")){
 			DataManager.Instance.GameData.SaveAsyncToParse();
 		}

@@ -17,6 +17,15 @@ public enum Level{
     Level8
 }
 
+public enum PetColor{
+	None,
+	OrangeYellow,
+	PurpleLime,
+	BlueYellow,
+	YellowPink,
+	PinkBlue,
+}
+
 public enum DosageRecord{
     Hit,
     Unknown,
@@ -29,19 +38,21 @@ public enum AsthmaStage{
     Sick,
     Attack,
 }
+
 public enum ItemType{
+	None,
 	Foods,
 	Usables,
 	Decorations,
 	Accessories,
-	Premiums
 }
+
 public enum StatType{
     Mood,
     Health,
-	Fire,
-	Gems
+	Fire
 }
+
 public enum ChallengeType{
     Weekly,
     Daily,
@@ -56,14 +67,12 @@ public enum NotificationPopupType{
 	LevelUp,
     BadgeUnlocked,
     FireLevelUp,
-	Premium,
-	InhalerRecharging,
-	PremiumTest,
+//	InhalerRecharging,
 	SuperWellaInhaler,
 	SuperWellaSickReminder,
-	GemIntro,
 	MiniGameQuitCheck,
-	ZeroHealth
+	ZeroHealth,
+	NeedFoodTutorial,
 }
 
 public enum NotificationPopupFields{
@@ -90,12 +99,16 @@ public enum TutorialPopupFields{
 
 public enum BadgeType{
     Level,
-    RunnerDistance,
-    PatientNumber,
-    Decoration,
-    Inhaler,
-    Coin,
-	NinjaScore
+	Inhaler,
+	Return, 	// How many times in a row the user returns.
+	Coin,
+	Decoration,
+	Accessory,
+	Ninja,
+	Memory,
+	DoctorMatch,
+    Runner,
+	Shooter,
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
@@ -122,6 +135,10 @@ public enum UIModeTypes {
 	Cutscene,
 	ParentPortal,
 	Friends,
+	MembershipCheck,
+	Badge,
+	FireCrystal,
+	Wellapad
 }
 
 // decoration node anchor types
@@ -201,7 +218,8 @@ public enum NinjaPatterns {
 	Cross,
 	Split,
 	Meet,
-	Sequence
+	Sequence,
+	Swarms
 }
 
 // scoring categories for the ninja game
@@ -211,7 +229,8 @@ public enum NinjaScoring {
 	Start_3,
 	Med,
 	Med_High,
-	High
+	High,
+	Bonus
 }
 
 // ninja game modes
@@ -237,8 +256,7 @@ public enum HUDElementType{
 	Points, 
 	Stars, 
 	Health, 
-	Mood,
-	Gems
+	Mood
 }
 
 // types of button clicks
@@ -263,7 +281,8 @@ public enum InterfaceAnchors {
 // reward types for minigames
 public enum MinigameRewardTypes {
 	XP,
-	Money
+	Money,
+	Shard
 }
 
 // reward statuses for wellapad missions
@@ -300,12 +319,27 @@ public enum DroppedItemStates {
 }
 
 public enum MiniPetTypes{
-    Basic,
+    None,
+	Retention,
+	GameMaster,
+	Merchant,
 }
 
 public enum CurrencyTypes{
-	WellaCoin,
-	Gem,
-	IAP
+	WellaCoin
 }
 
+public enum MinigameTypes{
+	None,	// Default value
+	TriggerNinja,
+	Shooter,
+	Memory,
+	Clinic,
+	Runner
+}
+
+public enum ZoneTypes{
+	None,	// Default value
+	Bedroom,
+	Yard
+}

@@ -21,13 +21,8 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	}
 
 	public bool IsFirstTimeRescue{
-		get{ return DataManager.Instance.GameData.Inhaler.FirstTimeRescue;}
-		set{ DataManager.Instance.GameData.Inhaler.FirstTimeRescue = value;}
-	}
-
-	public bool IsNewToTapPrescriptionHint{
-		get{ return DataManager.Instance.GameData.Inhaler.IsNewToTapPrescriptionHint;}
-		set{ DataManager.Instance.GameData.Inhaler.IsNewToTapPrescriptionHint = value;}
+		get{ return DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue; }
+		set{ DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue = value; }
 	}
 
 	public bool IsTutorialCompleted{
@@ -51,8 +46,12 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		else{
 			currentStep++;
 
-			if(D.Assert(OnNextStep != null, "OnNextStep has no listeners"))
+			if(OnNextStep != null){
 				OnNextStep(this, EventArgs.Empty);
+			}
+			else{
+				Debug.LogError("OnNextStep has no listeners");
+			}
 		}
 	}
 
@@ -65,28 +64,29 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	// Put anything in here that should happen as a result
 	// of the pet using the daily inhaler.
 	//---------------------------------------------------		
-	private void GameDone(){		
+	private void GameDone(){
+
 		// play game over sound
 		AudioManager.Instance.PlayClip("inhalerDone");
+		StatsController.Instance.ChangeStats(deltaHealth: 5, deltaMood: 30,isInternal: true);
+		// Save settings into data manager
 		IsFirstTimeRescue = false;
-		IsNewToTapPrescriptionHint = false;
+		DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();
+		DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime = LgDateTime.GetTimeNow();
 
-		if(OnGameOver != null)
+		if(OnGameOver != null){
 			OnGameOver(this, EventArgs.Empty);
+		}
 
 		//finish inhaler tutorial 
-		if(!IsTutorialCompleted)
+		if(!IsTutorialCompleted){
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
+		}
 		
 		// send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted("DailyInhaler");
 
-		// Check for badge reward
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
-		
 		// calculate the next play period for the inhaler
-		PlayPeriodLogic.Instance.CalculateNextPlayPeriod();
-	}	
-	
-
+	PlayPeriodLogic.Instance.InhalerGameDonePostLogic();
+	}
 }

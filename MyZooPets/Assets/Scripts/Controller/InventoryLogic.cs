@@ -128,6 +128,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 	/// <param name="itemID">Item ID.</param>
 	/// <param name="count">Count.</param>
 	public void AddItem(string itemID, int count){
+
 		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		Item itemData = DataLoaderItems.GetItem(itemID);
 
@@ -170,6 +171,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		}
 
 		// Add the respective items to their respective UIs
+
 		if(itemData.Type == ItemType.Foods || itemData.Type == ItemType.Usables){
 			if(OnItemAddedToInventory != null){
 				InventoryEventArgs args = new InventoryEventArgs();
@@ -184,7 +186,6 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 				InventoryEventArgs args = new InventoryEventArgs();
 				args.IsItemNew = itemNew;
 				args.InvItem = invItem;
-
 				OnItemAddedToDecoInventory(this, args);
 			}
 		}
@@ -207,7 +208,7 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			ItemLogic.Instance.StatsEffect(itemID);
 			
 			//analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
+			//Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
 			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
 			                                         Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
 			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
@@ -236,17 +237,14 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
 		InventoryItem invItem = null;
 		listNeedsUpdate = true;
-
 		if(invItems.ContainsKey(itemID)){
 			invItem = invItems[itemID];
 			invItem.Amount--;
 
-			//analytics
-			Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
-			
 			//remove inv item if there is none left
-			if(invItem.Amount == 0)
+			if(invItem.Amount == 0){
 				invItems.Remove(itemID);
+			}
 			
 			// fire item used event
 			if(OnItemUsed != null){

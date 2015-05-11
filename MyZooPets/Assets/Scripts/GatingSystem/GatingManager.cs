@@ -9,20 +9,30 @@ using System.Collections.Generic;
 /// player.
 /// </summary>
 
-public class DestroyedGateEventArgs : EventArgs{
-	public string DestroyedGateID{ get; set; }
-	public string MiniPetID{ get; set; }
-}
+//public class DestroyedGateEventArgs : EventArgs{
+//	public string DestroyedGateID{ get; set; }
+//	public string MiniPetID{ get; set; }
+//}
 
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
-	public EventHandler<EventArgs> OnReachedGate;   // when the player gets to the gate
-	public static EventHandler<EventArgs> OnDamageGate; // When player damages the gate
-	public static EventHandler<DestroyedGateEventArgs> OnDestroyedGate; // When a specific gate has been destroyed
+	public EventHandler<EventArgs> OnReachedGate;   		// When the player gets to the gate
+	public static EventHandler<EventArgs> OnDamageGate; 	// When player damages the gate
+	public static EventHandler<EventArgs> OnDestroyedGate;	// When a specific gate has been destroyed
 	//=====================================================
-    
-	public string currentArea; // area that this manager is in
-	public Vector3 startingLocation; // starting location for the gates -- might differ from area to area
+	private GameObject body;
+
+	public Vector3 startingLocation;	 // starting location for the gates -- might differ from area to area
+
+	private string currentZone; // area that this manager is in
+	public string CurrentZone{
+		get{ return currentZone; }
+	}
+
+	private ImmutableDataGate latestUnlockedGate; 
+	public ImmutableDataGate LatestUnlockedGate{
+		get{ return latestUnlockedGate; }
+	}
 
 	/// <summary>
 	/// The starting screen position. The Gates' position is decided by percentage of screen.
@@ -31,15 +41,19 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	public Vector3 startingScreenPosition;
 
+
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
 	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
 
 	void Awake(){
 		// set pan script
-		scriptPan = CameraManager.Instance.GetPanScript();
+		scriptPan = CameraManager.Instance.PanScript;
+
+		// Get current zone
+		currentZone = SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName).ToString();
 	}
 
-	void Start(){		
+	void Start(){
 		// see if the gating system is enabled
 		if(!DataManager.Instance.GameData.GatingProgress.IsEnabled())
 			return;
@@ -52,8 +66,50 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		// now spawn the gates
 		SpawnGates();
+
+		// Search and assign bodycollider
+		body = GameObject.Find("BodyCollider");
 	}
-		
+
+	/// <summary>
+	/// Calculates the latest unlocked gate.
+	/// This should be called everytime that a gate is unlocked
+	/// 'Null' if no unlocked gates yet
+	/// </summary>
+	private ImmutableDataGate GetLatestUnlockedGate(){
+		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
+		int maxGateNumberSoFar = -1;
+		ImmutableDataGate latestGateSoFar = null;
+		foreach(ImmutableDataGate gate in gateList){
+			if(gate.GateNumber > maxGateNumberSoFar && !DataManager.Instance.GameData.GatingProgress.IsGateActive(gate.GateID)){
+				maxGateNumberSoFar = gate.GateNumber;
+				latestGateSoFar = gate;
+			}
+		}
+		latestUnlockedGate = latestGateSoFar;	// Cache it
+		return latestGateSoFar;
+	}
+
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
+//			Debug.Log(GetLatestLockedGate().GateNumber);
+//		}
+//	}
+
+	public ImmutableDataGate GetLatestLockedGate(){
+		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
+		int minLockedGateNumberSoFar = 999;
+		ImmutableDataGate minLockedGateSoFar = null;
+		foreach(ImmutableDataGate gate in gateList){
+			if(gate.GateNumber < minLockedGateNumberSoFar && DataManager.Instance.GameData.GatingProgress.IsGateActive(gate.GateID)){
+				minLockedGateNumberSoFar = gate.GateNumber;
+				minLockedGateSoFar = gate;
+			}
+		}
+		latestUnlockedGate = minLockedGateSoFar;	// Cache it
+		return minLockedGateSoFar;
+	}
+
 	/// <summary>
 	/// Recurrings the gate check.
 	/// Some gates recur -- that is, if they have been
@@ -73,12 +129,13 @@ public class GatingManager : Singleton<GatingManager>{
 
 		// Next play period. refresh recurring gate
 		if(timeSinceLastSpawned.TotalHours >= 12){
-			Hashtable gates = DataLoaderGate.GetAreaGates(currentArea);
+			Hashtable gates = DataLoaderGate.GetZoneGates(currentZone);
+			Debug.Log("RECURRING GATE REFRESH");
 			foreach(DictionaryEntry entry in gates){
 				ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
 				
-				bool isRecurring = dataGate.IsRecurring();
-				bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+				bool isRecurring = dataGate.IsRecurring;
+				bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID);
 				
 				if(isRecurring && !isGateActive){
 					DataManager.Instance.GameData.GatingProgress.RefreshGate(dataGate);
@@ -91,13 +148,13 @@ public class GatingManager : Singleton<GatingManager>{
 	/// Spawns the gates.
 	/// </summary>
 	private void SpawnGates(){
-		Hashtable hashGates = DataLoaderGate.GetAreaGates(currentArea);
+		Hashtable hashGates = DataLoaderGate.GetZoneGates(currentZone);
 		foreach(DictionaryEntry entry in hashGates){
 			ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
-			int partition = dataGate.GetPartition();
+			int partition = dataGate.LocalPartition;
 			
 			// if the gate is activate, spawn the monster at an offset 
-			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID());
+			bool isGateActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID);
 
 			// check if gate is still in the scene. SpawnGates is also called after
 			// game is paused so need to check the status of each gate. This is mainly
@@ -110,21 +167,23 @@ public class GatingManager : Singleton<GatingManager>{
 				}
 				// Gate object has already been destroyed.
 				catch(MissingReferenceException e){
+					Debug.LogException(e);
 					isGateInSceneAlready = false;
 				}
 				catch(NullReferenceException e){
+					Debug.LogException(e);
 					isGateInSceneAlready = false;
 				}
 			}
 				
 			if(isGateActive && !isGateInSceneAlready){
-				int startingPartition = scriptPan.currentPartition;	// room the player is in
-				float roomPartitionOffset = scriptPan.partitionOffset; // the distance between each room
-				int partitionCountFromStartingPartition = dataGate.GetPartition() - startingPartition;	// the distance between the starting room and this gate's room
+				int startingCurrentPartition = scriptPan.currentLocalPartition;			// room the player is in
+				float roomPartitionOffset = scriptPan.partitionOffset; 		// the distance between each room
+				int partitionCountFromStartingPartition = dataGate.LocalPartition - startingCurrentPartition;	// the distance between the starting room and this gate's room
 				float distanceFromStartingPartition = partitionCountFromStartingPartition * roomPartitionOffset; // offset of the gate
 
 				// how much screen space should the gate be moved by
-				float screenOffset = Screen.width * dataGate.GetScreenPercentage();
+				float screenOffset = Screen.width * dataGate.ScreenPercentage;
 				Vector3 newScreenPosition = new Vector3(screenOffset, startingScreenPosition.y, startingScreenPosition.z);
 
 				float maxScreenSpace = Screen.width - screenOffset;
@@ -144,28 +203,15 @@ public class GatingManager : Singleton<GatingManager>{
 				GameObject goGate = Instantiate(prefab, gateLocation, Quaternion.identity) as GameObject;
 				Gate scriptGate = goGate.GetComponent<Gate>();
 				
-				string gateID = dataGate.GetGateID();
+				string gateID = dataGate.GateID;
 				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
 
-				if(dataGate.IsRecurring())
+				if(dataGate.IsRecurring)
 					DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod = 
 						PlayPeriodLogic.GetCurrentPlayPeriod();
 				
 				// hash the gate based on the room, for easier access
 				activeGates[partition] = scriptGate;
-			}
-			// if gate is not active that means it has been completely unlocked
-			else{
-				//if this gate unlocks minipet, we should double check if the minipet is unlocked.
-				//this is mainly for backward compatibility. Old users with the gates unlocked
-				//already should be awarded the minipets right away
-				string miniPetID = dataGate.GetMiniPetID();
-				if(!string.IsNullOrEmpty(miniPetID)){
-					bool isUnlocked = DataManager.Instance.GameData.MiniPets.IsMiniPetUnlocked(miniPetID);
-
-					if(!isUnlocked)
-						DataManager.Instance.GameData.MiniPets.UnlockMiniPet(miniPetID);
-				}
 			}
 		}		
 	}
@@ -187,9 +233,8 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	/// <returns><c>true</c> if this instance is in gated room; otherwise, <c>false</c>.</returns>
 	public bool IsInGatedRoom(){
-		int currentPartition = scriptPan.currentPartition;
-		bool isGated = HasActiveGate(currentArea, currentPartition);
-		
+		int currentPartition = scriptPan.currentLocalPartition;
+		bool isGated = HasActiveGate(currentZone, currentPartition);
 		return isGated;
 	}
 
@@ -199,7 +244,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c> if there is active gate the specified partition; otherwise, <c>false</c>.</returns>
 	/// <param name="partition">Partition.</param>
 	public bool HasActiveGate(int partition){
-		bool hasGate = HasActiveGate(currentArea, partition);
+		bool hasGate = HasActiveGate(currentZone, partition);
 		return hasGate;
 	}
 
@@ -209,12 +254,11 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c> if there is active gate at the specified area roomPartition; otherwise, <c>false</c>.</returns>
 	/// <param name="area">Area.</param>
 	/// <param name="roomPartition">Room partition.</param>
-	public bool HasActiveGate(string area, int roomPartition){
+	public bool HasActiveGate(string zone, int localParition){
 		bool isActive = false;
-		
-		ImmutableDataGate data = DataLoaderGate.GetData(area, roomPartition);
+		ImmutableDataGate data = DataLoaderGate.GetData(zone, localParition);
 		if(data != null) 
-			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GetGateID());
+			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GateID);
 		
 		return isActive;
 	}
@@ -225,7 +269,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c> if player can enter room ; otherwise, <c>false</c>.</returns>
 	/// <param name="currentRoom">Current room.</param>
 	/// <param name="eSwipeDirection">E swipe direction.</param>
-	public bool CanEnterRoom(int currentRoom, RoomDirection swipeDirection){
+	public bool CanEnterRoom(int currentLocalPartition, RoomDirection swipeDirection){
 		// early out if click manager is tweening
 		// WTF is this?? this messes up with the check logic. -- Jason
 //		if(ClickManager.Instance.IsTweeningUI())
@@ -235,9 +279,9 @@ public class GatingManager : Singleton<GatingManager>{
 		bool isAllowed = true;
 		
 		// if there is an active gate in this room, check to see if it is blocking the direction the player is trying to go in
-		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentArea, currentRoom);
+		ImmutableDataGate dataGate = DataLoaderGate.GetData(currentZone, currentLocalPartition);
 		if(dataGate != null && 
-			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GetGateID()) && 
+			DataManager.Instance.GameData.GatingProgress.IsGateActive(dataGate.GateID) && 
 			dataGate.DoesBlock(swipeDirection))
 			isAllowed = false;
 		
@@ -255,8 +299,8 @@ public class GatingManager : Singleton<GatingManager>{
 		int leavingPartitionNumber = args.oldPartition;
 		int enteringPartitionNumber = args.newPartition;
 		
-		bool isGateLeavingActive = HasActiveGate(currentArea, leavingPartitionNumber);
-		bool isGateEnteringActive = HasActiveGate(currentArea, enteringPartitionNumber);
+		bool isGateLeavingActive = HasActiveGate(currentZone, leavingPartitionNumber);
+		bool isGateEnteringActive = HasActiveGate(currentZone, enteringPartitionNumber);
 		
 		if(isGateEnteringActive){
 			// if the player is entering a gated room, hide some ui and lock the click manager
@@ -318,16 +362,14 @@ public class GatingManager : Singleton<GatingManager>{
 		if(OnDamageGate != null)
 			OnDamageGate(this, EventArgs.Empty);
 
-		// Fire event to notify gate with gateID has been destroyed
 		if(isDestroyed){
+			// Fire event to notify gate with gateID has been destroyed
 			if(OnDestroyedGate != null){
-				DestroyedGateEventArgs args = new DestroyedGateEventArgs();
-				
-				args.DestroyedGateID = gateID;
-				args.MiniPetID = DataLoaderGate.GetData(gateID).GetMiniPetID();
-
-				OnDestroyedGate(this, args);
+				OnDestroyedGate(this, null);
 			}
+
+			// Recalculate the latest unlocked gate
+			GetLatestUnlockedGate();
 		}
 			
 		return isDestroyed;
@@ -347,7 +389,6 @@ public class GatingManager : Singleton<GatingManager>{
 			// if there's a fire orb in the inventory prompt the user to use it
 			InventoryItem fireOrb = InventoryLogic.Instance.GetInvItem("Usable1");
 			if(fireOrb != null){
-				Debug.Log("use the fire Orb");
 			}
 			// if not tell user to buy flame crystal
 			else{
@@ -361,18 +402,20 @@ public class GatingManager : Singleton<GatingManager>{
 	/// buy flame crystal from the store with gems
 	/// </summary>
 	private void FlameCrystalNotification(){
-		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
-			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-			
-			ClickManager.Instance.Lock(UIModeTypes.Store);
-			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.FlameCrystalNeededNotification);
-		};
-		
-		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-		
-		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		//Debug.LogError("NEW NOTIFICATION HERE");
+		PetSpeechAI.Instance.ShowOutOfFireMsg();
+//		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
+//			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
+//			
+//			ClickManager.Instance.Lock(UIModeTypes.Store);
+//			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.FlameCrystalNeededNotification);
+//		};
+//		
+//		Hashtable notificationEntry = new Hashtable();
+//		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
+//		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+//		
+//		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 	}
 
 	/// <summary>
@@ -395,6 +438,8 @@ public class GatingManager : Singleton<GatingManager>{
 	private void PetReachedDest(object inhasender, EventArgs args){
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);
+
+		body.GetComponent<PetInteractionManager>().isInteractable = false;
 
 		//once pet is in position for fire breathing. Idle animations need to be turn off
 		//otherwise it might break the breathe fire animation
@@ -442,12 +487,12 @@ public class GatingManager : Singleton<GatingManager>{
 	private void ShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
-		GameObject goFireButton = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), resourceFireButton);
+		GameObject goFireButton = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), resourceFireButton);
 		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
 		GameObject petLocation = GameObject.Find("Pet");
-		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 		                                                             petLocation.transform.position);
 		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
 		                                                               InterfaceAnchors.BottomLeft, 
@@ -462,7 +507,7 @@ public class GatingManager : Singleton<GatingManager>{
 		goFireButton.name = ButtonMonster.FIRE_BUTTON;
 		
 		// get the gate in this room
-		Gate gate = activeGates[scriptPan.currentPartition];
+		Gate gate = activeGates[scriptPan.currentLocalPartition];
 		if(gate){
 			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
 			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
@@ -487,6 +532,8 @@ public class GatingManager : Singleton<GatingManager>{
 	private void EnableUI(){
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
+		
+		body.GetComponent<PetInteractionManager>().isInteractable = true;
 
 		//turn pet idle animation back on before leaving the gated room
 		PetAnimationManager.Instance.EnableIdleAnimation();

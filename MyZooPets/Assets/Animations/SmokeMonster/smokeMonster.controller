@@ -35,16 +35,16 @@ State:
   m_IKOnFeet: 0
   m_Mirror: 0
   m_Tag: 
---- !u!1102 &110290404
+--- !u!1102 &110281712
 State:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: smokeMonsterHurt
+  m_Name: smokeMonsterDie
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400000, guid: e5decd4293a95704da39fa24af038e8b, type: 2}
+  - {fileID: 7400000, guid: 59d65358b1c04b843afb3d1fcd0b4c9c, type: 2}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 48, y: 180, z: 0}
   m_IKOnFeet: 0
@@ -60,10 +60,13 @@ StateMachine:
   m_DefaultState: {fileID: 110200000}
   m_States:
   - {fileID: 110200000}
-  - {fileID: 110290404}
+  - {fileID: 110281712}
   m_ChildStateMachine: []
   m_ChildStateMachinePosition: []
-  m_OrderedTransitions: {}
+  m_OrderedTransitions:
+    data:
+      first: {fileID: 110200000}
+      second: []
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: 48, y: 48, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

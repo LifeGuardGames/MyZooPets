@@ -12,9 +12,6 @@ using System.Collections.Generic;
 public class WellapadMissionUIController : MonoBehaviour {
 	// the NGUI grid that the missions are put in to
 	public GameObject goGrid;
-	// prefabs for individual parts of a mission
-	public bool showTitle = false;
-	public GameObject prefabTitle;		// mission title
 	public GameObject prefabTask;		// mission task (dynamic amount in each mission)
 	
 	// the number of elements in the mission list...this is used for helping to sort elements in the grid
@@ -45,7 +42,6 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CreateMissions() {		
 		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentMissions();
-		
 		// create our missions
 		if(currentMissions.Count > 0)
 			foreach (string strMission in currentMissions)
@@ -56,18 +52,9 @@ public class WellapadMissionUIController : MonoBehaviour {
 	// CreateMission()
 	// Given a mission type, this function will add
 	// entries to the Wellapad for the mission; the mission
-	// title, reward, and tasks.
+	// reward, and tasks.
 	//---------------------------------------------------	
-	private void CreateMission(string missionType){		
-		// add a title for the mission
-
-		if(showTitle){
-			GameObject title = NGUITools.AddChild(goGrid, prefabTitle);
-			SetNameForGrid( title );
-			string strMissionTitle = GetMissionTitle( missionType );
-			title.transform.FindChild("Title").GetComponent<UILabel>().text = strMissionTitle;			
-		}
-
+	private void CreateMission(string missionType){	
 		// find the available tasks for the mission and add them
 		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
 		for ( int i = 0; i < listTasks.Count; i++ ){

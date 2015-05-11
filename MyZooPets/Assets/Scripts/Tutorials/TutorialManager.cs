@@ -38,7 +38,7 @@ public class TutorialManager : Singleton<TutorialManager>{
 			DataManager.Instance.SaveGameData();
 			
 			// then check for a new tutorial
-			Check();
+			IsPlayTutorial();
 		}
 	}
 
@@ -67,19 +67,20 @@ public class TutorialManager : Singleton<TutorialManager>{
 	
 	protected virtual void Start(){
 		// listen for partition changing event
-		CameraManager.Instance.GetPanScript().OnPartitionChanged += EnteredRoom;		
+		CameraManager.Instance.PanScript.OnPartitionChanged += EnteredRoom;		
 	}
 
 	/// <summary>
-	/// Checks withich tutorial should play based on certain game conditions
+	/// Checks which tutorial should play based on certain game conditions
 	/// </summary>
-	protected virtual bool Check(){
-		bool retVal = true;
+	protected virtual bool IsPlayTutorial(){
+		bool playTutorial = true;
 
-		if(!isTutorialEnabled || tutorial != null)
-			retVal = false;
+		if(!isTutorialEnabled || tutorial != null){
+			playTutorial = false;
+		}
 
-		return retVal;
+		return playTutorial;
 	}
 
 	/// <summary>
@@ -89,6 +90,6 @@ public class TutorialManager : Singleton<TutorialManager>{
 	/// <param name="args">Arguments.</param>
 	private void EnteredRoom(object sender, PartitionChangedArgs args){
 		// do a check in case a tutorial was in a different room
-		Check();
+		IsPlayTutorial();
 	}	
 }

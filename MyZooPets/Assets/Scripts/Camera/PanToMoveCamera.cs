@@ -19,29 +19,18 @@ public class PartitionChangedArgs : EventArgs{
 //    Panning left or right will move the camera x position right or left, respectively.
 //    Swiping Left or right will snap the camera x position right or left, respectively.
 //---------------------------------------------------
-
 public class PanToMoveCamera : MonoBehaviour{
 	//=======================Events========================
 	public EventHandler<PartitionChangedArgs> OnPartitionChanged;   // when the partition has changed (and the camera has finished moving)
 	public EventHandler<PartitionChangedArgs> OnPartitionChanging;  // when the partition is changing (i.e. camera is still moving)
 	//========================================================
-	
-	public int numOfPartitions = 4; //number of partitions allowed
-	public int firstPartition = -1; //Set this to negative numbers if you want to open a partition
+
+	public int firstPartition = -1;			//Set this to negative numbers if you want to open a partition
 	//on the left of the starting partition(always 0)
 	public int lastPartition = 2;
-	public float partitionOffset = 80.0f; //How big each partition is in world position
-	public int currentPartition = 0;
-	public float minNormalizedPanDistance = 0.05f; //min normalized panning distance
-	public float maxSwipeTime = 0.3f; //Swipe gesture needs to be faster than maxSwipeTime
-	public float panDistanceToChange = 0.5f;    // distance to pan before the camera will snap to the next partition
-
-	private Vector2 startTouchPos; //Position of touch when finger touches the screen
-	private Vector2 currentTouchPos; //Position of touch right now
-	private float startTime; //Time at when finger touches screen
-	private RoomDirection panDirection; //direction of the last finger gesture
-	private float normalizedTouchPosX; //0 ~ 1. 0.1 is 10% of the screen of any width
-	private bool touchCancelled = false; //True: touch shouldn't be handled
+	public float partitionOffset = 80.0f;	//How big each partition is in world position
+	public int currentLocalPartition = 0;
+	
 	private Camera nguiCamera;
 	private Camera mainCamera;
 
@@ -49,18 +38,19 @@ public class PanToMoveCamera : MonoBehaviour{
 	void Start(){
 		//Move camera to the last saved partition
 		LoadSceneData sceneData = DataManager.Instance.SceneData;
-		if(sceneData != null)
-		if(sceneData.LastScene == Application.loadedLevelName)
-			SetCameraToPartition(sceneData.LastCameraPartition);
+		if(sceneData != null){
+			if(sceneData.LastScene == Application.loadedLevelName){
+				SetCameraToLocalPartition(sceneData.LastCameraPartition);
+			}
+		}
 	}
 
-	
 	///////////////////////////////////////////
 	// SnapCamera()
 	// Snaps the camera to the current partition.
 	///////////////////////////////////////////		
-	private void SnapCamera(int oldPartition){
-		float moveTo = partitionOffset * currentPartition;
+	private void SnapCamera(int oldLocalPartition){
+		float moveTo = partitionOffset * currentLocalPartition;
 		
 		// if the camera is actually already in this position, don't bother doing anything	
 		if(gameObject.transform.position.x == moveTo)
@@ -72,12 +62,11 @@ public class PanToMoveCamera : MonoBehaviour{
 		optional.Add("onCompleteTarget", gameObject);
 		
 		Hashtable completeParamHash = new Hashtable();
-		completeParamHash.Add("Old", oldPartition);			
+		completeParamHash.Add("Old", oldLocalPartition);			
 		optional.Add("onCompleteParam", completeParamHash);
-		optional.Add("ease", LeanTweenType.easeOutQuad);
+		optional.Add("ease", LeanTweenType.easeInOutQuad);
 			
-		LeanTween.moveX(gameObject, moveTo, 0.35f, optional);
-		normalizedTouchPosX = 0;		
+		LeanTween.moveX(gameObject, moveTo, 0.5f, optional);
 	}
 
 	/// <summary>
@@ -85,33 +74,36 @@ public class PanToMoveCamera : MonoBehaviour{
 	/// </summary>
 	/// <param name="hash">Hash.</param>
 	private void OnCameraSnapped(Hashtable hash){
-		int oldPartition = (int)hash["Old"];
+		int oldLocalPartition = (int)hash["Old"];
 		
 		// if we were snapping back, don't send anything
-		if(oldPartition == currentPartition)
+		if(oldLocalPartition == currentLocalPartition){
 			return;
+		}
 
 		// camera is done snapping, so send the partition changed callback
-		if(OnPartitionChanged != null)
-			OnPartitionChanged(this, new PartitionChangedArgs(oldPartition, currentPartition));		
+		if(OnPartitionChanged != null){
+			OnPartitionChanged(this, new PartitionChangedArgs(oldLocalPartition, currentLocalPartition));
+		}
 	}
 
 	/// <summary>
 	/// Changes the partition.
 	/// </summary>
 	/// <param name="targetPartition">Target partition.</param>
-	private void ChangePartition(int targetPartition){
+	private void ChangeLocalPartition(int targetLocalPartition){
 		// check to make sure the move is legal (i.e. within bounds)
-		if(targetPartition >= firstPartition && targetPartition <= lastPartition){
-			int oldPartition = currentPartition;
-			currentPartition = targetPartition;
+		if(targetLocalPartition >= firstPartition && targetLocalPartition <= lastPartition){
+			int oldLocalPartition = currentLocalPartition;
+			currentLocalPartition = targetLocalPartition;
 			
 			// the partition changed, so snap the camera
-			SnapCamera(oldPartition);
+			SnapCamera(oldLocalPartition);
 			
 			// also send a callback that the partition is in the process of changing
-			if(OnPartitionChanging != null)
-				OnPartitionChanging(this, new PartitionChangedArgs(oldPartition, currentPartition));			
+			if(OnPartitionChanging != null){
+				OnPartitionChanging(this, new PartitionChangedArgs(oldLocalPartition, currentLocalPartition));			
+			}
 		}
 	}	
     
@@ -123,11 +115,11 @@ public class PanToMoveCamera : MonoBehaviour{
 	/// <param name="targetPartition">Target partition.</param>
 	/// <param name="panDirection">Pan direction.</param>
 	/// <param name="swipeTime">Swipe time.</param>
-	private bool CanMoveToPartition(int targetPartition, RoomDirection panDirection, float swipeTime){	
+	private bool CanMoveToPartition(int targetPartition, RoomDirection panDirection){	
 		bool retVal = true;
 			
 		// then check to make sure the gating manager is okay with the move
-		if(GatingManager.Instance.CanEnterRoom(currentPartition, panDirection) == false)
+		if(GatingManager.Instance.CanEnterRoom(currentLocalPartition, panDirection) == false)
 			retVal = false;
 			
 		// also check to make sure that the HUD animator is not animating
@@ -152,29 +144,30 @@ public class PanToMoveCamera : MonoBehaviour{
 	//It doesn't check click manager because we need the user to swipe left during
 	//the tutorial. 
 	public void TutorialSwipeLeft(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
-			ChangePartition(GetTargetPartition(1, RoomDirection.Left));
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)){
+			ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Left));
 		}
 	}
 
 	public void MoveOneRoomToRight(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
-			ChangePartition(GetTargetPartition(1, RoomDirection.Left));
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)){
+			ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Left));
 		}
 	}
 
 	public void MoveOneRoomToLeft(){
-		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right, -1)){
-			ChangePartition(GetTargetPartition(1, RoomDirection.Right));
+		if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right)){
+			ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Right));
 		}
 	}
 
 	public void MoveToFirstPartition(){
-		int targetPartition = GetTargetPartition(currentPartition, RoomDirection.Right);
-		bool isAllowedToMoveToPartition = CanMoveToPartition(targetPartition, RoomDirection.Right, -1);
+		int targetPartition = GetTargetPartition(currentLocalPartition, RoomDirection.Right);
+		bool isAllowedToMoveToPartition = CanMoveToPartition(targetPartition, RoomDirection.Right);
 
-		if(isAllowedToMoveToPartition)
-			ChangePartition(targetPartition);
+		if(isAllowedToMoveToPartition){
+			ChangeLocalPartition(targetPartition);
+		}
 	}
 
 	public bool CanDecoModeMoveToRight(){
@@ -182,8 +175,9 @@ public class PanToMoveCamera : MonoBehaviour{
 		bool retVal = true;
 
 		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen() && 
-			GatingManager.Instance.HasActiveGate(targetPartition))
+			GatingManager.Instance.HasActiveGate(targetPartition)){
 				retVal = false;
+		}
 
 		return retVal;
 	}
@@ -194,30 +188,27 @@ public class PanToMoveCamera : MonoBehaviour{
 			return;
 			
 		if(Input.GetKeyDown(KeyCode.RightArrow)){
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left, -1)){
-				ChangePartition(GetTargetPartition(1, RoomDirection.Left));
+			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)){
+				ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Left));
 			}
 		}
 		else if(Input.GetKeyDown(KeyCode.LeftArrow)){
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right, -1)){
-				ChangePartition(GetTargetPartition(1, RoomDirection.Right));       
+			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right)){
+				ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Right));       
 			}
 		}
 	}
 
 	/// <summary>
 	/// Gets the target partition.
-	/// Given a direction and a distance, what
-	/// partition is the target?
+	/// Given a direction and a distance, what partition is the target?
 	/// </summary>
 	/// <returns>The target partition.</returns>
-	/// <param name="moves">Moves.</param>
+	/// <param name="moves">Step</param>
 	/// <param name="swipeDirection">Swipe direction.</param>
-	private int GetTargetPartition(int moves, RoomDirection swipeDirection){
-		int change = swipeDirection == RoomDirection.Left ? moves : -moves;
-		int target = currentPartition + change;
-		
-		return target;
+	private int GetTargetPartition(int step, RoomDirection swipeDirection){
+		int change = swipeDirection == RoomDirection.Left ? step : -step;
+		return currentLocalPartition + change;
 	}
 
     
@@ -225,9 +216,9 @@ public class PanToMoveCamera : MonoBehaviour{
 	/// Sets the camera to partition.
 	/// </summary>
 	/// <param name="partition">Partition.</param>
-	private void SetCameraToPartition(int partition){
-		currentPartition = partition;
-		float cameraX = partition * partitionOffset;
-		transform.position = new Vector3(cameraX, transform.position.y, transform.position.z);
+	private void SetCameraToLocalPartition(int localPartition){
+		currentLocalPartition = localPartition;
+		float cameraPositionX = localPartition * partitionOffset;
+		transform.position = new Vector3(cameraPositionX, transform.position.y, transform.position.z);
 	}
 }

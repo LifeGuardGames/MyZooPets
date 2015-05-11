@@ -13,21 +13,17 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public UILabel moodLabel;
 	public UILabel starLabel;
 
-	public UILabel gemLabel;
-
 	// Parent for tweening
 	public GameObject tweenParent;
-	public GameObject anchorTopLeft;
-	public GameObject anchorTopRight;
+	public GameObject anchorTop;
 
 	// Icon pulsing
 	public AnimationControl animHealth;
 	public AnimationControl animMood;
 	public AnimationControl animMoney;
 	public AnimationControl animXP;
-	public ParticleSystemController animFire;
 
-	public AnimationControl animGem;
+	public Animation needMoneyAnimation;
 
 	private float points;
 	private float mood;
@@ -36,8 +32,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	private string levelText;
 	private int nextLevelPoints;
 	private string starCount;
-
-	private string gemCount;
 	
 	/// <summary>
 	/// Gets the tween parent.
@@ -48,11 +42,8 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	}
 
 	public GameObject GetTweenParent(string anchor){
-		if(anchor == "topLeft"){
-			return anchorTopLeft;
-		}
-		else if(anchor == "topRight"){
-			return anchorTopRight;
+		if(anchor == "Top"){
+			return anchorTop;
 		}
 		else{
 			Debug.LogError("Bad anchor specified for HUD tween");
@@ -63,6 +54,10 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	// Use this for initialization
 	void Awake(){
 		hudAnimator = GetComponent<HUDAnimator>();
+	}
+
+	void Start(){
+		HideLabels();
 	}
 	
 	// Update is called once per frame
@@ -85,8 +80,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		//Star data
 		starCount = hudAnimator.GetDisplayValue(HUDElementType.Stars).ToString();
 
-		gemCount = hudAnimator.GetDisplayValue(HUDElementType.Gems).ToString();
-
 		levelSlider.sliderValue = points / nextLevelPoints;
 		levelNumber.text = level;
 		levelFraction.text = levelText;
@@ -95,8 +88,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		healthSlider.sliderValue = health / 100;
 		healthLabel.text = health.ToString() + "%";
 		starLabel.text = starCount;
-
-		gemLabel.text = gemCount;
 	}
 
 	public void ShowPanel(){
@@ -106,4 +97,30 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public void HidePanel(){
 		gameObject.GetComponent<TweenToggleDemux>().Hide();
 	}
+
+	/// <summary>
+	/// Shows the more detailed HUD labels
+	/// </summary>
+	public void ShowLabels(){
+		levelFraction.gameObject.SetActive(true);
+		healthLabel.gameObject.SetActive(true);
+		moodLabel.gameObject.SetActive(true);
+	}
+
+	public void HideLabels(){
+		levelFraction.gameObject.SetActive(false);
+		healthLabel.gameObject.SetActive(false);
+		moodLabel.gameObject.SetActive(false);
+	}
+
+	public void PlayNeedMoneyAnimation(){
+		needMoneyAnimation.wrapMode = WrapMode.Once;
+		needMoneyAnimation.Play("moneyRequired");
+	}
+
+//	void OnGUI(){
+//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
+//			PlayNeedMoneyAnimation();
+//		}
+//	}
 }

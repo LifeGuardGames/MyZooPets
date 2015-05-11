@@ -1,66 +1,65 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-//---------------------------------------------------
-// CameraManager
-// Right now, this script really just manages the
-// perspective camera.
-//---------------------------------------------------
-
+/// <summary>
+/// Camera manager.
+/// Two parts to this class one camera movement and one that handles camera utility for screen conversion
+/// </summary>
 public class CameraManager : Singleton<CameraManager>{
-	// cameras
+
 	public Camera cameraMain;
-	public Camera cameraNGUI;
-	
-	// ratios
+	public Camera CameraMain{
+		get{ return cameraMain; }
+	}
+
+	#region Camera Move Variables
+	// Default position/rotation of the camera
+	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
+	protected Vector3 initFaceDirection;	
+
+	public PanToMoveCamera scriptPan;
+	public PanToMoveCamera PanScript{
+		get { return scriptPan; }
+	}
+
+	private bool isZoomed;		// Is the camera zoomed in
+	private bool isZoomingAux;	// Intermediate check to track if zoomed in or out when zoom is finished
+	private bool isMoving;		// Is the camera moving currently
+	public bool IsMoving{
+		get { return isMoving; }
+		set { isMoving = value; }
+	}
+
+	public delegate void Callback(); // Used for notification entry
+	public Callback FinishCameraMoveCallback;
+	#endregion
+
+	#region Utility Variables
 	public float ratioX;
 	public float ratioY;
 
-	public float GetRatioDifference(){
-		return ratioY;
-	}
-	
-	// default positoin/rotation of the camera
-	protected Vector3 initPosition;	// Default position: 0, 5.7, -23
-	protected Vector3 initFaceDirection;	
-	
-	// pan to move script
-	public PanToMoveCamera scriptPan;
-
-	public PanToMoveCamera GetPanScript(){
-		return scriptPan;	
-	}
-	
-	// is the camera zoomed?
-	private bool bZoomed;
-	private bool bZooming;
-
-	public void SetZooming(bool b){
-		bZooming = b;	
-	}
-
 	private int nativeWidth;
-
-	public int GetNativeWidth(){
-		return nativeWidth;	
+	public int NativeWidth{
+		get { return nativeWidth;}
 	}
 	
 	private int nativeHeight;
-
-	public int GetNativeHeight(){
-		return nativeHeight;	
+	public int NativeHeight{
+		get { return nativeHeight; }
 	}
+	#endregion
 
 	void Awake(){
-		// native height is a fixed constant that we define for NGUI
+		// Native height is a fixed constant that we define for NGUI
 		nativeHeight = Constants.GetConstant<int>("NativeHeight");
 		ratioY = nativeHeight / (Screen.height * 1.0f);
 		
-		// native width is not a constant -- it is a thing created by NGUI based on the height
+		// Native width is not a constant -- it is a thing created by NGUI based on the height
 		nativeWidth = (int)(Screen.width * ratioY);
 		ratioX = nativeWidth / (Screen.width * 1.0f);
 	}	
 
+	#region Camera Move Funtions
 	/// <summary>
 	/// Returns true if the camera is currently moving.
 	/// NOTE: I used to check for a lean tween, but we
@@ -70,21 +69,17 @@ public class CameraManager : Singleton<CameraManager>{
 	/// </summary>
 	/// <returns><c>true</c> if this camera is moving; otherwise, <c>false</c>.</returns>
 	public bool IsCameraMoving(){
-		PanToMoveCamera script = GetPanScript();
-		
-		// ahhhhhhhhh....hack for screens that do not have panning....
-		if(script == null)
+		if(scriptPan == null){	// Hack for screens that do not have panning
 			return false;
-		
+		}
+
 		GameObject goParent = transform.parent.gameObject;
-		
-		float fTargetX = script.partitionOffset * script.currentPartition;
+		float targetX = scriptPan.partitionOffset * scriptPan.currentLocalPartition;
 		float fX = goParent.transform.position.x;
 		
-		// check if the camera is moving horizontally or zooming
-		bool bMoving = fTargetX != fX || bZooming;
-		
-		return bMoving;
+		// Check if the camera is moving horizontally or zooming
+		bool auxMoving = (targetX != fX) || isMoving;
+		return auxMoving;
 	}
 
 	/// <summary>
@@ -97,17 +92,17 @@ public class CameraManager : Singleton<CameraManager>{
 	/// <param name="position">Position.</param>
 	/// <param name="rotation">Rotation.</param>
 	/// <param name="time">Time.</param>
-	/// <param name="targetObject">Target object.</param>
-	public void ZoomToTarget(Vector3 position, Vector3 rotation, float time, GameObject targetObject){
-		// before zooming, cache the camera position
+	/// <param name="cameraDoneCallback">Callback function on camera done moving</param>
+	public void ZoomToTarget(Vector3 position, Vector3 rotation, float time, CameraManager.Callback cameraDoneCallback){
+		// Before zooming, cache the camera position
 		initPosition = gameObject.transform.position;
 		initFaceDirection = gameObject.transform.eulerAngles;
 		
-		// move the camera
-		MoveCamera(position, rotation, time, targetObject);
-			
-		// mark that the camera is zoomed
-		bZoomed = true;
+		isZoomed = true;
+		isZoomingAux = true;	// Set the flag to true
+		isMoving = true;
+		
+		MoveCamera(position, rotation, time, cameraDoneCallback);
 	}
 
 	/// <summary>
@@ -118,34 +113,52 @@ public class CameraManager : Singleton<CameraManager>{
 	}
 
 	public void ZoomOutMove(float time){
-		if(bZoomed){
+		if(isZoomed){
+			isZoomingAux = false; // Set the flag to false
+			isMoving = true;
 			MoveCamera(initPosition, initFaceDirection, time, null);
-			bZoomed = false;
 		}
-	}	
+	}
 
-	private void MoveCamera(Vector3 position, Vector3 rotation, float time, GameObject targetObject){
-		// set up the movement hash
-		Hashtable hashMove = new Hashtable();
-		
-		// make sure to subtract the camera's parent's position from the vPos because the parent moves as the partitions pan
+	private void MoveCamera(Vector3 position, Vector3 rotation, float time, CameraManager.Callback cameraDoneCallback){
+		// Make sure to subtract the camera's parent's position from the vPos because the parent moves as the partitions pan
 		position -= gameObject.transform.parent.position;
 		
-		// if the incoming object isn't null, set up a callback
-		if(targetObject != null){
-			hashMove.Add("onCompleteTarget", targetObject);
-			hashMove.Add("onComplete", "CameraMoveDone");
+		Hashtable hashMove = new Hashtable();
+
+		// If the incoming object isn't null, set up a callback
+		if(cameraDoneCallback != null){
+			FinishCameraMoveCallback = cameraDoneCallback;	// Cache the callback
 		}
+
+		hashMove.Add("onCompleteTarget", gameObject);
+		hashMove.Add("onComplete", "MoveCameraDone");
 		
 		hashMove.Add("ease", LeanTweenType.easeInOutQuad);
 		
-		// set up the roation hash
+		// Set up the rotation hash
 		Hashtable hashRotation = new Hashtable();
 		hashRotation.Add("ease", LeanTweenType.easeInOutQuad);
 		
-		// kick of the move and rotation tweens
+		// Kick off the move and rotation tweens
 		LeanTween.moveLocal(gameObject, position, time, hashMove);
-		LeanTween.rotateLocal(gameObject, rotation, time, hashRotation);		
+		LeanTween.rotateLocal(gameObject, rotation, time, hashRotation);	
+	}
+
+	private void MoveCameraDone(){
+		isMoving = false;
+		isZoomed = isZoomingAux ? true : false;	// Determine if zoomed in or out based on flag
+
+		if(FinishCameraMoveCallback != null){
+			FinishCameraMoveCallback();			// Call the callback
+			FinishCameraMoveCallback = null;	// Unassign the callback once it is called
+		}
+	}
+	#endregion
+
+	#region Utility Functions
+	public float GetRatioDifference(){
+		return ratioY;
 	}
 
 	/// <summary>
@@ -270,7 +283,10 @@ public class CameraManager : Singleton<CameraManager>{
 		case InterfaceAnchors.BottomLeft:
 			transformedPosition.x -= nativeWidth / 2;
 			transformedPosition.y -= nativeHeight;
-			break;			
+			break;
+		case InterfaceAnchors.TopLeft:
+			transformedPosition.x -= nativeWidth / 2;
+			break;	
 		default:
 			Debug.LogError("Sorry not implemented yet.");
 			break;
@@ -286,6 +302,10 @@ public class CameraManager : Singleton<CameraManager>{
 		case InterfaceAnchors.Center:
 			transformedPosition.x -= nativeWidth / 2;
 			transformedPosition.y -= nativeHeight / 2;
+			break;
+		case InterfaceAnchors.BottomLeft:
+			transformedPosition.x -= nativeWidth;
+			transformedPosition.y -= nativeHeight;
 			break;
 		default:
 			Debug.LogError("Sorry not implemented yet.");
@@ -303,6 +323,9 @@ public class CameraManager : Singleton<CameraManager>{
 			transformedPosition.x += nativeWidth / 2;
 			transformedPosition.y -= nativeHeight / 2;
 			break;
+		case InterfaceAnchors.BottomLeft:
+			transformedPosition.y -= nativeHeight;
+			break;
 		default:
 			Debug.LogError("Sorry not implemented yet.");
 			break;
@@ -310,4 +333,5 @@ public class CameraManager : Singleton<CameraManager>{
 
 		return transformedPosition;
 	}
+	#endregion
 }

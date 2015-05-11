@@ -9,8 +9,8 @@ public class FloatyUtil {
     private static GameObject floatyText = null;
     private static GameObject floatyStats = null;
 	private static GameObject floatyImageText = null;
-
-
+	private static GameObject floatyFireCrystal = null;
+	
 	// NOTE: using a hashtable is actually a pretty bad idea. No type check so hard
 	// for other ppl to use
     //---------------------------------------------------- 
@@ -37,7 +37,7 @@ public class FloatyUtil {
         GameObject floaty;
 
         if(option.ContainsKey("parent")){
-            floaty = LgNGUITools.AddChildWithPositionAndScale((GameObject) option["parent"], floatyText);
+			floaty = GameObjectUtils.AddChildWithPositionAndScale((GameObject) option["parent"], floatyText);
         }else{
             Debug.LogError("SpawnfloatyText needs a parent");
             return;
@@ -100,7 +100,7 @@ public class FloatyUtil {
 		
 		GameObject floaty;
 		if(option.ContainsKey("parent")){
-            floaty = NGUITools.AddChild((GameObject) option["parent"], floatyStats);
+			floaty = GameObjectUtils.AddChild((GameObject) option["parent"], floatyStats);
         }
         else{
             Debug.Log("floatyImageText requires a parent");
@@ -159,17 +159,6 @@ public class FloatyUtil {
 			
 			offsetTracker++;
 		}
-		if(option.ContainsKey("deltaGems")){
-			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
-			label.gameObject.SetActive(true);
-			label.text = (string)option["deltaGems"];
-			
-			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
-			sprite.gameObject.SetActive(true);
-			sprite.spriteName = (string) option["spriteGems"];
-			
-			offsetTracker++;
-		}
 		
 		if(offsetTracker != 4){	// Check if every stat was modified, else need to hide them
 			
@@ -187,7 +176,7 @@ public class FloatyUtil {
 
         GameObject floaty;
         if(option.ContainsKey("parent")){
-            floaty = NGUITools.AddChild((GameObject) option["parent"], floatyImageText);
+			floaty = GameObjectUtils.AddChild((GameObject) option["parent"], floatyImageText);
         }
         else{
             Debug.Log("floatyImageText requires a parent");
@@ -200,4 +189,32 @@ public class FloatyUtil {
         if(option.ContainsKey("spriteName"))
             floaty.transform.Find("Sprite_StatsIcon").GetComponent<UISprite>().spriteName = (string) option["spriteName"];
     }
+
+	public static void SpawnFloatyFireCrystal(Hashtable option){
+		if(floatyFireCrystal == null)
+			floatyFireCrystal = (GameObject) Resources.Load("FloatyFireCrystal");
+		
+		GameObject floaty;
+		if(option.ContainsKey("parent")){
+			floaty = GameObjectUtils.AddChild((GameObject) option["parent"], floatyFireCrystal);
+		}
+		else{
+			Debug.Log("floatyImageText requires a parent");
+			return;
+		}
+		
+		// Reset all the children in floaty first
+		foreach(Transform child in floaty.transform){
+			child.gameObject.SetActive(false);
+		}
+
+		if(option.ContainsKey("deltaShards")){
+			UILabel label = floaty.transform.Find("Label_StatsChange1").GetComponent<UILabel>();
+			label.gameObject.SetActive(true);
+			label.text = (string)option["deltaShards"];
+			
+			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon1").GetComponent<UISprite>();
+			sprite.gameObject.SetActive(true);
+		}
+	}
 }

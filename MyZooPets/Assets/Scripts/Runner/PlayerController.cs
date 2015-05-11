@@ -12,7 +12,7 @@ public class PlayerController : Singleton<PlayerController>{
         
 		public float defaultTargetSpeed = 15f; //The default running speed
 		[System.NonSerialized]
-		public float currentSpeed = 0f; //currvent movement speed after it gets smoothed by acceleration
+		public float currentSpeed = 0f; //current movement speed after it gets smoothed by acceleration
 		public float targetSpeed; //The speed you want the character to reach to
 		public float acceleration = 5f; //How fast does the character change speed? higher is faster
 		public float jumpHeight = 9;
@@ -63,6 +63,8 @@ public class PlayerController : Singleton<PlayerController>{
 	private float speedIncreaseCounter = 0f; //Time till we speed up the game
 	private Vector2 initialPosition; //Where the player start
 	private GameObject floatyLocation;
+
+	public Camera nguiCamera;
 
 #if UNITY_EDITOR	
 	// used just for testing keyboard input in unity editor
@@ -133,17 +135,17 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics.Move(amountToMove);
 	}
 
-	//Listen to tap gesture from finger gesture plugin
-	void OnTap(TapGesture gesture){ 
-		if(RunnerGameManager.Instance.GameRunning){
+	/*// Listen to finger down gesture
+	void OnFingerDown(FingerDownEvent e){ 
+		if(RunnerGameManager.Instance.GameRunning && !IsTouchingNGUI(e.Position)){
 			Jump();
-			
+
 			if(OnJump != null)
 				OnJump(this, EventArgs.Empty);
 		}
-	}
+	}*/
 	
-	//Listen to swipe down gesture
+	// Listen to swipe down gesture
 	void OnSwipe(SwipeGesture gesture){
 		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			FingerGestures.SwipeDirection direction = gesture.Direction;
@@ -153,6 +155,13 @@ public class PlayerController : Singleton<PlayerController>{
 				if(OnDrop != null)
 					OnDrop(this, EventArgs.Empty);
 			}
+			else if (direction == FingerGestures.SwipeDirection.Up){
+				Jump();
+			
+			if(OnJump != null)
+				OnJump(this, EventArgs.Empty);
+			
+		}
 		}
 	}
 	
@@ -226,20 +235,25 @@ public class PlayerController : Singleton<PlayerController>{
 
 	private void Jump(){
 		if(playerPhysics.Grounded){
-            AudioManager.Instance.PlayClip("runnerJumpUp");
-
-			// amountToMove.y = jumpHeight;
+         //   AudioManager.Instance.PlayClip("runnerJumpUp", variations: 3);
+			AudioManager.Instance.PlayClip("runnerJumpUp");
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
-
 			playerPhysics.Jumping = true;
 		}
 	}
 
 	private void Drop(){
-		if(playerPhysics.Grounded && !playerPhysics.Jumping && !playerPhysics.Falling)
-			AudioManager.Instance.PlayClip("runnerJumpDown");
+		AudioManager.Instance.PlayClip("runnerJumpDown");
 
 		playerPhysics.AllowPassThroughLayer = true;
+
+		// Immediately tween down
+		if(movement.verticalSpeed >= 0){
+			movement.verticalSpeed = -10f;
+		}
+		else{
+			movement.verticalSpeed += -10f;
+		}
 	}
 	
 	//---------------------------------------------------
@@ -304,4 +318,22 @@ public class PlayerController : Singleton<PlayerController>{
 	}
 	#endif
 
+	//True: if finger touches NGUI 
+	/// <summary>
+	/// Determines whether if the touch is touching NGUI element
+	/// </summary>
+	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
+	/// <param name="screenPos">Screen position.</param>
+	private bool IsTouchingNGUI(Vector2 screenPos){
+		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
+		RaycastHit hit;
+		int layerMask = 1 << 10; 
+		bool isOnNGUILayer = false;
+		
+		// Raycast
+		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
+			isOnNGUILayer = true;
+		}
+		return isOnNGUILayer;
+	}
 }

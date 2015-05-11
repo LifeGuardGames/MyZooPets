@@ -12,28 +12,17 @@ public class DataManager : Singleton<DataManager>{
 		public bool IsSuccessful { get; set; }
 	}
 
-	public event EventHandler<SerializerEventArgs> OnGameDataLoaded;
+	public event EventHandler<EventArgs> OnGameDataLoaded;
 	public event EventHandler<EventArgs> OnGameDataSaved;
 
 	public bool isDebug = false; //turn isDebug to true if working on independent scene
 
 	private static bool isCreated;
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
-
-	//basic info data of all the pet that are only used in the menu scene
-	private MutableDataPetMenuInfo menuSceneData; // key: petID, value: instance of MutableDataPetInfo
-	private float syncToParseTimer = 0f;
-	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
+//	private float syncToParseTimer = 0f;
+//	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
 	#region Properties
-	/// <summary>
-	/// Gets the menu scene data. Note: GetMenuSceneData or SetMenuSceneData is the preferred method
-	/// </summary>
-	/// <value>The menu scene data.</value>
-	public MutableDataPetMenuInfo MenuSceneData{
-		get{ return menuSceneData; }
-	}
-
 	/// <summary>
 	/// Gets the game data.
 	/// </summary>
@@ -46,7 +35,14 @@ public class DataManager : Singleton<DataManager>{
 	/// Gets or sets the scene data. temporary data when transition to new scene
 	/// </summary>
 	/// <value>The scene data.</value>
-	public LoadSceneData SceneData{ get; set; } 
+	public LoadSceneData SceneData{ get; set; }
+
+//	/// <summary>
+//	/// If membership check failed a code will be passed from the LoadingScene to
+//	/// the MenuScene.
+//	/// </summary>
+//	/// <value>The membership check failed code.</value>
+//	public string MembershipCheckFailedCode{get; set;}
 	
 	/// <summary>
 	/// Gets a value indicating whether if it's user's first time launching app.
@@ -55,29 +51,94 @@ public class DataManager : Singleton<DataManager>{
 	public bool IsFirstTime{
 		get{
 			//default to true
-			bool firstTime = PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
-		
-			return firstTime;
+			return PlayerPrefs.GetInt("IsFirstTime", 1) > 0;
 		}
 	}
 
 	/// <summary>
-	/// Gets a value indicating whether terms of service and privacy are accepted
-	/// by the user
+	/// Checks if the player 
 	/// </summary>
-	public bool IsAgeCollected{
+	public bool IsQuestionaireCollected{
 		get{
 			//default to false
-			bool isAccepted = PlayerPrefs.GetInt("IsAgeCollected", 0) > 0;
-
-			return isAccepted;
+			return PlayerPrefs.GetInt("IsQuestionaireCollected", 0) > 0;
 		}
 		set{
-			bool isAccepted = value;
-			if(isAccepted)
-				PlayerPrefs.SetInt("IsAgeCollected", 1);
+			if(value){
+				PlayerPrefs.SetInt("IsQuestionaireCollected", 1);
+			}
 		}
 	}
+
+	/// <summary>
+	/// Gets or sets the membership check dates. Keep track of when membership check
+	/// happens. Also used for calculating when the trial period expires. Data will
+	/// be reset if trialStatus == expired, membershipStatus == active || expired.
+	/// </summary>
+	/// <value>The membership check dates.</value>
+//	public string MembershipCheckDates{
+//		get{
+//			return PlayerPrefs.GetString("MembershipCheckDates", "");
+//		}
+//		set{
+//			PlayerPrefs.SetString("MembershipCheckDates", value);
+//		}
+//	}
+
+	/// <summary>
+	/// Adds the membership check date. Save date in a comma deliminated string
+	/// ex. 14908789,14908382,14i09090
+	/// </summary>
+	/// <param name="timestamp">Timestamp.</param>
+//	public void AddMembershipCheckDate(string timestamp){
+//		string currentDates = MembershipCheckDates;
+//		if(!string.IsNullOrEmpty(timestamp)){
+//			if(!string.IsNullOrEmpty(currentDates))
+//				//Add new dates using a comma as the deliminating character
+//				MembershipCheckDates = currentDates + "," + timestamp;
+//			else
+//				MembershipCheckDates = timestamp;
+//		}
+//	}
+//
+//	public void ResetMembershipCheckDates(){
+//		MembershipCheckDates = "";
+//	}
+
+	/// <summary>
+	/// Tracks the connection error allowed before game is locked and user will 
+	/// be forced to go online before continue playing
+	/// </summary>
+	/// <value>The accumulated connection errors.</value>
+//	public int AccumulatedConnectionErrors{
+//		get{
+//			return PlayerPrefs.GetInt("ConnectionErrors", 0);
+//		}
+//		set{
+//			PlayerPrefs.SetInt("ConnectionErrors", value);
+//		}
+//	}
+
+	/// <summary>
+	/// Gets or sets the last play session date. Use to determine whether the game
+	/// should be force start from LoadingScene.unity
+	/// </summary>
+	/// <value>The last play session date.</value>
+//	public DateTime LastPlaySessionDate{
+//		get{
+//			string timeString = PlayerPrefs.GetString("LastPlaySessionDate", "");
+//			DateTime lastSessionTime = LgDateTime.GetTimeNow();
+//
+//			if(!string.IsNullOrEmpty(timeString))
+//				lastSessionTime = Convert.ToDateTime(timeString);
+//		
+//			return lastSessionTime;
+//		}
+//		set{
+//			string timeString = value.ToString("o");
+//			PlayerPrefs.SetString("LastPlaySessionDate", timeString);
+//		}
+//	}
 
 	/// <summary>
 	/// Use this to check if there is data loaded into gameData at anypoint
@@ -90,6 +151,10 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
+		#if DEVELOPMENT_BUILD
+		PlayerPrefs.DeleteAll();
+		#endif
+
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;
 		JSON.Instance.Parameters.UseUTCDateTime = false; //turning utc off for now
@@ -108,32 +173,30 @@ public class DataManager : Singleton<DataManager>{
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager
 		if(isDebug)
-			InitializeGameDataForNewPet();
+			InitGameDataForDebug();
 		else{
 			// if not first time need to do version check
 			if(!IsFirstTime){
-				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
 				VersionCheck(new Version(currentDataVersionString));
 			}
-			else{
-				bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-				if(isSyncToServerOn)
-					ExtraParseLogic.Instance.UserCheck();
-			}
-			
-			LoadMenuSceneData();
+//			else{
+//				bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+//				if(isSyncToServerOn)
+//					ExtraParseLogic.Instance.UserCheck();
+//			}
+
+			LoadGameData();
 		}
 	}
+
 	
 	//Serialize the data whenever the game is paused
 	void OnApplicationPause(bool paused){
 		if(paused){
-			#if DEVELOPMENT_BUILD
-				return;
-			#endif
-
-			//Save menu scene data. doesn't depend on if tutorial is finished or not
-			SaveMenuSceneData();
+//			#if DEVELOPMENT_BUILD
+//				return;
+//			#endif
 
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
@@ -143,8 +206,7 @@ public class DataManager : Singleton<DataManager>{
 			
 			// also early out if we happen to be in the inhaler game.  Ultimately we may want to create a more elaborate hash/list
 			// of scenes it is okay to save in, if we ever create more scenes that shouldn't serialize data
-			string loadedLevelName = Application.loadedLevelName;
-			if(loadedLevelName == "InhalerGamePet"){
+			if(Application.loadedLevelName == SceneUtils.INHALERGAME){
 				Debug.Log("Not saving the game because its inhaler scene");
 				return;
 			}
@@ -153,33 +215,42 @@ public class DataManager : Singleton<DataManager>{
 			//any thing that needs saving, so check before saving
 			if(gameData != null){
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
-				DataManager.Instance.GameData.Degradation.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
+				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
-				SaveGameData();
+				// Save last play period here again..
+				PlayPeriodLogic.Instance.SetLastPlayPeriod();
 
+				SaveGameData();
+				//Analytics.Instance.ShooterTimesPlayed(GameData.HighScore.timesPlayed["Shooter"]);
+				//Analytics.Instance.NinjaTimesPlayed(GameData.HighScore.timesPlayed["Ninja"]);
+				//Analytics.Instance.DoctorTimesPlayed(GameData.HighScore.timesPlayed["Clinic"]);
+				//Analytics.Instance.RunnerTimesPlayed(GameData.HighScore.timesPlayed["Runner"]);
+				//Analytics.Instance.MemoryTimesPlayed(GameData.HighScore.timesPlayed["Memory"]);
+				//Analytics.Instance.MiniPetVisited("MiniPet0", GameData.MiniPets.GetVisits("MiniPet0"));
+				//Analytics.Instance.MiniPetVisited("MiniPet1", GameData.MiniPets.GetVisits("MiniPet1"));
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
 			}
 		}
 	}
 
-	void Update(){
-		//this is the timer that will be running to keep track of when to sync data
-		//to parse server
-		bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-		if(!isDebug && isSyncToServerOn){
-
-			//waiting till auto sync time
-			syncToParseTimer += Time.deltaTime;
-			if(syncToParseTimer >= syncToParseWaitTime){
-				syncToParseTimer = 0;
-				if(gameData != null){
-					Debug.Log("auto sync starting");
-					gameData.SaveAsyncToParse();
-				}
-			}
-		}
-	}
+//	void Update(){
+//		//this is the timer that will be running to keep track of when to sync data
+//		//to parse server
+//		bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
+//		if(!isDebug && isSyncToServerOn){
+//
+//			//waiting till auto sync time
+//			syncToParseTimer += Time.deltaTime;
+//			if(syncToParseTimer >= syncToParseWaitTime){
+//				syncToParseTimer = 0;
+//				if(gameData != null){
+//					Debug.Log("auto sync starting");
+//					gameData.SaveAsyncToParse();
+//				}
+//			}
+//		}
+//	}
 	#endregion
 
 	#region Game Data
@@ -193,9 +264,9 @@ public class DataManager : Singleton<DataManager>{
 		}
 		
 		#if UNITY_EDITOR
-		Debug.Log("Game is saving");
+//		Debug.Log("Game is saving");
 		#endif
-		
+
 		//Data will not be saved if gameData is empty
 		if(gameData != null){
 			string jsonString = JSON.Instance.ToJSON(gameData);
@@ -203,7 +274,7 @@ public class DataManager : Singleton<DataManager>{
 			#if UNITY_EDITOR
 			Debug.Log("SERIALIZED: " + jsonString);
 			#endif
-			
+
 			PlayerPrefs.SetString("GameData", jsonString);
 			SaveDataVersion();
 			Serialized();
@@ -214,9 +285,11 @@ public class DataManager : Singleton<DataManager>{
 	}
 	
 	/// <summary>
-	/// Loads the game data from PlayerPrefs.
+	/// Loads the game data from PlayerPrefs. If no game data is found from PlayerPrefs
+	/// a new game data will be initiated. This function should only be called once when the
+	/// game loads in LoadingScene.
 	/// </summary>
-	public void LoadGameData(string petID = "Pet0"){
+	public void LoadGameData(){
 		//if gameData is not null then the gameData needs to be saved first
 		//otherwise loading the new data will erase the current gameData
 		if(gameData == null){
@@ -232,59 +305,99 @@ public class DataManager : Singleton<DataManager>{
 				#endif
 				
 				gameData = newGameData;
+
+				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+					Debug.Log("Setting dummy data for second play period");
+					SetDummyDataForSecondPlayPeriod();
+				}
+
 				LoadDataVersion();
 				
-				Deserialized(true);
+				Deserialized();
 			}
 			else{
-				Deserialized(false);
+				//initiate game data here because none is found in the PlayerPrefs
+				gameData = new PetGameData();
+
+				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+					Debug.Log("Setting dummy data for second play period");
+					SetDummyDataForSecondPlayPeriod();
+				}
+
+				Deserialized();
 			}
-		}
-		else{
-			Deserialized(true);
 		}
 	}
 	#endregion
 
+	public void SetDummyDataForSecondPlayPeriod(){
+		IsQuestionaireCollected = true;
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_SUPERWELLA_INHALER);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_WELLAPAD);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_SMOKE_INTRO);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FLAME_CRYSTAL);
+		gameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FLAME);
+	}
+
 	/// <summary>
-	/// Initializes the game data for new pet.
+	/// Modify Pet Info. Used in the MenuScene. Will trigger game data to be serialized
+	/// immediately. 
 	/// </summary>
 	/// <param name="petID">Pet ID.</param>
 	/// <param name="petName">Pet name.</param>
 	/// <param name="petSpecies">Pet species.</param>
 	/// <param name="petColor">Pet color.</param>
-	public void InitializeGameDataForNewPet(string petID = "Pet0", string petName = "", 
+	public void ModifyBasicPetInfo(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
-		gameData = new PetGameData();
-
 		if(!String.IsNullOrEmpty(petName))
-			gameData.PetInfo.PetName = petName;
+			gameData.PetInfo.ChangeName(petName);
 		else
-			gameData.PetInfo.PetName = "Player1";
+			gameData.PetInfo.ChangeName("Player1");
 
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;
 		gameData.PetInfo.PetID = petID;
-           
-		if(!isDebug)
-			menuSceneData = new MutableDataPetMenuInfo(gameData.PetInfo.PetName, petColor, petSpecies);
+
+		//serialize data right away
+    	SaveGameData();
+	}
+
+	public void InitGameDataForDebug(){
+		gameData = new PetGameData();
 	}
 
 	#region Data Version
 	/// <summary>
-	/// Versions the check. Handles any major data schema changes to the DataManager
+	/// Checks the version. Handles any major data schema changes to the DataManager
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
+		//Deleting all data that is less than 2.0.0
+		Version version200 = new Version("2.0.0");
+		if(currentDataVersion < version200){
+			PlayerPrefs.DeleteKey("GameData");
+		}
+
+		/*
 		Version version140 = new Version("1.4.0");
+		Version version142 = new Version("1.4.2");
 		
 		if(currentDataVersion < version140){
+			//no longer needs this key so removed it. this key was previously use
+			//to update from single pet to mulitple pet
 			PlayerPrefs.DeleteKey("IsSinglePetMode");
 			IsAgeCollected = true;
 			
 			ExtraParseLogic.Instance.UserCheck();
 		}
+
+		if(currentDataVersion < version142){
+			//menu scene data is no longer required. 
+			PlayerPrefs.DeleteKey("MenuSceneData");
+		}
+		 */
 	}
 
 	/// <summary>
@@ -293,10 +406,11 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	private void LoadDataVersion(){
 		//don't change the default value
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
-		
-		if(!IsFirstTime)
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
+
+		if(!IsFirstTime){
 			gameData.VersionCheck(new Version(currentDataVersionString));
+		}
 	}
 
 	/// <summary>
@@ -306,55 +420,31 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	private void SaveDataVersion(){
 		string buildVersionString = Constants.GetConstant<string>("BuildVersion");
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "1.3.0");
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
 		Version buildVersion = new Version(buildVersionString);
 		Version currentDataVersion = new Version(currentDataVersionString);
 		
-		if(buildVersion > currentDataVersion)
+		if(buildVersion > currentDataVersion){
 			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
-	}
-	#endregion
-
-	#region MenuScene Data
-	/// <summary>
-	/// Loads the menu scene data.
-	/// </summary>
-	private void LoadMenuSceneData(){
-		string jsonString = PlayerPrefs.GetString("MenuSceneData", "");
-
-		//Check if json string is actually loaded and not empty
-		if(!String.IsNullOrEmpty(jsonString))
-			menuSceneData = JSON.Instance.ToObject<MutableDataPetMenuInfo>(jsonString);
-	}
-	
-	/// <summary>
-	/// Saves the menu scene data.
-	/// </summary>
-	private void SaveMenuSceneData(){
-		if(menuSceneData != null){
-			string jsonString = JSON.Instance.ToJSON(menuSceneData);
-			PlayerPrefs.SetString("MenuSceneData", jsonString);
 		}
 	}
 	#endregion
-	
+
 	/// <summary>
 	/// Called when game data has been deserialized. Could be successful or failure
 	/// </summary>
-	private void Deserialized(bool isSuccessful){
-		SerializerEventArgs args = new SerializerEventArgs();
-		args.IsSuccessful = isSuccessful;
-
-		if(OnGameDataLoaded != null)
-			OnGameDataLoaded(this, args);
+	private void Deserialized(){
+		if(OnGameDataLoaded != null){
+			OnGameDataLoaded(this, EventArgs.Empty);
+		}
 	}
 	
 	/// <summary>
 	/// Called when game data has been serialized
 	/// </summary>
 	private void Serialized(){
-
-		if(OnGameDataSaved != null)
+		if(OnGameDataSaved != null){
 			OnGameDataSaved(this, EventArgs.Empty);
+		}
 	}
 }

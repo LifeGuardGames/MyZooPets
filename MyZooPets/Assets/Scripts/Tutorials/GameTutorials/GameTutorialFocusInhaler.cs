@@ -28,16 +28,17 @@ public class GameTutorialFocusInhaler : GameTutorial{
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-				// the start of the focus inhaler tutorial
+			// the start of the focus inhaler tutorial
 			FocusInhaler();
-			
+			ShowRetentionPet(true, new Vector3(-281, -86, -160));
 			break;
 			
 		case 1:
-				// destroy the spotlight we created for the inhaler
+			// destroy the spotlight we created for the inhaler
 			RemoveSpotlight();
 			RemoveFingerHint();
 			RemovePopup();
+			RemoveRetentionPet();
 			break;
 		}
 	}
@@ -61,8 +62,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 
 		string tutKey = GetKey() + "_" + GetStep();
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string message = String.Format(Localization.Localize(tutKey),
-		                               StringUtils.FormatStringPossession(petName));
+		string message = String.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
 		
 		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("InhalerPopupLoc");
@@ -71,7 +71,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, message);
 		
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
 	}
 
 	/// <summary>

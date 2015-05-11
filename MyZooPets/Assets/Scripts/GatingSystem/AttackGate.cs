@@ -11,11 +11,14 @@ public class AttackGate : Singleton<AttackGate>{
 	private Gate gateTarget; // gate to attack
 	private int damage; // damage to deal
 
+
 	void Start(){
 		PetAnimationManager.OnBreathEnded += ExecutePostAttackLogic;
+
 	}
 
 	void OnDestroy(){
+
 		PetAnimationManager.OnBreathEnded -= ExecutePostAttackLogic;
 	}
 

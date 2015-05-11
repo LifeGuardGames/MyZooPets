@@ -16,7 +16,8 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 
 	private string currentCutscene = null;
 
-	void Awake(){
+	protected override void Awake(){
+		base.Awake();
 		eModeType = UIModeTypes.Cutscene;
 		background.gameObject.SetActive(false);
 	}

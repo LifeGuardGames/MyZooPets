@@ -13,7 +13,7 @@ public class ServerEventArgs : EventArgs{
 	public string ErrorMessage {get; set;}
 }
 
-public class ServerConnector<T> : Singleton<T> where T : MonoBehaviour {
+public class ServerConnector<T> : Singleton<T> where T : MonoBehaviour{
 	public bool useDummyData = false; //serve dummy data to UI instead of server data
 
 	private bool runTimeOutTimer = false; // to run the time out timer or not

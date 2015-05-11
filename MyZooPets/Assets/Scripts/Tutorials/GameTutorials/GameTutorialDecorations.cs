@@ -1,3 +1,4 @@
+/*
 using UnityEngine;
 using System;
 using System.Collections;
@@ -80,11 +81,9 @@ public class GameTutorialDecorations : GameTutorial{
 	
 	private IEnumerator ShowWellapad(){
 		yield return new WaitForSeconds(1.5f);
-		// highlight the fight task
-		WellapadMissionController.Instance.HighlightTask("Decorate");
 	
 		// show the wellapad
-		WellapadUIManager.Instance.OpenUI();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 	
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
@@ -127,7 +126,7 @@ public class GameTutorialDecorations : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, location, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, location, option: option);
 		
 		// find and spotlight the edit button
 		GameObject goEditButton = NavigationUIManager.Instance.GetEditDecoButton();
@@ -158,8 +157,6 @@ public class GameTutorialDecorations : GameTutorial{
 		// advance the tutorial
 		Advance();		
 	}
-
-
 
 	/// <summary>
 	/// No deocration items yet, so make the user go to the store to buy some
@@ -284,8 +281,8 @@ public class GameTutorialDecorations : GameTutorial{
 	private IEnumerator FocusOnDecorationUI(){
 		yield return new WaitForSeconds(1);
 
-		GameObject tutDecoNode = GameObject.Find("DecoNode_Starting_Rug");
-		Vector3 tutDecoNodePosition = CameraManager.Instance.WorldToScreen(CameraManager.Instance.cameraMain, 
+		GameObject tutDecoNode = GameObject.Find("DecoNode_0_Rug");
+		Vector3 tutDecoNodePosition = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
 		                                                             tutDecoNode.transform.position);
 		tutDecoNodePosition = CameraManager.Instance.TransformAnchorPosition(tutDecoNodePosition, 
 		                                                               InterfaceAnchors.BottomLeft, 
@@ -294,7 +291,7 @@ public class GameTutorialDecorations : GameTutorial{
 
 		GameObject tutDecoItemGameObject = DecoInventoryUIManager.Instance.GetTutorialItem();
 		Vector3 tutDecoItemPosition = LgNGUITools.GetScreenPosition(tutDecoItemGameObject, isObjectInUIGrid: true);
-		decoFingerHint = LgNGUITools.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
+		decoFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight/ExtraBottomRightPanel"),
 		                                         (GameObject)Resources.Load("DecoFingerHint"));
 		decoFingerHint.transform.localPosition = tutDecoItemPosition;
 
@@ -335,9 +332,9 @@ public class GameTutorialDecorations : GameTutorial{
 		NotificationUIManager.Instance.CleanupNotification();
 
 		decoModeBackButton = GameObject.Find("DecoExitButton");
-
-		// show finger hint
-		ShowFingerHint(decoModeBackButton, isGUI:true, anchor:InterfaceAnchors.BottomLeft, flipX:true);
+		ShowFingerHint(decoModeBackButton);
+		SpotlightObject(decoModeBackButton, true, InterfaceAnchors.BottomLeft, fingerHint: true,
+		                fingerHintFlip: true, delay: 0.5f);
 
 		// show message
 		Vector3 popupLocation = Constants.GetConstant<Vector3>("DecorationExitPopupLoc");
@@ -348,7 +345,7 @@ public class GameTutorialDecorations : GameTutorial{
 		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
 		option.Add(TutorialPopupFields.Message, tutMessage);
 
-		ShowPopup(Tutorial.POPUP_STD, popupLocation, useViewPort: false, option: option);
+		ShowPopup(Tutorial.POPUP_STD, popupLocation, option: option);
 
 		//permit exit button to be clicked
 		AddToProcessList(decoModeBackButton);
@@ -365,11 +362,14 @@ public class GameTutorialDecorations : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void OnDecoModeExit(object sender, EventArgs args){
 		LgButton button = decoModeBackButton.GetComponent<LgButton>();
-		button.OnProcessed -= OnDecoModeExit;		
+		button.OnProcessed -= OnDecoModeExit;	
 
+		// clean up
+		RemoveSpotlight();
 		RemoveFingerHint();
 		RemovePopup();
 
 		Advance();
 	}
 }
+*/

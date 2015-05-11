@@ -2,7 +2,7 @@
 using System.Collections;
 
 /*
-    This class controls the physic of the runner player. Using a
+    This class controls the physics of the runner player. Using a
     rigid body or character controller doesn't really give us the
     game physics that we want, so we implemented a simple physics 
     class to handle jumping, falling, and colliding    

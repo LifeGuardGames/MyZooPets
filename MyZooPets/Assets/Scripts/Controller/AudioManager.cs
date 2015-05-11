@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-
 public class AudioManager : LgAudioManager<AudioManager>{
 	public bool isMusicOn = true;
 	public string backgroundMusic;
@@ -20,13 +19,13 @@ public class AudioManager : LgAudioManager<AudioManager>{
 		StartCoroutine(PlayBackground());
 	}
 
-
 	private IEnumerator PlayBackground(){
 		yield return new WaitForSeconds(0.5f);
 		if(isMusicOn){
 			AudioClip backgroundClip = null;
-			if(backgroundMusic != null)
+			if(backgroundMusic != null){
 				backgroundClip = Resources.Load(backgroundMusic) as AudioClip;
+			}
 
 			if(backgroundClip != null){
 				backgroundSource.clip = backgroundClip;
@@ -40,17 +39,25 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	}
 
 	// Pass in null if don't want new music
-	public void FadeOutPlayNewBackground(string newAudioClipName){
-		StartCoroutine(FadeOutPlayNewBackgroundHelper(newAudioClipName));
+	public void FadeOutPlayNewBackground(string newAudioClipName, bool isLoop = true){
+		StartCoroutine(FadeOutPlayNewBackgroundHelper(newAudioClipName, isLoop));
 	}
 
-	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName){
-		for(int i = 9; i > 0; i--){
+	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName, bool isLoop){
+		for(int i = 9; i >= 0; i--){
 			backgroundSource.volume = i * .1f;
-			yield return new WaitForSeconds(.4f);
+			yield return new WaitForSeconds(.01f);
 		}
 		if(newAudioClipName != null){
-			PlayBackground();
+			backgroundSource.Stop();
+			backgroundSource.volume = 0.6f;
+			backgroundMusic = newAudioClipName;
+
+			if(!isLoop){
+				backgroundSource.loop = false;
+			}
+
+			StartCoroutine(PlayBackground());
 		}
 		else{
 			backgroundSource.Stop();
@@ -62,9 +69,11 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	/// </summary>
 	/// <param name="isPaused">If set to <c>true</c> is paused.</param>
 	public void PauseBackground(bool isPaused){	
-		if(isPaused)
+		if(isPaused){
 			backgroundSource.Pause();
-		else
+		}
+		else{
 			backgroundSource.Play();
+		}
 	}
 }

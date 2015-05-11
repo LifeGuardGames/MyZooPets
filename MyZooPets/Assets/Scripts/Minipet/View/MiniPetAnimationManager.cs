@@ -90,7 +90,7 @@ public class MiniPetAnimationManager : MonoBehaviour {
 		if(happyIdleStateTimer > timeBeforeNextRandomHappyIdleAnimation){
 			happyIdleStateTimer = 0;
 			
-			AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+//			AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 			List<string> animations = new List<string>();
 			animations = happyIdleAnimations;
 

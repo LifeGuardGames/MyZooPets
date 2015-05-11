@@ -10,6 +10,8 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	private GameObject fingerTutorialPrefab;
 	private GameObject fingerTutorialObject;
 	private Animation fingerTutorialAnimation;
+	// handles multiple sprites needed for completeion 
+	private int numOfCompleteions = 0;
 
 	protected override void SetMaxSteps(){
 		maxSteps = 3;
@@ -24,8 +26,11 @@ public class DoctorMatchTutorial : MinigameTutorial {
 		if(isFinished){
 			// Enable all the collider and continue the game
 			zone1Collider.enabled = true;
+			zone1Collider.GetComponentInChildren<SpriteRenderer>().color=Color.white;
 			zone2Collider.enabled = true;
+			zone2Collider.GetComponentInChildren<SpriteRenderer>().color=Color.white;
 			zone3Collider.enabled = true;
+			zone3Collider.GetComponentInChildren<SpriteRenderer>().color=Color.white;
 
 			if(fingerTutorialObject)
 				GameObject.Destroy(fingerTutorialObject);
@@ -61,40 +66,61 @@ public class DoctorMatchTutorial : MinigameTutorial {
 				SetUpCharacterGroup(1);
 				zone1Collider.enabled = true;
 				zone2Collider.enabled = false;
+				// greys out non active collider
+				zone2Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
 				zone3Collider.enabled = false;
+				// greys out non active collider
+				zone3Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
 				fingerTutorialAnimation.Play("DoctorTut1");
 			break;
+		
 		case 1:
 				SetUpCharacterGroup(2);
 				zone1Collider.enabled = false;
+				zone1Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
 				zone2Collider.enabled = true;
+				zone2Collider.GetComponentInChildren<SpriteRenderer>().color=Color.white;
 				zone3Collider.enabled = false;
+				zone3Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
 				fingerTutorialAnimation.Play("DoctorTut2");
 			break;
+		
 		case 2:
-				SetUpCharacterGroup(3);
-				zone1Collider.enabled = false;
-				zone2Collider.enabled = false;
-				zone3Collider.enabled = true;
-				fingerTutorialAnimation.Play("DoctorTut3");
+			SetUpCharacterGroup(3);
+			zone1Collider.enabled = false;
+			zone1Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
+			zone2Collider.enabled = false;
+			zone2Collider.GetComponentInChildren<SpriteRenderer>().color=Color.grey;
+			zone3Collider.enabled = true;
+			zone3Collider.GetComponentInChildren<SpriteRenderer>().color=Color.white;
+			fingerTutorialAnimation.Play("DoctorTut3");
 			break;
 		default:
 			Debug.LogError("Ninja tutorial has an unhandled step: " + step);
 			break;
 		}
 	}
-
+	// spawns the two sprites associated with the situation
 	private void SetUpCharacterGroup(int itemGroupNumber){
-		GameObject stepItem = DoctorMatchManager.Instance.assemblyLineController.SpawnItemForTutorial();
-		DoctorMatchManager.Instance.SetUpAssemblyItemSprite(stepItem, itemGroupNumber: itemGroupNumber);
-		
-		stepItem.transform.position = new Vector3(0, 1.5f, 0);
+		GameObject[] stepItem = new GameObject[2];
+		for (int i = 0; i <2; i++){
+		stepItem[i] = DoctorMatchManager.Instance.assemblyLineController.SpawnItemForTutorial();
+		DoctorMatchManager.Instance.SetUpAssemblyItemSpriteTutorial(stepItem[i], i,itemGroupNumber: itemGroupNumber);
+		}
+		stepItem[0].transform.position = new Vector3(0, 1.5f, 0);
+		stepItem[1].transform.position = new Vector3(2.8f, 1.5f, 0);
+
 		
 		DoctorMatchManager.OnCharacterScoredRight += OnCharacterScoredRightEventHandler;
 	}
 
 	private void OnCharacterScoredRightEventHandler(object sender, EventArgs args){
+		numOfCompleteions++;
+		// handles more than one completion
+		if(numOfCompleteions == 2){
+			numOfCompleteions = 0;
 		DoctorMatchManager.OnCharacterScoredRight -= OnCharacterScoredRightEventHandler;
 		Advance();
+		}
 	}
 }

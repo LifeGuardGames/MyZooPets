@@ -5,31 +5,56 @@ using System;
 using System.Linq;
 
 public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
+
+	public static EventHandler<EventArgs> OnBadgeUIAnimationDone;
+
 	public AnimationClip pulseClip;
-	public GameObject backButton;
 	public GameObject badgeBoard;
-	public GameObject descriptionObject;
 	public GameObject badgePrefab;
 	public GameObject badgeBase;
-	public UIAtlas badgeCommonAtlas;		// Holds ALL the low-res badges and common objects
-	// public UIAtlas badgeExtraAtlas;			// Holds tier (gold/silver/bronze) medals for zoomed display
-	
+	public GameObject badgeExitButton;
+
+	public TweenToggleDemux descriptionDemux;
+	public UISprite descriptionBadgeSprite;
+	public UILabel descriptionBadgeTitle;
+	public UILabel descriptionBadgeInfo;
+	public ParticleSystem slamParticle;
+
+	private string blankBadgeTextureName = "badgeBlank";
 	private bool firstClick = true;
 	private GameObject lastClickedBadge;
-	private GameObject backButtonReference;
 	private bool isActive = false;
-	
-	// related to zooming into the badge board
-	public float fZoomTime;
-	public Vector3 vOffset;
-	public Vector3 vRotation;
 
-	void Start(){
+	private Queue<Badge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
+
+	private bool isQueueAnimating = false;
+	public bool IsBadgeBoardUIAnimating{	// Scenes will poll this to see if they need to wait
+		get{ return isQueueAnimating; }
+	}
+
+	private bool isWaitingInRewardQueue = false;
+	public bool IsWaitingInRewardQueue{		// If it is waiting in reward queue waiting to be animated, used for controlling unlocking multiple badges
+		get{ return isWaitingInRewardQueue; }
+	}
+
+	public delegate void Callback();
+	public Callback FinishedAnimatingCallback;
+	private bool isOpenedAsReward = false;	// Check if it is badge board clicked or from reward manager
+
+	protected override void Awake(){
+		base.Awake();
+		eModeType = UIModeTypes.Badge;
+	}
+
+	protected override void Start(){
+		base.Start();
+		badgeUnlockQueue = new Queue<Badge>();
 		BadgeLogic.OnNewBadgeUnlocked += UnlockBadge;
 		InitBadges();
 	}
 
-	void OnDestroy(){
+	protected override void OnDestroy(){
+		base.OnDestroy();
 		BadgeLogic.OnNewBadgeUnlocked -= UnlockBadge;
 	}
 
@@ -55,138 +80,170 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			foreach(var badge in group.Elements){
 				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
 				badgeGO.name = badge.ID;
-				string textureName = "";
-				//badgeGO.GetComponent<UIButtonMessage>().target = this.gameObject;
-
-				//TO DO: Update this after you have all the art for badges
-				if(badge.IsUnlocked){
-					textureName = badge.TextureName;
-				}else{
-					textureName = badge.TextureName + "Dark";
-				}
-				badgeGO.transform.Find("badgeSprite").GetComponent<UISprite>().spriteName = textureName;
+				badgeGO.GetComponent<BadgeController>().Init(badge.IsUnlocked, badge.TextureName, blankBadgeTextureName);
 			}
 		}
 
-		badgeBase.GetComponent<UIGrid>().Reposition();
+		UIGrid grid = badgeBase.GetComponent<UIGrid>();
+		grid.sorted = true;
+		grid.Reposition();
 	}
 
 	//Event Listener that updates the Level badges UI when a new badge is unlocked
 	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
-		Badge badge = arg.UnlockedBadge;
-		Transform badgeTrans = badgeBase.transform.Find(badge.ID);
+		// Populate the unlocked badge into the unlock queue
+		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
 
-		//TODO: Update this after you have all the art for badges
-		// if(badge.IsUnlocked){
+		// Check for waiting in reward queue because there might be more badges coming in during waiting so only want to enqueue
+		if(!isWaitingInRewardQueue){
+			isWaitingInRewardQueue = true;
 
-		// }else{
-
-		// }
-
-		if(badgeTrans != null)
-			badgeTrans.Find("badgeSprite").GetComponent<UISprite>().spriteName = badge.TextureName;
-
-		badgeBase.GetComponent<UIGrid>().Reposition();
-	}
-	
-	public void BadgeClicked(GameObject go){
-		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
-
-		// First time clicking, not showing description
-		if(firstClick){
-			firstClick = false;
-			descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Name : "";
-			descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Description : "";
-			ShowDescriptionPanel();
+			RewardQueueData.GenericDelegate funtion = delegate(){
+				// Try to animate, lock the queue animation. might be more badges coming in during animation so only want to enqueue
+				if(!isQueueAnimating){
+					isQueueAnimating = true;
+					StartCoroutine(TryPopBadgeQueue());
+				}
+			};
+			RewardManager.Instance.AddToRewardQueue(funtion);
 		}
-		
-		if(lastClickedBadge != go){
-			// Remove the animation component in the last badge and assign new reference
-			if(lastClickedBadge != null){
-				Destroy(lastClickedBadge.GetComponent<Animation>());
-				lastClickedBadge.transform.localScale = Vector3.one;
+	}
+
+	// Show the badge board pop queue board if any
+	private IEnumerator TryPopBadgeQueue(){
+		if(badgeUnlockQueue.Count != 0){
+			// If the badge board is not opened already, open the UI and wait a while
+			if(!BadgeBoardUIManager.Instance.IsOpen()){
+				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
+				yield return new WaitForSeconds(sceneSpecificDelay);
+
+				OpenUI();
+				yield return new WaitForSeconds(1f);
 			}
-			lastClickedBadge = go;
-			
-			// Play pulsing animation in current badge
-			Animation anim = go.AddComponent<Animation>();
-			anim.AddClip(pulseClip, "scaleUpDownBadge");
-			anim.Play("scaleUpDownBadge");
-			
-			// Hide callback, show last badge info
-			TweenToggle toggle = descriptionObject.GetComponent<PositionTweenToggle>();
-			toggle.HideTarget = gameObject;
-			toggle.HideFunctionName = "RepopulateAndShowDescriptionPanel";
-			HideDescriptionPanel();
+
+			Badge unlockingBadge = badgeUnlockQueue.Dequeue();
+			Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
+			if(badgeGOTransform != null){
+				BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
+				badgeController.PlayUnlockAnimation();
+			}
+			else{
+				Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
+				CloseUI();	// Try to fail gracefully
+			}
 		}
 	}
-	
-	// Callback for finished hide description, populate panel with new info and show
-	private void RepopulateAndShowDescriptionPanel(){
-		Badge clickedBadge = BadgeLogic.Instance.GetBadge(lastClickedBadge.name);
-		descriptionObject.transform.FindChild("L_Title").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Name : "";
-		descriptionObject.transform.FindChild("L_Description").gameObject.GetComponent<UILabel>().text = (clickedBadge != null) ? clickedBadge.Description : "";
+
+	/// <summary>
+	/// Plays the slam particle. Call from badge reward animation event
+	/// </summary>
+	public void PlaySlamParticle(Vector3 position){
+		slamParticle.transform.position = position;
+		slamParticle.Play();
+	}
+
+	/// <summary>
+	/// Called when a badge animation is done, check the queue again if still needs popping
+	/// </summary>
+	public IEnumerator BadgeAnimationDone(){
+		yield return new WaitForSeconds(1f);
+		
+		// Ending queue check, all animations and popping finished
+		if(badgeUnlockQueue.Count == 0){
+			CloseUI();
+
+			isQueueAnimating = false;	// Release the animation lock
+			isWaitingInRewardQueue = false;		// It is animating so no longer waiting in reward queue
+
+
+
+			// Launch any finished callback
+			if(FinishedAnimatingCallback != null){
+				FinishedAnimatingCallback();
+			}
+		}
+		else{
+			StartCoroutine(TryPopBadgeQueue());	// Fire off next in queue try
+		}
+	}
+
+	public void BadgeClicked(GameObject go){
+		// Get the information from the populated controller
+		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
+		descriptionBadgeSprite.spriteName = BadgeLogic.Instance.IsBadgeUnlocked(clickedBadge.ID) ? clickedBadge.TextureName : blankBadgeTextureName;
+		descriptionBadgeTitle.text = clickedBadge.Name;
+		descriptionBadgeInfo.text = clickedBadge.Description;
 		ShowDescriptionPanel();
-		descriptionObject.GetComponent<PositionTweenToggle>().HideTarget = null;
-		descriptionObject.GetComponent<PositionTweenToggle>().HideFunctionName = null;
+	}
+
+	/// <summary>
+	/// Clicked anywhere when showing the info, return to normal badge display
+	/// </summary>
+	public void BadgeInfoClicked(){
+		HideDescriptionPanel();
 	}
 	
 	private void ShowDescriptionPanel(){
-		descriptionObject.GetComponent<PositionTweenToggle>().Show();
+		descriptionDemux.GetComponent<TweenToggleDemux>().Show();
 	}
 	
 	private void HideDescriptionPanel(){
-		descriptionObject.GetComponent<PositionTweenToggle>().Hide();
+		descriptionDemux.GetComponent<TweenToggleDemux>().Hide();
 	}
 
-	public void DisableBackButton(){
-		isActive = false;
-	}
-
-	//When the badge board is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
-			// zoom into the board
-			Vector3 vPos = badgeBoard.transform.position + vOffset;
-			CameraManager.Instance.ZoomToTarget( vPos, vRotation, fZoomTime, null );
-			
+
+			// Disable the exit button if the badge is animating from reward manager
+			badgeExitButton.SetActive(isQueueAnimating ? false : true);
+			isOpenedAsReward = isQueueAnimating;
+
+			GetComponent<TweenToggleDemux>().Show();
+
+			//FirstInteraction.Instance.SetString("Badges");
+
 			//Hide other UI objects
-			NavigationUIManager.Instance.HidePanel();
 			HUDUIManager.Instance.HidePanel();
-			InventoryUIManager.Instance.HidePanel();
-			RoomArrowsUIManager.Instance.HidePanel();
-			
+
+			if(NavigationUIManager.Instance != null){
+				NavigationUIManager.Instance.HidePanel();
+			}
+			if(InventoryUIManager.Instance != null){
+				InventoryUIManager.Instance.HidePanel();
+			}
+			if(RoomArrowsUIManager.Instance != null){
+				RoomArrowsUIManager.Instance.HidePanel();
+			}
+
 			isActive = true;
-			badgeBoard.collider.enabled = false;
-			firstClick = true;
-			
-			backButton.SetActive(true);
+
+			if(badgeBoard != null){
+				badgeBoard.collider.enabled = false;
+			}
 		}
 	}
 
-	//The back button on the left top corner is clicked to zoom out of the badge board
 	protected override void _CloseUI(){
 		if(isActive){
 			HideDescriptionPanel();
-			if(lastClickedBadge != null){
-				Destroy(lastClickedBadge.GetComponent<Animation>());
-				lastClickedBadge.transform.localScale = Vector3.one;
-			}
-			lastClickedBadge = null;
-			
-			isActive = false;
-			badgeBoard.collider.enabled = true;
-			
-			CameraManager.Instance.ZoomOutMove();
-	
-			//Show other UI Objects
-			NavigationUIManager.Instance.ShowPanel();
-			HUDUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
-			RoomArrowsUIManager.Instance.ShowPanel();
+			GetComponent<TweenToggleDemux>().Hide();
 
-			if(D.Assert(backButton != null, "No back button to delete"))
-				backButton.SetActive(false);
+			isActive = false;
+
+			if(badgeBoard != null){
+				badgeBoard.collider.enabled = true;
+			}
+
+			CloseUIOpenNext(UIModeTypes.None);
+		}
+	}
+
+	private void CloseFinishHelper(){
+		if(isOpenedAsReward){
+			//Notify anything that is listening to animation done
+			if(OnBadgeUIAnimationDone != null){
+				OnBadgeUIAnimationDone(this, EventArgs.Empty);
+			}
 		}
 	}
 }

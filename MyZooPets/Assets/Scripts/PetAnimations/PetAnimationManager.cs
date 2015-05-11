@@ -11,7 +11,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public GameObject petShadow;
 	public GameObject flippableComponents;
 	public GameObject fireBlowPosition;
-	public GameObject headCollider;
 	public GameObject bodyCollider;
 	public GameObject highFiveCollider;
 	
@@ -91,7 +90,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void DisableVisibility(){
 		animatorObject.SetActive(false);
-		headCollider.SetActive(false);
 		bodyCollider.SetActive(false);
 		petShadow.GetComponent<MeshRenderer>().enabled = false;
 		DisableIdleAnimation();
@@ -100,7 +98,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 
 	public void EnableVisibility(){
 		animatorObject.SetActive(true);
-		headCollider.SetActive(true);
 		bodyCollider.SetActive(true);
 		petShadow.GetComponent<MeshRenderer>().enabled = true;
 		EnableIdleAnimation();
@@ -129,7 +126,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		foreach(string animationParameter in booleanParameters){
 			animator.SetBool(animationParameter, false);
 		}
-
+		//AudioManager.Instance.PlayClip("petMove", variations: 6);
 		currentAnimationState = PetAnimStates.Walking;
 		animator.SetBool("IsIdle", false);
 	}
@@ -228,11 +225,16 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		animator.SetBool("IsWaitingToEat", false);
 	}
 
+	public void Flipping(){
+		animator.SetTrigger("Backflip");
+	}
+
 	/// <summary>
 	/// Starts the tickling. Tickle will be played until StopTickling() is called
 	/// </summary>
 	public void StartTickling(){
 		animator.SetBool("IsTickling", true);
+		StartCoroutine("GenerateCoins");
 	}
 
 	/// <summary>
@@ -241,6 +243,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public void StopTickling(){
 		animator.SetBool("IsTickling", false);
 		PetAudioManager.Instance.StopAnimationSound();
+		StopCoroutine("GenerateCoins");
 	}
 
 	/// <summary>
@@ -248,14 +251,12 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	/// </summary>
 	public void StartHighFive(){
 		highFiveCollider.SetActive(true);
-		headCollider.SetActive(false);
 		bodyCollider.SetActive(false);
 		animator.SetBool("IsHighFiving", true);
 	}
 
 	public void FinishHighFive(){
 		highFiveCollider.SetActive(false);
-		headCollider.SetActive(true);
 		bodyCollider.SetActive(true);
 		animator.SetBool("IsHighFiving", false);
 		animator.SetTrigger("YesHighFive");
@@ -292,7 +293,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		if(isHighFiving){
 			animator.SetBool("IsHighFiving", false);
 			highFiveCollider.SetActive(false);
-			headCollider.SetActive(true);
 			bodyCollider.SetActive(true);
 		}
 	}
@@ -308,7 +308,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 				
 				//user didn't high five pet so end the high five animation
 				highFiveCollider.SetActive(false);
-				headCollider.SetActive(true);
 				bodyCollider.SetActive(true);
 				animator.SetBool("IsHighFiving", false);
 				animator.SetTrigger("NoHighFive");
@@ -362,5 +361,10 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 					animator.SetTrigger(animationName);
 			}
 		}
+	}
+	IEnumerator GenerateCoins(){
+		yield return new WaitForSeconds (5.0f);
+		StatsController.Instance.ChangeStats(deltaStars: 1, starsLoc: transform.position, is3DObject: true);
+		StartCoroutine("GenerateCoins");
 	}
 }

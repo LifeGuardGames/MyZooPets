@@ -7,41 +7,42 @@ using System.Collections;
 /// This script is attached to the window object to control the display contents in the window.
 /// </summary>
 public class WindowController : MonoBehaviour {
-
-	public tk2dSprite windowObject; // The sun or the moon
-	public tk2dSprite windowBackground; // The background sprite, for changing color
+	public Renderer[] windowImageRenderers; // The sun or the moon
+	public Texture dayTexture;
+	public Texture nightTexture;
 
 	void Start(){
 		CheckTime();
 	}
 
 	void OnApplicationPause(bool pauseStatus){
-		if(!pauseStatus)
+		if(!pauseStatus){
 			CheckTime();
+		}
 	}
 
 	private void CheckTime(){
 		DateTime now = LgDateTime.GetTimeNow();
-		if(now.Hour	< 12)
-			SetTime(true);
-		else
-			SetTime(false);
-	}
-
-	private void SetTime(bool isDaytime){
-		if(isDaytime){
-			// Set the sun sprite
-			windowObject.SetSprite("windowSun");
-			
-			// Change the sky to bright blue
-			windowBackground.color = new Color(107f/255f, 230f/255f, 1f, 1f);
+		if(now.Hour	>= 6 && now.Hour < 18){
+			SetImageByTime(true);
 		}
 		else{
-			// Set the moon sprite
-			windowObject.SetSprite("windowMoon");
-			
-			// Change the sky to dark blue
-			windowBackground.color = new Color(16f/255f, 29f/255f, 79f/255f, 1f);
+			SetImageByTime(false);
+		}
+	}
+
+	private void SetImageByTime(bool isDaytime){
+		if(isDaytime){
+			// Set the day sprite
+			foreach(Renderer rendererObject in windowImageRenderers){
+				rendererObject.material.mainTexture = dayTexture;
+			}
+		}
+		else{
+			// Set the night sprite
+			foreach(Renderer rendererObject in windowImageRenderers){
+				rendererObject.material.mainTexture = nightTexture;
+			}
 		}
 	}
 	

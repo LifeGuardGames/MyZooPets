@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections;
 
 //---------------------------------------------------
@@ -8,7 +8,7 @@ using System.Collections;
 // mission.
 //---------------------------------------------------
 
-public class WellapadRewardButton : LgButton {
+public class WellapadRewardButton : LgButton{
 	// mission ID associated with this reward
 	private string missionID;
 	
@@ -17,7 +17,6 @@ public class WellapadRewardButton : LgButton {
 	
 	// the NGUI button script for this button
 	public UIImageButton nguiButton;
-	
 	public UILabel buttonLabel;
 	public Color inactiveLabelColor = new Color();
 	private Color activeLabelColor;
@@ -25,21 +24,21 @@ public class WellapadRewardButton : LgButton {
 	//---------------------------------------------------
 	// Init()
 	//---------------------------------------------------	
-	public void Init( string missionID ) {
+	public void Init(string missionID){
 		
 		// Save the current active label color
-		activeLabelColor = buttonLabel.color;
+		//activeLabelColor = buttonLabel.color;
 		
 		// set wellapad sprite object
 		// buttonWellapad = GameObject.Find( "WellapadButton" ).GetComponent<UIImageButton>();
 			
-		this.missionID = missionID;	
+		//this.missionID = missionID;	
 		
 		// set the sprites for this button appropriately on init
-		SetSprites();		
+		//SetSprites();		
 		
 		// listen for when a task is complete so the UI can react
-		WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
+		//WellapadMissionController.Instance.OnTaskUpdated += OnTaskUpdated;		
 		
 		
 	}
@@ -49,7 +48,7 @@ public class WellapadRewardButton : LgButton {
 	// Sets the sprites for this button based on what
 	// state the reward is in.
 	//---------------------------------------------------		
-	private void SetSprites() {
+	private void SetSprites(){
 		
 		// state of the actual button (not the image on the button)
 		bool bEnabled = true;
@@ -63,7 +62,7 @@ public class WellapadRewardButton : LgButton {
 			
 			if(eStatus == RewardStatuses.Claimed){
 				// if the reward was claimed, just hide the icon sprite
-				NGUITools.SetActive( spriteIcon.gameObject, false );
+				NGUITools.SetActive(spriteIcon.gameObject, false);
 				
 				// if the reward is claimed, the button is not enabled
 				bEnabled = false;
@@ -71,7 +70,7 @@ public class WellapadRewardButton : LgButton {
 			else{
 				// the reward is either unclaimed or unearned -- show the proper icon	
 				string strKey = "Reward" + eStatus;
-				string strSprite = Constants.GetConstant<string>( strKey );
+				string strSprite = Constants.GetConstant<string>(strKey);
 				spriteIcon.spriteName = strSprite;
 				
 				// the button is not enabled if the reward is unearned
@@ -100,25 +99,25 @@ public class WellapadRewardButton : LgButton {
 	// OnTaskUpdated()
 	// Callback for when a task's status gets updated.
 	//---------------------------------------------------		
-	private void OnTaskUpdated( object sender, TaskUpdatedArgs args ) {
+	private void OnTaskUpdated(object sender, TaskUpdatedArgs args){
 		// if the mission IDs match, update our sprite (maybe)
-		if ( args.Mission == missionID )
-			SetSprites();
+		//if(args.Mission == missionID)
+			//SetSprites();
 	}	
 	
 	//---------------------------------------------------
 	// ProcessClick()
 	//---------------------------------------------------		
-	protected override void ProcessClick() {
+	protected override void ProcessClick(){
 		// first check to make sure that the reward is unclaimed -- if it is, claim that bad boy...they've earned it
-		MutableDataMission mission = WellapadMissionController.Instance.GetMission( missionID );
+		MutableDataMission mission = WellapadMissionController.Instance.GetMission(missionID);
 		
-		if ( mission != null && mission.RewardStatus == RewardStatuses.Unclaimed ) {
+		if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
 			// claim the reward
-			WellapadMissionController.Instance.ClaimReward( missionID );
+			WellapadMissionController.Instance.ClaimReward(missionID);
 			
 			// update the sprite
-			SetSprites();
+			//SetSprites();
 
 			//Refresh Check
 			//Case: User plays pass the playperiod and collects the reward
@@ -127,3 +126,4 @@ public class WellapadRewardButton : LgButton {
 		}
 	}
 }
+*/

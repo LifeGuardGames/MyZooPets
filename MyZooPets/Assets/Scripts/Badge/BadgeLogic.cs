@@ -7,13 +7,13 @@ using System.Collections.Generic;
 /// <summary>
 /// Badge logic.Checks and manages when a badge should be unlocked
 /// </summary>
-public class BadgeLogic : Singleton<BadgeLogic> {
+public class BadgeLogic : Singleton<BadgeLogic>{
     public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked; //Event fires when new badge has been added
     public class BadgeEventArgs : EventArgs{
         private Badge unlockedBadge;
 
         public Badge UnlockedBadge{
-            get{return unlockedBadge;}
+            get{ return unlockedBadge; }
         }
 
         public BadgeEventArgs(Badge badge){
@@ -24,7 +24,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     private List<Badge> allBadges; //List of all badges
 
     public List<Badge> AllBadges{
-        get{return allBadges;}
+        get{ return allBadges; }
     }
 
     void Awake(){
@@ -39,6 +39,25 @@ public class BadgeLogic : Singleton<BadgeLogic> {
     public Badge GetBadge(string badgeID){
         return DataLoaderBadges.GetData(badgeID);
     }
+
+	/// <summary>
+	/// Determines whether the badge is unlocked or not
+	/// </summary>
+	/// <returns><c>true</c> if badge unlocked; otherwise, <c>false</c>.</returns>
+	/// <param name="badgeID">Badge ID</param>
+	public bool IsBadgeUnlocked(string badgeID){
+		return DataManager.Instance.GameData.Badge.GetIsUnlocked(badgeID);
+	}
+
+	public int GetUnlockedBadgesCount(){
+		int count = 0;
+		foreach(Badge badge in allBadges){
+			if(IsBadgeUnlocked(badge.ID)){
+				count++;
+			}
+		}
+		return count;
+	}
 
 	/// <summary>
 	/// Gets the badge unlock at next level.
@@ -88,8 +107,13 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
         //Check if a new badge can be unlocked. Multiple badges of the same type 
         //can be unlock at the same time
-        foreach(Badge badge in sortedBadgesType)
-            CheckUnlockProgress(badge, latestProgress);
+		bool badgeUnlocked = false;
+        foreach(Badge badge in sortedBadgesType){
+			bool unlockFlag = CheckUnlockProgress(badge, latestProgress);
+			if(unlockFlag == true){
+				badgeUnlocked = true;
+			}
+		}
 
         //Check if all badges of the same type have been unlocked
         foreach(Badge badge in sortedBadgesType){
@@ -137,7 +161,7 @@ public class BadgeLogic : Singleton<BadgeLogic> {
         bool unlockNewBadge = false;
 
         if(progress >= badge.UnlockCondition){ //Check if progress matches unlock conditions
-            bool isUnlocked = DataManager.Instance.GameData.Badge.GetIsUnlocked(badge.ID);
+            bool isUnlocked = IsBadgeUnlocked(badge.ID);
 
             if(!isUnlocked){ //Unlock new badges
                 DataManager.Instance.GameData.Badge.UpdateBadgeStatus(badge.ID, true, true);
@@ -158,11 +182,4 @@ public class BadgeLogic : Singleton<BadgeLogic> {
 
         return unlockNewBadge;
     }
-
-    //Return a list from dictionary. 
-//    private List<Badge> SelectListFromDictionary(Dictionary<string, Badge> badgeDict){
-//        List<Badge> badgeList = (from keyValuePair in badgeDict
-//                                    select keyValuePair.Value).ToList();
-//        return badgeList;
-//    }
 }

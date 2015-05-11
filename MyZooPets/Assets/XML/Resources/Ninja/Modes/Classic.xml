@@ -1,6 +1,6 @@
 <NinjaGame>	
 	<Group ID="Starting_1" Scoring="Start_1" >
-		<Entry Time="0" Pattern="Separate" Triggers="1"> </Entry>
+		<Entry Time="0" Pattern="Split" Triggers="3"  > </Entry>
 	</Group>
 	
 	<Group ID="Starting_2" Scoring="Start_2" >
@@ -12,7 +12,7 @@
 	</Group>
 	
 	<Group ID="Med_1" Scoring="Med" >
-		<Entry Time="0" Pattern="Separate" Triggers="2" Bombs="2"> </Entry>
+		<Entry Time="0" Pattern="Separate" Triggers="3" Bombs="2"> </Entry>
 	</Group>	
 
 	<Group ID="Med_2" Scoring="Med" >
@@ -30,7 +30,9 @@
 	<Group ID="Med_5" Scoring="Med" >
 		<Entry Time="0" Pattern="Meet" Triggers="1" Bombs="1"> </Entry>
 	</Group>		
-	
+	<Group ID="Med_6" Scoring="Med" >
+		<Entry Time="0" Pattern="Split" Triggers="5"> </Entry>
+	</Group>
 	<Group ID="High_Test" Scoring="High" >
 		<Entry Time="0" Pattern="Meet" Bombs="2"> </Entry>
 		<Entry Time=".25" Pattern="Meet" Bombs="2"> </Entry>
@@ -43,7 +45,7 @@
 	<Group ID="High_2" Scoring="High" >
 		<Entry Time="0" Pattern="Meet" Triggers="1" Bombs="1"> </Entry>
 		<Entry Time=".25" Pattern="Meet" Triggers="1" Bombs="1"> </Entry>
-		<Entry Time=".5" Pattern="Clustered" Triggers="2" Bombs="1"> </Entry>
+		<Entry Time=".5" Pattern="Clustered" Triggers="2" Bombs="1"PowerUp= "1"> </Entry>
 	</Group>	
 	
 	<Group ID="High_3" Scoring="High">
@@ -104,7 +106,7 @@
 		<Entry Time=".2" Pattern="Cross" Bombs="2"> </Entry>
 		<Entry Time=".3" Pattern="Separate" Triggers="1"> </Entry>
 		<Entry Time=".4" Pattern="Separate" Triggers="1"> </Entry>
-		<Entry Time=".5" Pattern="Separate" Triggers="1"> </Entry>
+		<Entry Time=".5" Pattern="Separate" Triggers="1"PowerUp= "1"> </Entry>
 	</Group>	
 	
 	<Group ID="High_12" Scoring="High" >
@@ -114,4 +116,8 @@
 		<Entry Time=".75" Pattern="Meet" Triggers="2"> </Entry>
 	</Group>	
 	
+	<Group ID="Bonus" Scoring="Bonus">
+		<Entry Time="0" Pattern="Swarms" Triggers="2"> </Entry>
+		<Entry Time="1" Pattern="Swarms" Triggers="2"> </Entry>
+	</Group>
 </NinjaGame>

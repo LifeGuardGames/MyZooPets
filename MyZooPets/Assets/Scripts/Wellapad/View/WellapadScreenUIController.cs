@@ -25,7 +25,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 	}
 
 	void Awake(){
-		missionDonePrefabName = "MissionDonePro";
+		missionDonePrefabName = "MissionDone";
 	}	
 	//---------------------------------------------------
 	// Start()
@@ -44,7 +44,6 @@ public class WellapadScreenUIController : MonoBehaviour {
 	public void SetScreen() {
 		// for now, just check to see if the player has any outstanding missions.
 		bool hasActiveTasks = WellapadMissionController.Instance.HasActiveTasks();
-
 		foreach(Transform child in goWellapadScreen.transform){
 			child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
@@ -56,15 +55,14 @@ public class WellapadScreenUIController : MonoBehaviour {
 			// user has active tasks/missions, so show the task list
 			if(missionListGO == null){
 				GameObject missionListPrefab = (GameObject) Resources.Load(missionListPrefabName);
-				missionListGO = LgNGUITools.AddChildWithPositionAndScale(goWellapadScreen, missionListPrefab);
+				missionListGO = GameObjectUtils.AddChildWithPositionAndScale(goWellapadScreen, missionListPrefab);
 			}
-
 			missionListGO.GetComponent<WellapadMissionUIController>().DisplayMissions();
 		}else{
 			// otherwise, show the "come back later" screen
 			if(missionDoneGO == null){
 				GameObject missionDonePrefab = (GameObject) Resources.Load(missionDonePrefabName);
-				missionDoneGO = LgNGUITools.AddChildWithPositionAndScale(goWellapadScreen, missionDonePrefab);
+				missionDoneGO = GameObjectUtils.AddChildWithPositionAndScale(goWellapadScreen, missionDonePrefab);
 			}
 		}
 	}
@@ -74,7 +72,7 @@ public class WellapadScreenUIController : MonoBehaviour {
 	// Callback for when the user claims a wellapad reward.
 	//---------------------------------------------------	
 	private void OnRewardClaimed( object sender, EventArgs args ) {
-		StartCoroutine( SetScreenDelay() );
+		//StartCoroutine( SetScreenDelay() );
 	}	
 
 	//---------------------------------------------------

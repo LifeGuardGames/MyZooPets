@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,6 +7,10 @@ public class WellapadActionButtonUIController : MonoBehaviour {
     public GameObject rewardButton;
 
     private string missionID = "";
+
+	void Awake(){
+
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -18,21 +22,24 @@ public class WellapadActionButtonUIController : MonoBehaviour {
 
         //since we don't really use multiple missions in the wellapad right now. there will only be
         //one id in the list
+		if(currentMissionIDs.Count != 0){
         missionID = currentMissionIDs[0];
 
         //use GetMission(missionid) to get the mission data
         MutableDataMission mission = WellapadMissionController.Instance.GetMission(missionID);
-
+		
         if(mission != null){
             RewardStatuses status = mission.RewardStatus;
 
             //if reward status is claimed or unearned, so regular back button
-            if(status == RewardStatuses.Claimed || status == RewardStatuses.Unearned)
-                ShowBackButton();
+           // if(status == RewardStatuses.Claimed || status == RewardStatuses.Unearned)
+                
             //if reward status is unclaimed, so reward button
-            else
-                ShowRewardButton();
+            //else
+              //  ShowRewardButton();
         }
+		}
+		ShowBackButton();
 
     }
 
@@ -45,7 +52,7 @@ public class WellapadActionButtonUIController : MonoBehaviour {
     }
 
     private void BackButtonClicked(){
-        WellapadUIManager.Instance.CloseUI();
+		FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 
         HideBothButtons();
     }
@@ -65,3 +72,4 @@ public class WellapadActionButtonUIController : MonoBehaviour {
         rewardButton.SetActive(false);
     }
 }
+*/

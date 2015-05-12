@@ -63,6 +63,9 @@ public class UIDragPanelContents : MonoBehaviour
 
 	void OnPress (bool pressed)
 	{
+		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+			return;
+		}
 		if (enabled && NGUITools.GetActive(gameObject) && draggablePanel != null)
 		{
 			draggablePanel.Press(pressed);
@@ -75,6 +78,9 @@ public class UIDragPanelContents : MonoBehaviour
 
 	void OnDrag (Vector2 delta)
 	{
+		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+			return;
+		}
 		if (enabled && NGUITools.GetActive(gameObject) && draggablePanel != null)
 		{
 			draggablePanel.Drag();
@@ -87,6 +93,9 @@ public class UIDragPanelContents : MonoBehaviour
 
 	void OnScroll (float delta)
 	{
+		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+			return;
+		}
 		if (enabled && NGUITools.GetActive(gameObject) && draggablePanel != null)
 		{
 			draggablePanel.Scroll(delta);

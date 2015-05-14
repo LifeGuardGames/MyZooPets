@@ -66,9 +66,13 @@ public class GestureTrail : MonoBehaviour{
 				
 		// get the proper vector3 position of the trail based on where the user is touching
 		Vector3 screenPos = TranslateScreenPos(position);
-		
-		goTrail = Instantiate(Resources.Load(trailName) as GameObject, screenPos, Quaternion.identity) as GameObject;
-		goTrail.GetComponent<TrailRenderer>().autodestruct = false;
+		if(goTrail == null){
+			goTrail = Instantiate(Resources.Load(trailName) as GameObject, screenPos, Quaternion.identity) as GameObject;
+			goTrail.GetComponent<TrailRenderer>().autodestruct = false;
+		}
+		else{
+			goTrail.GetComponent<TrailRenderer>().autodestruct = true;
+		}
 	}
 
 	/// <summary>
@@ -76,8 +80,11 @@ public class GestureTrail : MonoBehaviour{
 	/// </summary>
 	public void DragEnded(){
 		// Let the trail commit seppuku
-		goTrail.GetComponent<TrailRenderer>().autodestruct = true;
+		if(goTrail != null){
+			goTrail.GetComponent<TrailRenderer>().autodestruct = true;
+		}
 	}
+
 
 	/// <summary>
 	/// As user drags across the screen trail is updated
@@ -109,4 +116,5 @@ public class GestureTrail : MonoBehaviour{
 		
 		return worldPoint;
 	}
+
 }

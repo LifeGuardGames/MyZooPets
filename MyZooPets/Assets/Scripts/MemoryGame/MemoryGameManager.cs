@@ -72,8 +72,10 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		CancelInvoke("StartScoreCountdown");
 		SetScore(startScoreValue);
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
-		
+		if(!IsTutorialOn()&& !IsTutorialOverride()|| 
+		   DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
 		ResetBoard();
+		}
 	}
 
 	private void ResetBoard(){

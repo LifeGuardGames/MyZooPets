@@ -97,7 +97,6 @@ public class LgDebugTool : EditorWindow{
 						new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
 						bool.Parse(constant.ConstantValue));
 					constant.ConstantValue = toggleState.ToString();
-					
 					if(toggleState){
 						GA.SettingsGA.Build = gaBuildVersion;				//set the build version
 						GA.SettingsGA.SetKeys(proGameKey, proSecretKey);	//set the api keys
@@ -117,58 +116,49 @@ public class LgDebugTool : EditorWindow{
 			if(buildInfoList != null){
 				foreach(Constant constant in buildInfoList){
 					switch(constant.Name){
-					case "ProBundleID":
-						constant.ConstantValue = EditorGUILayout.TextField("Pro Bundle ID", constant.ConstantValue);
+					case "BundleID":
+						constant.ConstantValue = EditorGUILayout.TextField("Bundle ID", constant.ConstantValue);
 						proBundleID = constant.ConstantValue;
+						PlayerSettings.bundleIdentifier = proBundleID;
 						break;
-					case "ProProductName":
-						constant.ConstantValue = EditorGUILayout.TextField("Pro Product Name", constant.ConstantValue);
+					case "ProductName":
+						constant.ConstantValue = EditorGUILayout.TextField("Product Name", constant.ConstantValue);
 						proProductName = constant.ConstantValue;
+						PlayerSettings.productName = proProductName;
 						break;
-					case "WellapetsProGameKey":
-						constant.ConstantValue = EditorGUILayout.TextField("Pro GA Game Key", constant.ConstantValue);
+					case "WellapetsGameKey":
+						constant.ConstantValue = EditorGUILayout.TextField("GA Game Key", constant.ConstantValue);
 						proGameKey = constant.ConstantValue;
 						break;
-					case "WellapetsProSecretKey":
-						constant.ConstantValue = EditorGUILayout.TextField("Pro GA Secret Key", constant.ConstantValue);
+					case "WellapetsSecretKey":
+						constant.ConstantValue = EditorGUILayout.TextField("GA Secret Key", constant.ConstantValue);
 						proSecretKey = constant.ConstantValue;
 						break;
 					}
 				}
 			}
-				
 			if(GUILayout.Button("Save")){
 				Serialize<BuildInfoConstants>(BUILDINFO_PATH, buildInfoConstants);
 			}
-				
-			GUILayout.Label("Build Setting Tools", EditorStyles.boldLabel);
-			EditorGUILayout.BeginHorizontal();
-			if(GUILayout.Button("Load Lite App Icon")){
-				LoadAppIcon("WellaPetsIconLite");
-			}
-			if(GUILayout.Button("Load Pro App Icon")){
-                LoadAppIcon("WellaPetsIcon");
-            }
-            EditorGUILayout.EndHorizontal(); 
         }
 		EditorGUILayout.EndScrollView();
     }
 
-    private void LoadAppIcon(string iconPrefix){
-        string filePath = "Assets/Textures/MobileIcons/";
-        int[] textureSizes = PlayerSettings.GetIconSizesForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-        Texture2D[] icons = new Texture2D[textureSizes.Length];
-
-        for(int i=0; i<textureSizes.Length; i++){
-            string assetFilePath = filePath + iconPrefix + textureSizes[i] + ".png";
-            Debug.Log(assetFilePath);
-            Texture2D appIcon = AssetDatabase.LoadAssetAtPath(assetFilePath, typeof(Texture2D)) as Texture2D;
-            Debug.Log(appIcon);
-            icons[i] = appIcon;
-        }
-
-        PlayerSettings.SetIconsForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup, icons);
-    }
+//    private void LoadAppIcon(string iconPrefix){
+//        string filePath = "Assets/Textures/MobileIcons/";
+//        int[] textureSizes = PlayerSettings.GetIconSizesForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+//        Texture2D[] icons = new Texture2D[textureSizes.Length];
+//
+//        for(int i=0; i<textureSizes.Length; i++){
+//            string assetFilePath = filePath + iconPrefix + textureSizes[i] + ".png";
+//            Debug.Log(assetFilePath);
+//            Texture2D appIcon = AssetDatabase.LoadAssetAtPath(assetFilePath, typeof(Texture2D)) as Texture2D;
+//            Debug.Log(appIcon);
+//            icons[i] = appIcon;
+//        }
+//
+//        PlayerSettings.SetIconsForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup, icons);
+//    }
 
     private void Serialize<T>(string filePath, object xmlData){
         XmlSerializer serializer = new XmlSerializer(typeof(T));
@@ -176,8 +166,7 @@ public class LgDebugTool : EditorWindow{
 
         using(TextWriter writer = new StreamWriter(path, false)){
             serializer.Serialize(writer, (T) xmlData);
-        }  
-
+        }
         AssetDatabase.Refresh();
     }
 

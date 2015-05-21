@@ -132,12 +132,12 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
 		}
 		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
-		if(ShooterInhalerManager.Instance.hit == false){
+		/*if(ShooterInhalerManager.Instance.hit == false){
 			missed++;
 			if(missed >= 2){
 				PlayerShooterController.Instance.ChangeHealth(-2);
 			}
-		}
+		}*/
 		ShooterInhalerManager.Instance.hit = false;
 		waveNum++;
 		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);

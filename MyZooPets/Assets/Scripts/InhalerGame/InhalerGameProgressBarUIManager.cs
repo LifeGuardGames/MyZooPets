@@ -16,7 +16,7 @@ public class InhalerGameProgressBarUIManager : Singleton<InhalerGameProgressBarU
     void Awake(){
         //Set up the progress slider
         slider.sliderValue = 0;
-        slider.numberOfSteps = InhalerLogic.RESCUE_NUM_STEPS;
+        slider.numberOfSteps = InhalerLogic.RESCUE_NUM_STEPS-1;
         increment = 1.0f / (slider.numberOfSteps - 1);
         sliderNodes = new List<GameObject>();
         SetUpProgressSteps();

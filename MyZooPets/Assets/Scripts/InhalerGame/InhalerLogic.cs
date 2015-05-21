@@ -6,7 +6,7 @@ using System;
 public class InhalerLogic : Singleton<InhalerLogic>{
 	public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
 	public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-	public const int RESCUE_NUM_STEPS = 7;
+	public const int RESCUE_NUM_STEPS = 8;
 	private int currentStep = 1; //current step that user is on
 
 	/*
@@ -36,13 +36,14 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	}
 
 	public bool IsDoneWithGame(){
-		return currentStep == RESCUE_NUM_STEPS;
+		return currentStep == RESCUE_NUM_STEPS-1;
 	}
 
 	//Use this function to move on to the next step
 	public void NextStep(){
-		if(IsDoneWithGame())
+		if(IsDoneWithGame()){
 			GameDone();
+		}
 		else{
 			currentStep++;
 
@@ -65,7 +66,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	// of the pet using the daily inhaler.
 	//---------------------------------------------------		
 	private void GameDone(){
-
+		InhalerGameUIManager.Instance.StopShowHintTimer();
 		// play game over sound
 		AudioManager.Instance.PlayClip("inhalerDone");
 		StatsController.Instance.ChangeStats(deltaHealth: 5, deltaMood: 30,isInternal: true);

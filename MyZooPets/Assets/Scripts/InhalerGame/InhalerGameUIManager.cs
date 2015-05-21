@@ -23,7 +23,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	private bool showHint = false; //display swipe hints for the inhaler
 	private bool runShowHintTimer = true; //True: start running hint timer
-	private float timer = 0; //hint timer
+	public float timer = 0; //hint timer
 	private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
 	private int starIncrement = 0;
 	public GameObject[] lightsToTurnOff;
@@ -34,6 +34,10 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		get{
 			return showHint;
 		}
+	}
+
+	public void StopShowHintTimer(){
+		runShowHintTimer = false;
 	}
 
 	void Awake(){
@@ -64,8 +68,9 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	// throughout the game (for someone's first time playing this).
 	//----------------------------------------------
 	void Update(){
-		if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
-			ShowHintTimer(); // This checks and shows hints if necessary.
+		//if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
+		if(runShowHintTimer){
+		ShowHintTimer(); // This checks and shows hints if necessary.
 		}
 	}
  

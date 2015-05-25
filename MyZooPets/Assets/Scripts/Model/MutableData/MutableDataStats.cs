@@ -30,10 +30,10 @@ public class MutableDataStats{
     }
 
     private void Init(){
-        Health = 80;
+        Health = 30;
         Mood = 80;
         Points = 0;
-		Stars = 100;
+		Stars = 1000;
 		Shards = 0;
 		totalStars = 100;
     }

@@ -169,6 +169,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	public void BadgeClicked(GameObject go){
 		// Get the information from the populated controller
+		AudioManager.Instance.PlayClip("badgeClicked");
 		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
 		descriptionBadgeSprite.spriteName = BadgeLogic.Instance.IsBadgeUnlocked(clickedBadge.ID) ? clickedBadge.TextureName : blankBadgeTextureName;
 		descriptionBadgeTitle.text = clickedBadge.Name;

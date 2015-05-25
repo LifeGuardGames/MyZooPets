@@ -21,7 +21,6 @@ public class GatingManager : Singleton<GatingManager>{
 	public static EventHandler<EventArgs> OnDestroyedGate;	// When a specific gate has been destroyed
 	//=====================================================
 	private GameObject body;
-
 	public Vector3 startingLocation;	 // starting location for the gates -- might differ from area to area
 
 	private string currentZone; // area that this manager is in
@@ -43,7 +42,7 @@ public class GatingManager : Singleton<GatingManager>{
 
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
-	private Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
+	public Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
 
 	void Awake(){
 		// set pan script
@@ -429,6 +428,30 @@ public class GatingManager : Singleton<GatingManager>{
 			PetMovement.Instance.OnReachedDest -= PetReachedDest;			
 	}
 
+
+	public void CanNowBlowFire(){
+		
+		body.GetComponent<PetInteractionManager>().isInteractable = false;
+		
+		//once pet is in position for fire breathing. Idle animations need to be turn off
+		//otherwise it might break the breathe fire animation
+		PetAnimationManager.Instance.DisableIdleAnimation();
+		
+		// if the pet is happy and healthy, add the fire button
+		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
+		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
+		
+		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
+			ShowFireButton();
+			
+			//if can't breathe fire show message
+			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			if(!canBreatheFire)
+				IndicateNoFire();
+		}
+		else
+			ShowUnhealthyNoFireSpeech();
+	}
 	/// <summary>
 	/// Pets the reached destination. It is critical this function is only
 	/// called if the pet is entering a gated room.

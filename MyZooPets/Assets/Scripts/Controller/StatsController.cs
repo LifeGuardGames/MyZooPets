@@ -29,7 +29,11 @@ public class StatsController : Singleton<StatsController>{
 
 	public HUDAnimator hudAnimator;
 	private bool isPetAnimationManagerPresent;
-	
+	private PanToMoveCamera scriptPan;
+	void Awake(){
+		// set pan script
+		scriptPan = CameraManager.Instance.PanScript;
+	}
 	void Start(){
 		// Check if hud animator is assigned already
 		if(hudAnimator == null){
@@ -277,6 +281,9 @@ public class StatsController : Singleton<StatsController>{
 				OnHappyToSad(this, EventArgs.Empty);
 		}
 		else if(oldMood == PetMoods.Sad && newMood == PetMoods.Happy){
+			if(GatingManager.Instance.activeGates.ContainsKey(scriptPan.currentLocalPartition)){
+				GatingManager.Instance.CanNowBlowFire();
+			}
 			// fire event
 			if(OnSadToHappy != null)
 				OnSadToHappy(this, EventArgs.Empty);
@@ -307,12 +314,18 @@ public class StatsController : Singleton<StatsController>{
 
 		// VerySick --> HealthyHappy or VerySick --> HealthySad
 		else if(oldHealth == PetHealthStates.VerySick && newHealth == PetHealthStates.Healthy){
+			if( GatingManager.Instance.activeGates.ContainsKey(scriptPan.currentLocalPartition)){
+				GatingManager.Instance.CanNowBlowFire();
+			}
 			if(OnVerySickToHealthy != null)
 				OnVerySickToHealthy(this, EventArgs.Empty);
 		}
 
 		// Sick --> HealthyHappy or Sick --> HealthySad
 		else if(oldHealth == PetHealthStates.Sick && newHealth == PetHealthStates.Healthy){
+			if(GatingManager.Instance.activeGates.ContainsKey(scriptPan.currentLocalPartition)){
+				GatingManager.Instance.CanNowBlowFire();
+			}
 			if(OnSickToHealthy != null)
 				OnSickToHealthy(this, EventArgs.Empty);
 		}

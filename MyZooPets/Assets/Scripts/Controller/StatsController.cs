@@ -32,6 +32,7 @@ public class StatsController : Singleton<StatsController>{
 	private PanToMoveCamera scriptPan;
 	void Awake(){
 		// set pan script
+		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD)
 		scriptPan = CameraManager.Instance.PanScript;
 	}
 	void Start(){

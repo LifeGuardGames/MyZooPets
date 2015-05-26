@@ -185,6 +185,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 		// Check for badge reward
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Retention, DataManager.Instance.GameData.Inhaler.timesUsedInARow,true);
 	}
 
 	private void QuitInhalerGame(object sender, EventArgs args){

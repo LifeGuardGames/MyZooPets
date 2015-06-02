@@ -55,8 +55,11 @@ public class Analytics : MonoBehaviour {
         }
         DontDestroyOnLoad(gameObject);
         isCreated = true;
+
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
+
+
     }
 
 	#region Ninja Trigger

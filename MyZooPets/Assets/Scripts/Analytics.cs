@@ -58,8 +58,6 @@ public class Analytics : MonoBehaviour {
 
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
-
-
     }
 
 	#region Ninja Trigger

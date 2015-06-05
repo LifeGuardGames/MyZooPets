@@ -70,7 +70,10 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		// play game over sound
 		AudioManager.Instance.PlayClip("inhalerDone");
 		StatsController.Instance.ChangeStats(deltaHealth: 5, deltaMood: 30,isInternal: true);
-		if((PlayPeriodLogic.GetCurrentPlayPeriod() - DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed).Hours > 12){
+		DateTime now = LgDateTime.GetTimeNow();
+		DateTime then = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed;
+		TimeSpan lastTimeSinceInhaler = now - then;
+		if(lastTimeSinceInhaler.TotalHours > 12){
 			DataManager.Instance.GameData.Inhaler.timesUsedInARow = 0;
 		}
 		DataManager.Instance.GameData.Inhaler.timesUsedInARow++;

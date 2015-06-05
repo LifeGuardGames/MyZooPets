@@ -257,7 +257,7 @@ public class StatsController : Singleton<StatsController>{
 			}
 
 		//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, DataManager.Instance.GameData.Stats.totalStars, true);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, DataManager.Instance.GameData.Stats.TotalStars, true);
 		}
 	}
 

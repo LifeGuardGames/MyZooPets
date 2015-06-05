@@ -15,6 +15,12 @@ public class DataManager : Singleton<DataManager>{
 	public event EventHandler<EventArgs> OnGameDataLoaded;
 	public event EventHandler<EventArgs> OnGameDataSaved;
 
+	public string CURRENT_VERSION{
+		get{
+			return Constants.GetConstant<string>("BuildVersion");;
+		}
+	}
+
 	public bool isDebug = false; //turn isDebug to true if working on independent scene
 
 	private static bool isCreated;
@@ -175,9 +181,9 @@ public class DataManager : Singleton<DataManager>{
 		if(isDebug)
 			InitGameDataForDebug();
 		else{
-			// if not first time need to do version check
+			// if not first time need to do version check, retrieve old version
 			if(!IsFirstTime){
-				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
+				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
 				VersionCheck(new Version(currentDataVersionString));
 			}
 //			else{
@@ -221,36 +227,12 @@ public class DataManager : Singleton<DataManager>{
 				PlayPeriodLogic.Instance.SetLastPlayPeriod();
 
 				SaveGameData();
-				//Analytics.Instance.ShooterTimesPlayed(GameData.HighScore.timesPlayed["Shooter"]);
-				//Analytics.Instance.NinjaTimesPlayed(GameData.HighScore.timesPlayed["Ninja"]);
-				//Analytics.Instance.DoctorTimesPlayed(GameData.HighScore.timesPlayed["Clinic"]);
-				//Analytics.Instance.RunnerTimesPlayed(GameData.HighScore.timesPlayed["Runner"]);
-				//Analytics.Instance.MemoryTimesPlayed(GameData.HighScore.timesPlayed["Memory"]);
-				//Analytics.Instance.MiniPetVisited("MiniPet0", GameData.MiniPets.GetVisits("MiniPet0"));
-				//Analytics.Instance.MiniPetVisited("MiniPet1", GameData.MiniPets.GetVisits("MiniPet1"));
+
 				//No longer first time
 				PlayerPrefs.SetInt("IsFirstTime", 0);
 			}
 		}
 	}
-
-//	void Update(){
-//		//this is the timer that will be running to keep track of when to sync data
-//		//to parse server
-//		bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-//		if(!isDebug && isSyncToServerOn){
-//
-//			//waiting till auto sync time
-//			syncToParseTimer += Time.deltaTime;
-//			if(syncToParseTimer >= syncToParseWaitTime){
-//				syncToParseTimer = 0;
-//				if(gameData != null){
-//					Debug.Log("auto sync starting");
-//					gameData.SaveAsyncToParse();
-//				}
-//			}
-//		}
-//	}
 	#endregion
 
 	#region Game Data
@@ -375,29 +357,10 @@ public class DataManager : Singleton<DataManager>{
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
 		//Deleting all data that is less than 2.0.0
-		Version version200 = new Version("2.0.0");
+		Version version200 = new Version("2.0.0");	//DONT TOUCH THIS
 		if(currentDataVersion < version200){
 			PlayerPrefs.DeleteKey("GameData");
 		}
-
-		/*
-		Version version140 = new Version("1.4.0");
-		Version version142 = new Version("1.4.2");
-		
-		if(currentDataVersion < version140){
-			//no longer needs this key so removed it. this key was previously use
-			//to update from single pet to mulitple pet
-			PlayerPrefs.DeleteKey("IsSinglePetMode");
-			IsAgeCollected = true;
-			
-			ExtraParseLogic.Instance.UserCheck();
-		}
-
-		if(currentDataVersion < version142){
-			//menu scene data is no longer required. 
-			PlayerPrefs.DeleteKey("MenuSceneData");
-		}
-		 */
 	}
 
 	/// <summary>
@@ -405,8 +368,7 @@ public class DataManager : Singleton<DataManager>{
 	/// use the data version for version check
 	/// </summary>
 	private void LoadDataVersion(){
-		//don't change the default value
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
+		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
 
 		if(!IsFirstTime){
 			gameData.VersionCheck(new Version(currentDataVersionString));
@@ -419,14 +381,7 @@ public class DataManager : Singleton<DataManager>{
 	/// the lastest build number
 	/// </summary>
 	private void SaveDataVersion(){
-		string buildVersionString = Constants.GetConstant<string>("BuildVersion");
-		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", "2.0.0");
-		Version buildVersion = new Version(buildVersionString);
-		Version currentDataVersion = new Version(currentDataVersionString);
-		
-		if(buildVersion > currentDataVersion){
-			PlayerPrefs.SetString("CurrentDataVersion", buildVersionString);
-		}
+		PlayerPrefs.SetString("CurrentDataVersion", CURRENT_VERSION);
 	}
 	#endregion
 

@@ -9,7 +9,7 @@ using System.Collections;
 public class MutableDataStats{
     public int Points {get; set;} //evolution Points
     public int Stars {get; set;} //currency of the game
-	public int totalStars {get; set;}
+	public int TotalStars {get; set;}
     public int Health {get; set;} //pet's Health
     public int Mood {get; set;} //pet's mood (refer to as hungry)
 	public int Shards {get; set;}	// Shard count, get out of 100 for now
@@ -35,7 +35,7 @@ public class MutableDataStats{
         Points = 0;
 		Stars = 100;
 		Shards = 0;
-		totalStars = 100;
+		TotalStars = 100;
     }
 	
     //==============StatsModifiers================
@@ -55,7 +55,7 @@ public class MutableDataStats{
     //Stars
     public void AddStars(int val){
         Stars += val;
-		totalStars += val;
+		TotalStars += val;
     }
     public void SubtractStars(int val){
         Stars -= val;

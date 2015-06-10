@@ -73,7 +73,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		DateTime now = LgDateTime.GetTimeNow();
 		DateTime then = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed;
 		TimeSpan lastTimeSinceInhaler = now - then;
-		if(lastTimeSinceInhaler.TotalHours > 12){
+		if(lastTimeSinceInhaler.TotalHours > 24){
 			DataManager.Instance.GameData.Inhaler.timesUsedInARow = 0;
 		}
 		DataManager.Instance.GameData.Inhaler.timesUsedInARow++;

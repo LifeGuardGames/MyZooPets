@@ -17,7 +17,7 @@ public class DataManager : Singleton<DataManager>{
 
 	public string CURRENT_VERSION{
 		get{
-			return Constants.GetConstant<string>("BuildVersion");;
+			return Constants.GetConstant<string>("BuildVersion");
 		}
 	}
 

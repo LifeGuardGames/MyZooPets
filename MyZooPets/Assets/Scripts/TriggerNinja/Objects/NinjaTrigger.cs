@@ -29,8 +29,10 @@ public class NinjaTrigger : MonoBehaviour{
 	public GameObject goHitFX;
 	public GameObject goHitFX2;
 	public GameObject goHitDirectionFX;
+	public float yVal;
 
 	protected virtual void Start(){
+		yVal = transform.position.y;
 		// count the number of children that have NinjaTriggerChildren scripts -- this will be used when determining if the
 		// trigger is being shown by the camera or not.
 		NinjaTriggerChild[] children = gameObject.GetComponentsInChildren<NinjaTriggerChild>();
@@ -204,8 +206,13 @@ public class NinjaTrigger : MonoBehaviour{
 		if(isCut)
 			Destroy(gameObject);
 		else{
-			// otherwise, it means the object was missed
-			OnMissed();
+			if(transform.position.y <= yVal+5){
+				// otherwise, it means the object was missed
+				OnMissed();
+			}
+			else{
+				gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
+			}
 		}		
 	}
 	

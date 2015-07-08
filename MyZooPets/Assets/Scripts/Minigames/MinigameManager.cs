@@ -53,7 +53,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	public string gameOverAudioClip = "minigameGameOver";
 
 	private int score;	// player score
-	private int lives; // player lives
+	public int lives; // player lives
 	private bool tutorialOverride; // is there a tutorial override? 
 	//i.e. tutorial has already been played but the user wants to see it again
 	private MinigameStates currentState = MinigameStates.Opening; // the state of this minigame

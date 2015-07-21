@@ -46,27 +46,26 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	// removes health and then calculates state
 	public void ChangeHealth(float amount){
 		if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
-		playerHealth += amount;
-		if(playerHealth >= 11){
-			ChangeState("happy");
-		}
-		else if(playerHealth > 5 && playerHealth <= 10){
-			ChangeState("neutral");
-		}
-		else if(playerHealth <= 5){
-			ChangeState("distressed");
-		}
-		else if (playerHealth <= 0){
-			this.collider2D.enabled = false;
-		}
-			//being super redundent to fix a game crashing bug
-			if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
+		
+		//being super redundent to fix a game crashing bug
+		if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 			// Also updates the lives in game manager as that is the true health
 			ShooterGameManager.Instance.UpdateLives((int)amount);
-			if(ShooterGameManager.Instance.GetLives() <= 0){ 
+			playerHealth = ShooterGameManager.Instance.GetLives();
+			if(playerHealth >= 11){
+				ChangeState("happy");
+			}
+			else if(playerHealth > 5 && playerHealth <= 10){
+				ChangeState("neutral");
+			}
+			else if(playerHealth <= 5 && playerHealth > 0){
+				ChangeState("distressed");
+			}
+			else if (playerHealth <= 0){
+				this.collider2D.enabled = false;
 				characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
 			}
-			}
+		}
 
 		if(amount > 0){ 
 			// work around for increaseing health above max 

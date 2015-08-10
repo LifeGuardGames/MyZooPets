@@ -19,6 +19,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 					"\nUser ID: " + Social.localUser.id + 
 						"\nIsUnderage: " + Social.localUser.underage;
 				Debug.Log (userInfo);
+				LoadLeaderBoard();
 			}
 			else
 				Debug.Log ("Authentication failed");
@@ -26,7 +27,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 	}
 
 	// Use this for initialization
-	void Start () {
+	private void LoadLeaderBoard () {
 
 		memory = Social.CreateLeaderboard();
 		memory.id = "MemoryLeaderBoard";

@@ -11,9 +11,23 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 	ILeaderboard shooter;
 	ILeaderboard runner;
 
+	void Awake(){
+		Social.localUser.Authenticate (success => {
+			if (success) {
+				Debug.Log ("Authentication successful");
+				string userInfo = "Username: " + Social.localUser.userName + 
+					"\nUser ID: " + Social.localUser.id + 
+						"\nIsUnderage: " + Social.localUser.underage;
+				Debug.Log (userInfo);
+			}
+			else
+				Debug.Log ("Authentication failed");
+		});
+	}
 
 	// Use this for initialization
 	void Start () {
+
 		memory = Social.CreateLeaderboard();
 		memory.id = "MemoryLeaderBoard";
 		memory.LoadScores(result => DidLoadLeaderboard(result,memory));

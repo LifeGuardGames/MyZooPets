@@ -17,7 +17,7 @@ public class CutsceneControllerMinipetHatchFluffy : CutsceneController {
 	}
 
 	public void playRollAudio(){
-		AudioManager.Instance.PlayClip("drumRoll");
+//		AudioManager.Instance.PlayClip("drumRoll");
 	}
 	
 	public void playHatchAudio(){

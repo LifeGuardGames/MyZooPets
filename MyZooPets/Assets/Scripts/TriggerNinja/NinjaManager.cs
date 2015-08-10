@@ -186,6 +186,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		Analytics.Instance.NinjaHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.NinjaBonusRounds(bonusRoundCounter);
 		Analytics.Instance.NinjaTimesPlayedTick();
+		LeaderBoardManager.Instance.enterScore((long)GetScore(), "NinjaLeaderBoard");
 	}
 
 	protected override string GetMinigameKey(){

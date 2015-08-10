@@ -92,6 +92,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 
 		Analytics.Instance.MemoryHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.MemoryTimesPlayedTick();
+		LeaderBoardManager.Instance.enterScore((long)GetScore(), "MemoryLeaderBoard");
 	}
 
 	private void GameStateChange(object sender, GameStateArgs args){

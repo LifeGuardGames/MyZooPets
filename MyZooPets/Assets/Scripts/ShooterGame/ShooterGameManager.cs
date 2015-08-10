@@ -99,6 +99,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 			WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
 		}
 		Analytics.Instance.ShooterTimesPlayedTick();
+		LeaderBoardManager.Instance.enterScore((long)GetScore(), "ShooterLeaderBoard");
 	}
 
 	public void ClickIt(TapGesture e){

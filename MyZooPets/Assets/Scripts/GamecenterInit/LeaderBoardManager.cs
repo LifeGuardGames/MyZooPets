@@ -17,6 +17,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 		memory = Social.CreateLeaderboard();
 		memory.id = "MemoryLeaderBoard";
 		memory.LoadScores(result => DidLoadLeaderboard(result,memory));
+		Debug.Log("createing Memory Leaderboard");
 		ninja = Social.CreateLeaderboard();
 		ninja.id = "NinjaLeaderBoard";
 		ninja.LoadScores(result => DidLoadLeaderboard(result,ninja));

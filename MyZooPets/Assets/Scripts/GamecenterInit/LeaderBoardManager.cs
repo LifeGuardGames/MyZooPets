@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.SocialPlatforms;
 
 public class LeaderBoardManager : Singleton<LeaderBoardManager> {
-
+#if UNITY_IOS
 	//here we need to create the leaderboards edit this script to change howmany leaderboards are created
 	ILeaderboard memory;
 	ILeaderboard ninja;
@@ -58,4 +58,5 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 			Debug.Log(success ? "Reported score successfully" : "Failed to report score");
 		});
 	}
+#endif
 }

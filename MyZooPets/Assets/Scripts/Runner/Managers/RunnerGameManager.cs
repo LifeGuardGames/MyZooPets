@@ -92,7 +92,9 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
 
 		Analytics.Instance.RunnerTimesPlayedTick();
+#if UNITY_IOS
 		LeaderBoardManager.Instance.enterScore((long)GetScore(), "RunnerLeaderBoard");
+#endif
 	}		
 
 	/// <summary>

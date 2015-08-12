@@ -11,8 +11,8 @@ public class PetMovement : Singleton<PetMovement>{
 	public List<Collider> walkingPathColliders; //Areas that the pet is allowed to move
 	public GameObject petSprite;
 
-	// sound for when the pet moves
-	public string strSoundMove;
+	public ParticleSystem particleMove;
+	public string soundMoveKey;
 	public float fShadow = .6f;
 
 	// Used for 2D room pet movement, height screen ratio in normal room walking
@@ -162,11 +162,11 @@ public class PetMovement : Singleton<PetMovement>{
 			return;
 		
 		// bit of a hack...remove if this causes any issues -- prevent pet movement if the edit decos UI is open
-		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen())
+		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen()){
 			return;
-       
-		AudioManager.Instance.PlayClip(strSoundMove);
-//		Debug.Log(gesture.Position);
+		}
+
+		AudioManager.Instance.PlayClip(soundMoveKey);
 		MovePet(Camera.main.ScreenPointToRay(new Vector3(gesture.Position.x, movementStaticScreenY, 0)));    
 	}
 
@@ -204,6 +204,8 @@ public class PetMovement : Singleton<PetMovement>{
 			foreach(Collider walkingPathCollider in walkingPathColliders){
 				if(hit.collider == walkingPathCollider){
 					MovePet(hit.point);
+					particleMove.transform.position = hit.point;
+					particleMove.Play();
 				}
 			}
 		}

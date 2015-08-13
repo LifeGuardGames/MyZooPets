@@ -2,38 +2,38 @@ using UnityEngine;
 using System.Collections;
 
 public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
-	private string powerUp = "normal";
-	public float timer;
-
-	public void ChangePowerUp(string _powerUp){
-		powerUp = _powerUp;
-		PowerUP();
+	public enum PowerUpType{
+		Normal,
+		Triple,
+		Pierce
 	}
 
-	public void PowerUP(){
+	public float timer;
+
+	public void ChangePowerUp(PowerUpType powerUp){
 		switch(powerUp){
-		case "normal":
-
-			PlayerShooterController.Instance.isPiercing = false;
-			PlayerShooterController.Instance.isTriple = false;
+		case PowerUpType.Normal:
+			PlayerShooterController.Instance.IsPiercing = false;
+			PlayerShooterController.Instance.IsTriple = false;
+			// Refresh its own state so it knows what size fireball to give
+			PlayerShooterController.Instance.ChangeState(PlayerShooterController.Instance.PlayerState);
 			break;
-		case "triple":
-			PlayerShooterController.Instance.isTriple = true;
-
+		case PowerUpType.Triple:
+			PlayerShooterController.Instance.IsTriple = true;
+			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());
 			break;
-		case "pierce":
-			PlayerShooterController.Instance.isPiercing = true;
-
+		case PowerUpType.Pierce:
+			PlayerShooterController.Instance.IsPiercing = true;
+			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());
 			break;
 		}
 	}
 
-	// Powering down form power up
+	// Powering down from power up
 	private IEnumerator ResetPowerUP(){
 		yield return new WaitForSeconds(timer);
-		powerUp = "normal";
-		PowerUP();
+		ChangePowerUp(PowerUpType.Normal);
 	}
 }

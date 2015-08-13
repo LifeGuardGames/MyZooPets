@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
-	public EventHandler<EventArgs> proceed;					//tutorial event handeler
+	public EventHandler<EventArgs> OnTutorialStepDone;					//tutorial event handeler
 	public List<ImmutableDataShooterArmy> enemyList;		// list of the various enemy types
 	public int enemiesInWave = 0;							// the number of enemies in the current wave											
 	private ImmutableDataWave currentWave;					// our current wave
@@ -33,7 +33,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 		else{
 			difficulty = 3;
 		}
-		return DataLoaderWaves.GetWave(difficulty);;
+		return DataLoaderWaves.GetWave(difficulty);
 	}
 
 	// builds a list of enemy types
@@ -61,31 +61,35 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 		// build an array of varying enemy types that array is then passed to the spawner manager
 		List<ImmutableDataShooterArmy> waveEnemies = new List<ImmutableDataShooterArmy>();
 
-		for(int i =0; i < currWave.BegEnemiesCount; i++){
+		for(int i = 0; i < currWave.BegEnemiesCount; i++){
 			waveEnemies.Add(enemyList[0]);
 		}
-		for(int i =0; i < currWave.MediumEnemiesCount; i++){
+		for(int i = 0; i < currWave.MediumEnemiesCount; i++){
 			waveEnemies.Add(enemyList[1]);
 		}
-		for(int i =0; i < currWave.HardEnemiesCount; i++){
+		for(int i = 0; i < currWave.HardEnemiesCount; i++){
 			waveEnemies.Add(enemyList[2]);
 		}
-		for(int i =0; i < currWave.PowerUpCount; i++){
+		for(int i = 0; i < currWave.PowerUpCount; i++){
 			int rand = UnityEngine.Random.Range(3, 5);
 			waveEnemies.Add(enemyList[rand]);
 		}
 		ShooterSpawnManager.Instance.SpawnTriggers(waveEnemies);
 	}
 
-	// checks if all enemies are dead and if they are beings day transition
+	// checks if all enemies are dead and if yes, begin day transition
 	public void CheckEnemiesInWave(){
-		if(enemiesInWave == 0){
-			if(ShooterGameManager.Instance.inTutorial){
-				if(proceed != null)
-					proceed(this, EventArgs.Empty);
+		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.Playing){
+			if(enemiesInWave == 0){
+				if(ShooterGameManager.Instance.inTutorial){
+					if(OnTutorialStepDone != null){
+						OnTutorialStepDone(this, EventArgs.Empty);
+					}
+				}
+				ShooterInhalerManager.Instance.CanUseInhalerButton = false;
+				ShooterGameManager.Instance.StartTimeTransition();
+				Debug.Log("===== Starting new day");
 			}
-			ShooterInhalerManager.Instance.CanUseInhalerButton = false;
-			ShooterUIManager.Instance.AChangeOfTimeActOne();
 		}
 	}
 }

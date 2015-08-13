@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class ShooterEnemyHard:ShooterEnemy{
+public class ShooterEnemyHard : ShooterEnemy{
+	public GameObject bulletPrefab;
+	private GameObject bulletAux;
 	private GameObject upper;
 	private GameObject lower;
 	private GameObject midPoint;
-	public GameObject bulletPrefab;
 
 	// Use this for initialization
 	void Start(){
@@ -14,25 +15,16 @@ public class ShooterEnemyHard:ShooterEnemy{
 		upper = GameObject.Find("Upper");
 		lower = GameObject.Find("Lower");
 		midPoint = GameObject.Find("MidPoint");
-		LeanTween.move(this.gameObject, midPoint.transform.position, moveDuration).setOnComplete(MoveAgain);
+		LeanTween.move(gameObject, midPoint.transform.position, moveDuration).setOnComplete(StartRepeatMove);
 	}
 
 	// function that moves around the smog monster between two points randomly
-	void MoveAgain(){
+	void StartRepeatMove(){
 		if(Random.Range(0, 2) == 0){
-			LeanTween.move(this.gameObject, upper.transform.position, moveDuration).setOnComplete(ShootSmogBall);
+			LeanTween.move(gameObject, upper.transform.position, moveDuration).setOnComplete(ShootSmogBall);
 		}
 		else{
-			LeanTween.move(this.gameObject, lower.transform.position, moveDuration).setOnComplete(ShootSmogBall);
-		}
-	}
-
-	void AndAgain(){
-		if(transform.position == upper.transform.position){
-			LeanTween.move(this.gameObject, lower.transform.position, moveDuration).setOnComplete(ShootSmogBall);
-		}
-		else{
-			LeanTween.move(this.gameObject, upper.transform.position, moveDuration).setOnComplete(ShootSmogBall);
+			LeanTween.move(gameObject, lower.transform.position, moveDuration).setOnComplete(ShootSmogBall);
 		}
 	}
 
@@ -41,8 +33,9 @@ public class ShooterEnemyHard:ShooterEnemy{
 		if(!isDead){	
 			animator.SetBool("Spit",true);
 			animator.SetBool("IsSpitMode", false);
-			GameObject instance = Instantiate(bulletPrefab, this.gameObject.transform.position, bulletPrefab.transform.rotation)as GameObject;
-			LeanTween.move(instance.gameObject, player.transform.position, 2.0f);
+			bulletAux = GameObjectUtils.AddChild(null, bulletPrefab);
+			bulletAux.transform.position = transform.position;
+			LeanTween.move(bulletAux, player.transform.position, 2.0f);
 			StartCoroutine(WaitASecond());
 		}
 	}
@@ -50,11 +43,24 @@ public class ShooterEnemyHard:ShooterEnemy{
 	// gives a 2 sec breather between shots
 	IEnumerator WaitASecond(){
 		yield return new WaitForSeconds(1.0f);
-		AndAgain();
+		RepeatMove();
+	}
+
+	void RepeatMove(){
+		if(transform.position == upper.transform.position){
+			LeanTween.move(gameObject, lower.transform.position, moveDuration).setOnComplete(ShootSmogBall);
+		}
+		else{
+			LeanTween.move(gameObject, upper.transform.position, moveDuration).setOnComplete(ShootSmogBall);
+		}
 	}
 
 	void OnDestroy(){
-		LeanTween.cancel(this.gameObject);
+		LeanTween.cancel(gameObject);
+
+		if(bulletAux != null){
+			Destroy(bulletAux);
+		}
 	}
 
 //	void OnGUI(){

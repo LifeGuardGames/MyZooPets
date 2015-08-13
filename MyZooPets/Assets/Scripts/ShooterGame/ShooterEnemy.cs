@@ -12,6 +12,7 @@ public class ShooterEnemy : MonoBehaviour{
 	public ParticleSystem particleDead;
 	protected GameObject player;
 	public bool isDead = false;
+	private bool isMarkedForDestroy = true;
 
 	// Use this for initialization
 	void Awake(){
@@ -71,24 +72,29 @@ public class ShooterEnemy : MonoBehaviour{
 	}
 
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
-	IEnumerator DestroyEnemy(){
-		particleDead.gameObject.SetActive(true);
-		AudioManager.Instance.PlayClip("shooterEnemyDie", variations:3);
-		yield return new WaitForEndOfFrame();
+	private IEnumerator DestroyEnemy(){
+		if(isMarkedForDestroy){		// Make sure this only gets called once
+			isMarkedForDestroy = false;
+			particleDead.gameObject.SetActive(true);
+			AudioManager.Instance.PlayClip("shooterEnemyDie", variations:3);
+			Debug.Log("playing deathhh");
+			Debug.Log(     gameObject.name + " " + gameObject.GetInstanceID());
+			yield return new WaitForEndOfFrame();
 
-		isDead = true;
-		collider2D.enabled = false;
-		LeanTween.cancel(this.gameObject);
-		ShooterGameEnemyController.Instance.enemiesInWave--;
-		ShooterGameEnemyController.Instance.CheckEnemiesInWave();
-		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
-		// Visual changes
-		animator.gameObject.SetActive(false);
-		if(particle != null){
-			particle.Stop();
+			isDead = true;
+			collider2D.enabled = false;
+			LeanTween.cancel(this.gameObject);
+			ShooterGameEnemyController.Instance.enemiesInWave--;
+			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
+			ShooterGameManager.OnStateChanged -= OnGameStateChanged;
+			// Visual changes
+			animator.gameObject.SetActive(false);
+			if(particle != null){
+				particle.Stop();
+			}
+
+			// Wait until the particles has finished clearing before you destroy
+			Destroy(this.gameObject, 2f);
 		}
-
-		// Wait until the particles has finished clearing before you destroy
-		Destroy(this.gameObject, 2f);
 	}
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class ShooterPowerUpScript : MonoBehaviour{
 
@@ -17,7 +18,9 @@ public class ShooterPowerUpScript : MonoBehaviour{
 			Destroy(this.gameObject);
 		}
 		else if(collider.gameObject.tag == "Player"){
-			ShooterPowerUpManager.Instance.ChangePowerUp(powerUpKey);
+			// Parse the powerup
+			ShooterPowerUpManager.PowerUpType powerUp = (ShooterPowerUpManager.PowerUpType)Enum.Parse(typeof(ShooterPowerUpManager.PowerUpType), powerUpKey);
+			ShooterPowerUpManager.Instance.ChangePowerUp(powerUp);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
 			Destroy(this.gameObject);

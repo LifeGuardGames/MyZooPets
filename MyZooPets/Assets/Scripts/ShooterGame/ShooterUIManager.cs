@@ -3,15 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class ShooterUIManager :Singleton<ShooterUIManager>{
+public class ShooterUIManager : MinigameUI{
 
 	public GameObject sun;
 	public GameObject moon;
 	public Transform posSky;
 	public Transform posBottom;
-	public GameObject fingerPos;
 	public TextureListAlphaTween dayTween;
 	public TextureListAlphaTween nightTween;
+	public GameObject fingerPos;
+	public GameObject FingerPos{
+		get{ return fingerPos; }
+	}
 
 	// handles the game state changes
 	void OnGameStateChanged(object sender, GameStateArgs args){
@@ -66,7 +69,7 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 	}
 
 	// changes the sun to moon or moon to sun and then sets off the next transition once it is complete
-	public void AChangeOfTimeActOne(){
+	public void StartTimeTransition(){
 		if(!ShooterGameManager.Instance.inTutorial){
 			if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 				if(ShooterGameManager.Instance.waveNum == 0){
@@ -74,12 +77,12 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 					fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
 				}
 				if(sun.GetComponent<MovingSky>().inSky == true){
-					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo).setEase(LeanTweenType.easeInQuad);
+					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(EndTimeTransition).setEase(LeanTweenType.easeInQuad);
 					nightTween.Show();
 					dayTween.Hide();
 				}
 				else{
-					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(AChangeOfTimeActTwo).setEase(LeanTweenType.easeInQuad);
+					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(EndTimeTransition).setEase(LeanTweenType.easeInQuad);
 					dayTween.Show();
 					nightTween.Hide();
 				}
@@ -97,18 +100,18 @@ public class ShooterUIManager :Singleton<ShooterUIManager>{
 		LeanTween.move(moon, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
 	}
 
-	// does the opposite of act 2 and then changes to the next wave
-	public void AChangeOfTimeActTwo(){
+	// Finishes the time transition and starts new wave
+	private void EndTimeTransition(){
 		MovingSky sunScript = sun.GetComponent<MovingSky>();
 		MovingSky moonScript = moon.GetComponent<MovingSky>();
 
 		if(sunScript.inSky == true){
-			LeanTween.move(moon, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(moon, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
 			moonScript.inSky = true;
 			sunScript.inSky = false;
 		}
 		else{
-			LeanTween.move(sun, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.ChangeWaves).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(sun, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
 			sunScript.inSky = true;
 			moonScript.inSky = false;
 		}

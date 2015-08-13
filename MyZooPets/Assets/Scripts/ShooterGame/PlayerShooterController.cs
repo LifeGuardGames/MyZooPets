@@ -3,94 +3,110 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// NOTE: This script keeps the internal health of the actual pet, instead of using lives since it fluctuates a lot
+/// </summary>
 public class PlayerShooterController : Singleton<PlayerShooterController>{
-	public ShooterCharacterController characterController;
-	public EventHandler <EventArgs> changeInHealth;
-	public string state = "neutral";	//the player state this dictates the pets strength
-	public float playerHealth;			//player health
+	public enum PlayerStateTypes{
+		Happy,
+		Neutral,
+		Distressed
+	}
+
+	public int playerHealth = 10;				// player health
+
+	private PlayerStateTypes playerState = PlayerStateTypes.Neutral;
+	public PlayerStateTypes PlayerState{
+		get{ return playerState; }
+	}
+
+	public ShooterCharacterAnimController characterAnim;
 	public List<GameObject> fireBallPrefabs;	// List of fireball presets too choose from
 	public Transform bulletSpawnLocation;		// location that the bullets spawn at aka the mouth not the middle of the chest
 	private GameObject currentFireBall;			// our fireball so we can modify it's properties and change its direction
-	public bool isTriple;						// are we triple firing
-	public bool isPiercing;
+
+	public bool isTriple;						// Triple firing upgrade
+	public bool IsTriple{
+		get{ return isTriple; }
+		set{ isTriple = value; }
+	}
+
+	public bool isPiercing;						// Piercing upgrade
+	public bool IsPiercing{
+		get{ return isPiercing; }
+		set{ isPiercing = value; }
+	}
 
 	// on reset change health to 10 and state to neutral
 	public void Reset(){
 		playerHealth = 10;
-		ChangeState("neutral");
+		ChangeState(PlayerStateTypes.Neutral);
 		this.collider2D.enabled = true;
 	}
+
 	// change states
-	private void ChangeState(string _state){
-		state = _state;
+	public void ChangeState(PlayerStateTypes state){
+		playerState = state;
 		switch(state){
-		case "happy":
-			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.happy);
+		case PlayerStateTypes.Happy:
+			characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Happy);
 			currentFireBall = fireBallPrefabs[0];	// Big fireball prefab
 			break;
-		case "neutral":
-			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.neutral);
+		case PlayerStateTypes.Neutral:
+			characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Neutral);
 			currentFireBall = fireBallPrefabs[1];	// Medium fireball prefab
 			break;
-		case "distressed":
-			characterController.SetState(ShooterCharacterController.ShooterCharacterStates.distressed);
+		case PlayerStateTypes.Distressed:
+			characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Distressed);
 			currentFireBall = fireBallPrefabs[2];	// Small fireball prefab
 			break;
 		}
 	}
 
-	private string CheckState(){
-		return state;
-	}
-
 	// removes health and then calculates state
-	public void ChangeHealth(float amount){
-		if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
-		
-		//being super redundent to fix a game crashing bug
-		if( ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
-			// Also updates the lives in game manager as that is the true health
-			ShooterGameManager.Instance.UpdateLives((int)amount);
-			playerHealth = ShooterGameManager.Instance.GetLives();
+	public void ChangeHealth(int deltaHealth){
+		if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
+
+			playerHealth += deltaHealth;
+			Debug.Log("Changed health : " + playerHealth);
 			if(playerHealth >= 11){
-				ChangeState("happy");
+				if(playerHealth > 15){
+					playerHealth = 15;	// Cap health at 15
+				}
+				ChangeState(PlayerStateTypes.Happy);
 			}
 			else if(playerHealth > 5 && playerHealth <= 10){
-				ChangeState("neutral");
+				ChangeState(PlayerStateTypes.Neutral);
 			}
 			else if(playerHealth <= 5 && playerHealth > 0){
-				ChangeState("distressed");
+				ChangeState(PlayerStateTypes.Distressed);
 			}
-			else if (playerHealth <= 0){
+			else if(playerHealth <= 0){
 				this.collider2D.enabled = false;
-				characterController.SetState(ShooterCharacterController.ShooterCharacterStates.dead);
+				characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Dead);
+			}
+
+			if(playerHealth <= 0){
+				// Trigger game over
+				ShooterGameManager.Instance.UpdateLives(-1);
 			}
 		}
-
-		if(amount > 0){ 
-			// work around for increaseing health above max 
-			if(changeInHealth != null)
-				changeInHealth(this, EventArgs.Empty);
-		}
-		// amount is 0 or less remove the listener
 		else{
-			changeInHealth -= ShooterGameManager.Instance.HealthUpdate;
-		}
+			Debug.LogError("Trying to change health after game over");
 		}
 	}
 
 	// shoots a bullet at the current position of the mouse or touch
 	public void Shoot(Vector3 dir){
 		AudioManager.Instance.PlayClip("shooterFire", variations: 3);
-		characterController.Shoot();	// Tell the animator to shoot
+		characterAnim.Shoot();	// Tell the animator to shoot
 
 		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
+
 		if(isPiercing){
 			currentFireBall = fireBallPrefabs[3];
 		}
-		else{
-			ChangeState(CheckState());
-		}
+
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 		ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 		bulletScript.target = lookPos;
@@ -99,19 +115,19 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		if(isTriple){
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
-			bulletScript.target = new Vector3(lookPos.x, lookPos.y+1, lookPos.z);
+			bulletScript.target = new Vector3(lookPos.x, lookPos.y + 1, lookPos.z);
 			bulletScript.FindTarget();
 			bulletScript.isPierceing = isPiercing;
 
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
-			bulletScript.target = new Vector3(lookPos.x, lookPos.y-1, lookPos.z);
+			bulletScript.target = new Vector3(lookPos.x, lookPos.y - 1, lookPos.z);
 			bulletScript.FindTarget();
 			bulletScript.isPierceing = isPiercing;
 		}
 	}
 
-	// removes health from player when hit by an enemy bullet // written this way to avoid making a mundane script
+	// removes health from player when hit by an enemy smog ball // written this way to avoid making a mundane script
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "EnemyBullet"){
 			ChangeHealth(-1);

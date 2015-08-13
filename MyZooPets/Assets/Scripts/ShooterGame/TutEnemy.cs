@@ -14,6 +14,7 @@ public class TutEnemy : MonoBehaviour {
 				StartCoroutine(DestroyEnemy());
 		}
 	}
+
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();

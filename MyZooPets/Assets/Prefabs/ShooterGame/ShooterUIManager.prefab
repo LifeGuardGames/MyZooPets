@@ -8,7 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400006}
   m_Layer: 0
@@ -30,22 +29,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0aac035af948418899a8549b2abd8f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  popupOpening: {fileID: 0}
-  popupGameOver: {fileID: 0}
-  popupPaused: {fileID: 0}
-  labelScore: {fileID: 0}
-  labelLives: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,13 +40,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f229a68889ccaa548b66bf7af8beb639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupOpening: {fileID: 0}
+  popupGameOver: {fileID: 0}
+  popupPaused: {fileID: 0}
+  labelScore: {fileID: 0}
+  labelLives: {fileID: 0}
   sun: {fileID: 0}
   moon: {fileID: 0}
   posSky: {fileID: 0}
   posBottom: {fileID: 0}
-  fingerPos: {fileID: 0}
   dayTween: {fileID: 0}
   nightTween: {fileID: 0}
+  fingerPos: {fileID: 0}
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1

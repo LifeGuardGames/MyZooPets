@@ -224,7 +224,9 @@ public class DataManager : Singleton<DataManager>{
 				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				// Save last play period here again..
-				PlayPeriodLogic.Instance.SetLastPlayPeriod();
+				if(PlayPeriodLogic.Instance != null){
+					PlayPeriodLogic.Instance.SetLastPlayPeriod();
+				}
 
 				SaveGameData();
 

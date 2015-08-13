@@ -25,12 +25,11 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 		// if they can use the inhaler reward them with health and points
 		if(CanUseInhalerButton == false){
 			if(ShooterGameManager.Instance.inTutorial==true){
-				if(proceed != null)
+				if(proceed != null){
 					proceed(this, EventArgs.Empty);
+				}
 			}
-			if(ShooterUIManager.Instance.fingerPos != null){
-				Destroy(ShooterUIManager.Instance.fingerPos.gameObject);
-			}
+			ShooterGameManager.Instance.RemoveInhalerFingerTutorial();
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.ChangeHealth(3);
 			CanUseInhalerButton =! CanUseInhalerButton;

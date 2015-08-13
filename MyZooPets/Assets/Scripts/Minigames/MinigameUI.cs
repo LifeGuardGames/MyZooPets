@@ -24,12 +24,8 @@ public class MinigameUI : MonoBehaviour{
 	// hashes
 	private Hashtable hashLabels;
 	private Dictionary<MinigamePopups, MinigamePopup> hashPopups;
-	
-	
-	//---------------------------------------------------
-	// Start()
-	//---------------------------------------------------		
-	void Start(){
+
+	void Awake(){
 		// set up the hash of labels
 		hashLabels = new Hashtable();
 		hashLabels[MinigameLabels.Score] = labelScore;

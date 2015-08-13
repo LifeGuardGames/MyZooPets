@@ -5,6 +5,9 @@ using System;
 public class ShooterPowerUpScript : MonoBehaviour{
 
 	public string powerUpKey;
+	public GameObject sprite;
+	public ParticleSystem particleSprite;
+	public ParticleSystem particleGet;
 
 	void Update(){
 		transform.Translate(Time.deltaTime * -2.0f, 0, 0);
@@ -15,7 +18,11 @@ public class ShooterPowerUpScript : MonoBehaviour{
 			Destroy(collider.gameObject);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
-			Destroy(this.gameObject);
+
+			sprite.SetActive(false);
+			particleSprite.Stop();
+
+			Destroy(this.gameObject, 1f);
 		}
 		else if(collider.gameObject.tag == "Player"){
 			// Parse the powerup
@@ -23,7 +30,12 @@ public class ShooterPowerUpScript : MonoBehaviour{
 			ShooterPowerUpManager.Instance.ChangePowerUp(powerUp);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
-			Destroy(this.gameObject);
+
+			sprite.SetActive(false);
+			particleSprite.Stop();
+			particleGet.Play();
+
+			Destroy(this.gameObject, 1f);
 		}
 	}
 }

@@ -68,7 +68,6 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 
 			playerHealth += deltaHealth;
-			Debug.Log("Changed health : " + playerHealth);
 			if(playerHealth >= 11){
 				if(playerHealth > 15){
 					playerHealth = 15;	// Cap health at 15

@@ -88,7 +88,6 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 				}
 				ShooterInhalerManager.Instance.CanUseInhalerButton = false;
 				ShooterGameManager.Instance.StartTimeTransition();
-				Debug.Log("===== Starting new day");
 			}
 		}
 	}

@@ -77,8 +77,6 @@ public class ShooterEnemy : MonoBehaviour{
 			isMarkedForDestroy = false;
 			particleDead.gameObject.SetActive(true);
 			AudioManager.Instance.PlayClip("shooterEnemyDie", variations:3);
-			Debug.Log("playing deathhh");
-			Debug.Log(     gameObject.name + " " + gameObject.GetInstanceID());
 			yield return new WaitForEndOfFrame();
 
 			isDead = true;

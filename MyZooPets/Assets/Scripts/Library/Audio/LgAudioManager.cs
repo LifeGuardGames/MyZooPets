@@ -27,6 +27,7 @@ public class LgAudioManager<T> : Singleton<T> where T : MonoBehaviour{
 	/// <param name="variations">Number of sounds for the same clip</param>
 	/// <param name="hashOverrides">Hash overrides.</param>
 	public virtual void PlayClip(string clipName, int variations = 1, Hashtable option = null){
+		Debug.Log(clipName);
 		if(option == null){
 			option = new Hashtable();
 		}

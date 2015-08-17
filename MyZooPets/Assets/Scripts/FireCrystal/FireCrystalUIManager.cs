@@ -18,6 +18,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public GameObject shardParent;
 	public float totalTimeTween = 1.5f;
 	public Animation crystalAnimation;
+	public ParticleSystem getGemParticle;
 	public GameObject clickableFireCrystalPrefab;
 	public UIAnchor parentAnchor;	// Changes depending on which scene we are in
 	public TweenToggle parentTween;	// Changes depending on which scene we are in
@@ -157,13 +158,15 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 				float pitchCount = 1f + (i / 5.0f);
 
+				Vector3 endPoint = GameObjectUtils.GetRandomPointOnCircumference(Vector3.zero, UnityEngine.Random.Range(0, 40f));
+
 				if(i == 0){
 					// Move the shard into the center and call start filling sprite, first tween
-					shardController.StartMoving(Vector3.zero, 0.8f, pitchCount, isFirstSprite: true);
+					shardController.StartMoving(endPoint, 0.8f, pitchCount, isFirstSprite: true);
 				}
 				else{
 					// Move the shard into the center
-					shardController.StartMoving(Vector3.zero, 0.8f, pitchCount);
+					shardController.StartMoving(endPoint, 0.8f, pitchCount);
 				}
 				yield return new WaitForSeconds(delayBetweenShards);
 			}
@@ -204,8 +207,14 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public void CrystalPopDone(){
 		InventoryUIManager.Instance.ShowPanel();
 
+		AudioManager.Instance.PlayClip("fireGemGet");
+
 		// Spawn a prefab that the user can click on and obtain
 		GameObjectUtils.AddChild(shardParent, clickableFireCrystalPrefab);
+	}
+
+	public void PlayGetGemParticle(){
+		getGemParticle.Play();
 	}
 
 	public void ResetFrontSprite(){

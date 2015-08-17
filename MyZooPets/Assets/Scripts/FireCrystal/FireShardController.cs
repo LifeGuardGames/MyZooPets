@@ -25,7 +25,7 @@ public class FireShardController : MonoBehaviour {
 		Hashtable hashOverride = new Hashtable();
 		hashOverride["Pitch"] = pitchCount;
 		hashOverride["Volume"] = 0.5f;
-//		AudioManager.Instance.PlayClip("fireShardGet", option: hashOverride);	// Need better sound...
+		AudioManager.Instance.PlayClip("fireShardGet", option: hashOverride);	// Need better sound...
 
 		// If this object is the first shard, call the animate meter function
 		if(isFirstSprite){

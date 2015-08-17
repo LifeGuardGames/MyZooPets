@@ -20,8 +20,7 @@ public class RotateAroundCenter : MonoBehaviour {
 		transform.Rotate(Vector3.forward * intervalIncrement);
 	}
 
-	private void Update()
-	{
+	private void Update(){
 		if(isPlaying && speed != 0){
 			transform.Rotate(Vector3.forward * Time.deltaTime * speed);
 		}

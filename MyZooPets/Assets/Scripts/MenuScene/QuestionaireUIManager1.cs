@@ -12,6 +12,7 @@ public class QuestionaireUIManager1 : MonoBehaviour{
 	public TweenToggle finishButtonTweenToggle;
 	public int maxAge = 25;
 
+	private int lastAgeAux;				// Keeping track of last age for sound effect
 	private int age;
 	private bool hasMovedSlider = false;
 	private GameObject menuScenePet = null;
@@ -30,6 +31,16 @@ public class QuestionaireUIManager1 : MonoBehaviour{
 		}
 		else{
 			age = Mathf.CeilToInt(percentage * 100f / 4f);	// Round up to the nearest 1-50 int
+
+			if(lastAgeAux != age){
+				float pitchCount = 1f + ((float)age * 0.1f);
+
+				Hashtable hashOverride = new Hashtable();
+				hashOverride["Pitch"] = pitchCount;
+				AudioManager.Instance.PlayClip("buttonGeneric3", option: hashOverride);
+				lastAgeAux = age;
+			}
+
 			label.text = age.ToString();
 		}
 

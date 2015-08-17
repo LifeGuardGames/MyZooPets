@@ -17,6 +17,7 @@ public class QuestionaireUIManager2 : MonoBehaviour{
 	/// </summary>
 	public void OnAsthmaYes(bool isChecked){
 		if(isChecked){
+			AudioManager.Instance.PlayClip("buttonGeneric3");
 			hasAsthma = true;
 			if(!hasAsthmaOptionChecked){
 				hasAsthmaOptionChecked = true;
@@ -30,6 +31,7 @@ public class QuestionaireUIManager2 : MonoBehaviour{
 	/// </summary>
 	public void OnAsthmaNo(bool isChecked){
 		if(isChecked){
+			AudioManager.Instance.PlayClip("buttonGeneric3");
 			hasAsthma = false;
 			if(!hasAsthmaOptionChecked){
 				hasAsthmaOptionChecked = true;

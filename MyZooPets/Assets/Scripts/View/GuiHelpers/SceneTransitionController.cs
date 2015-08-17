@@ -7,10 +7,12 @@ public class SceneTransitionController : MonoBehaviour {
 	public TweenToggleDemux loadingTweenToggle;
 
 	public void StartTransition(){
+		AudioManager.Instance.PlayClip("loadingSlideClose");
 		transitionTweenToggle.Show();
 	}
 
 	public void EndTransition(){
+		AudioManager.Instance.PlayClip("loadingSlideOpen");
 		transitionTweenToggle.Hide();
 	}
 

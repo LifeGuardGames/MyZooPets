@@ -17,7 +17,7 @@ public class ButtonChangeScene : LgButton{
 	// related to the camera move
 	public Vector3 finalPosition;		// offset of camera on the target
 	public Vector3 finalRotation;		// how the camera should rotate
-	public float zoomTime = 1f;				// how long the tween should last
+	private float zoomTime = 0.5f;		// how long the tween should last
 
 	public bool shouldSaveSceneData;	// give the option to load scene without saving partition or pet position
 	public GameObject cameraGO; 		// needs the camera to record partition # before scene change

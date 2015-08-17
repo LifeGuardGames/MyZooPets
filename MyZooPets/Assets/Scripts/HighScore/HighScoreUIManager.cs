@@ -10,7 +10,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	// related to the camera move
 	public Vector3 finalPosition;		// offset of camera on the target
 	public Vector3 finalRotation;		// how the camera should rotate
-	public float zoomTime = 1f;			// how long the tween should last
+	private float zoomTime = 0.5f;			// how long the tween should last
 
 	private bool isActive = false;
 
@@ -33,6 +33,8 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	//When the highscore board is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
+			AudioManager.Instance.PlayClip("subMenu");
+
 			FirstInteraction.Instance.SetString("HighScoreBoard");
 			// if there is a camera move, do it -- otherwise, just skip to the move being complete
 			if(zoomTime > 0){

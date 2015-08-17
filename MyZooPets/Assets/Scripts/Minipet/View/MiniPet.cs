@@ -102,13 +102,14 @@ public abstract class MiniPet : MonoBehaviour {
 	private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
-					if(!isFinishEating){
-						ShowFoodPreferenceMessage();
-					}
+				if(!isFinishEating){
+					ShowFoodPreferenceMessage();
+				}
 				bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
 				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 				if(!isMiniPetColliderLocked){
+					AudioManager.Instance.PlayClip("talkMinipet");
 					if(Application.loadedLevelName == "ZoneBedroom"){
 						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
 							if(OnTutorialMinipetClicked != null){
@@ -148,7 +149,7 @@ public abstract class MiniPet : MonoBehaviour {
 		CameraManager.Callback cameraDoneFunction = delegate(){
 			CameraMoveDone();
 		};
-		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 1f, cameraDoneFunction);
+		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 0.5f, cameraDoneFunction);
 	}
 
 	/// <summary>

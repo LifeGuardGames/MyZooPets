@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 public class MapUIManager : SingletonUI<MapUIManager> {
 
-	public float fZoomTime;
+	private float zoomTime = 0.5f;
 	public Vector3 vOffset;
 	public Vector3 vRotation;
 
@@ -41,7 +41,7 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	protected override void _OpenUI(){
 		// Zoom into the chart
 		Vector3 vPos = transform.position + vOffset;
-		CameraManager.Instance.ZoomToTarget(vPos, vRotation, fZoomTime, null);
+		CameraManager.Instance.ZoomToTarget(vPos, vRotation, zoomTime, null);
 		
 		// Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();

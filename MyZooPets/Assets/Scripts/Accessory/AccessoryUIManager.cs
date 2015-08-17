@@ -23,7 +23,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public GameObject zoomItem;
 
 	// related to zooming into the badge board
-	public float zoomTime;
+	private float zoomTime  = 0.5f;
 	public Vector3 zoomOffset;
 	public Vector3 zoomRotation;
 	public string soundBuy;
@@ -86,6 +86,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	// When the zoomItem is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
+			AudioManager.Instance.PlayClip("subMenu");
+
 			// Zoom into the item
 			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
 

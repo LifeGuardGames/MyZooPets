@@ -19,11 +19,13 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 			PlayerShooterController.Instance.ChangeState(PlayerShooterController.Instance.PlayerState);
 			break;
 		case PowerUpType.Triple:
+			AudioManager.Instance.PlayClip("shooterPowerUp");
 			PlayerShooterController.Instance.IsTriple = true;
 			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());
 			break;
 		case PowerUpType.Pierce:
+			AudioManager.Instance.PlayClip("shooterPowerUp");
 			PlayerShooterController.Instance.IsPiercing = true;
 			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());

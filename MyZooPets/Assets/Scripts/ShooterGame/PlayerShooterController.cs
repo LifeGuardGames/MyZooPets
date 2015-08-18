@@ -66,6 +66,9 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	// removes health and then calculates state
 	public void ChangeHealth(int deltaHealth){
 		if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
+			if(deltaHealth < 0){
+				AudioManager.Instance.PlayClip("shooterHurt");
+			}
 
 			playerHealth += deltaHealth;
 			if(playerHealth >= 11){

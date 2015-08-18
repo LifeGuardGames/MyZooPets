@@ -156,7 +156,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 					GameObjectUtils.GetRandomPointOnCircumference(Vector3.zero, UnityEngine.Random.Range(300f, 400f));
 				FireShardController shardController = shardObject.GetComponent<FireShardController>();
 
-				float pitchCount = 1f + (i / 5.0f);
+				float pitchCount = 1f + (i / 8.0f);
 
 				Vector3 endPoint = GameObjectUtils.GetRandomPointOnCircumference(Vector3.zero, UnityEngine.Random.Range(0, 40f));
 

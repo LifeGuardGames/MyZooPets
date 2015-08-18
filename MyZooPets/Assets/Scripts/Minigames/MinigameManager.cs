@@ -188,7 +188,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	
 	private IEnumerator NewGameAfterFrame(){
 		yield return 0;	
-		
+
+		// Want to hide inventory if we got fire crystal and restart again
+		if(InventoryUIManager.Instance){
+			InventoryUIManager.Instance.HidePanel();
+		}
+
 		// reset labels
 		ResetLabels();
 		

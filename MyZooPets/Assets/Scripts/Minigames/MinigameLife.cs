@@ -36,6 +36,17 @@ public class MinigameLife : MonoBehaviour{
 			DoctorMatchManager.OnLivesChanged += OnLivesChanged;			
 		}
 	}
+
+	void OnDestroy(){
+		if(NinjaManager.Instance != null){
+			NinjaManager.OnNewGame -= OnNewGame;
+			NinjaManager.OnLivesChanged -= OnLivesChanged;			
+		}
+		else if(DoctorMatchManager.Instance != null){
+			DoctorMatchManager.OnNewGame -= OnNewGame;
+			DoctorMatchManager.OnLivesChanged -= OnLivesChanged;			
+		}
+	}
 	
 	//---------------------------------------------------
 	// OnNewGame()
@@ -53,9 +64,10 @@ public class MinigameLife : MonoBehaviour{
 	private void OnLivesChanged(object sender, LivesChangedArgs args){
 		// get the number of lives there are
 		int nLives = GetLives();
-		
 		int nChange = args.GetChange();
+		Debug.Log("Preparing life..." + nLives + " " + nChange);
 		if(nChange < 0 && nLives + 1 == nIndex){
+			Debug.Log("----Loosing a life");
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
 			Toggle(false);
 
@@ -69,6 +81,7 @@ public class MinigameLife : MonoBehaviour{
 			}
 		}
 		else if(nChange > 0 && nLives == nIndex){
+			Debug.Log("---Gaining a life");
 			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
 			Toggle(true);
 		}
@@ -90,6 +103,7 @@ public class MinigameLife : MonoBehaviour{
 	// Turn this life on or off.
 	//---------------------------------------------------	
 	public void Toggle(bool bOn){
+		Debug.Log("TOGGLING " + bOn);
 		// cache the state of this life
 		//this.bOn = bOn;
 		
@@ -99,7 +113,8 @@ public class MinigameLife : MonoBehaviour{
 		
 		// play the particle system associated with this toggle, if it exists
 		ParticleSystemController system = bOn ? systemOn : systemOff;
-		if(system)
+		if(system){
 			system.Play();
+		}
 	}
 }

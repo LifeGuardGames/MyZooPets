@@ -221,7 +221,11 @@ public class PetMovement : Singleton<PetMovement>{
 			foreach(Collider walkingPathCollider in walkingPathColliders){
 				if(hit.collider == walkingPathCollider){
 					MovePet(hit.point);
+
+					// Play move particle
 					particleMove.transform.position = hit.point;
+					Vector3 particlePos = particleMove.transform.position;
+					particleMove.transform.localPosition = new Vector3(particlePos.x, particlePos.y + 0.1f, particlePos.z);
 					particleMove.Play();
 				}
 			}

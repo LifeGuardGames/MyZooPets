@@ -31,6 +31,7 @@ public class ShooterEnemyHard : ShooterEnemy{
 	// shoots a smog ball at the player
 	void ShootSmogBall(){
 		if(!isDead){	
+			AudioManager.Instance.PlayClip("shooterEnemySpit");
 			animator.SetBool("Spit",true);
 			animator.SetBool("IsSpitMode", false);
 			bulletAux = GameObjectUtils.AddChild(null, bulletPrefab);

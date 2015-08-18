@@ -151,7 +151,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		//teleport first then walk into view
 		if(!pet.renderer.isVisible)
 		PetMovement.Instance.petSprite.transform.position = new Vector3(-4f, 0, 26.65529f);
-		PetMovement.Instance.MovePet(new Vector3(-8f, 0, 26.65529f));
+		PetMovement.Instance.MovePetFromAccessory(new Vector3(-8f, 0, 26.65529f));
 
 	}
 

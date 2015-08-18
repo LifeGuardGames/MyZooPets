@@ -232,16 +232,15 @@ public class PetMovement : Singleton<PetMovement>{
 		destinationPoint = raycastHitPosition;
 		movingToAccessory = true;
 		// tell the pet animator script to start moving (but only if we aren't already moving)
-		if(!moving)
+		if(!moving){
 			PetAnimationManager.Instance.StartWalking();
-		Debug.Log("working");
+		}
 		moving = true;	
 		
 		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't
 		// take so long for the pet to move to its new destination.
 		if(!petSprite.renderer.isVisible){
 			if(offScreen){
-				Debug.Log(destinationPoint);
 				// get the point right off screen
 				float startingLocationX = Constants.GetConstant<float>("FromX");
 				float locationDifference = raycastHitPosition.x - petSprite.transform.position.x;

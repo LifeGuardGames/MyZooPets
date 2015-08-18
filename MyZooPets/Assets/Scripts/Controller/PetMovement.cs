@@ -20,7 +20,7 @@ public class PetMovement : Singleton<PetMovement>{
 
 	// Used for 2D room pet movement, height screen point in normal room walking
 	private float movementStaticScreenY;
-	private bool offScreen = true;
+	public  bool offScreen = true;
 
 	// Used for 2D pet movement, this will be the z depth for all pet placement
 	// Useful for zoomed in modes (accessories) where camera is zoomed in
@@ -41,6 +41,7 @@ public class PetMovement : Singleton<PetMovement>{
 	private float normalSpeed;
 	private float sickSpeed;
 	private float verySickSpeed;
+	public bool movingToAccessory;
 
 	void Awake(){
 		GatingManager.OnDestroyedGate += MoveToCenter;
@@ -131,6 +132,20 @@ public class PetMovement : Singleton<PetMovement>{
 				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
 				                                                   destinationPoint, normalSpeed * Time.deltaTime);
 			}
+			else if (movingToAccessory){
+				PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();             
+				PetHealthStates health = DataManager.Instance.GameData.Stats.GetHealthState();
+				float movementSpeed = normalSpeed;
+				
+				//show pet movement down if pet is sick
+				if(health == PetHealthStates.Sick || mood != PetMoods.Happy)
+					movementSpeed = sickSpeed;
+				else if(health == PetHealthStates.VerySick)
+					movementSpeed = verySickSpeed;
+				
+				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
+				                                                   destinationPoint, movementSpeed * Time.deltaTime);
+			}
 			else
 				StopMoving();
 
@@ -139,7 +154,9 @@ public class PetMovement : Singleton<PetMovement>{
 				// send out an event because the pet has reached their destination
 				if(OnReachedDest != null)
 					OnReachedDest(this, EventArgs.Empty);
-				
+				if(movingToAccessory){
+					movingToAccessory = false;
+				}
 				StopMoving();
 			}
 		}
@@ -210,6 +227,43 @@ public class PetMovement : Singleton<PetMovement>{
 			}
 		}
 	}
+
+	public void MovePetFromAccessory(Vector3 raycastHitPosition){
+		destinationPoint = raycastHitPosition;
+		movingToAccessory = true;
+		// tell the pet animator script to start moving (but only if we aren't already moving)
+		if(!moving)
+			PetAnimationManager.Instance.StartWalking();
+		Debug.Log("working");
+		moving = true;	
+		
+		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't
+		// take so long for the pet to move to its new destination.
+		if(!petSprite.renderer.isVisible){
+			if(offScreen){
+				Debug.Log(destinationPoint);
+				// get the point right off screen
+				float startingLocationX = Constants.GetConstant<float>("FromX");
+				float locationDifference = raycastHitPosition.x - petSprite.transform.position.x;
+				startingLocationX = locationDifference < 0 ? 1 + startingLocationX : -startingLocationX; 				// the point varies if the pet is coming from the right or left
+			
+				// also, the viewport y varies and is based on where the player is moving to
+				Vector3 viewPortPointOfRaycastLoc = Camera.main.WorldToViewportPoint(raycastHitPosition);
+				float startLocationY = viewPortPointOfRaycastLoc.y;
+			
+				// change the y and z because we really only want the x.  if we don't change the z the pet kind of appears too big
+				Vector3 targetPosition = Camera.main.ViewportToWorldPoint(new Vector3(startingLocationX, startLocationY, raycastHitPosition.z));
+				targetPosition.y = raycastHitPosition.y;
+				targetPosition.z = raycastHitPosition.z;
+			
+				// transport the pet to that point
+				petSprite.transform.position = targetPosition;
+				offScreen = false;
+			}
+		}
+		
+		ChangePetFacingDirection();
+	}
 	
 	public void MovePet(Vector3 raycastHitPosition){
 		destinationPoint = raycastHitPosition;
@@ -225,17 +279,15 @@ public class PetMovement : Singleton<PetMovement>{
 			if(offScreen){
 				// Get the point right off screen in viewport coordinates
 				float viewportOffsetX = Constants.GetConstant<float>("ViewportOffsetX");
-
 				// Add 1 to the viewport offset if the pet coming from left or right
 				float locationDifference = raycastHitPosition.x - petSprite.transform.position.x;
 				viewportOffsetX = locationDifference < 0 ? 1 + viewportOffsetX : -viewportOffsetX;
-			
 				// also, the viewport y varies and is based on where the player is moving to
 				Vector3 viewPortPointOfRaycastLoc = Camera.main.WorldToViewportPoint(raycastHitPosition);
 				float startLocationY = viewPortPointOfRaycastLoc.y;
-			
 				// change the y and z because we really only want the x.  if we don't change the z the pet kind of appears too big
 				Vector3 targetPosition = Camera.main.ViewportToWorldPoint(new Vector3(viewportOffsetX, startLocationY, raycastHitPosition.z));
+
 				targetPosition.y = raycastHitPosition.y;
 				targetPosition.z = raycastHitPosition.z;
 			

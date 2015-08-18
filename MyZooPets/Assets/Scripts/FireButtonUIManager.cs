@@ -123,6 +123,6 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 	public void PlayAudioPop(){
-		AudioManager.Instance.PlayClip("pop");
+		AudioManager.Instance.PlayClip("fireButtonPop");
 	}
 }

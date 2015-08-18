@@ -109,7 +109,6 @@ public abstract class MiniPet : MonoBehaviour {
 				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 				if(!isMiniPetColliderLocked){
-					AudioManager.Instance.PlayClip("talkMinipet");
 					if(Application.loadedLevelName == "ZoneBedroom"){
 						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
 							if(OnTutorialMinipetClicked != null){
@@ -119,6 +118,7 @@ public abstract class MiniPet : MonoBehaviour {
 						}
 					}
 					if(!isUIOpened && isModeLockEmpty){
+						AudioManager.Instance.PlayClip("talkMinipet");
 						ZoomInToMiniPet();
 						OpenChildUI();	// Further child UI calls
 					}

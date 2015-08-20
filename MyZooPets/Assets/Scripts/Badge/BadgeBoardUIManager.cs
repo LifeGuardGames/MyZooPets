@@ -194,6 +194,9 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	protected override void _OpenUI(){
 		if(!isActive){
+			if(Application.loadedLevelName == SceneUtils.BEDROOM){
+				PetMovement.Instance.StopMoving();
+			}
 			AudioManager.Instance.PlayClip("subMenu");
 
 			// Disable the exit button if the badge is animating from reward manager

@@ -81,7 +81,7 @@ public class GameTutorialFlame : GameTutorial{
 		yield return 0;
 		
 		// find and spotlight the fire button
-		GameObject goFlameButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
+		GameObject goFlameButton = GameObject.Find(ButtonFireButton.FIRE_BUTTON);
 		if(goFlameButton != null){
 			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
 			                "TutorialSpotlightFlameButton", fingerHint: true,

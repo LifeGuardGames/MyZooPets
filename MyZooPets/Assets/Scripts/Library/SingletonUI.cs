@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -135,7 +135,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 			if((Application.loadedLevelName == SceneUtils.BEDROOM
 			    || Application.loadedLevelName == SceneUtils.YARD)){
 
-				GameObject fireButton = GameObject.Find(ButtonMonster.FIRE_BUTTON);
+				GameObject fireButton = GameObject.Find(ButtonFireButton.FIRE_BUTTON);
 
 				// Editdeco mode check
 				if(ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){

@@ -21,6 +21,7 @@ public class GatingManager : Singleton<GatingManager>{
 	public static EventHandler<EventArgs> OnDestroyedGate;	// When a specific gate has been destroyed
 	//=====================================================
 	private GameObject body;
+	public GameObject goFireButton;
 	public Vector3 startingLocation;	 // starting location for the gates -- might differ from area to area
 
 	private string currentZone; // area that this manager is in
@@ -509,8 +510,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	private void ShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
-		GameObject resourceFireButton = Resources.Load(ButtonMonster.FIRE_BUTTON) as GameObject;
-		GameObject goFireButton = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), resourceFireButton);
+		goFireButton.SetActive(true);
 		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
@@ -527,14 +527,14 @@ public class GatingManager : Singleton<GatingManager>{
 		goFireButton.transform.localPosition = fireButtonLoc;
 		
 		// rename the button so that other things can find it
-		goFireButton.name = ButtonMonster.FIRE_BUTTON;
+		goFireButton.name = ButtonFireButton.FIRE_BUTTON;
 		
 		// get the gate in this room
 		Gate gate = activeGates[scriptPan.currentLocalPartition];
 		if(gate){
 			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
 			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
-			ButtonMonster script = transButton.gameObject.GetComponent<ButtonMonster>();
+			ButtonFireButton script = transButton.gameObject.GetComponent<ButtonFireButton>();
 			script.SetGate(gate);
 		}
 		else

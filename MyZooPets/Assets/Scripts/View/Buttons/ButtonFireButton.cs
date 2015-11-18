@@ -110,9 +110,10 @@ public class ButtonFireButton : LgButtonHold{
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive
 			int damage = GetDamage();
-			if(gate.GetGateHP() <= damage)
-				Destroy(parentPanel);	
-			else
+			//if(gate.GetGateHP() <= damage)
+
+				//Destroy(parentPanel);	
+			//else
 				//disable button
 				FireButtonUIManager.Instance.TurnFireButtonEffectOff();
 		}

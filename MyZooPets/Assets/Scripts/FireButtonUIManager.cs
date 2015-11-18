@@ -47,6 +47,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 		imageButton.gameObject.SetActive(false);
 		imageButton.gameObject.SetActive(true);
+		this.gameObject.SetActive(false);
 	}
 
 	// Start the animation for the fire button enabling process, this will call the below 4 functions

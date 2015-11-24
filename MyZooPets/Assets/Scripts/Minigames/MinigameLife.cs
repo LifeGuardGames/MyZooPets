@@ -65,9 +65,9 @@ public class MinigameLife : MonoBehaviour{
 		// get the number of lives there are
 		int nLives = GetLives();
 		int nChange = args.GetChange();
-		Debug.Log("Preparing life..." + nLives + " " + nChange);
+		//Debug.Log("Preparing life..." + nLives + " " + nChange);
 		if(nChange < 0 && nLives + 1 == nIndex){
-			Debug.Log("----Loosing a life");
+			//Debug.Log("----Loosing a life");
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
 			Toggle(false);
 
@@ -81,7 +81,7 @@ public class MinigameLife : MonoBehaviour{
 			}
 		}
 		else if(nChange > 0 && nLives == nIndex){
-			Debug.Log("---Gaining a life");
+			//Debug.Log("---Gaining a life");
 			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
 			Toggle(true);
 		}
@@ -103,7 +103,7 @@ public class MinigameLife : MonoBehaviour{
 	// Turn this life on or off.
 	//---------------------------------------------------	
 	public void Toggle(bool bOn){
-		Debug.Log("TOGGLING " + bOn);
+		//Debug.Log("TOGGLING " + bOn);
 		// cache the state of this life
 		//this.bOn = bOn;
 		

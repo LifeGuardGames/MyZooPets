@@ -57,7 +57,6 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 	// Called when the pet reaches a smoke monster room
 	public void Activate(){
-		Debug.Log("ACTIVATED");
 		isActive = true;
 		toggleParent.SetActive(true);
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -71,14 +70,9 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 	// Called when the pet leaves a smoke monster room
 	public void Deactivate(){
-		Debug.Log("DEACTIVATED");
 		isActive = false;
 		toggleParent.SetActive(false);
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
-	}
-
-	public GameObject GetFireButtonReference(){
-		return imageButton.gameObject;
 	}
 
 	public void FireEffectOff(){

@@ -5,30 +5,75 @@ using System.Collections;
 public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public static EventHandler<EventArgs> FireButtonActive;
 
+	public FireButtonAnimHelper animHelper;
+	public GameObject toggleParent;
 	public GameObject fireOrbDropTarget;
-	public Animation buttonAnimation;
-	public Animation EnableFireButtonAnimation;
-	public ParticleSystem buttonChargeParticle;
-	public ParticleSystem buttonBurstParticle;
 	public GameObject sunBeam;
-	public UIImageButton imageButton;
-	public Collider fireButtonCollider;
+
+	public GameObject fireButton;
+	public GameObject FireButton{
+		get{ return fireButton; }
+	}
+
+	// Components of fireButton
+	private UIImageButton imageButton;
+	private ButtonFireButton fireButtonScript;
+	public ButtonFireButton FireButtonScript{
+		get{ return fireButtonScript; }
+	}
+
+	private Collider fireButtonCollider;
+	public Collider FireButtonCollider{
+		get{ return fireButtonCollider; }
+	}
 
 	private string activeButtonSpriteName = "fireButtonOn";
 	private string inactiveButtonSpriteName = "fireButtonOff";
 
-	// Use this for initialization
-	void Start () {
-		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
+	private bool isActive = false;
+	public bool IsActive{
+		get{ return isActive; }
+	}
 
-		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-		if(!canBreatheFire)
-			TurnFireButtonEffectOff();
-		else
-			TurnFireButtonOn(0);
+	void Start () {
+		imageButton = fireButton.GetComponent<UIImageButton>();
+		fireButtonCollider = fireButton.GetComponent<Collider>();
+		fireButtonScript = fireButton.GetComponent<ButtonFireButton>();
+
+		toggleParent.SetActive(false);
+		CameraManager.Instance.PanScript.OnPartitionChanging += OnPartitionChanging;
 	}
 
 	void OnDestroy(){
+		if(CameraManager.Instance){
+			CameraManager.Instance.PanScript.OnPartitionChanging -= OnPartitionChanging;	
+		}
+	}
+
+	public void OnPartitionChanging(object sender, PartitionChangedArgs args){
+		// if the partition is changing at all, destroy this UI
+		Deactivate();
+	}
+
+	// Called when the pet reaches a smoke monster room
+	public void Activate(){
+		Debug.Log("ACTIVATED");
+		isActive = true;
+		toggleParent.SetActive(true);
+		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
+		
+		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+		if(!canBreatheFire)
+			FireEffectOff();
+		else
+			FireEffectOn(0);
+	}
+
+	// Called when the pet leaves a smoke monster room
+	public void Deactivate(){
+		Debug.Log("DEACTIVATED");
+		isActive = false;
+		toggleParent.SetActive(false);
 		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 	}
 
@@ -36,8 +81,8 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		return imageButton.gameObject;
 	}
 
-	public void TurnFireButtonEffectOff(){
-		buttonAnimation.Stop();
+	public void FireEffectOff(){
+		animHelper.buttonAnimation.Stop();
 		sunBeam.SetActive(false);
 		
 		imageButton.hoverSprite = inactiveButtonSpriteName;
@@ -47,38 +92,14 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 		imageButton.gameObject.SetActive(false);
 		imageButton.gameObject.SetActive(true);
-		this.gameObject.SetActive(false);
-	}
-
-	// Start the animation for the fire button enabling process, this will call the below 4 functions
-	public void StartFireButtonAnimation(){
-		EnableFireButtonAnimation.Play();
-	}
-
-	// This is called from the animation event
-	public void FireButtonAnimationActivate(){
-		EnableFireButtonAnimation.Stop();
-		buttonAnimation.Play();
-	}
-
-	// This is called from the animation event
-	public void StartChargeParticle(){
-		buttonChargeParticle.Play();
-	}
-
-	// This is called from the animation event
-	public void StartBurstParticle(){
-		if(buttonBurstParticle){
-			buttonBurstParticle.Play();
-		}
 	}
 
 	// This is called from the animation event / or from start
-	public void TurnFireButtonOn(int isCalledFromAnimation){
+	public void FireEffectOn(int isCalledFromAnimation){
 
 		// Turn on the pulsing manually because its not done from animation
 		if(isCalledFromAnimation == 0){
-			FireButtonAnimationActivate();
+			animHelper.FireButtonAnimationActivate();
 		}
 
 		if(FireButtonActive != null)
@@ -95,10 +116,9 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		imageButton.gameObject.SetActive(false);
 		imageButton.gameObject.SetActive(true);
 	}
-	
+
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
 		if(args.TargetCollider.name == fireOrbDropTarget.name){
-
 			string invItemID = args.ItemTransform.name; //get id from listener args
 			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
 			int numOfFireBreaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
@@ -112,18 +132,9 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 					//notify inventory logic that this item is being used
 					InventoryLogic.Instance.UsePetItem(invItemID);
 					
-					StartFireButtonAnimation();
+					animHelper.StartFireButtonAnimation();
 				}
 			}
 		}
-	}
-
-	// Audio handlers for animation event
-	public void PlayAudioCharge(){
-		AudioManager.Instance.PlayClip("fireCharge");
-	}
-
-	public void PlayAudioPop(){
-		AudioManager.Instance.PlayClip("fireButtonPop");
 	}
 }

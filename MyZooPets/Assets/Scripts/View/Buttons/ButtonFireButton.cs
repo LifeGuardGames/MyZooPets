@@ -3,29 +3,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
-/// Button monster.
-/// </summary>
 public class ButtonFireButton : LgButtonHold{
-	// const variable for the name of the fire button
-	public const string FIRE_BUTTON = "FireButtonPanel";
+	public FireMeter scriptFireMeter;		// fire meter script
+	public GameObject goIcon;				// the sprite icon of this button
 
-	public FireMeter scriptFireMeter; // fire meter script
-	public GameObject goIcon; // the sprite icon of this button
-	public GameObject parentPanel; // The parent panel for this button, to be destroyed when needed
-	
-	private AttackGate attackScript; // attack gate script
-	private Gate gate; // the gate that this button is for
-	private bool isLegal; // is this button being pressed legally?  Mainly used as a stopgap for now
-
-	protected override void _Start(){
-		PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
-		scriptPan.OnPartitionChanging += OnPartitionChanging;
-	}
+	private AttackGate attackScript;		// attack gate script
+	private Gate gate;						// the gate that this button is for
+	private bool isLegal;					// is this button being pressed legally?  Mainly used as a stopgap for now
 
 	protected override void _Update(){
-		if(!CameraManager.Instance)
+		if(!CameraManager.Instance){
 			return;
+		}
 		
 		bool isActive = NGUITools.GetActive(goIcon);
 		bool isCamMoving = CameraManager.Instance.IsCameraMoving();
@@ -34,21 +23,8 @@ public class ButtonFireButton : LgButtonHold{
 			NGUITools.SetActive(goIcon, false);	// if the button is on and the camera is moving, deactivate it
 		}
 		else if(!isActive && !isCamMoving){
-
 			NGUITools.SetActive(goIcon, true);	// if the button is off and the camera isn't moving, activate it
 		}
-	}	
-		
-	protected override void _OnDestroy(){
-		if(CameraManager.Instance){
-			PanToMoveCamera scriptPan = CameraManager.Instance.PanScript;
-			scriptPan.OnPartitionChanging -= OnPartitionChanging;	
-		}
-	}
-
-	public void OnPartitionChanging(object sender, PartitionChangedArgs args){
-		// if the partition is changing at all, destroy this UI
-		parentPanel.SetActive(false);
 	}
 
 	public void SetGate(Gate gate){
@@ -68,7 +44,6 @@ public class ButtonFireButton : LgButtonHold{
 		if(canBreathFire){
 			isLegal = true;
 
-			
 			// kick off the attack script
 			int damage = GetDamage();
 			attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
@@ -81,8 +56,9 @@ public class ButtonFireButton : LgButtonHold{
 		}
 		// else can't breathe fire. explain why
 		else{
-			if(!TutorialManager.Instance.IsTutorialActive())
+			if(!TutorialManager.Instance.IsTutorialActive()){
 				GatingManager.Instance.IndicateNoFire();
+			}
 		}
 	}
 
@@ -98,30 +74,29 @@ public class ButtonFireButton : LgButtonHold{
 
 	protected override void ButtonReleased(){
 		if(!isLegal){
-//			Debug.Log("Something going wrong with the fire button.  Aborting");
+			Debug.Log("Something going wrong with the fire button.  Aborting");
 			return;
 		}
 
 		if(scriptFireMeter.IsMeterFull()){
 			// if the meter was full on release, complete the attack!
 			attackScript.FinishAttack();
-//			scriptAttack.Attack();
 			
 			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 			// fire mode cheat is active and the gate is still alive
 			int damage = GetDamage();
-			//if(gate.GetGateHP() <= damage)
-
-				//Destroy(parentPanel);	
-			//else
+			if(gate.GetGateHP() <= damage){
+				FireButtonUIManager.Instance.Deactivate();
+			}
+			else{
 				//disable button
-				FireButtonUIManager.Instance.TurnFireButtonEffectOff();
+				FireButtonUIManager.Instance.FireEffectOff();
+			}
 		}
 		else{
 			// if the meter was not full, cancel the attack
 			attackScript.Cancel();
-		}	
-		
+		}
 		// regardless we want to empty the meter
 		scriptFireMeter.Empty();
 	}

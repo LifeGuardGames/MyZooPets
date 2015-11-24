@@ -21,7 +21,6 @@ public class GatingManager : Singleton<GatingManager>{
 	public static EventHandler<EventArgs> OnDestroyedGate;	// When a specific gate has been destroyed
 	//=====================================================
 	private GameObject body;
-	public GameObject goFireButton;
 	public Vector3 startingLocation;	 // starting location for the gates -- might differ from area to area
 
 	private string currentZone; // area that this manager is in
@@ -443,7 +442,7 @@ public class GatingManager : Singleton<GatingManager>{
 		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 		
 		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
-			ShowFireButton();
+			ArrivedShowFireButton();
 			
 			//if can't breathe fire show message
 			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
@@ -474,15 +473,18 @@ public class GatingManager : Singleton<GatingManager>{
 		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 		
 		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
-			ShowFireButton();
+			ArrivedShowFireButton();
 
 			//if can't breathe fire show message
 			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-			if(!canBreatheFire)
+			if(!canBreatheFire){
 				IndicateNoFire();
+			}
 		}
-		else
+		else{
 			ShowUnhealthyNoFireSpeech();
+		}
+
 		// regardless, stop listening for the callback now that we've received it
 		ListenForMovementFinished(false);
 	}
@@ -508,37 +510,26 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <summary>
 	/// Shows the fire button.
 	/// </summary>
-	private void ShowFireButton(){
+	private void ArrivedShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
-		goFireButton.SetActive(true);
+		FireButtonUIManager.Instance.Activate();
 		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
 		GameObject petLocation = GameObject.Find("Pet");
-		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, 
-		                                                             petLocation.transform.position);
-		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, 
-		                                                               InterfaceAnchors.BottomLeft, 
-		                                                               InterfaceAnchors.Center);
+		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, petLocation.transform.position);
+		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
+		FireButtonUIManager.Instance.transform.localPosition = new Vector3(fireButtonLoc.x, fireButtonLoc.y, 1f);
 
-		fireButtonLoc.z = 1;
-
-		// set button location
-		goFireButton.transform.localPosition = fireButtonLoc;
-		
-		// rename the button so that other things can find it
-		goFireButton.name = ButtonFireButton.FIRE_BUTTON;
-		
 		// get the gate in this room
 		Gate gate = activeGates[scriptPan.currentLocalPartition];
+
 		if(gate){
-			// this is a bit hackey, but the actual fire button is in a child because we need to make a better pivot
-			Transform transButton = goFireButton.transform.Find("ButtonParent/Button");
-			ButtonFireButton script = transButton.gameObject.GetComponent<ButtonFireButton>();
-			script.SetGate(gate);
+			FireButtonUIManager.Instance.FireButtonScript.SetGate(gate);
 		}
-		else
-			Debug.LogError("Destination callback being called for non gated room");		
+		else{
+			Debug.LogError("Destination callback being called for non gated room");
+		}
 	}
 
 

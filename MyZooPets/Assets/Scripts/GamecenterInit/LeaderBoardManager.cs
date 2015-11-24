@@ -18,7 +18,6 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 				string userInfo = "Username: " + Social.localUser.userName + 
 					"\nUser ID: " + Social.localUser.id + 
 						"\nIsUnderage: " + Social.localUser.underage;
-				Debug.Log (userInfo);
 				LoadLeaderBoard();
 			}
 			else
@@ -32,7 +31,6 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 		memory = Social.CreateLeaderboard();
 		memory.id = "MemoryLeaderBoard";
 		memory.LoadScores(result => DidLoadLeaderboard(result,memory));
-		Debug.Log("createing Memory Leaderboard");
 		ninja = Social.CreateLeaderboard();
 		ninja.id = "NinjaLeaderBoard";
 		ninja.LoadScores(result => DidLoadLeaderboard(result,ninja));

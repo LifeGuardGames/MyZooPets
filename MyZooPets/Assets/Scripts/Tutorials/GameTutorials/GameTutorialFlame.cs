@@ -79,23 +79,14 @@ public class GameTutorialFlame : GameTutorial{
 	private IEnumerator FocusOnFlameButton(){
 		// wait one frame so that the flame button can appear
 		yield return 0;
-		
-		// find and spotlight the fire button
-		GameObject goFlameButton = GameObject.Find(ButtonFireButton.FIRE_BUTTON);
-		if(goFlameButton != null){
-			SpotlightObject(goFlameButton, true, InterfaceAnchors.Center, 
-			                "TutorialSpotlightFlameButton", fingerHint: true,
-			                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 210f, fingerHintOffsetY: -40f,
-			                fingerHintFlip: true, delay: 0.5f);
-			
-			// add the fire button to the processable list
-			// this is kind of annoying...we actually want to add the child object, because the parent object is empty...
-			GameObject goButton = goFlameButton.transform.Find("ButtonParent/Button").gameObject;
-			AddToProcessList(goButton);
-		}
-		else{
-			Debug.LogError("No flame button...that means the game is going to break");
-		}
+
+		GameObject fireButton = FireButtonUIManager.Instance.FireButton;
+
+		SpotlightObject(fireButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton", fingerHint: true,
+		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 210f, fingerHintOffsetY: -40f,
+		                fingerHintFlip: true, delay: 0.5f);
+
+		AddToProcessList(fireButton);
 	}
 
 	/// <summary>

@@ -132,11 +132,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 
 		default:	// Default to base mode
 			// Only run this chunk if in bedroom or yard scene
-			if((Application.loadedLevelName == SceneUtils.BEDROOM
-			    || Application.loadedLevelName == SceneUtils.YARD)){
-
-				GameObject fireButton = GameObject.Find(ButtonFireButton.FIRE_BUTTON);
-
+			if((Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD)){
 				// Editdeco mode check
 				if(ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){
 					if(RoomArrowsUIManager.Instance != null){
@@ -151,7 +147,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 					HUDUIManager.Instance.ShowPanel();
 				}
 				// Fireblowing room check
-				else if(fireButton != null){
+				else if(FireButtonUIManager.Instance.IsActive){
 					if(RoomArrowsUIManager.Instance != null){
 						RoomArrowsUIManager.Instance.ShowPanel();
 						HUDUIManager.Instance.ShowPanel();

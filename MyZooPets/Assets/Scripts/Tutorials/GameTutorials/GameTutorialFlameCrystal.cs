@@ -48,8 +48,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			Vector3 hintPosition = fireOrbItemPosition;
 			hintPosition.z = fireOrbFingerHint.transform.localPosition.z;
 			fireOrbFingerHint.transform.localPosition = hintPosition;
-			
-			
+
 			fireButtonPosition = CameraManager.Instance.TransformAnchorPosition(fireButtonPosition, 
 			                                                                    InterfaceAnchors.Center, 
 			                                                                    InterfaceAnchors.BottomRight);

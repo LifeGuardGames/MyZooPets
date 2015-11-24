@@ -33,7 +33,7 @@ public class AttackGate : Singleton<AttackGate>{
 	public void Cancel(){
 		PetAnimationManager.Instance.AbortFireBlow();
 	
-		FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
+		FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
 
 		//release lock if fire breathing lock was called previously
 		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
@@ -49,7 +49,7 @@ public class AttackGate : Singleton<AttackGate>{
 	public void FinishAttack(){
 		PetAnimationManager.Instance.FinishFireBlow();
 
-		FireButtonUIManager.Instance.fireButtonCollider.enabled = false;
+		FireButtonUIManager.Instance.FireButtonCollider.enabled = false;
 		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
 
@@ -80,8 +80,9 @@ public class AttackGate : Singleton<AttackGate>{
 		yield return 0;
 
 		//make button clickable again
-		if(FireButtonUIManager.Instance)
-			FireButtonUIManager.Instance.fireButtonCollider.enabled = true;
+		if(FireButtonUIManager.Instance){
+			FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
+		}
 
 		// release fire breathing lock
 		ClickManager.Instance.ReleaseLock();

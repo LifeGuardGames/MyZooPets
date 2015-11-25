@@ -12,6 +12,7 @@ public class MiniPetGameMaster : MiniPet{
 	}
 
 	protected override void OpenChildUI(){
+		Debug.Log(MiniPetHUDUIManager.Instance.HasContent());
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 			if(isFinishEating){
 				minigameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).MissionID;
@@ -20,6 +21,9 @@ public class MiniPetGameMaster : MiniPet{
 
 				OpenGameMasterContent();
 			}
+		}
+		else{
+			OpenGameMasterContent();
 		}
 	}
 

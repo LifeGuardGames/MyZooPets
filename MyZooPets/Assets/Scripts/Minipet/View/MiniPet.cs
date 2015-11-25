@@ -101,7 +101,9 @@ public abstract class MiniPet : MonoBehaviour {
 	
 	private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
+			Debug.Log(ClickManager.Instance.stackPeek);
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
+				Debug.Log(isFinishEating);
 				if(!isFinishEating){
 					ShowFoodPreferenceMessage();
 				}
@@ -227,8 +229,8 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 	}
 
-	protected void ShowFoodPreferenceMessage(){
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && !isFinishEating){
+	protected virtual void ShowFoodPreferenceMessage(){
+		if(!isFinishEating){
 			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
 			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
 			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);

@@ -18,6 +18,12 @@ public class MiniPetRetentionPet : MiniPet {
 		}
 	}
 
+	protected override void ShowFoodPreferenceMessage(){
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+			base.ShowFoodPreferenceMessage();
+		}
+	}
+
 	protected override void OpenChildUI(){
 		if(!TutorialManager.Instance.IsTutorialActive()){
 			miniPetSpeechAI.ShowTipMsg();

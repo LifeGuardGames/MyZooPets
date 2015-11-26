@@ -38,14 +38,14 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	}
 
 	public void SetLastPlayPeriod(){
-//		Debug.Log("======SETTING LAST PLAY PERIOD");
-		if(!DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux){
-			DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux = true;
-			DataManager.Instance.GameData.PlayPeriod.FirstPlayPeriod = GetCurrentPlayPeriod();
-		}
-		else{
-			DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = GetCurrentPlayPeriod();
-//			Debug.Log(DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod + " gets " + GetCurrentPlayPeriod());
+		if(DataManager.Instance != null){
+			if(!DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux){
+				DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux = true;
+				DataManager.Instance.GameData.PlayPeriod.FirstPlayPeriod = GetCurrentPlayPeriod();
+			}
+			else{
+				DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod = GetCurrentPlayPeriod();
+			}
 		}
 	}
 

@@ -247,7 +247,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		}
 		else{
 			int playPeriodsOffset = GetNumPlayPeriodsOffset();
-			Debug.Log("===Play periods offset: " + playPeriodsOffset);
+
 			//There are missed play periods
 			if(playPeriodsOffset > 1){
 				//max of 2 missed play period will be accounted
@@ -394,7 +394,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		//if > 12 hrs punishment for every 12 hrs miss
 		playPeriodsOffset = (int)timeSinceStartOfPlayPeriod.TotalHours / 12;
 
-		Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + (playPeriodsOffset-1));
+		//Debug.Log("last play period " + lastPlayPeriod + " || time since start of play period " + timeSinceStartOfPlayPeriod + " || missed play period " + (playPeriodsOffset-1));
 		return playPeriodsOffset;
 	}
 }

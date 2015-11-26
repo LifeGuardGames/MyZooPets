@@ -134,7 +134,6 @@ public class GateMonster : Gate{
 	}
 
 	private void DisableSubHead(){
-		Debug.Log("DISABLING");
 		nextHeadToDestroy.SetActive(false);
 	}
 }

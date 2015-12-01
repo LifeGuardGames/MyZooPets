@@ -233,7 +233,9 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		// Analytics.Instance.StartPlayTimeTracker();		
 
 		// init stuff
-		NewGame();
+		if(currentState != MinigameStates.Playing){
+			NewGame();
+		}
 	}
 
 	//---------------------------------------------------

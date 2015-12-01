@@ -129,7 +129,7 @@ public class GatingManager : Singleton<GatingManager>{
 		// Next play period. refresh recurring gate
 		if(timeSinceLastSpawned.TotalHours >= 12){
 			Hashtable gates = DataLoaderGate.GetZoneGates(currentZone);
-			Debug.Log("RECURRING GATE REFRESH");
+			//Debug.Log("RECURRING GATE REFRESH");
 			foreach(DictionaryEntry entry in gates){
 				ImmutableDataGate dataGate = (ImmutableDataGate)entry.Value;
 				

@@ -101,9 +101,7 @@ public abstract class MiniPet : MonoBehaviour {
 	
 	private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
-			Debug.Log(ClickManager.Instance.stackPeek);
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
-				Debug.Log(isFinishEating);
 				if(!isFinishEating){
 					ShowFoodPreferenceMessage();
 				}

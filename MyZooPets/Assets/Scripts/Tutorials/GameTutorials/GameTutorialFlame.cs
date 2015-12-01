@@ -83,7 +83,7 @@ public class GameTutorialFlame : GameTutorial{
 		GameObject fireButton = FireButtonUIManager.Instance.FireButton;
 
 		SpotlightObject(fireButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton", fingerHint: true,
-		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 210f, fingerHintOffsetY: -40f,
+		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 0f, fingerHintOffsetY: -40f,
 		                fingerHintFlip: true, delay: 0.5f);
 
 		AddToProcessList(fireButton);

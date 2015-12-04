@@ -98,11 +98,11 @@ public class LgDebugTool : EditorWindow{
 						bool.Parse(constant.ConstantValue));
 					constant.ConstantValue = toggleState.ToString();
 					if(toggleState){
-						GA.SettingsGA.Build = gaBuildVersion;				//set the build version
-						GA.SettingsGA.SetKeys(proGameKey, proSecretKey);	//set the api keys
+					//	GA.SettingsGA.Build = gaBuildVersion;				//set the build version
+						//GA.SettingsGA.SetKeys(proGameKey, proSecretKey);	//set the api keys
 					}
 					else{
-						GA.SettingsGA.SetKeys("", "");
+						//GA.SettingsGA.SetKeys("", "");
 					}
 					break;
                 }
@@ -126,14 +126,14 @@ public class LgDebugTool : EditorWindow{
 						proProductName = constant.ConstantValue;
 						PlayerSettings.productName = proProductName;
 						break;
-					case "WellapetsGameKey":
+					/*case "WellapetsGameKey":
 						constant.ConstantValue = EditorGUILayout.TextField("GA Game Key", constant.ConstantValue);
 						proGameKey = constant.ConstantValue;
 						break;
 					case "WellapetsSecretKey":
 						constant.ConstantValue = EditorGUILayout.TextField("GA Secret Key", constant.ConstantValue);
 						proSecretKey = constant.ConstantValue;
-						break;
+						break;*/
 					}
 				}
 			}

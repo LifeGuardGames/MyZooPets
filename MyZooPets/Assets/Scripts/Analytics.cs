@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using GameAnalyticsSDK;
 
 public class Analytics : MonoBehaviour {
 
@@ -64,19 +65,19 @@ public class Analytics : MonoBehaviour {
 
 	public void NinjaHighScore(int score){
 	if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) score);
+			GA_Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
 	public void NinjaBonusRounds(int bonus){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) bonus);
+			GA_Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) bonus);
 		}
 	}
 
 	public void NinjaTimesPlayedTick(){
 	if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(NINJA_CATEGORY + "TimesPlayed", 1f);
+			GA_Design.NewEvent(NINJA_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 	#endregion
@@ -84,24 +85,24 @@ public class Analytics : MonoBehaviour {
 	#region Shooter Game
 	public void ShooterHighScore(int score){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "HighScore", (float) score);
+			GA_Design.NewEvent(SHOOTER_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
 	public void ShooterWave(int wave){
 	if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Failed at Wave: ", (float) wave);
+			GA_Design.NewEvent(SHOOTER_CATEGORY + "Failed at Wave: ", (float) wave);
 		}
 	}
 
 	public void ShooterPercentageMissed(int percentage){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", (float) percentage);
+			GA_Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", (float) percentage);
 		}
 	}
 	public void ShooterTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(SHOOTER_CATEGORY + "TimesPlayed", 1f);
+			GA_Design.NewEvent(SHOOTER_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 	#endregion
@@ -109,13 +110,13 @@ public class Analytics : MonoBehaviour {
 	#region Memory Game
 	public void MemoryHighScore(int score){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(MEMORY_CATEGORY + "HighScore", (float) score);
+			GA_Design.NewEvent(MEMORY_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
 	public void MemoryTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(MEMORY_CATEGORY + "TimesPlayed", 1f);
+			GA_Design.NewEvent(MEMORY_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 	#endregion
@@ -124,23 +125,23 @@ public class Analytics : MonoBehaviour {
     //Where did the user die most often in the runner game?
 //    public void RunnerPlayerDied(string levelComponentName){
 //        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled)
-//            GA.API.Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
+//            GA_Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
 //    }
 
 	public void RunnerHighScore (int score){
 	if(isAnalyticsEnabled){
-		GA.API.Design.NewEvent(RUNNER_CATEGORY + "HighScore", (float) score);
+		GA_Design.NewEvent(RUNNER_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
     public void RunnerPlayerDistanceRan(int distanceRan){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
+            GA_Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
     }
 
 	public void RunnerTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(RUNNER_CATEGORY + "TimesPlayed", 1f);
+			GA_Design.NewEvent(RUNNER_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 
@@ -150,7 +151,7 @@ public class Analytics : MonoBehaviour {
     //Which steps in inhaler game does the kids need help the most
     public void InhalerHintRequired(int stepID){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
+            GA_Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
     }
 	#endregion
 
@@ -160,7 +161,7 @@ public class Analytics : MonoBehaviour {
     //Which symptom is the user having trouble identifying
     public void DiagnoseResult(string diagnoseResult, AsthmaStage petStatus, AsthmaStage zone){
 //        if(!String.IsNullOrEmpty(diagnoseResult) && isAnalyticsEnabled)
-//            GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "Diagnose:" + diagnoseResult + ":" + 
+//            GA_Design.NewEvent(DIAGNOSE_CATEGORY + "Diagnose:" + diagnoseResult + ":" + 
 //                Enum.GetName(typeof(AsthmaStage), petStatus) + ":" + Enum.GetName(typeof(AsthmaStage), zone));
     }
 
@@ -174,13 +175,13 @@ public class Analytics : MonoBehaviour {
 
 	public void DoctorHighScore (int score){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "HighScore", (float) score);
+			GA_Design.NewEvent(DIAGNOSE_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
 	public void DoctorTimesPlayedTick(){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent(DIAGNOSE_CATEGORY + "TimesPlayed", 1f);
+			GA_Design.NewEvent(DIAGNOSE_CATEGORY + "TimesPlayed", 1f);
 		}
 	}
 
@@ -190,14 +191,14 @@ public class Analytics : MonoBehaviour {
 	public void MiniPetLevelUp(string miniPetID, int currentLevel){
 		string levelString = currentLevel.ToString();
 		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
-			GA.API.Design.NewEvent("MiniPet:LevelUnlocked:" + levelString + ":" + miniPetID);
+			GA_Design.NewEvent("MiniPet:LevelUnlocked:" + levelString + ":" + miniPetID);
 		}
 	}
 
 	public void MiniPetVisited(string miniPetID, int timesVisted){
 		string visitString = timesVisted.ToString();
 		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(visitString) && isAnalyticsEnabled){
-			GA.API.Design.NewEvent("MiniPet:LevelUnlocked:" + visitString + ":" + miniPetID);
+			GA_Design.NewEvent("MiniPet:LevelUnlocked:" + visitString + ":" + miniPetID);
 		}
 	}
 
@@ -205,15 +206,15 @@ public class Analytics : MonoBehaviour {
 
 	#region Friend Network
 	/*public void EnterFriendTree(){
-		GA.API.Design.NewEvent("Social:EnterFriendTree");
+		GA_Design.NewEvent("Social:EnterFriendTree");
 	}
 
 	public void AddFriend(){
-		GA.API.Design.NewEvent("Social:AddFriend");
+		GA_Design.NewEvent("Social:AddFriend");
 	}
 
 	public void AcceptFriendRequest(){
-		GA.API.Design.NewEvent("Social:AcceptFriendRequest");
+		GA_Design.NewEvent("Social:AcceptFriendRequest");
 	}*/
 	#endregion
 
@@ -222,42 +223,42 @@ public class Analytics : MonoBehaviour {
 
 	public void FirstInteraction(string firstInter){
 		if(!String.IsNullOrEmpty(firstInter) && isAnalyticsEnabled){
-			GA.API.Design.NewEvent("First Interaction:" + firstInter);
+			GA_Design.NewEvent("First Interaction:" + firstInter);
 		}
 	}
 
     public void PetColorChosen(string petColor){
         if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent("PetColorChosen:" + petColor);
+            GA_Design.NewEvent("PetColorChosen:" + petColor);
     }
 
 	//start game from menu scene
 	public void StartGame(){
-		GA.API.Design.NewEvent("StartGame");
+		GA_Design.NewEvent("StartGame");
 	}
 
     //when the user clean the triggers
  /*   public void TriggersCleaned(String triggerID){
         if(!String.IsNullOrEmpty(triggerID) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent("TriggersCleaned:" + triggerID);
+            GA_Design.NewEvent("TriggersCleaned:" + triggerID);
     }*/
 
 	public void RemainingTriggers(int triggers){
 		if(isAnalyticsEnabled){
-			GA.API.Design.NewEvent("Uncleaned Triggers", (float) triggers);
+			GA_Design.NewEvent("Uncleaned Triggers", (float) triggers);
 		}
 	}
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){
         if(!String.IsNullOrEmpty(badgeID) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Badge:Unlocked:" + badgeID);
+            GA_Design.NewEvent("Badge:Unlocked:" + badgeID);
     }
 
     //Items used or purchased
     public void ItemEvent(string itemStatus, ItemType itemType, string itemID){
         if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled){
-            GA.API.Design.NewEvent("Items:" + itemStatus + ":" + 
+            GA_Design.NewEvent("Items:" + itemStatus + ":" + 
                 Enum.GetName(typeof(ItemType), itemType) + ":" + itemID);
         }
     }
@@ -265,7 +266,7 @@ public class Analytics : MonoBehaviour {
     //What is the pet's health or mood when an item is used
     public void ItemEventWithPetStats(string itemID, string statsType, int statsValue){
         if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType) && isAnalyticsEnabled){
-            GA.API.Design.NewEvent("Items:" + ITEM_STATUS_USED + ":" + itemID + ":" +
+            GA_Design.NewEvent("Items:" + ITEM_STATUS_USED + ":" + itemID + ":" +
                 statsType, (float) statsValue);
         }
     }
@@ -274,61 +275,61 @@ public class Analytics : MonoBehaviour {
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
         if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && 
             !String.IsNullOrEmpty(taskID) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Wellapad:Task:" + taskStatus + ":" + missionID + ":" + taskID);
+            GA_Design.NewEvent("Wellapad:Task:" + taskStatus + ":" + missionID + ":" + taskID);
     }
 
     //Wellapad xp reward claim
     public void ClaimWellapadReward(){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Wellapad:Collect:Reward");
+            GA_Design.NewEvent("Wellapad:Collect:Reward");
     }
 
     //Gating
     public void GateUnlocked(string gateID){
         if(!String.IsNullOrEmpty(gateID) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Gate:Unlocked:" + gateID);
+            GA_Design.NewEvent("Gate:Unlocked:" + gateID);
     }
 
     //Tutorial completed
     public void TutorialCompleted(string tutorialID){
         if(!String.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
-            GA.API.Design.NewEvent("Tutorial:Completed:" + tutorialID);
+            GA_Design.NewEvent("Tutorial:Completed:" + tutorialID);
     }
 	
     //Pet level up
     public void LevelUnlocked(Level levelID){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent("PetLevel:Unlocked:" + levelID.ToString());
+            GA_Design.NewEvent("PetLevel:Unlocked:" + levelID.ToString());
     }
 
     public void ZeroHealth(){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent("ZeroHealth");
+            GA_Design.NewEvent("ZeroHealth");
     }
 
     /*public void TriggerHitPet(){
         if(isAnalyticsEnabled)
-            GA.API.Design.NewEvent("TriggerHitPet");
+            GA_Design.NewEvent("TriggerHitPet");
     }*/
 
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)
-			GA.API.Design.NewEvent("UserInfo:Age:" + age.ToString());
+			GA_Design.NewEvent("UserInfo:Age:" + age.ToString());
 	}
 
 	public void UserAsthma(bool hasAsthma){
 		if(isAnalyticsEnabled)
-			GA.API.Design.NewEvent("UserInfo:Asthma:" + hasAsthma.ToString());
+			GA_Design.NewEvent("UserInfo:Asthma:" + hasAsthma.ToString());
 	}
 
 	public void TimeBetweenPlaySession(int hours){
 		if(isAnalyticsEnabled){
 			if(hours > 0){
-				GA.API.Design.NewEvent("Time between session:" + hours.ToString());
-				GA.API.Design.NewEvent("Avg time between session", hours);
+				GA_Design.NewEvent("Time between session:" + hours.ToString());
+				GA_Design.NewEvent("Avg time between session", hours);
 			}
 			else{
-				GA.API.Design.NewEvent("Time between session:" + "< 1 hr");
+				GA_Design.NewEvent("Time between session:" + "< 1 hr");
 			}
 		}
 	}

@@ -1,17 +1,18 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 
-public class GA_Autorun : AssetPostprocessor
+namespace GameAnalyticsSDK
 {
-	static void OnPostprocessAllAssets ( string[] importedAssets,string[] deletedAssets,string[] movedAssets,string[] movedFromAssetPaths)
+	public class GA_Autorun : AssetPostprocessor
 	{
-		string[] splitPath = Application.dataPath.Split('/');
-		
-		if (!splitPath[splitPath.Length - 2].Equals("ga_unity_wrapper copy"))
+		static void OnPostprocessAllAssets ( string[] importedAssets,string[] deletedAssets,string[] movedAssets,string[] movedFromAssetPaths)
 		{
-			GA_Inspector.CheckForUpdates();
+			string[] splitPath = Application.dataPath.Split('/');
 			
-			GA_Tracking.Setup();
+			if (!splitPath[splitPath.Length - 2].Equals("ga_unity_wrapper copy"))
+			{
+				GA_SettingsInspector.CheckForUpdates();
+			}
 		}
 	}
 }

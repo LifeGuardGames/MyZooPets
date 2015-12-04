@@ -1,6 +1,7 @@
 #if false
 
 using System;
+using GameAnalyticsSDK;
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -11,37 +12,21 @@ namespace HutongGames.PlayMaker.Actions
 	{
 
 		[Tooltip("The severity of this event: critical, error, warning, info, debug")]
-		public GA_Error.SeverityType severityType ;
+		public GA_Error.GAErrorSeverity severityType ;
 		
-		[Tooltip("The event value")]
+		[Tooltip("The message")]
+		[RequiredField]
 		public FsmString Message;
-		
-		[Tooltip("The location of the event")]
-		public FsmVector3 Position;
 		
 		public override void Reset()
 		{
-			severityType = GA_Error.SeverityType.error;
-			Message = new FsmString() { UseVariable = true };
-			Position = new FsmVector3() { UseVariable = true };
+			severityType = GA_Error.GAErrorSeverity.GAErrorSeverityError;
+			Message = new FsmString() { UseVariable = false };
 		}
 		
 		public override void OnEnter()
 		{
-			if (Position.IsNone)
-			{
-				GA.API.Error.NewEvent(
-					severityType,
-					Message.Value
-					);
-			}else{
-				GA.API.Error.NewEvent(
-					severityType,
-					Message.Value,
-					Position.Value
-					);
-			}
-
+			GA_Error.NewEvent(severityType, Message.Value);
 
 			Finish();
 		}

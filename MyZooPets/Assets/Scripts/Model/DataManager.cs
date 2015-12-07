@@ -227,7 +227,7 @@ public class DataManager : Singleton<DataManager>{
 				if(PlayPeriodLogic.Instance != null){
 					PlayPeriodLogic.Instance.SetLastPlayPeriod();
 				}
-
+				Analytics.Instance.QuitGame(Application.loadedLevelName);
 				SaveGameData();
 
 				//No longer first time

@@ -294,6 +294,7 @@ public class PlayerController : Singleton<PlayerController>{
 	private void CheckAndActOnDeath(){
 		RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
 		if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
+			runnerLevelManager.mCurrentLevelGroup.ReportDeath();
 			AudioManager.Instance.PlayClip("runnerDie");
 			RunnerGameManager.Instance.ActivateGameOver();    
 

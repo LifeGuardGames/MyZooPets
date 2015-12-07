@@ -191,6 +191,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 					if(task.Completed == WellapadTaskCompletionStates.Uncompleted){
 						Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_FAIL, 
 							task.MissionID, task.TaskID);
+						if(task.TaskID == "DailyInhaler"){
+							Analytics.Instance.DidUseInhaler(false);
+						}
 					}
 				}
 			}

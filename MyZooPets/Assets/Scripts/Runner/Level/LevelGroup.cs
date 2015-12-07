@@ -35,6 +35,18 @@ public class LevelGroup : MonoBehaviour {
 		componentsInScene = new HashSet<string>();
 	}
 
+	public void ReportDeath(){
+		if(LevelGroupID == LevelGroup.eLevelGroupID.City){
+			Analytics.Instance.RunnerDied("City");
+		}
+		else if (LevelGroupID == LevelGroup.eLevelGroupID.CityNight){
+			Analytics.Instance.RunnerDied("CityNight");
+		}
+		else if(LevelGroupID == LevelGroup.eLevelGroupID.Forest){
+			Analytics.Instance.RunnerDied("Forest");
+		}	
+	}
+
 	/// <summary>
 	/// Gets the tutorial level component. Usually the first component of the list
 	/// </summary>

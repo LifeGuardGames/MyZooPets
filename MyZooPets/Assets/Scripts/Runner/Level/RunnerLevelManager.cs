@@ -30,7 +30,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     private int mNumLevelSwitches;
     private float mLevelSwitchPulse;
     private Vector3 mLastCenterPosition;
-    private LevelGroup mCurrentLevelGroup;
+    public LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 
 	// Use this for initialization

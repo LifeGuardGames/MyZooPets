@@ -35,7 +35,6 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 		if(!isActive){
 			AudioManager.Instance.PlayClip("subMenu");
 
-			FirstInteraction.Instance.SetString("HighScoreBoard");
 			// if there is a camera move, do it -- otherwise, just skip to the move being complete
 			if(zoomTime > 0){
 				CameraManager.Callback cameraDoneFunction = delegate(){

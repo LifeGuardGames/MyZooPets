@@ -209,9 +209,9 @@ public class InventoryLogic : Singleton<InventoryLogic>{
 			
 			//analytics
 			//Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_USED, invItem.ItemType, invItem.ItemID);
-			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
+			Analytics.Instance.ConsumableEventWithPetStats(invItem.ItemID, 
 			                                         Analytics.ITEM_STATS_HEALTH, DataManager.Instance.GameData.Stats.Health);
-			Analytics.Instance.ItemEventWithPetStats(invItem.ItemID, 
+			Analytics.Instance.ConsumableEventWithPetStats(invItem.ItemID, 
 			                                         Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
 			
 			// play the item's sound, if it has one

@@ -189,10 +189,9 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void MiniPetVisited(string miniPetID, int timesVisted){
-		string visitString = timesVisted.ToString();
-		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(visitString) && isAnalyticsEnabled){
-			GA_Design.NewEvent("MiniPet:LevelUnlocked:" + visitString + ":" + miniPetID);
+	public void MiniPetVisited(string miniPetID){
+		if(!String.IsNullOrEmpty(miniPetID) && isAnalyticsEnabled){
+			GA_Design.NewEvent("MiniPet:TimesVisited" + miniPetID);
 		}
 	}
 

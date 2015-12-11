@@ -19,12 +19,6 @@ public abstract class MutableData{
 	/// <param name="currentDataVersion">Current data version.</param>
 	public abstract void VersionCheck(Version currentDataVersion);
 
-	/// <summary>
-	/// Syncs to parse server. This is where the code to save data to parse backend
-	/// will go
-	/// </summary>
-	public abstract void SaveAsyncToParseServer();
-
 	public MutableData(){
 		IsDirty = true;
 	}

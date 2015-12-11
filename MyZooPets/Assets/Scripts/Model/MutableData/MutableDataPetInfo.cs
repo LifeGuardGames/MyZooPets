@@ -1,8 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Parse;
-using System.Threading.Tasks;
 
 public class MutableDataPetInfo : MutableData{	
 	public string PetID { get; set; }
@@ -85,54 +83,6 @@ public class MutableDataPetInfo : MutableData{
 			FireBreaths = nFireBreaths;
 		}
 		 */
-	}
-
-	public override void SaveAsyncToParseServer(){
-		//make the query that will get the kid account and eager load the pet accessory
-		ParseQuery<ParseObjectKidAccount> query = new ParseQuery<ParseObjectKidAccount>()
-			.WhereEqualTo("createdBy", ParseUser.CurrentUser)
-			.Include("petInfo");
-
-		query.FirstAsync().ContinueWith(t => {
-
-			ParseObjectKidAccount fetchedAccount = t.Result;
-			ParseObjectPetInfo petInfo = fetchedAccount.PetInfo;
-			List<ParseObject> objectsToSave = new List<ParseObject>();
-
-			if(petInfo == null){
-				petInfo = new ParseObjectPetInfo();
-				ParseACL acl = new ParseACL();
-				acl.PublicReadAccess = true;
-				acl.PublicWriteAccess = false;
-				acl.SetWriteAccess(ParseUser.CurrentUser, true);
-				petInfo.ACL = acl;
-				
-				fetchedAccount.PetInfo = petInfo;
-				objectsToSave.Add(fetchedAccount);
-			}
-
-			petInfo.Name = PetName;
-			petInfo.Color = PetColor;
-			petInfo.Species = PetSpecies;
-
-			objectsToSave.Add(petInfo);
-			
-			return ParseObject.SaveAllAsync(objectsToSave);
-		}).Unwrap().ContinueWith(t => {
-			if(t.IsFaulted || t.IsCanceled){
-				foreach(ParseException e in t.Exception.InnerExceptions)
-					Debug.Log("Message: " + e.Message + ", Code: " + e.Code);
-
-				Debug.Log("Fail to save async: " + this.ToString());
-			}
-			else{
-				Loom.DispatchToMainThread(() =>{
-					IsDirty = false;
-					Debug.Log("save async successful: " + this.ToString());
-					Debug.Log("is data dirty: " + IsDirty);
-				});
-			}
-		});
 	}
 	#endregion
 }

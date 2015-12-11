@@ -1,4 +1,4 @@
-﻿#if !UNITY_4_6 // For getting this to work in Unity 4.6 read the iOS build section on our wiki on github at https://github.com/GameAnalytics/GA-SDK-UNITY/wiki/iOS%20Build
+﻿//#if !UNITY_4_6 // For getting this to work in Unity 4.6 read the iOS build section on our wiki on github at https://github.com/GameAnalytics/GA-SDK-UNITY/wiki/iOS%20Build
 
 using UnityEditor.iOS.Xcode;
 using UnityEditor.Callbacks;
@@ -44,4 +44,4 @@ namespace GameAnalyticsSDK
 	}
 }
 
-#endif
+//#endif

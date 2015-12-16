@@ -69,14 +69,4 @@ public class PetGameData{
 //		PetInfo.VersionCheck(currentDataVersion);
 //		Tutorial.VersionCheck(currentDataVersion);
 	}
-
-	public void SaveAsyncToParse(){
-		ExtraParseLogic.Instance.UserCheck().ContinueWith(t => {
-			foreach(MutableData data in allMutableData){
-				if(data.IsDirty){
-					data.SaveAsyncToParseServer();
-				}
-			}
-		});
-	}
 }

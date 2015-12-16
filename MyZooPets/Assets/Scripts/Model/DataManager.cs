@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using Parse;
 using fastJSON;
 
 //This class handles all game data. No game logic

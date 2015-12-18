@@ -24,8 +24,6 @@ public class DataManager : Singleton<DataManager>{
 
 	private static bool isCreated;
 	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
-//	private float syncToParseTimer = 0f;
-//	private float syncToParseWaitTime = 30f; //30 seconds before data get sync to server
 
 	#region Properties
 	/// <summary>
@@ -41,13 +39,6 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	/// <value>The scene data.</value>
 	public LoadSceneData SceneData{ get; set; }
-
-//	/// <summary>
-//	/// If membership check failed a code will be passed from the LoadingScene to
-//	/// the MenuScene.
-//	/// </summary>
-//	/// <value>The membership check failed code.</value>
-//	public string MembershipCheckFailedCode{get; set;}
 	
 	/// <summary>
 	/// Gets a value indicating whether if it's user's first time launching app.
@@ -74,55 +65,6 @@ public class DataManager : Singleton<DataManager>{
 			}
 		}
 	}
-
-	/// <summary>
-	/// Gets or sets the membership check dates. Keep track of when membership check
-	/// happens. Also used for calculating when the trial period expires. Data will
-	/// be reset if trialStatus == expired, membershipStatus == active || expired.
-	/// </summary>
-	/// <value>The membership check dates.</value>
-//	public string MembershipCheckDates{
-//		get{
-//			return PlayerPrefs.GetString("MembershipCheckDates", "");
-//		}
-//		set{
-//			PlayerPrefs.SetString("MembershipCheckDates", value);
-//		}
-//	}
-
-	/// <summary>
-	/// Adds the membership check date. Save date in a comma deliminated string
-	/// ex. 14908789,14908382,14i09090
-	/// </summary>
-	/// <param name="timestamp">Timestamp.</param>
-//	public void AddMembershipCheckDate(string timestamp){
-//		string currentDates = MembershipCheckDates;
-//		if(!string.IsNullOrEmpty(timestamp)){
-//			if(!string.IsNullOrEmpty(currentDates))
-//				//Add new dates using a comma as the deliminating character
-//				MembershipCheckDates = currentDates + "," + timestamp;
-//			else
-//				MembershipCheckDates = timestamp;
-//		}
-//	}
-//
-//	public void ResetMembershipCheckDates(){
-//		MembershipCheckDates = "";
-//	}
-
-	/// <summary>
-	/// Tracks the connection error allowed before game is locked and user will 
-	/// be forced to go online before continue playing
-	/// </summary>
-	/// <value>The accumulated connection errors.</value>
-//	public int AccumulatedConnectionErrors{
-//		get{
-//			return PlayerPrefs.GetInt("ConnectionErrors", 0);
-//		}
-//		set{
-//			PlayerPrefs.SetInt("ConnectionErrors", value);
-//		}
-//	}
 
 	/// <summary>
 	/// Gets or sets the last play session date. Use to determine whether the game
@@ -185,14 +127,11 @@ public class DataManager : Singleton<DataManager>{
 				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
 				VersionCheck(new Version(currentDataVersionString));
 			}
-//			else{
-//				bool isSyncToServerOn = Constants.GetConstant<bool>("IsSyncToServerOn");
-//				if(isSyncToServerOn)
-//					ExtraParseLogic.Instance.UserCheck();
-//			}
 
 			LoadGameData();
 		}
+
+		// Cancel and schedule new notifications
 		LgNotificationServices.ScheduleLocalNotification();
 	}
 

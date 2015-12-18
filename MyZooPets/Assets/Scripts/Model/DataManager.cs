@@ -193,6 +193,7 @@ public class DataManager : Singleton<DataManager>{
 
 			LoadGameData();
 		}
+		LgNotificationServices.ScheduleLocalNotification();
 	}
 
 	

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using Area730.Notifications;
 
 public class LgNotificationServices{
 
-    public static void ScheduleLocalNotification(string message, DateTime fireDate, string title="Wellapets"){
+    public static void ScheduleLocalNotification(){
 #if UNITY_IPHONE && !UNITY_EDITOR 
         var notif = new LocalNotification();
         notif.fireDate = fireDate;
@@ -17,16 +18,16 @@ public class LgNotificationServices{
 #endif
 
 #if UNITY_ANDROID
-        TimeSpan delay = fireDate - LgDateTime.GetTimeNow();
-
-		ELANNotification notification = new ELANNotification();
-		notification.message = message;
-		notification.title = title;
-		notification.delayTypeTime = EnumTimeType.Hours;
-		notification.delay = (int) delay.TotalHours;
-		notification.useSound = true;
-		notification.useVibration = true;
-		notification.send();
+		AndroidNotifications.cancelNotification(1);
+		int id = 1;
+		string titleA = DataManager.Instance.GameData.PetInfo.PetName + " misses you";
+		string body = "Why not stop by and visit?";
+		NotificationBuilder build = new NotificationBuilder (id,titleA,body);
+		TimeSpan interval = new TimeSpan(168,0,0);
+		build.setInterval(interval);
+		build.setAutoCancel(false);
+		build.setDelay(interval);
+		AndroidNotifications.scheduleNotification(build.build());
 #endif
     }
 

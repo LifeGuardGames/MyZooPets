@@ -100,20 +100,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 	/// Additional steps to be done after inhaler game is finished
 	/// </summary>
 	public void InhalerGameDonePostLogic(){
-		// Queue up local notification
-		DateTime localNotificationFireDate;
-		bool isInhalerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
-		if(isInhalerTutDone){
-			//register local notification.
-			localNotificationFireDate = NextPlayPeriod.AddHours(7); //set notif to 7am and 7pm
-			string petName = DataManager.Instance.GameData.PetInfo.PetName;
-			string notifText;
-			
-			notifText = String.Format(Localization.Localize("NOTIFICATION_1_PRO"), petName);
-			
-			LgNotificationServices.RemoveIconBadgeNumber();
-			LgNotificationServices.ScheduleLocalNotification(notifText, localNotificationFireDate);
-		}
+
 	}
 	#endregion
 

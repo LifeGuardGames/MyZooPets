@@ -9,7 +9,18 @@ public class LgNotificationServices{
 		string title = DataManager.Instance.GameData.PetInfo.PetName + " misses you!";
 		string body = "Why not stop by and visit?";
 
-#if UNITY_IPHONE
+#if UNITY_IOS && !UNITY_EDITOR
+		// Try to register for token from device if null
+		byte[] token = NotificationServices.deviceToken;
+		if(token == null){
+			Debug.Log("Registering iOS notifications");
+			NotificationServices.RegisterForLocalNotificationTypes(LocalNotificationType.Alert | LocalNotificationType.Badge | LocalNotificationType.Sound);
+			token = NotificationServices.deviceToken;
+			if(token == null){
+				Debug.LogWarning("iOS Notification token not received");
+			}
+		}
+
 		NotificationServices.ClearLocalNotifications();
 		NotificationServices.CancelAllLocalNotifications();			// Clear all previous notifications
 		DateTime fireDate = LgDateTime.GetTimeNow().AddDays(7);		// Schedule for 7 days from now
@@ -25,7 +36,7 @@ public class LgNotificationServices{
         NotificationServices.ScheduleLocalNotification(notif);
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 		AndroidNotifications.cancelNotification(1);
 		int id = 1;
 		NotificationBuilder build = new NotificationBuilder(id, title, body);
@@ -39,7 +50,7 @@ public class LgNotificationServices{
 
     //removes icon badge number and removed the notifications delivered to user		// TODO delete
     public static void RemoveIconBadgeNumber(){
-#if UNITY_IPHONE && !UNITY_EDITOR 
+#if UNITY_IOS && !UNITY_EDITOR 
 //        var notif = new LocalNotification();
 //        notif.hasAction = false;
 //        notif.applicationIconBadgeNumber = -1;

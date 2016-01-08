@@ -142,6 +142,7 @@ public class DataManager : Singleton<DataManager>{
 //			#if DEVELOPMENT_BUILD
 //				return;
 //			#endif
+			Debug.Log("APPLICATION PAUSE CALLED");
 
 			// check immediately if a tutorial is playing...if one is, we don't want to save the game on pause
 			if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()){
@@ -166,6 +167,7 @@ public class DataManager : Singleton<DataManager>{
 				if(PlayPeriodLogic.Instance != null){
 					PlayPeriodLogic.Instance.SetLastPlayPeriod();
 				}
+
 				Analytics.Instance.QuitGame(Application.loadedLevelName);
 				SaveGameData();
 

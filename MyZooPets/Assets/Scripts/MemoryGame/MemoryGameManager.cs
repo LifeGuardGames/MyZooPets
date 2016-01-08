@@ -93,7 +93,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		Analytics.Instance.MemoryHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.MemoryTimesPlayedTick();
 #if UNITY_IOS
-		LeaderBoardManager.Instance.enterScore((long)GetScore(), "MemoryLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "MemoryLeaderBoard");
 #endif
 	}
 

@@ -8,12 +8,12 @@ using System.Collections;
 public class AnalyticsFacebook : MonoBehaviour{
 	void Start(){
 		// Start facebook SDK
-		FB.Init(OnFBInitComplete);
+		//FB.Init(OnFBInitComplete);	// TODO Remove when needed
 	}
 	
 	private void OnFBInitComplete(){
-		Debug.Log("Init FB complete");
+		//Debug.Log("Init FB complete");
 		// Tell facebook that this is the first install
-		FB.ActivateApp();
+		//FB.ActivateApp();				// TODO Remove when needed
 	}
 }

@@ -55,8 +55,16 @@ namespace GameAnalyticsSDK
 
 		public void Awake()
 		{
-			if(!Application.isPlaying)
+			// Do a LGG check to see if it is on
+			bool isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
+			if(!isAnalyticsEnabled){
+				Debug.Log("Analytics disabled");
 				return;
+			}
+
+			if(!Application.isPlaying){
+				return;
+			}
 			
 			if(_instance != null)
 			{

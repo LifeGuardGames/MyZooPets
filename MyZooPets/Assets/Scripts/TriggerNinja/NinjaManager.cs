@@ -187,7 +187,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		Analytics.Instance.NinjaBonusRounds(bonusRoundCounter);
 		Analytics.Instance.NinjaTimesPlayedTick();
 #if UNITY_IOS
-		LeaderBoardManager.Instance.enterScore((long)GetScore(), "NinjaLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "NinjaLeaderBoard");
 #endif
 	}
 

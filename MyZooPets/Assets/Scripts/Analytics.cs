@@ -64,7 +64,7 @@ public class Analytics : MonoBehaviour {
 	#region Ninja Trigger
 
 	public void NinjaHighScore(int score){
-	if(isAnalyticsEnabled){
+		if(isAnalyticsEnabled){
 			GA_Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) score);
 		}
 	}
@@ -123,14 +123,15 @@ public class Analytics : MonoBehaviour {
 //    }
 
 	public void RunnerHighScore (int score){
-	if(isAnalyticsEnabled){
-		GA_Design.NewEvent(RUNNER_CATEGORY + "HighScore", (float) score);
+		if(isAnalyticsEnabled){
+			GA_Design.NewEvent(RUNNER_CATEGORY + "HighScore", (float) score);
 		}
 	}
 
     public void RunnerPlayerDistanceRan(int distanceRan){
-        if(isAnalyticsEnabled)
+        if(isAnalyticsEnabled){
             GA_Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
+		}
     }
 
 	public void RunnerTimesPlayedTick(){
@@ -144,8 +145,9 @@ public class Analytics : MonoBehaviour {
 	#region Inhaler Game
     //Which steps in inhaler game does the kids need help the most
     public void InhalerHintRequired(int stepID){
-        if(isAnalyticsEnabled)
+        if(isAnalyticsEnabled){
             GA_Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
+		}
     }
 	#endregion
 
@@ -215,13 +217,16 @@ public class Analytics : MonoBehaviour {
     //Will be use in different mini games
 
     public void PetColorChosen(string petColor){
-        if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled)
+        if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled){
             GA_Design.NewEvent("PetColorChosen:" + petColor);
+		}
     }
 
 	//start game from menu scene
 	public void StartGame(){
-		GA_Design.NewEvent("StartGame");
+		if(isAnalyticsEnabled){
+			GA_Design.NewEvent("StartGame");
+		}
 	}
 
     //when the user clean the triggers
@@ -322,15 +327,20 @@ public class Analytics : MonoBehaviour {
 	}
 
 	public void DidUseInhaler(bool choice){
-		GA_Design.NewEvent("Did use Inhaler " + choice);
+		if(isAnalyticsEnabled){
+			GA_Design.NewEvent("Did use Inhaler " + choice);
+		}
 	}
 
 	public void RunnerDied(string level){
-		GA_Design.NewEvent("Runner died On: " + level);
+		if(isAnalyticsEnabled){
+			GA_Design.NewEvent("Runner died On: " + level);
+		}
 	}
 
 	public void QuitGame(string scene){
-		GA_Design.NewEvent("Game Quit: " + scene);
+		if(isAnalyticsEnabled){
+			GA_Design.NewEvent("Game Quit: " + scene);
+		}
 	}
-
 }

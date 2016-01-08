@@ -93,7 +93,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 
 		Analytics.Instance.RunnerTimesPlayedTick();
 #if UNITY_IOS
-		LeaderBoardManager.Instance.enterScore((long)GetScore(), "RunnerLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
 #endif
 	}		
 

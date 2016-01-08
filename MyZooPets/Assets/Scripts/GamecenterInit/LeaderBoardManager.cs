@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.SocialPlatforms;
 
 public class LeaderBoardManager : Singleton<LeaderBoardManager> {
-#if UNITY_IOS
 	//here we need to create the leaderboards edit this script to change howmany leaderboards are created
 	ILeaderboard memory;
 	ILeaderboard ninja;
@@ -12,6 +11,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 	ILeaderboard runner;
 
 	void Awake(){
+		#if UNITY_IOS && !UNITY_EDITOR
 		Social.localUser.Authenticate (success => {
 			if (success) {
 				Debug.Log ("Authentication successful");
@@ -23,11 +23,12 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 			else
 				Debug.Log ("Authentication failed");
 		});
+		#endif
 	}
 
 	// Use this for initialization
-	private void LoadLeaderBoard () {
-
+	private void LoadLeaderBoard (){
+		#if UNITY_IOS && !UNITY_EDITOR
 		memory = Social.CreateLeaderboard();
 		memory.id = "MemoryLeaderBoard";
 		memory.LoadScores(result => DidLoadLeaderboard(result,memory));
@@ -43,18 +44,21 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 		runner = Social.CreateLeaderboard();
 		runner.id = "RunnerLeaderBoard";
 		runner.LoadScores(result => DidLoadLeaderboard(result,runner));
+		#endif
 	}
 
-	private void DidLoadLeaderboard (bool result, ILeaderboard ledboard) {
-		Debug.Log("Received " + ledboard.scores.Length + " scores");
-		foreach (IScore score in ledboard.scores)
-			Debug.Log(score);
+	private void DidLoadLeaderboard(bool result, ILeaderboard leaderBoard) {
+//		foreach (IScore score in leaderBoard.scores){
+//			Debug.Log(score);
+//		}
 	}
 	
-	public void enterScore(long score, string ledBoardId){
-		Social.ReportScore(score,ledBoardId,success => {
+	public void EnterScore(long score, string leaderBoardID){
+		#if UNITY_IOS && !UNITY_EDITOR
+		Social.ReportScore(score,leaderBoardID,success => {
 			Debug.Log(success ? "Reported score successfully" : "Failed to report score");
 		});
+		#endif
 	}
-#endif
+
 }

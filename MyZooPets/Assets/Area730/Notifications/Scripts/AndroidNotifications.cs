@@ -11,8 +11,9 @@ namespace Area730.Notifications
         /// <summary>
         /// Instance of java notification handler class
         /// </summary>
+#if UNITY_ANDROID && !UNITY_EDITOR
         private static AndroidJavaClass notifHandlerClass;
-
+#endif
 
         /// <summary>
         /// Default constructor

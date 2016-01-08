@@ -76,7 +76,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		Analytics.Instance.ShooterTimesPlayedTick();
 
 		#if UNITY_IOS
-		LeaderBoardManager.Instance.enterScore((long)GetScore(), "ShooterLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "ShooterLeaderBoard");
 		#endif
 	}
 

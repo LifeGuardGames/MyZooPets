@@ -68,7 +68,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.DoctorTimesPlayedTick();
 		#if UNITY_IOS
-		LeaderBoardManager.Instance.enterScore((long)GetScore(), "DoctorLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
 #endif
 	}
 

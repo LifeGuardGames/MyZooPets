@@ -17,7 +17,7 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 	}
 
 	public void ScheduleLocalNotification(){
-#if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS //&& !UNITY_EDITOR
 		// Reset the badge icon
 		LocalNotification resetNotif = new LocalNotification();
 		resetNotif.applicationIconBadgeNumber = -1;

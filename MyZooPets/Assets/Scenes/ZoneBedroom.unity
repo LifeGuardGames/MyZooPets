@@ -5247,7 +5247,6 @@ GameObject:
   - 65: {fileID: 82845680}
   - 114: {fileID: 82845679}
   - 114: {fileID: 82845681}
-  - 114: {fileID: 82845677}
   m_Layer: 0
   m_Name: Entrance_Accessory
   m_TagString: Untagged
@@ -5269,17 +5268,6 @@ Transform:
   - {fileID: 1990455020}
   m_Father: {fileID: 42456632}
   m_RootOrder: 2
---- !u!114 &82845677
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 82845675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b611065b4d41464ab5d07a91a2649bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &82845679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79735,6 +79723,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1165817885}
+  - {fileID: 2139533832}
   m_Father: {fileID: 0}
   m_RootOrder: 4
 --- !u!1 &1815254950
@@ -98269,6 +98258,46 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 106cf84c0c6811647a4d8523eec0b143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2139533831
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 154098, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
+  m_PrefabInternal: {fileID: 1743679045}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2139533832}
+  - 114: {fileID: 2139533833}
+  m_Layer: 0
+  m_Name: LGNotificationServices
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2139533832
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 454098, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
+  m_PrefabInternal: {fileID: 1743679045}
+  m_GameObject: {fileID: 2139533831}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1814776893}
+  m_RootOrder: 1
+--- !u!114 &2139533833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11454098, guid: 1097f5f374f124e8eb4ddc215ba4b250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1743679045}
+  m_GameObject: {fileID: 2139533831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54f1d9d975ffa463494c0acef855d057, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2140572789

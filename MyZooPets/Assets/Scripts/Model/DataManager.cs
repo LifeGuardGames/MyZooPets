@@ -130,9 +130,6 @@ public class DataManager : Singleton<DataManager>{
 
 			LoadGameData();
 		}
-
-		// Cancel and schedule new notifications
-		LgNotificationServices.ScheduleLocalNotification();
 	}
 
 	

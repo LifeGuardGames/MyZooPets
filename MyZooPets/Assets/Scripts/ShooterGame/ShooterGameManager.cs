@@ -10,7 +10,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	private float startTime;
 	public int waveNum = 0;
 	public bool inTutorial;
-	private int missed;
 
 	private ShooterUIManager shooterUI;
 
@@ -50,7 +49,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		else{
 			inTutorial = false;
 			waveNum = 0;
-			missed = 0;
 			ShooterSpawnManager.Instance.Reset();
 			ShooterGameEnemyController.Instance.Reset();
 			shooterUI.Reset();

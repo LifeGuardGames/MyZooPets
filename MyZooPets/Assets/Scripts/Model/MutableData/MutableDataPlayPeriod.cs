@@ -9,6 +9,8 @@ public class MutableDataPlayPeriod{
 	public bool IsFirstPlayPeriodAux {get; set;}
 	public DateTime FirstPlayPeriod {get; set;}
 
+	public bool IsDisplayedAppNotification { get; set; }	// Has the app displayed a rate app notification yet
+
 	public MutableDataPlayPeriod(){
 		Init();
 	}
@@ -18,5 +20,7 @@ public class MutableDataPlayPeriod{
 		FirstPlayPeriod = DateTime.MinValue;
 		LastPlayPeriod = DateTime.MinValue;
 		LastTimeUserPlayedGame = DateTime.MinValue;
+
+		IsDisplayedAppNotification = false;
 	}
 }

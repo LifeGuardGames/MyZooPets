@@ -105,14 +105,8 @@ public class BadgeLogic : Singleton<BadgeLogic>{
             latestProgress = progress += currentProgress;
         }
 
-        //Check if a new badge can be unlocked. Multiple badges of the same type 
-        //can be unlock at the same time
-		bool badgeUnlocked = false;
         foreach(Badge badge in sortedBadgesType){
-			bool unlockFlag = CheckUnlockProgress(badge, latestProgress);
-			if(unlockFlag == true){
-				badgeUnlocked = true;
-			}
+			CheckUnlockProgress(badge, latestProgress);
 		}
 
         //Check if all badges of the same type have been unlocked
@@ -124,8 +118,9 @@ public class BadgeLogic : Singleton<BadgeLogic>{
         }
 
         //Only update DataManager if there are still locked badges
-        if(!unlockedAllSeriesBadges)
+        if(!unlockedAllSeriesBadges){
             DataManager.Instance.GameData.Badge.UpdateSeriesUnlockProgress(badgeType, latestProgress);
+		}
     }
 	
 	/// <summary>

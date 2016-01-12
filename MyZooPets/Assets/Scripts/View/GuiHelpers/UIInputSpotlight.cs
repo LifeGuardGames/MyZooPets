@@ -7,19 +7,19 @@ public class UIInputSpotlight:MonoBehaviour{
 	public GameObject spotlightToggle;
 	public UIInput inputScript;
 
-	private bool enabled;
+	private bool isActive;
 
 	void Start(){
 		spotlightToggle.SetActive(false);
-		enabled = false;
+		isActive = false;
 	}
 
 	// Polling - inefficient
 	void Update(){
-		if(inputScript.selected != enabled){
-			enabled = inputScript.selected;
+		if(inputScript.selected != isActive){
+			isActive = inputScript.selected;
 
-			spotlightToggle.SetActive(enabled ? true : false);
+			spotlightToggle.SetActive(isActive ? true : false);
 		}
 	}
 }

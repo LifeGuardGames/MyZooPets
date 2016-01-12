@@ -11,7 +11,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 
 	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
 
-	void Awake(){
+	protected override void Awake(){
 		eModeType = UIModeTypes.Wellapad;
 	}
 

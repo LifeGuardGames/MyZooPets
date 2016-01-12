@@ -26,7 +26,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public UISprite backdrop;
 
 	private int totalSubdivisions = 100;
-	private float step = 0.005f;
 	private float currentPercentage; // In terms of 0.0 -> 1.0
 	private float targetPercentage;
 
@@ -40,7 +39,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public delegate void Callback();
 	public Callback FinishedAnimatingCallback;
 
-	void Awake(){
+	protected override void Awake(){
 		eModeType = UIModeTypes.FireCrystal;
 
 		// If scene is the inhaler game, use right anchor and offset tweenparent
@@ -58,7 +57,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		}
 	}
 
-	void Start(){
+	protected override void Start(){
 		// Initalizaing from data
 		currentPercentage = (float)DataManager.Instance.GameData.Stats.Shards/(float)totalSubdivisions;
 		currentPercentage = Mathf.Min(currentPercentage, 1.0f);

@@ -12,7 +12,6 @@ public class HintController : MonoBehaviour {
     public bool startHidden = true; //Hide hint when game loads
     public int showOnStep = 0; // Set this to the step that the hint arrow should be shown on.
 	public Animator fingerAnimator; //Animator that contains the hint animation
-	private bool animatorPlaying = false;
 
 	public string clipToPlay; //The animation that you want to play
 	public GameObject outlineTexture;	// Texture of outline if applicable

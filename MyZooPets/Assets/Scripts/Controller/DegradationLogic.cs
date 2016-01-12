@@ -63,43 +63,12 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	public void ClearDegradationTrigger(DegradTrigger trigger){
 		// DegradData degradData = DataManager.Instance.GameData.Degradation.DegradationTriggers.Find(x => x.ID == trigger.ID);
 		DegradData degradData = degradationTriggers.Find(x => x.TriggerID == trigger.ID);
-		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(degradData.TriggerID);
 
 		// instantiate a stats item from the trigger, but only if it's not the tutorial
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
 		if(bTut == false){
 			int nXP = DataLoaderXpRewards.GetXP("CleanTrigger", new Hashtable());
 			StatsController.Instance.ChangeStats(deltaPoints: nXP, pointsLoc: trigger.transform.position, is3DObject: true);
-
-//			GameObject goPrefab = Resources.Load("DroppedStat") as GameObject;
-//			GameObject goDroppedItem = Instantiate(goPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-//			
-//			//Spawn floaty text to indicate trigger has been cleaned
-//			Hashtable option = new Hashtable();
-//			Vector3 floatUpPos = new Vector3(0, 5, 0);
-//			option.Add("parent", trigger.gameObject);
-//			option.Add("textSize", 1f);
-//			option.Add("text", triggerData.FloatyDesc);
-//			option.Add("floatingUpPos", floatUpPos);
-//
-//			FloatyUtil.SpawnFloatyText(option);
-//
-//			//Init dropped item
-//			int nXP = DataLoaderXpRewards.GetXP("CleanTrigger", new Hashtable());
-//			goDroppedItem.GetComponent<DroppedObjectStat>().Init(HUDElementType.Points, nXP);
-//			
-//			// set the position of the newly spawned item to be wherever this item box is
-//			float fOFfsetY = Constants.GetConstant<float>("ItemBoxTrigger_OffsetY");
-//			Vector3 vPosition = new Vector3(trigger.gameObject.transform.position.x, 
-//			                                trigger.gameObject.transform.position.y + fOFfsetY, 
-//			                                trigger.gameObject.transform.position.z);
-//			goDroppedItem.transform.position = vPosition;
-//			
-//			// make the stats "burst" out
-//			goDroppedItem.GetComponent<DroppedObject>().Appear();			
-
-			//send analytics event
-			//Analytics.Instance.TriggersCleaned(triggerData.ID);
 		}	
 		
 		// DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
@@ -121,16 +90,14 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	/// <param name="trigger">Trigger.</param>
 	public void TriggerHitPet(DegradParticle trigger){
 		// send out a callback
-		if(OnPetHit != null)
+		if(OnPetHit != null){
 			OnPetHit(this, EventArgs.Empty);
+		}
 		
 		// damage the pet
 		int damage = trigger.Damage;
 
 		StatsController.Instance.ChangeStats(deltaHealth: -damage, isFloaty: true);
-
-		//Send analytics event
-	//	Analytics.Instance.TriggerHitPet();    
 	}
 
 	private void StatsDegradationCheck(){
@@ -153,14 +120,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	/// spawned from the DegradationUIManager.
 	/// </summary>
 	private void SetUpTriggers(){
-
-//		Debug.Log("===SETTING UP TRIGGERS");
 		// get list of available locations to spawn triggers
 		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
-//		Debug.Log("===Spawning " + numToSpawn);
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
@@ -229,8 +193,6 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		int newTriggers = 0;
 		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 		MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
-
-//		isTriggerTutDone = true;	// DEBUG
 
 		if(!isTriggerTutDone){
 			int uncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;

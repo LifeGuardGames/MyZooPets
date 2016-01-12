@@ -25,8 +25,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 
 	private AccessoryItem itemData;
 
-	private AccessoryButtonType buttonState;
-
 	// various elements on the entry
 	public UILabel labelName;
 	public UILabel labelCost;
@@ -159,7 +157,5 @@ public class AccessoryEntryUIController : MonoBehaviour{
 			Debug.LogError("Invalid state for button type");
 			break;
 		}
-
-		buttonState = buttonType;
 	}
 }

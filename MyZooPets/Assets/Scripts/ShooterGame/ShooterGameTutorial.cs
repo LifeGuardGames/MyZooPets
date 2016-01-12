@@ -5,7 +5,6 @@ using System.Collections;
 public class ShooterGameTutorial : MinigameTutorial{
 	public static string TUT_KEY = "SHOOT_TUT";
 	GameObject tutBoards;				// Gameobject that positions the tutorial boards	
-	GameObject enemyPos;
 	GameObject tutorialInhalerUse;		// tutorial message board		
 	GameObject pressHere;				// tutorial message board
 	GameObject tutorialFinger;			// tutorial finger
@@ -36,17 +35,17 @@ public class ShooterGameTutorial : MinigameTutorial{
 			GameObject DestroyPrefabsClone = tutBoards;
 			GameObject.Destroy(DestroyPrefabsClone);
 			tutEnemy = (GameObject)Resources.Load("ShooterTutEnemy");
-			enemyPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("MidPoint"), tutEnemy);
+			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("MidPoint"), tutEnemy);
 			break;
 		case 2:
 			//prompt user to shoot
 			tutEnemy = (GameObject)Resources.Load("ShooterTutEnemy");
-			enemyPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Upper"), tutEnemy);
+			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Upper"), tutEnemy);
 			break;
 		case 3:
 			//prompt user to shoot
 			tutEnemy = (GameObject)Resources.Load("ShooterTutEnemy");
-			enemyPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Lower"), tutEnemy);
+			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Lower"), tutEnemy);
 			break;
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
 		case 4:

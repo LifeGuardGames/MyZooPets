@@ -29,7 +29,6 @@ public class LgDebugTool : EditorWindow{
     private string proGameKey;
     private string proSecretKey;
     private string proProductName;
-	private string gaBuildVersion;
 	private Vector2 scrollPos;
 	#endregion
 
@@ -85,7 +84,6 @@ public class LgDebugTool : EditorWindow{
                 switch(constant.Name){
 				case "BuildVersion":
 					constant.ConstantValue = EditorGUILayout.TextField("Build Version", constant.ConstantValue);
-					gaBuildVersion = constant.ConstantValue;
 					PlayerSettings.bundleVersion = constant.ConstantValue;
 					break;
 				case "BuildVersionCode":
@@ -97,13 +95,6 @@ public class LgDebugTool : EditorWindow{
 						new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
 						bool.Parse(constant.ConstantValue));
 					constant.ConstantValue = toggleState.ToString();
-					if(toggleState){
-					//	GA.SettingsGA.Build = gaBuildVersion;				//set the build version
-						//GA.SettingsGA.SetKeys(proGameKey, proSecretKey);	//set the api keys
-					}
-					else{
-						//GA.SettingsGA.SetKeys("", "");
-					}
 					break;
                 }
             }
@@ -112,7 +103,7 @@ public class LgDebugTool : EditorWindow{
                 Serialize<BuildSettingConstants>(BUILDSETTING_PATH, buildSettingConstants);
             }
 
-			GUILayout.Label("Build Info Editor (Not package with the game binary", EditorStyles.boldLabel);
+			GUILayout.Label("Build Info Editor (Not package with the game binary)", EditorStyles.boldLabel);
 			if(buildInfoList != null){
 				foreach(Constant constant in buildInfoList){
 					switch(constant.Name){

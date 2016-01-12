@@ -15,7 +15,6 @@ public class QuestionaireUIManager1 : MonoBehaviour{
 	private int lastAgeAux;				// Keeping track of last age for sound effect
 	private int age;
 	private bool hasMovedSlider = false;
-	private GameObject menuScenePet = null;
 
 	/// <summary>
 	/// Called by the slider when the value has changed. Rounds up to the nearest integer for age

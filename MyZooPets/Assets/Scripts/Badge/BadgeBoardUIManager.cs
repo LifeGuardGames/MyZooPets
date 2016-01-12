@@ -21,7 +21,6 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public ParticleSystem slamParticle;
 
 	private string blankBadgeTextureName = "badgeBlank";
-	private bool firstClick = true;
 	private GameObject lastClickedBadge;
 	private bool isActive = false;
 

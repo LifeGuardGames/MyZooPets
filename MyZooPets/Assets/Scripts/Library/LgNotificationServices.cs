@@ -31,12 +31,11 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 		// Clear and cancel
 		NotificationServices.ClearLocalNotifications();				// Clear all received notifications
 		foreach(LocalNotification localNotif in NotificationServices.scheduledLocalNotifications){		// Remove reminder notifications
-			Debug.Log("----SCHEDULED NOTIF");
 			if(localNotif.repeatInterval == CalendarUnit.Week){
 				NotificationServices.CancelLocalNotification(localNotif);
 				Debug.Log("CANCELLING RECURRING NOTIFICATIONS");
 			}
-		} // TODO needs testing
+		}
 
 		// Prepare to fire new notification
 		string iOSAction = "visit " + DataManager.Instance.GameData.PetInfo.PetName; 	// Action (ie. slide to _)
@@ -57,12 +56,18 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 		// Also check if we need to push the rate app notification
 		// Conditions - passed day 7 retention, only seen once
 		TimeSpan difference = LgDateTime.GetTimeNow().Subtract(DataManager.Instance.GameData.PlayPeriod.FirstPlayPeriod);
-		if(!DataManager.Instance.GameData.PlayPeriod.IsDisplayedAppNotification		// Displayed for first time
-		   && DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux			// Started first play session in
-		   && difference.CompareTo(new TimeSpan(7, 0, 0 ,0)) > 1){						// Past 7 days
+		if(!DataManager.Instance.GameData.PlayPeriod.IsDisplayedAppNotification			// Displayed for first time
+			&& DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux			// Started first play session in
+			&& difference > new TimeSpan(7, 0, 0 ,0)){									// Past 7 days
 
 			LocalNotification rateNotif = new LocalNotification();
-			rateNotif.fireDate = LgDateTime.GetTimeNow().AddSeconds(10);
+
+			// Shoot for next 8:47am
+			DateTime now = LgDateTime.GetTimeNow();
+			DateTime today847am = now.Date.AddHours(8).AddMinutes(47);
+			DateTime next847am = now <= today847am ? today847am : today847am.AddDays(1);
+			
+			rateNotif.fireDate = next847am;
 			rateNotif.alertAction = "open game";
 			rateNotif.alertBody = "Is 'Wizdy Pets' helping your kids with asthma? Leave us a review in the AppStore!";
 			rateNotif.soundName = LocalNotification.defaultSoundName;

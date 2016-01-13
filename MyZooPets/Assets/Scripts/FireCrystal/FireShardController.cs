@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Represents each particular fire shard that is spawned when the fire crystals fill up
+/// Controls the tweening and what happens when it is complete
+/// </summary>
 public class FireShardController : MonoBehaviour {
 
 	public ParticleSystem finishParticle;

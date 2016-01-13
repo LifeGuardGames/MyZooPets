@@ -45,8 +45,11 @@ public abstract class Tutorial{
 		return currentStep;	
 	}
 
-	protected void AddToProcessList(GameObject go){
+	protected void AddToProcessList(GameObject go, bool isDebugLog = false){
 		listCanProcess.Add(go);
+		if(isDebugLog){
+			// Debug tag here
+		}
 	}
 	
 	protected void RemoveFromProcessList(GameObject go){
@@ -152,8 +155,9 @@ public abstract class Tutorial{
 
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
-		if(isGUI)
+		if(isGUI){
 			focusPos = LgNGUITools.GetScreenPosition(goTarget);
+		}
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
@@ -195,8 +199,9 @@ public abstract class Tutorial{
 			focusPos.x = focusPos.x + fingerHintOffsetX;
 			goFingerHint.transform.localPosition = focusPos;
 
-			if(fingerHintFlip)
+			if(fingerHintFlip){
 				goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
+			}
 		}
 	}
 
@@ -212,8 +217,9 @@ public abstract class Tutorial{
 
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
-		if(isGUI)
+		if(isGUI){
 			focusPos = LgNGUITools.GetScreenPosition(goTarget);
+		}
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
@@ -223,8 +229,9 @@ public abstract class Tutorial{
 				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 		}
 
-		if(goFingerHint != null)
+		if(goFingerHint != null){
 			GameObject.Destroy(goFingerHint);
+		}
 
 		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
 		goFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
@@ -233,8 +240,9 @@ public abstract class Tutorial{
 		focusPos.z = goFingerHint.transform.localPosition.z;
 		goFingerHint.transform.localPosition = focusPos;
 
-		if(flipX)
+		if(flipX){
 			goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
+		}
 
 	}
 

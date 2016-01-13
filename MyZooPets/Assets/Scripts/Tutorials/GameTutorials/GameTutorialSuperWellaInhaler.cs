@@ -2,9 +2,12 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+/// <summary>
+/// wait for few seconds
+/// spawn super wella message to tell user to take inhaler morning and night
+/// </summary>
 public class GameTutorialSuperWellaInhaler : GameTutorial {
-	// wait for few seconds
-	// spawn super wella message to tell user to take inhaler morning and night
+	public bool isDelegateUsed = false;	// HACK Used to make sure delegate doesnt get called twice
 
 	public GameTutorialSuperWellaInhaler() : base(){	
 	}
@@ -32,8 +35,11 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		yield return new WaitForSeconds(1f);
 
 		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
-			PetAudioManager.Instance.EnableSound = true;
-			Advance();
+			if(!isDelegateUsed){
+				isDelegateUsed = true;
+				PetAudioManager.Instance.EnableSound = true;
+				Advance();
+			}
 		};
 
 		//Display tutorial notification

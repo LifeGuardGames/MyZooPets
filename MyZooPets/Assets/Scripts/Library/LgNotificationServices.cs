@@ -6,7 +6,7 @@ using Area730.Notifications;
 public class LgNotificationServices : Singleton<LgNotificationServices> {
 	
 	void Start(){
-#if UNITY_IOS //&& !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
 		// Register for iOS local notifications
 		Debug.Log("Registering iOS notifications");
 		NotificationServices.RegisterForLocalNotificationTypes(LocalNotificationType.Alert | LocalNotificationType.Badge | LocalNotificationType.Sound);
@@ -21,7 +21,7 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 	/// Also populates rate app notification
 	/// </summary>
 	public void ScheduleLocalNotification(){
-#if UNITY_IOS //&& !UNITY_EDITOR
+#if UNITY_IOS && !UNITY_EDITOR
 		// Reset the badge icon
 		LocalNotification resetNotif = new LocalNotification();
 		resetNotif.applicationIconBadgeNumber = -1;

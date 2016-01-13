@@ -25,8 +25,6 @@ public class Analytics : MonoBehaviour {
 
     private static bool isCreated = false;
     private static Analytics instance;
-    // private DateTime playTime;
-    // private bool isGameTimerOn = false;
     private bool isAnalyticsEnabled = false;
 
 
@@ -46,7 +44,6 @@ public class Analytics : MonoBehaviour {
             return instance;
         }
     }
-    //--------------------------------------------------------------------------
 
     void Awake(){
         //make persistent
@@ -62,7 +59,6 @@ public class Analytics : MonoBehaviour {
     }
 
 	#region Ninja Trigger
-
 	public void NinjaHighScore(int score){
 		if(isAnalyticsEnabled){
 			GA_Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) score);
@@ -118,11 +114,12 @@ public class Analytics : MonoBehaviour {
 	#region Runner Game
     //Where did the user die most often in the runner game?
 //    public void RunnerPlayerDied(string levelComponentName){
-//        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled)
+//        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled){
 //            GA_Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
+//		}
 //    }
 
-	public void RunnerHighScore (int score){
+	public void RunnerHighScore(int score){
 		if(isAnalyticsEnabled){
 			GA_Design.NewEvent(RUNNER_CATEGORY + "HighScore", (float) score);
 		}
@@ -152,23 +149,6 @@ public class Analytics : MonoBehaviour {
 	#endregion
 
 	#region Doctor Match
-    //==========================Diagnose track game=============================
-    //Number of correct diagnose. 
-    //Which symptom is the user having trouble identifying
-    public void DiagnoseResult(string diagnoseResult, AsthmaStage petStatus, AsthmaStage zone){
-//        if(!String.IsNullOrEmpty(diagnoseResult) && isAnalyticsEnabled)
-//            GA_Design.NewEvent(DIAGNOSE_CATEGORY + "Diagnose:" + diagnoseResult + ":" + 
-//                Enum.GetName(typeof(AsthmaStage), petStatus) + ":" + Enum.GetName(typeof(AsthmaStage), zone));
-    }
-
-	public void WrongDiagnose(){
-
-	}
-
-	public void DieAtWhatSpeed(){
-
-	}
-
 	public void DoctorHighScore (int score){
 		if(isAnalyticsEnabled){
 			GA_Design.NewEvent(DIAGNOSE_CATEGORY + "HighScore", (float) score);
@@ -199,23 +179,8 @@ public class Analytics : MonoBehaviour {
 
 	#endregion
 
-	#region Friend Network
-	/*public void EnterFriendTree(){
-		GA_Design.NewEvent("Social:EnterFriendTree");
-	}
-
-	public void AddFriend(){
-		GA_Design.NewEvent("Social:AddFriend");
-	}
-
-	public void AcceptFriendRequest(){
-		GA_Design.NewEvent("Social:AcceptFriendRequest");
-	}*/
-	#endregion
-
     //=======================General Analytics==================================
     //Will be use in different mini games
-
     public void PetColorChosen(string petColor){
         if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled){
             GA_Design.NewEvent("PetColorChosen:" + petColor);
@@ -228,12 +193,6 @@ public class Analytics : MonoBehaviour {
 			GA_Design.NewEvent("StartGame");
 		}
 	}
-
-    //when the user clean the triggers
- /*   public void TriggersCleaned(String triggerID){
-        if(!String.IsNullOrEmpty(triggerID) && isAnalyticsEnabled)
-            GA_Design.NewEvent("TriggersCleaned:" + triggerID);
-    }*/
 
 	public void RemainingTriggers(int triggers){
 		if(isAnalyticsEnabled){
@@ -298,11 +257,6 @@ public class Analytics : MonoBehaviour {
         if(isAnalyticsEnabled)
             GA_Design.NewEvent("ZeroHealth");
     }
-
-    /*public void TriggerHitPet(){
-        if(isAnalyticsEnabled)
-            GA_Design.NewEvent("TriggerHitPet");
-    }*/
 
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)

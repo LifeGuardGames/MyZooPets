@@ -108,12 +108,11 @@ public class TutorialManagerBedroom : TutorialManager{
 		bool isTriggerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_TRIGGERS);
 //		bool isDecoTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_DECOS); //UNDONE Take out for now
 		DateTime LastTutorial1DonePlayPeriod = DataManager.Instance.GameData.Tutorial.Tutorial1DonePlayPeriod;
-		
+
 //		Debug.Log("---- CHECKING PLAY PERIOD ----- " + PlayPeriodLogic.GetCurrentPlayPeriod() + " " + LastTutorial1DonePlayPeriod);
 		if(PlayPeriodLogic.GetCurrentPlayPeriod() > LastTutorial1DonePlayPeriod){
 			if(isFlameTutorialDone && !isTriggerTutorialDone &&
 			   CameraManager.Instance.PanScript.currentLocalPartition == 0 ){
-				Debug.Log("LAUNCHING TRIGGER TUTORIAL");
 				// play the trigger tutorial
 				new GameTutorialTriggersNew();
 				spawnedTutorial = true;

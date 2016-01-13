@@ -7,6 +7,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	public TweenToggleDemux roomArrowsDemux;
 	public TweenToggle leftArrowTween;
 	public TweenToggle rightArrowTween;
+	public LgButton rightArrowButtonScript;
 
 	void Start(){
 		CameraManager.Instance.PanScript.OnPartitionChanged += ShowPanel;
@@ -19,8 +20,9 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		CameraManager.Instance.PanScript.OnPartitionChanged -= ShowPanel;
 	}
 
-	public GameObject GetRightArrowReference(){
-		return rightArrowTween.transform.FindChild("Image Button").gameObject;
+	// For use in tutorial only
+	public LgButton GetRightArrowReference(){
+		return rightArrowButtonScript;
 	}
 
 	public void ShowPanel(object sender, EventArgs args){

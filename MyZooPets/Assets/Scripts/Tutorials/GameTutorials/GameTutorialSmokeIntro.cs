@@ -7,9 +7,7 @@ using System.Collections.Generic;
 // GameTutorial_SmokeIntro
 // Tutorial that introduces the smoke monster.
 //---------------------------------------------------
-
 public class GameTutorialSmokeIntro : GameTutorial{
-//	private GameObject swipeGO; //reference to the swipe listener
 
 	public GameTutorialSmokeIntro() : base(){
 	}
@@ -23,38 +21,21 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 			
 	protected override void _End(bool isFinished){
-
 	}
 	
 	protected override void ProcessStep(int step){
 		switch(step){
 		case 0:
-
 			TutorialManager.Instance.StartCoroutine(BeginPanRight());
 			break;
-			
 		case 1:
 			// open the wellapad to show the user what to do next
 			ShowWellapad();
 			break;
-
 		case 2:
 			FocusOnRightArrow();
 			break;
 		}
-	}
-	
-	private void ShowWellapad(){
-		// show the wellapad
-		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
-	
-		// enable the close button		
-		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
-		AddToProcessList(goBack);
-		
-		// listen for wellapad closing
-		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;			
-		
 	}
 
 	/// <summary>
@@ -70,26 +51,13 @@ public class GameTutorialSmokeIntro : GameTutorial{
 			// advance to next step
 			Advance();
 		}
-	}	
-
-	/// <summary>
-	/// Begins the intro for smoke monster.
-	/// </summary>
-	/// <returns>The intro.</returns>
-	private IEnumerator BeginIntro(){
-		// wait a brief moment
-		float waitTime = Constants.GetConstant<float>("SmokeIntroWait");
-		yield return new WaitForSeconds(waitTime);
-		
-		// play sound
-		AudioManager.Instance.PlayClip("tutorialSmokeIntro");
 	}
 
 	/// <summary>
 	/// This function handles the slight pan to view the smoke monster in the next room.
 	/// </summary>
 	/// <returns>The pan right.</returns>
-	private IEnumerator BeginPanRight(){	
+	private IEnumerator BeginPanRight(){
 		// wait a brief moment
 		float waitTime = Constants.GetConstant<float>("SmokeIntroWaitBetweenPans");
 		yield return new WaitForSeconds(waitTime);
@@ -123,7 +91,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 		LeanTween.moveX(CameraManager.Instance.gameObject.transform.parent.gameObject, moveTo, panTime)
 			.setEase(LeanTweenType.easeInOutQuad); 
-		
+
 		OnLeftPanDone();
 	}
 	
@@ -131,24 +99,35 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		Advance();	
 	}
 
+	private void ShowWellapad(){
+		// show the wellapad
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
+		
+		// enable the close button		
+		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
+		AddToProcessList(goBack);
+		
+		// listen for wellapad closing
+		WellapadUIManager.Instance.OnManagerOpen += OnWellapadClosed;	
+	}
+
 	private void FocusOnRightArrow(){
-		GameObject rightArrowObject = RoomArrowsUIManager.Instance.GetRightArrowReference();
 		string tutKey = GetKey() + "_" + GetStep();
 
-		// begin listening for when the inhaler is clicked
-		LgButton button = rightArrowObject.GetComponent<LgButton>();
-		button.OnProcessed += RightArrowClicked;
-		
-		// the inhaler is the only object that can be clicked
-		AddToProcessList(rightArrowObject);
-
+		//Start showing the right arrow
 		RoomArrowsUIManager.Instance.ShowRightArrow();
 
-		// spotlight the arrow
-		SpotlightObject(rightArrowObject, true, InterfaceAnchors.Right, 
-		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 0f);
+		// begin listening for when the inhaler is clicked
+		LgButton rightArrowButton = RoomArrowsUIManager.Instance.GetRightArrowReference();
 
-		ShowFingerHint(rightArrowObject, isGUI: true, anchor: InterfaceAnchors.Right);
+		// the inhaler is the only object that can be clicked
+		AddToProcessList(rightArrowButton.gameObject, true);
+
+		rightArrowButton.OnProcessed += RightArrowClicked;
+
+		// spotlight the arrow
+		SpotlightObject(rightArrowButton.gameObject, true, InterfaceAnchors.Right, 
+		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: false, delay: 0f);
 
 		// show message
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");

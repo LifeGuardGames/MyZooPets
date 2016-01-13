@@ -26,7 +26,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// Only call once per a play period all furture calls will be false
 	/// </summary>
 	public bool CanSpawnNewMinipetLocations(){
-		Debug.Log("---Checking can spawn minipets " + DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
+//		Debug.Log("---Checking can spawn minipets " + DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated + " " + PlayPeriodLogic.GetCurrentPlayPeriod());
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
 //			Debug.Log("----SPAWN NEW LOCATIONS?: YES");

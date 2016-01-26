@@ -9,7 +9,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 	[System.Serializable]
 	public class PlatformerControllerMovement{
-        
+
 		public float defaultTargetSpeed = 15f; //The default running speed
 		[System.NonSerialized]
 		public float currentSpeed = 0f; //current movement speed after it gets smoothed by acceleration
@@ -63,7 +63,6 @@ public class PlayerController : Singleton<PlayerController>{
 	private float speedIncreaseCounter = 0f; //Time till we speed up the game
 	private Vector2 initialPosition; //Where the player start
 	private GameObject floatyLocation;
-
 	public Camera nguiCamera;
 
 #if UNITY_EDITOR	
@@ -135,17 +134,26 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics.Move(amountToMove);
 	}
 
-	/*// Listen to finger down gesture
-	void OnFingerDown(FingerDownEvent e){ 
-		if(RunnerGameManager.Instance.GameRunning && !IsTouchingNGUI(e.Position)){
-			Jump();
+	// Listen to finger down gesture
+	void OnTap(TapGesture e){ 
 
-			if(OnJump != null)
-				OnJump(this, EventArgs.Empty);
+		if(RunnerGameManager.Instance.GameRunning ){
+			if(e.Position.y > Screen.height/2){
+				Jump();
+				if(OnJump != null)
+					OnJump(this, EventArgs.Empty);
+			}
+			else{
+				Drop();
+				
+				if(OnDrop != null)
+					OnDrop(this, EventArgs.Empty);
+			}
+
 		}
-	}*/
+	}
 	
-	// Listen to swipe down gesture
+	/*// Listen to swipe down gesture
 	void OnSwipe(SwipeGesture gesture){
 		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			FingerGestures.SwipeDirection direction = gesture.Direction;
@@ -163,7 +171,7 @@ public class PlayerController : Singleton<PlayerController>{
 			
 		}
 		}
-	}
+	}*/
 	
 	/// <summary>
 	/// Reset player position and physics

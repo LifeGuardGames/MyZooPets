@@ -58,15 +58,13 @@ public class PetGameData{
     }
 
 	/// <summary>
-	/// This function is called after the game data has
-	/// been loaded.  It will call individual game data
-	/// version checks so that save data can properly
-	/// be updated when the app is updated.
+	/// This function is called after the game data has been loaded. It will call individual game data
+	/// version checks so that save data can properly be updated when the app is updated.
 	/// </summary>
 	public void VersionCheck(Version currentDataVersion) {
+		Tutorial.VersionCheck(currentDataVersion);
 //		GatingProgress.VersionCheck(currentDataVersion);
 //		Calendar.VersionCheck(currentDataVersion);
 //		PetInfo.VersionCheck(currentDataVersion);
-//		Tutorial.VersionCheck(currentDataVersion);
 	}
 }

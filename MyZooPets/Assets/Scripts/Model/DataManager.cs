@@ -297,8 +297,7 @@ public class DataManager : Singleton<DataManager>{
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
 		//Deleting all data that is less than 2.0.0
-		Version version200 = new Version("2.0.0");	//DONT TOUCH THIS
-		if(currentDataVersion < version200){
+		if(currentDataVersion < new Version("2.0.0")){	//DONT TOUCH THIS
 			PlayerPrefs.DeleteKey("GameData");
 		}
 	}

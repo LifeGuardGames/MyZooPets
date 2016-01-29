@@ -71,7 +71,6 @@ public class NinjaTutorial : MinigameTutorial {
                 Debug.LogError("Ninja tutorial has an unhandled step: " + step);
                 break;
         }
-
     }
 
 	private void NinjaTriggerFirstCutEventHandler(object sender, EventArgs args){
@@ -96,7 +95,8 @@ public class NinjaTutorial : MinigameTutorial {
 		}
 		numOfTriggersCut++;
 		//end the tutorial when all triggers are cut
-		if (numOfTriggersCut >= 6)
+		if(numOfTriggersCut >= 6) {
 			Advance();
+		}
 	}
 }

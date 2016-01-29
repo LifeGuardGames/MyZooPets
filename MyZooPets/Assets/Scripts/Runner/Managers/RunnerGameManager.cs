@@ -1,13 +1,12 @@
-/* 
- * Description:
- * The sort of 'center' of the game.
- * However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
- * This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
- * You must 'unglue' everything you want to use elsewhere, sorry!
- * The upside is it's a bit faster.
- * 
- * Handles Resetting, Game Ending, and TimeScale.
- */
+/// <summary>
+// The sort of 'center' of the game.
+// However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
+// This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
+// You must 'unglue' everything you want to use elsewhere, sorry!
+// The upside is it's a bit faster.
+// 
+// Handles Resetting, Game Ending, and TimeScale.
+/// </summary>
 using UnityEngine;
 using System;
 using System.Collections;

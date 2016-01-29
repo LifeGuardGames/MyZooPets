@@ -39,38 +39,31 @@ public class RunnerTutorial : MinigameTutorial {
     // ProcessStep()
     //---------------------------------------------------       
     protected override void ProcessStep( int nStep ) {
-        // location and type of the tutorial message
-        Vector3 vPos = new Vector3();
-        string strResourceKey = Tutorial.POPUP_STD_WITH_IMAGE;
-        vPos = POS_TOP; 
-        Hashtable option = new Hashtable();
+        switch(nStep) {
+		case 0:
+			GameObject goResource1 = Resources.Load("RunnerTutorialPanelTop") as GameObject;
+			goPopup = GameObjectUtils.AddChild(GameObject.Find("Anchor-Center"), goResource1);
+			PlayerController.OnJump += TutorialJump;
+            break;
+        case 1:
+			GameObject goResource2 = Resources.Load("RunnerTutorialPanelBottom") as GameObject;
+			goPopup = GameObjectUtils.AddChild(GameObject.Find("Anchor-Center"), goResource2);
+			PlayerController.OnDrop += TutorialDrop;
+            break;
+        case 2:
+            TutorialPopup.Callback button1Fuction = delegate(){
+                Advance();
+            };
 
-        switch ( nStep ) {
-            case 0:
-                PlayerController.OnJump += TutorialJump;
-				option.Add(TutorialPopupFields.Message, "Swipe up to Jump");
-                option.Add(TutorialPopupFields.SpriteAtlas, "RunnerAtlas");
-                option.Add(TutorialPopupFields.SpriteName, "tutorialRunnerSwipeUp");
-                break;
-            case 1:
-                PlayerController.OnDrop += TutorialDrop;
-                option.Add(TutorialPopupFields.SpriteAtlas, "RunnerAtlas");
-                option.Add(TutorialPopupFields.SpriteName, "tutorialRunnerSwipeDown");
-                break;
-            case 2:
-                TutorialPopup.Callback button1Fuction = delegate(){
-                    Advance();
-                };
-
-                option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
-                strResourceKey = Tutorial.POPUP_LONG_WITH_BUTTON;      
-                break;
-            default:
-                Debug.Log("Runner tutorial has an unhandled step: " + nStep );
-                break;      
-        }       
-
-        ShowPopup(strResourceKey, vPos, option);
+			Hashtable option = new Hashtable();
+            option.Add(TutorialPopupFields.Button1Callback, button1Fuction);
+            string strResourceKey = Tutorial.POPUP_LONG_WITH_BUTTON;      
+			ShowPopup(strResourceKey, POS_TOP, option);
+            break;
+        default:
+            Debug.Log("Runner tutorial has an unhandled step: " + nStep );
+            break;      
+        }
     }
 
     private void TutorialJump(object sender, EventArgs args){

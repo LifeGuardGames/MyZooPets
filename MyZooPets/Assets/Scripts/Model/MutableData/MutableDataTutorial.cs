@@ -11,6 +11,7 @@ using System.Collections.Generic;
 public class MutableDataTutorial{
     public List<string> ListPlayed {get; set;}	// list of tutorials that have been played	
 	public DateTime Tutorial1DonePlayPeriod {get; set;}
+	public bool RunnerTutorialVersionCheckDone {get; set;}
 
 	/// <summary>
 	/// Determines whether tutorial part 1 is done
@@ -55,5 +56,14 @@ public class MutableDataTutorial{
     private void Init(){
 		ListPlayed = new List<string>();
 		Tutorial1DonePlayPeriod = DateTime.MinValue;
+		RunnerTutorialVersionCheckDone = false;
     }
+
+	public void VersionCheck(Version currentDataVersion){
+		if(currentDataVersion <= new Version("2.1.5") && !RunnerTutorialVersionCheckDone){
+			// Changed runner tutorial, so show tutorial again, soft remove
+			ListPlayed.Remove(RunnerTutorial.TUT_KEY);
+			RunnerTutorialVersionCheckDone = true;
+		}
+	}
 }

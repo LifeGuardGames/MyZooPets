@@ -29,7 +29,7 @@ public abstract class Tutorial{
 
 	private List<GameObject> listCanProcess = new List<GameObject>(); // list of objects that can be processed as input
 	private GameObject goSpotlight;	// current (and only) spotlight object this tutorial is highlighting
-	private GameObject goPopup; // current (and only) tutorial popup
+	protected GameObject goPopup; // current (and only) tutorial popup
 	private GameObject goFingerHint; //current finger hint
 	private GameObject goRetentionPet;	// Current retention pet sprite
 	private int currentStep; // step the tutorial is currently on

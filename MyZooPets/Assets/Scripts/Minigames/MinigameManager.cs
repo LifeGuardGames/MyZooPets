@@ -512,4 +512,14 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		
 		return rewardAmount;
 	}
+
+	public void ShowAd(){
+		AdManager.Instance.ShowAd (delegate(bool result) {
+			if (result) {		// Finished ads
+				// TODO Finishe here
+			} else {			// Ads failed somehow
+
+			}
+		});
+	}
 }

@@ -7,13 +7,18 @@ public class AdManager : Singleton<AdManager> {
 	[SerializeField] string androidGameID = "105908";
 
 	public delegate void AdCallback<T>(T value); // Populated by callers
+	private bool isTestMode = false;
 
 	void Awake(){
+		#if UNITY_EDITOR
+		isTestMode = true;
+		Debug.LogWarning("Editor Mode - turning ads testing mode ON");
+		#endif
 		#if UNITY_ANDROID
-		Advertisement.Initialize(androidGameID, true);
+		Advertisement.Initialize(androidGameID, isTestMode);
 		#endif
 		#if UNITY_IOS
-		Advertisement.Initialize(iOSGameID, true);
+		Advertisement.Initialize(iOSGameID, isTestMode);
 		#endif
 	}
 

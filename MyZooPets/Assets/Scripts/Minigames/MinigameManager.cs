@@ -61,6 +61,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 
 	protected string quitGameScene = null;	// Over write this in child on awake
 
+	public bool IsNewGameAd = false;		// Used to show ads only once per new game
+
 	//Return player score
 	public virtual int GetScore(){
 		return score;	
@@ -100,7 +102,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//Toggle bTutorialOverride
 	protected void SetTutorialOverride(bool bOverride){
 		tutorialOverride = bOverride;
-	}	
+	}
 
 	//Change the game state	
 	private void SetGameState(MinigameStates eNewState){
@@ -179,9 +181,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//---------------------------------------------------	
 	private void NewGame(){
 		// alert anything that may care about a new game starting
-		if(OnNewGame != null)
+		if(OnNewGame != null){
 			OnNewGame(this, EventArgs.Empty);
-		
+		}
+
+		IsNewGameAd = true;
+
 		// wait one frame so that cleanup from the previous game can happen properly
 		StartCoroutine(NewGameAfterFrame());
 	}
@@ -511,15 +516,5 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 //		Debug.Log("Reward for " + rewardType + " is " + rewardAmount);
 		
 		return rewardAmount;
-	}
-
-	public void ShowAd(){
-		AdManager.Instance.ShowAd (delegate(bool result) {
-			if (result) {		// Finished ads
-				// TODO Finishe here
-			} else {			// Ads failed somehow
-
-			}
-		});
 	}
 }

@@ -19,4 +19,10 @@ public class MinigamePopup_GameOver_DoctorMatch : MinigamePopup_GameOver{
 	protected override void _RewardBadges(){
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, DoctorMatchManager.Instance.NumOfCorrectDiagnose, true);
 	}
+
+	protected override bool CheckAndFlagNewGameAd(){
+		bool aux = DoctorMatchManager.Instance.IsNewGameAd;
+		DoctorMatchManager.Instance.IsNewGameAd = false;
+		return aux;
+	}
 }

@@ -9,8 +9,10 @@ using System;
 
 public abstract class MinigamePopup_GameOver : MinigamePopup{
 	// ---------- Pure Abstract -------------------------
-	protected abstract int GetScore();								// return the score for this minigame
-	protected abstract int GetReward(MinigameRewardTypes eType);	// get the reward for a type
+	protected abstract int GetScore();
+	// return the score for this minigame
+	protected abstract int GetReward(MinigameRewardTypes eType);
+	// get the reward for a type
 	// --------------------------------------------------
 	
 	// labels for the stars and xp rewards
@@ -27,7 +29,11 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	
 	// the buttons for the game over screen don't come up until the appropriate time
 	public PositionTweenToggle tweenButtons;
-	public int nFreebie; // used for testing purposes
+	public int nFreebie;
+	// used for testing purposes
+
+	public GameObject adButton;
+	public GameObject removeAdButton;
 
 	void Start(){
 		// Attach event to only show the game over buttons when all rewards are rewarded
@@ -64,8 +70,8 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 		
 		// award the actual xp and money
 		StatsController.Instance.ChangeStats(deltaPoints: rewardXP, pointsLoc: vPosXP,
-		                                     deltaStars: rewardMoney, starsLoc: vPosMoney,
-		                                     animDelay: 0.5f);
+			deltaStars: rewardMoney, starsLoc: vPosMoney,
+			animDelay: 0.5f);
 
 		FireCrystalManager.Instance.RewardShards(rewardShard);
 
@@ -74,14 +80,39 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 
 	protected abstract void _RewardBadges();
 
+	protected abstract bool CheckAndFlagNewGameAd();
+
 	protected override void _OnHide(){
 		HideButtons();
 	}
 
+	public void OnAdButtonClicked(){
+		
+		adButton.SetActive(false);
+		removeAdButton.SetActive(false);
+
+		AdManager.Instance.ShowAd (delegate(bool result) {
+			if (result) {		// Finished ads
+				FireCrystalManager.Instance.RewardShards(10);
+			} else {			// Ads failed somehow
+				// Dont do anything
+			}
+		});
+	}
+
+	public void OnRemoveAdButtonClicked(){
+
+	}
+
 	public void ShowButtons(object obj, EventArgs e){
 		tweenButtons.Show();
+
+		// Check to see if ads needs to be shown
+		bool isRemoveAdButtons = DataManager.Instance.IsAdsEnabled && AdManager.Instance.IsAdReady() && CheckAndFlagNewGameAd();
+		adButton.SetActive(isRemoveAdButtons);
+		removeAdButton.SetActive(isRemoveAdButtons);
 	}
-	
+
 	public void HideButtons(){
 		tweenButtons.Hide();
 	}

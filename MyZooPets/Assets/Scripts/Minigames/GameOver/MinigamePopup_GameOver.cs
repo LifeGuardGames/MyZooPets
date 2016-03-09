@@ -101,7 +101,7 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void OnRemoveAdButtonClicked(){
-
+		LGGIAPManager.Instance.PurchaseRemoveAds();
 	}
 
 	public void ShowButtons(object obj, EventArgs e){

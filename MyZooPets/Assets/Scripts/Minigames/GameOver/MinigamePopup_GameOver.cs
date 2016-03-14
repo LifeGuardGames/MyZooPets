@@ -32,8 +32,9 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	public int nFreebie;
 	// used for testing purposes
 
-	public TweenToggle adButtonTween;
-	public GameObject removeAdButton;
+	public TweenToggle adParentTween;
+
+	public LGGIAPController IAPController;
 
 	void Start(){
 		// Attach event to only show the game over buttons when all rewards are rewarded
@@ -87,8 +88,7 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void OnAdButtonClicked(){
-		adButtonTween.gameObject.SetActive(false);
-		removeAdButton.SetActive(false);
+		adParentTween.gameObject.SetActive(false);
 
 		AdManager.Instance.ShowAd(delegate(bool result){
 			if(result){		// Finished ads
@@ -101,7 +101,10 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void OnRemoveAdButtonClicked(){
-		LGGIAPManager.Instance.PurchaseRemoveAds();
+		LGGIAPController.OnSuccessDelegate del = delegate(){
+			adParentTween.gameObject.SetActive(false);
+		};
+		IAPController.ShowConfirmPanel(del);
 	}
 
 	public void ShowButtons(object obj, EventArgs e){
@@ -109,14 +112,13 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 
 		// Check to see if ads needs to be shown
 		bool isRemoveAdButtons = DataManager.Instance.IsAdsEnabled && AdManager.Instance.IsAdReady() && CheckAndFlagNewGameAd();
-		adButtonTween.gameObject.SetActive(isRemoveAdButtons);
+		adParentTween.gameObject.SetActive(isRemoveAdButtons);
 		if(isRemoveAdButtons){
-			adButtonTween.Show();
+			adParentTween.Show();
 		}
 		else{
-			adButtonTween.Hide();
+			adParentTween.Hide();
 		}
-		removeAdButton.SetActive(isRemoveAdButtons);
 	}
 
 	public void HideButtons(){

@@ -15,11 +15,17 @@ public class LGGIAPController : MonoBehaviour {
 	public List<GameObject> loadingObjects;	// Objects to show when UI is waiting for transaction
 	public UILabel statusLabel;
 
+	public delegate void OnSuccessDelegate();	// Fires when remove ad is successful, for doing handling outside changes (hide ads UI from caller)
+	public OnSuccessDelegate successCallback;
+
 	private IAPUIState UIState;
 
 	void Start(){
 		LGGIAPManager.OnTransactionFinishedUI += OnTransactionComplete;
-		SwitchState(IAPUIState.Confirm);
+
+		foreach(GameObject go in loadingObjects){
+			go.SetActive(false);
+		}
 	}
 
 	void OnDestroy(){
@@ -41,7 +47,7 @@ public class LGGIAPController : MonoBehaviour {
 
 			string localizedPriceWithSymbol = LGGIAPManager.Instance.GetCurrencySymbol(LGGIAPManager.IAP_REMOVE_ADS) +
 			                                  LGGIAPManager.Instance.GetLocalizedPrice(LGGIAPManager.IAP_REMOVE_ADS);
-			statusLabel.text = String.Format(Localization.Localize("IAP_SUCCESS"), localizedPriceWithSymbol);
+			statusLabel.text = String.Format(Localization.Localize("IAP_CONFIRM"), localizedPriceWithSymbol);
 			break;
 		case IAPUIState.WaitingForTransaction:
 			// Show all waiting objects
@@ -69,6 +75,7 @@ public class LGGIAPController : MonoBehaviour {
 		case InAppPurchaseState.Purchased:
 		case InAppPurchaseState.Restored:
 			statusLabel.text = Localization.Localize("IAP_SUCCESS");
+			successCallback();
 			SwitchState(IAPUIState.Completed);
 			break;
 		case InAppPurchaseState.Deferred:
@@ -126,7 +133,9 @@ public class LGGIAPController : MonoBehaviour {
 		}
 	}
 
-	public void ShowConfirmPanel(){
+	public void ShowConfirmPanel(OnSuccessDelegate successDelegate){
+		successCallback = successDelegate;
+		SwitchState(IAPUIState.Confirm);
 		purchaseTween.Show();
 	}
 

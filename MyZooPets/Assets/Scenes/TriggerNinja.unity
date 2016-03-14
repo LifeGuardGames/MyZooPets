@@ -218,7 +218,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 14302311}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -48, z: -5}
+  m_LocalPosition: {x: 0, y: 13, z: -5}
   m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 479891143}
@@ -804,8 +804,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1020919712}
-  functionName: RestartGame
+  target: {fileID: 479891142}
+  functionName: OnOkayButtonClicked
   trigger: 0
   includeChildren: 0
 --- !u!114 &110143181
@@ -1049,8 +1049,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1020919712}
-  functionName: QuitGame
+  target: {fileID: 479891142}
+  functionName: OnExitButtonClicked
   trigger: 0
   includeChildren: 0
 --- !u!114 &139979611
@@ -6397,7 +6397,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 479891142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2323, z: -6}
+  m_LocalPosition: {x: 0, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1779601938}
@@ -6433,11 +6433,11 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: 5489.81836
+    e13: 3166.81836
     e20: 0
     e21: 0
     e22: 384
-    e23: 6
+    e23: 50
     e30: 0
     e31: 0
     e32: 0
@@ -6462,15 +6462,15 @@ MonoBehaviour:
   ignoreTimeScale: 0
   isUsingDemultiplexer: 0
   blockUI: 1
-  startsHidden: 0
+  startsHidden: 1
   hideDeltaX: 0
-  hideDeltaY: 0
+  hideDeltaY: -1000
   hideDeltaZ: 0
   showDuration: .5
   hideDuration: .5
   showDelay: 0
   hideDelay: 0
-  easeHide: 26
+  easeHide: 4
   easeShow: 27
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
@@ -16480,7 +16480,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 906475558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1120, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1258551272}
@@ -16510,8 +16510,8 @@ MonoBehaviour:
   goIconXP: {fileID: 19924818}
   tweenButtons: {fileID: 17496774}
   nFreebie: 0
-  adButtonTween: {fileID: 1288413640}
-  removeAdButton: {fileID: 1533109329}
+  adParentTween: {fileID: 1288413640}
+  IAPController: {fileID: 479891146}
 --- !u!1 &907458843
 GameObject:
   m_ObjectHideFlags: 0
@@ -17739,7 +17739,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 923418091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -124, z: 6}
+  m_LocalPosition: {x: 0, y: -124, z: 0}
   m_LocalScale: {x: .400128007, y: .400128007, z: .999935985}
   m_Children:
   - {fileID: 1428261967}
@@ -17787,8 +17787,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4ff40739c7904ca26c14ffbdc4176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 906475558}
-  functionName: OnRemoveAdButtonClicked
+  target: {fileID: 479891142}
+  functionName: OnRestorePurchaseClicked
   trigger: 0
   includeChildren: 0
 --- !u!114 &923418096
@@ -26124,7 +26124,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1223275601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -50, z: 0}
+  m_LocalPosition: {x: 0, y: 11, z: 0}
   m_LocalScale: {x: 107, y: 113, z: 1}
   m_Children: []
   m_Father: {fileID: 479891143}
@@ -26164,9 +26164,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlaying: 1
   speed: 100
-  isIntervalOn: 0
+  isIntervalOn: 1
   intervalIncrement: 45
-  intervalSpeed: .200000003
+  intervalSpeed: .0500000007
 --- !u!1 &1225706691
 GameObject:
   m_ObjectHideFlags: 0
@@ -26424,7 +26424,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1235285108}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 151.000122, z: 0}
+  m_LocalPosition: {x: 0, y: 212, z: 0}
   m_LocalScale: {x: 684.929993, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 479891143}
@@ -26602,7 +26602,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1263667515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -253.000122, z: 0}
+  m_LocalPosition: {x: 0, y: -192, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 139979607}
@@ -26620,7 +26620,7 @@ GameObject:
   - 4: {fileID: 1288413639}
   - 114: {fileID: 1288413640}
   m_Layer: 10
-  m_Name: Ads
+  m_Name: AdTween
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26659,8 +26659,8 @@ MonoBehaviour:
   isUsingDemultiplexer: 0
   blockUI: 1
   startsHidden: 1
-  hideDeltaX: 1
-  hideDeltaY: 1
+  hideDeltaX: -1
+  hideDeltaY: -1
   hideDeltaZ: 0
   showDuration: .300000012
   hideDuration: .300000012
@@ -35116,7 +35116,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1631155193}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 162.50354, z: -5}
+  m_LocalPosition: {x: 0, y: 223, z: -5}
   m_LocalScale: {x: 60, y: 60, z: 1}
   m_Children: []
   m_Father: {fileID: 479891143}
@@ -35187,7 +35187,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1654407152}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: -49.9998779, z: 0}
+  m_LocalPosition: {x: -1, y: 11, z: 0}
   m_LocalScale: {x: 614, y: 428, z: 1}
   m_Children: []
   m_Father: {fileID: 479891143}
@@ -40349,6 +40349,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1779601938}
   - 114: {fileID: 1779601939}
+  - 65: {fileID: 1779601940}
   m_Layer: 10
   m_Name: BGFade
   m_TagString: Untagged
@@ -40380,7 +40381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mColor: {r: 0, g: 0, b: 0, a: .509803951}
+  mColor: {r: 0, g: 0, b: 0, a: .784313738}
   mPivot: 4
   mDepth: 0
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
@@ -40390,6 +40391,18 @@ MonoBehaviour:
   mFillDirection: 4
   mFillAmount: 1
   mInvert: 0
+--- !u!65 &1779601940
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1779601937}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: .100000001}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1782374321
 GameObject:
   m_ObjectHideFlags: 0

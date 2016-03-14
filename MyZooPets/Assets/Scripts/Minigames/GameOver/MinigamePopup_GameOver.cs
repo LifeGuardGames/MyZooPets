@@ -32,7 +32,7 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	public int nFreebie;
 	// used for testing purposes
 
-	public GameObject adButton;
+	public TweenToggle adButtonTween;
 	public GameObject removeAdButton;
 
 	void Start(){
@@ -87,14 +87,14 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void OnAdButtonClicked(){
-		
-		adButton.SetActive(false);
+		adButtonTween.gameObject.SetActive(false);
 		removeAdButton.SetActive(false);
 
-		AdManager.Instance.ShowAd (delegate(bool result) {
-			if (result) {		// Finished ads
+		AdManager.Instance.ShowAd(delegate(bool result){
+			if(result){		// Finished ads
 				FireCrystalManager.Instance.RewardShards(10);
-			} else {			// Ads failed somehow
+			}
+			else{			// Ads failed somehow
 				// Dont do anything
 			}
 		});
@@ -109,7 +109,13 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 
 		// Check to see if ads needs to be shown
 		bool isRemoveAdButtons = DataManager.Instance.IsAdsEnabled && AdManager.Instance.IsAdReady() && CheckAndFlagNewGameAd();
-		adButton.SetActive(isRemoveAdButtons);
+		adButtonTween.gameObject.SetActive(isRemoveAdButtons);
+		if(isRemoveAdButtons){
+			adButtonTween.Show();
+		}
+		else{
+			adButtonTween.Hide();
+		}
 		removeAdButton.SetActive(isRemoveAdButtons);
 	}
 

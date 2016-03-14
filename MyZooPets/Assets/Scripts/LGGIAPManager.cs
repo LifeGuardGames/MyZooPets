@@ -2,7 +2,16 @@
 using System.Collections;
 using System;
 
+public class IAPEventArgs : EventArgs{
+	public InAppPurchaseState purchaseState;
+
+	public IAPEventArgs(InAppPurchaseState state){	// Event args constructor
+		purchaseState = state;
+	}
+}
+
 public class LGGIAPManager : Singleton<LGGIAPManager>{
+	public static EventHandler<IAPEventArgs> OnTransactionFinishedUI;
 
 	public const string IAP_REMOVE_ADS = "com.LifeGuardGames.WellapetsAsthma.IAP.RemoveAds";
 
@@ -11,6 +20,12 @@ public class LGGIAPManager : Singleton<LGGIAPManager>{
 		IOSInAppPurchaseManager.OnTransactionComplete += OnTransactionComplete;
 		IOSInAppPurchaseManager.OnRestoreComplete += OnRestoreComplete;
 		IOSInAppPurchaseManager.instance.LoadStore();
+	}
+
+	void OnDestroy(){
+		IOSInAppPurchaseManager.OnStoreKitInitComplete -= OnStoreKitInitComplete;
+		IOSInAppPurchaseManager.OnTransactionComplete -= OnTransactionComplete;
+		IOSInAppPurchaseManager.OnRestoreComplete -= OnRestoreComplete;
 	}
 
 	// Callback for intialize complete
@@ -47,6 +62,11 @@ public class LGGIAPManager : Singleton<LGGIAPManager>{
 			Debug.Log("Transaction failed with error, description: " + response.Error.Description);
 			break;
 		}
+
+		if(OnTransactionFinishedUI != null){
+			OnTransactionFinishedUI(this, new IAPEventArgs(response.State));
+		}
+
 		// TODO need this?
 		IOSNativePopUpManager.showMessage("Store Kit Response", "product " + response.ProductIdentifier + " state: " + response.State.ToString());
 	}
@@ -87,7 +107,7 @@ public class LGGIAPManager : Singleton<LGGIAPManager>{
 		}
 	}
 
-	private void RestorePurchases(){
+	public void RestorePurchases(){
 		if(IOSInAppPurchaseManager.Instance.IsStoreLoaded){
 			Debug.Log("RESTORING PURCHASES");
 			IOSInAppPurchaseManager.Instance.RestorePurchases();
@@ -95,5 +115,13 @@ public class LGGIAPManager : Singleton<LGGIAPManager>{
 		else{
 			Debug.LogError("Store not loaded yet for purchase.");
 		}
+	}
+
+	public string GetLocalizedPrice(string productID){
+		return IOSInAppPurchaseManager.Instance.GetProductById(productID).LocalizedPrice;
+	}
+
+	public string GetCurrencySymbol(string productID){
+		return IOSInAppPurchaseManager.Instance.GetProductById(productID).CurrencySymbol;
 	}
 }

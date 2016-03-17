@@ -912,7 +912,6 @@ Transform:
   - {fileID: 906475559}
   - {fileID: 356260361}
   - {fileID: 1168494342}
-  - {fileID: 479891143}
   m_Father: {fileID: 1991734814}
   m_RootOrder: 2
 --- !u!114 &128884711
@@ -6265,7 +6264,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 479891142}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -50}
+  m_LocalPosition: {x: 0, y: -1759.00012, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1779601938}
@@ -6276,8 +6275,8 @@ Transform:
   - {fileID: 1263667516}
   - {fileID: 14302312}
   - {fileID: 1223275602}
-  m_Father: {fileID: 128884710}
-  m_RootOrder: 5
+  m_Father: {fileID: 906475559}
+  m_RootOrder: 3
 --- !u!114 &479891144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6302,7 +6301,7 @@ MonoBehaviour:
     e10: 0
     e11: 384
     e12: 0
-    e13: 3166.81836
+    e13: 4925.81836
     e20: 0
     e21: 0
     e22: 384
@@ -16406,6 +16405,7 @@ Transform:
   - {fileID: 1258551272}
   - {fileID: 17496773}
   - {fileID: 1288413639}
+  - {fileID: 479891143}
   m_Father: {fileID: 128884710}
   m_RootOrder: 2
 --- !u!114 &906475560
@@ -17645,7 +17645,6 @@ GameObject:
   - 114: {fileID: 923418095}
   - 65: {fileID: 923418094}
   - 114: {fileID: 923418093}
-  - 114: {fileID: 923418098}
   m_Layer: 10
   m_Name: RestoreButton
   m_TagString: Untagged
@@ -17661,7 +17660,7 @@ Transform:
   m_GameObject: {fileID: 923418091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -124, z: 0}
-  m_LocalScale: {x: .400128007, y: .400128007, z: 1}
+  m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children:
   - {fileID: 1428261967}
   - {fileID: 572094943}
@@ -17745,44 +17744,6 @@ MonoBehaviour:
   hoverSprite: button4Blue
   pressedSprite: button4Blue
   disabledSprite: button4Blue
---- !u!114 &923418098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 923418091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 0
-  cullWhileDragging: 0
-  worldToLocal:
-    e00: 959.692871
-    e01: 0
-    e02: 0
-    e03: 2.42346692
-    e10: 0
-    e11: 959.692871
-    e12: 0
-    e13: 8704.25977
-    e20: 0
-    e21: 0
-    e22: 384
-    e23: 50
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
 --- !u!1 &946550368
 GameObject:
   m_ObjectHideFlags: 0
@@ -31769,7 +31730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mColor: {r: 1, g: 1, b: 1, a: 1}
   mPivot: 4
-  mDepth: 17
+  mDepth: 15
   mAtlas: {fileID: 11400000, guid: 54a37b71d4ca29348a881621fbb36d1e, type: 2}
   mSpriteName: button4Blue
   mFillCenter: 1

@@ -1,11 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//---------------------------------------------------
-// MinigamePopup_GameOver_Runner
-// Game over screen for runner game.
-//---------------------------------------------------
-
 public class MinigamePopup_GameOver_Runner : MinigamePopup_GameOver {	
 	protected override int GetReward (MinigameRewardTypes eType) {
 		return RunnerGameManager.Instance.GetReward( eType );
@@ -15,7 +10,7 @@ public class MinigamePopup_GameOver_Runner : MinigamePopup_GameOver {
 		return RunnerGameManager.Instance.GetScore();
 	}
 
-	protected override void _RewardBadges(){
+	protected override void RewardBadges(){
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, RunnerGameManager.Instance.GetScore(), true);
 	}
 

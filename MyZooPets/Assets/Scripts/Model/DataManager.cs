@@ -311,12 +311,12 @@ public class DataManager : Singleton<DataManager>{
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
-		//Deleting all data that is less than v2.0.0
-		if(currentDataVersion < new Version("2.0.0")){	//DONT TOUCH THIS
+		//Deleting all data that is less than v2.0.0	//DONT TOUCH THIS
+		if(currentDataVersion < new Version("2.0.0")) {
 			PlayerPrefs.DeleteKey("GameData");
 		}
 
-		// Disabling ads for all users below v2.2.0 (premium users)
+		// Disabling ads for all users below v2.2.0 (premium users)		//DONT TOUCH THIS
 		if(currentDataVersion < new Version ("2.2.0")) {
 			IsAdsEnabled = false;
 		}

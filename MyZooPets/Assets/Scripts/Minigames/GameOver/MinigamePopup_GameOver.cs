@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
-
 //---------------------------------------------------
 // MinigamePopup_GameOver
 // Shown when the minigame is over.
 //---------------------------------------------------
-using System;
-
 public abstract class MinigamePopup_GameOver : MinigamePopup{
-	// ---------- Pure Abstract -------------------------
-	protected abstract int GetScore();
-	// return the score for this minigame
-	protected abstract int GetReward(MinigameRewardTypes eType);
-	// get the reward for a type
-	// --------------------------------------------------
-	
+	protected abstract int GetScore();								// return the score for this minigame
+	protected abstract int GetReward(MinigameRewardTypes eType);	// get the reward for a type
+	protected abstract void RewardBadges();
+	protected abstract bool CheckAndFlagNewGameAd();
+
 	// labels for the stars and xp rewards
 	public UILabel labelXP;
 	public UILabel labelStars;
@@ -29,25 +25,22 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	
 	// the buttons for the game over screen don't come up until the appropriate time
 	public PositionTweenToggle tweenButtons;
-	public int nFreebie;
-	// used for testing purposes
+	public int nFreebie;											// used for testing purposes
 
+	// Ads and IAP
 	public TweenToggle adParentTween;
-
 	public LGGIAPController IAPController;
 
 	void Start(){
-		// Attach event to only show the game over buttons when all rewards are rewarded
-		RewardManager.OnAllRewardsDone += ShowButtons;
+		RewardManager.OnAllRewardsDone += ShowButtons;				// Attach event to only show the game over buttons when all rewards are rewarded
 	}
 
 	void OnDestroy(){
 		RewardManager.OnAllRewardsDone -= ShowButtons;
 	}
 
+	// the game over screen is showing, so we need to set our stats properly
 	protected override void _OnShow(){
-		// the game over screen is showing, so we need to set our stats properly
-		
 		// set the score
 		int score = GetScore();
 		string scoreText = StringUtils.FormatNumber(score);
@@ -75,13 +68,8 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 			animDelay: 0.5f);
 
 		FireCrystalManager.Instance.RewardShards(rewardShard);
-
-		_RewardBadges();
+		RewardBadges();
 	}
-
-	protected abstract void _RewardBadges();
-
-	protected abstract bool CheckAndFlagNewGameAd();
 
 	protected override void _OnHide(){
 		HideButtons();

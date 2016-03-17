@@ -45,6 +45,7 @@ public class LGGIAPController : MonoBehaviour {
 			foreach(GameObject go in loadingObjects){
 				go.SetActive(false);
 			}
+			statusLabel.gameObject.SetActive(true);
 			doneButton.SetActive(false);
 			statusLabel.text = String.Format(Localization.Localize("IAP_CONFIRM"), LGGIAPManager.Instance.GetLocalizedPrice(LGGIAPManager.IAP_REMOVE_ADS));
 			break;
@@ -56,6 +57,7 @@ public class LGGIAPController : MonoBehaviour {
 			foreach(GameObject go in loadingObjects){
 				go.SetActive(true);
 			}
+			statusLabel.gameObject.SetActive(false);
 			doneButton.SetActive(false);
 			break;
 		case IAPUIState.Completed:
@@ -66,6 +68,7 @@ public class LGGIAPController : MonoBehaviour {
 			foreach(GameObject go in loadingObjects){
 				go.SetActive(false);
 			}
+			statusLabel.gameObject.SetActive(true);
 			doneButton.SetActive(true);
 			break;
 		}

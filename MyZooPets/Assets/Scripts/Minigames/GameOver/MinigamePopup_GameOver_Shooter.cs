@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
-
 	protected override int GetReward(MinigameRewardTypes eType){
 		return ShooterGameManager.Instance.GetReward(eType);
 	}
@@ -11,7 +10,7 @@ public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
 		return ShooterGameManager.Instance.GetScore();
 	}
 
-	protected override void _RewardBadges(){
+	protected override void RewardBadges(){
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Shooter, ShooterGameManager.Instance.GetScore(), true);
 	}
 

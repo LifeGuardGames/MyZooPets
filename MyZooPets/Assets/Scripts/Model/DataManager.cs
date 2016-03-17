@@ -75,10 +75,8 @@ public class DataManager : Singleton<DataManager>{
 			return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
 		}
 		set{
-			if(value){
-				PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
-				PlayerPrefs.Save();
-			}
+			PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
+			PlayerPrefs.Save();
 		}
 	}
 

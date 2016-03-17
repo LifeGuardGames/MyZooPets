@@ -72,11 +72,12 @@ public class DataManager : Singleton<DataManager>{
 			if(!PlayerPrefs.HasKey("AdsEnabled")){
 				PlayerPrefs.SetInt("AdsEnabled", 1);
 			}
-			return PlayerPrefs.GetInt("AdsEnabled", 1) > 0;
+			return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
 		}
 		set{
 			if(value){
 				PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
+				PlayerPrefs.Save();
 			}
 		}
 	}

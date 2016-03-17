@@ -13,6 +13,7 @@ public class LGGIAPController : MonoBehaviour {
 	public TweenToggle purchaseTween;	// Used for confirm panel
 	public List<GameObject> activeObjects;	// Objects to show when UI is active
 	public List<GameObject> loadingObjects;	// Objects to show when UI is waiting for transaction
+	public GameObject doneButton;	// For use when the confirmation panel is showing
 	public UILabel statusLabel;
 
 	public delegate void OnSuccessDelegate();	// Fires when remove ad is successful, for doing handling outside changes (hide ads UI from caller)
@@ -44,10 +45,8 @@ public class LGGIAPController : MonoBehaviour {
 			foreach(GameObject go in loadingObjects){
 				go.SetActive(false);
 			}
-
-			string localizedPriceWithSymbol = LGGIAPManager.Instance.GetCurrencySymbol(LGGIAPManager.IAP_REMOVE_ADS) +
-			                                  LGGIAPManager.Instance.GetLocalizedPrice(LGGIAPManager.IAP_REMOVE_ADS);
-			statusLabel.text = String.Format(Localization.Localize("IAP_CONFIRM"), localizedPriceWithSymbol);
+			doneButton.SetActive(false);
+			statusLabel.text = String.Format(Localization.Localize("IAP_CONFIRM"), LGGIAPManager.Instance.GetLocalizedPrice(LGGIAPManager.IAP_REMOVE_ADS));
 			break;
 		case IAPUIState.WaitingForTransaction:
 			// Show all waiting objects
@@ -57,15 +56,17 @@ public class LGGIAPController : MonoBehaviour {
 			foreach(GameObject go in loadingObjects){
 				go.SetActive(true);
 			}
+			doneButton.SetActive(false);
 			break;
 		case IAPUIState.Completed:
 			// Show all active objects
 			foreach(GameObject go in activeObjects){
-				go.SetActive(true);
+				go.SetActive(false);
 			}
 			foreach(GameObject go in loadingObjects){
 				go.SetActive(false);
 			}
+			doneButton.SetActive(true);
 			break;
 		}
 	}
@@ -89,7 +90,7 @@ public class LGGIAPController : MonoBehaviour {
 		}
 	}
 
-	public void OnOkayButtonClicked(){
+	public void OnYesButtonClicked(){
 		switch(UIState){
 		case IAPUIState.Confirm:
 			LGGIAPManager.Instance.PurchaseRemoveAds();
@@ -99,12 +100,12 @@ public class LGGIAPController : MonoBehaviour {
 			HideConfirmPanel();
 			break;
 		default:
-			Debug.LogError("Bad UI state okay button clicked: " + UIState.ToString());
+			Debug.LogError("Bad UI state yes button clicked: " + UIState.ToString());
 			break;
 		}
 	}
 
-	public void OnExitButtonClicked(){
+	public void OnNoButtonClicked(){
 		switch(UIState){
 		case IAPUIState.Confirm:
 			HideConfirmPanel();
@@ -113,7 +114,21 @@ public class LGGIAPController : MonoBehaviour {
 			HideConfirmPanel();
 			break;
 		default:
-			Debug.LogError("Bad UI state exit button clicked: " + UIState.ToString());
+			Debug.LogError("Bad UI state no button clicked: " + UIState.ToString());
+			break;
+		}
+	}
+
+	public void OnDoneButtonClicked(){
+		switch(UIState){
+		case IAPUIState.Confirm:
+			HideConfirmPanel();
+			break;
+		case IAPUIState.Completed:
+			HideConfirmPanel();
+			break;
+		default:
+			Debug.LogError("Bad UI state done button clicked: " + UIState.ToString());
 			break;
 		}
 	}

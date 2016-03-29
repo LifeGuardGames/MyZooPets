@@ -270,12 +270,14 @@ public class Analytics : MonoBehaviour {
 
 	public void TimeBetweenPlaySession(int hours){
 		if(isAnalyticsEnabled){
-			if(hours > 0){
-				GA_Design.NewEvent("Time between session:" + hours.ToString());
-				GA_Design.NewEvent("Avg time between session", hours);
-			}
-			else{
-				GA_Design.NewEvent("Time between session:" + "< 1 hr");
+			if(hours < 2000){
+				if(hours > 0){
+					GA_Design.NewEvent("Time between session:" + hours.ToString());
+					GA_Design.NewEvent("Avg time between session", hours);
+				}
+				else{
+					GA_Design.NewEvent("Time between session:" + "< 1 hr");
+				}
 			}
 		}
 	}

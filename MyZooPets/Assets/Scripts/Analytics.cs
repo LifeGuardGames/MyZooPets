@@ -299,4 +299,10 @@ public class Analytics : MonoBehaviour {
 			GA_Design.NewEvent("Game Quit: " + scene);
 		}
 	}
+
+	public void BlowFire (string timesFireBlow){
+		if(isAnalyticsEnabled){
+			GA_Design.NewEvent("Fire Blow X Times: " + timesFireBlow);
+		}
+	}
 }

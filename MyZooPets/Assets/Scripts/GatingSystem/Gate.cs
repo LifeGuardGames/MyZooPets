@@ -119,6 +119,8 @@ public abstract class Gate : MonoBehaviour{
 	/// <returns><c>true</c>, if gate is destroyed, <c>false</c> otherwise.</returns>
 	/// <param name="damage">Damage.</param>
 	public bool DamageGate(int damage){
+		DataManager.Instance.GameData.PetInfo.amountOfFireBreathsDone++;
+		Analytics.Instance.BlowFire(DataManager.Instance.GameData.PetInfo.amountOfFireBreathsDone.ToString());
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
 		bool isDestroyed = GatingManager.Instance.DamageGate(gateID, damage);
 		

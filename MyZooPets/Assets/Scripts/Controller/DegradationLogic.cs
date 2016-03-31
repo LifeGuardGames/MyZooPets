@@ -52,11 +52,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	}
 
 	private void RefreshCheck(){
-		degradationTriggers = new List<DegradData>(); 
-
-		StatsDegradationCheck();
-		SetUpTriggers();
-//		UpdateNextPlayPeriodTime();
+		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+			degradationTriggers = new List<DegradData>(); 
+				
+			StatsDegradationCheck();
+			SetUpTriggers();
+//			UpdateNextPlayPeriodTime();
+		}
 	}
 
 	//use the method when a trigger has been destroyed by user
@@ -80,8 +82,13 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		// if there are no degradation triggers left, send out a task completion message
 		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)
 		// if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
-		if(degradationTriggers.Count == 0)
+		if(degradationTriggers.Count == 0){
 			WellapadMissionController.Instance.TaskCompleted("CleanRoom");
+			AudioManager.Instance.LowerBackgroundVolume(0.1f);
+			AudioManager.Instance.PlayClip("inhalerCapstone");
+			AudioManager.Instance.backgroundMusic = "bgBedroom";
+			AudioManager.Instance.StartCoroutine("PlayBackground");
+		}
 	}
 
 	/// <summary>
@@ -125,6 +132,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
         
 		// get the number of triggers to spawn based on the previously uncleaned triggers and the new ones to spawn, with a max
 		int numToSpawn = GetNumTriggersToSpawn();
+	
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
 		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
         
@@ -152,10 +160,14 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 			//spawn them at a pre define location ID is the order in which the data are created
 			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Partition, location.Position));
 		}                
-		
+		if(degradationTriggers.Count > 0){
+			AudioManager.Instance.backgroundMusic = "bgClinic";
+			AudioManager.Instance.StartCoroutine("PlayBackground");
+		}
 		if(OnRefreshTriggers != null){
 			OnRefreshTriggers(this, EventArgs.Empty);
 		}
+
 	}
     
 	//---------------------------------------------------
@@ -194,9 +206,9 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
 		MutableDataDegradation degradationData = DataManager.Instance.GameData.Degradation;
 
-		if(!isTriggerTutDone){
+		if(!isTriggerTutDone && !PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
 			int uncleanedTriggers = DataManager.Instance.GameData.Degradation.UncleanedTriggers;
-
+			Debug.Log("workib sghesdu");
 			// only spawn one trigger if trigger tutorial is not done yet
 			if(uncleanedTriggers == 0){
 				newTriggers = 1;

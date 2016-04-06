@@ -98,6 +98,10 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		}
 	}
 
+	public void Move(Vector3 dir){
+		LeanTween.moveY(this.gameObject, Camera.main.ScreenToWorldPoint(dir).y, 1.0f);
+	}
+
 	// shoots a bullet at the current position of the mouse or touch
 	public void Shoot(Vector3 dir){
 		AudioManager.Instance.PlayClip("shooterFire", variations: 3);

@@ -69,6 +69,9 @@ public class ShooterEnemy : MonoBehaviour{
 			PlayerShooterController.Instance.ChangeHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
+		else{
+			StartCoroutine(DestroyEnemy());
+		}
 	}
 
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI

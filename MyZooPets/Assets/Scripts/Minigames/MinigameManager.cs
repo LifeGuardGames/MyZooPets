@@ -381,8 +381,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		if(!IsTutorialRunning()){
 			// for now, current lives cannot go above the starting value...
 			int nCurLives = GetLives();
-			if(num > 0 && nCurLives == nStartingLives)
-				return;
 			
 			int nNew = lives + num;
 			SetLives(nNew);

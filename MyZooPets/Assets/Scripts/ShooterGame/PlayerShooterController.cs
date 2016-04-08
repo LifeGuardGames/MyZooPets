@@ -13,7 +13,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		Distressed
 	}
 
-	public int playerHealth = 10;				// player health
+	public int playerHealth = 2;				// player health
 
 	private PlayerStateTypes playerState = PlayerStateTypes.Neutral;
 	public PlayerStateTypes PlayerState{
@@ -39,7 +39,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 	// on reset change health to 10 and state to neutral
 	public void Reset(){
-		playerHealth = 10;
+		playerHealth = 1;
 		ChangeState(PlayerStateTypes.Neutral);
 		this.collider2D.enabled = true;
 	}
@@ -63,34 +63,67 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		}
 	}
 
+	public void ChangeFire(){
+		switch (playerHealth){
+		case 1:
+			currentFireBall = fireBallPrefabs[0];
+			break;
+		case 2:
+			currentFireBall = fireBallPrefabs[1];
+			break;
+		case 3:
+			currentFireBall = fireBallPrefabs[2];
+			break;
+		case 4:
+			currentFireBall = fireBallPrefabs[3];
+			break;
+		case 5:
+			currentFireBall = fireBallPrefabs[4];
+			break;
+		case 6:
+			currentFireBall = fireBallPrefabs[5];
+			break;
+		case 7:
+			currentFireBall = fireBallPrefabs[6];
+			break;
+		}	
+	}
+
 	// removes health and then calculates state
 	public void ChangeHealth(int deltaHealth){
 		if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
 			if(deltaHealth < 0){
 				AudioManager.Instance.PlayClip("shooterHurt");
 			}
-
-			playerHealth += deltaHealth;
-			if(playerHealth >= 11){
-				if(playerHealth > 15){
-					playerHealth = 15;	// Cap health at 15
+			if(deltaHealth < 0){
+				playerHealth += deltaHealth;
+			}
+			else{
+				if(playerHealth < deltaHealth){
+					playerHealth = deltaHealth;
+				}
+			}
+			if(playerHealth >= 4){
+				if(playerHealth > 7){
+					playerHealth = 7;	// Cap health at 15
 				}
 				ChangeState(PlayerStateTypes.Happy);
 			}
-			else if(playerHealth > 5 && playerHealth <= 10){
+			else if(playerHealth > 1 && playerHealth <= 3){
 				ChangeState(PlayerStateTypes.Neutral);
 			}
-			else if(playerHealth <= 5 && playerHealth > 0){
+			else if(playerHealth <= 1 && playerHealth > 0){
 				ChangeState(PlayerStateTypes.Distressed);
-			}
-			else if(playerHealth <= 0){
-				this.collider2D.enabled = false;
-				characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Dead);
 			}
 
 			if(playerHealth <= 0){
+				this.collider2D.enabled = false;
+				characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Dead);
 				// Trigger game over
-				ShooterGameManager.Instance.UpdateLives(-1);
+				ShooterGameManager.Instance.TriggerGameover();
+			}
+			else{
+				ChangeFire();
 			}
 		}
 		else{

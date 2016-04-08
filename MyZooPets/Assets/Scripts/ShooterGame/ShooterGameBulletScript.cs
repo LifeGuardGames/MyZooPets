@@ -8,6 +8,7 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	// the position the bullet will move toward
 	public Vector3 target;
 	public bool isPierceing;
+	public int health = 1;
 	
 	//find target aids the bullet in moving toward the fire position
 	public void FindTarget(){
@@ -31,7 +32,7 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "EnemyBullet"){
 			Destroy(collider.gameObject);
-			if(!isPierceing){
+			if(!isPierceing || health < 2){
 				Destroy(this.gameObject);
 			}
 		}

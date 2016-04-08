@@ -65,6 +65,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		}
 	}
 
+	public void TriggerGameover(){
+		GameOver();
+	}
+
 	protected override void _GameOver(){
 		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		if(waveNum != 0){	// HACK patching this up for now, please fix dylan, when wave num is 0 -> division by zero

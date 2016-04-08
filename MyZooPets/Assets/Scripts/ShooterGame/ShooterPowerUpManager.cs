@@ -16,7 +16,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 			PlayerShooterController.Instance.IsPiercing = false;
 			PlayerShooterController.Instance.IsTriple = false;
 			// Refresh its own state so it knows what size fireball to give
-			PlayerShooterController.Instance.ChangeState(PlayerShooterController.Instance.PlayerState);
+			PlayerShooterController.Instance.ChangeFire();
 			break;
 		case PowerUpType.Triple:
 			AudioManager.Instance.PlayClip("shooterPowerUp");

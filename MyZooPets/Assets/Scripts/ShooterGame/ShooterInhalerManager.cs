@@ -10,6 +10,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public GameObject badTimingObject;
 	public ParticleSystem goodTimingParticle;
 	public int missed = 0;
+	public int combo = 0;
 	public bool CanUseInhalerButton{
 		get{
 			return canUseInhalerButton;
@@ -29,15 +30,16 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 					proceed(this, EventArgs.Empty);
 				}
 			}
+			combo++;
 			ShooterGameManager.Instance.RemoveInhalerFingerTutorial();
 			ShooterGameManager.Instance.AddScore(10);
-			PlayerShooterController.Instance.ChangeHealth(3);
+			PlayerShooterController.Instance.ChangeHealth(combo);
 			CanUseInhalerButton =! CanUseInhalerButton;
 			goodTimingParticle.Play();
-
 			AudioManager.Instance.PlayClip("shooterButtonSuccess");
 		}
 		else if(CanUseInhalerButton == true){
+			combo = 0;
 			missed++;
 			Debug.Log(badTimingObject.name);
 			badTimingObject.SetActive(true);

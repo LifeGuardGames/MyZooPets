@@ -46,6 +46,10 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		spawningList = listToSpawn;
 		StartCoroutine("SpawnEnemies");
 	}
+	public void SpawnBoss(){
+		GameObject spawnPrefab = Resources.Load("ShooterEnemyBoss") as GameObject;
+		GameObjectUtils.AddChild(posList[0], spawnPrefab, isPreserveLayer:true);
+	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
 	IEnumerator SpawnEnemies(){
@@ -55,12 +59,17 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			}
 			yield return new WaitForSeconds(1.0f);
 			int randomPositionIndex = Random.Range(0, 3);
-
+			if(randomPositionIndex < 3){
 			//they are spawned in more of a weighted list fashion 
 			//so while one of the first waves has only one hard enemy in it it can spawn more than one
 			int randomSpawnIndex = Random.Range(0, spawningList.Count);
 			GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
 			GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
+			}
+			else{
+				GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
+				GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
+			}
 		}
 	}
 }

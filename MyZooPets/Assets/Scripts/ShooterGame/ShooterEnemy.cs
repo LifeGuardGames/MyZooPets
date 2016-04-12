@@ -74,7 +74,7 @@ public class ShooterEnemy : MonoBehaviour{
 			PlayerShooterController.Instance.ChangeHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
-		else{
+		else if(collider.gameObject.tag == "Wall"){
 			StartCoroutine(DestroyEnemy());
 		}
 	}

@@ -21,6 +21,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 	// builds a list of waves
 	public ImmutableDataWave buildWave(int waveNumber){
 		int difficulty = 0;
+		if(waveNumber == 1){
+			return DataLoaderWaves.GetData("Boss Wave_1");
+		}
 		if(waveNumber == 0){
 			difficulty = 0;
 		}
@@ -73,6 +76,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 		for(int i = 0; i < currWave.PowerUpCount; i++){
 			int rand = UnityEngine.Random.Range(3, 5);
 			waveEnemies.Add(enemyList[rand]);
+		}
+		if(currWave.BossRound == true){
+			ShooterSpawnManager.Instance.SpawnBoss();
 		}
 		ShooterSpawnManager.Instance.SpawnTriggers(waveEnemies);
 	}

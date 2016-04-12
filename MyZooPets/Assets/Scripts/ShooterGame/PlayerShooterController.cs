@@ -13,7 +13,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		Distressed
 	}
 
-	public int playerHealth = 2;				// player health
+	public int playerHealth = 5;				// player health
 
 	private PlayerStateTypes playerState = PlayerStateTypes.Neutral;
 	public PlayerStateTypes PlayerState{
@@ -39,7 +39,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 	// on reset change health to 10 and state to neutral
 	public void Reset(){
-		playerHealth = 1;
+		playerHealth = 5;
 		ChangeState(PlayerStateTypes.Neutral);
 		this.collider2D.enabled = true;
 	}
@@ -69,22 +69,45 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 			currentFireBall = fireBallPrefabs[0];
 			break;
 		case 2:
-			currentFireBall = fireBallPrefabs[1];
+			currentFireBall = fireBallPrefabs[0];
 			break;
 		case 3:
-			currentFireBall = fireBallPrefabs[2];
+			currentFireBall = fireBallPrefabs[0];
 			break;
 		case 4:
-			currentFireBall = fireBallPrefabs[3];
+			currentFireBall = fireBallPrefabs[2];
 			break;
 		case 5:
-			currentFireBall = fireBallPrefabs[4];
+			currentFireBall = fireBallPrefabs[2];
 			break;
 		case 6:
-			currentFireBall = fireBallPrefabs[5];
+			currentFireBall = fireBallPrefabs[3];
 			break;
 		case 7:
+			currentFireBall = fireBallPrefabs[3];
+			break;
+		case 8:
+			currentFireBall = fireBallPrefabs[4];
+			break;
+		case 9:
+			currentFireBall = fireBallPrefabs[4];
+			break;
+		case 10:
+			currentFireBall = fireBallPrefabs[5];
+			break;
+		case 11:
+			currentFireBall = fireBallPrefabs[5];
+			break;
+		case 12:
 			currentFireBall = fireBallPrefabs[6];
+			break;
+		case 13:
+			currentFireBall = fireBallPrefabs[6];
+			isPiercing = false;
+			break;
+		case 14:
+			currentFireBall = fireBallPrefabs[7];
+			isPiercing = true;
 			break;
 		}	
 	}
@@ -104,8 +127,8 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 				}
 			}
 			if(playerHealth >= 4){
-				if(playerHealth > 7){
-					playerHealth = 7;	// Cap health at 15
+				if(playerHealth > 14){
+					playerHealth = 14;	// Cap health at 15
 				}
 				ChangeState(PlayerStateTypes.Happy);
 			}
@@ -132,7 +155,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	public void Move(Vector3 dir){
-		LeanTween.moveY(this.gameObject, Camera.main.ScreenToWorldPoint(dir).y, 1.0f);
+		LeanTween.moveY(this.gameObject, Camera.main.ScreenToWorldPoint(dir).y, 0.5f);
 	}
 
 	// shoots a bullet at the current position of the mouse or touch

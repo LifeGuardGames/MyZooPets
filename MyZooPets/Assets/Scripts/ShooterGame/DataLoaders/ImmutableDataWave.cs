@@ -32,6 +32,10 @@ public class ImmutableDataWave {
 	public int PowerUpCount{
 		get{ return powerUpCount;}
 	}
+	private bool bossRound;
+	public bool BossRound{
+		get{return bossRound;;}
+	}
 
 	public ImmutableDataWave(string id, IXMLNode xmlNode, string error){
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
@@ -41,5 +45,6 @@ public class ImmutableDataWave {
 		mediumEnemiesCount = XMLUtils.GetInt(hashElements["MediumEnemies"] as IXMLNode, 0, error);
 		hardEnemiesCount = XMLUtils.GetInt(hashElements["HardEnemies"] as IXMLNode, 0, error);
 		powerUpCount = XMLUtils.GetInt(hashElements["PowerUps"] as IXMLNode, 0, error);
+		bossRound = XMLUtils.GetBool(hashElements["Bossround"] as IXMLNode);
 	}
 }

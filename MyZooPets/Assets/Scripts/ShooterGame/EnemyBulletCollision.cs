@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyBulletCollisionManager : MonoBehaviour {
+public class EnemyBulletCollision : MonoBehaviour {
 
 	public bool isTrap;
 
-	void OnCollisionEnter(Collision col){
+	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.tag =="Wall"){
 			if(isTrap){
 				StartCoroutine("TrapTimer");

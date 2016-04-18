@@ -14,7 +14,7 @@ public class ShooterPowerUpScript : MonoBehaviour{
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.gameObject.tag == "bullet"){
+		if(collider.gameObject.tag == "bullet" || collider.gameObject.tag == "Wall"){
 			Destroy(collider.gameObject);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
@@ -24,6 +24,7 @@ public class ShooterPowerUpScript : MonoBehaviour{
 
 			Destroy(this.gameObject, 1f);
 		}
+
 		else if(collider.gameObject.tag == "Player"){
 			// Parse the powerup
 			ShooterPowerUpManager.PowerUpType powerUp = (ShooterPowerUpManager.PowerUpType)Enum.Parse(typeof(ShooterPowerUpManager.PowerUpType), powerUpKey);

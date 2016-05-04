@@ -64,6 +64,7 @@ GameObject:
   - 114: {fileID: 11443278}
   - 58: {fileID: 5843278}
   - 212: {fileID: 21243278}
+  - 50: {fileID: 5080692}
   m_Layer: 2
   m_Name: ShooterFireBallMid2
   m_TagString: bullet
@@ -116,12 +117,27 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 143278}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.994195, y: 6.35511112, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 443272}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!50 &5080692
+Rigidbody2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 143278}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 0
+  m_FixedAngle: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!58 &5843278
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -171,6 +187,8 @@ MonoBehaviour:
   speed: 5
   target: {x: 0, y: 0, z: 0}
   isPierceing: 0
+  health: 1
+  canHitPlayer: 0
 --- !u!198 &19843274
 ParticleSystem:
   m_ObjectHideFlags: 1

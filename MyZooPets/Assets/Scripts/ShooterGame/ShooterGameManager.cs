@@ -10,6 +10,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	private float startTime;
 	public int waveNum = 0;
 	public bool inTutorial;
+	public int powerUpScore;
 
 	private ShooterUIManager shooterUI;
 
@@ -119,6 +120,11 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 
 	public void AddScore(int amount){
 		UpdateScore(amount);
+		powerUpScore += amount;
+		if(powerUpScore > 75){
+			powerUpScore = 0;
+			ShooterSpawnManager.Instance.SpawnPowerUp();
+		}
 	}
 
 	public void StartTimeTransition(){

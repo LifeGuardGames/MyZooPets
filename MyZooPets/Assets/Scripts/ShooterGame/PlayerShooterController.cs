@@ -191,6 +191,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 	// removes health from player when hit by an enemy smog ball // written this way to avoid making a mundane script
 	void OnTriggerEnter2D(Collider2D collider){
+		Debug.Log("hit");
 		if(collider.gameObject.tag == "EnemyBullet"){
 			ChangeHealth(-1);
 			Destroy(collider.gameObject);

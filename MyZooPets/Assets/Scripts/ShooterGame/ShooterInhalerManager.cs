@@ -10,7 +10,7 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public GameObject badTimingObject;
 	public ParticleSystem goodTimingParticle;
 	public int missed = 0;
-	public int combo = 0;
+	public int combo = 5;
 	public bool CanUseInhalerButton{
 		get{
 			return canUseInhalerButton;

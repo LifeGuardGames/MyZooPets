@@ -9,6 +9,7 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	public Vector3 target;
 	public bool isPierceing;
 	public int health = 1;
+	public bool canHitPlayer = false;
 	
 	//find target aids the bullet in moving toward the fire position
 	public void FindTarget(){
@@ -33,6 +34,16 @@ public class ShooterGameBulletScript : MonoBehaviour{
 		if(collider.gameObject.tag == "EnemyBullet"){
 			Destroy(collider.gameObject);
 			if(!isPierceing || health < 2){
+				Destroy(this.gameObject);
+			}
+		}
+		else if(collider.gameObject.tag == "EnemyWall"){
+			speed = -speed;
+			canHitPlayer = true;
+		}
+		else if(collider.gameObject.tag == "Player"){
+			if(canHitPlayer){
+				PlayerShooterController.Instance.ChangeHealth(-1);
 				Destroy(this.gameObject);
 			}
 		}

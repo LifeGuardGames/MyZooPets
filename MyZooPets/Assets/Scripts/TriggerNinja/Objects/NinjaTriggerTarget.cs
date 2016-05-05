@@ -76,14 +76,13 @@ public class NinjaTriggerTarget : NinjaTrigger{
 	}
 
 	void OnTriggerEnter(Collider col){
-		Debug.Log("working");
-		if(isOnScreen){
-			Debug.Log("working");
-			this.GetComponent<Rigidbody>().velocity = -this.GetComponent<Rigidbody>().velocity;
+		if(isOnScreen && !NinjaManager.Instance.bonusRound){
+			this.GetComponent<Rigidbody>().velocity = new Vector3(-this.GetComponent<Rigidbody>().velocity.x,this.GetComponent<Rigidbody>().velocity.y,this.GetComponent<Rigidbody>().velocity.z) ;
 		}
 	}
 
 	void OnBecameVisible(){
 		isOnScreen = true;
+		this.GetComponent<Rigidbody>().detectCollisions = true;
 	}
 }

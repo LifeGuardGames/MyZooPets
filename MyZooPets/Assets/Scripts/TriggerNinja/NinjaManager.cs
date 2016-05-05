@@ -159,6 +159,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}
 			
 	protected override void _GameOver(){
+		Time.timeScale = 1.0f;
 		// Reset all states - Remove any visuals for combos
 		bonusVisualController.StopBonusVisuals();
 		bonusRound = false;
@@ -438,7 +439,13 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			SetComboBest(combo);
 		
 		// reset the combo down to 0
-		SetCombo(0);	
+		SetCombo(0);
+		if(GetScore() > 100){
+			Time.timeScale = 1.25f;
+		}
+		else if(GetScore() > 250){
+			Time.timeScale = 1.5f; 
+		}
 	}
 	
 	private void StartTutorial(){

@@ -41,15 +41,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	protected abstract void _Start();								// when the manager is started
 
 	//=======================Events========================
-	public static EventHandler<GameStateArgs> OnStateChanged; 		//when the game state changes
-	public static EventHandler<EventArgs> OnNewGame; 				//when a new game starts
+	public static EventHandler<GameStateArgs> OnStateChanged; 		// when the game state changes
+	public static EventHandler<EventArgs> OnNewGame; 				// when a new game starts
 	public static EventHandler<LivesChangedArgs> OnLivesChanged;	// when lives are changed
 	
-	public MinigameUI ui; // reference to the UI controlle
-//	public SceneTransition scriptTransition; // scene transition
+	public MinigameUI ui; // reference to the UI controller
 	public int nStartingLives;
-//	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
-
 	public string gameOverAudioClip = "minigameGameOver";
 
 	private int score;	// player score
@@ -60,7 +57,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	private MinigameTutorial tutorial; // Reference to the tutorial. Null when tutorial is not active
 
 	protected string quitGameScene = null;	// Over write this in child on awake
-
 	public bool IsNewGameAd = false;		// Used to show ads only once per new game
 
 	//Return player score
@@ -211,7 +207,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 	
 	protected virtual void _NewGame(){
-
 		// children implement this
 	}
 	

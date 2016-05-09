@@ -95,7 +95,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 				// spread across 3 scripts this section deals with getting the input position
 				#if !UNITY_EDITOR
 				Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-				if(Camera.main.ScreenT7777oWorldPointtouchPos.x <= PlayerShooterController.Instance.gameObject.transform.position.x){
+				if(Camera.main.ScreenToWorldPoint(touchPos).x <= PlayerShooterController.Instance.gameObject.transform.position.x){
 					PlayerShooterController.Instance.Move(touchPos);
 				}
 				else{

@@ -440,11 +440,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		
 		// reset the combo down to 0
 		SetCombo(0);
-		if(GetScore() > 100){
+		if(GetScore() > 50){
 			Time.timeScale = 1.25f;
 		}
-		else if(GetScore() > 250){
+		else if(GetScore() > 150){
 			Time.timeScale = 1.5f; 
+		}
+		else if (GetScore() > 250){
+			Time.timeScale = 2.0f;
 		}
 	}
 	

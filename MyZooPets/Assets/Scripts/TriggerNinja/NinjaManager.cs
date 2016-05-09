@@ -475,4 +475,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		AudioManager.Instance.PlayClip("ninjaBonus");
 		bonusVisualController.PlayBonusVisuals();
 	}
+
+	public void BeginBoucePowerUp(){
+		isBouncyTime = true;
+		StartCoroutine("EndBounceTime");
+	}
+
+	IEnumerator EndBounceTime(){
+		yield return new WaitForSeconds(10.0f);
+		isBouncyTime = false;
+	}
 }

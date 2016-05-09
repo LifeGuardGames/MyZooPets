@@ -213,7 +213,9 @@ public class NinjaTrigger : MonoBehaviour{
 				//}
 			}
 			else{
-				gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
+				if(this.GetComponent<NinjaTriggerBomb>() ==null){
+					gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
+				}
 			}
 		}		
 	}

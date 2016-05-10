@@ -12,16 +12,27 @@ using System.Collections;
 
 public class ScoreManager : Singleton<ScoreManager>{
 	public int scorePerIncrement = 3;
+
 	public float scoreDistance = 10.0f; //every 10 unit in distance traveled equals to 10 score points
 	public float coinStreakTime; // if X seconds elapse without picking up a coin, the streak is over
+
 	
 	private int mPlayerDistancePoints = 0; //points calculated from distance
 	private int mPlayerPoints = 0; //points accumulated in the game (getting item or hitting trigger)
 	private int mPlayerCoins = 0; //coins collected in the game
 	private int distanceTraveled = 0;
-	private float coinStreakCountdown; //
+	private float coinStreakCountdown; 
 	private int coinStreak; //counting how many coins are picked up in a row
 
+	private int scoreStreak=1;
+	private int comboMod=1;
+
+	public int Combo{
+		get{ 
+			return comboMod; 
+		}
+	}
+	
 	public int Coins{ 
 		get{ 
 			return mPlayerCoins; 
@@ -36,6 +47,10 @@ public class ScoreManager : Singleton<ScoreManager>{
 		get{
 			return mPlayerDistancePoints + mPlayerPoints;
 		}
+	}
+
+	public void IncrementCombo(int increment){
+		comboMod += increment;
 	}
 
 	/// <summary>
@@ -144,4 +159,10 @@ public class ScoreManager : Singleton<ScoreManager>{
 		SetCoinStreakCountdown(fCountdown + change);
 	}
 	//---------------------------------------------------
+
+	void OnGUI(){
+		GUI.Box(new Rect(Screen.width-100,0,100,20),"STREAK: " + scoreStreak.ToString());
+		GUI.Box(new Rect(Screen.width-100,20,100,20),"COMBO: " + scoreStreak.ToString());
+		
+	}
 }

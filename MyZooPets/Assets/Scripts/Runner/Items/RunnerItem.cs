@@ -43,11 +43,17 @@ public abstract class RunnerItem : MonoBehaviour {
 	/// Raises the pickup event.
 	/// </summary>
 	public abstract void OnPickup();
+	/// <summary>
+	/// Raises the missed event.
+	/// </summary>
+	public virtual void OnMissed(){
+		//Does nothing, and this is sufficient for most items
+	}
 
 	/// <summary>
 	/// Spawns the floaty text. Replace the tutorial messages
 	/// </summary>
-	protected void SpawnFloatyText(int coinValue = 0){
+	protected void SpawnFloatyText(string toDisplay = ""){
 		Hashtable floatyOption = new Hashtable();
 //		string hintMessage = Localization.Localize(ID + "_HINT_MESSAGE");
 
@@ -56,7 +62,7 @@ public abstract class RunnerItem : MonoBehaviour {
 		floatyOption.Add("floatingUpPos", new Vector3(0, 4, 0));
 		floatyOption.Add("floatingTime", 0.5f);
 		floatyOption.Add("textSize", 2f);
-		floatyOption.Add("text", "+" + coinValue);
+		floatyOption.Add("text", toDisplay);
 
 		FloatyUtil.SpawnFloatyText(floatyOption);
 	}

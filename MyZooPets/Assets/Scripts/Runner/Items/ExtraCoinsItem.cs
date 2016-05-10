@@ -17,7 +17,7 @@ public class ExtraCoinsItem : RunnerItem {
     public override void OnPickup() {
         ScoreManager.Instance.AddCoins(coinValue);
 
-		SpawnFloatyText(coinValue);
+		SpawnFloatyText("+" + coinValue);
         
         GameObject.Destroy(gameObject);
     }

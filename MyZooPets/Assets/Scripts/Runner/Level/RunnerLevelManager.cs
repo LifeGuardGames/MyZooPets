@@ -500,7 +500,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             Debug.LogError("Not enough points, fix it!");
             return -1f;
         }
-        // Uhh.. Determine the lenght?
+        // Uhh.. Determine the length?
         Vector3 ptA = inSpawnGroup.mPoints[0].mPosition;
         Vector3 ptB = inSpawnGroup.mPoints[1].mPosition;
         Vector3 ptC = inSpawnGroup.mPoints[2].mPosition;

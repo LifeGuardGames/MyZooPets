@@ -105,6 +105,7 @@ public class ItemManager : Singleton<ItemManager> {
 		// Disable it. If its queued, then it will 'disapaear' off the map. If its deleted well who cares!
 		if (inItem != null){
             inItem.gameObject.SetActive(false);
+			inItem.OnMissed();
             Destroy(inItem.gameObject);
         }
 

@@ -12,10 +12,15 @@ public class PlayerController : Singleton<PlayerController>{
 
 		public float defaultTargetSpeed = 15f; //The default running speed
 		[System.NonSerialized]
+		public readonly float maxHeight = 18;
+		public readonly float minHeight = 9;
+		public readonly float minSpeed = 15;
+		public readonly float maxSpeed = 35;
 		public float currentSpeed = 0f; //current movement speed after it gets smoothed by acceleration
 		public float targetSpeed; //The speed you want the character to reach to
 		public float acceleration = 5f; //How fast does the character change speed? higher is faster
 		public float jumpHeight = 9;
+
 		[System.NonSerialized]
 		public float verticalSpeed = 0f;
 		public float maxFallSpeed = 100f; //maximum speed the player is allowed to fall
@@ -70,6 +75,15 @@ public class PlayerController : Singleton<PlayerController>{
 	private bool bDelay = false;
 #endif
 
+	public float GetCurrentSpeed(){
+		return movement.currentSpeed;
+	}
+	public float GetMaxSpeed(){
+		return movement.maxSpeed;
+	}
+	public float GetMinSpeed(){
+		return movement.minSpeed;
+	}
 	public GameObject FloatyLocation{
 		get{
 			return floatyLocation;
@@ -136,10 +150,10 @@ public class PlayerController : Singleton<PlayerController>{
 
 	// Listen to finger down gesture
 	void OnTap(TapGesture e){ 
-
 		if(RunnerGameManager.Instance.GameRunning ){
-			if(e.Position.y > Screen.height/2){
-				Jump();
+			float touchLocationDifference = Camera.main.ScreenToWorldPoint(e.Position).y - floatyLocation.transform.position.y; //Height of touch - height of player
+			if(touchLocationDifference>0){
+				Jump(Mathf.Clamp(touchLocationDifference,movement.minHeight,movement.maxHeight)); //In world coordinates
 				if(OnJump != null)
 					OnJump(this, EventArgs.Empty);
 			}
@@ -150,10 +164,11 @@ public class PlayerController : Singleton<PlayerController>{
 					OnDrop(this, EventArgs.Empty);
 			}
 
+
 		}
 	}
 	
-	/*// Listen to swipe down gesture
+	/* Listen to swipe down gesture
 	void OnSwipe(SwipeGesture gesture){
 		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
 			FingerGestures.SwipeDirection direction = gesture.Direction;
@@ -240,12 +255,13 @@ public class PlayerController : Singleton<PlayerController>{
 		// at apex
 		return Mathf.Sqrt(2 * targetJumpHeight * movement.Gravity);
 	}
-
-	private void Jump(){
+	//heightMultiplier multiplies movement.jumpHeight to increase speed and max heiht achieved.
+	private void Jump(float height){
 		if(playerPhysics.Grounded){
          //   AudioManager.Instance.PlayClip("runnerJumpUp", variations: 3);
 			AudioManager.Instance.PlayClip("runnerJumpUp");
-			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
+			//movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
+			movement.verticalSpeed = CalculateJumpVerticalSpeed(height);
 			playerPhysics.Jumping = true;
 		}
 	}
@@ -317,13 +333,16 @@ public class PlayerController : Singleton<PlayerController>{
 	//---------------------------------------------------
 	private void CheckKeyMovement(){
 		
-		if(Input.GetKey("up")) Jump();
+		if(Input.GetKey("up")) Jump(movement.jumpHeight);
 		if(Input.GetKey("down") && !playerPhysics.Falling && !bDelay) {
 			bDelay = true;
 			Drop();
 		}
 		else
 			bDelay = false;
+		/*if (Input.GetKey("right")){
+
+		}*/
 	}
 	#endif
 

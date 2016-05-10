@@ -1,47 +1,45 @@
-﻿using UnityEngine;
+﻿//// Copyright (c) 2016 LifeGuard Games Inc.
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
 /// Move tween toggle demultiplexer.
 /// Packs multiple objects that needs to be move tweened into one compact call
 /// </summary>
-
-public class TweenToggleDemux : MonoBehaviour {
+public class TweenToggleDemux : MonoBehaviour{
 
 	public GameObject[] GoList;
-	public bool isDebug = false;
 	public bool startsHidden = false;
-
 	public GameObject lastFinishedShowObject;	// For lock
 	private TweenToggle lastFinishedShowObjectScript;
 	public GameObject lastFinishedHideObject;	// For lock
 	private TweenToggle lastFinishedHideObjectScript;
-	
 	public bool isShowFinishedCallback = true;	// Call callback after the end of the tween instead of the beginning
 	public GameObject ShowTarget;
 	public string ShowFunctionName;
 	public bool ShowIncludeChildren = false;
-	
 	public bool isHideFinishedCallback = true;	// Call callback after the end of the tween instead of the beginning
 	public GameObject HideTarget;
 	public string HideFunctionName;
 	public bool HideIncludeChildren = false;
-	
 	public bool hideImmediately = false;
-	
 	private bool isShown; // Active lock
 	public bool IsShowing{ get { return isShown; } }
+
 	private bool isMoving; // Move lock
 	public bool IsMoving{ get { return isMoving; } }
 	
 	private bool pollingFirstFrameLock = false;	// Since we are polling & setting show/hide next frame, need to stop current frame check for callbacks
-	private bool pollingSecondFrameLock = false;	// Check for two frames, dumb implementation to enforce order (update gets called before show)
-	
+	private bool pollingSecondFrameLock = false;    // Check for two frames, dumb implementation to enforce order (update gets called before show)
+
+	public CanvasGroup UIRayCastBlock;			// If this is assigned, it will attempt to block (ONLY) UI Raycasts when shown
+
 	void Awake(){
 		if(startsHidden){
 			isShown = false;
 			isMoving = false;
-		}else{
+		}
+		else{
 			isShown = true;
 			isMoving = false;
 		}
@@ -58,27 +56,21 @@ public class TweenToggleDemux : MonoBehaviour {
 
 				toggle.isDebug = false;	// Turn all the other debug off
 			}
-			else{
-				Debug.LogError("No TweenToggle script for " + go.name);
-			}
 		}
 		
 		if(lastFinishedShowObject != null){
 			lastFinishedShowObjectScript = lastFinishedShowObject.GetComponent<TweenToggle>();
 		}
-		else{
-			Debug.LogError("Demux last finished show object not assigned!");
-		}
 		
 		if(lastFinishedHideObject != null){
 			lastFinishedHideObjectScript = lastFinishedHideObject.GetComponent<TweenToggle>();
 		}
-		else{
-			Debug.LogError("Demux last finished hide object not assigned!");
-		}
 	}
 	
-	public void Reset(){
+	public void LgReset(){
+		if(UIRayCastBlock != null) {
+			UIRayCastBlock.blocksRaycasts = startsHidden ? false : true;
+		}
 		foreach(GameObject go in GoList){
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
 			toggle.startsHidden = startsHidden;
@@ -96,10 +88,11 @@ public class TweenToggleDemux : MonoBehaviour {
 			pollingSecondFrameLock = false;
 		}
 		// Do regular polling
-		else{	
+		else{
 			if(isMoving){
+//				Debug.Log("is moving check" + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
 				if(isShown && lastFinishedShowObjectScript != null && !lastFinishedShowObjectScript.IsMoving){
-//					print (isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
+//					Debug.Log(isShown + " " + lastFinishedShowObjectScript + " " + lastFinishedShowObjectScript.IsMoving);
 					isMoving = false;
 					// If option set for finish show callback, call it now!
 					if(isShowFinishedCallback){
@@ -125,9 +118,14 @@ public class TweenToggleDemux : MonoBehaviour {
 		if(!isShown && !isMoving){
 			isShown = true;
 			isMoving = true;
-			
+
 			pollingFirstFrameLock = true;
 			pollingSecondFrameLock = true;
+
+			if(UIRayCastBlock != null) {
+				UIRayCastBlock.blocksRaycasts = true;
+			}
+
 			StartCoroutine(SetNextFrameShow());
 		}
 		else{
@@ -143,6 +141,11 @@ public class TweenToggleDemux : MonoBehaviour {
 			
 			pollingFirstFrameLock = true;
 			pollingSecondFrameLock = true;
+
+			if(UIRayCastBlock != null) {
+				UIRayCastBlock.blocksRaycasts = false;
+			}
+
 			StartCoroutine(SetNextFrameHide());
 		}
 		else{
@@ -158,9 +161,6 @@ public class TweenToggleDemux : MonoBehaviour {
 			TweenToggle toggle = go.GetComponent<TweenToggle>();
 			if(toggle != null){
 				toggle.Show();
-			}
-			else{
-				Debug.LogError("No TweenToggle script for " + go.name);
 			}
 		}
 		
@@ -184,9 +184,6 @@ public class TweenToggleDemux : MonoBehaviour {
 				}
 				toggle.Hide();
 			}
-			else{
-				Debug.LogError("No TweenToggle script for " + go.name);
-			}
 		}
 		
 		// If set to begin hide callback, call it now!
@@ -201,18 +198,22 @@ public class TweenToggleDemux : MonoBehaviour {
 //	 	 		Show();
 //	 	 	}
 //	 	 	if(GUI.Button(new Rect(testButtonPos.x + 110, testButtonPos.y, 100, 100), "hide")){
+//				Debug.Log("HIDE button");
 //	 	 		Hide();
 //	 	 	}
 //	 	 }
 //	 }
 	
 	void ShowSendCallback(){
-		if (string.IsNullOrEmpty(ShowFunctionName)) return;
-		if (ShowTarget == null) ShowTarget = gameObject;
-
-		if (ShowIncludeChildren){
+		if(string.IsNullOrEmpty(ShowFunctionName)){
+			return;
+		}
+		if(ShowTarget == null){
+			ShowTarget = gameObject;
+		}
+		if(ShowIncludeChildren){
 			Transform[] transforms = ShowTarget.GetComponentsInChildren<Transform>();
-			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+			for(int i = 0, imax = transforms.Length; i < imax; ++i){
 				Transform t = transforms[i];
 				t.gameObject.SendMessage(ShowFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
 			}
@@ -223,12 +224,15 @@ public class TweenToggleDemux : MonoBehaviour {
 	}
 	
 	void HideSendCallback(){
-		if (string.IsNullOrEmpty(HideFunctionName)) return;
-		if (HideTarget == null) HideTarget = gameObject;
-
-		if (HideIncludeChildren){
+		if(string.IsNullOrEmpty(HideFunctionName)){
+			return;
+		}
+		if(HideTarget == null){
+			HideTarget = gameObject;
+		}
+		if(HideIncludeChildren){
 			Transform[] transforms = HideTarget.GetComponentsInChildren<Transform>();
-			for (int i = 0, imax = transforms.Length; i < imax; ++i){
+			for(int i = 0, imax = transforms.Length; i < imax; ++i){
 				Transform t = transforms[i];
 				t.gameObject.SendMessage(HideFunctionName, gameObject, SendMessageOptions.DontRequireReceiver);
 			}

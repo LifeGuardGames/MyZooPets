@@ -24,14 +24,10 @@ public class ScaleTweenUpDown : MonoBehaviour {
 	}
 	
 	void StartScale(){
-		Hashtable optional = new Hashtable();
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "StartReverse");
-		LeanTween.scale(gameObject, scaleTo, duration/2, optional);
+		LeanTween.scale(gameObject, scaleTo, duration/2).setOnComplete(StartReverse);
 	}
 			
 	void StartReverse(){
-		Hashtable optional = new Hashtable();
-		LeanTween.scale(gameObject, scaleInit, duration/2, optional);
+		LeanTween.scale(gameObject, scaleInit, duration/2);
 	}
 }

@@ -17,8 +17,6 @@ public static class SpriteUtils  {
 		Vector3 vTo = goTo.transform.position;
 		float fAngle = Mathf.Rad2Deg * Mathf.Atan2( vFrom.y - vTo.y, vFrom.x - vTo.x );
 		
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", LeanTweenType.linear);
-		LeanTween.rotateZ(goFrom, fAngle, fTime, optional);		
+		LeanTween.rotateZ(goFrom, fAngle, fTime);		
 	}
 }

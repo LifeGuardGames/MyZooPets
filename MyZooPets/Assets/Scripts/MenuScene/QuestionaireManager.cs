@@ -1,6 +1,4 @@
-using UnityEngine;
-using System;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Questionaire manager. Check when it's appropriate to spawn the questionaire
@@ -42,10 +40,10 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 
 	public void ContinueLoading(){
 		if(DataManager.Instance.GameData.PetInfo.IsHatched){
-			Application.LoadLevel(SceneUtils.BEDROOM);
+			SceneManager.LoadScene(SceneUtils.BEDROOM);
 		}
 		else{
-			Application.LoadLevel(SceneUtils.MENU);
+			SceneManager.LoadScene(SceneUtils.MENU);
 		}
 	}
 }

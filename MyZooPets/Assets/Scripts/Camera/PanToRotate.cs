@@ -8,6 +8,7 @@ using System.Collections;
     panning speed and snapping speed can be adjusted in the inspector
 */
 public class PanToRotate : MonoBehaviour {
+	/*
     public float panSpeed = 0.5f; //the speed that you want the camera to rotate while panning
     public float snapSpeed = 0.5f; //the speed that you want the camera to snap back when touch ends
     public float minPanDistance = 80.0f; //min distance required for panning to be recognized
@@ -234,4 +235,5 @@ public class PanToRotate : MonoBehaviour {
         }
         return isOnPet;
     }
+	*/
 }

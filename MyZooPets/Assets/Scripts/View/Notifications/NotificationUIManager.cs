@@ -423,7 +423,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		TweenToggleDemux demux = obj.GetComponent<TweenToggleDemux>();
 		if(demux != null){
 			demux.startsHidden = startsHidden;
-			demux.Reset();
+			demux.LgReset();
 		}
 		
 		PopupNotificationNGUI popup = obj.GetComponent<PopupNotificationNGUI>();

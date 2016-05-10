@@ -89,10 +89,12 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void OnRemoveAdButtonClicked(){
+		/*
 		LGGIAPController.OnSuccessDelegate del = delegate(){
 			adParentTween.gameObject.SetActive(false);
 		};
 		IAPController.ShowConfirmPanel(del);
+		*/
 	}
 
 	public void ShowButtons(object obj, EventArgs e){

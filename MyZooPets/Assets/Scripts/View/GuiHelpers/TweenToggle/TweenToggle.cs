@@ -58,10 +58,6 @@ public class TweenToggle : MonoBehaviour{
 	// we might want these to get fancier at some point (i.e. start the sound when the object tweens in, or when it finishes, etc)
 	public string strSoundShow;
 	public string strSoundHide;
-	
-	// Testing purposes, isDebug true will show OnGUI buttons
-	public bool isDebug = false;
-	public Vector2 testButtonPos; 	// Set base positions of test buttons
 
 	protected bool isGUI;				// Check if Unity GUI, will be set on awake
 	protected RectTransform GUIRectTransform;	// Local cache of rect transform if GUI

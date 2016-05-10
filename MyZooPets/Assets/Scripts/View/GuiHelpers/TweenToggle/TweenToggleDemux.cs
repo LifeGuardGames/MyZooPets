@@ -53,8 +53,6 @@ public class TweenToggleDemux : MonoBehaviour{
 				else{
 					toggle.startsHidden = false;
 				}
-
-				toggle.isDebug = false;	// Turn all the other debug off
 			}
 		}
 		

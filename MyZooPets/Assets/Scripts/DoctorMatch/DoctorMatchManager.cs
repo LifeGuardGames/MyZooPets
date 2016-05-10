@@ -4,6 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
+	public enum DoctorMatchButtonTypes{
+		None,
+		Green,
+		Yellow,
+		Red
+	}
+
 	public AssemblyLineController assemblyLineController;
 	public DoctorMatchLifeBarController lifeBarController;
 
@@ -33,10 +40,14 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}	
 
 	protected override void _NewGame(){
-
+		assemblyLineController.Initialize();
+		lifeBarController.ResetBar();
+		lifeBarController.StartDraining();
 	}
 
 	protected override void _GameOver(){
+		lifeBarController.StopDraining();
+		assemblyLineController.DestroyItems();
 		/*
 		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.DoctorTimesPlayedTick();
@@ -57,29 +68,47 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		return Constants.GetConstant<bool>("IsDoctorMatchTutorialOn");
 	}
 
-	public void CharacterScoredRight(){
+	// Input coming from button scripts
+	public void OnZoneClicked(DoctorMatchButtonTypes buttonType){
+		AssemblyLineItem poppedItem = assemblyLineController.PopFirstItem();
+		if(poppedItem.ItemType == buttonType){
+			CharacterScoredRight();
+		}
+		else{
+			CharacterScoredWrong();
+		}
+
+		// Have item do what it does when activated
+		poppedItem.Activate();
+
+		assemblyLineController.ShiftAndAddNewItem();
+	}
+
+	// When your timer runs out
+	public void OnTimerBarEmpty(){
+		// Game over, starting with 1 life
+		UpdateLives(-1);
+	}
+
+	private void CharacterScoredRight(){
 		if(IsTutorialRunning()){
 			
 		}
 		else{
-
+			lifeBarController.PlusBar();
+			UpdateScore(1);
 		}
 	
 		// Play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");
 	}
 
-	public void CharacterScoredWrong(){
-		// Game over, starting with 1 life
-		UpdateLives(-1);
+	private void CharacterScoredWrong(){
+		lifeBarController.HurtBar();
 
 		// Play an incorrect sound
 		AudioManager.Instance.PlayClip("minigameError");
 
 
-	}
-
-	public void SetUpAssemblyItemSprite(GameObject assemblyLineItemObject, int itemGroupNumber = 0){
-		
 	}
 }

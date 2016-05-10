@@ -22,6 +22,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
 	private List<NinjaDataEntry> currentTriggerEntries;		// current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection;	// record the last drag direction
+	public bool isBouncyTime = false;
 
 	void Awake(){
 		Application.targetFrameRate = 60;
@@ -473,5 +474,15 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public void StartBonusVisuals(){
 		AudioManager.Instance.PlayClip("ninjaBonus");
 		bonusVisualController.PlayBonusVisuals();
+	}
+
+	public void BeginBoucePowerUp(){
+		isBouncyTime = true;
+		StartCoroutine("EndBounceTime");
+	}
+
+	IEnumerator EndBounceTime(){
+		yield return new WaitForSeconds(10.0f);
+		isBouncyTime = false;
 	}
 }

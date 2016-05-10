@@ -206,12 +206,16 @@ public class NinjaTrigger : MonoBehaviour{
 		if(isCut)
 			Destroy(gameObject);
 		else{
-			if(transform.position.y <= yVal+5){
+			if(transform.position.y <= yVal+5 && !NinjaManager.Instance.isBouncyTime){
+				//if(this.GetComponent<NinjaTriggerBomb>() ==null){
 				// otherwise, it means the object was missed
-				OnMissed();
+					OnMissed();
+				//}
 			}
 			else{
-				gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
+				if(this.GetComponent<NinjaTriggerBomb>() ==null){
+					gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
+				}
 			}
 		}		
 	}

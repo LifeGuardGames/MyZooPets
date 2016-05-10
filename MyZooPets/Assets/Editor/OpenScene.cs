@@ -1,62 +1,58 @@
-﻿//// Copyright (c) 2015 LifeGuard Games Inc.
-
-using UnityEngine;
+﻿//// Copyright (c) 2016 LifeGuard Games Inc.
 using UnityEditor;
-using System.Collections;
 
-public class SceneItem : Editor {
-
+public class OpenScene : Editor {
 	[MenuItem("Open Scene/LoadingScene")]
 	public static void OpenLoadingScene(){
-		OpenScene(SceneUtils.LOADING);
+		LoadScene(SceneUtils.LOADING);
 	}
 
 	[MenuItem("Open Scene/MenuScene")]
 	public static void OpenMenuScene(){
-		OpenScene(SceneUtils.MENU);
+		LoadScene(SceneUtils.MENU);
 	}
 
 	[MenuItem("Open Scene/ZoneBedroom")]
 	public static void OpenZoneBedroom(){
-		OpenScene(SceneUtils.BEDROOM);
+		LoadScene(SceneUtils.BEDROOM);
 	}
 
 	[MenuItem("Open Scene/ZoneYard")]
 	public static void OpenZoneYard(){
-		OpenScene(SceneUtils.YARD);
+		LoadScene(SceneUtils.YARD);
 	}
 
 	[MenuItem("Open Scene/InhalerGame")]
 	public static void OpenInhalerGame(){
-		OpenScene(SceneUtils.INHALERGAME);
+		LoadScene(SceneUtils.INHALERGAME);
 	}
 
 	[MenuItem("Open Scene/TriggerNinja")]
 	public static void OpenTriggerNinja(){
-		OpenScene("TriggerNinja");
+		LoadScene("TriggerNinja");
 	}
 
 	[MenuItem("Open Scene/MemoryGame")]
 	public static void OpenMemoryGame(){
-		OpenScene("MemoryGame");
+		LoadScene("MemoryGame");
 	}
 
 	[MenuItem("Open Scene/ShooterGame")]
 	public static void OpenShooterGame(){
-		OpenScene("ShooterGame");
+		LoadScene("ShooterGame");
 	}
 
 	[MenuItem("Open Scene/DoctorMatch")]
 	public static void OpenDoctorMatch(){
-		OpenScene("DoctorMatch");
+		LoadScene("DoctorMatch");
 	}
 
 	[MenuItem("Open Scene/Runner")]
 	public static void OpenRunner(){
-		OpenScene("Runner");
+		LoadScene("Runner");
 	}
 
-	static void OpenScene(string name){
+	static void LoadScene(string name){
 		if(EditorApplication.SaveCurrentSceneIfUserWantsTo()){
 			EditorApplication.OpenScene("Assets/Scenes/" + name + ".unity");
 		}

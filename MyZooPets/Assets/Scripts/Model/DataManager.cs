@@ -66,6 +66,20 @@ public class DataManager : Singleton<DataManager>{
 		}
 	}
 
+	public bool IsAdsEnabled{
+		get{
+			//default set to true
+			if(!PlayerPrefs.HasKey("AdsEnabled")){
+				PlayerPrefs.SetInt("AdsEnabled", 1);
+			}
+			return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
+		}
+		set{
+			PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
+			PlayerPrefs.Save();
+		}
+	}
+
 	/// <summary>
 	/// Gets or sets the last play session date. Use to determine whether the game
 	/// should be force start from LoadingScene.unity
@@ -293,12 +307,18 @@ public class DataManager : Singleton<DataManager>{
 	#region Data Version
 	/// <summary>
 	/// Checks the version. Handles any major data schema changes to the DataManager
+	/// NOTE: Dont touch anything in here
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
 	private void VersionCheck(Version currentDataVersion){
-		//Deleting all data that is less than 2.0.0
-		if(currentDataVersion < new Version("2.0.0")){	//DONT TOUCH THIS
+		//Deleting all data that is less than v2.0.0	//DONT TOUCH THIS
+		if(currentDataVersion < new Version("2.0.0")) {
 			PlayerPrefs.DeleteKey("GameData");
+		}
+
+		// Disabling ads for all users below v2.2.0 (premium users)		//DONT TOUCH THIS
+		if(currentDataVersion < new Version ("2.2.0")) {
+			IsAdsEnabled = false;
 		}
 	}
 

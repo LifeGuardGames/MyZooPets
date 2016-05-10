@@ -17,12 +17,24 @@ public static class GameObjectUtils{
 		go.transform.localScale = Vector3.one;
 	}
 
+	static public void CopyRectTransform(RectTransform target, RectTransform source){
+		target.anchoredPosition3D = source.anchoredPosition3D;
+		target.anchorMax = source.anchorMax;
+		target.anchorMin = source.anchorMin;
+		target.offsetMax = source.offsetMax;
+		target.offsetMin = source.offsetMin;
+		target.pivot = source.pivot;
+		target.sizeDelta = source.sizeDelta;
+		target.localEulerAngles = source.localEulerAngles;
+		target.localScale = source.localScale;
+	}
+
 	/// <summary>
 	/// Instantiate an object and add it to the specified parent.
 	/// </summary>
 	static public GameObject AddChild(GameObject parent, GameObject prefab, bool isPreserveLayer = false){
 		GameObject go = GameObject.Instantiate(prefab) as GameObject;
-		
+
 		if(go != null){
 			Transform t = go.transform;
 
@@ -44,8 +56,41 @@ public static class GameObjectUtils{
 		return go;
 	}
 
+	static public GameObject AddChildGUI(GameObject parent, GameObject prefab, bool isPreserveLayer = false){
+		GameObject go = GameObject.Instantiate(prefab) as GameObject;
+
+		if(go != null){
+			Transform t = go.transform;
+
+			if(parent != null){
+				t.SetParent(parent.transform, false);
+
+				if(!isPreserveLayer){
+					go.layer = parent.layer;
+				}
+			}
+			else{
+				t.SetParent(null);	// Assign to root
+			}
+
+			t.localPosition = Vector3.zero;
+			t.localRotation = Quaternion.identity;
+			t.localScale = Vector3.one;
+		}
+		return go;
+	}
+
+	static public GameObject AddChildGUIWithPosition(GameObject parent, GameObject prefab) {
+		GameObject go = AddChildGUI(parent, prefab);
+		if(go != null) {
+			RectTransform rt = prefab.GetComponent<RectTransform>();
+			go.GetComponent<RectTransform>().localPosition = rt.localPosition;
+		}
+		return go;
+	}
+
 	/// <summary>
-	/// Instantiate an object and add it to the specified parent. use the position of the prefab
+	/// Instantiate an object and add it to the specified parent. use the localposition and localscale of the prefab
 	/// </summary>
 	static public GameObject AddChildWithPositionAndScale(GameObject parent, GameObject prefab){
 		GameObject go = AddChild(parent, prefab);
@@ -53,6 +98,18 @@ public static class GameObjectUtils{
 			Transform t = go.transform;
 			t.localPosition = prefab.transform.localPosition;
 			t.localScale = prefab.transform.localScale;
+		}
+		return go;
+	}
+
+	/// <summary>
+	/// Instantiate an object and add it to the specified parent. use the position of the prefab
+	/// </summary>
+	static public GameObject AddChildWithPosition(GameObject parent, GameObject prefab) {
+		GameObject go = AddChild(parent, prefab);
+		if(go != null) {
+			Transform t = go.transform;
+			t.localPosition = prefab.transform.localPosition;
 		}
 		return go;
 	}
@@ -81,5 +138,10 @@ public static class GameObjectUtils{
 		float xComponent = radius * Mathf.Sin(randomDegree);	// Not sure if sin or cos but we dont really care
 		float yComponent = radius * Mathf.Cos(randomDegree);
 		return new Vector3(center.x + xComponent, center.y + yComponent, center.z);
+	}
+
+	static public Vector2 GetRandomPointOnCircumference(Vector2 center, float radius){
+		Vector3 position = GetRandomPointOnCircumference(new Vector3(center.x, center.y, 0f), radius);
+		return new Vector2(position.x, position.y);
 	}
 }

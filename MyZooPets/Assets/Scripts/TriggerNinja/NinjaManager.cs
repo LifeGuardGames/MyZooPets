@@ -4,27 +4,25 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class NinjaManager : MinigameManager<NinjaManager>{
-	// combo related
-	public float comboMaxTime;		// max time between cuts for a combo
-	public GestureTrail trail; // the gesture trail that follows the user's finger around
+	public float comboMaxTime;				// max time between cuts for a combo
+	public GestureTrail trail; 				// the gesture trail that follows the user's finger around
 	public float timeBetweenSpawnGroups;	// time between spawn groups
 	public bool bonusRound = false;			// triggers Bonus round
 	public int bonusRoundEnemies;
 	public int bonusRoundCounter;			// tracks number of boss round
-	public int chain = 0;			// number of enemies killed with out hitting a bomb 
-	public BonusVisualController bonusVisualController;	// Controller that controls the bonus UI
+	public int chain = 0;					// number of enemies killed with out hitting a bomb 
+	public BonusVisualController bonusVisualController;		// Controller that controls the bonus UI
 
-	private bool spawning = true;			//stops the spawning to prevent the play from being horibly murdered mid bonus round
-	private float comboTime = 0;	// time counter
-	private int combo = 0;			// the current combo level of the player
-	private int bestCombo = 0;		// player's best combo in one run
-	private float timeCount = 0; // used to count time between groups and between entries within a group
+	private bool spawning = true;			// stops the spawning to prevent the play from being horribly murdered mid bonus round
+	private float comboTime = 0;			// time counter
+	private int combo = 0;					// the current combo level of the player
+	private int bestCombo = 0;				// player's best combo in one run
+	private float timeCount = 0; 			// used to count time between groups and between entries within a group
 	private Vector2 trailDeltaMove;
 	private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
-//	private Vector3 lastTrailPosition = Vector3.zero;	// The position of trail one frame ago
-//	private int lastTrailFrameCount
-	private List<NinjaDataEntry> currentTriggerEntries; // current list of entries to spawn triggers from
-	private FingerGestures.SwipeDirection lastDirection; // record the last drag direction
+	private List<NinjaDataEntry> currentTriggerEntries;		// current list of entries to spawn triggers from
+	private FingerGestures.SwipeDirection lastDirection;	// record the last drag direction
+	public bool isBouncyTime = false;
 
 	void Awake(){
 		Application.targetFrameRate = 60;
@@ -59,10 +57,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		chain = 0;
 	}
 
-	/// <summary>
-	/// Gets the current combo level.
-	/// </summary>
-	/// <returns>The combo.</returns>
 	public int GetCombo(){
 		return combo;	
 	}
@@ -70,11 +64,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public int GetComboBest(){
 		return bestCombo;	
 	}
-	
-	/// <summary>
-	/// Sets the combo.
-	/// </summary>
-	/// <param name="num">Number.</param>
+
 	private void SetCombo(int num){
 		combo = num;	
 	}
@@ -92,10 +82,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		return comboMaxTime;
 	}	
 
-	/// <summary>
-	/// Increases the combo.
-	/// </summary>
-	/// <param name="num">Number.</param>
 	public void IncreaseCombo(int num){
 		if(!IsTutorialRunning()){
 			// increase the combo
@@ -130,7 +116,6 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 		
 		lastDirection = swipeDir;
-		//--------------- end -----------------------
 		
 		switch(gesture.Phase){
 		case ContinuousGesturePhase.Updated:
@@ -175,6 +160,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}
 			
 	protected override void _GameOver(){
+		Time.timeScale = 1.0f;
 		// Reset all states - Remove any visuals for combos
 		bonusVisualController.StopBonusVisuals();
 		bonusRound = false;
@@ -378,9 +364,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}
 	
 	/// <summary>
-	/// Returns the current scoring key, based on the
-	/// player's current score.  This function is a little
-	/// hacky.
+	/// Returns the current scoring key, based on the player's current score.  This function is a little hacky.
 	/// </summary>
 	/// <returns>The scoring key.</returns>
 	private NinjaScoring GetScoringKey(){
@@ -456,7 +440,16 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 			SetComboBest(combo);
 		
 		// reset the combo down to 0
-		SetCombo(0);	
+		SetCombo(0);
+		if(GetScore() > 50){
+			Time.timeScale = 1.25f;
+		}
+		else if(GetScore() > 150){
+			Time.timeScale = 1.5f; 
+		}
+		else if (GetScore() > 250){
+			Time.timeScale = 2.0f;
+		}
 	}
 	
 	private void StartTutorial(){
@@ -481,5 +474,15 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	public void StartBonusVisuals(){
 		AudioManager.Instance.PlayClip("ninjaBonus");
 		bonusVisualController.PlayBonusVisuals();
+	}
+
+	public void BeginBoucePowerUp(){
+		isBouncyTime = true;
+		StartCoroutine("EndBounceTime");
+	}
+
+	IEnumerator EndBounceTime(){
+		yield return new WaitForSeconds(10.0f);
+		isBouncyTime = false;
 	}
 }

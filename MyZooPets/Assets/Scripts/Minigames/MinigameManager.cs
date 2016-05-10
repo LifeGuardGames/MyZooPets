@@ -41,15 +41,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	protected abstract void _Start();								// when the manager is started
 
 	//=======================Events========================
-	public static EventHandler<GameStateArgs> OnStateChanged; 		//when the game state changes
-	public static EventHandler<EventArgs> OnNewGame; 				//when a new game starts
+	public static EventHandler<GameStateArgs> OnStateChanged; 		// when the game state changes
+	public static EventHandler<EventArgs> OnNewGame; 				// when a new game starts
 	public static EventHandler<LivesChangedArgs> OnLivesChanged;	// when lives are changed
 	
-	public MinigameUI ui; // reference to the UI controlle
-//	public SceneTransition scriptTransition; // scene transition
+	public MinigameUI ui; // reference to the UI controller
 	public int nStartingLives;
-//	public bool bRunTut = true;			// used for debug/testing. Tutorial on or off
-
 	public string gameOverAudioClip = "minigameGameOver";
 
 	private int score;	// player score
@@ -60,6 +57,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	private MinigameTutorial tutorial; // Reference to the tutorial. Null when tutorial is not active
 
 	protected string quitGameScene = null;	// Over write this in child on awake
+	public bool IsNewGameAd = false;		// Used to show ads only once per new game
 
 	//Return player score
 	public virtual int GetScore(){
@@ -100,7 +98,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//Toggle bTutorialOverride
 	protected void SetTutorialOverride(bool bOverride){
 		tutorialOverride = bOverride;
-	}	
+	}
 
 	//Change the game state	
 	private void SetGameState(MinigameStates eNewState){
@@ -179,9 +177,12 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	//---------------------------------------------------	
 	private void NewGame(){
 		// alert anything that may care about a new game starting
-		if(OnNewGame != null)
+		if(OnNewGame != null){
 			OnNewGame(this, EventArgs.Empty);
-		
+		}
+
+		IsNewGameAd = true;
+
 		// wait one frame so that cleanup from the previous game can happen properly
 		StartCoroutine(NewGameAfterFrame());
 	}
@@ -206,7 +207,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 	}
 	
 	protected virtual void _NewGame(){
-
 		// children implement this
 	}
 	
@@ -376,8 +376,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		if(!IsTutorialRunning()){
 			// for now, current lives cannot go above the starting value...
 			int nCurLives = GetLives();
-			if(num > 0 && nCurLives == nStartingLives)
-				return;
 			
 			int nNew = lives + num;
 			SetLives(nNew);

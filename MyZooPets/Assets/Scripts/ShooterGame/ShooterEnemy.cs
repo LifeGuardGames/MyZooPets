@@ -56,10 +56,15 @@ public class ShooterEnemy : MonoBehaviour{
 	// handles collision not too much special there
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "bullet"){
-			if(!collider.GetComponent<ShooterGameBulletScript>().isPierceing){
-				Destroy(collider.gameObject);
-			}
-			health--;
+			health -= collider.GetComponent<ShooterGameBulletScript>().health;
+			if(!collider.GetComponent<ShooterGameBulletScript>().isPierceing ){
+				if(collider.GetComponent<ShooterGameBulletScript>().health > damage){
+					collider.GetComponent<ShooterGameBulletScript>().health--;
+				}
+				else{
+					Destroy(collider.gameObject);
+				}
+			}		
 			if(health <= 0){
 				ShooterGameManager.Instance.AddScore(scoreVal);
 				StartCoroutine(DestroyEnemy());
@@ -67,6 +72,9 @@ public class ShooterEnemy : MonoBehaviour{
 		}
 		else if(collider.gameObject.tag == "Player"){
 			PlayerShooterController.Instance.ChangeHealth(-damage);
+			StartCoroutine(DestroyEnemy());
+		}
+		else if(collider.gameObject.tag == "Wall"){
 			StartCoroutine(DestroyEnemy());
 		}
 	}

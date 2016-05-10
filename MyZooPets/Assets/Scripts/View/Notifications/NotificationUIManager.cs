@@ -92,15 +92,18 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 			//Check if notification panel exist. load it if not
 			if(notificationCenterPanel == null){
+				if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
 				GameObject notificationPanelPrefab = (GameObject)Resources.Load("NotificationCenterPanel");
 				notificationCenterPanel = GameObjectUtils.AddChildWithPositionAndScale(anchorCenter, notificationPanelPrefab);
-
+				}
 			}
 
 			//load the 3D click blocker	
 			if(notificationBackDrop3D == null && mainCamera != null){
-				GameObject notificationBackDrop3DPrefab = (GameObject)Resources.Load("NotificationBackDrop3D");
-				notificationBackDrop3D = GameObjectUtils.AddChildWithPositionAndScale(mainCamera, notificationBackDrop3DPrefab);
+				if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+					GameObject notificationBackDrop3DPrefab = (GameObject)Resources.Load("NotificationBackDrop3D");
+					notificationBackDrop3D = GameObjectUtils.AddChildWithPositionAndScale(mainCamera, notificationBackDrop3DPrefab);
+				}
 			}
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
@@ -251,10 +254,14 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.SetSound(sound);
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		
+		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
+		}
+		else{
+			oneButtonMessage.Hide();
+		}
 	}
-	
+
 	/// <summary>
 	/// Shows the popup tip with image.
 	/// </summary>

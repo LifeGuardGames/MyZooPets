@@ -56,7 +56,7 @@ public class PopupNotificationNGUI : MonoBehaviour{
 	}
 
 	// Hide the popup panel
-	protected void Hide(){
+	public void Hide(){
 		try{
 			if(HideImmediately){
 				TryHideDemuxThenToggle(0f);

@@ -110,9 +110,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 417122}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 61: {fileID: 6100000}
+  - 50: {fileID: 5060872}
   m_Layer: 0
   m_Name: PlayerShooter
   m_TagString: Player
@@ -542,6 +542,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 417138}
   m_RootOrder: 2
+--- !u!50 &5060872
+Rigidbody2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 117122}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 0
+  m_FixedAngle: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -568,18 +583,6 @@ Animator:
   m_ApplyRootMotion: 1
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 117122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 623595f1fd8f50f4aa576099d9accd65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 9517144}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -591,9 +594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bd54a3fc44b654c83a4fa48f915ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 11400000}
-  state: neutral
   playerHealth: 10
+  characterAnim: {fileID: 0}
   fireBallPrefabs:
   - {fileID: 100008, guid: 58c5b47491e03434989d3779860ac8ca, type: 2}
   - {fileID: 100000, guid: 523a0ad9124c63c42a33d9fe6f4e83ba, type: 2}

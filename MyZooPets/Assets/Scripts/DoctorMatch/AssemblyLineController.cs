@@ -3,78 +3,55 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class AssemblyLineController : MonoBehaviour {
-
+	public List<Transform> positionList;
+	public GameObject itemParent;
 	public GameObject itemPrefab;
-	public GameObject startLocation;
-	public GameObject endLocation;
 
-	private bool isRunning = false;
-	private float frequency;
-	public float Frequency{
-		get{return frequency;}
-		set{
-			frequency = value;
-			if(isRunning){	// Keep the track running if it is already active
-				StartSpawning();
-			}
+	private Queue<AssemblyLineItem> itemQueue;
+
+	// Fill the list with items and in the right positions
+	public void Initialize(){
+		if(positionList == null || positionList.Count == 0){
+			Debug.LogError("Position list not initialized or empty");
+			return;
+		}
+
+		itemQueue = new Queue<AssemblyLineItem>();
+
+		// Init and throw it into the queue
+		for(int i = 0; i < positionList.Count; i++){
+			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
+			item.transform.position = positionList[i].position;
+			AssemblyLineItem itemScript = item.GetComponent<AssemblyLineItem>();
+			itemScript.Init(i);
+			itemQueue.Enqueue(itemScript);
 		}
 	}
 
-	private float speed;
-	public float Speed{
-		get{return speed;}
-		set{speed = value;}
+	public AssemblyLineItem PopFirstItem(){
+		AssemblyLineItem poppedItem = itemQueue.Dequeue();
+		return poppedItem;
 	}
 
-	void Start(){
-		DoctorMatchManager.OnStateChanged += OnGameStateChanged;	// Game state changes
-	}
-
-	void OnDestroy(){
-		DoctorMatchManager.OnStateChanged -= OnGameStateChanged;	// Game state changes
-	}
-
-	void OnGameStateChanged(object sender, GameStateArgs args){
-		MinigameStates eState = args.GetGameState();
-		
-		switch(eState){
-		case MinigameStates.GameOver:
-			StopSpawning();
-			break;
-		case MinigameStates.Paused:
-			StopSpawning();
-			break;
-		case MinigameStates.Playing:
-			StartSpawning();
-			break;
+	public void ShiftAndAddNewItem(){
+		foreach(AssemblyLineItem itemScript in itemQueue){
+			int newIndex = itemScript.GetIncrementIndex();
+			LeanTween.cancel(itemScript.gameObject);
+			LeanTween.move(itemScript.gameObject, positionList[newIndex].position, 0.1f);
 		}
+
+		// Add new item
+		GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
+		int newItemIndex = positionList.Count - 1;
+		item.transform.position = positionList[newItemIndex].position;
+		AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
+		newItemScript.Init(newItemIndex);
+		itemQueue.Enqueue(newItemScript);
 	}
 
-	public void StartSpawning(){
-		if(!DoctorMatchManager.Instance.IsTutorialRunning()){
-			StopSpawning();
-			isRunning = true;
-			InvokeRepeating("SpawnItem", 1f, frequency);
-		}
-	}
-
-	public void StopSpawning(){
-		isRunning = false;
-		CancelInvoke("SpawnItem");
-	}
-
-	public GameObject SpawnItemForTutorial(){
-		GameObject item = Instantiate(itemPrefab) as GameObject;
-//		item.GetComponent<AssemblyLineItem>().SetupItem(this);
-
-		return item;
-	}
-
-	private void SpawnItem(){
-		if(!DoctorMatchManager.Instance.IsTutorialRunning()){
-			GameObject item = Instantiate(itemPrefab) as GameObject;
-			item.transform.position = startLocation.transform.position;
-			item.GetComponent<AssemblyLineItem>().SetupItem(this);
+	public void DestroyItems(){
+		foreach (Transform child in itemParent.transform) {
+			GameObject.Destroy(child.gameObject);
 		}
 	}
 }

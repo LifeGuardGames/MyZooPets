@@ -9,6 +9,7 @@ public class NinjaTriggerTarget : NinjaTrigger{
 
 	public int points = 1;			// how much is this trigger worth when the player cuts it?
 	public Renderer rendererFace;	// renderer for cockroach face
+	public bool isOnScreen = false;
 
 	protected override void Start(){
 		base.Start();	
@@ -72,5 +73,16 @@ public class NinjaTriggerTarget : NinjaTrigger{
 				NinjaManager.Instance.CheckEndBonus();
 			}
 		}
-	}	
+	}
+
+	void OnTriggerEnter(Collider col){
+		if(isOnScreen && !NinjaManager.Instance.bonusRound){
+			this.GetComponent<Rigidbody>().velocity = new Vector3(-this.GetComponent<Rigidbody>().velocity.x,this.GetComponent<Rigidbody>().velocity.y,this.GetComponent<Rigidbody>().velocity.z) ;
+		}
+	}
+
+	void OnBecameVisible(){
+		isOnScreen = true;
+		this.GetComponent<Rigidbody>().detectCollisions = true;
+	}
 }

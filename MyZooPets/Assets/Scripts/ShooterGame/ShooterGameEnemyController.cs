@@ -21,6 +21,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 	// builds a list of waves
 	public ImmutableDataWave buildWave(int waveNumber){
 		int difficulty = 0;
+		if(waveNumber % 10 == 0 && waveNumber !=0){
+			return DataLoaderWaves.GetData("Boss Wave_1");
+		}
 		if(waveNumber == 0){
 			difficulty = 0;
 		}
@@ -65,16 +68,19 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 			waveEnemies.Add(enemyList[0]);
 		}
 		for(int i = 0; i < currWave.MediumEnemiesCount; i++){
-			waveEnemies.Add(enemyList[1]);
-		}
-		for(int i = 0; i < currWave.HardEnemiesCount; i++){
-			waveEnemies.Add(enemyList[2]);
-		}
-		for(int i = 0; i < currWave.PowerUpCount; i++){
-			int rand = UnityEngine.Random.Range(3, 5);
+			int rand = UnityEngine.Random.Range(1,3);
 			waveEnemies.Add(enemyList[rand]);
 		}
-		ShooterSpawnManager.Instance.SpawnTriggers(waveEnemies);
+		for(int i = 0; i < currWave.HardEnemiesCount; i++){
+			int rand = UnityEngine.Random.Range(3,5);
+			waveEnemies.Add(enemyList[rand]);
+		}
+		if(currWave.BossRound == true){
+			ShooterSpawnManager.Instance.SpawnBoss();
+		}
+		else{
+			ShooterSpawnManager.Instance.SpawnTriggers(waveEnemies);
+		}
 	}
 
 	// checks if all enemies are dead and if yes, begin day transition

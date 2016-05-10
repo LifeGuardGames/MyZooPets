@@ -10,6 +10,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	private float startTime;
 	public int waveNum = 0;
 	public bool inTutorial;
+	public int powerUpScore;
 
 	private ShooterUIManager shooterUI;
 
@@ -65,6 +66,10 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		}
 	}
 
+	public void TriggerGameover(){
+		GameOver();
+	}
+
 	protected override void _GameOver(){
 		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		if(waveNum != 0){	// HACK patching this up for now, please fix dylan, when wave num is 0 -> division by zero
@@ -90,20 +95,36 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 				// spread across 3 scripts this section deals with getting the input position
 				#if !UNITY_EDITOR
 				Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-				PlayerShooterController.Instance.Shoot(touchPos);
+				if(Camera.main.ScreenToWorldPoint(touchPos).x <= PlayerShooterController.Instance.gameObject.transform.position.x){
+					PlayerShooterController.Instance.Move(touchPos);
+				}
+				else{
+					PlayerShooterController.Instance.Shoot(touchPos);
+					startTime = Time.time;
+				}
 				#endif
-
+					
 				#if UNITY_EDITOR
 				Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-				PlayerShooterController.Instance.Shoot(mousePos);
+				if(Camera.main.ScreenToWorldPoint(mousePos).x <= PlayerShooterController.Instance.gameObject.transform.position.x +1.0f){
+					PlayerShooterController.Instance.Move(mousePos);
+				}
+				else{
+					PlayerShooterController.Instance.Shoot(mousePos);
+					startTime = Time.time;
+				}
 				#endif
 			}
-			startTime = Time.time;
 		}
 	}
 
 	public void AddScore(int amount){
 		UpdateScore(amount);
+		powerUpScore += amount;
+		if(powerUpScore > 75){
+			powerUpScore = 0;
+			ShooterSpawnManager.Instance.SpawnPowerUp();
+		}
 	}
 
 	public void StartTimeTransition(){

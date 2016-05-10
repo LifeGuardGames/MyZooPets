@@ -114,6 +114,7 @@ public abstract class Tutorial{
 		if(isFinished){
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(GetKey());
 			Analytics.Instance.TutorialCompleted(GetKey());
+			//DataManager.Instance.SaveGameData();
 		}
 
 		if(goPopup != null){

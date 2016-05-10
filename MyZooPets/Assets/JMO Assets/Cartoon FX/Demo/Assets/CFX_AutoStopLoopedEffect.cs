@@ -25,7 +25,7 @@ public class CFX_AutoStopLoopedEffect : MonoBehaviour
 			d -= Time.deltaTime;
 			if(d <= 0)
 			{
-				this.particleSystem.Stop(true);
+				this.GetComponent<ParticleSystem>().Stop(true);
 				
 				CFX_Demo_Translate translation = this.gameObject.GetComponent<CFX_Demo_Translate>();
 				if(translation != null)

@@ -50,7 +50,7 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 		RoomArrowsUIManager.Instance.HidePanel();
 
 		// disable the collider so the user can't click the chart again
-		gameObject.collider.enabled = false;
+		gameObject.GetComponent<Collider>().enabled = false;
 
 		// disable FingerGesture OnDrag event
 		dragRecognizerFingerGesture.enabled = false;
@@ -65,7 +65,7 @@ public class MapUIManager : SingletonUI<MapUIManager> {
 	//---------------------------------------------------
 	protected override void _CloseUI(){
 		// enable the collider so that the board can be clicked again
-		gameObject.collider.enabled = true;
+		gameObject.GetComponent<Collider>().enabled = true;
 
 		// enable FingerGesture OnDrag event
 		dragRecognizerFingerGesture.enabled = true;

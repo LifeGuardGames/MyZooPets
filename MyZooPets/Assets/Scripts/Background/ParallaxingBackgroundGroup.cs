@@ -27,9 +27,9 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
 
     public void SetAlpha(float alpha) {
          foreach(Parallax currentParallax in ParralaxingTextures) {
-            Color currentColor = currentParallax.renderer.material.color;
+            Color currentColor = currentParallax.GetComponent<Renderer>().material.color;
             currentColor.a = alpha;
-            currentParallax.renderer.material.color = currentColor;
+            currentParallax.GetComponent<Renderer>().material.color = currentColor;
          }
     }
 

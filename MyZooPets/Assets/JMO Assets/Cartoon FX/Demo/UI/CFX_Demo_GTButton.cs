@@ -19,14 +19,14 @@ public class CFX_Demo_GTButton : MonoBehaviour
 	
 	void Awake()
 	{
-		CollisionRect = this.guiTexture.GetScreenRect(Camera.main);
+		CollisionRect = this.GetComponent<GUITexture>().GetScreenRect(Camera.main);
 	}
 	
 	void Update ()
 	{
 		if(CollisionRect.Contains(Input.mousePosition))
 		{
-			this.guiTexture.color = HoverColor;
+			this.GetComponent<GUITexture>().color = HoverColor;
 			
 			if(Input.GetMouseButtonDown(0))
 			{
@@ -35,7 +35,7 @@ public class CFX_Demo_GTButton : MonoBehaviour
 		}
 		else
 		{
-			this.guiTexture.color = NormalColor;
+			this.GetComponent<GUITexture>().color = NormalColor;
 		}
 	}
 	

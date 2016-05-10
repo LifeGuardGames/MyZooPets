@@ -54,7 +54,7 @@ public abstract class MiniPet : MonoBehaviour {
 	}
 
 	protected virtual void Start(){
-		nguiCamera = GameObject.Find("Camera").camera;
+		nguiCamera = GameObject.Find("Camera").GetComponent<Camera>();
 		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -74,20 +74,20 @@ public abstract class MiniPet : MonoBehaviour {
 		isHatchedAux = isHatched;
 		if(isHatched){
 			eggParent.SetActive(false);
-			eggAnimation.animation.Stop();
+			eggAnimation.GetComponent<Animation>().Stop();
 			flippable.SetActive(true);
-			gameObject.collider.enabled = true;
+			gameObject.GetComponent<Collider>().enabled = true;
 			if(eggClickController != null){		// Remove unused components on the egg parent
 				Destroy(eggClickController);
-				Destroy(eggClickController.collider);
+				Destroy(eggClickController.GetComponent<Collider>());
 			}
 			isVisible = true;
 		}
 		else{	// Not hatched yet
 			eggParent.SetActive(true);
-			eggAnimation.animation.Play();
+			eggAnimation.GetComponent<Animation>().Play();
 			flippable.SetActive(false);
-			gameObject.collider.enabled = false;
+			gameObject.GetComponent<Collider>().enabled = false;
 			isVisible = false;
 		}
 	}
@@ -244,7 +244,7 @@ public abstract class MiniPet : MonoBehaviour {
 		else{
 			flippable.SetActive(false);
 			eggParent.SetActive(false);
-			gameObject.collider.enabled = false;
+			gameObject.GetComponent<Collider>().enabled = false;
 		}
 	}
 

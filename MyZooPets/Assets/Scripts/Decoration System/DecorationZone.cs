@@ -236,7 +236,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		if(nodeTypeName == null){
 			isAnimationPlaying = false;
 			if(!isAnimationPlaying){
-				animation.Stop();
+				GetComponent<Animation>().Stop();
 			}
 			
 			spriteOutline.color = neutralColorOutline;
@@ -247,7 +247,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		else if(nodeTypeName != nodeType.ToString()){
 			isAnimationPlaying = false;
 			if(!isAnimationPlaying){
-				animation.Stop();
+				GetComponent<Animation>().Stop();
 			}
 
 			spriteOutline.color = inactiveColorOutline;
@@ -255,7 +255,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 		// Correct state, play the active state
 		else{
-			animation.Play();
+			GetComponent<Animation>().Play();
 			isAnimationPlaying = true;
 
 			spriteOutline.color = activeColorOutline;

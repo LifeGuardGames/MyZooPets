@@ -128,7 +128,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 	public void LoadGame(){
 		//Lock it while loading
 		ClickManager.Instance.Lock(UIModeTypes.None);
-		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
+		LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 	}
 
 	//After existing game data has been loaded. Enter the game

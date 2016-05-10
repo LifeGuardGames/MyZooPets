@@ -9,7 +9,6 @@ using System.Collections;
 public class TweenToggleDemux : MonoBehaviour {
 
 	public GameObject[] GoList;
-	public Vector2 testButtonPos;
 	public bool isDebug = false;
 	public bool startsHidden = false;
 

@@ -86,7 +86,7 @@ public class ButtonChangeScene : LgButton{
 	//---------------------------------------------------
 	private void CameraMoveDone(){
 		// the camera move is complete, so now let's start the transition (if it exists)
-		LoadLevelUIManager.Instance.StartLoadTransition(strScene);
+		LoadLevelManager.Instance.StartLoadTransition(strScene);
 	}
 
 	//---------------------------------------------------

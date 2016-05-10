@@ -17,7 +17,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	public GameObject progressBarObject;
 	public GameObject inhalerBody;
 	public Animator inhalerWholeObject;
-	public SceneTransition scriptTransition;
 	public bool tutOn; //turn tutorial on or off. for debuggin
 	private bool isFirstTimeAux; // Keep track of this internally, need for gameover reward
 
@@ -190,7 +189,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	private void QuitInhalerGame(object sender, EventArgs args){
 		NotificationUIManager.Instance.CleanupNotification();
-		LoadLevelUIManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
+		LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 	}
 }
 

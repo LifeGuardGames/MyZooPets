@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 
 public class LGGIAPController : MonoBehaviour {
+	/*
 	public enum IAPUIState{
 		Confirm,
 		WaitingForTransaction,
@@ -160,4 +161,5 @@ public class LGGIAPController : MonoBehaviour {
 	public void HideConfirmPanel(){
 		purchaseTween.Hide();
 	}
+	*/
 }

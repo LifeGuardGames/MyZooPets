@@ -82,10 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isShown: 0
-  ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 1
   startsHidden: 0
   hideDeltaX: 800
   hideDeltaY: 0
@@ -96,6 +93,7 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 5
   easeShow: 6
+  isUseEstimatedTime: 0
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -104,8 +102,6 @@ MonoBehaviour:
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11410386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -120,19 +116,19 @@ MonoBehaviour:
   GoList:
   - {fileID: 101914}
   - {fileID: 157798}
-  isDebug: 0
   startsHidden: 1
   lastFinishedShowObject: {fileID: 101914}
   lastFinishedHideObject: {fileID: 157798}
   isShowFinishedCallback: 1
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: StartLoadingScreen
+  ShowTarget: {fileID: 126360}
+  ShowFunctionName: ShowFinishedCallback
   ShowIncludeChildren: 0
   isHideFinishedCallback: 1
   HideTarget: {fileID: 0}
   HideFunctionName: 
   HideIncludeChildren: 0
   hideImmediately: 0
+  UIRayCastBlock: {fileID: 0}
 --- !u!114 &11410866
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,10 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd789e648af5ec8498454ef5f0f7d0bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isShown: 0
-  ignoreTimeScale: 0
   isUsingDemultiplexer: 1
-  blockUI: 1
   startsHidden: 0
   hideDeltaX: -800
   hideDeltaY: 0
@@ -179,6 +172,7 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 5
   easeShow: 6
+  isUseEstimatedTime: 0
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -187,8 +181,6 @@ MonoBehaviour:
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 
-  isDebug: 0
-  testButtonPos: {x: 0, y: 0}
 --- !u!114 &11417938
 MonoBehaviour:
   m_ObjectHideFlags: 1

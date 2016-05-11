@@ -153,16 +153,6 @@ public abstract class Gate : MonoBehaviour{
 		
 		// gates might do their own thing upon destruction
 		GateDestroyed();	
-		
-		// add any appropriate task unlocks
-		ImmutableDataGate data = GetGateData();
-		string[] arrayUnlocks = data.TaskUnlocks;
-
-		if(arrayUnlocks != null){
-			for(int i = 0; i < arrayUnlocks.Length; ++i){
-				WellapadMissionController.Instance.UnlockTask(arrayUnlocks[i]);		
-			}
-		}
 	}
 
 	private void UnlockRoomArrows(){

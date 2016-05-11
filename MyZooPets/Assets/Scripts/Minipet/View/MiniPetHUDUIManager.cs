@@ -44,8 +44,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			minipetType = MiniPetTypes.Retention;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString())){
 //				Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus);
-				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
-					  || DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
+				if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].isReward == RewardStatuses.Unclaimed
+					  || DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].isReward == RewardStatuses.Unearned){
 
 					contentPrefab = Resources.Load("ContentParentRetention") as GameObject;
 					content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
@@ -67,8 +67,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		case MiniPetTypes.GameMaster:
 			minipetType = MiniPetTypes.GameMaster;
-			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unclaimed
-				  ||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus == RewardStatuses.Unearned){
+			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].isReward == RewardStatuses.Unclaimed
+				  ||DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].isReward == RewardStatuses.Unearned){
 
 				contentPrefab = Resources.Load("ContentParentGameMaster") as GameObject;
 				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);

@@ -21,7 +21,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 	public void InitializeContent(string taskID, MiniPetRetentionPet retentionScript){
 		this.retentionScript = retentionScript;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
-				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
+				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTaskGroup("TutorialPart1"); 
 				task = listTasks[0];
 				ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
 				SetCheckboxSprite(true, slash1);
@@ -42,10 +42,10 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 			}
 			else {
 //			Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus);
-			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unclaimed
-			   || DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].RewardStatus == RewardStatuses.Unearned){
+			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].isReward == RewardStatuses.Unclaimed
+			   || DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].isReward == RewardStatuses.Unearned){
 					//Debug.Log(taskID);
-					List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
+					List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTaskGroup("Critical"); 
 					task = listTasks[0];
 					SetCheckboxSprite(true, slash1);
 					ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);

@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 
 /// <summary>
 /// Player age user interface manager.
 /// </summary>
-public class QuestionaireUIManager2 : MonoBehaviour{
-	public TweenToggle baseTweenToggle;
-	public TweenToggle finishButtonTweenToggle;
+public class QuestionaireAsthmaController : MonoBehaviour{
+	public TweenToggleDemux panelTween;
+	public TweenToggle submitButtonTween;
 
 	private bool hasAsthma;
 	private bool hasAsthmaOptionChecked = false;
@@ -21,7 +19,7 @@ public class QuestionaireUIManager2 : MonoBehaviour{
 			hasAsthma = true;
 			if(!hasAsthmaOptionChecked){
 				hasAsthmaOptionChecked = true;
-				finishButtonTweenToggle.Show();
+				submitButtonTween.Show();
 			}
 		}
 	}
@@ -35,27 +33,27 @@ public class QuestionaireUIManager2 : MonoBehaviour{
 			hasAsthma = false;
 			if(!hasAsthmaOptionChecked){
 				hasAsthmaOptionChecked = true;
-				finishButtonTweenToggle.Show();
+				submitButtonTween.Show();
 			}
 		}
 	}
 
-	public void ButtonClickedFinish(){
+	public void OnSubmitButton(){
 		Analytics.Instance.UserAsthma(hasAsthma);
 		QuestionaireManager.Instance.QuestionaireCollected();
-		CloseUI();
+		HidePanel();
 	}
 
-	public void OpenUI(){
-		baseTweenToggle.Show();
+	public void ShowPanel() {
+		panelTween.Show();
 	}
 
-	public void CloseUI(){
-		baseTweenToggle.Hide();
+	public void HidePanel() {
+		panelTween.Hide();
 	}
 
 	// Assigned callback
-	public void FinishedCloseFunction(){
-		QuestionaireManager.Instance.ContinueLoading();
+	public void OnFinishClose() {
+		QuestionaireManager.Instance.ContinueLoading(true);
 	}
 }

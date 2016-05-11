@@ -35,14 +35,14 @@ public class LoadLevelManager : Singleton<LoadLevelManager> {
 		isShowingImageTip = false;
 
 		// Reset everything first
-		loadText.text = "";
-		loadImage.gameObject.SetActive(false);
+		//loadText.text = "";
+		//loadImage.gameObject.SetActive(false);
 
 		if(additionalTextKey != null) {
 			//loadText.text = LocalizationText.GetText(additionalTextKey);
 		}
 		if(additionalImageKey != null) {
-			loadImage.gameObject.SetActive(true);
+			//loadImage.gameObject.SetActive(true);
 			//loadImage.sprite = SpriteCacheManager.GetLoadingImageData(additionalImageKey);
 			isShowingImageTip = true;
 		}

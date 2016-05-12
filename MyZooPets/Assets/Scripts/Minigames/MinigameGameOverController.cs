@@ -2,14 +2,33 @@
 using System.Collections;
 
 public class MinigameGameOverController : MonoBehaviour {
+	public TweenToggleDemux panelTween;
+	public GenericMinigameUI UIManager;
 
-	// Use this for initialization
-	void Start () {
-	
+	public void PopulateAndShow(){
+		// ...
+		ShowPanel();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	#region Button calls
+	public void OnAdButton(){
+		UIManager.OnPlayAd();
+	}
+
+	public void OnExitButton(){
+		UIManager.OnExitGame(true);
+	}
+
+	public void OnRestartButton(){
+		UIManager.OnRestart();
+	}
+	#endregion
+
+	public void ShowPanel(){
+		panelTween.Show();
+	}
+
+	public void HidePanel(){
+		panelTween.Hide();
 	}
 }

@@ -2,14 +2,28 @@
 using System.Collections;
 
 public class MinigamePauseController : MonoBehaviour {
+	public TweenToggleDemux panelTween;
+	public GenericMinigameUI UIManager;
 
-	// Use this for initialization
-	void Start () {
-	
+	#region Button calls
+	public void OnResumeButton(){
+		UIManager.OnResume();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void OnRestartButton(){
+		UIManager.OnRestart();
+	}
+
+	public void OnExitButton(){
+		UIManager.OnExitGame(false);
+	}
+	#endregion
+
+	public void ShowPanel(){
+		panelTween.Show();
+	}
+
+	public void HidePanel(){
+		panelTween.Hide();
 	}
 }

@@ -113,6 +113,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22496332}
+  - 114: {fileID: 11483440}
   - 114: {fileID: 11464642}
   m_Layer: 5
   m_Name: PauseController
@@ -148,6 +149,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22420038}
+  - 114: {fileID: 11488782}
   - 114: {fileID: 11497942}
   m_Layer: 5
   m_Name: StartController
@@ -289,6 +291,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22418616}
+  - 114: {fileID: 11420038}
   - 114: {fileID: 11484846}
   m_Layer: 5
   m_Name: GameOverController
@@ -524,6 +527,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11420038
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 186322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49a9c2caea370b4e9d9aa31ca566f75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelTween: {fileID: 11484846}
+  UIManager: {fileID: 11428398}
 --- !u!114 &11428398
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -535,6 +551,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce16a8512dd8c454f9c14fdc0dd38682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startController: {fileID: 11488782}
+  pauseController: {fileID: 11483440}
+  gameOverController: {fileID: 11420038}
 --- !u!114 &11435924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -994,6 +1013,19 @@ MonoBehaviour:
   HideIncludeChildren: 0
   strSoundShow: 
   strSoundHide: 
+--- !u!114 &11483440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1e7af094ab19154fb68eefcaad6ab32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelTween: {fileID: 11464642}
+  UIManager: {fileID: 11428398}
 --- !u!114 &11484846
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1021,6 +1053,19 @@ MonoBehaviour:
   HideIncludeChildren: 0
   hideImmediately: 0
   UIRayCastBlock: {fileID: 22542866}
+--- !u!114 &11488782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 135580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f2f7ded2b933044b8a8c32a28b5ebe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelTween: {fileID: 11497942}
+  UIManager: {fileID: 11428398}
 --- !u!114 &11493532
 MonoBehaviour:
   m_ObjectHideFlags: 1

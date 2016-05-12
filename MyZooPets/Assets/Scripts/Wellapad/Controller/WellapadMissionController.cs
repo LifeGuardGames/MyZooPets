@@ -210,9 +210,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public void CreateTutorialPart1Missions(){
 		// reset the current data
 		DataManager.Instance.GameData.Wellapad.ResetMissions();
-		
-		AddTask("TutorialPart1");
-		
+
+		AddTask("DailyInhaler");
+		AddTask("FightMonster");
+
+
 		// send event
 		if(OnMissionsRefreshed != null) 
 			OnMissionsRefreshed(this, EventArgs.Empty);
@@ -221,9 +223,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public void CreateTutorialPart2Missions(){
 		// reset the current data
 		DataManager.Instance.GameData.Wellapad.ResetMissions();
-		
-		AddTask("TutorialPart2");
-		
+
+		AddTask("DailyInhaler");
+		AddTask("FightMonster");
+		AddTask("CleanRoom");
+
 		// send event
 		if(OnMissionsRefreshed != null) 
 			OnMissionsRefreshed(this, EventArgs.Empty);
@@ -335,7 +339,8 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	}
 
 	private void AddDefaultMissions(){
-		AddTask("Critical");
+		AddTask("DailyInhaler");
+		AddTask("FightMonster");
 	}
 
 

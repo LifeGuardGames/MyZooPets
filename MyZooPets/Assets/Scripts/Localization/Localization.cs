@@ -15,32 +15,23 @@ using System.Collections.Generic;
 /// This will attempt to load the file called "French.txt" in the Resources folder.
 /// The localization file should contain key = value pairs, one pair per line.
 /// </summary>
-
-[AddComponentMenu("NGUI/Internal/Localization")]
-public class Localization : MonoBehaviour
-{
+public class Localization : MonoBehaviour {
 	static Localization mInstance;
 
 	/// <summary>
 	/// Whether there is an instance of the localization class present.
 	/// </summary>
-
 	static public bool isActive { get { return mInstance != null; } }
 
 	/// <summary>
 	/// The instance of the localization class. Will create it if one isn't already around.
 	/// </summary>
-
-	static public Localization instance
-	{
-		get
-		{
-			if (mInstance == null)
-			{
+	static public Localization instance {
+		get {
+			if(mInstance == null) {
 				mInstance = Object.FindObjectOfType(typeof(Localization)) as Localization;
 
-				if (mInstance == null)
-				{
+				if(mInstance == null) {
 					GameObject go = new GameObject("_Localization");
 					DontDestroyOnLoad(go);
 					mInstance = go.AddComponent<Localization>();
@@ -53,13 +44,11 @@ public class Localization : MonoBehaviour
 	/// <summary>
 	/// Language the localization manager will start with.
 	/// </summary>
-
 	public string startingLanguage = "English";
 
 	/// <summary>
 	/// Available list of languages.
 	/// </summary>
-
 	public TextAsset[] languages;
 
 	Dictionary<string, string> mDictionary = new Dictionary<string, string>();
@@ -72,30 +61,21 @@ public class Localization : MonoBehaviour
 	/// <summary>
 	/// Name of the currently active language.
 	/// </summary>
-
-	public string currentLanguage
-	{
-		get
-		{
+	public string currentLanguage {
+		get {
 			return mLanguage;
 		}
-		set
-		{
-			if (mLanguage != value)
-			{
+		set {
+			if(mLanguage != value) {
 				startingLanguage = value;
 
-				if (!string.IsNullOrEmpty(value))
-				{
+				if(!string.IsNullOrEmpty(value)) {
 					// Check the referenced assets first
-					if (languages != null)
-					{
-						for (int i = 0, imax = languages.Length; i < imax; ++i)
-						{
+					if(languages != null) {
+						for(int i = 0, imax = languages.Length; i < imax; ++i) {
 							TextAsset asset = languages[i];
 
-							if (asset != null && asset.name == value)
-							{
+							if(asset != null && asset.name == value) {
 								Load(asset);
 								return;
 							}
@@ -105,8 +85,7 @@ public class Localization : MonoBehaviour
 					// Not a referenced asset -- try to load it dynamically
 					TextAsset txt = Resources.Load(value, typeof(TextAsset)) as TextAsset;
 
-					if (txt != null)
-					{
+					if(txt != null) {
 						Load(txt);
 						return;
 					}
@@ -122,29 +101,25 @@ public class Localization : MonoBehaviour
 	/// <summary>
 	/// Determine the starting language.
 	/// </summary>
-
-	void Awake ()
-	{
-		if (mInstance == null)
-		{
+	void Awake() {
+		if(mInstance == null) {
 			mInstance = this;
 			DontDestroyOnLoad(gameObject);
 
 			currentLanguage = PlayerPrefs.GetString(null, startingLanguage);
 
-			if (string.IsNullOrEmpty(mLanguage) && (languages != null && languages.Length > 0))
-			{
+			if(string.IsNullOrEmpty(mLanguage) && (languages != null && languages.Length > 0)) {
 				currentLanguage = languages[0].name;
 			}
 		}
-		else Destroy(gameObject);
+		else
+			Destroy(gameObject);
 	}
 
 	/// <summary>
 	/// Oddly enough... sometimes if there is no OnEnable function in Localization, it can get the Awake call after UILocalize's OnEnable.
 	/// </summary>
-
-	void OnEnable () { if (mInstance == null) mInstance = this; }
+	void OnEnable() { if(mInstance == null) mInstance = this; }
 
 #if SHOW_REPORT
 	/// <summary>
@@ -181,15 +156,12 @@ public class Localization : MonoBehaviour
 	/// <summary>
 	/// Remove the instance reference.
 	/// </summary>
-
-	void OnDestroy () { if (mInstance == this) mInstance = null; }
+	void OnDestroy() { if(mInstance == this) mInstance = null; }
 
 	/// <summary>
 	/// Load the specified asset and activate the localization.
 	/// </summary>
-
-	void Load (TextAsset asset)
-	{
+	void Load(TextAsset asset) {
 #if SHOW_REPORT
 		mUsed.Clear();
 #endif
@@ -203,22 +175,23 @@ public class Localization : MonoBehaviour
 	/// <summary>
 	/// Localize the specified value.
 	/// </summary>
-
-	public string Get (string key)
-	{
+	public string Get(string key) {
 #if UNITY_EDITOR
-		if (!Application.isPlaying) return key;
+		if(!Application.isPlaying)
+			return key;
 #endif
 #if SHOW_REPORT
 		if (!mUsed.Contains(key)) mUsed.Add(key);
 #endif
 		string val;
 #if UNITY_IPHONE || UNITY_ANDROID
-		if (mDictionary.TryGetValue(key + " Mobile", out val)) return val;
+		if(mDictionary.TryGetValue(key + " Mobile", out val))
+			return val;
 #endif
 
 #if UNITY_EDITOR
-		if (mDictionary.TryGetValue(key, out val)) return val;
+		if(mDictionary.TryGetValue(key, out val))
+			return val;
 		Debug.LogWarning("Localization key not found: '" + key + "'");
 		return key;
 #else
@@ -229,6 +202,5 @@ public class Localization : MonoBehaviour
 	/// <summary>
 	/// Localize the specified value.
 	/// </summary>
-
-	static public string Localize (string key) { return (instance != null) ? instance.Get(key) : key; }
+	static public string Localize(string key) { return (instance != null) ? instance.Get(key) : key; }
 }

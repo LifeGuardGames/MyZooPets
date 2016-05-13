@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class MinigameStartController : MonoBehaviour {
 	public TweenToggleDemux panelTween;
 	public GenericMinigameUI UIManager;
+	public Text minigameTitle;
+	public Text minigameOpening;
+
+	public void Start() {
+		
+	}
 
 	#region Button calls
 	public void OnTutorialButton(){

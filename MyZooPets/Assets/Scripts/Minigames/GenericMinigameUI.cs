@@ -1,10 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GenericMinigameUI : MonoBehaviour {
 	public MinigameStartController startController;
 	public MinigamePauseController pauseController;
 	public MinigameGameOverController gameOverController;
+
+	private MinigameManager<MonoBehaviour> minigameManager;
+	
+	void Awake() {
+		// ... Search by tags here!
+//		minigameManager = 
+		Debug.Log("Found Object type" + minigameManager.name);
+	}
+
+	public void GetMinigameKey() {
+	}
 
 	public void StartUI(){
 		startController.ShowPanel();

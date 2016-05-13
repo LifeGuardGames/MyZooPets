@@ -10,7 +10,7 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void FigureOutMissions(){
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
+		if(!DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done()){
 			missionID = "TutorialPart1";
 		}
 		else{
@@ -67,7 +67,8 @@ public class MiniPetRetentionPet : MiniPet {
 		isPetCanGainXP = true;
 
 		WellapadMissionController.Instance.needMission = true;
-		WellapadMissionController.Instance.AddTask("Critical");
+		WellapadMissionController.Instance.AddTask("DailyInhaler");
+		WellapadMissionController.Instance.AddTask("FightMonster");
 
 	}
 }

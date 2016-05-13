@@ -10,10 +10,17 @@ public class AssemblyLineController : MonoBehaviour {
 	private Queue<AssemblyLineItem> itemQueue;
 
 	// Fill the list with items and in the right positions
-	public void Initialize(){
+	public void Initialize() {
+		StartCoroutine(InitializeHelper());
+	}
+
+	private IEnumerator InitializeHelper() {
+		DestroyItems();
+		yield return 0;
+
 		if(positionList == null || positionList.Count == 0){
 			Debug.LogError("Position list not initialized or empty");
-			return;
+			yield break;
 		}
 
 		itemQueue = new Queue<AssemblyLineItem>();
@@ -51,7 +58,7 @@ public class AssemblyLineController : MonoBehaviour {
 
 	public void DestroyItems(){
 		foreach (Transform child in itemParent.transform) {
-			GameObject.Destroy(child.gameObject);
+			Destroy(child.gameObject);
 		}
 	}
 }

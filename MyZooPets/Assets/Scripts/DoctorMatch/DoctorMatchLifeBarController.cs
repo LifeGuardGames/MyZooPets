@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 public class DoctorMatchLifeBarController : MonoBehaviour {
 	public RectTransform barTransform;
 	private Vector2 barSize;
 	private float barPercentage = 1f;
-	private float hurtPercentage = -0.03f;
+	private float hurtPercentage = -0.05f;
 	private float plusPercentage = 0.05f;
 	private float startDrainSpeed = 0.1f;
 
@@ -66,7 +64,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	}
 
 	private void NotifyEmpty(){
-		Debug.Log("Notify empty");
 		StopDraining();
 		DoctorMatchManager.Instance.OnTimerBarEmpty();
 	}

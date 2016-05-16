@@ -6,12 +6,11 @@ using System.Collections;
 /// Camera follow. Camera follows the player
 /// </summary>
 public class CameraFollow : MonoBehaviour {
-    public MegaHazard MegaHazardToOffset;
 	public Transform playerTransform;
-
 	private Vector3 cameraPositionOffset;
 	public float minOffset = 5; //Used to be main camera's transform, now moved to here (13.40473f)
 	public float maxOffset = 18;
+	public float height = 17;
 	private float currentOffset = 0;
 	private float maxSpeed;
 	private float minSpeed;
@@ -45,6 +44,6 @@ public class CameraFollow : MonoBehaviour {
 //		transform.position = newPosition;
 		speedPercentage = (PlayerController.Instance.Speed-minSpeed)/(maxSpeed-minSpeed); //Between 0 and 1 depending on percentage of currentSpeed from minSpeed to maxSpeed
 		currentOffset = maxOffset + (minOffset - maxOffset) * speedPercentage; //Now make our offset somewhere between maxOffset and minOffset depending on speedPercentage
-		this.transform.position = new Vector3(playerTransform.position.x+currentOffset, 14, this.transform.position.z); //playerTransform.position.x+offset
+		this.transform.position = new Vector3(playerTransform.position.x+currentOffset, height, this.transform.position.z); //playerTransform.position.x+offset
 	}
 }

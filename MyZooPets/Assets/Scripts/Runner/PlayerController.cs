@@ -72,7 +72,7 @@ public class PlayerController : Singleton<PlayerController>{
 	private Vector2 initialPosition; //Where the player start
 	private GameObject floatyLocation;
 	private SpriteRenderer[] spriteRendererList; //List of SpriteRenderers loaded by PetSpriteColorLoader
-	private Color[] colorList; //Used by spriteRenderList to revert colors back to original
+	private Color[] colorList; //Used by spriteRendererList to revert colors back to original
 	private bool flipColor = false;
 	private float magnetTime=0; //How long until magnet is disabled
 	private float magnetTimeIncrease=5f; //How much extra time a magnet gives

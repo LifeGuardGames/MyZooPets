@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Gating manager. This manager is in charge of behavior related to
@@ -9,10 +10,7 @@ using System.Collections.Generic;
 /// player.
 /// </summary>
 
-//public class DestroyedGateEventArgs : EventArgs{
-//	public string DestroyedGateID{ get; set; }
-//	public string MiniPetID{ get; set; }
-//}
+
 
 public class GatingManager : Singleton<GatingManager>{
 	//=======================Events========================
@@ -27,6 +25,8 @@ public class GatingManager : Singleton<GatingManager>{
 	public string CurrentZone{
 		get{ return currentZone; }
 	}
+
+	public int damage = 1;
 
 	private ImmutableDataGate latestUnlockedGate; 
 	public ImmutableDataGate LatestUnlockedGate{
@@ -49,7 +49,7 @@ public class GatingManager : Singleton<GatingManager>{
 		scriptPan = CameraManager.Instance.PanScript;
 
 		// Get current zone
-		currentZone = SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName).ToString();
+		currentZone = SceneUtils.GetZoneTypeFromSceneName(SceneManager.GetActiveScene().name).ToString();
 	}
 
 	void Start(){
@@ -89,11 +89,6 @@ public class GatingManager : Singleton<GatingManager>{
 		return latestGateSoFar;
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
-//			Debug.Log(GetLatestLockedGate().GateNumber);
-//		}
-//	}
 
 	public ImmutableDataGate GetLatestLockedGate(){
 		List<ImmutableDataGate> gateList = DataLoaderGate.GetAllData();
@@ -221,10 +216,6 @@ public class GatingManager : Singleton<GatingManager>{
 	public void GateCleared(){
 		// enable the player to do stuff in the room
 		EnableUI();
-
-		// move the pet to the center of the room
-//		Vector3 petPositionAfterGateCleared = new Vector3(76, -2, 20);
-//		PetMovement.Instance.MovePet(petPositionAfterGateCleared);
 	}
 
 	/// <summary>
@@ -265,14 +256,10 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <summary>
 	/// Determines whether the player can enter room.
 	/// </summary>
-	/// <returns><c>true</c> if player can enter room ; otherwise, <c>false</c>.</returns>
+	/// <returns><c>true</c> if player can enter room ie player is moving from a smog room; otherwise, <c>false</c>.</returns>
 	/// <param name="currentRoom">Current room.</param>
 	/// <param name="eSwipeDirection">E swipe direction.</param>
 	public bool CanEnterRoom(int currentLocalPartition, RoomDirection swipeDirection){
-		// early out if click manager is tweening
-		// WTF is this?? this messes up with the check logic. -- Jason
-//		if(ClickManager.Instance.IsTweeningUI())
-//			return false;
 		
 		// start off optimistic
 		bool isAllowed = true;
@@ -336,7 +323,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <returns><c>true</c>, if gate was destroyed, <c>false</c> otherwise.</returns>
 	/// <param name="gateID">Gate ID.</param>
 	/// <param name="damage">Damage amount.</param>
-	public bool DamageGate(string gateID, int damage){
+	public bool DamageGate(string gateID){
 		// check to make sure the gate exists
 		if(!DataManager.Instance.GameData.GatingProgress.GatingProgress.ContainsKey(gateID)){
 			Debug.LogError("Something trying to access a non-existant gate " + gateID);
@@ -351,7 +338,7 @@ public class GatingManager : Singleton<GatingManager>{
 
 		// otherwise, calculate and save the new hp
 		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
-		hp = Mathf.Max(hp - damage, 0);
+		hp -= damage;
 		DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] = hp;
 		
 		// then return whether or not the gate has been destroyed
@@ -403,18 +390,7 @@ public class GatingManager : Singleton<GatingManager>{
 	private void FlameCrystalNotification(){
 		//Debug.LogError("NEW NOTIFICATION HERE");
 		PetSpeechAI.Instance.ShowOutOfFireMsg();
-//		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
-//			StoreUIManager.OnShortcutModeEnd += ReturnToGatingSystemUIMode;
-//			
-//			ClickManager.Instance.Lock(UIModeTypes.Store);
-//			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.FlameCrystalNeededNotification);
-//		};
-//		
-//		Hashtable notificationEntry = new Hashtable();
-//		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.InhalerRecharging);
-//		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-//		
-//		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
 	}
 
 	/// <summary>

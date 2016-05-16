@@ -30,7 +30,6 @@ public abstract class MiniPet : MonoBehaviour {
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 	private bool isVisible;
 	private bool isHatchedAux;
-	private bool isBeingTickled = false;
 	public Camera nguiCamera;
 
 	public ParticleSystem getAccessoryParticle;
@@ -98,8 +97,8 @@ public abstract class MiniPet : MonoBehaviour {
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
 		}
 	}
-	
-	private void OnTap(TapGesture gesture){
+
+	/*private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
 				Analytics.Instance.MiniPetVisited(minipetId);
@@ -123,12 +122,36 @@ public abstract class MiniPet : MonoBehaviour {
 						ZoomInToMiniPet();
 						OpenChildUI();	// Further child UI calls
 					}
-					else if(ClickManager.Instance.CurrentMode == UIModeTypes.MiniPet){
-						if(!isBeingTickled){
-							animationManager.StartTickling();
-							isBeingTickled = true;
-							Invoke("StartTicklingTimer", 2f);
+				}
+			}
+		}
+	}*/
+
+	private void OnMouseDown() {
+		RaycastHit hitObject;
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if(Physics.Raycast(ray, out hitObject)) {
+			if(hitObject.transform == transform) {
+				Analytics.Instance.MiniPetVisited(minipetId);
+				if(!isFinishEating) {
+					ShowFoodPreferenceMessage();
+				}
+				bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+
+				if(!isMiniPetColliderLocked) {
+					if(SceneManager.GetActiveScene().name == "ZoneBedroom") {
+						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()) {
+							if(OnTutorialMinipetClicked != null) {
+								OnTutorialMinipetClicked(this, EventArgs.Empty);
+							}
+							return;
 						}
+					}
+					if(!isUIOpened && isModeLockEmpty) {
+						AudioManager.Instance.PlayClip("talkMinipet");
+						ZoomInToMiniPet();
+						OpenChildUI();  // Further child UI calls
 					}
 				}
 			}
@@ -137,10 +160,6 @@ public abstract class MiniPet : MonoBehaviour {
 	// Further code to run in children if tapped and zoom into minipet
 	protected abstract void OpenChildUI();
 
-	private void StartTicklingTimer(){
-		animationManager.StopTickling();
-		isBeingTickled = false;
-	}
 
 	private void ZoomInToMiniPet(){
 		Vector3 position = this.transform.position + zoomPositionOffset;

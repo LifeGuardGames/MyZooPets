@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class AlphaTweenToggle : TweenToggle {
 	public float hideDeltaAlpha;

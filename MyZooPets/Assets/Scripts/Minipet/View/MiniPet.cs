@@ -40,7 +40,6 @@ public abstract class MiniPet : MonoBehaviour {
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
 	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
-	public bool isPetCanGainXP = false;	// If the pet can get experience
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
 	public EventHandler<EventArgs> OnTutorialMinipetClicked;	// event that fires when the user clicks on pet during tutorial

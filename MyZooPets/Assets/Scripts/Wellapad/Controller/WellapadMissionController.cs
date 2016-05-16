@@ -22,9 +22,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public EventHandler<EventArgs> OnRewardClaimed;			// when a reward is claimed
 	//=====================================================
 
-	//check missions based off this
-	public bool needMission{get; set;}
-
 	/// <summary>
 	/// Gets the mission.
 	/// </summary>
@@ -196,7 +193,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// send event
 			if(OnMissionsRefreshed != null) 
 				OnMissionsRefreshed(this, EventArgs.Empty);		
-			needMission = false;
 			IsRefresh = false;
 		}
 	}

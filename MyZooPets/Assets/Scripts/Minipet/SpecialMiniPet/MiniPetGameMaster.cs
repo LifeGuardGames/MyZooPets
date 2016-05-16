@@ -30,13 +30,11 @@ public class MiniPetGameMaster : MiniPet{
 	public override void FinishEating(){
 		if(!isFinishEating){
 			base.FinishEating();
-			isPetCanGainXP = true;
 			isFinishEating = true; 
 			PetSpeechManager.Instance.BeQuiet();
 			miniPetSpeechAI.ShowChallengeMsg(minigameType);
 			minigameTaskId = PickMinigameMissionKey(minigameType);
 			
-			WellapadMissionController.Instance.needMission = true;
 			WellapadMissionController.Instance.AddTask(minigameTaskId);
 			
 			MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(minigameTaskId); 

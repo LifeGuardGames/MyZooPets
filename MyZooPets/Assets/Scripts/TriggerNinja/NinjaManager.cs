@@ -169,9 +169,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		// send out combo task
 		int nBestCombo = GetComboBest();
 		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
-		Analytics.Instance.NinjaHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-		Analytics.Instance.NinjaBonusRounds(bonusRoundCounter);
-		Analytics.Instance.NinjaTimesPlayedTick();
+		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], bonusRoundCounter);
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "NinjaLeaderBoard");
 #endif

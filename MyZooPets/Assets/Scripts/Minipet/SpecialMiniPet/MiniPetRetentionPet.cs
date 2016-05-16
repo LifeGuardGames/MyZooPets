@@ -64,9 +64,6 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void GiveOutMission(){
-		isPetCanGainXP = true;
-
-		WellapadMissionController.Instance.needMission = true;
 		WellapadMissionController.Instance.AddTask("DailyInhaler");
 		WellapadMissionController.Instance.AddTask("FightMonster");
 

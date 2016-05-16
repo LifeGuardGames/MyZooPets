@@ -13,7 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class RunnerGameManager : MinigameManager<RunnerGameManager>{
-    
+	public string deathLevel;
 	void Awake(){
 		quitGameScene = SceneUtils.YARD;
 	}
@@ -77,20 +77,18 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// </summary>
 	protected override void _GameOver(){
 
-		int score = GetScore();
-		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
-		Analytics.Instance.RunnerHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-
 		// send out distance task
 		int distance = ScoreManager.Instance.Distance;
 		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), distance);
-		Analytics.Instance.RunnerPlayerDistanceRan(distance);
+		int score = GetScore();
+		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
+		Analytics.Instance.RunnerGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()],deathLevel,distance);
+
 		
 		// send out coins task
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
 
-		Analytics.Instance.RunnerTimesPlayedTick();
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
 #endif

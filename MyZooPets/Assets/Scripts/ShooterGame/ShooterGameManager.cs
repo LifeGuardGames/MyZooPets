@@ -71,12 +71,9 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _GameOver(){
-		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-		if(waveNum != 0){	// HACK patching this up for now, please fix dylan, when wave num is 0 -> division by zero
-			Analytics.Instance.ShooterPercentageMissed(ShooterInhalerManager.Instance.missed / waveNum+1);
-			WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
-		}
-		Analytics.Instance.ShooterTimesPlayedTick();
+		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / waveNum + 1);
+		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
+		
 
 		#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "ShooterLeaderBoard");

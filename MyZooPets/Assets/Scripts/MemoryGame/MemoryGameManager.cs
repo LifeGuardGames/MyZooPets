@@ -90,8 +90,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		memoryUI.FinishBoard();
 		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), GetScore());
 
-		Analytics.Instance.MemoryHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-		Analytics.Instance.MemoryTimesPlayedTick();
+		Analytics.Instance.MemoryGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "MemoryLeaderBoard");
 #endif

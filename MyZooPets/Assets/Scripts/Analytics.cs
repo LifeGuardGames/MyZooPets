@@ -59,54 +59,31 @@ public class Analytics : MonoBehaviour {
     }
 
 	#region Ninja Trigger
-	public void NinjaHighScore(int score){
+	public void NinjaGameData(int score, int bonus) {
 		if(isAnalyticsEnabled){
 			Mixpanel.SendEvent("Ninja HighScore", new Dictionary<string, object>{
-				{ "High Score: ", score}
+				{ "High Score: ", score},
+				{ "Bonus: ", bonus},
 			});
 		}
 	}
 
-	public void NinjaBonusRounds(int bonus){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Ninja BonusRound", new Dictionary<string, object>{
-				{ "Bonus: ", bonus}
-			});
-		}
-	}
-
-	public void NinjaTimesPlayedTick(){
-	if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Ninja TimesPlayed");
-		}
-	}
 	#endregion
 
 	#region Shooter Game
-	public void ShooterHighScore(int score){
+	public void ShooterGameData(int score, int percentage) {
 		if(isAnalyticsEnabled){
 			Mixpanel.SendEvent("Shooter HighScore", new Dictionary<string, object>{
-				{ "High Score: ", score}
-			});
-		}
-	}
-
-	public void ShooterPercentageMissed(int percentage){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Inhaler Missed", new Dictionary<string, object>{
+				{ "High Score: ", score},
 				{ "Inhaler misses: ", percentage}
 			});
 		}
 	}
-	public void ShooterTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Shooter TimesPlayed");
-		}
-	}
+
 	#endregion
 
 	#region Memory Game
-	public void MemoryHighScore(int score){
+	public void MemoryGameData(int score){
 		if(isAnalyticsEnabled){
 			Mixpanel.SendEvent("Memory HighScore", new Dictionary<string, object>{
 				{ "Memory HighScore: ", score}
@@ -114,42 +91,20 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void MemoryTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Memory TimesPlayed");
-		}
-	}
 	#endregion
 
 	#region Runner Game
-    //Where did the user die most often in the runner game?
-//    public void RunnerPlayerDied(string levelComponentName){
-//        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled){
-//            GA_Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
-//		}
-//    }
 
-	public void RunnerHighScore(int score){
+	public void RunnerGameData(int score, string level, int distanceRan) {
 		if(isAnalyticsEnabled){
 			Mixpanel.SendEvent("Runner HighScore", new Dictionary<string, object>{
-				{ "Runner HighScore: ", score}
-			});
-		}
-	}
-
-    public void RunnerPlayerDistanceRan(int distanceRan){
-        if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Runner Distance Ran", new Dictionary<string, object>{
+				{ "Runner HighScore: ", score},
+				{ "Died at: ", level},
 				{ "Distance Ran: ", distanceRan}
 			});
 		}
-    }
-
-	public void RunnerTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Runner TimesPlayed");
-		}
 	}
+
 
 	#endregion
 
@@ -173,11 +128,6 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void DoctorTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Doctor TimesPlayed");
-		}
-	}
 
 	#endregion
 
@@ -341,13 +291,6 @@ public class Analytics : MonoBehaviour {
 		}
 	}
 
-	public void RunnerDied(string level){
-		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Runner Died", new Dictionary<string, object>{
-					{ "Died at: ", level}
-				});
-		}
-	}
 
 	public void QuitGame(string scene){
 		if(isAnalyticsEnabled){

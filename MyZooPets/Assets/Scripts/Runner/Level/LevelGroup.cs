@@ -35,15 +35,15 @@ public class LevelGroup : MonoBehaviour {
 		componentsInScene = new HashSet<string>();
 	}
 
-	public void ReportDeath(){
+	public string ReportDeath(){
 		if(LevelGroupID == LevelGroup.eLevelGroupID.City){
-			Analytics.Instance.RunnerDied("City");
+			return "City";
 		}
 		else if (LevelGroupID == LevelGroup.eLevelGroupID.CityNight){
-			Analytics.Instance.RunnerDied("CityNight");
+			return "CityNight";
 		}
-		else if(LevelGroupID == LevelGroup.eLevelGroupID.Forest){
-			Analytics.Instance.RunnerDied("Forest");
+		else { 
+			return "Forest";
 		}	
 	}
 

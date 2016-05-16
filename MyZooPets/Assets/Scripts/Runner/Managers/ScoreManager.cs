@@ -24,21 +24,25 @@ public class ScoreManager : Singleton<ScoreManager>{
 	private float coinStreakCountdown; 
 	private int coinStreak; //counting how many coins are picked up in a row
 
-	private int scoreStreak=1;
-	private int comboMod=1;
+	private float comboMod=1;
 
-	public int Combo{
-		get{ 
-			return comboMod; 
+
+
+	public int Streak{
+		get{
+			return coinStreak;
 		}
 	}
-	
 	public int Coins{ 
 		get{ 
 			return mPlayerCoins; 
 		} 
 	}
-
+	public float Combo {
+		get {
+			return comboMod;
+		}
+	}
 	/// <summary>
 	/// Gets the score. Which is just the distance score + the number of coins collected
 	/// </summary>
@@ -49,7 +53,12 @@ public class ScoreManager : Singleton<ScoreManager>{
 		}
 	}
 
-	public void IncrementCombo(int increment){
+	public void OnGUI(){
+		GUI.Box(new Rect(Screen.width-100,0,100,20),"COMBO: " + comboMod.ToString("N2"));
+		
+	}
+
+	public void IncrementCombo(float increment){
 		comboMod += increment;
 	}
 
@@ -107,6 +116,14 @@ public class ScoreManager : Singleton<ScoreManager>{
 		SetCoinStreakCountdown(0);
 		SetCoinStreak(0);
 		AddCoins(0);
+		ResetCombo();
+	}
+
+	/// <summary>
+	/// Reset all score variables to zero.
+	/// </summary>
+	public void ResetCombo(){
+		comboMod=1;
 	}
 
 	/// <summary>
@@ -119,7 +136,8 @@ public class ScoreManager : Singleton<ScoreManager>{
 
 		// the player picked up a coin, so increment their streak and reset the countdown
 		// can't go below 0 coins -- this sounds silly, but coins right now is the new "points"
-		mPlayerCoins = Mathf.Max(mPlayerCoins + numOfCoinsToAdd, 0);
+		int pointsToAdd = (int) Mathf.Floor((numOfCoinsToAdd) * comboMod);
+		mPlayerCoins = Mathf.Max(mPlayerCoins + pointsToAdd, 0);
 	}
 
 	public void AddPoints(int inNumPointsToAdd){
@@ -160,9 +178,4 @@ public class ScoreManager : Singleton<ScoreManager>{
 	}
 	//---------------------------------------------------
 
-	void OnGUI(){
-		GUI.Box(new Rect(Screen.width-100,0,100,20),"STREAK: " + scoreStreak.ToString());
-		GUI.Box(new Rect(Screen.width-100,20,100,20),"COMBO: " + scoreStreak.ToString());
-		
-	}
 }

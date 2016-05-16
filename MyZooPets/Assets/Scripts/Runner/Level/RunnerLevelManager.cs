@@ -302,6 +302,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
     private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup) {
         ItemManager itemManager = ItemManager.Instance; 
+
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point:
             case eCurveType.Linear: {
@@ -312,19 +313,28 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                     float currentLineDistance = Vector3.Distance(currentLineBegin, currentLineEnd);
 
                     // Interpolate along our current line
+					int coinNum = 1; //Number of coins we have spawned on this line
+					CoinItem lastCoin = null;
                     for (float currentInterpolation = interpolationLeftovers; currentInterpolation < currentLineDistance; currentInterpolation += CoinSpawnDistance) {
                         // Find our new spawn point
                         Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
                         // But wait, that's on the prefab. Add in our real world clones position.
                         newCoinPosition += inLevelComponent.transform.position;
-
                         CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
                         newCoin.transform.position = newCoinPosition;
-
+						newCoin.CoinValue=coinNum;
                         inLevelComponent.AddLevelItem(newCoin);
-
+						if (coinNum==1) {
+							newCoin.NextToCollect=true;
+						} else {
+							lastCoin.nextCoin=newCoin; //The coin after the one before us, is us
+						}
+						
+						coinNum++;
+						lastCoin = newCoin;
                         interpolationLeftovers = currentInterpolation - currentLineDistance;
                     }
+					lastCoin.LastCoin=true;
                 }
             }
             break;
@@ -341,7 +351,10 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                         ptD = inSpawnGroup.mPoints[3].mPosition;
 
                     // Iterate the line length.
-                    for (float currentPosition = 0f; currentPosition < lineLength; currentPosition += CoinSpawnDistance) {
+					int coinNum = 1; //Number of coins we have spawned on this line
+					CoinItem lastCoin = null;
+					CoinSpawnDistance+=.75f; //When we are a curve, we need a little bit more spin in between our stars
+					for (float currentPosition = 0f; currentPosition < lineLength; currentPosition += CoinSpawnDistance) {
                         // Determine current t
                         float currentT = currentPosition / lineLength;
                         // Get the new position
@@ -355,8 +368,18 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                         // And spawn
                         CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
                         newCoin.transform.position = coinSpawnLocation;
-                        inLevelComponent.AddLevelItem(newCoin);
-                    }
+						newCoin.CoinValue=coinNum;
+						inLevelComponent.AddLevelItem(newCoin);
+						if (coinNum==1) { //FIXME: Sometimes these are made backwards?
+							newCoin.NextToCollect=true;
+						} else {
+							lastCoin.nextCoin=newCoin; //The coin after the one before us, is us
+						}
+						
+						coinNum++;
+						lastCoin = newCoin;
+						inLevelComponent.AddLevelItem(newCoin);
+                	}
                 }
             }
             break;
@@ -413,6 +436,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
         inItemToSpawn.transform.position = newPosition;
 
         // Spawn it at that point
+		//(CoinItem)inItemToSpawn.
         inLevelComponent.AddLevelItem(inItemToSpawn);
 	}
 	

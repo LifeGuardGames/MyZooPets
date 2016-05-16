@@ -16,7 +16,8 @@ public class ExtraCoinsItem : RunnerItem {
 
     public override void OnPickup() {
         ScoreManager.Instance.AddCoins(coinValue);
-
+		MegaHazard.Instance.IncrementHealth(coinValue);
+		
 		SpawnFloatyText("+" + coinValue);
         
         GameObject.Destroy(gameObject);

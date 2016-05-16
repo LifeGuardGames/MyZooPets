@@ -20,6 +20,10 @@ public class MinigameStartController : MonoBehaviour {
 		// Same code flow as restart
 		UIManager.OnRestart();
 	}
+
+	public void OnExitButton() {
+		UIManager.OnExitGame(true);
+	}
 	#endregion
 
 	public void ShowPanel(){

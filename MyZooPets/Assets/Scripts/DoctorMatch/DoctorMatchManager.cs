@@ -38,7 +38,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		return GetStandardReward(eType);
 	}
 
-	private void StartTutorial(){
+	public void StartTutorial(){
 		// set our tutorial
 		SetTutorial(new DoctorMatchTutorial());
 	}	

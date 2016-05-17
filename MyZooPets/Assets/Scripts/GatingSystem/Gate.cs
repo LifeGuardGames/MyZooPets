@@ -10,7 +10,7 @@ using System.Collections;
 
 public abstract class Gate : MonoBehaviour{
 	// ----- Pure Abstract -------------------------
-	protected abstract void GateDamaged(int nDamage);	// when a gate is damaged
+	protected abstract void GateDamaged();	// when a gate is damaged
 	protected abstract void GateDestroyed();			// what to do when this gate is destroyed
 	// ---------------------------------------------
 
@@ -46,23 +46,7 @@ public abstract class Gate : MonoBehaviour{
 		gateResource = monster.ResourceKey;
 
 		this.maxScreenSpace = maxScreenSpace;
-		
-//		// since this gate is getting created, if it is guarding an item box, create the box
-//		ImmutableDataGate dataGate = GetGateData();
-//		string itemBoxID = dataGate.ItemBoxID;
-//		if(!string.IsNullOrEmpty(itemBoxID)){
-//			GameObject goResource = Resources.Load("ItemBox_Monster") as GameObject;
-//			GameObject goBox = Instantiate(goResource, 
-//			                               new Vector3(transform.position.x + dataGate.ItemBoxPositionOffset, transform.position.y, goResource.transform.position.z), 
-//			                               Quaternion.identity) as GameObject;
-//			goBox = goBox.FindInChildren("Button");
-//			
-//			scriptItemBox = goBox.GetComponent<ItemBoxLogic>();
-//			if(scriptItemBox)
-//				scriptItemBox.SetItemBoxID(itemBoxID);
-//			else
-//				Debug.LogError("No logic script on box", goBox);
-//		}		
+			
 	}
 			
 	/// <summary>
@@ -118,17 +102,17 @@ public abstract class Gate : MonoBehaviour{
 	/// </summary>
 	/// <returns><c>true</c>, if gate is destroyed, <c>false</c> otherwise.</returns>
 	/// <param name="damage">Damage.</param>
-	public bool DamageGate(int damage){
+	public bool DamageGate(){
 		DataManager.Instance.GameData.PetInfo.amountOfFireBreathsDone++;
 		Analytics.Instance.BlowFire(DataManager.Instance.GameData.PetInfo.amountOfFireBreathsDone.ToString());
 		// this is kind of convoluted, but to actually damage the gate we want to edit the info in the data manager
-		bool isDestroyed = GatingManager.Instance.DamageGate(gateID, damage);
+		bool isDestroyed = GatingManager.Instance.DamageGate(gateID);
 		
 		// because the gate was damaged, play a sound
 		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 		
 		// let children know that the gate was damaged so they can react in their own way
-		GateDamaged(damage);
+		GateDamaged();
 		
 		if(isDestroyed){
 			Analytics.Instance.GateUnlocked(gateID);	

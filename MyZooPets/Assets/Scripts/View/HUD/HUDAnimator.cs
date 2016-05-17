@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public struct StatPair{
@@ -39,7 +39,7 @@ public class HUDAnimator : MonoBehaviour{
 	//========================================
 
 	#region public variables
-	public bool isDebug = false;
+	//public bool isDebug = false;
 	// sounds for animations
 	public float soundFadeTime;
 	public string soundStars;
@@ -251,7 +251,8 @@ public class HUDAnimator : MonoBehaviour{
 		string strImageDown = Constants.GetConstant<string>(type + "_Down");
 		float fModifier = GetModifier(type);
 		Vector3 vHUD = Constants.GetConstant<Vector3>(type + "_HUD");
-		GameObject tweenParent = HUDUIManager.Instance.GetTweenParent(Constants.GetConstant<String>(type + "_Anchor"));	// Check which anchor this is in
+
+		GameObject tweenParent = null;//HUDUIManager.Instance.GetTweenParent(Constants.GetConstant<String>(type + "_Anchor"));	// Check which anchor this is in
 
 		modifier = Math.Abs(fModifier * amount);
 		if(amount > 0){

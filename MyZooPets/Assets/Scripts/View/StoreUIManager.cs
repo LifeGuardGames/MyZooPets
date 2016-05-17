@@ -96,7 +96,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		RoomArrowsUIManager.Instance.HidePanel();
-		HUDUIManager.Instance.ShowLabels();
+		HUDUIManager.Instance.ToggleLabels(true);
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
 	}
@@ -106,7 +106,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		NavigationUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.ShowPanel();
-		HUDUIManager.Instance.HideLabels();
+		HUDUIManager.Instance.ToggleLabels(false);
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -504,7 +504,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private void ShowStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Show();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
-		HUDUIManager.Instance.ShowLabels();
+		HUDUIManager.Instance.ToggleLabels(true);
 	}
 
 	//------------------------------------------

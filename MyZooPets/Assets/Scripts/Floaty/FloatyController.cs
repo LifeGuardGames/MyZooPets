@@ -21,15 +21,11 @@ public class FloatyController : MonoBehaviour {
 	}
 
     private void FloatUp(){
-        Hashtable optional = new Hashtable();
-        optional.Add("onCompleteTarget", gameObject);
-        optional.Add("onComplete", "SelfDestruct");
-		
 		// Lean tween doesn't have a move by, so what we really want to do is move the object to its current position + the floating vector
 		Vector3 vTarget = gameObject.transform.localPosition;
 		vTarget += floatingUpPos;
 		
-        LeanTween.moveLocal(gameObject, vTarget, floatingTime, optional);
+        LeanTween.moveLocal(gameObject, vTarget, floatingTime).setOnComplete(SelfDestruct);
     }
 
     private void SelfDestruct(){

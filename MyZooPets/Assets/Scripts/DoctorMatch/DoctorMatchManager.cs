@@ -1,7 +1,4 @@
 using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	public enum DoctorMatchButtonTypes{
@@ -13,6 +10,10 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	public AssemblyLineController assemblyLineController;
 	public DoctorMatchLifeBarController lifeBarController;
+	public Animation cameraShake;
+	public DoctorMatchZone zoneGreen;
+	public DoctorMatchZone zoneYellow;
+	public DoctorMatchZone zoneRed;
 
 	private int numOfCorrectDiagnose;
 	public int NumOfCorrectDiagnose{
@@ -24,6 +25,9 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 	
 	protected override void _Start(){
+		zoneGreen.ToggleButtonInteractable(false);
+		zoneYellow.ToggleButtonInteractable(false);
+		zoneRed.ToggleButtonInteractable(false);
 	}	
 	
 	protected override void _OnDestroy(){
@@ -34,7 +38,7 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		return GetStandardReward(eType);
 	}
 
-	private void StartTutorial(){
+	public void StartTutorial(){
 		// set our tutorial
 		SetTutorial(new DoctorMatchTutorial());
 	}	
@@ -43,11 +47,18 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		assemblyLineController.Initialize();
 		lifeBarController.ResetBar();
 		lifeBarController.StartDraining();
+
+		zoneGreen.ToggleButtonInteractable(true);
+		zoneYellow.ToggleButtonInteractable(true);
+		zoneRed.ToggleButtonInteractable(true);
 	}
 
 	protected override void _GameOver(){
 		lifeBarController.StopDraining();
-		assemblyLineController.DestroyItems();
+		zoneGreen.ToggleButtonInteractable(false);
+		zoneYellow.ToggleButtonInteractable(false);
+		zoneRed.ToggleButtonInteractable(false);
+
 		/*
 		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
 		Analytics.Instance.DoctorTimesPlayedTick();
@@ -108,7 +119,6 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 		// Play an incorrect sound
 		AudioManager.Instance.PlayClip("minigameError");
-
-
-	}
+		cameraShake.Play();
+    }
 }

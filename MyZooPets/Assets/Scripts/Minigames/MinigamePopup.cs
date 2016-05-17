@@ -58,7 +58,7 @@ public class MinigamePopup : MonoBehaviour{
 	// IsShowing()
 	//---------------------------------------------------		
 	public bool IsShowing(){
-		return tween.IsShowing;	
+		return tween.IsShown;
 	}
 	
 	protected virtual void _OnShow(){

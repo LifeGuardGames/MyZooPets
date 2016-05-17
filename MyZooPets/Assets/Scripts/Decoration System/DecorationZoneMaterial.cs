@@ -16,8 +16,8 @@ public class DecorationZoneMaterial : DecorationZone{
 		
 		for(int i = 0; i < arrayObjects.Length; ++i){
 			GameObject go = arrayObjects[i];
-			if(go.renderer){
-				go.renderer.material = matPrefab;
+			if(go.GetComponent<Renderer>()){
+				go.GetComponent<Renderer>().material = matPrefab;
 			}
 		}
 	}

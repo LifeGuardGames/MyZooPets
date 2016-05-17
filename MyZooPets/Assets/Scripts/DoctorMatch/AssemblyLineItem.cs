@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class AssemblyLineItem : MonoBehaviour {
 	public SpriteRenderer itemSprite;
@@ -31,7 +30,7 @@ public class AssemblyLineItem : MonoBehaviour {
 	}
 
 	public void Activate(){
-		Destroy(gameObject, 0.05f);	
+		Destroy(gameObject);
 	}
 
 	public int GetIncrementIndex(){

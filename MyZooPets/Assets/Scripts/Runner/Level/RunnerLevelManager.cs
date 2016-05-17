@@ -424,13 +424,13 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	}
 	
 	private void GetMinMaxExtentsIncludingChildren(GameObject inObjectToSearch, int inExtent, ref Vector3 ioMinExtent, ref Vector3 ioMaxExtent) {		
-		if (inObjectToSearch.collider != null) {
+		if (inObjectToSearch.GetComponent<Collider>() != null) {
 			// there used to be a check in these two ifs for ioMinExtend != null -- but this check is pointless.  What was it really
 			// supposed to be checking?			
-			if (inObjectToSearch.collider.bounds.min[inExtent] < ioMinExtent[inExtent])
-				ioMinExtent = inObjectToSearch.collider.bounds.min;
-			if (inObjectToSearch.collider.bounds.max[inExtent] > ioMaxExtent[inExtent])
-				ioMaxExtent = inObjectToSearch.collider.bounds.max;
+			if (inObjectToSearch.GetComponent<Collider>().bounds.min[inExtent] < ioMinExtent[inExtent])
+				ioMinExtent = inObjectToSearch.GetComponent<Collider>().bounds.min;
+			if (inObjectToSearch.GetComponent<Collider>().bounds.max[inExtent] > ioMaxExtent[inExtent])
+				ioMaxExtent = inObjectToSearch.GetComponent<Collider>().bounds.max;
 		}
 		
 		foreach (Transform currentChild in inObjectToSearch.transform) {

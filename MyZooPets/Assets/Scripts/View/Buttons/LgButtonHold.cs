@@ -49,7 +49,7 @@ public abstract class LgButtonHold : LgButton{
 		// if this button is enabled and is currently being held...
 		if(enabled && isSprite && isHeld){
 			// if the user moved off the button, it is no longer being held
-			if(UICamera.lastHit.collider != gameObject.collider){
+			if(UICamera.lastHit.collider != gameObject.GetComponent<Collider>()){
 				SetHeld(false);
 				ButtonReleased();
 			}

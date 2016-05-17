@@ -15,7 +15,7 @@ public class MiniPetGameMaster : MiniPet{
 		Debug.Log(MiniPetHUDUIManager.Instance.HasContent());
 		if(!MiniPetHUDUIManager.Instance.HasContent()){
 			if(isFinishEating){
-				minigameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).MissionID;
+				minigameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).TaskID;
 				
 				miniPetSpeechAI.ShowIdleMessage(MinipetType);
 
@@ -30,18 +30,15 @@ public class MiniPetGameMaster : MiniPet{
 	public override void FinishEating(){
 		if(!isFinishEating){
 			base.FinishEating();
-			isPetCanGainXP = true;
 			isFinishEating = true; 
 			PetSpeechManager.Instance.BeQuiet();
 			miniPetSpeechAI.ShowChallengeMsg(minigameType);
 			minigameTaskId = PickMinigameMissionKey(minigameType);
 			
-			WellapadMissionController.Instance.UnlockTask(minigameTaskId);
-			WellapadMissionController.Instance.needMission = true;
-			WellapadMissionController.Instance.AddMission(minigameTaskId);
+			WellapadMissionController.Instance.AddTask(minigameTaskId);
 			
-			List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(minigameTaskId); 
-			DataManager.Instance.GameData.MiniPets.SetTask(minipetId,listTasks[0]);
+			MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(minigameTaskId); 
+			DataManager.Instance.GameData.MiniPets.SetTask(minipetId,task);
 
 			OpenGameMasterContent();
 		}
@@ -105,8 +102,8 @@ public class MiniPetGameMaster : MiniPet{
 	
 	private void TurnInMission(){
 		if(isFinishEating){
-			MutableDataMission mission = WellapadMissionController.Instance.GetMission(minigameTaskId);
-			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
+			MutableDataWellapadTask task= WellapadMissionController.Instance.GetTask(minigameTaskId);
+			if(task != null && task.isReward == RewardStatuses.Unclaimed){
 				// Claim the reward
 				MiniPetManager.Instance.IncreaseXp(minipetId);
 				MiniPetGameMasterUIController gameMasterUI = (MiniPetGameMasterUIController)MiniPetHUDUIManager.Instance.SelectedMiniPetContentUIScript;

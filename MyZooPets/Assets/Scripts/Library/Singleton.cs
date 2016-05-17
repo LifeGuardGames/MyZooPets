@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour{
 	protected static T instance;

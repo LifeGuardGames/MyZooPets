@@ -17,8 +17,7 @@ public class TweenAmbientColor : MonoBehaviour {
 	}
 	
 	public void StartTween(){
-		Hashtable optional = new Hashtable();
-		LeanTween.value(gameObject, "DarkenLight", 0, 1, time, optional);
+		LeanTween.value(gameObject, DarkenLight, 0, 1, time);
 	}
 	
 	private void DarkenLight(float factor){

@@ -30,7 +30,7 @@ public class PanToMoveCamera : MonoBehaviour{
 	public int lastPartition = 2;
 	public float partitionOffset = 80.0f;	//How big each partition is in world position
 	public int currentLocalPartition = 0;
-	
+
 	private Camera nguiCamera;
 	private Camera mainCamera;
 
@@ -51,31 +51,29 @@ public class PanToMoveCamera : MonoBehaviour{
 	///////////////////////////////////////////		
 	private void SnapCamera(int oldLocalPartition){
 		float moveTo = partitionOffset * currentLocalPartition;
-		
+
 		// if the camera is actually already in this position, don't bother doing anything	
-		if(gameObject.transform.position.x == moveTo)
+		if(gameObject.transform.position.x == moveTo) {
 			return;
-		
-		// prepare the hashtables for the camera snap callback
-		Hashtable optional = new Hashtable();
-		optional.Add("onComplete", "OnCameraSnapped");
-		optional.Add("onCompleteTarget", gameObject);
-		
-		Hashtable completeParamHash = new Hashtable();
-		completeParamHash.Add("Old", oldLocalPartition);			
-		optional.Add("onCompleteParam", completeParamHash);
-		optional.Add("ease", LeanTweenType.easeInOutQuad);
-			
-		LeanTween.moveX(gameObject, moveTo, 0.5f, optional);
+		}
+
+		Debug.LogWarning("On camera snapped try");
+
+		LeanTween.moveX(gameObject, moveTo, 0.5f)
+			.setEase(LeanTweenType.easeInOutQuad)
+			.setOnComplete(OnCameraSnapped)
+			.setOnCompleteParam(new Hashtable() { { "Old", oldLocalPartition } });
 	}
 
 	/// <summary>
 	/// Callback for when the camera is done snapping
 	/// </summary>
-	/// <param name="hash">Hash.</param>
-	private void OnCameraSnapped(Hashtable hash){
+	private void OnCameraSnapped(System.Object param){
+		Hashtable hash = (Hashtable)param;
 		int oldLocalPartition = (int)hash["Old"];
-		
+
+		Debug.LogWarning("On camera snapped done");
+
 		// if we were snapping back, don't send anything
 		if(oldLocalPartition == currentLocalPartition){
 			return;

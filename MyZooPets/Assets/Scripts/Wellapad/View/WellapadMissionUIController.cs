@@ -41,7 +41,7 @@ public class WellapadMissionUIController : MonoBehaviour {
 	// Creates the mission entries for the Wellapad.
 	//---------------------------------------------------	
 	private void CreateMissions() {		
-		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentMissions();
+		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentTasks();
 		// create our missions
 		if(currentMissions.Count > 0)
 			foreach (string strMission in currentMissions)
@@ -56,16 +56,13 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CreateMission(string missionType){	
 		// find the available tasks for the mission and add them
-		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
-		for ( int i = 0; i < listTasks.Count; i++ ){
-			MutableDataWellapadTask task = listTasks[i];
+		MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(missionType);
 			
 			GameObject goTask = NGUITools.AddChild(goGrid, prefabTask);
 			SetNameForGrid( goTask );
 			
 			// init this task UI with the task itself
 			goTask.GetComponent<WellapadTaskUI>().Init(task);
-		}
 	}
 	
 	//---------------------------------------------------

@@ -131,18 +131,9 @@ public class CameraManager : Singleton<CameraManager>{
 			FinishCameraMoveCallback = cameraDoneCallback;	// Cache the callback
 		}
 
-		hashMove.Add("onCompleteTarget", gameObject);
-		hashMove.Add("onComplete", "MoveCameraDone");
-		
-		hashMove.Add("ease", LeanTweenType.easeInOutQuad);
-		
-		// Set up the rotation hash
-		Hashtable hashRotation = new Hashtable();
-		hashRotation.Add("ease", LeanTweenType.easeInOutQuad);
-		
 		// Kick off the move and rotation tweens
-		LeanTween.moveLocal(gameObject, position, time, hashMove);
-		LeanTween.rotateLocal(gameObject, rotation, time, hashRotation);	
+		LeanTween.moveLocal(gameObject, position, time).setEase(LeanTweenType.easeInOutQuad).setOnComplete(MoveCameraDone);
+		LeanTween.rotateLocal(gameObject, rotation, time).setEase(LeanTweenType.easeInOutQuad);	
 	}
 
 	private void MoveCameraDone(){

@@ -90,9 +90,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 			if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 
 				// Update position of the bar if inventory is open
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeOutBounce);
-				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f, optional);
+				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f)
+					.setEase(LeanTweenType.easeOutBounce);
 			}
 		}
 		// Scene loading case, dont want to tween here so set them explicitly

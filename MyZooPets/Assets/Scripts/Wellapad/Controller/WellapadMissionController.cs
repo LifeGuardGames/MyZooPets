@@ -22,19 +22,16 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public EventHandler<EventArgs> OnRewardClaimed;			// when a reward is claimed
 	//=====================================================
 
-	//check missions based off this
-	public bool needMission{get; set;}
-
 	/// <summary>
 	/// Gets the mission.
 	/// </summary>
 	/// <returns>The mission.</returns>
-	/// <param name="missionID">Mission ID.</param>
-	public MutableDataMission GetMission(string missionID){
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID))
-			return DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID];
+	/// <param name="taskID">Mission ID.</param>
+	public MutableDataWellapadTask GetTask(string taskID){
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(taskID))
+			return DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID];
 		else{
-			Debug.LogError("No such mission in current tasks: " + missionID);
+			Debug.LogError("No such mission in current tasks: " + taskID);
 			return null;
 		}
 	}
@@ -50,34 +47,24 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		bool isActive = false;
 		
 		// loop through all missions and check their reward status
-		foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
-			MutableDataMission thisMission = mission.Value;
-			if(thisMission.RewardStatus == RewardStatuses.Unearned || thisMission.RewardStatus == RewardStatuses.Unclaimed)
+		foreach(KeyValuePair<string, MutableDataWellapadTask> task in DataManager.Instance.GameData.Wellapad.CurrentTasks){
+			MutableDataWellapadTask thisTask = task.Value;
+			if(thisTask.isReward == RewardStatuses.Unearned || thisTask.isReward == RewardStatuses.Unclaimed)
 				isActive = true;
 		}
 
 		return isActive;
 	}
 
-	/// <summary>
-	/// Unlocks the task.
-	/// Marks the incoming task as unlocked -- it may now be eligible for being
-	/// in a mission
-	/// </summary>
-	/// <param name="taskID">Task ID.</param>
-	public void UnlockTask(string taskID){
-		DataManager.Instance.GameData.Wellapad.TasksUnlocked.Add(taskID);
-
-	}
 
 	/// <summary>
 	/// Claims the reward. Called when user successfully claimed reward from a mission
 	/// </summary>
-	/// <param name="missionID">Mission ID.</param>
-	public void ClaimReward(string missionID, GameObject rewardObject = null){
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
+	/// <param name="taskID">Mission ID.</param>
+	public void ClaimReward(string taskID, GameObject rewardObject = null){
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(taskID)){
 			// one final check just to be safe
-			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus == RewardStatuses.Unclaimed){
+			if(DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].isReward == RewardStatuses.Unclaimed){
 
 				HUDUIManager.Instance.ShowPanel();
 
@@ -91,7 +78,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 					StatsController.Instance.ChangeStats(deltaStars: 50);
 				}
 
-				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].RewardStatus = RewardStatuses.Claimed;
+				DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].isReward = RewardStatuses.Claimed;
 
 				//Send analytics event
 				Analytics.Instance.ClaimWellapadReward();
@@ -103,11 +90,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 //				Debug.Log("Reward claimed for mission: " + strMissionID);
 			}
 			else{
-				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + missionID);
+				Debug.LogError("Something trying to claim an unclaimable reward for mission: " + taskID);
 			}
 		}
 		else{
-			Debug.LogError("Something trying to claim a reward for non-current mission: " + missionID);
+			Debug.LogError("Something trying to claim a reward for non-current mission: " + taskID);
 		}
 	}
 
@@ -119,33 +106,31 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	/// <param name="completeCondition">Complete condition.</param>
 	public void TaskCompleted(string completedTaskID, int completeCondition = 0){
 		// check to see if the completed task was in a player's mission -- if it was, mark it was done
-		foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
-			foreach(KeyValuePair<string, MutableDataWellapadTask> task in mission.Value.Tasks){
-				if(task.Value.WillComplete(completedTaskID, completeCondition)){
+		foreach(KeyValuePair<string, MutableDataWellapadTask> _task in DataManager.Instance.GameData.Wellapad.CurrentTasks){
+				if(_task.Value.WillComplete(completedTaskID, completeCondition)){
 //					Debug.Log("++ valid task completed and set: " + completedTaskID);
 
-					string taskID = task.Value.TaskID;
-					DataManager.Instance.GameData.Wellapad.CurrentTasks[mission.Key].Tasks[taskID].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
+				string taskID = _task.Value.TaskID;
+				DataManager.Instance.GameData.Wellapad.CurrentTasks[_task.Key].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
 
-					// because the task was completed, we may have to update our reward status...
-					// got to do this before sending the event or the reward will not be displayed right
-					RewardCheck(mission.Key);						
+				// because the task was completed, we may have to update our reward status...
+				// got to do this before sending the event or the reward will not be displayed right
+				RewardCheck(_task.Key);						
 
-					//Analytics
-					Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_COMPLETE, task.Value.MissionID, task.Value.TaskID);
+				//Analytics
+				Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_COMPLETE, _task.Value.TaskID, _task.Value.TaskID);
 					
-					// send event for the task update
-					if(OnTaskUpdated != null){
-						TaskUpdatedArgs args = new TaskUpdatedArgs();
-						args.Status = true;
-						args.ID = completedTaskID;
-						args.Mission = mission.Key;
-						OnTaskUpdated(this, args);
-					}
-					
-					// right now there will only be unique tasks for each mission, so if we've found it, just return out
-					return;
+				// send event for the task update
+				if(OnTaskUpdated != null){
+					TaskUpdatedArgs args = new TaskUpdatedArgs();
+					args.Status = true;
+					args.ID = completedTaskID;
+					args.Mission = _task.Key;
+					OnTaskUpdated(this, args);
 				}
+					
+				// right now there will only be unique tasks for each mission, so if we've found it, just return out
+				return;
 			}
 		}
 	}
@@ -183,17 +168,16 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		// if we have to refresh, just delete our data...the missions list will take it from there
 		if(IsRefresh){
 			//Before reseting mission. Go through current mission and send failed tasks to analytics server
-			foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
-				foreach(KeyValuePair<string, MutableDataWellapadTask> taskKeyValuePair in mission.Value.Tasks){
-					MutableDataWellapadTask task = taskKeyValuePair.Value;
+			foreach(KeyValuePair<string, MutableDataWellapadTask> taskList in DataManager.Instance.GameData.Wellapad.CurrentTasks){
+			
+				MutableDataWellapadTask _task = taskList.Value;
 
-					//task is incomplete
-					if(task.Completed == WellapadTaskCompletionStates.Uncompleted){
-						Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_FAIL, 
-							task.MissionID, task.TaskID);
-						if(task.TaskID == "DailyInhaler"){
-							Analytics.Instance.DidUseInhaler(false);
-						}
+				//task is incomplete
+				if(_task.Completed == WellapadTaskCompletionStates.Uncompleted){
+					Analytics.Instance.WellapadTaskEvent(Analytics.TASK_STATUS_FAIL, 
+						_task.TaskID, _task.TaskID);
+					if(_task.TaskID == "DailyInhaler"){
+						Analytics.Instance.DidUseInhaler(false);
 					}
 				}
 			}
@@ -209,7 +193,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			// send event
 			if(OnMissionsRefreshed != null) 
 				OnMissionsRefreshed(this, EventArgs.Empty);		
-			needMission = false;
 			IsRefresh = false;
 		}
 	}
@@ -223,9 +206,11 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public void CreateTutorialPart1Missions(){
 		// reset the current data
 		DataManager.Instance.GameData.Wellapad.ResetMissions();
-		
-		AddMission("TutorialPart1");
-		
+
+		AddTask("DailyInhaler");
+		AddTask("FightMonster");
+
+
 		// send event
 		if(OnMissionsRefreshed != null) 
 			OnMissionsRefreshed(this, EventArgs.Empty);
@@ -234,12 +219,29 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public void CreateTutorialPart2Missions(){
 		// reset the current data
 		DataManager.Instance.GameData.Wellapad.ResetMissions();
-		
-		AddMission("TutorialPart2");
-		
+
+		AddTask("DailyInhaler");
+		AddTask("FightMonster");
+		AddTask("CleanRoom");
+
 		// send event
 		if(OnMissionsRefreshed != null) 
 			OnMissionsRefreshed(this, EventArgs.Empty);
+	}
+
+	public RewardStatuses CheckGroupReward() {
+
+		foreach(KeyValuePair<string, MutableDataWellapadTask> _task in DataManager.Instance.GameData.Wellapad.CurrentTasks) {
+			if(_task.Value.Category == MiniGameCategory.Critical) {
+				if(_task.Value.isReward == RewardStatuses.Unearned) {
+					return RewardStatuses.Unearned;
+				}
+				else {
+					return RewardStatuses.Unclaimed;
+				}
+			}
+		}
+		return RewardStatuses.Claimed;
 	}
 
 	/// <summary>
@@ -253,32 +255,36 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	/// this way because our save system needs ot save
 	/// primitives.
 	/// </summary>
-	/// <param name="missionID">Mission ID.</param>
-	private void RewardCheck(string missionID){
+	/// <param name="taskID">Mission ID.</param>
+	private void RewardCheck(string taskID){
 		// do some legality checks
 
 		// mission exists
-		if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
-			Debug.LogError("Reward is attempted to be check for an illegal mission: " + missionID);
+		if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(taskID)){
+			Debug.LogError("Reward is attempted to be check for an illegal mission: " + taskID);
 			return;
 		}
-		
+
 		// reward is currently unearned
-		MutableDataMission mission = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID];
-		if(mission.RewardStatus != RewardStatuses.Unearned){
-			Debug.LogError("Reward check revealed illegal state for reward for mission " + missionID);
-			return;
+		MutableDataWellapadTask task = DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID];
+		if(task.Category == MiniGameCategory.Critical) {
+			foreach(KeyValuePair<string, MutableDataWellapadTask> _task in DataManager.Instance.GameData.Wellapad.CurrentTasks) {
+				if(_task.Value.Category == MiniGameCategory.Critical) {
+					if(_task.Value.isReward == RewardStatuses.Unearned) {
+						return;
+					}
+				}
+			}
 		}
-		
-		// loop through all tasks to see their status...if we run into a task that is not completed, just return
-		foreach(KeyValuePair<string, MutableDataWellapadTask> task in mission.Tasks){
-			if(task.Value.Completed != WellapadTaskCompletionStates.RecentlyCompleted && 
-				task.Value.Completed != WellapadTaskCompletionStates.Completed)
+		else {
+			if(task.isReward != RewardStatuses.Unearned) {
+				Debug.LogError("Reward check revealed illegal state for reward for mission " + taskID);
 				return;
+			}
 		}
 		
 		// if we get here it means that all tasks in the mission are complete -- the reward is now unclaimed
-		mission.RewardStatus = RewardStatuses.Unclaimed;
+		task.isReward = RewardStatuses.Unclaimed;
 	}
 
 	/// <summary>
@@ -290,16 +296,15 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 	public WellapadTaskCompletionStates GetTaskStatus(MutableDataWellapadTask task, bool bPop = false){
 		WellapadTaskCompletionStates status = WellapadTaskCompletionStates.Uncompleted;
 		
-		string missionID = task.MissionID;
 		string taskID = task.TaskID;
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID) && 
-			DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks.ContainsKey(taskID)){
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(taskID) && 
+			DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(taskID)){
 
-			status = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed;
+			status = DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].Completed;
 			
 			// if the status is recently completed and we are popping, "pop" it by setting it to just plain completed now
 			if(bPop && status == WellapadTaskCompletionStates.RecentlyCompleted){
-				DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks[taskID].Completed = WellapadTaskCompletionStates.Completed;
+				DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].Completed = WellapadTaskCompletionStates.Completed;
 			}
 		}
 		else{
@@ -309,56 +314,35 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		return status;
 	}
 
-	public List<string> GetCurrentMissions(){
-		List<string> listMissions = new List<string>();
-		// if the user does not have any missions saved, give them the default missions
-		// probably want to do this through xml data at some point...
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.Count == 0){
-			//AddDefaultMissions();
-		}
-		foreach(KeyValuePair<string, MutableDataMission> mission in DataManager.Instance.GameData.Wellapad.CurrentTasks){
-			listMissions.Add(mission.Key);	
-		}
-		
-		return listMissions;
-	}
-
-	private void AddDefaultMissions(){
-		AddMission("Critical");
-	}
 
 	/// <summary>
 	/// Gets the tasks. Returns a task list for a given mission type. If there are
 	/// no tasks in save data, it means they must be created first
 	/// </summary>
 	/// <returns>The tasks.</returns>
-	/// <param name="missionID">Mission ID.</param>
-	public List<MutableDataWellapadTask> GetTasks(string missionID){
-		List<MutableDataWellapadTask> listTasks = new List<MutableDataWellapadTask>();
-		// before creating the missions from scratch, check to see if the user has any save data
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(missionID)){
-			// user has saved tasks...use those	
-			Dictionary<string, MutableDataWellapadTask> savedTasks = DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID].Tasks;
-			// loop through all saved tasks and add them to the list
-			foreach(KeyValuePair<string, MutableDataWellapadTask> pair in savedTasks){
-				listTasks.Add(pair.Value);
-			}
+	public List<string> GetCurrentTasks(){
+		List<string> listTask = new List<string>();
+		// if the user does not have any missions saved, give them the default missions
+		// probably want to do this through xml data at some point...
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.Count == 0){
+			//AddDefaultMissions();
 		}
-		else{
-			Debug.LogError("Something trying to create a mission in the UI that the user does not have...give it to them first!");
+		foreach(MutableDataWellapadTask task in DataManager.Instance.GameData.Wellapad.CurrentTasks.Values){
+			listTask.Add(task.TaskID);	
 		}
-		return listTasks;
-	}	
+		
+		return listTask;
+	}
 
-	public void AddMission(string missionID){
-		List<ImmutableDataWellapadTask> listTasks = GetUnlockedTasks(missionID);
-		Dictionary<string, MutableDataWellapadTask> savedTasks = new Dictionary<string, MutableDataWellapadTask>();
-		for(int i = 0; i < listTasks.Count; ++i){
-			ImmutableDataWellapadTask task = listTasks[i];
-			string taskID = task.GetTaskID();
-			savedTasks[taskID] = new MutableDataWellapadTask(task);
-		}
-		DataManager.Instance.GameData.Wellapad.CurrentTasks[missionID] = new MutableDataMission(missionID, savedTasks);
+	private void AddDefaultMissions(){
+		AddTask("DailyInhaler");
+		AddTask("FightMonster");
+	}
+
+
+	public void AddTask(string taskID){
+		ImmutableDataWellapadTask task = DataLoaderWellapadTasks.GetTask(taskID);
+		DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID] = new MutableDataWellapadTask(task);
 		
 		// reset the time -- I probably want to change this to a per mission basis at some point if we expand the system?
 		DataManager.Instance.GameData.Wellapad.DateMissionsCreated = LgDateTime.GetTimeNow();
@@ -368,32 +352,21 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 		}
 	}
 
-	private List<ImmutableDataWellapadTask> GetUnlockedTasks(string missionID){
-		Hashtable taskHash = DataLoaderWellapadTasks.GetTasks(missionID);
-		List<ImmutableDataWellapadTask> taskListFinal = new List<ImmutableDataWellapadTask>();
-		// now go through each category in this hash and pick one task at random and add it to our list of tasks
-		// (but also check to make sure the category is unlocked)
-		foreach(DictionaryEntry pair in taskHash){
-			string category = (string)pair.Key;
-			if(DataManager.Instance.GameData.Wellapad.TasksUnlocked.Contains(category)){
-				List<ImmutableDataWellapadTask> listTasks = (List<ImmutableDataWellapadTask>) pair.Value;
-				// get a random number of tasks to add to the list -- if the category is "Always" we want all the tasks,
-				// otherwise we just want to pick 1 at random
-				// int nTasks = strCategory == WellapadData.ALWAYShashDataD ? listTasks.Count : 1;
-				int numberOfTasks = category == "Always" ? listTasks.Count : 1;
-				
-				// this is a little weird...the random element thing is messing up the ordering of the tasks
-				List<ImmutableDataWellapadTask> tasks = listTasks;
-				if(numberOfTasks != listTasks.Count){
-					tasks = ListUtils.GetRandomElements<ImmutableDataWellapadTask>(listTasks, numberOfTasks);
-				}
-				
-				// add each of our tasks to the final list
-				foreach(ImmutableDataWellapadTask task in tasks){
-					taskListFinal.Add(task);
+	public List<MutableDataWellapadTask> GetTaskGroup(string missionID) {
+		List<MutableDataWellapadTask> listTask = new List<MutableDataWellapadTask>();
+		if(missionID == "TutorialPart1") {
+			MutableDataWellapadTask task = new MutableDataWellapadTask(DataLoaderWellapadTasks.GetTask("DailyInhaler"));
+            listTask.Add(task);
+			MutableDataWellapadTask task2 = new MutableDataWellapadTask(DataLoaderWellapadTasks.GetTask("FightMonster"));
+			listTask.Add(task2);
+		}
+		if(missionID == "Critical") {
+			foreach(MutableDataWellapadTask task in DataManager.Instance.GameData.Wellapad.CurrentTasks.Values) {
+				if(task.Category == MiniGameCategory.Critical) {
+					listTask.Add(task);
 				}
 			}
 		}
-		return taskListFinal;
+		return listTask;
 	}
 }

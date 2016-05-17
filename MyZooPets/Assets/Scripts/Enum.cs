@@ -344,3 +344,9 @@ public enum ZoneTypes{
 	Bedroom,
 	Yard
 }
+
+public enum MiniGameCategory {
+	None,
+	Critical,
+	Regular,
+}

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Script to control Minipet and contains the basic properties of a minipet.
@@ -29,7 +30,6 @@ public abstract class MiniPet : MonoBehaviour {
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 	private bool isVisible;
 	private bool isHatchedAux;
-	private bool isBeingTickled = false;
 	public Camera nguiCamera;
 
 	public ParticleSystem getAccessoryParticle;
@@ -39,7 +39,6 @@ public abstract class MiniPet : MonoBehaviour {
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
 	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
-	public bool isPetCanGainXP = false;	// If the pet can get experience
 	private string invItemID; //local reference to the item that is dropped on the minipet
 
 	public EventHandler<EventArgs> OnTutorialMinipetClicked;	// event that fires when the user clicks on pet during tutorial
@@ -54,7 +53,7 @@ public abstract class MiniPet : MonoBehaviour {
 	}
 
 	protected virtual void Start(){
-		nguiCamera = GameObject.Find("Camera").camera;
+		nguiCamera = GameObject.Find("Camera").GetComponent<Camera>();
 		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
@@ -74,20 +73,20 @@ public abstract class MiniPet : MonoBehaviour {
 		isHatchedAux = isHatched;
 		if(isHatched){
 			eggParent.SetActive(false);
-			eggAnimation.animation.Stop();
+			eggAnimation.GetComponent<Animation>().Stop();
 			flippable.SetActive(true);
-			gameObject.collider.enabled = true;
+			gameObject.GetComponent<Collider>().enabled = true;
 			if(eggClickController != null){		// Remove unused components on the egg parent
 				Destroy(eggClickController);
-				Destroy(eggClickController.collider);
+				Destroy(eggClickController.GetComponent<Collider>());
 			}
 			isVisible = true;
 		}
 		else{	// Not hatched yet
 			eggParent.SetActive(true);
-			eggAnimation.animation.Play();
+			eggAnimation.GetComponent<Animation>().Play();
 			flippable.SetActive(false);
-			gameObject.collider.enabled = false;
+			gameObject.GetComponent<Collider>().enabled = false;
 			isVisible = false;
 		}
 	}
@@ -98,8 +97,8 @@ public abstract class MiniPet : MonoBehaviour {
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
 		}
 	}
-	
-	private void OnTap(TapGesture gesture){
+
+	/*private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
 				Analytics.Instance.MiniPetVisited(minipetId);
@@ -123,12 +122,36 @@ public abstract class MiniPet : MonoBehaviour {
 						ZoomInToMiniPet();
 						OpenChildUI();	// Further child UI calls
 					}
-					else if(ClickManager.Instance.CurrentMode == UIModeTypes.MiniPet){
-						if(!isBeingTickled){
-							animationManager.StartTickling();
-							isBeingTickled = true;
-							Invoke("StartTicklingTimer", 2f);
+				}
+			}
+		}
+	}*/
+
+	private void OnMouseDown() {
+		RaycastHit hitObject;
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if(Physics.Raycast(ray, out hitObject)) {
+			if(hitObject.transform == transform) {
+				Analytics.Instance.MiniPetVisited(minipetId);
+				if(!isFinishEating) {
+					ShowFoodPreferenceMessage();
+				}
+				bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
+				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
+
+				if(!isMiniPetColliderLocked) {
+					if(SceneManager.GetActiveScene().name == "ZoneBedroom") {
+						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()) {
+							if(OnTutorialMinipetClicked != null) {
+								OnTutorialMinipetClicked(this, EventArgs.Empty);
+							}
+							return;
 						}
+					}
+					if(!isUIOpened && isModeLockEmpty) {
+						AudioManager.Instance.PlayClip("talkMinipet");
+						ZoomInToMiniPet();
+						OpenChildUI();  // Further child UI calls
 					}
 				}
 			}
@@ -137,10 +160,6 @@ public abstract class MiniPet : MonoBehaviour {
 	// Further code to run in children if tapped and zoom into minipet
 	protected abstract void OpenChildUI();
 
-	private void StartTicklingTimer(){
-		animationManager.StopTickling();
-		isBeingTickled = false;
-	}
 
 	private void ZoomInToMiniPet(){
 		Vector3 position = this.transform.position + zoomPositionOffset;
@@ -244,7 +263,7 @@ public abstract class MiniPet : MonoBehaviour {
 		else{
 			flippable.SetActive(false);
 			eggParent.SetActive(false);
-			gameObject.collider.enabled = false;
+			gameObject.GetComponent<Collider>().enabled = false;
 		}
 	}
 

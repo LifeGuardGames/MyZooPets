@@ -16,8 +16,7 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 
 	public void InitializeContent(string taskID, MinigameTypes type, MiniPetGameMaster gameMasterScript){
 		this.gameMasterScript = gameMasterScript;
-		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
-		task = listTasks[0];
+		task = WellapadMissionController.Instance.GetTask(taskID); 
 		ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc = missionTask.GetText();
 		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];

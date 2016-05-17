@@ -197,18 +197,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		Hashtable optional = new Hashtable();
 		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, itemSpritePrefab);
 		
-		// hashtable for completion params for the callback (stash the icon we are animating)
-		Hashtable completeParamHash = new Hashtable();
-		completeParamHash.Add("Icon", animationSprite);		
-
-		optional.Add("ease", LeanTweenType.easeOutQuad);
-		optional.Add("onComplete", "DestroySprite");
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onCompleteParam", completeParamHash);
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(90, 90, 1);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
-		LeanTween.move(animationSprite, path, speed, optional);
+
+		Debug.LogWarning("Sprite delete test start");
+
+		LeanTween.move(animationSprite, path, speed)
+			.setEase(LeanTweenType.easeOutQuad)
+			.setOnComplete(DestroySprite)
+			.setOnCompleteParam(animationSprite);
 	}
 
 	//---------------------------------------------------
@@ -216,11 +214,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Callback for buy animation -- will destroy the
 	// sprite icon clone we create and animated.
 	//---------------------------------------------------
-	public void DestroySprite(Hashtable hash){
+	public void DestroySprite(System.Object obj){
 		// delete the icon we moved
-		if(hash.ContainsKey("Icon")){
-			GameObject goSprite = (GameObject)hash["Icon"];
-			Destroy(goSprite);
+		if(obj != null) {
+			Debug.LogWarning("Sprite delete test end");
+			Destroy((GameObject)obj);
 		}	
 	}
 
@@ -612,7 +610,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private void HideUnuseTab(Transform tab){
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = false;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = false;
-		tab.collider.enabled = false;
+		tab.GetComponent<Collider>().enabled = false;
 	}
 
 	/// <summary>
@@ -623,7 +621,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		tab.GetComponent<UIImageButton>().isEnabled = true;
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.collider.enabled = true;
+		tab.GetComponent<Collider>().enabled = true;
 	}
 
 	/// <summary>
@@ -634,7 +632,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		tab.GetComponent<UIImageButton>().isEnabled = false;
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.collider.enabled = false;
+		tab.GetComponent<Collider>().enabled = false;
 	}
 
 	//------------------------------------------

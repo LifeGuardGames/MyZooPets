@@ -1,13 +1,11 @@
-using UnityEngine;
-using System;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Questionaire manager. Check when it's appropriate to spawn the questionaire
 /// </summary>
 public class QuestionaireManager : Singleton<QuestionaireManager> {
-	public QuestionaireUIManager1 questionaireManager1;
-	public QuestionaireUIManager2 questionaireManager2;
+	public QuestionaireAgeController questionaireAgeController;
+	public QuestionaireAsthmaController questionaireAsthmaController;
 
 	void Start(){
 		#if DEVELOPMENT_BUILD
@@ -25,12 +23,12 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 			Invoke("ShowQuestionaire", 0.5f);
 		}
 		else{
-			ContinueLoading();
+			ContinueLoading(false);
 		}
 	}
 
 	private void ShowQuestionaire(){
-		questionaireManager1.OpenUI();
+		questionaireAgeController.ShowPanel();
 	}
 
 	/// <summary>
@@ -40,12 +38,22 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 		DataManager.Instance.IsQuestionaireCollected = true;
 	}
 
-	public void ContinueLoading(){
+	public void ContinueLoading(bool doTransition){
 		if(DataManager.Instance.GameData.PetInfo.IsHatched){
-			Application.LoadLevel(SceneUtils.BEDROOM);
+			if(doTransition) {
+				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
+			}
+			else {
+				SceneManager.LoadScene(SceneUtils.BEDROOM);
+			}
 		}
 		else{
-			Application.LoadLevel(SceneUtils.MENU);
+			if(doTransition) {
+				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.MENU);
+			}
+			else {
+				SceneManager.LoadScene(SceneUtils.MENU);
+			}
 		}
 	}
 }

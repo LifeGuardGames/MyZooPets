@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class MiniPetManager : Singleton<MiniPetManager>{
 	public Dictionary<string, GameObject> MiniPetTable = new Dictionary<string, GameObject>();
@@ -63,7 +64,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			}
 
 			// Only spawn the retention pet in the bedroom
-			if(Application.loadedLevelName == SceneUtils.BEDROOM){
+			if(SceneManager.GetActiveScene().name == SceneUtils.BEDROOM){
 
 				// Calculate the MP location
 				LgTuple<Vector3, string> retentionLocation = PartitionManager.Instance.GetBasePositionInBedroom();

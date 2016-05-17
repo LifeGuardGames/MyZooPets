@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
-using GameAnalyticsSDK;
+using System.Collections.Generic;
 
 public class Analytics : MonoBehaviour {
 
@@ -59,83 +59,52 @@ public class Analytics : MonoBehaviour {
     }
 
 	#region Ninja Trigger
-	public void NinjaHighScore(int score){
+	public void NinjaGameData(int score, int bonus) {
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(NINJA_CATEGORY + "HighScore", (float) score);
+			Mixpanel.SendEvent("Ninja HighScore", new Dictionary<string, object>{
+				{ "High Score: ", score},
+				{ "Bonus: ", bonus},
+			});
 		}
 	}
 
-	public void NinjaBonusRounds(int bonus){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(NINJA_CATEGORY + "BonusRound", (float) bonus);
-		}
-	}
-
-	public void NinjaTimesPlayedTick(){
-	if(isAnalyticsEnabled){
-			GA_Design.NewEvent(NINJA_CATEGORY + "TimesPlayed", 1f);
-		}
-	}
 	#endregion
 
 	#region Shooter Game
-	public void ShooterHighScore(int score){
+	public void ShooterGameData(int score, int percentage) {
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(SHOOTER_CATEGORY + "HighScore", (float) score);
+			Mixpanel.SendEvent("Shooter HighScore", new Dictionary<string, object>{
+				{ "High Score: ", score},
+				{ "Inhaler misses: ", percentage}
+			});
 		}
 	}
 
-	public void ShooterPercentageMissed(int percentage){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(SHOOTER_CATEGORY + "Missed inhaler percentage: ", (float) percentage);
-		}
-	}
-	public void ShooterTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(SHOOTER_CATEGORY + "TimesPlayed", 1f);
-		}
-	}
 	#endregion
 
 	#region Memory Game
-	public void MemoryHighScore(int score){
+	public void MemoryGameData(int score){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(MEMORY_CATEGORY + "HighScore", (float) score);
+			Mixpanel.SendEvent("Memory HighScore", new Dictionary<string, object>{
+				{ "Memory HighScore: ", score}
+			});
 		}
 	}
 
-	public void MemoryTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(MEMORY_CATEGORY + "TimesPlayed", 1f);
-		}
-	}
 	#endregion
 
 	#region Runner Game
-    //Where did the user die most often in the runner game?
-//    public void RunnerPlayerDied(string levelComponentName){
-//        if(!String.IsNullOrEmpty(levelComponentName) && isAnalyticsEnabled){
-//            GA_Design.NewEvent(RUNNER_CATEGORY + "Dead:" + levelComponentName);
-//		}
-//    }
 
-	public void RunnerHighScore(int score){
+	public void RunnerGameData(int score, string level, int distanceRan) {
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(RUNNER_CATEGORY + "HighScore", (float) score);
+			Mixpanel.SendEvent("Runner HighScore", new Dictionary<string, object>{
+				{ "Runner HighScore: ", score},
+				{ "Died at: ", level},
+				{ "Distance Ran: ", distanceRan}
+			});
 		}
 	}
 
-    public void RunnerPlayerDistanceRan(int distanceRan){
-        if(isAnalyticsEnabled){
-            GA_Design.NewEvent(RUNNER_CATEGORY + "DistanceRan", (float) distanceRan);
-		}
-    }
-
-	public void RunnerTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(RUNNER_CATEGORY + "TimesPlayed", 1f);
-		}
-	}
 
 	#endregion
 
@@ -143,7 +112,9 @@ public class Analytics : MonoBehaviour {
     //Which steps in inhaler game does the kids need help the most
     public void InhalerHintRequired(int stepID){
         if(isAnalyticsEnabled){
-            GA_Design.NewEvent(INHALER_CATEGORY + "HintRequired:" + stepID);
+			Mixpanel.SendEvent("Inhaler Hint", new Dictionary<string, object>{
+				{ "Hint: ", stepID}
+			});
 		}
     }
 	#endregion
@@ -151,15 +122,12 @@ public class Analytics : MonoBehaviour {
 	#region Doctor Match
 	public void DoctorHighScore (int score){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(DIAGNOSE_CATEGORY + "HighScore", (float) score);
+			Mixpanel.SendEvent("Doctor HighScore", new Dictionary<string, object>{
+				{ "Doctor High Score: ", score}
+			});
 		}
 	}
 
-	public void DoctorTimesPlayedTick(){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent(DIAGNOSE_CATEGORY + "TimesPlayed", 1f);
-		}
-	}
 
 	#endregion
 
@@ -167,13 +135,17 @@ public class Analytics : MonoBehaviour {
 	public void MiniPetLevelUp(string miniPetID, int currentLevel){
 		string levelString = currentLevel.ToString();
 		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
-			GA_Design.NewEvent("MiniPet:LevelUnlocked:" + levelString + ":" + miniPetID);
+			Mixpanel.SendEvent("Minipet Level Up", new Dictionary<string, object>{
+				{ miniPetID + "Level up: ", currentLevel}
+			});
 		}
 	}
 
 	public void MiniPetVisited(string miniPetID){
 		if(!String.IsNullOrEmpty(miniPetID) && isAnalyticsEnabled){
-			GA_Design.NewEvent("MiniPet:TimesVisited" + miniPetID);
+			Mixpanel.SendEvent("Times Visited Minipet", new Dictionary<string, object>{
+				{ "Times Visited: ", miniPetID}
+			});
 		}
 	}
 
@@ -183,100 +155,129 @@ public class Analytics : MonoBehaviour {
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
         if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled){
-            GA_Design.NewEvent("PetColorChosen:" + petColor);
+			Mixpanel.SendEvent("Pet Color", new Dictionary<string, object>{
+				{ "Color chosen: ", petColor}
+			});
 		}
     }
 
 	//start game from menu scene
 	public void StartGame(){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent("StartGame");
+			Mixpanel.SendEvent("Start Game");
 		}
 	}
 
 	public void RemainingTriggers(int triggers){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent("Uncleaned Triggers", (float) triggers);
+			Mixpanel.SendEvent("Remaining Triggers", new Dictionary<string, object>{
+				{ "Remainder: ", triggers}
+			});
 		}
 	}
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){
         if(!String.IsNullOrEmpty(badgeID) && isAnalyticsEnabled)
-            GA_Design.NewEvent("Badge:Unlocked:" + badgeID);
-    }
+			Mixpanel.SendEvent("Badge Unlocked", new Dictionary<string, object>{
+				{ "Badge: ", badgeID}
+			});
+	}
 
     //Items used or purchased
     public void ItemEvent(string itemStatus, ItemType itemType, string itemID){
-        if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled){
-            GA_Design.NewEvent("Items:" + itemStatus + ":" + 
-                Enum.GetName(typeof(ItemType), itemType) + ":" + itemID);
-        }
+		if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled) {
+			if(itemStatus == "Bought") { 
+				Mixpanel.SendEvent("Item Bought", new Dictionary<string, object>{
+					{ itemType.ToString()+": ", itemID}
+				});
+			}
+			else {
+				Mixpanel.SendEvent("Item Used", new Dictionary<string, object>{
+					{ itemType.ToString()+": ", itemID}
+				});
+			}
+		}
     }
 
     //What is the pet's health or mood when an item is used
     public void ConsumableEventWithPetStats(string itemID, string statsType, int statsValue){
         if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType) && isAnalyticsEnabled){
-            GA_Design.NewEvent("Items:" + ITEM_STATUS_USED + ":" + itemID + ":" +
-                statsType, (float) statsValue);
-        }
+			Mixpanel.SendEvent(statsType + "Increased", new Dictionary<string, object>{
+					{ itemID+": ", statsValue}
+				});
+		}
     }
 
     //Wellapad
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
         if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && 
             !String.IsNullOrEmpty(taskID) && isAnalyticsEnabled)
-            GA_Design.NewEvent("Wellapad:Task:" + taskStatus + ":" + missionID + ":" + taskID);
-    }
+			Mixpanel.SendEvent("Task Status", new Dictionary<string, object>{
+					{ taskID +": ", taskStatus}
+				});
+	}
 
     //Wellapad xp reward claim
     public void ClaimWellapadReward(){
-        if(isAnalyticsEnabled)
-            GA_Design.NewEvent("Wellapad:Collect:Reward");
+		if(isAnalyticsEnabled)
+			Mixpanel.SendEvent("Reward Claimed");
     }
 
     //Gating
     public void GateUnlocked(string gateID){
         if(!String.IsNullOrEmpty(gateID) && isAnalyticsEnabled)
-            GA_Design.NewEvent("Gate:Unlocked:" + gateID);
-    }
+			Mixpanel.SendEvent("Gate Unlocked", new Dictionary<string, object>{
+					{ "Gate Unlocked: ", gateID}
+				});
+	}
 
     //Tutorial completed
     public void TutorialCompleted(string tutorialID){
         if(!String.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
-            GA_Design.NewEvent("Tutorial:Completed:" + tutorialID);
-    }
+			Mixpanel.SendEvent("Tutorial Completed", new Dictionary<string, object>{
+					{ "Tutorial Completed: ", tutorialID}
+				});
+	}
 	
     //Pet level up
     public void LevelUnlocked(Level levelID){
         if(isAnalyticsEnabled)
-            GA_Design.NewEvent("PetLevel:Unlocked:" + levelID.ToString());
-    }
+			Mixpanel.SendEvent("Level Unlocked", new Dictionary<string, object>{
+					{ "Level Unlocked: ", levelID}
+				});
+	}
 
     public void ZeroHealth(){
         if(isAnalyticsEnabled)
-            GA_Design.NewEvent("ZeroHealth");
+            Mixpanel.SendEvent("ZeroHealth");
     }
 
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)
-			GA_Design.NewEvent("UserInfo:Age:" + age.ToString());
+			Mixpanel.SendEvent("User Age", new Dictionary<string, object>{
+					{ "User Age: ", age}
+				});
 	}
 
 	public void UserAsthma(bool hasAsthma){
 		if(isAnalyticsEnabled)
-			GA_Design.NewEvent("UserInfo:Asthma:" + hasAsthma.ToString());
+			Mixpanel.SendEvent("User Asthma", new Dictionary<string, object>{
+					{ "User Asthma: ", hasAsthma}
+				});
 	}
 
 	public void TimeBetweenPlaySession(int hours){
 		if(isAnalyticsEnabled){
 			if(hours < 2000){
 				if(hours > 0){
-					GA_Design.NewEvent("Time between session:" + hours.ToString());
-					GA_Design.NewEvent("Avg time between session", hours);
+					Mixpanel.SendEvent("Time data", new Dictionary<string, object>{
+					{ "Time between sessions: ",hours}
+				});
+					//GA_Design.NewEvent("Avg time between session", hours);
 				}
 				else{
-					GA_Design.NewEvent("Time between session:" + "< 1 hr");
+					Mixpanel.SendEvent("Time between session:" + "< 1 hr");
 				}
 			}
 		}
@@ -284,25 +285,26 @@ public class Analytics : MonoBehaviour {
 
 	public void DidUseInhaler(bool choice){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent("Did use Inhaler " + choice);
+			Mixpanel.SendEvent("Did Use Inhaler", new Dictionary<string, object>{
+					{ "Did use Inhaler: ", choice}
+				});
 		}
 	}
 
-	public void RunnerDied(string level){
-		if(isAnalyticsEnabled){
-			GA_Design.NewEvent("Runner died On: " + level);
-		}
-	}
 
 	public void QuitGame(string scene){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent("Game Quit: " + scene);
+			Mixpanel.SendEvent("Quit Game", new Dictionary<string, object>{
+					{ "Quit At: ", scene}
+				});
 		}
 	}
 
 	public void BlowFire (string timesFireBlow){
 		if(isAnalyticsEnabled){
-			GA_Design.NewEvent("Fire Blow X Times: " + timesFireBlow);
+			Mixpanel.SendEvent("Blow Fire", new Dictionary<string, object>{
+					{ "Times blown fire: ", timesFireBlow}
+				});
 		}
 	}
 }

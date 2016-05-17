@@ -63,13 +63,13 @@ public class RescueShaker : InhalerPart {
     }
    
    protected override void Disable(){
-        transform.collider.enabled = false;
+        transform.GetComponent<Collider>().enabled = false;
         shakerConstraintPlane.SetActive(false);
         doneWithShake = true;
    }
 
    protected override void Enable(){
-        transform.collider.enabled = true;
+        transform.GetComponent<Collider>().enabled = true;
         shakerConstraintPlane.SetActive(true);
         doneWithShake = false;
    }

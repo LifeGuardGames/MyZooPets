@@ -89,10 +89,12 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	public void OnRemoveAdButtonClicked(){
+		/*
 		LGGIAPController.OnSuccessDelegate del = delegate(){
 			adParentTween.gameObject.SetActive(false);
 		};
 		IAPController.ShowConfirmPanel(del);
+		*/
 	}
 
 	public void ShowButtons(object obj, EventArgs e){
@@ -100,7 +102,7 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 
 		// Check to see if ads needs to be shown
 		bool isRemoveAdButtons = DataManager.Instance.IsAdsEnabled && AdManager.Instance.IsAdReady() && CheckAndFlagNewGameAd();
-		adParentTween.gameObject.SetActive(isRemoveAdButtons);
+	//	adParentTween.gameObject.SetActive(isRemoveAdButtons);
 		if(isRemoveAdButtons){
 			adParentTween.Show();
 		}

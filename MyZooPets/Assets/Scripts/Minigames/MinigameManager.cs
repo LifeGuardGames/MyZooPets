@@ -302,7 +302,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			if(ui.IsPopupShowing(MinigamePopups.GameOver)){
 				ui.TogglePopup(MinigamePopups.GameOver, false);
 
-				LoadLevelUIManager.Instance.StartLoadTransition(quitGameScene);
+				LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
 			}
 			
 			//double confirm quit game
@@ -311,7 +311,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 				PopupNotificationNGUI.Callback button1Function = delegate(){
 					ui.TogglePopup(MinigamePopups.Pause, false);
 
-					LoadLevelUIManager.Instance.StartLoadTransition(quitGameScene);
+					LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
 				};
 
 				PopupNotificationNGUI.Callback button2Function = delegate(){

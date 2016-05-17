@@ -49,15 +49,15 @@ public class RescuePrescription : InhalerPart{
 
     private void PrescriptionAnimation(){
         Vector3 to = new Vector3(transform.localPosition.x, 1.5f, transform.localPosition.z);
-        LeanTween.moveLocal(gameObject, to, 0.5f, new Hashtable());
+        LeanTween.moveLocal(gameObject, to, 0.5f);
     }
 
     protected override void Disable(){
-        transform.collider.enabled = false;
+        transform.GetComponent<Collider>().enabled = false;
     }
 
     protected override void Enable(){
-        transform.collider.enabled = true;
+        transform.GetComponent<Collider>().enabled = true;
     }
 
     protected override void NextStep(){

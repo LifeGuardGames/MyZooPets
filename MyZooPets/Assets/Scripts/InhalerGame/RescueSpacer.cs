@@ -68,6 +68,6 @@ public class RescueSpacer : InhalerPart{
 		
         base.NextStep();
         Destroy(rescueSpacerTarget);
-        transform.collider.enabled = false;
+        transform.GetComponent<Collider>().enabled = false;
     }
 }

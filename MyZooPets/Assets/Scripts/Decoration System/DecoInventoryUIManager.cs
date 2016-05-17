@@ -163,9 +163,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 			if(allDecoInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
 				
 				// Update position of the bar if inventory is open
-				Hashtable optional = new Hashtable();
-				optional.Add("ease", LeanTweenType.easeOutBounce);
-				LeanTween.moveLocalX(decorationGridPanel, collapsedPos - allDecoInventoryItemsCount * 90, 0.4f, optional);
+				LeanTween.moveLocalX(decorationGridPanel, collapsedPos - allDecoInventoryItemsCount * 90, 0.4f)
+					.setEase(LeanTweenType.easeInOutQuad);
 			}
 		}
 		// Scene loading case, dont want to tween here so set them explicitly
@@ -382,11 +381,11 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		}
 
 		if(isPulseShopButton){
-			shopButtonParent.animation.Play();
+			shopButtonParent.GetComponent<Animation>().Play();
 			sunbeamObject.SetActive(true);
 		}
 		else{
-			shopButtonParent.animation.Stop();
+			shopButtonParent.GetComponent<Animation>().Stop();
 			GameObjectUtils.ResetLocalScale(shopButtonParent);
 			sunbeamObject.SetActive(false);
 		}

@@ -25,10 +25,7 @@ public class RescueCap : InhalerPart{
 
 					//Lean tween cap
 					Vector3 to = new Vector3(2, -6, 0); //off the screen
-					Hashtable optional = new Hashtable();
-					optional.Add("onCompleteTarget", gameObject);
-					optional.Add("onComplete", "NextStep");
-					LeanTween.move(gameObject, to, 0.5f, optional);
+					LeanTween.move(gameObject, to, 0.5f).setOnComplete(NextStep);
 				}
             }
         }

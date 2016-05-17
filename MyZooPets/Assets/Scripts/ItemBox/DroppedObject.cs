@@ -133,8 +133,7 @@ using System.Collections.Generic;
 		Vector3 vEnd = new Vector3(vStart.x + fEndX, vStart.y, vStart.z);
 
 		// and send the object on its way!
-		Hashtable optional = new Hashtable();	
-		LeanTween.moveLocal(go, vEnd, fTime, optional);
+		LeanTween.moveLocal(go, vEnd, fTime);
 	}
 
 	/// <summary>
@@ -162,13 +161,10 @@ using System.Collections.Generic;
 			// animate the object by applying a rotation, translation, and fade
 			float fTime = Constants.GetConstant<float>("ItemPickup_Time");
 			float fUp = Constants.GetConstant<float>("ItemPickup_UpY");
-			Vector3 vSpin = Constants.GetConstant<Vector3>("ItemPickup_Spin");
-
-			Hashtable optional = new Hashtable();
-			optional.Add("onComplete", "OnDoneAnimating");			
+			Vector3 vSpin = Constants.GetConstant<Vector3>("ItemPickup_Spin");		
 			
 			GameObject go = GetGameObject();
-			LeanTween.moveY(go, fUp, fTime, optional);			
+			LeanTween.moveY(go, fUp, fTime).setOnComplete(OnDoneAnimating);			
 			TweenAlpha.Begin(go, fTime, 0);
 			LeanTween.rotate(go, vSpin, fTime);
 			

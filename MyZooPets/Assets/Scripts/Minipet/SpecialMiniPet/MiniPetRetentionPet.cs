@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class MiniPetRetentionPet : MiniPet {
 
 	string missionID;
@@ -10,7 +10,7 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void FigureOutMissions(){
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
+		if(!DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done()){
 			missionID = "TutorialPart1";
 		}
 		else{
@@ -45,14 +45,14 @@ public class MiniPetRetentionPet : MiniPet {
 
 	private void TurnInMission(){
 		if(isFinishEating){
-			MutableDataMission mission;
+			List <MutableDataWellapadTask>  mission;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
-				mission = WellapadMissionController.Instance.GetMission("TutorialPart1");
+				mission = WellapadMissionController.Instance.GetTaskGroup("TutorialPart1");
 			}
 			else{
-				mission = WellapadMissionController.Instance.GetMission("Critical");
+				mission = WellapadMissionController.Instance.GetTaskGroup("Critical");
 			}
-			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
+			if(mission != null && WellapadMissionController.Instance.CheckGroupReward() == RewardStatuses.Unclaimed){
 				// Claim the reward
 				MiniPetManager.Instance.IncreaseXp(minipetId);
 				MiniPetRetentionUIController retentionUI = (MiniPetRetentionUIController)MiniPetHUDUIManager.Instance.SelectedMiniPetContentUIScript;
@@ -64,11 +64,8 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void GiveOutMission(){
-		isPetCanGainXP = true;
-
-		WellapadMissionController.Instance.UnlockTask("Critical");
-		WellapadMissionController.Instance.needMission = true;
-		WellapadMissionController.Instance.AddMission("Critical");
+		WellapadMissionController.Instance.AddTask("DailyInhaler");
+		WellapadMissionController.Instance.AddTask("FightMonster");
 
 	}
 }

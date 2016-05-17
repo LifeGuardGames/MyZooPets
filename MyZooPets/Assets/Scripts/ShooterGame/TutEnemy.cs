@@ -18,7 +18,7 @@ public class TutEnemy : MonoBehaviour {
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	IEnumerator DestroyEnemy(){
 		yield return new WaitForEndOfFrame();
-		collider2D.enabled = false;
+		GetComponent<Collider2D>().enabled = false;
 		
 		// Wait until the particles has finished clearing before you destroy
 		Destroy(this.gameObject);

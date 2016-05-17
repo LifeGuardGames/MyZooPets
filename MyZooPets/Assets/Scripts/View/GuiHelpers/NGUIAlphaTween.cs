@@ -63,10 +63,8 @@ public class NGUIAlphaTween : MonoBehaviour {
 	public void StartAlphaTween(){
 		if(!isTweening){
 			isTweening = true;
-			Hashtable optional = new Hashtable();
-			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onComplete", "OnCompleteCallback");
-			LeanTween.value(gameObject, "UpdateFloat", startAlpha, endAlpha, duration, optional);
+			LeanTween.value(gameObject, UpdateFloat, startAlpha, endAlpha, duration)
+				.setOnComplete(OnCompleteCallback);
 		}
 		else{
 			Debug.LogError("alpha tween already tweening");

@@ -86,25 +86,22 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		Hashtable optional = new Hashtable();
 		GameObject animationSprite = NGUITools.AddChild(sprite.transform.parent.gameObject, itemSpritePrefab);
 		
-		// hashtable for completion params for the callback (stash the icon we are animating)
-		Hashtable completeParamHash = new Hashtable();
-		completeParamHash.Add("Icon", animationSprite);		
-		
-		optional.Add("ease", LeanTweenType.easeOutQuad);
-		optional.Add("onComplete", "DestroySprite");
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onCompleteParam", completeParamHash);
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(90, 90, 1);
 		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
-		LeanTween.move(animationSprite, path, speed, optional);
+
+		Debug.LogWarning("Tween sprite test start");
+		LeanTween.move(animationSprite, path, speed)
+			.setEase(LeanTweenType.easeOutQuad)
+			.setOnComplete(DestroySprite)
+			.setOnCompleteParam(animationSprite);
 	}
 
-	public void DestroySprite(Hashtable hash){
-		// delete the icon we moved
-		if(hash.ContainsKey("Icon")){
-			GameObject goSprite = (GameObject)hash["Icon"];
-			Destroy(goSprite);
+	// delete the icon we moved
+	public void DestroySprite(System.Object obj){
+		Debug.LogWarning("Tween sprite test end");
+		if(obj != null) {
+			Destroy((GameObject)obj);
 		}
 	}
 }

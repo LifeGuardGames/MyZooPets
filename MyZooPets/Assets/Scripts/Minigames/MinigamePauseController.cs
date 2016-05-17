@@ -8,11 +8,13 @@ public class MinigamePauseController : MonoBehaviour {
 	#region Button calls
 	public void OnResumeButton(){
 		UIManager.OnResume();
+		HidePanel();
 	}
 
 	public void OnRestartButton(){
 		UIManager.OnRestart();
-	}
+		HidePanel();
+    }
 
 	public void OnExitButton(){
 		UIManager.OnExitGame(false);

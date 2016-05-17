@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
+public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public enum DoctorMatchButtonTypes{
 		None,
 		Green,
@@ -21,27 +22,24 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 	}
 
 	void Awake(){
+		// Parent settings
+		minigameKey = "DOCTOR";
 		quitGameScene = SceneUtils.BEDROOM;
-	}
+		rewardXPMultiplier = 1f;
+		rewardMoneyMultiplier = 1f;
+		rewardShardMultiplier = 1f;
+    }
 	
 	protected override void _Start(){
 		zoneGreen.ToggleButtonInteractable(false);
 		zoneYellow.ToggleButtonInteractable(false);
 		zoneRed.ToggleButtonInteractable(false);
-	}	
-	
-	protected override void _OnDestroy(){
-	}
-
-	public override int GetReward(MinigameRewardTypes eType){
-		// for now, just use the standard way
-		return GetStandardReward(eType);
 	}
 
 	public void StartTutorial(){
 		// set our tutorial
-		SetTutorial(new DoctorMatchTutorial());
-	}	
+	//	SetTutorial(new DoctorMatchTutorial());
+	}
 
 	protected override void _NewGame(){
 		assemblyLineController.Initialize();
@@ -51,6 +49,10 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		zoneGreen.ToggleButtonInteractable(true);
 		zoneYellow.ToggleButtonInteractable(true);
 		zoneRed.ToggleButtonInteractable(true);
+	}
+
+	protected override void _PauseGame() {
+		// not implemented yet!
 	}
 
 	protected override void _GameOver(){
@@ -66,18 +68,27 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
 		#endif
 		*/
+
 	}
 
-	protected override void _Update(){
+	// award the actual xp and money, called when tween is complete
+	protected override void _GameOverReward() {
+		StatsController.Instance.ChangeStats(
+			deltaPoints: rewardXPAux,
+			pointsLoc: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			deltaStars: rewardMoneyAux,
+			starsLoc: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 	}
 
-	protected override string GetMinigameKey(){
-		return "Clinic";
-	}	
-	
-	protected override bool IsTutorialOn(){
-		return Constants.GetConstant<bool>("IsDoctorMatchTutorialOn");
+	protected override void _QuitGame() {
 	}
+
+	//protected override bool IsTutorialOn(){
+	//	return Constants.GetConstant<bool>("IsDoctorMatchTutorialOn");
+	//}
 
 	// Input coming from button scripts
 	public void OnZoneClicked(DoctorMatchButtonTypes buttonType){
@@ -97,18 +108,17 @@ public class DoctorMatchManager : MinigameManager<DoctorMatchManager> {
 
 	// When your timer runs out
 	public void OnTimerBarEmpty(){
-		// Game over, starting with 1 life
-		UpdateLives(-1);
+		GameOver();
 	}
 
 	private void CharacterScoredRight(){
-		if(IsTutorialRunning()){
+		//if(IsTutorialRunning()){
 			
-		}
-		else{
+		//}
+		//else{
 			lifeBarController.PlusBar();
 			UpdateScore(1);
-		}
+		//}
 	
 		// Play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");

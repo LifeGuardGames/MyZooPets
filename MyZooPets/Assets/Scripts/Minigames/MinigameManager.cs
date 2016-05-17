@@ -36,8 +36,8 @@ public class LivesChangedArgs : EventArgs{
 
 public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{	
 	//----------------- Abstract -----------------------------
-	public abstract int GetReward(MinigameRewardTypes eType);		// returns the reward the player got for playing this minigame
-	protected abstract string GetMinigameKey();						// returns string key for this minigame
+	public abstract int GetReward(MinigameRewardTypes eType);       // returns the reward the player got for playing this minigame
+	public abstract string GetMinigameKey();						// returns string key for this minigame
 	protected abstract void _Start();								// when the manager is started
 
 	//=======================Events========================

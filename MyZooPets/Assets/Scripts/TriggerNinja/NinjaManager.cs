@@ -175,7 +175,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 #endif
 	}
 
-	protected override string GetMinigameKey(){
+	public override string GetMinigameKey(){
 		return "Ninja";	
 	}
 

@@ -6,9 +6,11 @@ public class AlphaTweenToggleCanvasGroup : TweenToggle {
 
 	private float showingAlpha;
 	private float hiddenAlpha;
+	private CanvasGroup canvasGroup;
 
 	protected override void RememberPositions() {
-		showingAlpha = GUIRectTransform.GetComponent<CanvasGroup>().alpha;
+		canvasGroup = GUIRectTransform.GetComponent<CanvasGroup>();
+        showingAlpha = canvasGroup.alpha;
 		hiddenAlpha = showingAlpha - hideDeltaAlpha;
 
 		// Sanity check on hidden alpha values, sometimes we want to override simply
@@ -38,6 +40,8 @@ public class AlphaTweenToggleCanvasGroup : TweenToggle {
 
 	public override void Show(float time) {
 		if(!isShown) {
+			canvasGroup.interactable = true;
+			canvasGroup.blocksRaycasts = true;
 			isShown = true;
 			isMoving = true;
 
@@ -52,6 +56,8 @@ public class AlphaTweenToggleCanvasGroup : TweenToggle {
 
 	public override void Hide(float time) {
 		if(isShown) {
+			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
 			isShown = false;
 			isMoving = true;
 

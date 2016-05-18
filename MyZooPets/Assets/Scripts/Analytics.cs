@@ -71,11 +71,13 @@ public class Analytics : MonoBehaviour {
 	#endregion
 
 	#region Shooter Game
-	public void ShooterGameData(int score, int percentage) {
+	public void ShooterGameData(int score, int percentage, string waveName, int combo) {
 		if(isAnalyticsEnabled){
 			Mixpanel.SendEvent("Shooter HighScore", new Dictionary<string, object>{
 				{ "High Score: ", score},
-				{ "Inhaler misses: ", percentage}
+				{ "Inhaler misses: ", percentage},
+				{"Wave Number died at: ", waveName },
+				{"Inhaler combo: ", combo }
 			});
 		}
 	}

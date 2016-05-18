@@ -31,6 +31,9 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 				}
 			}
 			combo++;
+			if(ShooterGameManager.Instance.highestCombo < combo) {
+				ShooterGameManager.Instance.highestCombo = combo;
+			}
 			ShooterGameManager.Instance.RemoveInhalerFingerTutorial();
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.ChangeHealth(combo);

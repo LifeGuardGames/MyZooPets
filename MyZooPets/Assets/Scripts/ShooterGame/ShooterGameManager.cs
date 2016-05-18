@@ -11,6 +11,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public int waveNum = 0;
 	public bool inTutorial;
 	public int powerUpScore;
+	public int highestCombo = 0;
 
 	private ShooterUIManager shooterUI;
 
@@ -71,7 +72,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _GameOver(){
-		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / waveNum + 1);
+		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / waveNum + 1, ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
 		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
 		
 

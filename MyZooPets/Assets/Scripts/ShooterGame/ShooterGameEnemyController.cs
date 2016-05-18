@@ -7,7 +7,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 	public EventHandler<EventArgs> OnTutorialStepDone;					//tutorial event handeler
 	public List<ImmutableDataShooterArmy> enemyList;		// list of the various enemy types
 	public int enemiesInWave = 0;							// the number of enemies in the current wave											
-	private ImmutableDataWave currentWave;					// our current wave
+	public ImmutableDataWave currentWave;					// our current wave
 
 	public void Reset(){
 		enemiesInWave = 0;

@@ -40,7 +40,7 @@ public class AssemblyLineController : MonoBehaviour {
 		return poppedItem;
 	}
 
-	public void ShiftAndAddNewItem(){
+	public void ShiftAndAddNewItem(){ //TODO: Set them invisible
 		foreach(AssemblyLineItem itemScript in itemQueue){
 			int newIndex = itemScript.GetIncrementIndex();
 			LeanTween.cancel(itemScript.gameObject);

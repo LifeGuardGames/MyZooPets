@@ -1,9 +1,10 @@
 using UnityEngine;
-using System.Collections;
 
 public class HUDUIManager : Singleton<HUDUIManager>{
+	//public bool isDebug;
+	public TweenToggleDemux panelTween;
 	public HUDAnimator hudAnimator;
-	public bool isDebug;
+
 	public UISlider healthSlider;
 	public UILabel healthLabel;
 	public UILabel levelNumber;
@@ -32,37 +33,39 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	private string levelText;
 	private int nextLevelPoints;
 	private string starCount;
-	
+
+	void Start() {
+		ToggleLabels(false);
+	}
+
+	public void ShowPanel() {
+		panelTween.Show();
+	}
+
+	public void HidePanel() {
+		panelTween.Hide();
+	}
+
 	/// <summary>
 	/// Gets the tween parent.
 	/// </summary>
 	/// <returns>The tween parent.</returns>
-	public GameObject GetTweenParent(){
-		return tweenParent;	
-	}
+	//public GameObject GetTweenParent(){
+	//	return tweenParent;	
+	//}
 
-	public GameObject GetTweenParent(string anchor){
-		if(anchor == "Top"){
-			return anchorTop;
-		}
-		else{
-			Debug.LogError("Bad anchor specified for HUD tween");
-			return null;
-		}
-	}
-    
-	// Use this for initialization
-	void Awake(){
-		hudAnimator = GetComponent<HUDAnimator>();
-	}
-
-	void Start(){
-		HideLabels();
-	}
+	//public GameObject GetTweenParent(string anchor){
+	//	if(anchor == "Top"){
+	//		return anchorTop;
+	//	}
+	//	else{
+	//		Debug.LogError("Bad anchor specified for HUD tween");
+	//		return null;
+	//	}
+	//}
 	
 	// Update is called once per frame
 	void Update(){
-
 		//Data reading from Data Manager
 		points = hudAnimator.GetDisplayValue(HUDElementType.Points);
 		mood = hudAnimator.GetDisplayValue(HUDElementType.Mood);
@@ -89,28 +92,11 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		healthLabel.text = health.ToString() + "%";
 		starLabel.text = starCount;
 	}
-
-	public void ShowPanel(){
-		gameObject.GetComponent<TweenToggleDemux>().Show();
-	}
-
-	public void HidePanel(){
-		gameObject.GetComponent<TweenToggleDemux>().Hide();
-	}
-
-	/// <summary>
-	/// Shows the more detailed HUD labels
-	/// </summary>
-	public void ShowLabels(){
-		levelFraction.gameObject.SetActive(true);
-		healthLabel.gameObject.SetActive(true);
-		moodLabel.gameObject.SetActive(true);
-	}
-
-	public void HideLabels(){
-		levelFraction.gameObject.SetActive(false);
-		healthLabel.gameObject.SetActive(false);
-		moodLabel.gameObject.SetActive(false);
+	
+	public void ToggleLabels(bool isShow){
+		levelFraction.gameObject.SetActive(isShow);
+		healthLabel.gameObject.SetActive(isShow);
+		moodLabel.gameObject.SetActive(isShow);
 	}
 
 	public void PlayNeedMoneyAnimation(){

@@ -42,7 +42,7 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		MemoryGameManager.OnStateChanged -= GameStateChange;
 	}
 
-	protected override string GetMinigameKey(){
+	public override string GetMinigameKey(){
 		return "Memory";
 	}
 

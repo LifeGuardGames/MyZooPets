@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Managed by GenericMinigameUI
+/// </summary>
 public class MinigameStartController : MonoBehaviour {
 	public TweenToggleDemux panelTween;
 	public GenericMinigameUI UIManager;
@@ -8,7 +11,8 @@ public class MinigameStartController : MonoBehaviour {
 	public Text minigameOpening;
 
 	public void Start() {
-		
+		minigameTitle.text = Localization.Localize(UIManager.GetMinigameKey() + "_TITLE");
+		minigameOpening.text = Localization.Localize(UIManager.GetMinigameKey() + "_OPENING");
 	}
 
 	#region Button calls
@@ -19,7 +23,8 @@ public class MinigameStartController : MonoBehaviour {
 	public void OnPlayButton(){
 		// Same code flow as restart
 		UIManager.OnRestart();
-	}
+		HidePanel();
+    }
 
 	public void OnExitButton() {
 		UIManager.OnExitGame(true);

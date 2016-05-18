@@ -19,7 +19,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 	}
 
-	protected override string GetMinigameKey(){
+	public override string GetMinigameKey(){
 		return "Shooter";
 	}
 

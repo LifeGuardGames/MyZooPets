@@ -48,7 +48,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// Gets the minigame key.
 	/// </summary>
 	/// <returns>The minigame key.</returns>
-	protected override string GetMinigameKey(){
+	public override string GetMinigameKey(){
 		return "Runner";	
 	}
 

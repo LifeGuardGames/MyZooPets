@@ -98,7 +98,7 @@ GameObject:
   - 114: {fileID: 11405868}
   - 95: {fileID: 9580984}
   m_Layer: 5
-  m_Name: ButtonPlay
+  m_Name: ButtonReplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1784,7 +1784,7 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 1
   easeShow: 1
-  isUseEstimatedTime: 0
+  isUseEstimatedTime: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -1912,8 +1912,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: OnExitButton
+      - m_Target: {fileID: 11441706}
+        m_MethodName: OnClosePanelButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2149,8 +2149,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: OnSubmitButton
+      - m_Target: {fileID: 11428398}
+        m_MethodName: PauseUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2178,7 +2178,7 @@ MonoBehaviour:
   pauseController: {fileID: 11494034}
   gameOverController: {fileID: 11471818}
   exitConfirmController: {fileID: 11441706}
-  minigameInterface: {fileID: 11445920}
+  minigameUIInterface: {fileID: 11445920}
 --- !u!114 &11428548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3502,7 +3502,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 11441706}
         m_MethodName: OnExitButton
         m_Mode: 1
         m_Arguments:
@@ -3636,6 +3636,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelTween: {fileID: 11497942}
   UIManager: {fileID: 11428398}
+  scoreText: {fileID: 11440712}
+  starText: {fileID: 11413148}
+  coinText: {fileID: 11438656}
+  shardText: {fileID: 11462238}
 --- !u!114 &11474102
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3822,7 +3826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: MG_DELETE_CONFIRM
+  key: MG_QUIT_CONFIRM
 --- !u!114 &11481648
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3890,7 +3894,7 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 1
   easeShow: 1
-  isUseEstimatedTime: 0
+  isUseEstimatedTime: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -4113,7 +4117,7 @@ MonoBehaviour:
   hideDelay: 0
   easeHide: 4
   easeShow: 27
-  isUseEstimatedTime: 0
+  isUseEstimatedTime: 1
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
   ShowIncludeChildren: 0
@@ -5088,7 +5092,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 23.000004}
-  m_SizeDelta: {x: 747, y: 114}
+  m_SizeDelta: {x: 296, y: 114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22434064
 RectTransform:

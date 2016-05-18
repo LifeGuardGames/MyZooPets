@@ -152,7 +152,7 @@ public class InventoryDragDrop : MonoBehaviour{
 				dragScrollScript.enabled = false;
 				savedLocalPosition = gameObject.transform.localPosition;	// Save original position detection failed
 
-				HUDUIManager.Instance.ShowLabels();
+				HUDUIManager.Instance.ToggleLabels(true);
 
 				mIsDragging = true;
 				mParent = mTrans.parent;
@@ -250,7 +250,7 @@ public class InventoryDragDrop : MonoBehaviour{
 				UICamera.current.stickyPress = false;
 			}
 			
-			HUDUIManager.Instance.HideLabels();
+			HUDUIManager.Instance.ToggleLabels(false);
 			mIsDragging = false;
 			Collider col = GetComponent<Collider>();
 

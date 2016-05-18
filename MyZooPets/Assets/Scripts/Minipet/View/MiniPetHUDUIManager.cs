@@ -213,7 +213,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 	private void CloseShop(object sender, EventArgs args){
 		StoreUIManager.OnShortcutModeEnd -= CloseShop;
-		HUDUIManager.Instance.HideLabels();
+		HUDUIManager.Instance.ToggleLabels(false);
 		ClickManager.Instance.ReleaseLock();
 	
 		UIModeTypes currentMode = ClickManager.Instance.CurrentMode;

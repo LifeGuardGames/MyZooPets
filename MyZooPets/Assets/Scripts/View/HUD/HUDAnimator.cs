@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,11 +38,11 @@ public class HUDAnimator : MonoBehaviour{
 	public Animator animHealth;
 	public Animator animHunger;
 	public Animator animCoin;
+	public GameObject tweenSpritePrefab;
 	public AnimationCurve customEaseCurve;
 
 
 
-	public UIAtlas commonAtlas;
 
 	#region private variables
 	private int nextLevelPoints; //the minimum requirement for next level up
@@ -217,20 +218,16 @@ public class HUDAnimator : MonoBehaviour{
 	private void StartCurve(StatType type, int amount, Vector3 originPoint, string sound = null){
 		TweenMoveToPoint(type, amount, originPoint, sound);	
 	}
-	
-	//---------------------------------------------------
-	// TweenMoveToPoint()
-	// For one stat, actually prepare and spawn the
-	// visuals.
-	//---------------------------------------------------	
+
+	/// <summary>
+	/// For one stat, actually prepare and spawn the visuals.
+	/// </summary>
 	private void TweenMoveToPoint(StatType type, int amount, Vector3 originPoint, string sound){
 		float duration = Constants.GetConstant<float>("HudCurveDuration");
-		string imageName = null;
+		Sprite imageSprite;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
 		bool isPlusAnimation = false;	// Used for "adding" animation otherwise "substracting" animation
-		string strImageUp = Constants.GetConstant<string>(type + "_Up");
-		string strImageDown = Constants.GetConstant<string>(type + "_Down");
 		float fModifier = GetModifier(type);
 		Vector3 vHUD = Constants.GetConstant<Vector3>(type + "_HUD");
 
@@ -240,14 +237,14 @@ public class HUDAnimator : MonoBehaviour{
 		if(amount > 0){
 			endPosition = vHUD;
 			isPlusAnimation = true;
-			imageName = strImageUp;
+			imageSprite = SpriteCacheManager.GetHudTweenIcon(type);
 		}
 		else{
 			originPoint = vHUD;
 			Vector3 vOffset = Constants.GetConstant<Vector3>("Below_HUD");
 			endPosition = originPoint + vOffset;
 			isPlusAnimation = false;
-			imageName = strImageDown;
+			imageSprite = null;
 		}
 		
 		// spawns the individual visual elements
@@ -255,15 +252,14 @@ public class HUDAnimator : MonoBehaviour{
 			// On its own thread
 			Hashtable hashSoundOverrides = new Hashtable();
 			hashSoundOverrides["Pitch"] = 1.0f + i;
-			StartCoroutine(SpawnOneSprite(tweenParent, i, type, imageName, originPoint, endPosition, duration, isPlusAnimation, sound, hashSoundOverrides));
+			StartCoroutine(SpawnOneSprite(tweenParent, i, type, imageSprite, originPoint, endPosition, duration, isPlusAnimation, sound, hashSoundOverrides));
 		}
 	}
 
-	//---------------------------------------------------
-	// SpawnOneSprite()
-	// Spawns one sprite for the visual curve.
-	//---------------------------------------------------	
-	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, StatType type, string imageName,
+	/// <summary>
+	/// Spawns one sprite for the visual curve.
+	/// </summary>
+	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, StatType type, Sprite spriteData,
 	                           Vector3 fromPos, Vector3 toPos, float duration, bool isPlusAnimation,
 	                           string strSound, Hashtable hashSoundOverrides){
 
@@ -275,20 +271,9 @@ public class HUDAnimator : MonoBehaviour{
 
 		// Modify some tweening behaviors based on adding or subtracting a stat
 		if(isPlusAnimation){
-			// Create the tween image
-			UISprite sprite = NGUITools.AddSprite(tweenParent, commonAtlas, imageName);
-			sprite.depth = 30;	// TODO-s make this dynamic?
-			GameObject go = sprite.gameObject;
+			GameObject go = GameObjectUtils.AddChildGUI(gameObject, tweenSpritePrefab);
 			go.transform.localPosition = fromPos;
-			go.transform.localScale = new Vector3(10f, 10f, 1f);
-
-			RotateAroundCenter rotateScript = go.AddComponent<RotateAroundCenter>();
-			rotateScript.speed = 500;
-			rotateScript.Play();
-
-			ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
-			scaleScript.scaleFactor = Constants.GetConstant<Vector3>("HudCurveAddScale");
-			scaleScript.duration = Constants.GetConstant<float>("HudCurveDuration");
+			go.GetComponent<Image>().sprite = spriteData;
 
 			// Addition tweening behavior
 			Vector3[] path = new Vector3[4];
@@ -302,7 +287,6 @@ public class HUDAnimator : MonoBehaviour{
 		}
 		else{
 			// Add subtraction tweening logic here
-
 			// Disable curve wait time for stat penalty
 			duration = 0;
 		}

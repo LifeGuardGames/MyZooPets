@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HUDUIManager : Singleton<HUDUIManager>{
-	//public bool isDebug;
 	public TweenToggleDemux panelTween;
 	public HUDAnimator hudAnimator;
 
@@ -13,18 +13,6 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public UISlider moodSlider;
 	public UILabel moodLabel;
 	public UILabel starLabel;
-
-	// Parent for tweening
-	public GameObject tweenParent;
-	public GameObject anchorTop;
-
-	// Icon pulsing
-	public AnimationControl animHealth;
-	public AnimationControl animMood;
-	public AnimationControl animMoney;
-	public AnimationControl animXP;
-
-	public Animation needMoneyAnimation;
 
 	private float points;
 	private float mood;
@@ -45,30 +33,11 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public void HidePanel() {
 		panelTween.Hide();
 	}
-
-	/// <summary>
-	/// Gets the tween parent.
-	/// </summary>
-	/// <returns>The tween parent.</returns>
-	//public GameObject GetTweenParent(){
-	//	return tweenParent;	
-	//}
-
-	//public GameObject GetTweenParent(string anchor){
-	//	if(anchor == "Top"){
-	//		return anchorTop;
-	//	}
-	//	else{
-	//		Debug.LogError("Bad anchor specified for HUD tween");
-	//		return null;
-	//	}
-	//}
 	
-	// Update is called once per frame
 	void Update(){
 		//Data reading from Data Manager
-		points = hudAnimator.GetDisplayValue(HUDElementType.Points);
-		mood = hudAnimator.GetDisplayValue(HUDElementType.Mood);
+		points = hudAnimator.GetDisplayValue(HUDElementType.Xp);
+		mood = hudAnimator.GetDisplayValue(HUDElementType.Hunger);
 		health = hudAnimator.GetDisplayValue(HUDElementType.Health);
 
 		//points progress bar data
@@ -81,7 +50,7 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 			levelText = points + "/" + nextLevelPoints;
 
 		//Star data
-		starCount = hudAnimator.GetDisplayValue(HUDElementType.Stars).ToString();
+		starCount = hudAnimator.GetDisplayValue(HUDElementType.Coin).ToString();
 
 		levelSlider.sliderValue = points / nextLevelPoints;
 		levelNumber.text = level;
@@ -99,10 +68,9 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		moodLabel.gameObject.SetActive(isShow);
 	}
 
-	public void PlayNeedMoneyAnimation(){
-		needMoneyAnimation.wrapMode = WrapMode.Once;
-		needMoneyAnimation.Play("moneyRequired");
-	}
+	public void PlayNeedCoinAnimation(){
+		hudAnimator.PlayNeedCoinAnimation();
+    }
 
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){

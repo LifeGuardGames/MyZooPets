@@ -74,10 +74,10 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	// award the actual xp and money, called when tween is complete
 	protected override void _GameOverReward() {
 		StatsController.Instance.ChangeStats(
-			deltaPoints: rewardXPAux,
-			pointsLoc: GenericMinigameUI.Instance.GetXPPanelPosition(),
-			deltaStars: rewardMoneyAux,
-			starsLoc: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
 		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);

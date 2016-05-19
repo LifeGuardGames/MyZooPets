@@ -38,7 +38,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 
 	void Start(){
-		int mood = StatsController.Instance.GetStat(HUDElementType.Mood);
+		int mood = StatsController.Instance.GetStat(HUDElementType.Hunger);
 		int health = StatsController.Instance.GetStat(HUDElementType.Health);
 		currentAnimationState = PetAnimStates.Idling;
 
@@ -364,7 +364,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 	IEnumerator GenerateCoins(){
 		yield return new WaitForSeconds (5.0f);
-		StatsController.Instance.ChangeStats(deltaStars: 1, starsLoc: transform.position, is3DObject: true);
+		StatsController.Instance.ChangeStats(coinsDelta: 1, coinsPos: transform.position, is3DObject: true);
 		StartCoroutine("GenerateCoins");
 	}
 }

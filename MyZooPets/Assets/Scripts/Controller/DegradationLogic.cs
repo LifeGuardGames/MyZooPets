@@ -70,7 +70,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		bool bTut = TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive();
 		if(bTut == false){
 			int nXP = DataLoaderXpRewards.GetXP("CleanTrigger", new Hashtable());
-			StatsController.Instance.ChangeStats(deltaPoints: nXP, pointsLoc: trigger.transform.position, is3DObject: true);
+			StatsController.Instance.ChangeStats(xpDelta: nXP, xpPos: trigger.transform.position, is3DObject: true);
 		}	
 		
 		// DataManager.Instance.GameData.Degradation.DegradationTriggers.Remove(degradData);
@@ -104,7 +104,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		// damage the pet
 		int damage = trigger.Damage;
 
-		StatsController.Instance.ChangeStats(deltaHealth: -damage, isFloaty: true);
+		StatsController.Instance.ChangeStats(healthDelta: -damage, isFloaty: true);
 	}
 
 	private void StatsDegradationCheck(){
@@ -332,7 +332,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 				numPlayPeriodOffset = 3;
 			}
 			Debug.Log("Missed play period, punishing user with " + ((numPlayPeriodOffset - 1) * -20) + " health");
-			StatsController.Instance.ChangeStats(deltaHealth: (numPlayPeriodOffset - 1) * -20);
+			StatsController.Instance.ChangeStats(healthDelta: (numPlayPeriodOffset - 1) * -20);
 		}
 	}
 

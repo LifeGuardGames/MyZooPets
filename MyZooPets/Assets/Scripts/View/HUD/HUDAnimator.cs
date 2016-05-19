@@ -38,14 +38,20 @@ public class HUDAnimator : MonoBehaviour{
 
 	//========================================
 
+	public Animator animXp;			// Controls all the animations for a single stat
+	public Animator animHealth;
+	public Animator animHunger;
+	public Animator animCoin;
+	public AnimationCurve customEaseCurve;
+
+
+
 	#region public variables
-	//public bool isDebug = false;
 	// sounds for animations
 	public float soundFadeTime;
 	public string soundStars;
 	public string soundXP;
 	public UIAtlas commonAtlas;
-	public AnimationCurve customEaseCurve;
 	#endregion
 
 	#region private variables
@@ -57,9 +63,7 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl moodIconAnim;
 	private AnimationControl starIconAnim;
 	private AnimationControl xpIconAnim;
-	
-	private GameObject toDestroy;
-	
+		
 	// stores elements for easy access
 	private Dictionary<HUDElementType, int> hashDisplays = new Dictionary<HUDElementType, int>();
 	private Dictionary<HUDElementType, AnimationControl> hashAnimControls = new Dictionary<HUDElementType, AnimationControl>();
@@ -114,22 +118,22 @@ public class HUDAnimator : MonoBehaviour{
 	}
 	
 	void Start(){
-		healthIconAnim = HUDUIManager.Instance.animHealth;
-		moodIconAnim = HUDUIManager.Instance.animMood;
-		starIconAnim = HUDUIManager.Instance.animMoney;
-		xpIconAnim = HUDUIManager.Instance.animXP;
-		
+		healthIconAnim = null;//HUDUIManager.Instance.animHealth;
+		moodIconAnim = null;//HUDUIManager.Instance.animMood;
+		starIconAnim = null;//HUDUIManager.Instance.animMoney;
+		xpIconAnim = null;//HUDUIManager.Instance.animXP;
+
 		// store all the relevant elements in hashes...kind of annoying
-		hashAnimControls[HUDElementType.Points] = xpIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Stars] = starIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[HUDElementType.Xp] = xpIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[HUDElementType.Coin] = starIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Mood] = moodIconAnim.GetComponent<AnimationControl>();		
+		hashAnimControls[HUDElementType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();		
 		
 		// Model > View, exception!
-		hashDisplays[HUDElementType.Points] = DataManager.Instance.GameData.Stats.Points;
-		hashDisplays[HUDElementType.Stars] = DataManager.Instance.GameData.Stats.Stars;
+		hashDisplays[HUDElementType.Xp] = DataManager.Instance.GameData.Stats.Points;
+		hashDisplays[HUDElementType.Coin] = DataManager.Instance.GameData.Stats.Stars;
 		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
-		hashDisplays[HUDElementType.Mood] = DataManager.Instance.GameData.Stats.Mood;
+		hashDisplays[HUDElementType.Hunger] = DataManager.Instance.GameData.Stats.Mood;
 		
 		
 		lastLevel = LevelLogic.Instance.CurrentLevel; 
@@ -150,7 +154,7 @@ public class HUDAnimator : MonoBehaviour{
 	//Check if the points progress bar has reached the level requirement
 	//if it does call on event listeners and reset the exp points progress bar
 	private void LevelUpEventCheck(){
-		if(hashDisplays[HUDElementType.Points] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
+		if(hashDisplays[HUDElementType.Xp] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Instance.GameData.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 			// increment level
@@ -164,10 +168,10 @@ public class HUDAnimator : MonoBehaviour{
 			}
 
 			//reset the progress bar for next level
-			DataManager.Instance.GameData.Stats.ResetPoints();
+			DataManager.Instance.GameData.Stats.ResetCurrentLevelXp();
 			nextLevelPoints = LevelLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(deltaPoints: remainderPoints, isPlaySounds: false);
-			hashDisplays[HUDElementType.Points] = 0;
+			StatsController.Instance.ChangeStats(xpDelta: remainderPoints, isPlaySounds: false);
+			hashDisplays[HUDElementType.Xp] = 0;
 			lastLevel = LevelLogic.Instance.CurrentLevel;
 		}
 	}
@@ -376,5 +380,12 @@ public class HUDAnimator : MonoBehaviour{
 		if(anim){
 			anim.Stop();
 		}
+	}
+
+
+	// ==================================================
+
+	public void PlayNeedCoinAnimation() {
+		animCoin.Play("HUDCoinRequired");
 	}
 }

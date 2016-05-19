@@ -67,7 +67,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 	//---------------------------------------------------		
 	private void GameDone(){
 		InhalerGameUIManager.Instance.StopShowHintTimer();
-		StatsController.Instance.ChangeStats(deltaHealth: 5, deltaMood: 100,isInternal: true);
+		StatsController.Instance.ChangeStats(healthDelta: 5, hungerDelta: 100,isInternal: true);
 		DateTime now = LgDateTime.GetTimeNow();
 		DateTime then = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed;
 		TimeSpan lastTimeSinceInhaler = now - then;

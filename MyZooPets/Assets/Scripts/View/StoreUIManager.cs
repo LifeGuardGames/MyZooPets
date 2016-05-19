@@ -248,7 +248,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				}
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
+				StatsController.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				
 				//Analytics
@@ -258,7 +258,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			else{
-				HUDUIManager.Instance.PlayNeedMoneyAnimation();
+				HUDUIManager.Instance.PlayNeedCoinAnimation();
 				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;

@@ -254,10 +254,10 @@ public enum MinigamePopups {
 
 // if you refactor these, look for the names in xml, because they are referenced there as well
 public enum HUDElementType{
-	Points, 
-	Stars, 
-	Health, 
-	Mood
+	Xp,
+	Coin,
+	Health,
+	Hunger
 }
 
 // types of button clicks

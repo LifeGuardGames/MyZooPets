@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	protected abstract void _Start();
 	protected abstract void _NewGame();
-	protected abstract void _PauseGame();
+	protected abstract void _PauseGame(bool isShow);
 	protected abstract void _GameOver();
 	protected abstract void _GameOverReward();
 	protected abstract void _QuitGame();
@@ -60,9 +60,9 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		_NewGame();
 	}
 
-	public void PauseGame() {
-		_PauseGame();
-		GenericMinigameUI.Instance.PauseUI();
+	public void PauseGame(bool isShow) {
+		_PauseGame(isShow);
+		Debug.Log("Pausing");
     }
 
 	public void GameOver() {

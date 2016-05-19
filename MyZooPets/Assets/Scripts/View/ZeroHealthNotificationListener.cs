@@ -21,8 +21,8 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
 
         PopupNotificationNGUI.Callback button1Function = delegate(){
 
-			StatsController.Instance.ChangeStats(deltaStars: -1 * hospitalBillCost,
-			                                     deltaHealth: 100, deltaMood: -1 * moodPunishment,
+			StatsController.Instance.ChangeStats(coinsDelta: -1 * hospitalBillCost,
+			                                     healthDelta: 100, hungerDelta: -1 * moodPunishment,
 			                                     isPlaySounds: true, isFloaty: false);
 
             //Register the handler again after the notification has been cleared

@@ -5,7 +5,6 @@ using System.Collections;
 /// Animation control.
 /// State machine wrapper for playing default animations (must be attached)
 /// </summary>
-
 public class AnimationControl : MonoBehaviour {
 	public Animation thisAnimation;
 	public bool resetAfterStop = false;

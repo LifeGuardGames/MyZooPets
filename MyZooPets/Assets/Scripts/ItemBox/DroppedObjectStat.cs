@@ -52,16 +52,16 @@ public class DroppedObjectStat : DroppedObject{
 		SetState(DroppedItemStates.Awarded);
 		
 		// add the stat...I really need to refactor StatsController...
-		int xp = hudElementType == HUDElementType.Points ? amount : 0;
-		int coins = hudElementType == HUDElementType.Stars ? amount : 0;
+		int xp = hudElementType == HUDElementType.Xp ? amount : 0;
+		int coins = hudElementType == HUDElementType.Coin ? amount : 0;
 		int health = hudElementType == HUDElementType.Health ? amount : 0;
-		int mood = hudElementType == HUDElementType.Mood ? amount : 0;
+		int mood = hudElementType == HUDElementType.Hunger ? amount : 0;
 
 		Debug.Log("DROPPED STAT");
 		// Pass in the global object and flag is3DObject
-		StatsController.Instance.ChangeStats(deltaPoints: xp, pointsLoc: transform.position, deltaStars: coins, starsLoc: transform.position,
-		                                     deltaHealth: health, healthLoc: transform.position,
-		                                     deltaMood: mood, moodLoc: transform.position, is3DObject: true);
+		StatsController.Instance.ChangeStats(xpDelta: xp, xpPos: transform.position, coinsDelta: coins, coinsPos: transform.position,
+		                                     healthDelta: health, healthPos: transform.position,
+		                                     hungerDelta: mood, hungerPos: transform.position, is3DObject: true);
 
 		// destroy the object
 		GameObject go = GetGameObject();

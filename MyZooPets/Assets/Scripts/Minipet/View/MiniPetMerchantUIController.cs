@@ -50,7 +50,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 			OnBuyAnimation(secretItem, sprite.gameObject);
 		}
 		else{
-			HUDUIManager.Instance.PlayNeedMoneyAnimation();
+			HUDUIManager.Instance.PlayNeedCoinAnimation();
 			AudioManager.Instance.PlayClip("buttonDontClick");
 		}
 	}

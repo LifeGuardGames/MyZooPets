@@ -2,14 +2,20 @@
 
 public class DoctorMatchLifeBarController : MonoBehaviour {
 	public RectTransform barTransform;
+	public AssemblyLineController lineController;
 	private Vector2 barSize;
 	private float barPercentage = 1f;
 	private float hurtPercentage = -0.05f;
 	private float plusPercentage = 0.05f;
 	private float startDrainSpeed = 0.1f;
-
 	private float currentDrainSpeed;
 	private bool isDraining = false;
+
+	public float Percentage{
+		get {
+			return barPercentage;
+		}
+	}
 
 	void Start(){
 		barSize = barTransform.sizeDelta;
@@ -35,32 +41,33 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 		if(isDraining){
 			barPercentage -= Time.deltaTime * startDrainSpeed;
 			barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
-
+			lineController.UpdateVisibleCount(barPercentage);
 			if(barPercentage <= 0f){
 				NotifyEmpty();
 			}
 		}
 	}
 
-	public void HurtBar(){
+	public void HurtBar(float multiplier = 1f){
 		if(isDraining){
-			UpdateBarPercentage(hurtPercentage);
+			UpdateBarPercentage(hurtPercentage*multiplier);
 		}
 	}
 
-	public void PlusBar(){
+	public void PlusBar(float multiplier = 1f){
 		if(isDraining){
-			UpdateBarPercentage(plusPercentage);
+			UpdateBarPercentage(plusPercentage*multiplier);
 		}
 	}
 
 	private void UpdateBarPercentage(float deltaPercent){
 		barPercentage += deltaPercent;
-		barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
-
 		if(barPercentage <= 0f){
 			NotifyEmpty();
+		} else if (barPercentage > 1) {
+			barPercentage=1f;
 		}
+		barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
 	}
 
 	private void NotifyEmpty(){

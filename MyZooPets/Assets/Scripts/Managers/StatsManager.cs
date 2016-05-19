@@ -159,9 +159,9 @@ public class StatsManager : Singleton<StatsManager>{
 
 			// Tell HUDAnimator to animate and change
 			List<StatPair> listStats = new List<StatPair>();
-			listStats.Add(new StatPair(StatType.Xp, xpDelta, xpPos, xpDelta > 0 ? hudAnimator.soundXP : null));
-			listStats.Add(new StatPair(StatType.Coin, coinsDelta, coinsPos, coinsDelta > 0 ? hudAnimator.soundStars : null));
-			listStats.Add(new StatPair(StatType.Health, healthDelta, healthPos));
+			listStats.Add(new StatPair(StatType.Xp, xpDelta, xpPos, xpDelta > 0 ? "XpSingleTick" : null));
+            listStats.Add(new StatPair(StatType.Coin, coinsDelta, coinsPos, coinsDelta > 0 ? "CoinSingleTick" : null));
+            listStats.Add(new StatPair(StatType.Health, healthDelta, healthPos, healthDelta > 0 ? "HealthSingleTick" : null));
 			listStats.Add(new StatPair(StatType.Hunger, hungerDelta, hungerPos));
 			
 			if(hudAnimator != null && !bBeingDestroyed){

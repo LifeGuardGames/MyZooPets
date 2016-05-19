@@ -28,15 +28,10 @@ public struct StatPair{
 /// If any other class wants to display UI elements when this event happens, a listener will need to
 /// be provided.
 /// </summary>
-
 public class HUDAnimator : MonoBehaviour{
-	//================Events================
 	//call when the pet levels up. used this to level up UI components
 	public static EventHandler<EventArgs> OnLevelUp;
-
 	public static EventHandler<EventArgs> OnStatsAnimationDone;
-
-	//========================================
 
 	public Animator animXp;			// Controls all the animations for a single stat
 	public Animator animHealth;
@@ -46,13 +41,7 @@ public class HUDAnimator : MonoBehaviour{
 
 
 
-	#region public variables
-	// sounds for animations
-	public float soundFadeTime;
-	public string soundStars;
-	public string soundXP;
 	public UIAtlas commonAtlas;
-	#endregion
 
 	#region private variables
 	private int nextLevelPoints; //the minimum requirement for next level up
@@ -76,11 +65,8 @@ public class HUDAnimator : MonoBehaviour{
 
 	private bool isAnimating = false;
 	public bool IsAnimating{
-		get{
-			return isAnimating;
-		}
+		get{ return isAnimating; }
 	}
-
 	#endregion
 
 	#region Getter/Setters
@@ -239,7 +225,7 @@ public class HUDAnimator : MonoBehaviour{
 	//---------------------------------------------------	
 	private void TweenMoveToPoint(StatType type, int amount, Vector3 originPoint, string sound){
 		float duration = Constants.GetConstant<float>("HudCurveDuration");
-		String imageName = null;
+		string imageName = null;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
 		bool isPlusAnimation = false;	// Used for "adding" animation otherwise "substracting" animation
@@ -283,8 +269,9 @@ public class HUDAnimator : MonoBehaviour{
 
 		yield return new WaitForSeconds(waitTime);
 
-		if(!string.IsNullOrEmpty(strSound))
+		if(!string.IsNullOrEmpty(strSound)) {
 			AudioManager.Instance.PlayClip(strSound, option: hashSoundOverrides);
+		}
 
 		// Modify some tweening behaviors based on adding or subtracting a stat
 		if(isPlusAnimation){

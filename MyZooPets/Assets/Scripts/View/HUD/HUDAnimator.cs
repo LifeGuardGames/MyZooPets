@@ -4,16 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 public struct StatPair{
-	public HUDElementType eType;
-	public int nPoints;
-	public Vector3 vOrigin;
-	public string strSound;
+	public StatType statType;
+	public int value;
+	public Vector3 posOrigin;
+	public string soundKey;
 	
-	public StatPair(HUDElementType eType, int nPoints, Vector3 vOrigin, string strSound = null){
-		this.eType = eType;
-		this.nPoints = nPoints;
-		this.vOrigin = vOrigin;
-		this.strSound = strSound;
+	public StatPair(StatType _statType, int _value, Vector3 _posOrigin, string _soundKey = null){
+		statType = _statType;
+		value = _value;
+		posOrigin = _posOrigin;
+		soundKey = _soundKey;
 	}
 }
 
@@ -65,8 +65,8 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl xpIconAnim;
 		
 	// stores elements for easy access
-	private Dictionary<HUDElementType, int> hashDisplays = new Dictionary<HUDElementType, int>();
-	private Dictionary<HUDElementType, AnimationControl> hashAnimControls = new Dictionary<HUDElementType, AnimationControl>();
+	private Dictionary<StatType, int> hashDisplays = new Dictionary<StatType, int>();
+	private Dictionary<StatType, AnimationControl> hashAnimControls = new Dictionary<StatType, AnimationControl>();
 	 
 	// list of UI sprite objects that may have been spawned
 	private List<GameObject> listMovingSprites = new List<GameObject>();
@@ -106,7 +106,7 @@ public class HUDAnimator : MonoBehaviour{
 	}
 	#endregion
 
-	private float GetModifier(HUDElementType eType){
+	private float GetModifier(StatType eType){
 		float fModifier = Constants.GetConstant<float>(eType + "_Modifier");
 		
 		// if there is an override, use that instead
@@ -124,16 +124,16 @@ public class HUDAnimator : MonoBehaviour{
 		xpIconAnim = null;//HUDUIManager.Instance.animXP;
 
 		// store all the relevant elements in hashes...kind of annoying
-		hashAnimControls[HUDElementType.Xp] = xpIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Coin] = starIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Xp] = xpIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Coin] = starIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Health] = healthIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();
 
 		// Model > View, exception!
-		hashDisplays[HUDElementType.Xp] = StatsManager.Instance.GetStat(HUDElementType.Xp);
-		hashDisplays[HUDElementType.Coin] = DataManager.Instance.GameData.Stats.Stars;
-		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
-		hashDisplays[HUDElementType.Hunger] = DataManager.Instance.GameData.Stats.Mood;
+		hashDisplays[StatType.Xp] = StatsManager.Instance.GetStat(StatType.Xp);
+		hashDisplays[StatType.Coin] = DataManager.Instance.GameData.Stats.Stars;
+		hashDisplays[StatType.Health] = DataManager.Instance.GameData.Stats.Health;
+		hashDisplays[StatType.Hunger] = DataManager.Instance.GameData.Stats.Mood;
 		
 		
 		lastLevel = LevelLogic.Instance.CurrentLevel; 
@@ -147,14 +147,14 @@ public class HUDAnimator : MonoBehaviour{
 	//---------------------------------------------------
 	// GetDisplayValue()
 	//---------------------------------------------------		
-	public int GetDisplayValue(HUDElementType eType){
+	public int GetDisplayValue(StatType eType){
 		return hashDisplays[eType];
 	}
 
 	//Check if the points progress bar has reached the level requirement
 	//if it does call on event listeners and reset the exp points progress bar
 	private void LevelUpEventCheck(){
-		if(hashDisplays[HUDElementType.Xp] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
+		if(hashDisplays[StatType.Xp] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Instance.GameData.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 			// increment level
@@ -171,7 +171,7 @@ public class HUDAnimator : MonoBehaviour{
 			DataManager.Instance.GameData.Stats.ResetCurrentLevelXp();
 			nextLevelPoints = LevelLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
 			StatsManager.Instance.ChangeStats(xpDelta: remainderPoints);
-			hashDisplays[HUDElementType.Xp] = 0;
+			hashDisplays[StatType.Xp] = 0;
 			lastLevel = LevelLogic.Instance.CurrentLevel;
 		}
 	}
@@ -188,7 +188,7 @@ public class HUDAnimator : MonoBehaviour{
 		// One loop for each TYPE of stat (Coin, Stars, etc)
 		for(int i = 0; i < statsTypeList.Count; ++i){
 			StatPair pair = statsTypeList[i];
-			HUDElementType eType = pair.eType;
+			StatType eType = pair.statType;
 			
 			// If it is a floaty text, just increment values instantaneously
 			if(isFloaty){
@@ -200,12 +200,12 @@ public class HUDAnimator : MonoBehaviour{
 			else{
 				//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
 				Vector3 vHUD = Constants.GetConstant<Vector3>(eType + "_HUD");
-				Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y, 0);
+				Vector3 vOrigin = (pair.posOrigin == Vector3.zero) ? vHUD : new Vector3(pair.posOrigin.x, pair.posOrigin.y, 0);
 
-				StartCurve(eType, pair.nPoints, vOrigin, pair.strSound);
+				StartCurve(eType, pair.value, vOrigin, pair.soundKey);
 				
 				float fModifier = GetModifier(eType);
-				yield return new WaitForSeconds(fModifier * pair.nPoints);	
+				yield return new WaitForSeconds(fModifier * pair.value);	
 			}
 
 			// Soft check for detecting when anim is done, its so complicated we are just going to estimate here
@@ -224,11 +224,11 @@ public class HUDAnimator : MonoBehaviour{
 	/// <summary>
 	/// Starts a curve for one particular stat.
 	/// </summary>
-	/// <param name="type">HUDElementType type</param>
+	/// <param name="type">StatType type</param>
 	/// <param name="amount">Amount</param>
 	/// <param name="originPoint">Origin point</param>
 	/// <param name="sound">Sound optional</param>
-	private void StartCurve(HUDElementType type, int amount, Vector3 originPoint, string sound = null){
+	private void StartCurve(StatType type, int amount, Vector3 originPoint, string sound = null){
 		TweenMoveToPoint(type, amount, originPoint, sound);	
 	}
 	
@@ -237,7 +237,7 @@ public class HUDAnimator : MonoBehaviour{
 	// For one stat, actually prepare and spawn the
 	// visuals.
 	//---------------------------------------------------	
-	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint, string sound){
+	private void TweenMoveToPoint(StatType type, int amount, Vector3 originPoint, string sound){
 		float duration = Constants.GetConstant<float>("HudCurveDuration");
 		String imageName = null;
 		Vector3 endPosition = Vector3.zero;
@@ -277,7 +277,7 @@ public class HUDAnimator : MonoBehaviour{
 	// SpawnOneSprite()
 	// Spawns one sprite for the visual curve.
 	//---------------------------------------------------	
-	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, HUDElementType type, string imageName,
+	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, StatType type, string imageName,
 	                           Vector3 fromPos, Vector3 toPos, float duration, bool isPlusAnimation,
 	                           string strSound, Hashtable hashSoundOverrides){
 
@@ -331,7 +331,7 @@ public class HUDAnimator : MonoBehaviour{
 	// AnimateStatBar()
 	// Animates the stat bar for eStat.
 	//---------------------------------------------------	
-	private IEnumerator AnimateStatBar(HUDElementType eStat, float delay){
+	private IEnumerator AnimateStatBar(StatType eStat, float delay){
 		// wait X seconds
 		yield return new WaitForSeconds(delay);
 		

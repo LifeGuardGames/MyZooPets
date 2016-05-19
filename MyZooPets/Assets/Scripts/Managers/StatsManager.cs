@@ -43,15 +43,15 @@ public class StatsManager : Singleton<StatsManager>{
 		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;		
 	}
 
-	public int GetStat(HUDElementType stat){
+	public int GetStat(StatType stat){
 		switch(stat){
-		case HUDElementType.Xp:
+		case StatType.Xp:
 			return DataManager.Instance.GameData.Stats.Points;
-		case HUDElementType.Health:
+		case StatType.Health:
 			return DataManager.Instance.GameData.Stats.Health;
-		case HUDElementType.Hunger:
+		case StatType.Hunger:
 			return DataManager.Instance.GameData.Stats.Mood;
-		case HUDElementType.Coin:
+		case StatType.Coin:
 			return DataManager.Instance.GameData.Stats.Stars;
 		default:
 			Debug.LogError("No such display target for " + stat);
@@ -159,10 +159,10 @@ public class StatsManager : Singleton<StatsManager>{
 
 			// Tell HUDAnimator to animate and change
 			List<StatPair> listStats = new List<StatPair>();
-			listStats.Add(new StatPair(HUDElementType.Xp, xpDelta, xpPos, xpDelta > 0 ? hudAnimator.soundXP : null));
-			listStats.Add(new StatPair(HUDElementType.Coin, coinsDelta, coinsPos, coinsDelta > 0 ? hudAnimator.soundStars : null));
-			listStats.Add(new StatPair(HUDElementType.Health, healthDelta, healthPos));
-			listStats.Add(new StatPair(HUDElementType.Hunger, hungerDelta, hungerPos));
+			listStats.Add(new StatPair(StatType.Xp, xpDelta, xpPos, xpDelta > 0 ? hudAnimator.soundXP : null));
+			listStats.Add(new StatPair(StatType.Coin, coinsDelta, coinsPos, coinsDelta > 0 ? hudAnimator.soundStars : null));
+			listStats.Add(new StatPair(StatType.Health, healthDelta, healthPos));
+			listStats.Add(new StatPair(StatType.Hunger, hungerDelta, hungerPos));
 			
 			if(hudAnimator != null && !bBeingDestroyed){
 				// Push this into the reward queue
@@ -267,31 +267,6 @@ public class StatsManager : Singleton<StatsManager>{
 		if(OnZeroHealth != null)
 			OnZeroHealth(this, EventArgs.Empty);
 	}
-	
-	
-	//---------------------------------------------------
-	// GetStatText()
-	// Returns the localized stat text for incoming
-	// stat id.
-	//---------------------------------------------------	
-	public string GetStatText(StatType statType){
-		string key = "STAT_" + statType;
-		string localizedStat = Localization.Localize(key);
-		
-		return localizedStat;
-	}
-
-	/// <summary>
-	/// Gets the name of the stat icon.
-	/// Returns the sprite name of the icon for the incoming stat.
-	/// </summary>
-	/// <returns>The stat icon name.</returns>
-	/// <param name="eStat">E stat.</param>
-	public string GetStatIconName(HUDElementType eStat){
-		string strKey = "PetStatsIcon_" + eStat;
-		string strSprite = Constants.GetConstant<string>(strKey);
-		return strSprite;
-	}
 
 	/// <summary>
 	/// Changes the fire breaths the pet has.
@@ -306,7 +281,6 @@ public class StatsManager : Singleton<StatsManager>{
 	private void SetFireBreaths(int amount){
 		DataManager.Instance.GameData.PetInfo.SetFireBreaths(amount);	
 	}
-
 	//-----------------------------------------------------------------
 	// OnMissionsRefreshed()
 	// When the user's current missions expire and must be refreshed.

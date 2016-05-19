@@ -48,8 +48,10 @@ public enum ItemType{
 }
 
 public enum StatType{
-    Mood,
-    Health,
+	Xp,
+	Coin,
+	Health,
+	Hunger,
 	Fire
 }
 
@@ -250,14 +252,6 @@ public enum MinigamePopups {
 	Opening,
 	Pause,
 	GameOver
-}
-
-// if you refactor these, look for the names in xml, because they are referenced there as well
-public enum HUDElementType{
-	Xp,
-	Coin,
-	Health, 
-	Hunger
 }
 
 // types of button clicks

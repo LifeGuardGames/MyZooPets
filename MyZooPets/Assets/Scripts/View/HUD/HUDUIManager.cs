@@ -37,9 +37,9 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	
 	void Update(){
 		//Data reading from Data Manager
-		points = hudAnimator.GetDisplayValue(HUDElementType.Xp);
-		mood = hudAnimator.GetDisplayValue(HUDElementType.Hunger);
-		health = hudAnimator.GetDisplayValue(HUDElementType.Health);
+		points = hudAnimator.GetDisplayValue(StatType.Xp);
+		mood = hudAnimator.GetDisplayValue(StatType.Hunger);
+		health = hudAnimator.GetDisplayValue(StatType.Health);
 
 		//points progress bar data
 		level = ((int)hudAnimator.LastLevel).ToString();
@@ -51,7 +51,7 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 			levelText = points + "/" + nextLevelPoints;
 
 		//Star data
-		starCount = hudAnimator.GetDisplayValue(HUDElementType.Coin).ToString();
+		starCount = hudAnimator.GetDisplayValue(StatType.Coin).ToString();
 
 		levelSlider.sliderValue = points / nextLevelPoints;
 		levelNumber.text = level;

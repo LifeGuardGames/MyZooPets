@@ -162,7 +162,7 @@ public class DataLoaderItems{
 					Debug.LogError( itemID + " already in items dict" );
             }
 
-            //Store dictionary into allItems
+            //Store dictionary into all Items
             allItems.Add(itemType, categoryItem);
          }
     }

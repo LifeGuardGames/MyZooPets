@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 public class InventoryItemStatsHintController : MonoBehaviour{
@@ -23,7 +22,7 @@ public class InventoryItemStatsHintController : MonoBehaviour{
             int statEffect = stat.Value;
 
             switch(stat.Key){
-                case StatType.Mood:
+                case StatType.Hunger:
                     spriteName = "iconHunger";
                 break;
                 case StatType.Health:
@@ -71,6 +70,4 @@ public class InventoryItemStatsHintController : MonoBehaviour{
             hint.SetActive(false);
         }
     }
-
-
 }

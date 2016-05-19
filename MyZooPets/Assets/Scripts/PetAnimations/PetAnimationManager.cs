@@ -38,8 +38,8 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 
 	void Start(){
-		int mood = StatsManager.Instance.GetStat(HUDElementType.Hunger);
-		int health = StatsManager.Instance.GetStat(HUDElementType.Health);
+		int mood = StatsManager.Instance.GetStat(StatType.Hunger);
+		int health = StatsManager.Instance.GetStat(StatType.Health);
 		currentAnimationState = PetAnimStates.Idling;
 
 		PetStatsModified(health, mood);

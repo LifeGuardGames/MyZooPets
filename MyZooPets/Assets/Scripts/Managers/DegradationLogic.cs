@@ -1,7 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
 //Logic for the daily maintenance system that drives retention
 //and daily check-ins. 
@@ -10,9 +10,6 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 	public static event EventHandler<EventArgs> OnTriggerAffectsHealth;
 	public static event EventHandler<EventArgs> OnRefreshTriggers;
 	public event EventHandler<EventArgs> OnPetHit;
-	
-	// tut key
-//	public static string TIME_DECAY_TUT = "TUT_TIME_DECAY";
 
 	// --- mood related degradation variables
 	// if the pet's health is below this value, mood effects are doubled
@@ -115,8 +112,6 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		}
 		
 		// calculate changes in the pets mood
-//		TimeSpan sinceLastPlayed = LgDateTime.GetTimeSpanSinceLastPlayed();
-//		CalculateMoodDegradation(sinceLastPlayed);
 		CalculateHealthDegradation();
 	}
    
@@ -169,12 +164,8 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		}
 
 	}
-    
-	//---------------------------------------------------
-	// GetNumTriggersToSpawn()
-	// Returns the correct number of triggers that should
-	// spawn based.
-	//---------------------------------------------------       
+
+	// Returns the correct number of triggers that should spawn based.   
 	private int GetNumTriggersToSpawn(){
 		// get the new number of triggers to spawn based on how long the player has been absent
 		int newTriggers = GetNewTriggerCount();
@@ -194,13 +185,11 @@ public class DegradationLogic : Singleton<DegradationLogic>{
         
 		return numToSpawn;
 	}
-    
-	//---------------------------------------------------
-	// GetNewTriggerCount()
-	// Depending on how long the player has been away
-	// and what time of day it is, return the number of
-	// new triggers that should spawn.
-	//---------------------------------------------------       
+
+	/// <summary>
+	/// Depending on how long the player has been away and what time of day it is, return the number of
+	/// new triggers that should spawn. 
+	/// <summary>
 	private int GetNewTriggerCount(){
 		int newTriggers = 0;
 		bool isTriggerTutDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_TRIGGERS);
@@ -260,67 +249,10 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 		}
 		return newTriggers;
 	}
-        
-//	//---------------------------------------------------
-//	// CalculateMoodDegradation()
-//	// Depending on how long it has been since the user
-//	// last played, the pet will suffer some mood loss.
-//	//---------------------------------------------------   
-//	private void CalculateMoodDegradation(TimeSpan timeSinceLastPlayed){
-//		// amount to degrade mood by
-//		int moodLoss = 0;
-//        
-//		// penalties
-//		float firstHoursPenalty = Constants.GetConstant<float>("HungerDamage_Short");
-//		float secondHoursPenalty = Constants.GetConstant<float>("HungerDamage_Long");
-//		
-//		// get the pet's health %, because it affects how their mood changes
-//		float hp = (float)(DataManager.Instance.GameData.Stats.Health / 100.0f);
-//		float multiplier = Constants.GetConstant<float>("HungerMultiplier_Healthy");
-//		if(hp < fHealthMoodThreshold){
-//			multiplier = Constants.GetConstant<float>("HungerMultiplier_Sick");
-//		}
-//        
-//		// first part of the mood degradation -- the first 24 hours of not playing
-//		int firstHours = timeSinceLastPlayed.TotalHours > 24 ? 24 : (int)timeSinceLastPlayed.TotalHours;
-//		if(firstHours > 0){
-//			moodLoss += (int)(firstHours * (firstHoursPenalty * multiplier));
-//		}
-//        
-//		// second part of mood degradation -- anything after 24 hours of not playing
-//		int secondHours = (int)(timeSinceLastPlayed.TotalHours - 24);
-//		if(secondHours > 0){
-//			moodLoss += (int)(secondHours * (secondHoursPenalty * multiplier));
-//		}
-//
-//		// actually change the pet's mood
-//		StatsController.Instance.ChangeStats(deltaMood: -moodLoss);
-//        
-//		// if the player actually lost some mood, check and show the mood loss tutorial (if appropriate)
-//		// also only spawn tutorial if pet is healthy. Other notifications will be spawned
-//		// when pet is not healthy
-////		bool isMoodDecayTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TIME_DECAY_TUT);
-////		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
-////		if(moodLoss > 0 && !isMoodDecayTutorialDone && healthState == PetHealthStates.Healthy)
-////			StartCoroutine(MoodDegradTutorial());
-//	}
 
-	//-----------------------------------------------
-	// MoodDeradTutorial()
-	// Yield one frame before calling a separate class
-	// because CalculateMoodDeradation is called in Awake()
-	// and Awake() execution order is not guaranteed between classes 
-	//-----------------------------------------------
-//	private IEnumerator MoodDegradTutorial(){
-//		yield return 0;
-//		TutorialUIManager.Instance.StartTimeMoodDecayTutorial();
-//	}
-
-	//---------------------------------------------------   
-	// CalculateHealthDegradation()
-	// Health degrads each time user misses inhaler or a 
-	// play period
-	//---------------------------------------------------   
+	/// <summary>
+	/// Health degrads each time user misses inhaler or a play period
+	/// </summary>
 	private void CalculateHealthDegradation(){
 		// wait a frame, or else the notification manager won't work properly
 

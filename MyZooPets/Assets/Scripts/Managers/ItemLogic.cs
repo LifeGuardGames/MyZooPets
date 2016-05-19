@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 //Item Logic Class
@@ -168,17 +167,19 @@ public class ItemLogic : Singleton<ItemLogic>{
 		if(statsDict != null){		
 			int moodAmount = 0;
 			int healthAmount = 0;
-	
-			if(statsDict.ContainsKey(StatType.Mood))
-				moodAmount = statsDict[StatType.Mood];
-		
-			if(statsDict.ContainsKey(StatType.Health))
+
+			if(statsDict.ContainsKey(StatType.Hunger)) {
+				moodAmount = statsDict[StatType.Hunger];
+			}
+
+			if(statsDict.ContainsKey(StatType.Health)) {
 				healthAmount = statsDict[StatType.Health];
+			}
 			
 			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
 			// the item, because it would be a waste.
-			int currentHealth = StatsManager.Instance.GetStat(HUDElementType.Health);
-			int currentMood = StatsManager.Instance.GetStat(HUDElementType.Hunger);
+			int currentHealth = StatsManager.Instance.GetStat(StatType.Health);
+			int currentMood = StatsManager.Instance.GetStat(StatType.Hunger);
 			
 			if(moodAmount > 0 && healthAmount > 0 && currentMood == 100 && currentHealth == 100)
 				isUsable = false;
@@ -215,8 +216,6 @@ public class ItemLogic : Singleton<ItemLogic>{
 		List<Item> itemsUnlock = new List<Item>();
 		List<Item> retList;
 
-		//ItemBoxOnly == false
-		//UnlockAtLevel == nextLevel
 		foreach(Item item in FoodList){
 			if(!item.IsSecretItem && item.UnlockAtLevel == nextLevel)
 				itemsUnlock.Add(item);
@@ -265,8 +264,8 @@ public class ItemLogic : Singleton<ItemLogic>{
 		int moodAmount = 0;
 		int healthAmount = 0;
 
-		if(statDict.ContainsKey(StatType.Mood)){
-			moodAmount = statDict[StatType.Mood];
+		if(statDict.ContainsKey(StatType.Hunger)){
+			moodAmount = statDict[StatType.Hunger];
 		}
 		if(statDict.ContainsKey(StatType.Health)){
 			healthAmount = statDict[StatType.Health];

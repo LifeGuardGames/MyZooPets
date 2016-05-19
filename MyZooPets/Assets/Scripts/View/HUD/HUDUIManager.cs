@@ -1,9 +1,10 @@
-using UnityEngine;
-using UnityEngine.UI;
-
 public class HUDUIManager : Singleton<HUDUIManager>{
 	public TweenToggleDemux panelTween;
+
 	public HUDAnimator hudAnimator;
+	public HUDAnimator HudAnimator {
+		get { return hudAnimator; }
+	}
 
 	public UISlider healthSlider;
 	public UILabel healthLabel;

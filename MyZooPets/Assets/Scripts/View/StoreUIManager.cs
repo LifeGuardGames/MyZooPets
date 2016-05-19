@@ -248,7 +248,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				}
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
+				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				
 				//Analytics

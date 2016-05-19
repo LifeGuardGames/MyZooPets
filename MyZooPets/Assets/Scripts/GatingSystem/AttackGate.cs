@@ -68,7 +68,7 @@ public class AttackGate : Singleton<AttackGate>{
 	/// </summary> 
 	private IEnumerator PostAttackLogic(){
 		// and decrement the user's fire breaths
-		StatsController.Instance.ChangeFireBreaths(-1);
+		StatsManager.Instance.ChangeFireBreaths(-1);
 
 		// damage the gate
 		gateTarget.DamageGate();

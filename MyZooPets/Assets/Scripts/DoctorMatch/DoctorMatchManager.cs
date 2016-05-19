@@ -73,7 +73,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 	// award the actual xp and money, called when tween is complete
 	protected override void _GameOverReward() {
-		StatsController.Instance.ChangeStats(
+		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
 			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
 			coinsDelta: rewardMoneyAux,

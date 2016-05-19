@@ -8,25 +8,24 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        StatsController.OnZeroHealth += OnZeroHealthNotification;
+        StatsManager.OnZeroHealth += OnZeroHealthNotification;
 	}
 
     void OnDestroy(){
-        StatsController.OnZeroHealth -= OnZeroHealthNotification;    
+        StatsManager.OnZeroHealth -= OnZeroHealthNotification;    
     }
 
     private void OnZeroHealthNotification(object sender, EventArgs args){
         //Unregister the handler so we don't get multiple notifications of the same thing
-        StatsController.OnZeroHealth -= OnZeroHealthNotification;    
+        StatsManager.OnZeroHealth -= OnZeroHealthNotification;    
 
         PopupNotificationNGUI.Callback button1Function = delegate(){
 
-			StatsController.Instance.ChangeStats(coinsDelta: -1 * hospitalBillCost,
-			                                     healthDelta: 100, hungerDelta: -1 * moodPunishment,
-			                                     isPlaySounds: true, isFloaty: false);
+			StatsManager.Instance.ChangeStats(coinsDelta: -1 * hospitalBillCost,
+			                                     healthDelta: 100, hungerDelta: -1 * moodPunishment, isFloaty: false);
 
             //Register the handler again after the notification has been cleared
-            StatsController.OnZeroHealth += OnZeroHealthNotification;
+            StatsManager.OnZeroHealth += OnZeroHealthNotification;
         };
 
         string petName = DataManager.Instance.GameData.PetInfo.PetName;

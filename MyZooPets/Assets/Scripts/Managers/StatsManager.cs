@@ -7,17 +7,15 @@ using System.Collections.Generic;
 /// Stats controller.
 /// Takes care of modifying values in datamanager as well as controlling Hud animator
 /// 
-/// 					  DataManager (model)
-/// 					/
-/// 	StatsController
-/// 					\
-/// 					  HUDAnimator (view)
+/// 				  DataManager (model)
+/// 				/
+/// 	StatsManager
+/// 				\
+/// 				  HUDAnimator (view)
 /// </summary>
-
-public class StatsController : Singleton<StatsController>{
-	//----------- Events ------------------------------
-//	public EventHandler<EventArgs> OnBreathsChanged;		// when fire breath status changes
-	public static EventHandler<EventArgs> OnHappyToSad; //when mood changes
+public class StatsManager : Singleton<StatsManager>{
+	// Mood change events
+	public static EventHandler<EventArgs> OnHappyToSad; 
 	public static EventHandler<EventArgs> OnSadToHappy;
 	public static EventHandler<EventArgs> OnHealthyToVerySick;
 	public static EventHandler<EventArgs> OnHealthyToSick;
@@ -25,101 +23,40 @@ public class StatsController : Singleton<StatsController>{
 	public static EventHandler<EventArgs> OnVerySickToHealthy;
 	public static EventHandler<EventArgs> OnSickToVerySick;
 	public static EventHandler<EventArgs> OnZeroHealth;
-	//-------------------------------------------------	
 
-	public HUDAnimator hudAnimator;
+	private HUDAnimator hudAnimator;
 	private bool isPetAnimationManagerPresent;
 	private PanToMoveCamera scriptPan;
+
 	void Awake(){
 		// set pan script
-		if(SceneManager.GetActiveScene().name == SceneUtils.BEDROOM || SceneManager.GetActiveScene().name == SceneUtils.YARD)
-		scriptPan = CameraManager.Instance.PanScript;
-	}
-	void Start(){
-		// Check if hud animator is assigned already
-		if(hudAnimator == null){
-			GameObject hudAnimatorObject = GameObject.Find("HUDPanelUI");
-			hudAnimator = hudAnimatorObject.GetComponent<HUDAnimator>();
-
-			if(hudAnimator == null){
-				Debug.LogError("Hud Animator can not be found in " + SceneManager.GetActiveScene().name);
-			}
+		if(SceneManager.GetActiveScene().name == SceneUtils.BEDROOM || SceneManager.GetActiveScene().name == SceneUtils.YARD) {
+			scriptPan = CameraManager.Instance.PanScript;
 		}
-		
-		isPetAnimationManagerPresent = PetAnimationManager.Instance;
+	}
+
+	void Start(){
+		hudAnimator = HUDUIManager.Instance.HudAnimator;
+		isPetAnimationManagerPresent = PetAnimationManager.Instance != null;
 		
 		// listen for refresh message
 		WellapadMissionController.Instance.OnMissionsRefreshed += OnMissionsRefreshed;		
-	}	
-
-	#if UNITY_EDITOR || DEVELOPMENT_BUILD
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
-//			ChangeStats(deltaHealth: 10);
-//	 	}
-//		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
-//			ChangeStats(deltaHealth: -10);
-//		 }
-//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
-//			ChangeStats(deltaMood: 10);
-//		}
-//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
-//			ChangeStats(deltaMood: -10);
-//		}
-//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
-//			ChangeStats(deltaPoints: 100);
-//		}
-//		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
-//			ChangeStats(deltaStars: 50);
-//		}
-//		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
-//			ChangeStats(deltaStars: -40);
-//		}
-//
-//
-//		if(GUI.Button(new Rect(0, 50, 100, 50), "+health")){
-//			ChangeStats(deltaHealth: 100);
-//		}
-
-//		if(GUI.Button(new Rect(200, 50, 100, 50), "+mood")){
-//			ChangeStats(deltaMood: 10);
-//		}
-//		if(GUI.Button(new Rect(300, 50, 100, 50), "-mood")){
-//			ChangeStats(deltaMood: -10);
-//		}
-//		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
-//			ChangeStats(deltaPoints: 100);
-//		}
-//		if(GUI.Button(new Rect(600, 50, 100, 50), "+Stars")){
-//			ChangeStats(deltaStars: 50);
-//		}
-//		if(GUI.Button(new Rect(700, 50, 100, 50), "-Stars")){
-//			ChangeStats(deltaStars: -40);
-//		}
-//	}
-	#endif
+	}
 
 	public int GetStat(HUDElementType stat){
-		int statNumber = 0;
 		switch(stat){
 		case HUDElementType.Xp:
-			statNumber = DataManager.Instance.GameData.Stats.Points;
-			break;
+			return DataManager.Instance.GameData.Stats.Points;
 		case HUDElementType.Health:
-			statNumber = DataManager.Instance.GameData.Stats.Health;
-			break;
+			return DataManager.Instance.GameData.Stats.Health;
 		case HUDElementType.Hunger:
-			statNumber = DataManager.Instance.GameData.Stats.Mood;
-			break;
+			return DataManager.Instance.GameData.Stats.Mood;
 		case HUDElementType.Coin:
-			statNumber = DataManager.Instance.GameData.Stats.Stars;
-			break;
+			return DataManager.Instance.GameData.Stats.Stars;
 		default:
 			Debug.LogError("No such display target for " + stat);
-			break;
+			return 0;
 		}
-
-		return statNumber;
 	}
 
 	/// <summary>
@@ -134,24 +71,21 @@ public class StatsController : Singleton<StatsController>{
 	/// <param name="healthPos">Health location.</param>
 	/// <param name="hungerDelta">Delta mood.</param>
 	/// <param name="hungerPos">Mood location.</param>
-	/// <param name="isPlaySounds">If set to <c>true</c> play sounds.</param>
-	/// <param name="isAllAtOnce">If set to <c>true</c> animate all stats at once.</param>
 	/// <param name="bFloaty">If set to <c>true</c> spawn floaty on the pet. (this will not play sound)</param>
-	/// <param name="isInternal">If set to <c>true</c> skip all animations / rewarding</param>
+	/// <param name="isInternal">If set to <c>true</c> skip all animations + rewarding</param>
 	public void ChangeStats(int xpDelta = 0, Vector3 xpPos = default(Vector3),
 	                        int coinsDelta = 0, Vector3 coinsPos = default(Vector3),
 	                        int healthDelta = 0, Vector3 healthPos = default(Vector3), 
 	    					int hungerDelta = 0, Vector3 hungerPos = default(Vector3),
-							bool isPlaySounds = true, bool isAllAtOnce = false, bool isFloaty = false,
-	                        bool isDisableStream = false, bool is3DObject = false, float animDelay = 0f,
-	                        bool isInternal = false){;
+							bool isFloaty = false, bool is3DObject = false, float animDelay = 0f,
+	                        bool isInternal = false){
+
 		// Make necessary changes in the DataManager and HUDAnimator
 		if(xpDelta != 0){
 			if(xpDelta > 0){
 				DataManager.Instance.GameData.Stats.AddCurrentLevelXp(xpDelta);
 			}
-			else if(xpDelta < 0){
-				// Invalid case
+			else if(xpDelta < 0) {  // Invalid case
 				Debug.LogError("Subtracting experience points");
 			}
 		}
@@ -160,7 +94,7 @@ public class StatsController : Singleton<StatsController>{
 			DataManager.Instance.GameData.Stats.UpdateCoins(coinsDelta);
 		}
 		
-		// so that the pet animations play properly, make sure to change and check mood BEFORE health
+		// NOTE: so that the pet animations play properly, make sure to change and check mood BEFORE health
 		if(hungerDelta != 0){
 			PetMoods oldMood = DataManager.Instance.GameData.Stats.GetMoodState();
 			DataManager.Instance.GameData.Stats.UpdateHunger(hungerDelta);
@@ -233,7 +167,7 @@ public class StatsController : Singleton<StatsController>{
 			if(hudAnimator != null && !bBeingDestroyed){
 				// Push this into the reward queue
 				RewardQueueData.GenericDelegate function1 = delegate{
-					StartCoroutine(hudAnimator.StartCurveStats(listStats, isPlaySounds, isAllAtOnce, isFloaty, animDelay));
+					StartCoroutine(hudAnimator.StartCurveStats(listStats, isFloaty, animDelay));
 				};
 				RewardManager.Instance.AddToRewardQueue(function1);
 			}
@@ -349,8 +283,7 @@ public class StatsController : Singleton<StatsController>{
 
 	/// <summary>
 	/// Gets the name of the stat icon.
-	/// Returns the sprite name of the icon for the 
-	/// incoming stat.
+	/// Returns the sprite name of the icon for the incoming stat.
 	/// </summary>
 	/// <returns>The stat icon name.</returns>
 	/// <param name="eStat">E stat.</param>
@@ -371,20 +304,62 @@ public class StatsController : Singleton<StatsController>{
 	}
 
 	private void SetFireBreaths(int amount){
-		DataManager.Instance.GameData.PetInfo.SetFireBreaths(amount);
-		
-		// send out an event that fire breaths have changed
-//		if(OnBreathsChanged != null)
-//			OnBreathsChanged(this, EventArgs.Empty);		
+		DataManager.Instance.GameData.PetInfo.SetFireBreaths(amount);	
 	}
-	
-	//---------------------------------------------------
+
+	//-----------------------------------------------------------------
 	// OnMissionsRefreshed()
-	// When the user's current missions expire and must
-	// be refreshed.
-	//---------------------------------------------------		
+	// When the user's current missions expire and must be refreshed.
+	//-----------------------------------------------------------------
 	private void OnMissionsRefreshed(object sender, EventArgs args){
 		// if the missions are refreshing, make sure the player can no longer breath fire
 		SetFireBreaths(0);
-	}	
+	}
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+	//	void OnGUI(){
+	//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
+	//			ChangeStats(deltaHealth: 10);
+	//	 	}
+	//		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
+	//			ChangeStats(deltaHealth: -10);
+	//		 }
+	//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
+	//			ChangeStats(deltaMood: 10);
+	//		}
+	//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
+	//			ChangeStats(deltaMood: -10);
+	//		}
+	//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
+	//			ChangeStats(deltaPoints: 100);
+	//		}
+	//		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
+	//			ChangeStats(deltaStars: 50);
+	//		}
+	//		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
+	//			ChangeStats(deltaStars: -40);
+	//		}
+	//
+	//
+	//		if(GUI.Button(new Rect(0, 50, 100, 50), "+health")){
+	//			ChangeStats(deltaHealth: 100);
+	//		}
+
+	//		if(GUI.Button(new Rect(200, 50, 100, 50), "+mood")){
+	//			ChangeStats(deltaMood: 10);
+	//		}
+	//		if(GUI.Button(new Rect(300, 50, 100, 50), "-mood")){
+	//			ChangeStats(deltaMood: -10);
+	//		}
+	//		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
+	//			ChangeStats(deltaPoints: 100);
+	//		}
+	//		if(GUI.Button(new Rect(600, 50, 100, 50), "+Stars")){
+	//			ChangeStats(deltaStars: 50);
+	//		}
+	//		if(GUI.Button(new Rect(700, 50, 100, 50), "-Stars")){
+	//			ChangeStats(deltaStars: -40);
+	//		}
+	//	}
+#endif
 }

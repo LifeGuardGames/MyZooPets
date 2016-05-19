@@ -256,7 +256,7 @@ public enum MinigamePopups {
 public enum HUDElementType{
 	Xp,
 	Coin,
-	Health,
+	Health, 
 	Hunger
 }
 

@@ -177,8 +177,8 @@ public class ItemLogic : Singleton<ItemLogic>{
 			
 			// if the amounts are > 0 (i.e. adding health/mood) and those values are already at 100, then the user can't use
 			// the item, because it would be a waste.
-			int currentHealth = StatsController.Instance.GetStat(HUDElementType.Health);
-			int currentMood = StatsController.Instance.GetStat(HUDElementType.Hunger);
+			int currentHealth = StatsManager.Instance.GetStat(HUDElementType.Health);
+			int currentMood = StatsManager.Instance.GetStat(HUDElementType.Hunger);
 			
 			if(moodAmount > 0 && healthAmount > 0 && currentMood == 100 && currentHealth == 100)
 				isUsable = false;
@@ -274,10 +274,10 @@ public class ItemLogic : Singleton<ItemLogic>{
 		if(statDict.ContainsKey(StatType.Fire)){
 			//add one more fire blow here
 			int fireBreath = statDict[StatType.Fire];
-			StatsController.Instance.ChangeFireBreaths(fireBreath);
+			StatsManager.Instance.ChangeFireBreaths(fireBreath);
 		}
 
-		StatsController.Instance.ChangeStats(healthDelta: healthAmount, hungerDelta: moodAmount, isFloaty: true);
+		StatsManager.Instance.ChangeStats(healthDelta: healthAmount, hungerDelta: moodAmount, isFloaty: true);
 	}
 
 	/// <summary>

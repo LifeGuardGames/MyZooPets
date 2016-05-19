@@ -127,10 +127,10 @@ public class HUDAnimator : MonoBehaviour{
 		hashAnimControls[HUDElementType.Xp] = xpIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Coin] = starIconAnim.GetComponent<AnimationControl>();
 		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();		
-		
+		hashAnimControls[HUDElementType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();
+
 		// Model > View, exception!
-		hashDisplays[HUDElementType.Xp] = DataManager.Instance.GameData.Stats.Points;
+		hashDisplays[HUDElementType.Xp] = StatsManager.Instance.GetStat(HUDElementType.Xp);
 		hashDisplays[HUDElementType.Coin] = DataManager.Instance.GameData.Stats.Stars;
 		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
 		hashDisplays[HUDElementType.Hunger] = DataManager.Instance.GameData.Stats.Mood;
@@ -170,7 +170,7 @@ public class HUDAnimator : MonoBehaviour{
 			//reset the progress bar for next level
 			DataManager.Instance.GameData.Stats.ResetCurrentLevelXp();
 			nextLevelPoints = LevelLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(xpDelta: remainderPoints, isPlaySounds: false);
+			StatsManager.Instance.ChangeStats(xpDelta: remainderPoints);
 			hashDisplays[HUDElementType.Xp] = 0;
 			lastLevel = LevelLogic.Instance.CurrentLevel;
 		}
@@ -181,10 +181,8 @@ public class HUDAnimator : MonoBehaviour{
 	/// </summary>
 	/// <returns>The curve stats.</returns>
 	/// <param name="statsTypeList">Stats type list.</param>
-	/// <param name="isPlaySounds">If set to <c>true</c> is play sounds.</param>
-	/// <param name="isAllAtOnce">If set to <c>true</c> is all at once.</param>
 	/// <param name="isFloaty">If set to <c>true</c> is floaty.</param>
-	public IEnumerator StartCurveStats(List<StatPair> statsTypeList, bool isPlaySounds, bool isAllAtOnce, bool isFloaty, float animDelay){
+	public IEnumerator StartCurveStats(List<StatPair> statsTypeList, bool isFloaty, float animDelay){
 		isAnimating = true;
 		yield return new WaitForSeconds(animDelay);
 		// One loop for each TYPE of stat (Coin, Stars, etc)
@@ -204,16 +202,10 @@ public class HUDAnimator : MonoBehaviour{
 				Vector3 vHUD = Constants.GetConstant<Vector3>(eType + "_HUD");
 				Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y, 0);
 
-				if(isPlaySounds)
-					StartCurve(eType, pair.nPoints, vOrigin, pair.strSound);
-				else
-					StartCurve(eType, pair.nPoints, vOrigin);
+				StartCurve(eType, pair.nPoints, vOrigin, pair.strSound);
 				
-				// some places might want to do all the stat curves at once
-				if(isAllAtOnce == false){
-					float fModifier = GetModifier(eType);
-					yield return new WaitForSeconds(fModifier * pair.nPoints);	
-				}
+				float fModifier = GetModifier(eType);
+				yield return new WaitForSeconds(fModifier * pair.nPoints);	
 			}
 
 			// Soft check for detecting when anim is done, its so complicated we are just going to estimate here
@@ -346,7 +338,7 @@ public class HUDAnimator : MonoBehaviour{
 		// required data for animating the bar
 		int step = Constants.GetConstant<int>(eStat + "_Step");
 		AnimationControl anim = hashAnimControls[eStat];
-		int target = StatsController.Instance.GetStat(eStat);
+		int target = StatsManager.Instance.GetStat(eStat);
 
 		if(hashDisplays[eStat] > target){
 			step *= -1;
@@ -373,7 +365,7 @@ public class HUDAnimator : MonoBehaviour{
 			yield return 0;
 			
 			// update our target in case it changed
-			target = StatsController.Instance.GetStat(eStat);
+			target = StatsManager.Instance.GetStat(eStat);
 		}
 
 		// animating is finished, so stop the control if it exists

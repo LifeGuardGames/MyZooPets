@@ -72,10 +72,10 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				if(rewardObject != null){
 					Vector3 screenPos = LgNGUITools.GetScreenPosition(rewardObject);
 					screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.TopLeft, InterfaceAnchors.Top);
-					StatsController.Instance.ChangeStats(coinsDelta: 50, coinsPos: screenPos);
+					StatsManager.Instance.ChangeStats(coinsDelta: 50, coinsPos: screenPos);
 				}
 				else{
-					StatsController.Instance.ChangeStats(coinsDelta: 50);
+					StatsManager.Instance.ChangeStats(coinsDelta: 50);
 				}
 
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[taskID].isReward = RewardStatuses.Claimed;

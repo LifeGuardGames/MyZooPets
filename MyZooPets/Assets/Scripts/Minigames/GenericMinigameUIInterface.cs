@@ -36,8 +36,9 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 	}
 
-	public void PauseToggle(bool isPause) {
+	public void PauseToggle(bool isShow) {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
+			DoctorMatchManager.Instance.PauseGame(isShow);
 			//DoctorMatchManager.Instance.GetMinigameKey();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {

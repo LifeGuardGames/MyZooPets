@@ -37,7 +37,11 @@ public class AssemblyLineItem : MonoBehaviour {
 		index--;
 		return index;
 	}
-
+	public void Complete(Vector3 endPosition, Vector3 offset){
+		LeanTween.cancel(gameObject);
+		LeanTween.move(gameObject, endPosition + offset*index, 1.5f);
+		Debug.Log(endPosition + offset*index);
+	}
 	private Sprite LoadSpriteZoneType(DoctorMatchManager.DoctorMatchButtonTypes type){
 		int randomIndex = UnityEngine.Random.Range(1, 6);
 		Sprite spriteData = null;
@@ -56,5 +60,12 @@ public class AssemblyLineItem : MonoBehaviour {
 			break;
 		}
 		return spriteData;
+	}
+	public void CompareVisible(int toCompare){
+		if (index>=toCompare){
+			itemSprite.enabled=false;
+		} else {
+			itemSprite.enabled=true;
+		}
 	}
 }

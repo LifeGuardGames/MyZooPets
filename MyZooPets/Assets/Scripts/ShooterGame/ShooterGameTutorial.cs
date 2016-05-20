@@ -30,9 +30,9 @@ public class ShooterGameTutorial : MinigameTutorial{
 			break;
 		case 1:
 			ShooterGameManager.Instance.OnTutorialTap += MoveAlong;
-				//prompt user to shoot
-				ShooterGameManager.Instance.tutFinger.SetActive(false);
-				pressHere = (GameObject)Resources.Load("ShooterTut");
+			//prompt user to shoot
+			ShooterGameManager.Instance.tutFinger.SetActive(false);
+			pressHere = (GameObject)Resources.Load("ShooterTut");
 			tutBoards = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), pressHere);
 			break;
 		case 2:

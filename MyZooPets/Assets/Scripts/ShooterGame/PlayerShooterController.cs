@@ -13,8 +13,8 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		Distressed
 	}
 
-	public int playerHealth = 5;				// player health
-
+	public int playerHealth = 5;                // player health
+	public EventHandler<EventArgs> OnTutorialMove;
 	private PlayerStateTypes playerState = PlayerStateTypes.Neutral;
 	public PlayerStateTypes PlayerState{
 		get{ return playerState; }
@@ -158,6 +158,11 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	public void Move(Vector3 dir){
+		if(ShooterGameManager.Instance.inTutorial) {
+			if(OnTutorialMove!= null) {
+				OnTutorialMove(this, EventArgs.Empty);
+			}
+		}
 		clickPos = dir;
 		moving = true;
 	}

@@ -13,6 +13,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public int powerUpScore;
 	public int highestCombo = 0;
 	public GameObject BouncyWalls;
+	public GameObject tutFinger;
 
 	private ShooterUIManager shooterUI;
 

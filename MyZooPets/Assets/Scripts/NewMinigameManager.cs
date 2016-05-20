@@ -65,7 +65,6 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 
 	public void PauseGame(bool isShow) {
 		_PauseGame(isShow);
-		Debug.Log("Pausing");
     }
 
 	public void GameOver() {

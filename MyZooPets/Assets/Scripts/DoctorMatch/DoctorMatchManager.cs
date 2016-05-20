@@ -21,10 +21,10 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	private float timeToCombo=3f; //Time between each correct diagnoses for it to be consistent
 	private float currentComboTime=0;
 	private bool paused=true;
-
+	private bool clearing=false;
 	public bool Paused {
 		get {
-			return paused;
+			return paused||clearing;
 		}
 	}
 
@@ -141,19 +141,29 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		// Have item do what it does when activated
 		poppedItem.Activate();
 
-		assemblyLineController.ShiftAndAddNewItem();
+
+		if (combo==5){
+			ComboBonus();
+		} else {
+			assemblyLineController.ShiftAndAddNewItem();
+		}
 	}
 	void OnGUI(){
-		GUI.Box(new Rect(Screen.width/2,Screen.height/2,80,40),"C : " + combo + "\n T: " + currentComboTime);
+		//GUI.Box(new Rect(Screen.width/2,Screen.height/2,80,40),"C : " + combo + "\n T: " + currentComboTime);
 	}
 	// When your timer runs out
+
+	public void FinishClear(){
+		clearing=false;
+	}
 	public void OnTimerBarEmpty() {
 		GameOver();
 	}
 	private void ComboBonus() {
 		lifeBarController.PlusBar(3f);
-		assemblyLineController.ClearLine();
+		StartCoroutine(assemblyLineController.ClearLine());
 		combo=0;
+		clearing=true;
 	}
 	private void ResetScore() {
 		combo=0;
@@ -174,9 +184,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		lifeBarController.PlusBar();
 		UpdateScore(1);
 		//}
-		if (combo==5){
-			ComboBonus();
-		}
+
 		// Play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");
 	}

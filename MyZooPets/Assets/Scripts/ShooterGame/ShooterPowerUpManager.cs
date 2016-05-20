@@ -5,7 +5,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 	public enum PowerUpType{
 		Normal,
 		Triple,
-		Pierce
+		Bouncy
 	}
 
 	public float timer;
@@ -13,8 +13,8 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 	public void ChangePowerUp(PowerUpType powerUp){
 		switch(powerUp){
 		case PowerUpType.Normal:
-			PlayerShooterController.Instance.IsPiercing = false;
 			PlayerShooterController.Instance.IsTriple = false;
+			ShooterGameManager.Instance.BouncyWalls.SetActive(false);
 			// Refresh its own state so it knows what size fireball to give
 			PlayerShooterController.Instance.ChangeFire();
 			break;
@@ -24,9 +24,9 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());
 			break;
-		case PowerUpType.Pierce:
+		case PowerUpType.Bouncy:
 			AudioManager.Instance.PlayClip("shooterPowerUp");
-			PlayerShooterController.Instance.IsPiercing = true;
+			ShooterGameManager.Instance.BouncyWalls.SetActive(true);
 			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());
 			break;

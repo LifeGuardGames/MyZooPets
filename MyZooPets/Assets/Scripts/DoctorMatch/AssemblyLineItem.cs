@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class AssemblyLineItem : MonoBehaviour {
 	public SpriteRenderer itemSprite;
-
+	public ParticleSystem pSystem;
 	private DoctorMatchManager.DoctorMatchButtonTypes itemType;
+	private float verticalOffset = -50f;
 	public DoctorMatchManager.DoctorMatchButtonTypes ItemType{
 		get{
 			return itemType;
@@ -36,11 +38,6 @@ public class AssemblyLineItem : MonoBehaviour {
 	public int GetIncrementIndex(){
 		index--;
 		return index;
-	}
-	public void Complete(Vector3 endPosition, Vector3 offset){
-		LeanTween.cancel(gameObject);
-		LeanTween.move(gameObject, endPosition + offset*index, 1.5f);
-		Debug.Log(endPosition + offset*index);
 	}
 	private Sprite LoadSpriteZoneType(DoctorMatchManager.DoctorMatchButtonTypes type){
 		int randomIndex = UnityEngine.Random.Range(1, 6);

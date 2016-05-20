@@ -53,7 +53,7 @@ public class MiniPetMerchant : MiniPet{
 		InventoryLogic.Instance.AddItem(secretMerchantItem.ItemId, 1);
 
 		int cost = DataLoaderItems.GetCost(secretMerchantItem.ItemId);
-		StatsController.Instance.ChangeStats(coinsDelta: cost * -1);
+		StatsManager.Instance.ChangeStats(coinsDelta: cost * -1);
 
 		MiniPetManager.Instance.IncreaseXp(MinipetId);
 	}

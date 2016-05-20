@@ -1,19 +1,20 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public struct StatPair{
-	public HUDElementType eType;
-	public int nPoints;
-	public Vector3 vOrigin;
-	public string strSound;
+	public StatType statType;
+	public int value;
+	public Vector3 posOrigin;
+	public string soundKey;
 	
-	public StatPair(HUDElementType eType, int nPoints, Vector3 vOrigin, string strSound = null){
-		this.eType = eType;
-		this.nPoints = nPoints;
-		this.vOrigin = vOrigin;
-		this.strSound = strSound;
+	public StatPair(StatType _statType, int _value, Vector3 _posOrigin, string _soundKey = null){
+		statType = _statType;
+		value = _value;
+		posOrigin = _posOrigin;
+		soundKey = _soundKey;
 	}
 }
 
@@ -28,31 +29,20 @@ public struct StatPair{
 /// If any other class wants to display UI elements when this event happens, a listener will need to
 /// be provided.
 /// </summary>
-
 public class HUDAnimator : MonoBehaviour{
-	//================Events================
 	//call when the pet levels up. used this to level up UI components
 	public static EventHandler<EventArgs> OnLevelUp;
-
 	public static EventHandler<EventArgs> OnStatsAnimationDone;
-
-	//========================================
 
 	public Animator animXp;			// Controls all the animations for a single stat
 	public Animator animHealth;
 	public Animator animHunger;
 	public Animator animCoin;
+	public GameObject tweenSpritePrefab;
 	public AnimationCurve customEaseCurve;
 
 
 
-	#region public variables
-	// sounds for animations
-	public float soundFadeTime;
-	public string soundStars;
-	public string soundXP;
-	public UIAtlas commonAtlas;
-	#endregion
 
 	#region private variables
 	private int nextLevelPoints; //the minimum requirement for next level up
@@ -65,8 +55,8 @@ public class HUDAnimator : MonoBehaviour{
 	private AnimationControl xpIconAnim;
 		
 	// stores elements for easy access
-	private Dictionary<HUDElementType, int> hashDisplays = new Dictionary<HUDElementType, int>();
-	private Dictionary<HUDElementType, AnimationControl> hashAnimControls = new Dictionary<HUDElementType, AnimationControl>();
+	private Dictionary<StatType, int> hashDisplays = new Dictionary<StatType, int>();
+	private Dictionary<StatType, AnimationControl> hashAnimControls = new Dictionary<StatType, AnimationControl>();
 	 
 	// list of UI sprite objects that may have been spawned
 	private List<GameObject> listMovingSprites = new List<GameObject>();
@@ -76,11 +66,8 @@ public class HUDAnimator : MonoBehaviour{
 
 	private bool isAnimating = false;
 	public bool IsAnimating{
-		get{
-			return isAnimating;
-		}
+		get{ return isAnimating; }
 	}
-
 	#endregion
 
 	#region Getter/Setters
@@ -106,7 +93,7 @@ public class HUDAnimator : MonoBehaviour{
 	}
 	#endregion
 
-	private float GetModifier(HUDElementType eType){
+	private float GetModifier(StatType eType){
 		float fModifier = Constants.GetConstant<float>(eType + "_Modifier");
 		
 		// if there is an override, use that instead
@@ -124,16 +111,16 @@ public class HUDAnimator : MonoBehaviour{
 		xpIconAnim = null;//HUDUIManager.Instance.animXP;
 
 		// store all the relevant elements in hashes...kind of annoying
-		hashAnimControls[HUDElementType.Xp] = xpIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Coin] = starIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Health] = healthIconAnim.GetComponent<AnimationControl>();
-		hashAnimControls[HUDElementType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();		
-		
+		hashAnimControls[StatType.Xp] = xpIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Coin] = starIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Health] = healthIconAnim.GetComponent<AnimationControl>();
+		hashAnimControls[StatType.Hunger] = moodIconAnim.GetComponent<AnimationControl>();
+
 		// Model > View, exception!
-		hashDisplays[HUDElementType.Xp] = DataManager.Instance.GameData.Stats.Points;
-		hashDisplays[HUDElementType.Coin] = DataManager.Instance.GameData.Stats.Stars;
-		hashDisplays[HUDElementType.Health] = DataManager.Instance.GameData.Stats.Health;
-		hashDisplays[HUDElementType.Hunger] = DataManager.Instance.GameData.Stats.Mood;
+		hashDisplays[StatType.Xp] = StatsManager.Instance.GetStat(StatType.Xp);
+		hashDisplays[StatType.Coin] = DataManager.Instance.GameData.Stats.Stars;
+		hashDisplays[StatType.Health] = DataManager.Instance.GameData.Stats.Health;
+		hashDisplays[StatType.Hunger] = DataManager.Instance.GameData.Stats.Mood;
 		
 		
 		lastLevel = LevelLogic.Instance.CurrentLevel; 
@@ -147,14 +134,14 @@ public class HUDAnimator : MonoBehaviour{
 	//---------------------------------------------------
 	// GetDisplayValue()
 	//---------------------------------------------------		
-	public int GetDisplayValue(HUDElementType eType){
+	public int GetDisplayValue(StatType eType){
 		return hashDisplays[eType];
 	}
 
 	//Check if the points progress bar has reached the level requirement
 	//if it does call on event listeners and reset the exp points progress bar
 	private void LevelUpEventCheck(){
-		if(hashDisplays[HUDElementType.Xp] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
+		if(hashDisplays[StatType.Xp] >= nextLevelPoints){ //logic for when progress bar reaches level requirement
 			int remainderPoints = DataManager.Instance.GameData.Stats.Points - nextLevelPoints; //points to be added after leveling up
 
 			// increment level
@@ -170,8 +157,8 @@ public class HUDAnimator : MonoBehaviour{
 			//reset the progress bar for next level
 			DataManager.Instance.GameData.Stats.ResetCurrentLevelXp();
 			nextLevelPoints = LevelLogic.Instance.NextLevelPoints(); //set the requirement for nxt level
-			StatsController.Instance.ChangeStats(xpDelta: remainderPoints, isPlaySounds: false);
-			hashDisplays[HUDElementType.Xp] = 0;
+			StatsManager.Instance.ChangeStats(xpDelta: remainderPoints);
+			hashDisplays[StatType.Xp] = 0;
 			lastLevel = LevelLogic.Instance.CurrentLevel;
 		}
 	}
@@ -181,16 +168,14 @@ public class HUDAnimator : MonoBehaviour{
 	/// </summary>
 	/// <returns>The curve stats.</returns>
 	/// <param name="statsTypeList">Stats type list.</param>
-	/// <param name="isPlaySounds">If set to <c>true</c> is play sounds.</param>
-	/// <param name="isAllAtOnce">If set to <c>true</c> is all at once.</param>
 	/// <param name="isFloaty">If set to <c>true</c> is floaty.</param>
-	public IEnumerator StartCurveStats(List<StatPair> statsTypeList, bool isPlaySounds, bool isAllAtOnce, bool isFloaty, float animDelay){
+	public IEnumerator StartCurveStats(List<StatPair> statsTypeList, bool isFloaty, float animDelay){
 		isAnimating = true;
 		yield return new WaitForSeconds(animDelay);
 		// One loop for each TYPE of stat (Coin, Stars, etc)
 		for(int i = 0; i < statsTypeList.Count; ++i){
 			StatPair pair = statsTypeList[i];
-			HUDElementType eType = pair.eType;
+			StatType eType = pair.statType;
 			
 			// If it is a floaty text, just increment values instantaneously
 			if(isFloaty){
@@ -202,18 +187,12 @@ public class HUDAnimator : MonoBehaviour{
 			else{
 				//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
 				Vector3 vHUD = Constants.GetConstant<Vector3>(eType + "_HUD");
-				Vector3 vOrigin = (pair.vOrigin == Vector3.zero) ? vHUD : new Vector3(pair.vOrigin.x, pair.vOrigin.y, 0);
+				Vector3 vOrigin = (pair.posOrigin == Vector3.zero) ? vHUD : new Vector3(pair.posOrigin.x, pair.posOrigin.y, 0);
 
-				if(isPlaySounds)
-					StartCurve(eType, pair.nPoints, vOrigin, pair.strSound);
-				else
-					StartCurve(eType, pair.nPoints, vOrigin);
+				StartCurve(eType, pair.value, vOrigin, pair.soundKey);
 				
-				// some places might want to do all the stat curves at once
-				if(isAllAtOnce == false){
-					float fModifier = GetModifier(eType);
-					yield return new WaitForSeconds(fModifier * pair.nPoints);	
-				}
+				float fModifier = GetModifier(eType);
+				yield return new WaitForSeconds(fModifier * pair.value);	
 			}
 
 			// Soft check for detecting when anim is done, its so complicated we are just going to estimate here
@@ -232,27 +211,23 @@ public class HUDAnimator : MonoBehaviour{
 	/// <summary>
 	/// Starts a curve for one particular stat.
 	/// </summary>
-	/// <param name="type">HUDElementType type</param>
+	/// <param name="type">StatType type</param>
 	/// <param name="amount">Amount</param>
 	/// <param name="originPoint">Origin point</param>
 	/// <param name="sound">Sound optional</param>
-	private void StartCurve(HUDElementType type, int amount, Vector3 originPoint, string sound = null){
+	private void StartCurve(StatType type, int amount, Vector3 originPoint, string sound = null){
 		TweenMoveToPoint(type, amount, originPoint, sound);	
 	}
-	
-	//---------------------------------------------------
-	// TweenMoveToPoint()
-	// For one stat, actually prepare and spawn the
-	// visuals.
-	//---------------------------------------------------	
-	private void TweenMoveToPoint(HUDElementType type, int amount, Vector3 originPoint, string sound){
+
+	/// <summary>
+	/// For one stat, actually prepare and spawn the visuals.
+	/// </summary>
+	private void TweenMoveToPoint(StatType type, int amount, Vector3 originPoint, string sound){
 		float duration = Constants.GetConstant<float>("HudCurveDuration");
-		String imageName = null;
+		Sprite imageSprite;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
 		bool isPlusAnimation = false;	// Used for "adding" animation otherwise "substracting" animation
-		string strImageUp = Constants.GetConstant<string>(type + "_Up");
-		string strImageDown = Constants.GetConstant<string>(type + "_Down");
 		float fModifier = GetModifier(type);
 		Vector3 vHUD = Constants.GetConstant<Vector3>(type + "_HUD");
 
@@ -262,14 +237,14 @@ public class HUDAnimator : MonoBehaviour{
 		if(amount > 0){
 			endPosition = vHUD;
 			isPlusAnimation = true;
-			imageName = strImageUp;
+			imageSprite = SpriteCacheManager.GetHudTweenIcon(type);
 		}
 		else{
 			originPoint = vHUD;
 			Vector3 vOffset = Constants.GetConstant<Vector3>("Below_HUD");
 			endPosition = originPoint + vOffset;
 			isPlusAnimation = false;
-			imageName = strImageDown;
+			imageSprite = null;
 		}
 		
 		// spawns the individual visual elements
@@ -277,39 +252,28 @@ public class HUDAnimator : MonoBehaviour{
 			// On its own thread
 			Hashtable hashSoundOverrides = new Hashtable();
 			hashSoundOverrides["Pitch"] = 1.0f + i;
-			StartCoroutine(SpawnOneSprite(tweenParent, i, type, imageName, originPoint, endPosition, duration, isPlusAnimation, sound, hashSoundOverrides));
+			StartCoroutine(SpawnOneSprite(tweenParent, i, type, imageSprite, originPoint, endPosition, duration, isPlusAnimation, sound, hashSoundOverrides));
 		}
 	}
 
-	//---------------------------------------------------
-	// SpawnOneSprite()
-	// Spawns one sprite for the visual curve.
-	//---------------------------------------------------	
-	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, HUDElementType type, string imageName,
+	/// <summary>
+	/// Spawns one sprite for the visual curve.
+	/// </summary>
+	IEnumerator SpawnOneSprite(GameObject tweenParent, float waitTime, StatType type, Sprite spriteData,
 	                           Vector3 fromPos, Vector3 toPos, float duration, bool isPlusAnimation,
 	                           string strSound, Hashtable hashSoundOverrides){
 
 		yield return new WaitForSeconds(waitTime);
 
-		if(!string.IsNullOrEmpty(strSound))
+		if(!string.IsNullOrEmpty(strSound)) {
 			AudioManager.Instance.PlayClip(strSound, option: hashSoundOverrides);
+		}
 
 		// Modify some tweening behaviors based on adding or subtracting a stat
 		if(isPlusAnimation){
-			// Create the tween image
-			UISprite sprite = NGUITools.AddSprite(tweenParent, commonAtlas, imageName);
-			sprite.depth = 30;	// TODO-s make this dynamic?
-			GameObject go = sprite.gameObject;
+			GameObject go = GameObjectUtils.AddChildGUI(gameObject, tweenSpritePrefab);
 			go.transform.localPosition = fromPos;
-			go.transform.localScale = new Vector3(10f, 10f, 1f);
-
-			RotateAroundCenter rotateScript = go.AddComponent<RotateAroundCenter>();
-			rotateScript.speed = 500;
-			rotateScript.Play();
-
-			ScaleTweenUpDown scaleScript = go.AddComponent<ScaleTweenUpDown>();
-			scaleScript.scaleFactor = Constants.GetConstant<Vector3>("HudCurveAddScale");
-			scaleScript.duration = Constants.GetConstant<float>("HudCurveDuration");
+			go.GetComponent<Image>().sprite = spriteData;
 
 			// Addition tweening behavior
 			Vector3[] path = new Vector3[4];
@@ -323,7 +287,6 @@ public class HUDAnimator : MonoBehaviour{
 		}
 		else{
 			// Add subtraction tweening logic here
-
 			// Disable curve wait time for stat penalty
 			duration = 0;
 		}
@@ -339,14 +302,14 @@ public class HUDAnimator : MonoBehaviour{
 	// AnimateStatBar()
 	// Animates the stat bar for eStat.
 	//---------------------------------------------------	
-	private IEnumerator AnimateStatBar(HUDElementType eStat, float delay){
+	private IEnumerator AnimateStatBar(StatType eStat, float delay){
 		// wait X seconds
 		yield return new WaitForSeconds(delay);
 		
 		// required data for animating the bar
 		int step = Constants.GetConstant<int>(eStat + "_Step");
 		AnimationControl anim = hashAnimControls[eStat];
-		int target = StatsController.Instance.GetStat(eStat);
+		int target = StatsManager.Instance.GetStat(eStat);
 
 		if(hashDisplays[eStat] > target){
 			step *= -1;
@@ -373,7 +336,7 @@ public class HUDAnimator : MonoBehaviour{
 			yield return 0;
 			
 			// update our target in case it changed
-			target = StatsController.Instance.GetStat(eStat);
+			target = StatsManager.Instance.GetStat(eStat);
 		}
 
 		// animating is finished, so stop the control if it exists

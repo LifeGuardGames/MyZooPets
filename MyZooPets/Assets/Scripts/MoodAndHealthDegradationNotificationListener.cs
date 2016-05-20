@@ -28,8 +28,8 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		//else register for health state change and check if mood needs a notification
 		else{
 			if(isReminderActive && !isRemindedThisPlayPeriod){
-				StatsController.OnHealthyToSick += OnHealthyToSickHandler;
-				StatsController.OnHealthyToVerySick += OnHealthyToSickHandler;
+				StatsManager.OnHealthyToSick += OnHealthyToSickHandler;
+				StatsManager.OnHealthyToVerySick += OnHealthyToSickHandler;
 			}
 			
 			PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
@@ -42,8 +42,8 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 	}
 	
 	void OnDestroy(){
-		StatsController.OnHealthyToSick -= OnHealthyToSickHandler;
-		StatsController.OnHealthyToVerySick -= OnHealthyToSickHandler;
+		StatsManager.OnHealthyToSick -= OnHealthyToSickHandler;
+		StatsManager.OnHealthyToVerySick -= OnHealthyToSickHandler;
 	}
 
 	private void OnHealthyToSickHandler(object sender, EventArgs args){
@@ -81,8 +81,8 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 
 	private void ShowSuperWellaSickReminder(){
 		//unregister listener after notification is shown once
-		StatsController.OnHealthyToSick -= OnHealthyToSickHandler;
-		StatsController.OnHealthyToVerySick -= OnHealthyToSickHandler;
+		StatsManager.OnHealthyToSick -= OnHealthyToSickHandler;
+		StatsManager.OnHealthyToVerySick -= OnHealthyToSickHandler;
 
 		//change the necessary data
 		DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod = true;

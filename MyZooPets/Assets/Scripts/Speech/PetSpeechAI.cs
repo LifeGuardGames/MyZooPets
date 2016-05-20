@@ -12,27 +12,27 @@ public class PetSpeechAI : Singleton<PetSpeechAI>{
     private float timeBeforeSpeech = 15; //30 seconds interval
 
     void Start(){
-        StatsController.OnHappyToSad += ShowHappyToSadMsg;
-        StatsController.OnSadToHappy += ShowSadToHappyMsg;
-        StatsController.OnSickToVerySick += ShowSickToVerySickMsg;
+        StatsManager.OnHappyToSad += ShowHappyToSadMsg;
+        StatsManager.OnSadToHappy += ShowSadToHappyMsg;
+        StatsManager.OnSickToVerySick += ShowSickToVerySickMsg;
 
-        StatsController.OnHealthyToVerySick += ShowHealthyToVerySickMsg;
-        StatsController.OnHealthyToSick += ShowHealthyToVerySickMsg;
+        StatsManager.OnHealthyToVerySick += ShowHealthyToVerySickMsg;
+        StatsManager.OnHealthyToSick += ShowHealthyToVerySickMsg;
 
-        StatsController.OnSickToHealthy += StopAutoSpeech;
-        StatsController.OnVerySickToHealthy += StopAutoSpeech;
+        StatsManager.OnSickToHealthy += StopAutoSpeech;
+        StatsManager.OnVerySickToHealthy += StopAutoSpeech;
     }
 
     void OnDestroy(){
-        StatsController.OnHappyToSad -= ShowHappyToSadMsg;
-        StatsController.OnSadToHappy -= ShowSadToHappyMsg;
-        StatsController.OnSickToVerySick -= ShowSickToVerySickMsg;
+        StatsManager.OnHappyToSad -= ShowHappyToSadMsg;
+        StatsManager.OnSadToHappy -= ShowSadToHappyMsg;
+        StatsManager.OnSickToVerySick -= ShowSickToVerySickMsg;
 
-        StatsController.OnHealthyToVerySick -= ShowHealthyToVerySickMsg;
-        StatsController.OnHealthyToSick -= ShowHealthyToVerySickMsg;
+        StatsManager.OnHealthyToVerySick -= ShowHealthyToVerySickMsg;
+        StatsManager.OnHealthyToSick -= ShowHealthyToVerySickMsg;
 
-        StatsController.OnSickToHealthy -= StopAutoSpeech;
-        StatsController.OnVerySickToHealthy -= StopAutoSpeech;
+        StatsManager.OnSickToHealthy -= StopAutoSpeech;
+        StatsManager.OnVerySickToHealthy -= StopAutoSpeech;
     }
 
     void Update(){

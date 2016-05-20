@@ -62,10 +62,10 @@ public class GateMonster : Gate{
 
 		// Drop some coins when the gate monster is attacked
 		if(!isBoss){
-		StatsController.Instance.ChangeStats(coinsDelta: 35, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
+		StatsManager.Instance.ChangeStats(coinsDelta: 35, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
 		}
 		else{
-			StatsController.Instance.ChangeStats(coinsDelta: 150, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
+			StatsManager.Instance.ChangeStats(coinsDelta: 150, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
 		}
 		// Move one of the heads out, ONLY applies to everything thats not the first head
 		if(baseHeadToMove != nextHeadToMove){

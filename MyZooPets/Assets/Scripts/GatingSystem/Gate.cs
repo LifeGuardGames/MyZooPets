@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-
 //---------------------------------------------------
 // Gate
 // This is a gate that blocks the user's path.  In
@@ -21,8 +19,6 @@ public abstract class Gate : MonoBehaviour{
 	protected string gateID;
 	protected string gateResource;
 	protected float maxScreenSpace; // the max screen space the gate covers with 100% HP
-
-	private ItemBoxLogic scriptItemBox; // the item box this gate is blocking (if any)
 	
 	protected ImmutableDataGate GetGateData(){
 		ImmutableDataGate data = DataLoaderGate.GetData(gateID);

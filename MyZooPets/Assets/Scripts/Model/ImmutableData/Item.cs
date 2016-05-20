@@ -1,77 +1,70 @@
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Item. Immutable data
+/// Immutable item data
 /// </summary>
 public class Item{
-	private string id; //id of item
-	private string name; //name of item
-	private string textureName; //name of texture in the atlas
+	private string id;
+	public string ID {
+		get { return id; }
+	}
+
+	private string name;
+	public string Name {
+		get { return Localization.Localize(name); }
+	}
+
+	private string textureName;
+	public string TextureName {
+		get { return textureName; }
+	}
+
 	private ItemType type;
-	private int cost; //cost of item
+	public ItemType Type {
+		get { return type; }
+	}
+
+	private int cost;
+	public int Cost {
+		get { return cost; }
+	}
+
 	private CurrencyTypes currencyType;
+	public CurrencyTypes CurrencyType {
+		get { return currencyType; }
+	}
+
 	protected string description;
-	private int unlockAtLevel = 0; //the level when item is unlocked
-	private bool itemBoxOnly = false; //T: only available from item box (dropped by smog monster)
-	private bool isSecretItem = false;
-	private int sortCategory;	// Options, use for category sorting (ie. accessories)
-
-	//F: available in store as well
-	//default to false
-	private string soundUsed; // sound item makes when it is used
-
-	public string ID{
-		get{ return id;}
-	}
-
-	public string Name{ 
-		get{ return Localization.Localize(name);} 
-	}
-
-	public string TextureName{
-		get{ return textureName;}
-	}
-
-	public ItemType Type{
-		get{ return type;}
-	}
-
-	public int Cost{
-		get{ return cost;}
-	}
-
-	public CurrencyTypes CurrencyType{
-		get{ return currencyType;}
-	}
-
-	public virtual string Description{
-		get{
+	public virtual string Description {
+		get {
 			string retVal = "";
-
-			if(!String.IsNullOrEmpty(description))
+			if(!string.IsNullOrEmpty(description)) {
 				retVal = Localization.Localize(description);
-
+			}
 			return retVal;
 		}
 	}
 
-	public int UnlockAtLevel{
-		get{ return unlockAtLevel;}
+	private int unlockAtLevel = 0;
+	public int UnlockAtLevel {
+		get { return unlockAtLevel; }
 	}
 
-	public string SoundUsed{
-		get{ return soundUsed;}	
+	private bool isSecretItem = false;
+	public bool IsSecretItem {
+		get { return isSecretItem; }
 	}
 
-	public bool IsSecretItem{
-		get{ return isSecretItem;}
+	private int sortCategory;   // Options, use for category sorting (ie. accessories)
+	public int SortCategory {
+		get { return sortCategory; }
 	}
 
-	public int SortCategory{
-		get{ return sortCategory;}
+	private string soundUsed; // sound item makes when it is used
+	public string SoundUsed {
+		get { return soundUsed; }
 	}
 	
 	public bool IsLocked(){
@@ -90,14 +83,10 @@ public class Item{
 
 		name = XMLUtils.GetString(hashItemData["Name"] as IXMLNode);
 		textureName = XMLUtils.GetString(hashItemData["TextureName"] as IXMLNode);
-
 		Hashtable costAttributes = XMLUtils.GetAttributes(hashItemData["Cost"] as IXMLNode);
-		
 		currencyType = (CurrencyTypes)Enum.Parse(typeof(CurrencyTypes), 
 		                  HashUtils.GetHashValue<string>(costAttributes, "CurrencyType", ""));
-
 		cost = int.Parse(HashUtils.GetHashValue<string>(costAttributes, "Amount", ""));
-
 		description = XMLUtils.GetString(hashItemData["Desc"] as IXMLNode, "");
     
 		// optional for now
@@ -123,7 +112,6 @@ public class Item{
 	protected Dictionary<StatType, int> LoadStats(IXMLNode node){
 		Dictionary<StatType, int> statsDict = new Dictionary<StatType, int>();
 		List<IXMLNode> childrenList = XMLUtils.GetChildrenList(node);
-
 		foreach(IXMLNode xmlNode in childrenList){
 			Hashtable attrHash = XMLUtils.GetAttributes(xmlNode);
 			StatType statType = (StatType)Enum.Parse(typeof(StatType), (string)attrHash["ID"]);

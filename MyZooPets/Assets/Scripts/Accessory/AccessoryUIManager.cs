@@ -165,14 +165,14 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
-			if(StatsController.Instance.GetStat(HUDElementType.Coin) >= itemData.Cost){
+			if(StatsManager.Instance.GetStat(StatType.Coin) >= itemData.Cost){
 
 				//Disable the buy button so user can't buy the same wallpaper anymore 
 				UIImageButton buyButton = button.GetComponent<UIImageButton>();
 				buyButton.isEnabled = false;
 				
 				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
+				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 
 				// Change the state of the button
 				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);

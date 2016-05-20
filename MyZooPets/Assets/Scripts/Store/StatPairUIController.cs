@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Stat pair user interface controller.
@@ -9,23 +8,18 @@ public class StatPairUIController : MonoBehaviour{
 	public UISprite spriteIcon;
 	public UILabel labelAmount;
 
-	/// <summary>
-	/// Init the specified eStat and nAmount.
-	/// </summary>
-	/// <param name="eStat">E stat.</param>
-	/// <param name="nAmount">N amount.</param>
-	public void Init(StatType eStat, int nAmount){
+	public void Init(StatType statType, int amount){
 		// set the icon of the stat (a little hacky unless we need to expand further)
-		if(eStat == StatType.Mood)
+		if(statType == StatType.Hunger)
 			spriteIcon.spriteName = "iconHunger";
-		else if(eStat == StatType.Health)
+		else if(statType == StatType.Health)
 			spriteIcon.spriteName = "iconHeart";
-		else if(eStat == StatType.Fire)
+		else if(statType == StatType.Fire)
 			spriteIcon.spriteName = "iconFire";
 		else{}
 		
 		// set the label to whatever the amount is, with a + or -, and then add the amount for the text
-		string strModifier = nAmount > 0 ? "+" : "";
-		labelAmount.text = strModifier + nAmount;
+		string strModifier = amount > 0 ? "+" : "";
+		labelAmount.text = strModifier + amount;
 	}
 }

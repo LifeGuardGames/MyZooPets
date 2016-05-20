@@ -202,7 +202,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		// this is potentially not the best place to put this...
 		// right now I'd say NewGame() means the game is starting
 		SetGameState(MinigameStates.Playing);
-		StatsController.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
+		StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
 		_NewGame();		
 	}
 	
@@ -248,7 +248,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		
 	public void RestartGame(bool minusMood = true){
 		if(minusMood){
-			StatsController.Instance.ChangeStats(hungerDelta: -10, isInternal: true);
+			StatsManager.Instance.ChangeStats(hungerDelta: -10, isInternal: true);
 		}
 		AudioManager.Instance.PauseBackground(false);
 

@@ -173,7 +173,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	private void GiveReward(){
 		//Reward xp
 		int nXP = DataLoaderXpRewards.GetXP("DailyInhaler", new Hashtable());
-		StatsController.Instance.ChangeStats(xpDelta: nXP, coinsDelta: starIncrement);
+		StatsManager.Instance.ChangeStats(xpDelta: nXP, coinsDelta: starIncrement);
 		
 		// Reward shards
 		int fireShardReward = 50;	

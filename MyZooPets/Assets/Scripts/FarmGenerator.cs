@@ -110,7 +110,7 @@ public class FarmGenerator : MonoBehaviour {
 			}
 			
 			// Spew out the reward here
-			StatsController.Instance.ChangeStats(coinsDelta: (int)current, coinsPos: transform.position, is3DObject: true);
+			StatsManager.Instance.ChangeStats(coinsDelta: (int)current, coinsPos: transform.position, is3DObject: true);
 
 			// Update mutable datas
 			ItemLogic.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());

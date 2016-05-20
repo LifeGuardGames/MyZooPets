@@ -4,32 +4,39 @@ using System.Collections;
 
 public class DoctorMatchTutorial : MinigameTutorial {
 	public static string TUT_KEY = "DOCTORMATCH_TUT";
+	private GameObject[] buttons;
 
-	// handles multiple sprites needed for completeion 
-	private int numOfCompleteions = 0;
-
-	protected override void SetMaxSteps(){
+	protected override void SetMaxSteps() {
 		maxSteps = 3;
 	}
-	
-	protected override void SetKey(){
+
+	protected override void SetKey() {
 		tutorialKey = TUT_KEY;
 	}
-	
-	protected override void _End(bool isFinished){
+
+	protected override void _End(bool isFinished) {
+		DoctorMatchManager.Instance.NewGame();
+		DoctorMatchManager.Instance.BarFinger();
 	}
-	
-	protected override void ProcessStep(int step){
-		switch(step){
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		default:
-			Debug.LogError("Ninja tutorial has an unhandled step: " + step);
-			break;
+
+	protected override void ProcessStep(int step) {
+		switch (step) {
+			case 0:
+				Debug.Log("called");
+				DoctorMatchManager.Instance.SpawnFinger(0);
+				DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(0);
+				break;
+			case 1:
+				DoctorMatchManager.Instance.SpawnFinger(1);
+				DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(1);
+				break;
+			case 2:
+				DoctorMatchManager.Instance.SpawnFinger(2);
+				DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(2);
+				break;
+			default:
+				Debug.LogError("DoctorMatch tutorial has an unhandled step: " + step);
+				break;
 		}
 	}
 }

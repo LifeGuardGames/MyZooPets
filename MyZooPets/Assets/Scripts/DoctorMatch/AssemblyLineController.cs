@@ -17,21 +17,21 @@ public class AssemblyLineController : MonoBehaviour {
 	private float distanceBetween = -50;
 	private int startingCount = 4;
 	private float clearTime = .05f;
-	private float moveTime = .2f;
+	private const float moveTime = .2f;
 	// Fill the list with items and in the right positions
 	public float ClearTime {
 		get {
 			return visibleCount*clearTime*4+moveTime;
 		}
 	}
-	public void Initialize() {
-		StartCoroutine(InitializeHelper());
+	public bool lineComplete {
+		get {
+			return itemQueue.Count==0;
+		}
 	}
-
-	private IEnumerator InitializeHelper() {
+	public IEnumerator Initialize(bool isTutorial) {
 		DestroyItems();
 		yield return 0;
-
 		/*if(positionList == null || positionList.Count == 0){
 			Debug.LogError("Position list not initialized or empty");
 			yield break;
@@ -39,16 +39,19 @@ public class AssemblyLineController : MonoBehaviour {
 
 		itemQueue = new Queue<AssemblyLineItem>();
 		// Init and throw it into the queue
-		PopulateQueue(StartPosition.position);
+		if (!isTutorial)
+			PopulateQueue(StartPosition.position);
 	}
 
 	public AssemblyLineItem PopFirstItem() {
-		AssemblyLineItem poppedItem = itemQueue.Dequeue();
-		return poppedItem;
+		return itemQueue.Dequeue();
 	}
 
-	public IEnumerator ClearLine() {
-		Debug.Log(Time.time);
+	public AssemblyLineItem PeekFirstItem() {
+		return itemQueue.Peek();
+	}
+
+	public IEnumerator ClearLine() { //TODO: Pop the first one!
 		foreach (AssemblyLineItem itemScript in itemQueue) {
 			if (itemScript.itemSprite.isVisible) {
 				yield return new WaitForSeconds(clearTime * 4);
@@ -66,7 +69,6 @@ public class AssemblyLineController : MonoBehaviour {
 
 	public void ShiftAndAddNewItem() {
 		MoveUpLine(moveTime);
-
 		// Add new item
 		GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
 		int newItemIndex = startingCount;
@@ -76,7 +78,15 @@ public class AssemblyLineController : MonoBehaviour {
 		itemQueue.Enqueue(newItemScript);
 		newItemScript.CompareVisible(visibleCount);
 	}
-
+	public void SpawnTutorialSet(int stage){
+		for (int i = 1; i < AssemblyLineItem.SPRITE_COUNT; i++) {
+			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
+			item.transform.position = StartPosition.position + i * new Vector3(distanceBetween, 0);
+			AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
+			newItemScript.Init(i,stage,i); 
+			itemQueue.Enqueue(newItemScript);
+		}
+	}
 	public void DestroyItems() {
 		foreach (Transform child in itemParent.transform) {
 			Destroy(child.gameObject);
@@ -103,7 +113,13 @@ public class AssemblyLineController : MonoBehaviour {
 			itemScript.CompareVisible(visibleCount);
 		}
 	}
-
+	public void MoveUpLine(float timeToTake=moveTime) {
+		foreach (AssemblyLineItem itemScript in itemQueue) {
+			int newIndex = itemScript.GetIncrementIndex();
+			LeanTween.cancel(itemScript.gameObject);
+			LeanTween.move(itemScript.gameObject, StartPosition.position + newIndex * new Vector3(distanceBetween, 0), timeToTake);
+		}
+	}
 	private void PopulateQueue(Vector3 startPos, int indexOffset=0) {
 		for (int i = 0; i < startingCount + 1; i++) {
 			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
@@ -115,11 +131,5 @@ public class AssemblyLineController : MonoBehaviour {
 		}
 	}
 
-	private void MoveUpLine(float timeToTake) {
-		foreach (AssemblyLineItem itemScript in itemQueue) {
-			int newIndex = itemScript.GetIncrementIndex();
-			LeanTween.cancel(itemScript.gameObject);
-			LeanTween.move(itemScript.gameObject, StartPosition.position + newIndex * new Vector3(distanceBetween, 0), timeToTake);
-		}
-	}
+
 }

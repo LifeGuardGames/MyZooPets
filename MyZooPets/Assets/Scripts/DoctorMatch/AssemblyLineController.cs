@@ -19,6 +19,11 @@ public class AssemblyLineController : MonoBehaviour {
 	private float clearTime = .05f;
 	private float moveTime = .2f;
 	// Fill the list with items and in the right positions
+	public float ClearTime {
+		get {
+			return visibleCount*clearTime*4+moveTime;
+		}
+	}
 	public void Initialize() {
 		StartCoroutine(InitializeHelper());
 	}
@@ -43,7 +48,7 @@ public class AssemblyLineController : MonoBehaviour {
 	}
 
 	public IEnumerator ClearLine() {
-		
+		Debug.Log(Time.time);
 		foreach (AssemblyLineItem itemScript in itemQueue) {
 			if (itemScript.itemSprite.isVisible) {
 				yield return new WaitForSeconds(clearTime * 4);
@@ -54,7 +59,7 @@ public class AssemblyLineController : MonoBehaviour {
 		}
 		itemQueue.Clear();
 		PopulateQueue(OffscreenPosition.position,1);
-		MoveUpLine(.2f);
+		MoveUpLine(moveTime);
 		DoctorMatchManager.Instance.FinishClear();
 	}
 

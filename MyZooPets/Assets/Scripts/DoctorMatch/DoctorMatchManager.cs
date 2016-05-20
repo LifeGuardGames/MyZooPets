@@ -154,13 +154,15 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	// When your timer runs out
 
 	public void FinishClear(){
+		Debug.Log(Time.time + "Called");
 		clearing=false;
 	}
 	public void OnTimerBarEmpty() {
 		GameOver();
 	}
 	private void ComboBonus() {
-		lifeBarController.PlusBar(3f);
+		Debug.Log(assemblyLineController.ClearTime + "Hey");
+		lifeBarController.PlusBar(assemblyLineController.ClearTime*lifeBarController.Speed/Time.fixedDeltaTime); //Time for a clear in seconds, convert to frames, then multiply by drain per frame
 		StartCoroutine(assemblyLineController.ClearLine());
 		combo=0;
 		clearing=true;

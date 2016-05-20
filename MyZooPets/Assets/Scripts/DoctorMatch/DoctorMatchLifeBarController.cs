@@ -16,6 +16,11 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 			return barPercentage;
 		}
 	}
+	public float Speed {
+		get {
+			return currentDrainSpeed;
+		}
+	}
 
 	void Start(){
 		barSize = barTransform.sizeDelta;

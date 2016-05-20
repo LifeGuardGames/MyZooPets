@@ -41,12 +41,15 @@ public class HUDAnimator : MonoBehaviour{
 	public GameObject tweenSpritePrefab;
 	public AnimationCurve customEaseCurve;
 
+	private int nextLevelPoints;    // Requirement for next level up
+	public int NextLevelPoints {
+		get { return nextLevelPoints; }
+	}
 
-
-
-	#region private variables
-	private int nextLevelPoints; //the minimum requirement for next level up
-	private Level lastLevel; //pet's last level
+	private Level lastLevel;		// Pet's last level
+	public Level LastLevel {
+		get { return lastLevel; }
+	}
 
 	// Icon pulsing
 	private AnimationControl healthIconAnim;
@@ -61,48 +64,23 @@ public class HUDAnimator : MonoBehaviour{
 	// list of UI sprite objects that may have been spawned
 	private List<GameObject> listMovingSprites = new List<GameObject>();
 
-	// there may be an override for how many of a given sprite we spawn when animating the HUD
-	private float fModifierOverride = 0;
-
 	private bool isAnimating = false;
 	public bool IsAnimating{
 		get{ return isAnimating; }
 	}
-	#endregion
+
+
+
 
 	#region Getter/Setters
-	public int NextLevelPoints{
-		get{ return nextLevelPoints;}
-	}
 	
-	public Level LastLevel{
-		get{ return lastLevel;}
-	}
-
 	public bool AreSpawnedSprites(){
 		bool b = listMovingSprites.Count > 0;
 		return b;
 	}
-
-	public void SetModifierOverride(float fOverride){
-		fModifierOverride = fOverride;	
-	}
-
-	public float GetModifierOverride(){
-		return fModifierOverride;	
-	}
 	#endregion
 
-	private float GetModifier(StatType eType){
-		float fModifier = Constants.GetConstant<float>(eType + "_Modifier");
-		
-		// if there is an override, use that instead
-		float fOverride = GetModifierOverride();
-		if(fOverride > 0)
-			fModifier = fOverride;
-		
-		return fModifier;
-	}
+	
 	
 	void Start(){
 		healthIconAnim = null;//HUDUIManager.Instance.animHealth;
@@ -175,23 +153,23 @@ public class HUDAnimator : MonoBehaviour{
 		// One loop for each TYPE of stat (Coin, Stars, etc)
 		for(int i = 0; i < statsTypeList.Count; ++i){
 			StatPair pair = statsTypeList[i];
-			StatType eType = pair.statType;
+			StatType statType = pair.statType;
 			
 			// If it is a floaty text, just increment values instantaneously
 			if(isFloaty){
 				// this code will instead animate the bar
 				// leaving old code in since this is one of the last things I do; in case things backfire, just uncomment and delete
-				StartCoroutine(AnimateStatBar(eType, 0));	// TODO why is there no delay?
+				StartCoroutine(AnimateStatBar(statType, 0));	// TODO why is there no delay?
 			}
 			// If not floaty text, play tween sprite animation to HUD
 			else{
 				//Default spawn from top if zero, otherwise remove z component, since we are in NGUI
-				Vector3 vHUD = Constants.GetConstant<Vector3>(eType + "_HUD");
+				Vector3 vHUD = Constants.GetConstant<Vector3>(statType + "_HUD");
 				Vector3 vOrigin = (pair.posOrigin == Vector3.zero) ? vHUD : new Vector3(pair.posOrigin.x, pair.posOrigin.y, 0);
 
-				StartCurve(eType, pair.value, vOrigin, pair.soundKey);
+				StartCurve(statType, pair.value, vOrigin, pair.soundKey);
 				
-				float fModifier = GetModifier(eType);
+				float fModifier = GetSpawnCountModifier(statType);
 				yield return new WaitForSeconds(fModifier * pair.value);	
 			}
 
@@ -222,14 +200,14 @@ public class HUDAnimator : MonoBehaviour{
 	/// <summary>
 	/// For one stat, actually prepare and spawn the visuals.
 	/// </summary>
-	private void TweenMoveToPoint(StatType type, int amount, Vector3 originPoint, string sound){
-		float duration = Constants.GetConstant<float>("HudCurveDuration");
+	private void TweenMoveToPoint(StatType statType, int amount, Vector3 originPoint, string sound){
+		float duration = 1f;
 		Sprite imageSprite;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
 		bool isPlusAnimation = false;	// Used for "adding" animation otherwise "substracting" animation
-		float fModifier = GetModifier(type);
-		Vector3 vHUD = Constants.GetConstant<Vector3>(type + "_HUD");
+		float fModifier = GetSpawnCountModifier(statType);
+		Vector3 vHUD = Constants.GetConstant<Vector3>(statType + "_HUD");
 
 		GameObject tweenParent = null;//HUDUIManager.Instance.GetTweenParent(Constants.GetConstant<String>(type + "_Anchor"));	// Check which anchor this is in
 
@@ -237,11 +215,11 @@ public class HUDAnimator : MonoBehaviour{
 		if(amount > 0){
 			endPosition = vHUD;
 			isPlusAnimation = true;
-			imageSprite = SpriteCacheManager.GetHudTweenIcon(type);
+			imageSprite = SpriteCacheManager.GetHudTweenIcon(statType);
 		}
 		else{
 			originPoint = vHUD;
-			Vector3 vOffset = Constants.GetConstant<Vector3>("Below_HUD");
+			Vector3 vOffset = new Vector3(0, -75, 0);
 			endPosition = originPoint + vOffset;
 			isPlusAnimation = false;
 			imageSprite = null;
@@ -252,7 +230,7 @@ public class HUDAnimator : MonoBehaviour{
 			// On its own thread
 			Hashtable hashSoundOverrides = new Hashtable();
 			hashSoundOverrides["Pitch"] = 1.0f + i;
-			StartCoroutine(SpawnOneSprite(tweenParent, i, type, imageSprite, originPoint, endPosition, duration, isPlusAnimation, sound, hashSoundOverrides));
+			StartCoroutine(SpawnOneSprite(tweenParent, i, statType, imageSprite, originPoint, endPosition, duration, isPlusAnimation, sound, hashSoundOverrides));
 		}
 	}
 
@@ -298,32 +276,28 @@ public class HUDAnimator : MonoBehaviour{
 		}
 	}
 
-	//---------------------------------------------------
-	// AnimateStatBar()
-	// Animates the stat bar for eStat.
-	//---------------------------------------------------	
-	private IEnumerator AnimateStatBar(StatType eStat, float delay){
+	private IEnumerator AnimateStatBar(StatType statType, float delay){
 		// wait X seconds
 		yield return new WaitForSeconds(delay);
-		
-		// required data for animating the bar
-		int step = Constants.GetConstant<int>(eStat + "_Step");
-		AnimationControl anim = hashAnimControls[eStat];
-		int target = StatsManager.Instance.GetStat(eStat);
 
-		if(hashDisplays[eStat] > target){
+		// required data for animating the bar
+		int step = GetStepModifier(statType);
+        AnimationControl anim = hashAnimControls[statType];
+		int target = StatsManager.Instance.GetStat(statType);
+
+		if(hashDisplays[statType] > target){
 			step *= -1;
 		}
 
 		// while the display number is not where we want to be...
-		while(hashDisplays[eStat] != target){
+		while(hashDisplays[statType] != target){
 
 			// animate by altering the display amount, but don't go over/under the target
 			if(step > 0){
-				hashDisplays[eStat] = Mathf.Min(hashDisplays[eStat] + step, target);
+				hashDisplays[statType] = Mathf.Min(hashDisplays[statType] + step, target);
 			}
 			else{
-				hashDisplays[eStat] = Mathf.Max(hashDisplays[eStat] + step, target);
+				hashDisplays[statType] = Mathf.Max(hashDisplays[statType] + step, target);
 			}
 
 			// if there is a controller, play it
@@ -336,7 +310,7 @@ public class HUDAnimator : MonoBehaviour{
 			yield return 0;
 			
 			// update our target in case it changed
-			target = StatsManager.Instance.GetStat(eStat);
+			target = StatsManager.Instance.GetStat(statType);
 		}
 
 		// animating is finished, so stop the control if it exists
@@ -351,4 +325,39 @@ public class HUDAnimator : MonoBehaviour{
 	public void PlayNeedCoinAnimation() {
 		animCoin.Play("HUDCoinRequired");
 	}
+
+	#region modifiers
+	private float GetSpawnCountModifier(StatType statType) {
+		switch(statType) {
+			case StatType.Xp:
+				return 0.02f;
+			case StatType.Health:
+				return 0.02f;
+			case StatType.Hunger:
+				return 0.02f;
+			case StatType.Coin:
+				return 0.03f;
+			default:
+				Debug.LogError("Invalid stat type for count modifier " + statType.ToString());
+				return 0f;
+		}
+	}
+
+	private int GetStepModifier(StatType statType) {
+		switch(statType) {
+			case StatType.Xp:
+				return 3;
+			case StatType.Health:
+				return 1;
+			case StatType.Hunger:
+				return 1;
+			case StatType.Coin:
+				return 1;
+			default:
+				Debug.LogError("Invalid stat type for step modifier " + statType.ToString());
+				return 0;
+		}
+	}
+
+	#endregion
 }

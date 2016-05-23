@@ -22,7 +22,6 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	protected override void ProcessStep(int step) {
 		switch (step) {
 			case 0:
-				Debug.Log("called");
 				DoctorMatchManager.Instance.SpawnFinger(0);
 				DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(0);
 				break;

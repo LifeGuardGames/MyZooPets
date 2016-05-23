@@ -3,12 +3,12 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Net;
-using System.Net.Mail;
+
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
 public class ParentPortalLogic : Singleton<ParentPortalLogic> {
-
+	#if false
     // public string ParentEmail{
     //     get{return DataManager.Instance.ParentEmail;}
     // }
@@ -211,4 +211,5 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
             result.Add("SendMailErrorMsg", Localization.Localize("ERROR_SMTP_BAD_CONNECTION"));
         }
     }
+	#endif
 }

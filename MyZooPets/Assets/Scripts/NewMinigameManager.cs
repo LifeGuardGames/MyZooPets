@@ -50,6 +50,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		if(score < 0) {
 			score = 0;
 		}
+
 	}
 
 	public void NewGame() {

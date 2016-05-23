@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public enum DoctorMatchButtonTypes {
@@ -17,6 +18,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public DoctorMatchZone zoneYellow;
 	public DoctorMatchZone zoneRed;
 	public GameObject pointerPrefab;
+	public ComboController comboController;
+	public GameObject floatyPrefab;
 
 	private int numOfCorrectDiagnose;
 	private int combo = 0;
@@ -25,11 +28,13 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	private float currentComboTime = 0;
 	private bool paused = true;
 	private bool clearing = false;
+	private UGUIFloaty currentFloaty = null;
 
 	private DoctorMatchTutorial doctorMatchTutorial;
 	private bool tutorial = false;
 	private int tutorialZone = 0;
 	private FingerController finger = null;
+	private bool parentObject = false;
 
 	public bool Paused {
 		get {
@@ -53,7 +58,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else if (Input.GetKeyDown(KeyCode.RightArrow)) {
 			OnZoneClicked(DoctorMatchButtonTypes.Red);
 		} else if (Input.GetKeyDown(KeyCode.Q)) {
-			ComboBonus();
+			parentObject = !parentObject;//ComboBonus();
 		}
 		#endif
 		if (currentComboTime > 0) {
@@ -164,10 +169,9 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public void SpawnFinger(int zone) {
 		tutorialZone = zone;
 		if (finger == null) {
-			Debug.Log("INSTANT");
 			finger = Instantiate(pointerPrefab).GetComponent<FingerController>();
 		}
-		finger.transform.position = GetTutorialPosition();
+		finger.transform.position = GetButtonTransform(tutorialZone).position;
 	}
 
 	public void BarFinger() {
@@ -176,17 +180,17 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		finger.Shake(new Vector3(20, 0), true);
 	}
 	// Input coming from button scripts
-	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
+	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) { //TODO: Combo has been removed
 		if (tutorial) { //Tutorial uses seperate logic
 			HandleTutorial(buttonType);
-		} else if (combo == 1000000) { //Out of commission for now
-			ComboBonus();
-			Debug.Log("COMBO");
 		} else {
 			HandleNormal(buttonType);
-			Debug.Log("Normal");
 		}
+
+		comboController.UpdateCombo(combo);
+		comboController.UpdateScore(score);
 	}
+
 	private void HandleNormal(DoctorMatchButtonTypes buttonType) {
 		AssemblyLineItem poppedItem = assemblyLineController.PopFirstItem();
 		if (poppedItem.ItemType == buttonType) {
@@ -194,19 +198,20 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else {
 			CharacterScoredWrong();
 		}
-
-
+		SpawnFloatyText(poppedItem.ItemType == buttonType, GetButtonTransform((int)buttonType - 1));
 		// Have item do what it does when activated
 		poppedItem.Activate();
 		assemblyLineController.ShiftAndAddNewItem();
 	}
+
 	private void HandleTutorial(DoctorMatchButtonTypes buttonType) {
 		AssemblyLineItem poppedItem = assemblyLineController.PeekFirstItem();
-		finger.StopShake(GetTutorialPosition());
+		finger.StopShake(GetButtonTransform(tutorialZone).position);
 		if (poppedItem.ItemType == buttonType) {
 			poppedItem.Activate();
 			assemblyLineController.PopFirstItem();
 			assemblyLineController.MoveUpLine();
+			UpdateScore(1);
 			AudioManager.Instance.PlayClip("clinicCorrect");
 			if (assemblyLineController.lineComplete) {
 				doctorMatchTutorial.Advance();
@@ -219,17 +224,45 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		}
 	}
 
-	private Vector3 GetTutorialPosition() {
-		switch (tutorialZone) {
+	private void SpawnFloatyText(bool correct, Transform buttonTransform) {
+		if (currentFloaty) {
+			LeanTween.cancel(currentFloaty.gameObject);
+			Destroy(currentFloaty.gameObject);
+		}
+		string text;
+		Color color;
+		int size = Random.Range(40, 50);//= Random.Range(75, 95);
+		int index;
+		if (correct) {
+			index = Random.Range(0, 9);
+			text = Localization.Localize("DOCTOR_RIGHT_" + index);
+			color = new Color(Random.Range(.0f, .4f), Random.Range(.7f, 1f), Random.Range(.0f, .4f));
+		} else {
+			index = Random.Range(0, 9);
+			text = Localization.Localize("DOCTOR_WRONG_" + index);
+			color = new Color(Random.Range(.7f, 1f), Random.Range(.0f, .2f), Random.Range(.0f, .2f));
+		}
+		UGUIFloaty floaty = Instantiate(floatyPrefab).GetComponent<UGUIFloaty>();
+		Vector3 offset = new Vector3(Random.Range(-10, 10), 50);
+		Vector3 spawnPos = buttonTransform.position + new Vector3(0, 25);//buttonObject.transform.position-(Vector3)buttonObject.GetComponent<RectTransform>().rect.center;
+		floaty.transform.SetParent(buttonTransform, true);
+		floaty.transform.localScale = new Vector3(1, 1, 1);
+		floaty.StartFloaty(spawnPos, text: text, textSize: size, riseTime: .6f, toMove: offset, color: color);
+		currentFloaty = floaty;
+
+	}
+
+	private Transform GetButtonTransform(int buttonType) {
+		switch (buttonType) {
 			case 0:
-				return zoneGreen.transform.position;
+				return zoneGreen.transform;
 			case 1:
-				return zoneYellow.transform.position;
+				return zoneYellow.transform;
 			case 2:
-				return zoneRed.transform.position;
+				return zoneRed.transform;
 			default:
 				Debug.LogWarning("Invalid Zone");
-				return Vector3.zero;
+				return null;
 		}
 	}
 
@@ -249,26 +282,17 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		rewardShardMultiplier = 1f;
 		score = 0;
 	}
-	void OnGUI() {
-		GUI.Box( new Rect(0, 0, 50, 50), score.ToString());
-	}
+
 	private void CharacterScoredRight() {
-		//if(IsTutorialRunning()){
-			
-		//}
-		//else{
 		combo++;
 		currentComboTime = timeToCombo;
-		//lifeBarController.PlusBar();
 		UpdateScore(2);
-		//}
 
 		// Play appropriate sound
 		AudioManager.Instance.PlayClip("clinicCorrect");
 	}
 
 	private void CharacterScoredWrong() {
-		//lifeBarController.HurtBar();
 		combo = 0;
 		currentComboTime = 0;
 		UpdateScore(-1);

@@ -18,6 +18,7 @@ public class MinigameStartController : MonoBehaviour {
 	#region Button calls
 	public void OnTutorialButton(){
 		UIManager.OnTutorial();
+		HidePanel();
 	}
 
 	public void OnPlayButton(){

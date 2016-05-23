@@ -3,13 +3,13 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Net;
-using System.Net.Mail;
+
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 */
 
 public class ParentPortalLogic : Singleton<ParentPortalLogic> {
-
+	#if false
     // public string ParentEmail{
     //     get{return DataManager.Instance.ParentEmail;}
     // }
@@ -186,7 +186,6 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
     //    string account = "";
     //    string password = "";
     //    MailMessage message = new MailMessage(from, to);
- 
     //    message.Subject = "Wellapets parent portal";
     //    message.Body = "This is for testing SMTP mail from LifeGuardGames";
 
@@ -213,4 +212,5 @@ public class ParentPortalLogic : Singleton<ParentPortalLogic> {
     //        result.Add("SendMailErrorMsg", Localization.Localize("ERROR_SMTP_BAD_CONNECTION"));
     //    }
     //}
+	#endif 
 }

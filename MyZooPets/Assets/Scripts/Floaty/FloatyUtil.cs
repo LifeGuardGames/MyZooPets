@@ -28,6 +28,7 @@ public class FloatyUtil {
         //set in the prefab
 		if ( option.ContainsKey("prefab") ) {
 			string strPrefab = (string) option["prefab"];
+			Debug.Log(strPrefab);
 			floatyText = (GameObject) Resources.Load( strPrefab );
 		}
         else{

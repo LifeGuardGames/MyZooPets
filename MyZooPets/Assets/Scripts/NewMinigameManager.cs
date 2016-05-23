@@ -50,13 +50,13 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		if(score < 0) {
 			score = 0;
 		}
+
 	}
 
 	public void NewGame() {
 		rewardXPAux = 0;
 		rewardMoneyAux = 0;
 		rewardShardAux = 0;
-
 		// Decrease the pet's hunger after each new game
 		StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
 

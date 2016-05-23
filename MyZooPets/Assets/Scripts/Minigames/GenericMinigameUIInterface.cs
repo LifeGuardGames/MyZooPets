@@ -12,132 +12,102 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 
 	void Awake() {
 		sceneName = SceneManager.GetActiveScene().name;
-    }
+	}
 
 	public string GetMinigameKey() {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
+		if (sceneName == SceneUtils.DOCTORMATCH) {
 			return DoctorMatchManager.Instance.MinigameKey;
-        }
-		else if(sceneName == SceneUtils.MEMORY) {
+		} else if (sceneName == SceneUtils.MEMORY) {
 			return MemoryGameManager.Instance.GetMinigameKey();	// ...
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
+		} else if (sceneName == SceneUtils.RUNNER) {
 			return RunnerGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
+		} else if (sceneName == SceneUtils.SHOOTER) {
 			return ShooterGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			return NinjaManager.Instance.GetMinigameKey();
-		}
-		else {
+		} else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
 			return null;
 		}
 	}
 
 	public void PauseToggle(bool isShow) {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
+		if (sceneName == SceneUtils.DOCTORMATCH) {
 			DoctorMatchManager.Instance.PauseGame(isShow);
 			//DoctorMatchManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.MEMORY) {
+		} else if (sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
+		} else if (sceneName == SceneUtils.RUNNER) {
 			//RunnerGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
+		} else if (sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.GetMinigameKey();
-		}
-		else {
+		} else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
 		}
 	}
 
-	public void OnTutorial() {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
-			DoctorMatchManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.MEMORY) {
+	public void OnTutorial() { //These should/could be Coroutines
+		if (sceneName == SceneUtils.DOCTORMATCH) {
+			//This one needs to be a coroutine
+			StartCoroutine(DoctorMatchManager.Instance.StartTutorial());
+		} else if (sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
+		} else if (sceneName == SceneUtils.RUNNER) {
 			//RunnerGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
+		} else if (sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.StartTutorial();
-		}
-		else {
+		} else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
 		}
 	}
 
 	public void OnResume() {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
-			//DoctorMatchManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.MEMORY) {
+		if (sceneName == SceneUtils.DOCTORMATCH) {
+		} else if (sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
+		} else if (sceneName == SceneUtils.RUNNER) {
 			//RunnerGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
+		} else if (sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.GetMinigameKey();
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.GetMinigameKey();
-		}
-		else {
+		} else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
 		}
 	}
 
 	public void OnRestart() {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
+		if (sceneName == SceneUtils.DOCTORMATCH) {
 			DoctorMatchManager.Instance.NewGame();
-		}
-		else if(sceneName == SceneUtils.MEMORY) {
+		} else if (sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
+		} else if (sceneName == SceneUtils.RUNNER) {
 			//RunnerGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
+		} else if (sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.StartTutorial();
-		}
-		else {
+		} else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
 		}
 	}
 
 	public void QuitGame() {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
+		if (sceneName == SceneUtils.DOCTORMATCH) {
 			DoctorMatchManager.Instance.QuitGame();
-		}
-		else if(sceneName == SceneUtils.MEMORY) {
+		} else if (sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.QuitGame();
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
+		} else if (sceneName == SceneUtils.RUNNER) {
 			//RunnerGameManager.Instance.QuitGame();
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
+		} else if (sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.QuitGame();
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.QuitGame();
-		}
-		else {
+		} else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
 		}
 	}

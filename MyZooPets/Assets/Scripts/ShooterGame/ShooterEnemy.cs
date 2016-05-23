@@ -55,7 +55,7 @@ public class ShooterEnemy : MonoBehaviour{
 
 	// handles collision not too much special there
 	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.gameObject.tag == "bullet"){
+		if(collider.gameObject.tag == "Shooterbullet"){
 			health -= collider.GetComponent<ShooterGameBulletScript>().health;
 			if(!collider.GetComponent<ShooterGameBulletScript>().isPierceing ){
 				if(collider.GetComponent<ShooterGameBulletScript>().health > damage){
@@ -74,7 +74,7 @@ public class ShooterEnemy : MonoBehaviour{
 			PlayerShooterController.Instance.ChangeHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
-		else if(collider.gameObject.tag == "Wall"){
+		else if(collider.gameObject.tag == "ShooterWall"){
 			StartCoroutine(DestroyEnemy());
 		}
 	}

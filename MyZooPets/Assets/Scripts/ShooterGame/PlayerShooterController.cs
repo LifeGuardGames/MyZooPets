@@ -13,8 +13,8 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		Distressed
 	}
 
-	public int playerHealth = 5;				// player health
-
+	public int playerHealth = 5;                // player health
+	public EventHandler<EventArgs> OnTutorialMove;
 	private PlayerStateTypes playerState = PlayerStateTypes.Neutral;
 	public PlayerStateTypes PlayerState{
 		get{ return playerState; }
@@ -23,7 +23,10 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	public ShooterCharacterAnimController characterAnim;
 	public List<GameObject> fireBallPrefabs;	// List of fireball presets too choose from
 	public Transform bulletSpawnLocation;		// location that the bullets spawn at aka the mouth not the middle of the chest
-	private GameObject currentFireBall;			// our fireball so we can modify it's properties and change its direction
+	private GameObject currentFireBall;         // our fireball so we can modify it's properties and change its direction
+	public float moveSpeed = 10;
+	public Vector3 clickPos;
+	public bool moving = false;
 
 	public bool isTriple;						// Triple firing upgrade
 	public bool IsTriple{
@@ -127,9 +130,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 				}
 			}
 			if(playerHealth >= 4){
-				if(playerHealth > 14){
-					playerHealth = 14;	// Cap health at 15
-				}
+				
 				ChangeState(PlayerStateTypes.Happy);
 			}
 			else if(playerHealth > 1 && playerHealth <= 3){
@@ -138,7 +139,9 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 			else if(playerHealth <= 1 && playerHealth > 0){
 				ChangeState(PlayerStateTypes.Distressed);
 			}
-
+			if(playerHealth > 14) {
+				playerHealth = 14;  // Cap health at 15
+			}
 			if(playerHealth <= 0){
 				this.GetComponent<Collider2D>().enabled = false;
 				characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Dead);
@@ -155,7 +158,19 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	public void Move(Vector3 dir){
-		LeanTween.moveY(this.gameObject, Camera.main.ScreenToWorldPoint(dir).y, 0.5f);
+		if(ShooterGameManager.Instance.inTutorial) {
+			if(OnTutorialMove!= null) {
+				OnTutorialMove(this, EventArgs.Empty);
+			}
+		}
+		clickPos = dir;
+		moving = true;
+	}
+
+	void FixedUpdate() {
+		if(moving) {
+			transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, Camera.main.ScreenToWorldPoint(clickPos).y, transform.position.z), moveSpeed * Time.deltaTime);
+		}
 	}
 
 	// shoots a bullet at the current position of the mouse or touch
@@ -173,7 +188,6 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 		bulletScript.target = lookPos;
 		bulletScript.FindTarget();
-		bulletScript.isPierceing = isPiercing;
 		if(isTriple){
 			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
@@ -185,14 +199,13 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 			bulletScript.target = new Vector3(lookPos.x, lookPos.y - 1, lookPos.z);
 			bulletScript.FindTarget();
-			bulletScript.isPierceing = isPiercing;
 		}
 	}
 
 	// removes health from player when hit by an enemy smog ball // written this way to avoid making a mundane script
 	void OnTriggerEnter2D(Collider2D collider){
 		Debug.Log("hit");
-		if(collider.gameObject.tag == "EnemyBullet"){
+		if(collider.gameObject.tag == "ShooterEnemyBullet"){
 			ChangeHealth(-1);
 			Destroy(collider.gameObject);
 		}

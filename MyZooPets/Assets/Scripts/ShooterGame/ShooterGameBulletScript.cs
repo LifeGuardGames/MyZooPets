@@ -31,15 +31,24 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	
 	// collision handling
 	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.gameObject.tag == "EnemyBullet"){
+		if(collider.gameObject.tag == "ShooterEnemyBullet"){
 			Destroy(collider.gameObject);
 			if(!isPierceing || health < 2){
 				Destroy(this.gameObject);
 			}
 		}
-		else if(collider.gameObject.tag == "EnemyWall"){
+		else if(collider.gameObject.tag == "ShooterEnemyWall"){
 			speed = -speed;
 			canHitPlayer = true;
+		}
+		else if (collider.gameObject.tag == "ShooterBouncyWallTop") {
+			target = new Vector3(-target.x, -target.y, target.z);
+			FindTarget();
+		}
+		else if(collider.gameObject.tag == "ShooterBouncyWallBottom") {
+			target = new Vector3(-target.x, -target.y, target.z);
+			speed = -speed;
+			FindTarget();
 		}
 		else if(collider.gameObject.tag == "Player"){
 			if(canHitPlayer){

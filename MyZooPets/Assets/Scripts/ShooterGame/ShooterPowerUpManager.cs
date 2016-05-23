@@ -5,7 +5,8 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 	public enum PowerUpType{
 		Normal,
 		Triple,
-		Bouncy
+		Bouncy,
+		HypeBeam
 	}
 
 	public float timer;
@@ -29,6 +30,11 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 			ShooterGameManager.Instance.BouncyWalls.SetActive(true);
 			StopCoroutine(ResetPowerUP());
 			StartCoroutine(ResetPowerUP());
+			break;
+		case PowerUpType.HypeBeam:
+			AudioManager.Instance.PlayClip("shooterPowerUp");
+			//change to hype fire ball
+			// destroy screen for a few seconds
 			break;
 		}
 	}

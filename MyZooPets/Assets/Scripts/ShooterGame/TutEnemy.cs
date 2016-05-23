@@ -8,7 +8,7 @@ public class TutEnemy : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.gameObject.tag == "bullet"){
+		if(collider.gameObject.tag == "Shooterbullet"){
 				Destroy(collider.gameObject);
 				ShooterGameManager.Instance.MoveTut();
 				StartCoroutine(DestroyEnemy());

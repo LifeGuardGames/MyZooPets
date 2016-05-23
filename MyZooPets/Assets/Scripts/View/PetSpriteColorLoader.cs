@@ -66,4 +66,9 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			isDebugInternal = isDebug;
 		}
 	}
+	// For Salon Manager
+	public void ChangeStyle(string colorName) {
+		LoadAndSetColor(colorName);
+	}
+
 }

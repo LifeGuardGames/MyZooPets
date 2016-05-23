@@ -291,49 +291,28 @@ public class StatsManager : Singleton<StatsManager>{
 	}
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-	//	void OnGUI(){
-	//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")){
-	//			ChangeStats(deltaHealth: 10);
-	//	 	}
-	//		 if(GUI.Button(new Rect(100, 0, 100, 50), "-health")){
-	//			ChangeStats(deltaHealth: -10);
-	//		 }
-	//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")){
-	//			ChangeStats(deltaMood: 10);
-	//		}
-	//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")){
-	//			ChangeStats(deltaMood: -10);
-	//		}
-	//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")){
-	//			ChangeStats(deltaPoints: 100);
-	//		}
-	//		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")){
-	//			ChangeStats(deltaStars: 50);
-	//		}
-	//		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")){
-	//			ChangeStats(deltaStars: -40);
-	//		}
-	//
-	//
-	//		if(GUI.Button(new Rect(0, 50, 100, 50), "+health")){
-	//			ChangeStats(deltaHealth: 100);
-	//		}
-
-	//		if(GUI.Button(new Rect(200, 50, 100, 50), "+mood")){
-	//			ChangeStats(deltaMood: 10);
-	//		}
-	//		if(GUI.Button(new Rect(300, 50, 100, 50), "-mood")){
-	//			ChangeStats(deltaMood: -10);
-	//		}
-	//		if(GUI.Button(new Rect(400, 50, 100, 50), "+xp")){
-	//			ChangeStats(deltaPoints: 100);
-	//		}
-	//		if(GUI.Button(new Rect(600, 50, 100, 50), "+Stars")){
-	//			ChangeStats(deltaStars: 50);
-	//		}
-	//		if(GUI.Button(new Rect(700, 50, 100, 50), "-Stars")){
-	//			ChangeStats(deltaStars: -40);
-	//		}
-	//	}
+	void OnGUI() {
+		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")) {
+			ChangeStats(healthDelta: 10);
+		}
+		if(GUI.Button(new Rect(100, 0, 100, 50), "-health")) {
+			ChangeStats(healthDelta: -10);
+		}
+		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")) {
+			ChangeStats(hungerDelta: 10);
+		}
+		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")) {
+			ChangeStats(hungerDelta: -10);
+		}
+		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")) {
+			ChangeStats(xpDelta: 100);
+		}
+		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")) {
+			ChangeStats(coinsDelta: 50);
+		}
+		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")) {
+			ChangeStats(coinsDelta: -40);
+		}
+	}
 #endif
 }

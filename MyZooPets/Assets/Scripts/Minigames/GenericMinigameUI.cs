@@ -51,6 +51,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 	#region Calls from components, NOT from buttons
 	public void OnTutorial(){
 		minigameUIInterface.OnTutorial();
+		TogglePauseButton(true);
     }
 
 	public void OnResume(){

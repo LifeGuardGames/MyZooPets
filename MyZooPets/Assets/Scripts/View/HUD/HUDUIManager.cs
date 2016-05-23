@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.UI;
+
 public class HUDUIManager : Singleton<HUDUIManager>{
 	public TweenToggleDemux panelTween;
 
@@ -6,26 +9,31 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		get { return hudAnimator; }
 	}
 
-	public UISlider healthSlider;
-	public UILabel healthLabel;
-	public UILabel levelNumber;
-	public UILabel levelFraction;
-	public UISlider levelSlider;
-	public UISlider moodSlider;
-	public UILabel moodLabel;
-	public UILabel starLabel;
+	public Text levelNumber;
+	public Text levelFraction;
+	public Image levelBar;
+	public Text healthLabel;
+	public Image healthBar;
+	public Image hungerBar;
+	public Text hungerLabel;
+	public Text coinLabel;
 
-	private float points;
-	private float mood;
-	private float health;
-	private string level;
+	private float levelBarWidth;
+	private float healthBarWidth;
+	private float hungerBarWidth;
+	
 	private string levelText;
 	private int nextLevelPoints;
 	private string starCount;
 
 	void Start() {
 		ToggleLabels(false);
-	}
+
+		// Save initial data so image bar can be populated properly
+		levelBarWidth = levelBar.rectTransform.sizeDelta.x;
+		healthBarWidth = healthBar.rectTransform.sizeDelta.x;
+		hungerBarWidth = hungerBar.rectTransform.sizeDelta.x;
+    }
 
 	public void ShowPanel() {
 		panelTween.Show();
@@ -36,46 +44,43 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	}
 	
 	void Update(){
-		//Data reading from Data Manager
-		points = hudAnimator.GetDisplayValue(StatType.Xp);
-		mood = hudAnimator.GetDisplayValue(StatType.Hunger);
-		health = hudAnimator.GetDisplayValue(StatType.Health);
+		// Data reading from HUDAnimator
+		int xp = hudAnimator.GetDisplayValue(StatType.Xp);
+		int hunger = hudAnimator.GetDisplayValue(StatType.Hunger);
+		int health = hudAnimator.GetDisplayValue(StatType.Health);
 
-		//points progress bar data
-		level = ((int)hudAnimator.LastLevel).ToString();
+		// Points progress bar data
 		nextLevelPoints = hudAnimator.NextLevelPoints;
 		
-		if(LevelLogic.Instance && LevelLogic.Instance.IsAtMaxLevel())
-			levelText = Localization.Localize("MAX_LEVEL");
-		else
-			levelText = points + "/" + nextLevelPoints;
+		if(LevelLogic.Instance && LevelLogic.Instance.IsAtMaxLevel()) {
+			levelFraction.text = Localization.Localize("MAX_LEVEL");
+		}
+		else {
+			levelFraction.text = xp + "/" + nextLevelPoints;
+		}
 
-		//Star data
-		starCount = hudAnimator.GetDisplayValue(StatType.Coin).ToString();
-
-		levelSlider.sliderValue = points / nextLevelPoints;
-		levelNumber.text = level;
-		levelFraction.text = levelText;
-		moodSlider.sliderValue = mood / 100;
-		moodLabel.text = mood.ToString() + "%";
-		healthSlider.sliderValue = health / 100;
+		levelBar.rectTransform.sizeDelta = new Vector2((xp / (float)nextLevelPoints) * levelBarWidth, 31f);
+		levelNumber.text = ((int)hudAnimator.LastLevel).ToString();
+		healthBar.rectTransform.sizeDelta = new Vector2((health / 100f) * healthBarWidth, 31f);
 		healthLabel.text = health.ToString() + "%";
-		starLabel.text = starCount;
+		hungerBar.rectTransform.sizeDelta = new Vector2((hunger / 100f) * hungerBarWidth, 31f);
+		hungerLabel.text = hunger.ToString() + "%";
+		coinLabel.text = hudAnimator.GetDisplayValue(StatType.Coin).ToString();
 	}
 	
 	public void ToggleLabels(bool isShow){
 		levelFraction.gameObject.SetActive(isShow);
 		healthLabel.gameObject.SetActive(isShow);
-		moodLabel.gameObject.SetActive(isShow);
+		hungerLabel.gameObject.SetActive(isShow);
 	}
 
 	public void PlayNeedCoinAnimation(){
 		hudAnimator.PlayNeedCoinAnimation();
     }
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-//			PlayNeedMoneyAnimation();
-//		}
-//	}
+	//void OnGUI() {
+	//	if(GUI.Button(new Rect(100, 100, 100, 100), "test")) {
+	//		PlayNeedMoneyAnimation();
+	//	}
+	//}
 }

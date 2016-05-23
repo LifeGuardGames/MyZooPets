@@ -2,67 +2,69 @@
 using System.Collections;
 
 public class AssemblyLineItem : MonoBehaviour {
+	public static int SPRITE_COUNT = 6;
 	public SpriteRenderer itemSprite;
 	public ParticleSystem pSystem;
 	private DoctorMatchManager.DoctorMatchButtonTypes itemType;
-	private float verticalOffset = -50f;
-	public DoctorMatchManager.DoctorMatchButtonTypes ItemType{
-		get{
+	public DoctorMatchManager.DoctorMatchButtonTypes ItemType {
+		get {
 			return itemType;
 		}
 	}
 
 	private int index;
 
-	public void Init(int currentIndex){
+	public void Init(int currentIndex, int typeIndex = -1, int spriteIndex = -1) {
+		// Generate random type and populate everything
+		if (typeIndex == -1)
+			typeIndex = UnityEngine.Random.Range(0, 3);
 		index = currentIndex;
 
-		// Generate random type and populate everything
-		int randomIndex = UnityEngine.Random.Range(0, 3);
-		if(randomIndex == 1){
+	
+		if (typeIndex == 0) {
 			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Green;
-		}
-		else if(randomIndex == 2){
+		} else if (typeIndex == 1) {
 			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Yellow;
-		}
-		else{
+		} else {
 			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Red;
 		}
-		itemSprite.sprite = LoadSpriteZoneType(itemType);
+		itemSprite.sprite = LoadSpriteZoneType(itemType, spriteIndex);
 	}
 
-	public void Activate(){
+	public void Activate() {
 		Destroy(gameObject);
 	}
 
-	public int GetIncrementIndex(){
+	public int GetIncrementIndex() {
 		index--;
 		return index;
 	}
-	private Sprite LoadSpriteZoneType(DoctorMatchManager.DoctorMatchButtonTypes type){
-		int randomIndex = UnityEngine.Random.Range(1, 6);
+	private Sprite LoadSpriteZoneType(DoctorMatchManager.DoctorMatchButtonTypes type, int spriteIndex) { //Sprite index is already optional as above
+		if (spriteIndex == -1)
+			spriteIndex = UnityEngine.Random.Range(1, SPRITE_COUNT);
 		Sprite spriteData = null;
-		switch(type){
-		case DoctorMatchManager.DoctorMatchButtonTypes.Green:
-			spriteData = Resources.Load<Sprite>("happy_" + randomIndex);
-			break;
-		case DoctorMatchManager.DoctorMatchButtonTypes.Yellow:
-			spriteData = Resources.Load<Sprite>("sick1_" + randomIndex);
-			break;
-		case DoctorMatchManager.DoctorMatchButtonTypes.Red:
-			spriteData = Resources.Load<Sprite>("sick2_" + randomIndex);
-			break;
-		default:
-			Debug.LogError("Invalid type " + type.ToString());
-			break;
+		switch (type) {
+			case DoctorMatchManager.DoctorMatchButtonTypes.Green:
+				spriteData = Resources.Load<Sprite>("happy_" + spriteIndex);
+				break;
+			case DoctorMatchManager.DoctorMatchButtonTypes.Yellow:
+				spriteData = Resources.Load<Sprite>("sick1_" + spriteIndex);
+				break;
+			case DoctorMatchManager.DoctorMatchButtonTypes.Red:
+				spriteData = Resources.Load<Sprite>("sick2_" + spriteIndex);
+				break;
+			default:
+				Debug.LogError("Invalid type " + type.ToString());
+				break;
 		}
 		return spriteData;
 	}
-	public void CompareVisible(int toCompare){
-		if (index>=toCompare){
-			itemSprite.enabled=false;
+
+	public void CompareVisible(int toCompare) {
+		if (index >= toCompare) {
+			itemSprite.enabled = false;
 		} else {
-			itemSprite.enabled=true;
+			itemSprite.enabled = true;
 		}
 	}
 }

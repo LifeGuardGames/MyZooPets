@@ -16,7 +16,7 @@ public class DoctorMatchZone : MonoBehaviour {
 	public void OnZoneClicked(){
 		if(!isLocked) {
 			isLocked = true;	// Lock to prevent accidental double tapping
-            DoctorMatchManager.Instance.OnZoneClicked(buttonType);
+			DoctorMatchManager.Instance.OnZoneClicked(buttonType);
 			particle.Play();
 			Invoke("TempUnlock", lockTime);
 		}

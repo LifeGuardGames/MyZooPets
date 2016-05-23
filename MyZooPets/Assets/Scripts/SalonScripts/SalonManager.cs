@@ -23,6 +23,8 @@ public class SalonManager : MonoBehaviour {
 	public void ShowNamePanel() {
 		nameButton.GetComponent<PositionTweenToggle>().hideDeltaX = -550;
 		styleButton.GetComponent<PositionTweenToggle>().hideDeltaX = -550;
+		nameButton.GetComponent<PositionTweenToggle>().RememberPoisitionsHideUpdate();
+		styleButton.GetComponent<PositionTweenToggle>().RememberPoisitionsHideUpdate();
 		nameButton.GetComponent<PositionTweenToggle>().Hide();
 		styleButton.GetComponent<PositionTweenToggle>().Hide();
 		namePanel.Show();
@@ -37,6 +39,8 @@ public class SalonManager : MonoBehaviour {
 	public void ShowStylePanel() {
 		nameButton.GetComponent<PositionTweenToggle>().hideDeltaX = 550;
 		styleButton.GetComponent<PositionTweenToggle>().hideDeltaX = 550;
+		nameButton.GetComponent<PositionTweenToggle>().RememberPoisitionsHideUpdate();
+		styleButton.GetComponent<PositionTweenToggle>().RememberPoisitionsHideUpdate();
 		nameButton.GetComponent<PositionTweenToggle>().Hide();
 		styleButton.GetComponent<PositionTweenToggle>().Hide();
 		stylePanel.Show();

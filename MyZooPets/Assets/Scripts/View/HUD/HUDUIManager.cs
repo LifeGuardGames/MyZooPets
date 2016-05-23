@@ -78,9 +78,9 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		hudAnimator.PlayNeedCoinAnimation();
     }
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-//			PlayNeedMoneyAnimation();
-//		}
-//	}
+	//void OnGUI() {
+	//	if(GUI.Button(new Rect(100, 100, 100, 100), "test")) {
+	//		PlayNeedMoneyAnimation();
+	//	}
+	//}
 }

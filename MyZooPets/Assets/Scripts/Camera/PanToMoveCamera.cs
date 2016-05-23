@@ -103,8 +103,8 @@ public class PanToMoveCamera : MonoBehaviour{
 				OnPartitionChanging(this, new PartitionChangedArgs(oldLocalPartition, currentLocalPartition));			
 			}
 		}
-	}	
-    
+	}
+
 	/// <summary>
 	/// The user has attempted to initiate a change in
 	/// partition; this function makes sure that it is
@@ -113,26 +113,29 @@ public class PanToMoveCamera : MonoBehaviour{
 	/// <param name="targetPartition">Target partition.</param>
 	/// <param name="panDirection">Pan direction.</param>
 	/// <param name="swipeTime">Swipe time.</param>
-	private bool CanMoveToPartition(int targetPartition, RoomDirection panDirection){	
+	private bool CanMoveToPartition(int targetPartition, RoomDirection panDirection) {
 		bool retVal = true;
-			
+
 		// then check to make sure the gating manager is okay with the move
-		if(GatingManager.Instance.CanEnterRoom(currentLocalPartition, panDirection) == false)
+		if(GatingManager.Instance.CanEnterRoom(currentLocalPartition, panDirection) == false) {
 			retVal = false;
-			
+		}
+
 		// also check to make sure that the HUD animator is not animating
-		if(HUDUIManager.Instance && HUDUIManager.Instance.hudAnimator && 
-			HUDUIManager.Instance.hudAnimator.AreSpawnedSprites())
+		if(HUDUIManager.Instance && HUDUIManager.Instance.hudAnimator && HUDUIManager.Instance.hudAnimator.IsAnimating) {
 			retVal = false;
-		
+		}
+
 		// if the user is in deco mode and the room they are moving to has an active gate, illegal move
-		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen() && 
-			GatingManager.Instance.HasActiveGate(targetPartition))
+		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen() &&
+			GatingManager.Instance.HasActiveGate(targetPartition)) {
 			retVal = false;
-		
+		}
+
 		// if the shop is open, no movement allowed
-		if(StoreUIManager.Instance && StoreUIManager.Instance.IsOpen())
+		if(StoreUIManager.Instance && StoreUIManager.Instance.IsOpen()) {
 			retVal = false;
+		}
 		
 		// if we get here, the move is valid
 		return retVal;

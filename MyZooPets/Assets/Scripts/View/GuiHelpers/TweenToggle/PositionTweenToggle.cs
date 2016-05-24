@@ -21,13 +21,18 @@ public class PositionTweenToggle : TweenToggle {
 		}
 	}
 
-	public void RememberPoisitionsHideUpdate() {
-		if(isGUI) {
-			hiddenPos = GUIRectTransform.anchoredPosition3D + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+	public void UpdateHideDelta() {
+		if(isShown) {
+			if(isGUI) {
+				hiddenPos = GUIRectTransform.anchoredPosition3D + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
 
+			}
+			else {
+				hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+			}
 		}
 		else {
-			hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+			Debug.LogError("delta hide changed while hidden");
 		}
 	}
 	

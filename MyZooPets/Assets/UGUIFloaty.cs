@@ -4,11 +4,7 @@ using System.Collections;
 public class UGUIFloaty : MonoBehaviour {
 	public Text textUI;
 	private float hangTime;
-	/*public string text;
-	public int textSize;
-	public float textTime;*/
 	//public Sprite sprite; //TODO: Implement sprite rendering
-	//public Color textColor;
 
 	public void StartFloaty(Vector3 startPosition, string text = "", int textSize = 14, float riseTime = .5f,  Vector3? toMove = null, Color? color = null) {
 		color =  color ?? Color.white; //color and toMove are entered as a nullable so that there can be defaults
@@ -17,9 +13,6 @@ public class UGUIFloaty : MonoBehaviour {
 		textUI.text = text;
 		textUI.fontSize = textSize;
 		textUI.color=(Color) color;
-		/*LeanTween.value( gameObject, 1, 0, riseTime).setOnUpdate( function( val:float ){ 
-			//textUI.color = 
-		} );*/
 		LeanTween.textAlpha(GetComponent<RectTransform>(),0,riseTime*3).setEase(LeanTweenType.easeOutQuad);
 		LeanTween.move(gameObject, transform.position+ (Vector3) toMove, riseTime).setOnComplete(OnComplete).setEase(LeanTweenType.easeOutQuad);
 	}

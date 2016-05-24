@@ -81,9 +81,9 @@ public class AssemblyLineController : MonoBehaviour {
 	public void SpawnTutorialSet(int stage){
 		for (int i = 1; i < AssemblyLineItem.SPRITE_COUNT; i++) {
 			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
-			item.transform.position = StartPosition.position + i * new Vector3(distanceBetween, 0);
+			item.transform.position = StartPosition.position + (i-1) * new Vector3(distanceBetween, 0);
 			AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
-			newItemScript.Init(i,stage,i); 
+			newItemScript.Init(i-1,stage,i); 
 			itemQueue.Enqueue(newItemScript);
 		}
 	}

@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class DoctorMatchLifeBarController : MonoBehaviour {
 	public RectTransform barTransform;
 	public AssemblyLineController lineController;
+	public Text numberLabel;
+	public Text barLabel;
 	private Vector2 barSize;
 	private float barPercentage = 1f;
 	private float hurtPercentage = -0.05f;
@@ -25,13 +28,15 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 
 	void Start(){
 		barSize = barTransform.sizeDelta;
-		ResetBar();
 	}
 
 	public void ResetBar(){
 		isDraining = false;
 		currentDrainSpeed = startDrainSpeed;
 		barPercentage = 1f;
+		barLabel.color = Color.white;
+		LeanTween.textAlpha(barLabel.GetComponent<RectTransform>(),0,3f).setEase(LeanTweenType.easeOutQuad);
+
 	}
 
 	public void StartDraining(){
@@ -48,6 +53,8 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 			barPercentage -= Time.deltaTime * currentDrainSpeed;
 			barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
 			lineController.UpdateVisibleCount(barPercentage);
+			numberLabel.text = (barPercentage>=.03f) ? (barPercentage*30f).ToString("N0") : "";
+			numberLabel.fontSize =  40 - (int) ((1-barPercentage)*12); //Does this look good?
 			if(barPercentage <= 0f){
 				NotifyEmpty();
 			}
@@ -67,13 +74,19 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 
 	public void PlusBar(float multiplier = 1f){
 		if(isDraining){
+			Debug.Log("Called");
 			UpdateBarPercentage(plusPercentage*multiplier);
-			currentDrainSpeed+=drainSpeedIncrement;
+			//currentDrainSpeed+=drainSpeedIncrement;
 		}
+	}
+
+	public bool IsEmpty(){
+		return barPercentage<= 0f;
 	}
 
 	private void UpdateBarPercentage(float deltaPercent){
 		barPercentage += deltaPercent;
+		Debug.Log("Smo" + deltaPercent);
 		if(barPercentage <= 0f){
 			NotifyEmpty();
 		} else if (barPercentage > 1) {

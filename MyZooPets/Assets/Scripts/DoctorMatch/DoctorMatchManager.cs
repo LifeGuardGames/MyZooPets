@@ -21,8 +21,14 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public ComboController comboController;
 	public GameObject floatyPrefab;
 	public GameObject fireworkPrefab;
+	public RectTransform comboTransform;
+	public RectTransform counterTransform;
 
+	private ParticleSystem partSystem;
 	private ParticleSystem.Particle[] particles = new ParticleSystem.Particle[90];
+	private Vector3 particleAim;
+	private float particleRunTime;
+
 	private int particleCount = 0;
 	private int numOfCorrectDiagnose;
 	private int combo = 0;
@@ -64,22 +70,11 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		if (currentComboTime > 0) {
 			currentComboTime -= Time.deltaTime;
 		} else if (combo != 0) {
-			combo = 0;
-			comboController.UpdateCombo(combo);
+			ResetCombo();
 		}
-		if (currentComboTime > 2) {
-			particles = null;
-		}
-		Debug.Log("Hello" + particleCount);
-		for (int i = 0; i < particleCount; i++) {
-			particles [i].position = Vector3.Lerp(particles [i].position, Vector3.zero, currentComboTime);	
-		}
-		// (Particle part in particles) {
-		/*if (currentComboTime>1) {
-				part.position = Vector3.Lerp(part.position,Vector3.zero,currentComboTime-1);
+		if (particleCount != 0)
+			MoveParticles();
 
-			}*/
-		//}
 	}
 
 	void Awake() {
@@ -115,13 +110,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	protected override void _NewGame() { //Reset everything then start again
 		ResetScore();
 
-		if (finger) {
-			if (tutorial) { //We have just finished the tutorial (or quit it and started again)
-				BarFinger();
-			} else { //TODO: See if this is necessary
-				Debug.LogWarning("This should never happen"); 
-				Destroy(finger.gameObject); //Make sure it doesn't hang around
-			}
+		if (finger) { //Called if we complete the tutorial or leave restart early
+			BarFinger();
 		}
 
 		paused = false;
@@ -213,9 +203,28 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else {
 			HandleNormal(buttonType);
 		}
+	}
 
+	public void UpdateCombo(int deltaCombo) {
+		combo += deltaCombo;
 		comboController.UpdateCombo(combo);
+		currentComboTime = timeToCombo;
+	}
+
+	public override void UpdateScore(int deltaScore) {
+		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
+	}
+
+	public int GetComboLevel() {
+		if ((combo + 1) % 10 == 0 && combo != 0) { //Big combo bonus
+			return 2;
+		} else if ((combo + 1) % 5 == 0 && combo != 0) { //Small combo bonus
+			return 1;
+		} else {
+			return 0;
+		}
+
 	}
 
 	private void HandleNormal(DoctorMatchButtonTypes buttonType) {
@@ -242,9 +251,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		finger.StopShake(GetButtonTransform(tutorialZone).position);
 		if (poppedItem.ItemType == buttonType) {
 			ComboBonus();
-			SpawnFirework();
-			combo++;
-			currentComboTime = timeToCombo;
+			StartCoroutine(SpawnFirework());
+			UpdateCombo(1);
 			poppedItem.Activate();
 			assemblyLineController.PopFirstItem();
 			assemblyLineController.MoveUpLine();
@@ -255,6 +263,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 			}
 		} else {
+			ResetCombo();
 			AudioManager.Instance.PlayClip("minigameError");
 			cameraShake.Play();
 			finger.Shake(new Vector3(0, 20));
@@ -288,9 +297,9 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		wordFloaty.StartFloaty(spawnPos, text: wordText, textSize: size, riseTime: .6f, toMove: wordOffset, color: color);
 
 		float comboBonusScalar = 1; //Applied to the size during these special ones
-		if ((combo + 1) % 10 == 0 && combo != 0) { //Big combo bonus
+		if (GetComboLevel() == 2) { //Big combo bonus
 			comboBonusScalar = 2f;
-		} else if ((combo + 1) % 5 == 0 && combo != 0) { //Small combo bonus
+		} else if (GetComboLevel() == 1) { //Small combo bonus
 			comboBonusScalar = 1.5f;
 		}
 
@@ -302,24 +311,21 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 	}
 
-	private void SpawnFirework() { 
+	private IEnumerator SpawnFirework() { 
 		float comboMod = Mathf.Clamp(combo, 0, 10);
 		GameObject firework = Instantiate(fireworkPrefab);
 		firework.transform.position = assemblyLineController.StartPosition.position;
 		ParticleSystem pSystem = firework.GetComponent<ParticleSystem>();
+		//pSystem.startLifetime=10;
 		float comboBonusScalar = 1; //Applied to the size during these special ones
-		if ((combo + 1) % 10 == 0 && combo != 0) { //Big combo bonus
+		if (GetComboLevel() == 2) { //Big combo bonus
 			pSystem.startColor = Color.blue;
 			comboBonusScalar = 2f;
-		} else if ((combo + 1) % 5 == 0 && combo != 0) { //Small combo bonus
+			particleAim = counterTransform.position;
+		} else if (GetComboLevel() == 1) { //Small combo bonus
 			pSystem.startColor = Color.green;
 			comboBonusScalar = 1.5f;
-		}
-		if (comboBonusScalar != 1) { //Activated
-			particleCount = pSystem.GetParticles(particles);
-			Debug.Log(pSystem.GetParticles(particles));
-		} else { //TODO: yield return new wait for frames so that this works. This must be made into a coroutine
-			particleCount=0; //http://answers.unity3d.com/questions/198738/shuriken-particle-system-getparticles-not-working.html
+			particleAim = comboTransform.position;
 		}
 		ParticleSystem.LimitVelocityOverLifetimeModule emissionModule = pSystem.limitVelocityOverLifetime; //HACK: Currently, you cannot modify particle system module curves directly, so we save it here and modify it later
 		AnimationCurve ourCurve = new AnimationCurve();
@@ -330,7 +336,26 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 		pSystem.startSize *= (1 + comboMod / 10) * comboBonusScalar;
 
-	
+		//We need to wait a frame so that the burst at 0 seconds can happen and GetParticles is populated
+		yield return new WaitForEndOfFrame();
+		if (comboBonusScalar != 1) { //Activated
+			int tempCount = pSystem.GetParticles(particles);
+			for (int i = 0; i < tempCount; i++) { //These particles need to live longer so that we can bring them out
+				particles [i].startLifetime = 1f; //Must be larger than .5f, but actual value does not matter
+				particles [i].lifetime = 1f;
+			}
+			pSystem.SetParticles(particles, tempCount);
+			partSystem = pSystem;
+			yield return new WaitForSeconds(.5f);
+			AnimationCurve newCurve = new AnimationCurve();
+			newCurve.AddKey(0, 0);
+			newCurve.AddKey(1, 0);
+			particleRunTime = 0;
+			emissionModule.limit = new ParticleSystem.MinMaxCurve(0, newCurve); //1 second has passed, freeze our particles
+			particleCount = tempCount;
+			pSystem.GetParticles(particles);
+
+		} 
 	}
 
 	private Transform GetButtonTransform(int buttonType) {
@@ -352,21 +377,26 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		StartCoroutine(assemblyLineController.ClearLine());
 		combo = 0;
 		clearing = true;*/
-		if ((combo + 1) % 10 == 0 && combo != 0) { //Big combo bonus
-			lifeBarController.PlusBar(1f);
-		} else if ((combo + 1) % 5 == 0 && combo != 0) { //Small combo bonus
-			score += combo;
+		if (GetComboLevel() == 2) { //Big combo bonus
+			lifeBarController.PlusBar(1.5f);
+		} else if (GetComboLevel() == 1) { //Small combo bonus
+			UpdateScore(combo);
 		}
 	}
 
 	private void ResetScore() {
-		combo = 0;
-		currentComboTime = 0;
-
 		rewardXPMultiplier = 1f;
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;
 		score = 0;
+		ResetCombo();
+		comboController.UpdateScore(score);
+	}
+
+	private void ResetCombo() {
+		combo = 0;
+		currentComboTime = 0;
+		comboController.UpdateCombo(combo);
 	}
 
 	private void CharacterScoredRight() {
@@ -377,18 +407,29 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		Hashtable hashOverride = new Hashtable();
 		hashOverride ["Pitch"] = Mathf.Clamp(.9f + ((float)combo / 30), 0, 1.25f); //Goes from .9 to 1.25 by increments of .0333 and then caps
 		AudioManager.Instance.PlayClip("clinicCorrect", option: hashOverride);
-		SpawnFirework();
-		combo++;
-		currentComboTime = timeToCombo;
+		StartCoroutine(SpawnFirework());
+		UpdateCombo(1);
 	}
 
 	private void CharacterScoredWrong() {
-		combo = 0;
-		currentComboTime = 0;
+		ResetCombo();
 		UpdateScore(-1);
 		// Play an incorrect sound
 		AudioManager.Instance.PlayClip("minigameError");
 		cameraShake.Play();
 	}
 
+
+
+	private void MoveParticles() { 
+		for (int i = 0; i < particleCount; i++) {
+			particles [i].position = Vector3.Lerp(particles [i].position, particleAim, particleRunTime);	
+		}
+		partSystem.SetParticles(particles, particleCount);
+		particleRunTime += Time.deltaTime;
+		if (particleRunTime > .5) {
+			particleCount = 0;
+			Destroy(partSystem.gameObject);
+		}
+	}
 }

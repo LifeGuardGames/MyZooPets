@@ -74,7 +74,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 
 	public void PlusBar(float multiplier = 1f){
 		if(isDraining){
-			Debug.Log("Called");
 			UpdateBarPercentage(plusPercentage*multiplier);
 			//currentDrainSpeed+=drainSpeedIncrement;
 		}
@@ -86,7 +85,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 
 	private void UpdateBarPercentage(float deltaPercent){
 		barPercentage += deltaPercent;
-		Debug.Log("Smo" + deltaPercent);
 		if(barPercentage <= 0f){
 			NotifyEmpty();
 		} else if (barPercentage > 1) {

@@ -32,7 +32,7 @@ public class AssemblyLineItem : MonoBehaviour {
 	}
 
 	public void Activate() {
-		Destroy(gameObject);
+		LeanTween.alpha(gameObject,0,.3f).setOnComplete(DestroySelf);
 	}
 
 	public int GetIncrementIndex() {
@@ -66,5 +66,8 @@ public class AssemblyLineItem : MonoBehaviour {
 		} else {
 			itemSprite.enabled = true;
 		}
+	}
+	private void DestroySelf(){
+		Destroy(gameObject);
 	}
 }

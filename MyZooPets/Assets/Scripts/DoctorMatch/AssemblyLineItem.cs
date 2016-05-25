@@ -19,7 +19,6 @@ public class AssemblyLineItem : MonoBehaviour {
 		if (typeIndex == -1)
 			typeIndex = UnityEngine.Random.Range(0, 3);
 		index = currentIndex;
-
 	
 		if (typeIndex == 0) {
 			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Green;

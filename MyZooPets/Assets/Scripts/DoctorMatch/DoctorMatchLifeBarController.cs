@@ -4,13 +4,14 @@ using UnityEngine.UI;
 public class DoctorMatchLifeBarController : MonoBehaviour {
 	public RectTransform barTransform;
 	public AssemblyLineController lineController;
-	public Text numberLabel;
-	public Text barLabel;
+	public Text numberLabel; //Label for time
+	public Text barLabel; //TIME LEFT
+	public Text barCount; //X Left to clear
 	private Vector2 barSize;
 	private float barPercentage = 1f;
 	private float hurtPercentage = -0.05f;
 	private float plusPercentage = 0.05f;
-	private float startDrainSpeed = .03333f; //Takes 30 seconds
+	private float startDrainSpeed = .8f;//.03333f; //Takes 30 seconds
 	private float currentDrainSpeed;
 	private float drainSpeedIncrement = .001f;
 	private bool isDraining = false;
@@ -52,7 +53,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 		if(isDraining){
 			barPercentage -= Time.deltaTime * currentDrainSpeed;
 			barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
-			lineController.UpdateVisibleCount(barPercentage);
 			numberLabel.text = (barPercentage>=.03f) ? (barPercentage*30f).ToString("N0") : "";
 			numberLabel.fontSize =  40 - (int) ((1-barPercentage)*12); //Does this look good?
 			if(barPercentage <= 0f){
@@ -82,7 +82,9 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	public bool IsEmpty(){
 		return barPercentage<= 0f;
 	}
-
+	public void UpdateCount (int count) {
+		barCount.text = count + " LEFT TO CLEAR";
+	}
 	private void UpdateBarPercentage(float deltaPercent){
 		barPercentage += deltaPercent;
 		if(barPercentage <= 0f){

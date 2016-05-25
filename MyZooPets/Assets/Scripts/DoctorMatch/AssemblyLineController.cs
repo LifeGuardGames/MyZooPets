@@ -11,7 +11,7 @@ public class AssemblyLineController : MonoBehaviour {
 	public GameObject particlePrefab;
 	public bool growsLowHealth = true;
 	//Line grows as you decrease in health
-	public int visibleCount = 2;
+	private int visibleCount = 2;
 	public bool constantCount = false;
 	private Queue<AssemblyLineItem> itemQueue;
 	private float distanceBetween = -50;
@@ -24,19 +24,19 @@ public class AssemblyLineController : MonoBehaviour {
 			return visibleCount*clearTime*4+moveTime;
 		}
 	}
-	public bool lineComplete {
+	public bool LineComplete {
 		get {
 			return itemQueue.Count==0;
 		}
 	}
+	public int Count {
+		get {
+			return itemQueue.Count;
+		}
+	}
 	public IEnumerator Initialize(bool isTutorial) {
 		DestroyItems();
-		yield return 0;
-		/*if(positionList == null || positionList.Count == 0){
-			Debug.LogError("Position list not initialized or empty");
-			yield break;
-		}*/
-
+		yield return new WaitForEndOfFrame();
 		itemQueue = new Queue<AssemblyLineItem>();
 		// Init and throw it into the queue
 		if (!isTutorial)
@@ -51,22 +51,6 @@ public class AssemblyLineController : MonoBehaviour {
 		return itemQueue.Peek();
 	}
 
-	public IEnumerator ClearLine() { //TODO: Pop the first one!
-		foreach (AssemblyLineItem itemScript in itemQueue) {
-			if (itemScript.itemSprite.isVisible) {
-				yield return new WaitForSeconds(clearTime * 4);
-				GameObject particle = Instantiate(particlePrefab);
-				particle.transform.position = itemScript.transform.position;
-			}
-			Destroy(itemScript.gameObject);
-		}
-		itemQueue.Clear();
-		PopulateQueue(OffscreenPosition.position,1);
-		MoveUpLine(moveTime);
-		DoctorMatchManager.Instance.FinishClear();
-	}
-
-
 	public void ShiftAndAddNewItem() {
 		MoveUpLine(moveTime);
 		// Add new item
@@ -77,6 +61,7 @@ public class AssemblyLineController : MonoBehaviour {
 		newItemScript.Init(newItemIndex);
 		itemQueue.Enqueue(newItemScript);
 		newItemScript.CompareVisible(visibleCount);
+		UpdateVisibleCount();
 	}
 	public void SpawnTutorialSet(int stage){
 		for (int i = 1; i < AssemblyLineItem.SPRITE_COUNT; i++) {
@@ -95,7 +80,8 @@ public class AssemblyLineController : MonoBehaviour {
 			itemQueue.Clear();
 	}
 
-	public void UpdateVisibleCount(float percentage) {
+	public void UpdateVisibleCount() {
+		float percentage = DoctorMatchManager.Instance.lifeBarController.Percentage;
 		if (constantCount || itemQueue == null || DoctorMatchManager.Instance.Paused)
 			return;
 		if (percentage < .2f) {
@@ -113,6 +99,11 @@ public class AssemblyLineController : MonoBehaviour {
 			itemScript.CompareVisible(visibleCount);
 		}
 	}
+	public void VisibleCount(){
+		foreach (AssemblyLineItem itemScript in itemQueue) {  //Here we are not calling update because we do not want anyone to appear
+			itemScript.CompareVisible(visibleCount); //Instead we are just using our cached value
+		}
+	}
 	public void MoveUpLine(float timeToTake=moveTime) {
 		foreach (AssemblyLineItem itemScript in itemQueue) {
 			int newIndex = itemScript.GetIncrementIndex();
@@ -121,6 +112,7 @@ public class AssemblyLineController : MonoBehaviour {
 		}
 	}
 	private void PopulateQueue(Vector3 startPos, int indexOffset=0) {
+		UpdateVisibleCount();
 		for (int i = 0; i < startingCount + 1; i++) {
 			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
 			item.transform.position = startPos + i * new Vector3(distanceBetween, 0);

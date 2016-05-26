@@ -5,13 +5,12 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	public RectTransform barTransform;
 	public AssemblyLineController lineController;
 	public Text numberLabel; //Label for time
-	public Text barLabel; //TIME LEFT
 	public Text barCount; //X Left to clear
 	private Vector2 barSize;
 	private float barPercentage = 1f;
 	private float hurtPercentage = -0.05f;
 	private float plusPercentage = 0.05f;
-	private float startDrainSpeed = .8f;//.03333f; //Takes 30 seconds
+	private float startDrainSpeed = .03333f; //Takes 30 seconds
 	private float currentDrainSpeed;
 	private float drainSpeedIncrement = .001f;
 	private bool isDraining = false;
@@ -35,9 +34,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 		isDraining = false;
 		currentDrainSpeed = startDrainSpeed;
 		barPercentage = 1f;
-		barLabel.color = Color.white;
-		LeanTween.textAlpha(barLabel.GetComponent<RectTransform>(),0,3f).setEase(LeanTweenType.easeOutQuad);
-
 	}
 
 	public void StartDraining(){

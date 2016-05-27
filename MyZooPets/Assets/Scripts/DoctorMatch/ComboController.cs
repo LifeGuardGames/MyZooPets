@@ -22,17 +22,30 @@ public class ComboController : MonoBehaviour {
 	private float currentComboTime = 0;
 	private int comboBonus = 5;
 
+	void Update() {
+		if (DoctorMatchManager.Instance.Paused)
+			return;
+		if (currentComboTime > 0) {
+			currentComboTime -= Time.deltaTime;
+			if (currentComboTime <= timeToCombo / 2) {
+				TimeLowColor(currentComboTime);
+			}
+		} else if (combo != 0) {
+			ResetCombo();
+		}
+	}
+
 	public int Combo {
 		get{ return combo; }
 	}
 
 	public int ComboMod {
-		get { return Mathf.Clamp(combo, 0, (comboBonus*2)); }
+		get { return Mathf.Clamp(combo, 0, (comboBonus * 2)-1); }
 	}
 
 	public int ComboLevel {
 		get {
-			if ((combo + 1) % (comboBonus*2) == 0 && combo != 0) { //Big combo bonus
+			if ((combo + 1) % (comboBonus * 2) == 0 && combo != 0) { //Big combo bonus
 				return 2;
 			} else if ((combo + 1) % comboBonus == 0 && combo != 0) { //Small combo bonus
 				return 1;
@@ -42,8 +55,14 @@ public class ComboController : MonoBehaviour {
 		}
 	}
 
+	public void ResetCombo() {
+		combo = 0;
+		currentComboTime = 0;
+		UpdateCombo();
+	}
+
 	public void Setup() {
-		slotImages = new RawImage[(comboBonus*2)];
+		slotImages = new RawImage[(comboBonus * 2)];
 		GameObject slotObject;
 		RectTransform localRectTransform = GetComponent<RectTransform>();
 		for (int i = 0; i < slotImages.Length; i++) {
@@ -53,7 +72,6 @@ public class ComboController : MonoBehaviour {
 			slotObject.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
 			slotImages [i] = slotObject.GetComponent<RawImage>();
 			slotImages [i].rectTransform.localPosition = new Vector3(0, slotImages [i].rectTransform.sizeDelta.x * i);
-
 		}
 		setup = true;
 	}
@@ -73,21 +91,26 @@ public class ComboController : MonoBehaviour {
 		}
 	}
 
-	public void UpdateCombo(int newCombo) {
-		comboText.text = "Combo: \n" + newCombo.ToString();
-		if (newCombo == 0) {
-			StopColor();
-		} else if (newCombo / comboBonus < colorCount) {
-			SetColor(newCombo - 1);
-			lastCombo = newCombo;
-		} else {
-			FlashColor(newCombo);
-		}
-		lastCombo = Mathf.Clamp(newCombo, 0, (comboBonus*2) - 1);
+	public Vector3 GetComboPosition(int combo) {
+		return slotImages [combo % (comboBonus * 2)].transform.position;
+	}
+	public void IncrementCombo(int deltaCombo) {
+		combo += deltaCombo;
+		UpdateCombo();
+		currentComboTime = timeToCombo;
 	}
 
-	public Vector3 GetComboPosition(int combo) {
-		return slotImages [combo % (comboBonus*2)].transform.position;
+	private void UpdateCombo() {
+		comboText.text = "Combo: \n" + combo.ToString();
+		if (combo == 0) {
+			StopColor();
+		} else if (combo / comboBonus < colorCount) {
+			SetColor(combo - 1);
+			lastCombo = combo;
+		} else {
+			FlashColor(combo);
+		}
+		lastCombo = ComboMod;
 	}
 
 	private void StopColor() { //newCombo == 0
@@ -101,7 +124,7 @@ public class ComboController : MonoBehaviour {
 			RestoreColors();
 		}
 		if (clearLine == null) {
-			clearLine = ClearLine(Mathf.Clamp(lastCombo, 0, (comboBonus*2)));
+			clearLine = ClearLine();
 			StartCoroutine(clearLine);
 		}
 	}
@@ -117,7 +140,7 @@ public class ComboController : MonoBehaviour {
 			clearLine = null;
 			ImmediateClear();
 		}
-		slotImages [newCombo % (comboBonus*2)].color = GetComboColor(newCombo / comboBonus);
+		slotImages [newCombo % (comboBonus * 2)].color = GetComboColor(newCombo / comboBonus);
 	}
 
 	private void FlashColor(int newCombo) { //colorCount <= newCombo/littleCombo
@@ -132,8 +155,8 @@ public class ComboController : MonoBehaviour {
 		}
 	}
 
-	private IEnumerator ClearLine(int toClear) {
-		for (int i = toClear; i >= 0; i--) {
+	private IEnumerator ClearLine() {
+		for (int i = lastCombo; i >= 0; i--) {
 			slotImages [i].color = Color.white;
 			yield return new WaitForEndOfFrame();
 		}
@@ -141,8 +164,8 @@ public class ComboController : MonoBehaviour {
 	}
 
 	private IEnumerator TimeLow(float timeLeft) {
-		colorCache = new Color[(comboBonus*2)];
-		for (int i = 0; i < (comboBonus*2); i++) { //Cache the colors
+		colorCache = new Color[(comboBonus * 2)];
+		for (int i = 0; i < (comboBonus * 2); i++) { //Cache the colors
 			colorCache [i] = slotImages [i].color;
 		}
 		ImmediateClear();
@@ -159,7 +182,7 @@ public class ComboController : MonoBehaviour {
 	private IEnumerator FlashBar() { //Does not need to be marked as done, will be marked null when completed
 		int colorStart = 0;
 		while (true) {
-			for (int i = 0; i < (comboBonus*2); i++) {
+			for (int i = 0; i < (comboBonus * 2); i++) {
 				slotImages [i].color = GetComboColor((int)Mathf.PingPong(i + colorStart, colorCount - 1));
 			}
 			yield return new WaitForSeconds(.3f);
@@ -168,13 +191,13 @@ public class ComboController : MonoBehaviour {
 	}
 
 	private void ImmediateClear() {
-		for (int i = 0; i < (comboBonus*2); i++) {
+		for (int i = 0; i < (comboBonus * 2); i++) {
 			slotImages [i].color = Color.white;
 		}
 	}
 
 	private void RestoreColors() {
-		for (int i = 0; i < (comboBonus*2); i++) {
+		for (int i = 0; i < (comboBonus * 2); i++) {
 			slotImages [i].color = colorCache [i];
 		}
 	}

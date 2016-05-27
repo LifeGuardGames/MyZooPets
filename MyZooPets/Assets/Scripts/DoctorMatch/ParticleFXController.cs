@@ -23,18 +23,18 @@ public class ParticleFXController : MonoBehaviour {
 		float comboBonusScalar = 1; //Applied to the size during these special ones
 		Vector3 toAim;
 		float yieldTime = .2f;
-		if (DoctorMatchManager.Instance.GetComboLevel() == 2) { //Big combo bonus
+		if (DoctorMatchManager.Instance.comboController.ComboLevel == 2) { //Big combo bonus
 			pSystem.startColor = Color.blue;
 			comboBonusScalar = 1.1f;
 			toAim = counterTransform.position;
-			yieldTime=.6f;
-		} else if (DoctorMatchManager.Instance.GetComboLevel() == 1) { //Small combo bonus
+			yieldTime = .6f;
+		} else if (DoctorMatchManager.Instance.comboController.ComboLevel == 1) { //Small combo bonus
 			pSystem.startColor = Color.green;
 			comboBonusScalar = 1.1f;
 			toAim = scoreTransform.position;
-			yieldTime=.4f;
+			yieldTime = .4f;
 		} else {
-			toAim = DoctorMatchManager.Instance.comboController.GetComboPosition(DoctorMatchManager.Instance.Combo);
+			toAim = DoctorMatchManager.Instance.comboController.GetComboPosition(DoctorMatchManager.Instance.comboController.Combo);
 		}
 		ParticleSystem.LimitVelocityOverLifetimeModule emissionModule = pSystem.limitVelocityOverLifetime; //HACK: Currently, you cannot modify particle system module curves directly, so we save it here and modify it later
 		AnimationCurve ourCurve = new AnimationCurve();
@@ -55,7 +55,7 @@ public class ParticleFXController : MonoBehaviour {
 		int index = Random.Range(0, 9);
 		if (correct) { //TODO: Color differently based on combo
 			wordText = Localization.Localize("DOCTOR_RIGHT_" + index);
-			comboText = "x" + DoctorMatchManager.Instance.Combo;
+			comboText = "x" + DoctorMatchManager.Instance.comboController.Combo;
 			color = new Color(0, 1 - (10 - comboMod) / 30, 0);//new Color(Random.Range(.0f, .4f), Random.Range(.7f, 1f), Random.Range(.0f, .4f));
 		} else {
 			comboText = "X";
@@ -72,9 +72,9 @@ public class ParticleFXController : MonoBehaviour {
 		wordFloaty.StartFloaty(spawnPos, text: wordText, textSize: size, riseTime: .6f, toMove: wordOffset, color: color);
 
 		float comboBonusScalar = 1; //Applied to the size during these special ones
-		if (DoctorMatchManager.Instance.GetComboLevel() == 2) { //Big combo bonus
+		if (DoctorMatchManager.Instance.comboController.ComboLevel == 2) { //Big combo bonus
 			comboBonusScalar = 1.5f;
-		} else if (DoctorMatchManager.Instance.GetComboLevel() == 1) { //Small combo bonus
+		} else if (DoctorMatchManager.Instance.comboController.ComboLevel == 1) { //Small combo bonus
 			comboBonusScalar = 1.25f;
 		}
 

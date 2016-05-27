@@ -23,10 +23,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public GameObject floatyPrefab;
 
 	private int numOfCorrectDiagnose;
-	private int combo = 0;
-	//Maximum amount of time for a correct diagnosis
-	private float timeToCombo = 2f;
-	private float currentComboTime = 0;
 	private bool paused = true;
 
 	private DoctorMatchTutorial doctorMatchTutorial;
@@ -58,14 +54,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else if (Input.GetKeyDown(KeyCode.Q)) {
 		}
 		#endif
-		if (currentComboTime > 0) {
-			currentComboTime -= Time.deltaTime;
-			if (currentComboTime <= timeToCombo / 2) {
-				comboController.TimeLowColor(currentComboTime);
-			}
-		} else if (combo != 0) {
-			ResetCombo();
-		}
 	}
 
 	void Awake() {
@@ -179,43 +167,25 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		finger.Shake(new Vector3(20, 0), true);
 	}
 
-	public void UpdateCombo(int deltaCombo) {
-		combo += deltaCombo;
-		comboController.UpdateCombo(combo);
-		currentComboTime = timeToCombo;
-	}
-
 	public override void UpdateScore(int deltaScore) {
 		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
 	}
-
-	public int GetComboLevel() {
-		if ((combo + 1) % 10 == 0 && combo != 0) { //Big combo bonus
-			return 2;
-		} else if ((combo + 1) % 5 == 0 && combo != 0) { //Small combo bonus
-			return 1;
-		} else {
-			return 0;
-		}
-
-	}
-
 	// Input coming from button scripts
-	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) { //TODO: Combo has been removed
+	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
 		AssemblyLineItem poppedItem = assemblyLineController.PopFirstItem();
 		bool correct = poppedItem.ItemType == buttonType;
 		Transform buttonTransform = GetButtonTransform((int)buttonType - 1);
-		float comboMod = Mathf.Clamp(combo, 0, 10);
+		float comboMod = comboController.ComboMod;
 		if (correct) {
 			StartCoroutine(particleController.SpawnFirework(comboMod, assemblyLineController.StartPosition.position));
 			numOfCorrectDiagnose++;
 			UpdateScore(2);
 			ComboBonus();
 			PlaySoundCorrect();
-			UpdateCombo(1);
+			comboController.IncrementCombo(1);
 		} else {
-			ResetCombo();
+			comboController.ResetCombo();
 			UpdateScore(-1);
 			AudioManager.Instance.PlayClip("minigameError");
 			cameraShake.Play();
@@ -231,7 +201,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 	private void HandleNormal(AssemblyLineItem poppedItem) {
 		poppedItem.Activate();
-		if (!lifeBarController.IsEmpty()) {
+		if (!lifeBarController.IsEmpty) {
 			assemblyLineController.ShiftAndAddNewItem();
 		} else if (!assemblyLineController.LineComplete) {
 			assemblyLineController.MoveUpLine();
@@ -272,14 +242,10 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	private void ComboBonus() {
-		/*lifeBarController.PlusBar(assemblyLineController.ClearTime);
-		StartCoroutine(assemblyLineController.ClearLine());
-		combo = 0;
-		clearing = true;*/
 		if (comboController.ComboLevel == 2) { //Big combo bonus
 			lifeBarController.PlusBar(1.5f);
 		} else if (comboController.ComboLevel == 1) { //Small combo bonus
-			UpdateScore(combo);
+			UpdateScore(comboController.Combo);
 		}
 	}
 
@@ -288,19 +254,13 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;
 		score = 0;
-		ResetCombo();
-		comboController.UpdateScore(score);
-	}
-
-	private void ResetCombo() {
-		combo = 0;
-		currentComboTime = 0;
-		comboController.UpdateCombo(combo);
+		comboController.ResetCombo();
+		comboController.UpdateScore(0);
 	}
 
 	private void PlaySoundCorrect() {
 		Hashtable hashOverride = new Hashtable();
-		hashOverride ["Pitch"] = Mathf.Clamp(.9f + ((float)combo / 30), 0, 1.25f); //Goes from .9 to 1.25 by increments of .0333 and then caps
+		hashOverride ["Pitch"] = .9f + ((float)comboController.ComboMod) / 30f;//Mathf.Clamp(.9f + ((float)comboController.Combo / 30), 0, 1.25f); //Goes from .9 to 1.25 by increments of .0333 and then caps
 		AudioManager.Instance.PlayClip("clinicCorrect", option: hashOverride);
 	}
 }

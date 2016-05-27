@@ -7,7 +7,8 @@ public class MiniPetPowerUp : MonoBehaviour {
 	public GameObject bulletPrefab;
 	private GameObject bulletAux;
 
-	void Start() {
+	public void WakeUp() {
+		this.gameObject.SetActive(true);
 		StartCoroutine("Fire");
 	}
 

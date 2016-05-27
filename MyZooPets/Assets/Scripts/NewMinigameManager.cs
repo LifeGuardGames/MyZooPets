@@ -45,7 +45,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		_Start();
     }
 
-	public void UpdateScore(int deltaScore) {
+	public virtual void UpdateScore(int deltaScore) {
 		score += deltaScore;
 		if(score < 0) {
 			score = 0;

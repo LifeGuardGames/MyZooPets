@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -12,18 +13,15 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 	public static EventHandler<EventArgs> OnFireCrystalUIAnimationDone;
 
-	public UISprite spriteFireFill;
-	public TweenToggle tweenToggle;
+	public Image spriteFireFill;
+	public TweenToggleDemux tweenDemux;
+	public TweenToggle panelTween;	// Changes depending on which scene we are in
 	public GameObject shardSpritePrefab;
 	public GameObject shardParent;
 	public float totalTimeTween = 1.5f;
 	public Animation crystalAnimation;
 	public ParticleSystem getGemParticle;
 	public GameObject clickableFireCrystalPrefab;
-	public UIAnchor parentAnchor;	// Changes depending on which scene we are in
-	public TweenToggle parentTween;	// Changes depending on which scene we are in
-	public UISprite parentBG;
-	public UISprite backdrop;
 
 	private int totalSubdivisions = 100;
 	private float currentPercentage; // In terms of 0.0 -> 1.0
@@ -44,16 +42,14 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 
 		// If scene is the inhaler game, use right anchor and offset tweenparent
 		// NOTE: Make sure script execution order is BEFORE tween toggle scripts!
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
-			parentAnchor.side = UIAnchor.Side.Right;
-			Vector3 currentPos = parentTween.transform.localPosition;
-			parentTween.transform.localPosition = new Vector3(-300f, currentPos.y, currentPos.z);
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
+			Vector3 currentPos = panelTween.transform.localPosition;
+			panelTween.transform.localPosition = new Vector3(-300f, currentPos.y, currentPos.z);
 		}
 		// If scene is in bedroom or yard, combine with wellapad
-		else if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
-			Vector3 currentPos = parentTween.transform.localPosition;
-			parentTween.transform.localPosition = new Vector3(-272, currentPos.y, currentPos.z);
-			parentBG.enabled = false;
+		else if((SceneUtils.CurrentScene == SceneUtils.BEDROOM) || SceneUtils.CurrentScene == SceneUtils.YARD){
+			Vector3 currentPos = panelTween.transform.localPosition;
+			panelTween.transform.localPosition = new Vector3(-272, currentPos.y, currentPos.z);
 		}
 	}
 
@@ -62,7 +58,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		currentPercentage = (float)DataManager.Instance.GameData.Stats.Shards/(float)totalSubdivisions;
 		currentPercentage = Mathf.Min(currentPercentage, 1.0f);
 		spriteFireFill.fillAmount = currentPercentage;
-		backdrop.enabled = true; 	// backdrop enabled by default
 	}
 
 	public void PopupAndRewardShards(int numberOfShards){
@@ -87,18 +82,16 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	}
 
 	public void OpenUIBasedOnScene(){
-		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
-			backdrop.enabled = false;	// Use the wellapad backdrop due to panel layering issues
+		if((SceneUtils.CurrentScene == SceneUtils.BEDROOM) || SceneUtils.CurrentScene == SceneUtils.YARD){
 			WellapadUIManager.Instance.OpenUI();
 		}
 		else{
-			backdrop.enabled = true;
 			OpenUI();
 		}
 	}
 
 	public void CloseUIBasedOnScene(){
-		if((Application.loadedLevelName == SceneUtils.BEDROOM) || Application.loadedLevelName == SceneUtils.YARD){
+		if((SceneUtils.CurrentScene == SceneUtils.BEDROOM) || SceneUtils.CurrentScene == SceneUtils.YARD){
 			WellapadUIManager.Instance.CloseUI();
 
 			if(FinishedAnimatingCallback != null){
@@ -111,11 +104,11 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	}
 
 	protected override void _OpenUI(){
-		tweenToggle.Show();
+		tweenDemux.Show();
 	}
 
 	protected override void _CloseUI(){
-		tweenToggle.Hide();
+		tweenDemux.Hide();
 
 		// Launch any finished callback
 		if(FinishedAnimatingCallback != null){
@@ -138,14 +131,11 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	/// <param name="numberOfShards">Number of shards.</param>
 	private IEnumerator StartFlyingShards(int numberOfShards, float delay){
 		if(IsOpen()){
-		//	if(numberOfShards == 1){
-		//		numberOfShards = 2;
-		//	}
 			// Wait before starting
 			yield return new WaitForSeconds(delay);
 
 			// 100 shards is too much... cap at 15
-			float numberOfShardsToShow = numberOfShards > 15 ? 15f : (float)numberOfShards;
+			float numberOfShardsToShow = numberOfShards > 15 ? 15f : numberOfShards;
 			float delayBetweenShards = totalTimeTween / numberOfShardsToShow;
 
 			for(float i = 0; i < numberOfShardsToShow; i++){
@@ -203,20 +193,15 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	}
 
 	// Event callback from the crystal animation CrystalPop
-	public void CrystalPopDone(){
+	public void OnCrystalPopDone(){
 		InventoryUIManager.Instance.ShowPanel();
 
 		AudioManager.Instance.PlayClip("fireGemGet");
+		getGemParticle.Play();
 
 		// Spawn a prefab that the user can click on and obtain
 		GameObjectUtils.AddChild(shardParent, clickableFireCrystalPrefab);
-	}
 
-	public void PlayGetGemParticle(){
-		getGemParticle.Play();
-	}
-
-	public void ResetFrontSprite(){
 		currentPercentage = 0;
 		spriteFireFill.fillAmount = 0;
 		FireCrystalManager.Instance.ResetShards();

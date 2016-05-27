@@ -265,7 +265,6 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 		}
 
 		SetGameState(MinigameStates.Restarting);
-		
 		NewGame();
 	}
 	

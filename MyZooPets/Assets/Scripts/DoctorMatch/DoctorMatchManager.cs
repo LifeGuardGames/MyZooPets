@@ -13,37 +13,39 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 	public AssemblyLineController assemblyLineController;
 	public DoctorMatchLifeBarController lifeBarController;
+	public ParticleFXController particleController;
+	public ComboController comboController;
 	public Animation cameraShake;
 	public DoctorMatchZone zoneGreen;
 	public DoctorMatchZone zoneYellow;
 	public DoctorMatchZone zoneRed;
 	public GameObject pointerPrefab;
-	public ComboController comboController;
 	public GameObject floatyPrefab;
 
 	private int numOfCorrectDiagnose;
 	private int combo = 0;
-	private float timeToCombo = 3f;
-	//Time between each correct diagnoses for it to be consistent
+	//Maximum amount of time for a correct diagnosis
+	private float timeToCombo = 2f;
 	private float currentComboTime = 0;
 	private bool paused = true;
-	private bool clearing = false;
-	private UGUIFloaty currentFloaty = null;
 
 	private DoctorMatchTutorial doctorMatchTutorial;
 	private bool tutorial = false;
 	private int tutorialZone = 0;
 	private FingerController finger = null;
-	private bool parentObject = false;
 
 	public bool Paused {
 		get {
-			return paused || clearing;
+			return paused;
 		}
 	}
 
 	public int NumOfCorrectDiagnose {
 		get{ return numOfCorrectDiagnose; }
+	}
+
+	public int Combo {
+		get{ return combo; }
 	}
 
 	void Update() {
@@ -58,13 +60,12 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else if (Input.GetKeyDown(KeyCode.RightArrow)) {
 			OnZoneClicked(DoctorMatchButtonTypes.Red);
 		} else if (Input.GetKeyDown(KeyCode.Q)) {
-			parentObject = !parentObject;//ComboBonus();
 		}
 		#endif
 		if (currentComboTime > 0) {
 			currentComboTime -= Time.deltaTime;
 		} else if (combo != 0) {
-			combo = 0;
+			ResetCombo();
 		}
 	}
 
@@ -72,6 +73,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		// Parent settings
 		minigameKey = "DOCTOR";
 		quitGameScene = SceneUtils.BEDROOM;
+		comboController.Setup();
 		ResetScore();
 	}
 
@@ -93,10 +95,17 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 		doctorMatchTutorial = new DoctorMatchTutorial();
 
+		yield return new WaitForSeconds(.8f);
+		finger.Shake(new Vector3(0, 20));
+	
 	}
 
 	protected override void _NewGame() { //Reset everything then start again
 		ResetScore();
+
+		if (finger) { //Called if we complete the tutorial or leave restart early
+			BarFinger();
+		}
 
 		paused = false;
 		tutorial = false;
@@ -117,7 +126,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else {
 			lifeBarController.StopDraining();
 		}
-		// not implemented yet!
 	}
 
 	protected override void _GameOver() {
@@ -151,19 +159,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	protected override void _QuitGame() {
 	}
 
-	//protected override bool IsTutorialOn(){
-	//	return Constants.GetConstant<bool>("IsDoctorMatchTutorialOn");
-	//}
-
-
-	// When your timer runs out
-
-	public void FinishClear() {
-		clearing = false;
-	}
-
 	public void OnTimerBarEmpty() {
-		GameOver();
+		lifeBarController.UpdateCount(assemblyLineController.Count);
 	}
 
 	public void SpawnFinger(int zone) {
@@ -172,6 +169,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			finger = Instantiate(pointerPrefab).GetComponent<FingerController>();
 		}
 		finger.transform.position = GetButtonTransform(tutorialZone).position;
+		finger.Shake(new Vector3(0, 20));
+
 	}
 
 	public void BarFinger() {
@@ -186,9 +185,28 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else {
 			HandleNormal(buttonType);
 		}
+	}
 
+	public void UpdateCombo(int deltaCombo) {
+		combo += deltaCombo;
 		comboController.UpdateCombo(combo);
+		currentComboTime = timeToCombo;
+	}
+
+	public override void UpdateScore(int deltaScore) {
+		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
+	}
+
+	public int GetComboLevel() {
+		if ((combo + 1) % 10 == 0 && combo != 0) { //Big combo bonus
+			return 2;
+		} else if ((combo + 1) % 5 == 0 && combo != 0) { //Small combo bonus
+			return 1;
+		} else {
+			return 0;
+		}
+
 	}
 
 	private void HandleNormal(DoctorMatchButtonTypes buttonType) {
@@ -198,57 +216,43 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else {
 			CharacterScoredWrong();
 		}
-		SpawnFloatyText(poppedItem.ItemType == buttonType, GetButtonTransform((int)buttonType - 1));
+		particleController.SpawnFloatyText(Mathf.Clamp(combo, 0, 10), poppedItem.ItemType == buttonType, GetButtonTransform((int)buttonType - 1));
 		// Have item do what it does when activated
 		poppedItem.Activate();
-		assemblyLineController.ShiftAndAddNewItem();
+		if (!lifeBarController.IsEmpty()) {
+			assemblyLineController.ShiftAndAddNewItem();
+		} else if (!assemblyLineController.LineComplete) {
+			assemblyLineController.MoveUpLine();
+			assemblyLineController.VisibleCount();
+			lifeBarController.UpdateCount(assemblyLineController.Count);
+		} else {
+			GameOver();
+		}
 	}
 
-	private void HandleTutorial(DoctorMatchButtonTypes buttonType) {
+	private void HandleTutorial(DoctorMatchButtonTypes buttonType) { //TODO: Refactor this and HandleNormal into one clean method
 		AssemblyLineItem poppedItem = assemblyLineController.PeekFirstItem();
 		finger.StopShake(GetButtonTransform(tutorialZone).position);
 		if (poppedItem.ItemType == buttonType) {
+			ComboBonus();
+			StartCoroutine(particleController.SpawnFirework(Mathf.Clamp(combo, 0, 10), assemblyLineController.StartPosition.position));
+			UpdateCombo(1);
 			poppedItem.Activate();
 			assemblyLineController.PopFirstItem();
 			assemblyLineController.MoveUpLine();
 			UpdateScore(1);
-			AudioManager.Instance.PlayClip("clinicCorrect");
-			if (assemblyLineController.lineComplete) {
+			PlayCorrectSound();
+			if (assemblyLineController.LineComplete) {
 				doctorMatchTutorial.Advance();
 
 			}
 		} else {
+			ResetCombo();
 			AudioManager.Instance.PlayClip("minigameError");
 			cameraShake.Play();
 			finger.Shake(new Vector3(0, 20));
 		}
-	}
-
-	private void SpawnFloatyText(bool correct, Transform buttonTransform) {
-		if (currentFloaty) {
-			LeanTween.cancel(currentFloaty.gameObject);
-			Destroy(currentFloaty.gameObject);
-		}
-		string text;
-		Color color;
-		int size = Random.Range(40, 50);//= Random.Range(75, 95);
-		int index;
-		if (correct) {
-			index = Random.Range(0, 9);
-			text = Localization.Localize("DOCTOR_RIGHT_" + index);
-			color = new Color(Random.Range(.0f, .4f), Random.Range(.7f, 1f), Random.Range(.0f, .4f));
-		} else {
-			index = Random.Range(0, 9);
-			text = Localization.Localize("DOCTOR_WRONG_" + index);
-			color = new Color(Random.Range(.7f, 1f), Random.Range(.0f, .2f), Random.Range(.0f, .2f));
-		}
-		UGUIFloaty floaty = Instantiate(floatyPrefab).GetComponent<UGUIFloaty>();
-		Vector3 offset = new Vector3(Random.Range(-10, 10), 50);
-		Vector3 spawnPos = buttonTransform.position + new Vector3(0, 25);//buttonObject.transform.position-(Vector3)buttonObject.GetComponent<RectTransform>().rect.center;
-		floaty.transform.SetParent(buttonTransform, true);
-		floaty.transform.localScale = new Vector3(1, 1, 1);
-		floaty.StartFloaty(spawnPos, text: text, textSize: size, riseTime: .6f, toMove: offset, color: color);
-		currentFloaty = floaty;
+		particleController.SpawnFloatyText(Mathf.Clamp(combo, 0, 10), poppedItem.ItemType == buttonType, GetButtonTransform((int)buttonType - 1));
 
 	}
 
@@ -267,38 +271,52 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	private void ComboBonus() {
-		lifeBarController.PlusBar(assemblyLineController.ClearTime);
+		/*lifeBarController.PlusBar(assemblyLineController.ClearTime);
 		StartCoroutine(assemblyLineController.ClearLine());
 		combo = 0;
-		clearing = true;
+		clearing = true;*/
+		if (GetComboLevel() == 2) { //Big combo bonus
+			lifeBarController.PlusBar(1.5f);
+		} else if (GetComboLevel() == 1) { //Small combo bonus
+			UpdateScore(combo);
+		}
 	}
 
 	private void ResetScore() {
-		combo = 0;
-		currentComboTime = 0;
-
 		rewardXPMultiplier = 1f;
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;
 		score = 0;
+		ResetCombo();
+		comboController.UpdateScore(score);
+	}
+
+	private void ResetCombo() {
+		combo = 0;
+		currentComboTime = 0;
+		comboController.UpdateCombo(combo);
 	}
 
 	private void CharacterScoredRight() {
-		combo++;
-		currentComboTime = timeToCombo;
+		numOfCorrectDiagnose++;
 		UpdateScore(2);
-
-		// Play appropriate sound
-		AudioManager.Instance.PlayClip("clinicCorrect");
+		ComboBonus();
+		PlayCorrectSound();
+		StartCoroutine(particleController.SpawnFirework(Mathf.Clamp(combo, 0, 10), assemblyLineController.StartPosition.position));
+		UpdateCombo(1);
 	}
 
 	private void CharacterScoredWrong() {
-		combo = 0;
-		currentComboTime = 0;
+		ResetCombo();
 		UpdateScore(-1);
 		// Play an incorrect sound
 		AudioManager.Instance.PlayClip("minigameError");
 		cameraShake.Play();
 	}
 
+	private void PlayCorrectSound() {
+		Hashtable hashOverride = new Hashtable();
+		hashOverride ["Pitch"] = Mathf.Clamp(.9f + ((float)combo / 30), 0, 1.25f); //Goes from .9 to 1.25 by increments of .0333 and then caps
+		AudioManager.Instance.PlayClip("clinicCorrect", option: hashOverride);
+	}
 }

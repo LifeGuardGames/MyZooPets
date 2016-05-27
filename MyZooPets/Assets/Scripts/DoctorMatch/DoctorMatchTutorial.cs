@@ -16,7 +16,7 @@ public class DoctorMatchTutorial : MinigameTutorial {
 
 	protected override void _End(bool isFinished) {
 		DoctorMatchManager.Instance.NewGame();
-		DoctorMatchManager.Instance.BarFinger();
+		//DoctorMatchManager.Instance.BarFinger();
 	}
 
 	protected override void ProcessStep(int step) {

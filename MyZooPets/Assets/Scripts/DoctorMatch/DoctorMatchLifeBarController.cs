@@ -56,25 +56,12 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 			}
 		}
 	}
-	void OnGUI() {
-		//GUI.Box(new Rect(Screen.width/2+150,Screen.height/2, 50, 50), currentDrainSpeed.ToString());
-	}
-	public void HurtBar(float multiplier = 1f){
-		if(isDraining){
-			UpdateBarPercentage(hurtPercentage*multiplier);
-			currentDrainSpeed-=drainSpeedIncrement;
-			if (currentDrainSpeed<startDrainSpeed)
-				currentDrainSpeed=startDrainSpeed;
-		}
-	}
 
 	public void PlusBar(float multiplier = 1f){
 		if(isDraining){
 			UpdateBarPercentage(plusPercentage*multiplier);
-			//currentDrainSpeed+=drainSpeedIncrement;
 		}
 	}
-
 	public bool IsEmpty(){
 		return barPercentage<= 0f;
 	}

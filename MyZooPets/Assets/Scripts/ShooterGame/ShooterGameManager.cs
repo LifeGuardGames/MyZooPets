@@ -121,7 +121,7 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public void AddScore(int amount){
 		UpdateScore(amount);
 		powerUpScore += amount;
-		if(powerUpScore > 75){
+		if(powerUpScore > (75 + 25 * (waveNum %10))){
 			powerUpScore = 0;
 			ShooterSpawnManager.Instance.SpawnPowerUp();
 		}

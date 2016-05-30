@@ -29,6 +29,7 @@ public class ShooterGameTutorial : MinigameTutorial{
 				ShooterGameManager.Instance.tutFinger.SetActive(true);
 			break;
 		case 1:
+			PlayerShooterController.Instance.OnTutorialMove -= MoveAlong;
 			ShooterGameManager.Instance.OnTutorialTap += MoveAlong;
 			//prompt user to shoot
 			ShooterGameManager.Instance.tutFinger.SetActive(false);

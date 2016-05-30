@@ -13,6 +13,10 @@ public class ShooterPowerUpScript : MonoBehaviour{
 		transform.Translate(Time.deltaTime * -2.0f, 0, 0);
 	}
 
+	void OnBecameInvisible() {
+		Destroy(this.gameObject);
+	}
+
 	void OnTriggerEnter2D(Collider2D collider){
 	 if(collider.gameObject.tag == "Player"){
 			// Parse the powerup

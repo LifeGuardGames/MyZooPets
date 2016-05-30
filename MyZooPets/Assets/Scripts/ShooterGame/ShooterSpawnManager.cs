@@ -59,7 +59,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	}
 
 	public void SpawnPowerUp(){
-		int randPowerUp = Random.Range(5,7);
+		int randPowerUp = Random.Range(5,8);
 		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_" + randPowerUp.ToString()).PrefabName) as GameObject;
 		int randomPositionIndex = Random.Range(0, 3);
 		GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);

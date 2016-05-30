@@ -30,10 +30,12 @@ public class MiniPetPowerUp : MonoBehaviour {
 		}
 		StartCoroutine("Fire");
 	}
+
 	public void Hit() {
 		StopAllCoroutines();
 		this.gameObject.SetActive(false);
 	}
+
 	void OnTriggerEnter2D (Collider2D col) {
 		if(col.gameObject.tag == "ShooterEnemy") {
 			Hit();

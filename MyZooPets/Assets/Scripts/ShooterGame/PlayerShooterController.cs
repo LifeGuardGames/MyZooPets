@@ -109,7 +109,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 			isPiercing = false;
 			break;
 		case 14:
-			currentFireBall = fireBallPrefabs[7];
+			currentFireBall = fireBallPrefabs[6];
 			isPiercing = true;
 			break;
 		}	
@@ -125,7 +125,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 				playerHealth += deltaHealth;
 			}
 			else{
-				if(playerHealth < deltaHealth){
+				if(playerHealth < deltaHealth && deltaHealth < 14){
 					playerHealth = deltaHealth;
 				}
 			}
@@ -139,7 +139,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 			else if(playerHealth <= 1 && playerHealth > 0){
 				ChangeState(PlayerStateTypes.Distressed);
 			}
-			if(playerHealth > 14) {
+			if(deltaHealth > 14) {
 				playerHealth = 14;  // Cap health at 15
 			}
 			if(playerHealth <= 0){

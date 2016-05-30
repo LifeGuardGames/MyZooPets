@@ -18,6 +18,8 @@ public class ShooterEnemy : MonoBehaviour{
 	void Awake(){
 		player = GameObject.FindWithTag("Player");
 		ShooterGameManager.OnStateChanged += OnGameStateChanged;
+		health += ShooterGameManager.Instance.waveNum % 10;
+        damage += ShooterGameManager.Instance.waveNum % 10;
 	}
 
 	void OnDestroy(){

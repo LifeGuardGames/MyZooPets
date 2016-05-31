@@ -21,9 +21,10 @@ public class ComboController : MonoBehaviour {
 	private float timeToCombo = 2f;
 	private float currentComboTime = 0;
 	private int comboBonus = 5;
+	private bool countingDown = true;
 
 	void Update() {
-		if (DoctorMatchManager.Instance.Paused)
+		if (DoctorMatchManager.Instance.Paused || !countingDown)
 			return;
 		if (currentComboTime > 0) {
 			currentComboTime -= Time.deltaTime;
@@ -40,7 +41,7 @@ public class ComboController : MonoBehaviour {
 	}
 
 	public int ComboMod {
-		get { return Mathf.Clamp(combo, 0, (comboBonus * 2)-1); }
+		get { return Mathf.Clamp(combo, 0, (comboBonus * 2) - 1); }
 	}
 
 	public int ComboLevel {
@@ -52,6 +53,19 @@ public class ComboController : MonoBehaviour {
 			} else {
 				return 0;
 			}
+		}
+	}
+
+	public void StartCounting() {
+		countingDown = true;
+	}
+
+	public void StopCounting() {
+		countingDown = false;
+		if (timeLowLine != null) {
+			StopCoroutine(timeLowLine);
+			timeLowLine = null;
+			RestoreColors();
 		}
 	}
 
@@ -94,6 +108,7 @@ public class ComboController : MonoBehaviour {
 	public Vector3 GetComboPosition(int combo) {
 		return slotImages [combo % (comboBonus * 2)].transform.position;
 	}
+
 	public void IncrementCombo(int deltaCombo) {
 		combo += deltaCombo;
 		UpdateCombo();

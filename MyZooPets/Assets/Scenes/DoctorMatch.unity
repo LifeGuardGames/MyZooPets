@@ -138,6 +138,7 @@ MonoBehaviour:
   zoneRed: {fileID: 1922356621}
   pointerPrefab: {fileID: 100004, guid: b4d71d1b7f55f964080d5c35db20a687, type: 2}
   floatyPrefab: {fileID: 111924, guid: 05f2df02abd88479ba6388ff77262765, type: 2}
+  inhalerPrefab: {fileID: 156536, guid: af289371d42ef4333b45abf46c6b577b, type: 2}
 --- !u!1 &109016049
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,8 +147,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 109016050}
-  - 222: {fileID: 109016052}
-  - 114: {fileID: 109016051}
   m_Layer: 5
   m_Name: ComboTable
   m_TagString: Untagged
@@ -172,45 +171,6 @@ RectTransform:
   m_AnchoredPosition: {x: -49.000046, y: -101.29985}
   m_SizeDelta: {x: 315, y: 178}
   m_Pivot: {x: 0.2, y: 0.4}
---- !u!114 &109016051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 109016049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: 6d1dc246dd34b784c9b206c6d38e273b, type: 3}
-    m_FontSize: 30
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Hello
---- !u!222 &109016052
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 109016049}
 --- !u!4 &132085474 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 757b4286850334627aba3a50d7693b04, type: 2}
@@ -885,7 +845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 941522670}
   comboText: {fileID: 780691659}
-  comboTable: {fileID: 109016051}
+  comboTable: {fileID: 109016050}
   UISlotPrefab: {fileID: 123414, guid: 190aac43741b24559a72593fe0d1945f, type: 2}
 --- !u!222 &586954152
 CanvasRenderer:
@@ -6897,7 +6857,7 @@ Transform:
   - {fileID: 187725539}
   - {fileID: 1500685627}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
 --- !u!1 &1619036415
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	private GameObject[] buttons;
 
 	protected override void SetMaxSteps() {
-		maxSteps = 3;
+		maxSteps = 4;
 	}
 
 	protected override void SetKey() {
@@ -33,6 +33,9 @@ public class DoctorMatchTutorial : MinigameTutorial {
 				DoctorMatchManager.Instance.SpawnFinger(2);
 				DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(2);
 				break;
+			case 3:
+				//DoctorMatchManager.Instance.StartMode(4)
+				//assembyLine.SpawnRandomSet
 			default:
 				Debug.LogError("DoctorMatch tutorial has an unhandled step: " + step);
 				break;

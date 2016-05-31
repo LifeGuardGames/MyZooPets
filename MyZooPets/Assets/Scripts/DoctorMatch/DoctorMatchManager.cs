@@ -21,14 +21,16 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public DoctorMatchZone zoneRed;
 	public GameObject pointerPrefab;
 	public GameObject floatyPrefab;
+	public GameObject inhalerPrefab;
 
 	private int numOfCorrectDiagnose;
 	private bool paused = true;
-
+	private GameObject inhalerObject;
 	private DoctorMatchTutorial doctorMatchTutorial;
 	private bool tutorial = false;
 	private int tutorialZone = 0;
 	private FingerController finger = null;
+	private bool spawnInhalers = false;
 
 	public bool Paused {
 		get {
@@ -52,6 +54,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else if (Input.GetKeyDown(KeyCode.RightArrow)) {
 			OnZoneClicked(DoctorMatchButtonTypes.Red);
 		} else if (Input.GetKeyDown(KeyCode.Q)) {
+			SpawnInhalerPopup();
 		}
 		#endif
 	}
@@ -62,6 +65,12 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		quitGameScene = SceneUtils.BEDROOM;
 		comboController.Setup();
 		ResetScore();
+	}
+
+	void OnGUI() {
+		if (GUI.Button(new Rect(0,100,30,30),spawnInhalers.ToString())) {
+			spawnInhalers=!spawnInhalers;
+		}
 	}
 
 	protected override void _Start() {
@@ -171,9 +180,33 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
 	}
+
+	public IEnumerator FinishInhalerPopup(bool successful, Vector3 startPosition = default(Vector3), GameObject toDestroy = null) {
+		if (successful) {
+			for (int i = 0; i < 3; i++) {
+				StartCoroutine(particleController.SpawnFirework(comboController.ComboMod, startPosition, comboController.GetComboPosition(comboController.Combo)));
+				comboController.IncrementCombo(1);
+				ComboBonus();
+				yield return new WaitForSeconds(.25f);
+			}
+		} else {
+			comboController.ResetCombo();
+		}
+		yield return new WaitForEndOfFrame();
+		comboController.StartCounting();
+		lifeBarController.StartDraining();
+		if (toDestroy != null)
+			Destroy(toDestroy);
+	}
+
+	public void LockZones() {
+		zoneGreen.TempLock(.15f);
+		zoneYellow.TempLock(.15f);
+		zoneRed.TempLock(.15f);
+	}
 	// Input coming from button scripts
 	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
-		AssemblyLineItem poppedItem = assemblyLineController.PopFirstItem();
+		AssemblyLineItem poppedItem = assemblyLineController.PeekFirstItem();
 		bool correct = poppedItem.ItemType == buttonType;
 		Transform buttonTransform = GetButtonTransform((int)buttonType - 1);
 		float comboMod = comboController.ComboMod;
@@ -200,9 +233,13 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	private void HandleNormal(AssemblyLineItem poppedItem) {
+		assemblyLineController.PopFirstItem();
 		poppedItem.Activate();
 		if (!lifeBarController.IsEmpty) {
 			assemblyLineController.ShiftAndAddNewItem();
+			if (Random.value > .8f && spawnInhalers) {
+				SpawnInhalerPopup();
+			}
 		} else if (!assemblyLineController.LineComplete) {
 			assemblyLineController.MoveUpLine();
 			assemblyLineController.VisibleCount();
@@ -215,8 +252,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	private void HandleTutorial(AssemblyLineItem poppedItem, bool correct) { //TODO: Refactor this and HandleNormal into one clean method
 		finger.StopShake(GetButtonTransform(tutorialZone).position);
 		if (correct) {
-			poppedItem.Activate();
 			assemblyLineController.PopFirstItem();
+			poppedItem.Activate();
 			assemblyLineController.MoveUpLine();
 			if (assemblyLineController.LineComplete) {
 				doctorMatchTutorial.Advance();
@@ -239,6 +276,31 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 				Debug.LogWarning("Invalid Zone");
 				return null;
 		}
+	}
+	private Transform GetCorrectTransform(){
+		AssemblyLineItem item = assemblyLineController.PeekFirstItem();
+		return GetButtonTransform((int)item.ItemType);
+	}
+	private void SpawnInhalerPopup() {
+		/*lifeBarController.StopDraining();
+		zoneGreen.enabled=false;
+		zoneYellow.enabled=false;
+		zoneRed.enabled=false;*/
+
+		lifeBarController.StopDraining();
+		inhalerObject = Instantiate(inhalerPrefab);
+		Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, -1 * Camera.main.transform.position.z));
+		Vector3 bottomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, -1 * Camera.main.transform.position.z));
+		float inhalerXPos = Random.Range(bottomLeft.x, bottomRight.x);
+		inhalerObject.transform.position = new Vector3(inhalerXPos, bottomRight.y);
+
+		InhalerPopup popup = inhalerObject.GetComponent<InhalerPopup>();
+		popup.Velocity = new Vector3(Random.Range(-100, 100), 300 + Random.Range(-15, 15));
+		popup.bottomY = bottomLeft.y;
+		popup.leftX = bottomLeft.x;
+		popup.RightX = bottomRight.x;
+
+		comboController.StopCounting();
 	}
 
 	private void ComboBonus() {

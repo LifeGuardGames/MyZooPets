@@ -44,7 +44,7 @@ public class LevelComponent : MonoBehaviour{
 			}
 		}
 	}
-
+	
 	//Destroys this level component and all its items
     public void Destroy(){
     	DestroyItems();
@@ -141,6 +141,7 @@ public class LevelComponent : MonoBehaviour{
 			mBundles.Add(bundleToModify);
 		}
 	}
+
 }
 
 //====================================================================

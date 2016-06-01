@@ -9,6 +9,7 @@ public class HazardItem : RunnerItem {
 	// Use this for initialization
 	public override void Start () {
         base.Start();
+		hazard=true;
 	}
 	
 	// Update is called once per frame
@@ -18,8 +19,10 @@ public class HazardItem : RunnerItem {
 
 	public override void OnPickup(){
         // Player, sloooooowwww downnnnnnnn
-        PlayerController.Instance.TriggerSlowdown(SlowdownDivisor);
-
+		if (!PlayerController.Instance.Invincible){
+       		PlayerController.Instance.TriggerSlowdown(SlowdownDivisor,ID);
+			ScoreManager.Instance.ResetCombo();
+		}
 		GameObject.Destroy(gameObject);
 	}
 }

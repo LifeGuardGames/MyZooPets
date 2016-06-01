@@ -44,7 +44,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			// Set their sprites according to index from metadata
 			spriteRenderer.sprite = sprites[atlasIndex];
 		}
-
+		PlayerController.Instance.SetRenderers(spriteRendererList);
 //		Debug.Log("Loading Colors done...");
 	}
 

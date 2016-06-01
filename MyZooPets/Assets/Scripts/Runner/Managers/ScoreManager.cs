@@ -12,22 +12,37 @@ using System.Collections;
 
 public class ScoreManager : Singleton<ScoreManager>{
 	public int scorePerIncrement = 3;
+
 	public float scoreDistance = 10.0f; //every 10 unit in distance traveled equals to 10 score points
 	public float coinStreakTime; // if X seconds elapse without picking up a coin, the streak is over
+
 	
 	private int mPlayerDistancePoints = 0; //points calculated from distance
 	private int mPlayerPoints = 0; //points accumulated in the game (getting item or hitting trigger)
 	private int mPlayerCoins = 0; //coins collected in the game
 	private int distanceTraveled = 0;
-	private float coinStreakCountdown; //
+	private float coinStreakCountdown; 
 	private int coinStreak; //counting how many coins are picked up in a row
 
+	private float comboMod=1;
+
+
+
+	public int Streak{
+		get{
+			return coinStreak;
+		}
+	}
 	public int Coins{ 
 		get{ 
 			return mPlayerCoins; 
 		} 
 	}
-
+	public float Combo {
+		get {
+			return comboMod;
+		}
+	}
 	/// <summary>
 	/// Gets the score. Which is just the distance score + the number of coins collected
 	/// </summary>
@@ -36,6 +51,15 @@ public class ScoreManager : Singleton<ScoreManager>{
 		get{
 			return mPlayerDistancePoints + mPlayerPoints;
 		}
+	}
+
+	public void OnGUI(){
+		GUI.Box(new Rect(Screen.width-100,0,100,20),"COMBO: " + comboMod.ToString("N2"));
+		
+	}
+
+	public void IncrementCombo(float increment){
+		comboMod += increment;
 	}
 
 	/// <summary>
@@ -92,6 +116,14 @@ public class ScoreManager : Singleton<ScoreManager>{
 		SetCoinStreakCountdown(0);
 		SetCoinStreak(0);
 		AddCoins(0);
+		ResetCombo();
+	}
+
+	/// <summary>
+	/// Reset all score variables to zero.
+	/// </summary>
+	public void ResetCombo(){
+		comboMod=1;
 	}
 
 	/// <summary>
@@ -104,7 +136,8 @@ public class ScoreManager : Singleton<ScoreManager>{
 
 		// the player picked up a coin, so increment their streak and reset the countdown
 		// can't go below 0 coins -- this sounds silly, but coins right now is the new "points"
-		mPlayerCoins = Mathf.Max(mPlayerCoins + numOfCoinsToAdd, 0);
+		int pointsToAdd = (int) Mathf.Floor((numOfCoinsToAdd) * comboMod);
+		mPlayerCoins = Mathf.Max(mPlayerCoins + pointsToAdd, 0);
 	}
 
 	public void AddPoints(int inNumPointsToAdd){
@@ -144,4 +177,5 @@ public class ScoreManager : Singleton<ScoreManager>{
 		SetCoinStreakCountdown(fCountdown + change);
 	}
 	//---------------------------------------------------
+
 }

@@ -11,7 +11,7 @@ public class MinigamePopup_GameOver_Runner : MinigamePopup_GameOver {
 	}
 
 	protected override void RewardBadges(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, RunnerGameManager.Instance.GetScore(), true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, RunnerGameManager.Instance.GetScore(), true);
 	}
 
 	protected override bool CheckAndFlagNewGameAd(){

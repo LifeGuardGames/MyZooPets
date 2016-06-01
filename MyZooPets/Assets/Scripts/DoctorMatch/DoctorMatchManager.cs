@@ -133,7 +133,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 	}
 
 	protected override void _QuitGame() {

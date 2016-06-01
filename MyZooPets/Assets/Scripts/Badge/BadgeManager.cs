@@ -1,57 +1,37 @@
-using UnityEngine;
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Badge logic.Checks and manages when a badge should be unlocked
+/// Checks and manages when a badge should be unlocked
 /// </summary>
-public class BadgeLogic : Singleton<BadgeLogic>{
-    public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked; //Event fires when new badge has been added
-    public class BadgeEventArgs : EventArgs{
-        private Badge unlockedBadge;
+public class BadgeManager : Singleton<BadgeManager>{
+	//Event fires when new badge has been added
+	public static event EventHandler<BadgeEventArgs> OnNewBadgeUnlocked;
 
-        public Badge UnlockedBadge{
+    public class BadgeEventArgs : EventArgs{
+        private ImmutableDataBadge unlockedBadge;
+        public ImmutableDataBadge UnlockedBadge{
             get{ return unlockedBadge; }
         }
 
-        public BadgeEventArgs(Badge badge){
+        public BadgeEventArgs(ImmutableDataBadge badge){
             unlockedBadge = badge;
         }
     }
 
-    private List<Badge> allBadges; //List of all badges
-
-    public List<Badge> AllBadges{
+    private List<ImmutableDataBadge> allBadges; //List of all badges
+    public List<ImmutableDataBadge> AllBadges{
         get{ return allBadges; }
     }
-
-    void Awake(){
-        allBadges = DataLoaderBadges.GetDataList();
-    }
-
-    /// <summary>
-    /// Gets the badge.
-    /// </summary>
-    /// <returns>The badge.</returns>
-    /// <param name="badgeID">Badge ID.</param>
-    public Badge GetBadge(string badgeID){
-        return DataLoaderBadges.GetData(badgeID);
-    }
-
-	/// <summary>
-	/// Determines whether the badge is unlocked or not
-	/// </summary>
-	/// <returns><c>true</c> if badge unlocked; otherwise, <c>false</c>.</returns>
-	/// <param name="badgeID">Badge ID</param>
+	
 	public bool IsBadgeUnlocked(string badgeID){
 		return DataManager.Instance.GameData.Badge.GetIsUnlocked(badgeID);
 	}
 
 	public int GetUnlockedBadgesCount(){
 		int count = 0;
-		foreach(Badge badge in allBadges){
+		foreach(ImmutableDataBadge badge in allBadges){
 			if(IsBadgeUnlocked(badge.ID)){
 				count++;
 			}
@@ -63,32 +43,30 @@ public class BadgeLogic : Singleton<BadgeLogic>{
 	/// Gets the badge unlock at next level.
 	/// </summary>
 	/// <returns>The badge unlock at next level.</returns>
-    public Badge GetBadgeUnlockAtNextLevel(){
+    public ImmutableDataBadge GetBadgeUnlockAtNextLevel(){
         int nextLevel = LevelLogic.Instance.NextLevel;
-        Badge selectedBadge = null;
+        ImmutableDataBadge selectedBadge = null;
         
-        foreach(Badge badge in allBadges){
+        foreach(ImmutableDataBadge badge in allBadges){
             if(badge.Type == BadgeType.Level && badge.UnlockCondition == nextLevel){
                 selectedBadge = badge;
                 break;
             }
         }
-        
-        // selectedBadge = (from badge in allBadges
-        //                 where badge.Type == BadgeType.Level &&
-        //                     badge.UnlockCondition == nextLevel 
-        //                 select badge).First();
-
         return selectedBadge;
     }
-	
+
+	void Awake() {
+		allBadges = DataLoaderBadges.GetDataList();
+	}
+
 	/// <summary>
 	/// Checks the series unlock progress.
 	/// </summary>
 	/// <param name="badgeType">Badge type.</param>
 	/// <param name="currentProgress">Current progress.</param>
 	/// <param name="overrideProgress">If set to <c>true</c> override progress from DataManager. else add to the record progress</param>
-    public void CheckSeriesUnlockProgress(BadgeType badgeType, int currentProgress, bool overrideProgress){
+	public void CheckSeriesUnlockProgress(BadgeType badgeType, int currentProgress, bool overrideProgress){
         int latestProgress;
         bool unlockedAllSeriesBadges = true;
 
@@ -105,13 +83,13 @@ public class BadgeLogic : Singleton<BadgeLogic>{
             latestProgress = progress += currentProgress;
         }
 
-        foreach(Badge badge in sortedBadgesType){
+        foreach(ImmutableDataBadge badge in sortedBadgesType){
 			CheckUnlockProgress(badge, latestProgress);
 		}
 
         //Check if all badges of the same type have been unlocked
-        foreach(Badge badge in sortedBadgesType){
-            if(!badge.IsUnlocked){
+        foreach(ImmutableDataBadge badge in sortedBadgesType){
+            if(!IsBadgeUnlocked(badge.ID)){
                 unlockedAllSeriesBadges = false;
                 break;
             }
@@ -131,19 +109,21 @@ public class BadgeLogic : Singleton<BadgeLogic>{
 	/// <param name="overrideProgress">If set to <c>true</c> override progress.</param>
     public void CheckSingleUnlockProgress(string badgeID, int currentProgress, bool overrideProgress){
         int latestProgress;
-        Badge badge = DataLoaderBadges.GetData(badgeID);
+        ImmutableDataBadge badge = DataLoaderBadges.GetData(badgeID);
 
         //Decides to override or add to recorded progress from DataManager
-        if(overrideProgress){
+        if(overrideProgress) {
             latestProgress = currentProgress;
-        }else{
+        }
+		else {
             int progress = DataManager.Instance.GameData.Badge.GetSingleUnlockProgress(badgeID);
             latestProgress = progress += currentProgress;
         }
 
-        //Update DataManager only if badge with badgeID is still locked
-        if(!CheckUnlockProgress(badge, latestProgress))
-            DataManager.Instance.GameData.Badge.UpdateSingleUnlockProgress(badgeID, latestProgress);
+		//Update DataManager only if badge with badgeID is still locked
+		if(!CheckUnlockProgress(badge, latestProgress)) {
+			DataManager.Instance.GameData.Badge.UpdateSingleUnlockProgress(badgeID, latestProgress);
+		}
     }
 	
 	/// <summary>
@@ -152,7 +132,7 @@ public class BadgeLogic : Singleton<BadgeLogic>{
 	/// <returns><c>true</c>, if new badge unlocked.</returns>
 	/// <param name="badge">Badge.</param>
 	/// <param name="progress">Progress.</param>
-    private bool CheckUnlockProgress(Badge badge, int progress){
+    private bool CheckUnlockProgress(ImmutableDataBadge badge, int progress){
         bool unlockNewBadge = false;
 
         if(progress >= badge.UnlockCondition){ //Check if progress matches unlock conditions

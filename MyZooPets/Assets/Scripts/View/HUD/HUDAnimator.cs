@@ -97,7 +97,7 @@ public class HUDAnimator : MonoBehaviour{
 			LevelLogic.Instance.IncrementLevel();
 
 			//Check for Unlock badge
-			BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Level, (int)LevelLogic.Instance.CurrentLevel, true);
+			BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Level, (int)LevelLogic.Instance.CurrentLevel, true);
 			
 			if(OnLevelUp != null){
 				OnLevelUp(this, EventArgs.Empty); //Level up. call the UI event listeners

@@ -183,8 +183,8 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		FireCrystalManager.Instance.RewardShards(fireShardReward);
 
 		// Check for badge reward
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Retention, DataManager.Instance.GameData.Inhaler.timesUsedInARow,true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Retention, DataManager.Instance.GameData.Inhaler.timesUsedInARow,true);
 	}
 
 	private void QuitInhalerGame(object sender, EventArgs args){

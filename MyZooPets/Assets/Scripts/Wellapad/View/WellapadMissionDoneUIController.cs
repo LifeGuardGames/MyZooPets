@@ -50,7 +50,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			Destroy(child.gameObject);
 		}
 
-		Badge badge = BadgeLogic.Instance.GetBadgeUnlockAtNextLevel();
+		ImmutableDataBadge badge = BadgeManager.Instance.GetBadgeUnlockAtNextLevel();
 		if(badge != null){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();

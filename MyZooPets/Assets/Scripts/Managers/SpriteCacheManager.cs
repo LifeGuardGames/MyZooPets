@@ -19,4 +19,13 @@ public class SpriteCacheManager : Singleton<SpriteCacheManager> {
 				return null;
 		}
 	}
+
+	public static Sprite GetBadgeSprite(string badgeID) {
+		if(string.IsNullOrEmpty(badgeID)) {
+			return Resources.Load<Sprite>("BadgeBlank");
+		}
+		else {
+			return Resources.Load<Sprite>(DataLoaderBadges.GetData(badgeID).TextureName);
+		}
+	}
 }

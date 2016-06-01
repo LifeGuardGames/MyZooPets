@@ -11,7 +11,7 @@ public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
 	}
 
 	protected override void RewardBadges(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Shooter, ShooterGameManager.Instance.GetScore(), true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Shooter, ShooterGameManager.Instance.GetScore(), true);
 	}
 
 	protected override bool CheckAndFlagNewGameAd(){

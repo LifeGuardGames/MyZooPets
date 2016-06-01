@@ -11,7 +11,7 @@ public class MinigamePopup_GameOver_MemoryGame : MinigamePopup_GameOver{
 	}
 
 	protected override void RewardBadges(){
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Memory, MemoryGameManager.Instance.GetScore(), true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Memory, MemoryGameManager.Instance.GetScore(), true);
 	}
 
 	protected override bool CheckAndFlagNewGameAd(){

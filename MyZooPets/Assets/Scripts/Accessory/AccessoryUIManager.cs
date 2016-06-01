@@ -185,7 +185,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 				//Check for badge unlock
 				int totalNumOfAccessories = DataManager.Instance.GameData.Inventory.AccessoryItems.Count;
-				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
+				BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
 
 				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);

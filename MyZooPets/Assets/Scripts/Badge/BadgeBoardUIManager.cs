@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -7,24 +8,22 @@ using System.Linq;
 public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	public static EventHandler<EventArgs> OnBadgeUIAnimationDone;
-
-	public AnimationClip pulseClip;
-	public GameObject badgeBoard;
+	public BadgePopController badgePopController;		// Used for unlocking badges
+	public GameObject bedroomBadgeBoard;
 	public GameObject badgePrefab;
-	public GameObject badgeBase;
+	public GridLayoutGroup badgeGrid;
 	public GameObject badgeExitButton;
 
 	public TweenToggleDemux descriptionDemux;
-	public UISprite descriptionBadgeSprite;
-	public UILabel descriptionBadgeTitle;
-	public UILabel descriptionBadgeInfo;
-	public ParticleSystem slamParticle;
+	public Image descBadgeSprite;
+	public Text descBadgeTitle;
+	public Text descBadgeInfo;
 
 	private string blankBadgeTextureName = "badgeBlank";
 	private GameObject lastClickedBadge;
 	private bool isActive = false;
 
-	private Queue<Badge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
+	private Queue<ImmutableDataBadge> badgeUnlockQueue;	// This is the queue that will pop recently unlocked badges
 
 	private bool isQueueAnimating = false;
 	public bool IsBadgeBoardUIAnimating{	// Scenes will poll this to see if they need to wait
@@ -47,23 +46,20 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	protected override void Start(){
 		base.Start();
-		badgeUnlockQueue = new Queue<Badge>();
-		BadgeLogic.OnNewBadgeUnlocked += UnlockBadge;
+		badgeUnlockQueue = new Queue<ImmutableDataBadge>();
+		BadgeManager.OnNewBadgeUnlocked += UnlockBadge;
 		InitBadges();
 	}
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
-		BadgeLogic.OnNewBadgeUnlocked -= UnlockBadge;
+		BadgeManager.OnNewBadgeUnlocked -= UnlockBadge;
 	}
 
 	//When the scene starts Initialize all the badges once
 	private void InitBadges(){
-		List<Badge> badges = BadgeLogic.Instance.AllBadges;
+		List<ImmutableDataBadge> badges = BadgeManager.Instance.AllBadges;
 
-		//Can't decide whether is query should be in BadgeLogic or not
-		//Because it's using anonymous type I thought it's better to place it with
-		//the query execution(foreach loop)
 		var query = 
 			from badge in badges
 			group badge by badge.Type into badgeGroup
@@ -77,19 +73,15 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 		foreach(var group in query){
 			foreach(var badge in group.Elements){
-				GameObject badgeGO = NGUITools.AddChild(badgeBase, badgePrefab);
+				GameObject badgeGO = GameObjectUtils.AddChild(badgeGrid.gameObject, badgePrefab);
 				badgeGO.name = badge.ID;
-				badgeGO.GetComponent<BadgeController>().Init(badge.IsUnlocked, badge.TextureName, blankBadgeTextureName);
+				badgeGO.GetComponent<BadgeController>().Init(badge);
 			}
 		}
-
-		UIGrid grid = badgeBase.GetComponent<UIGrid>();
-		grid.sorted = true;
-		grid.Reposition();
 	}
 
 	//Event Listener that updates the Level badges UI when a new badge is unlocked
-	private void UnlockBadge(object senders, BadgeLogic.BadgeEventArgs arg){
+	private void UnlockBadge(object senders, BadgeManager.BadgeEventArgs arg){
 		// Populate the unlocked badge into the unlock queue
 		badgeUnlockQueue.Enqueue(arg.UnlockedBadge);
 
@@ -112,33 +104,24 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private IEnumerator TryPopBadgeQueue(){
 		if(badgeUnlockQueue.Count != 0){
 			// If the badge board is not opened already, open the UI and wait a while
-			if(!BadgeBoardUIManager.Instance.IsOpen()){
-				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + Application.loadedLevelName);
+			if(!IsOpen()){
+				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + SceneUtils.CurrentScene);
 				yield return new WaitForSeconds(sceneSpecificDelay);
 
 				OpenUI();
 				yield return new WaitForSeconds(1f);
 			}
 
-			Badge unlockingBadge = badgeUnlockQueue.Dequeue();
-			Transform badgeGOTransform = badgeBase.transform.Find(unlockingBadge.ID);
+			ImmutableDataBadge unlockingBadge = badgeUnlockQueue.Dequeue();
+			Transform badgeGOTransform = badgeGrid.transform.Find(unlockingBadge.ID);
 			if(badgeGOTransform != null){
-				BadgeController badgeController = badgeGOTransform.gameObject.GetComponent<BadgeController>();
-				badgeController.PlayUnlockAnimation();
+				badgePopController.InitializeAndPlay(badgeGOTransform.gameObject);
 			}
 			else{
 				Debug.LogWarning("Can not find badge name: " + unlockingBadge.ID);
 				CloseUI();	// Try to fail gracefully
 			}
 		}
-	}
-
-	/// <summary>
-	/// Plays the slam particle. Call from badge reward animation event
-	/// </summary>
-	public void PlaySlamParticle(Vector3 position){
-		slamParticle.transform.position = position;
-		slamParticle.Play();
 	}
 
 	/// <summary>
@@ -153,9 +136,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 			isQueueAnimating = false;	// Release the animation lock
 			isWaitingInRewardQueue = false;		// It is animating so no longer waiting in reward queue
-
-
-
+			
 			// Launch any finished callback
 			if(FinishedAnimatingCallback != null){
 				FinishedAnimatingCallback();
@@ -168,11 +149,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	public void BadgeClicked(GameObject go){
 		// Get the information from the populated controller
-		AudioManager.Instance.PlayClip("badgeClicked");
-		Badge clickedBadge = BadgeLogic.Instance.GetBadge(go.name);
-		descriptionBadgeSprite.spriteName = BadgeLogic.Instance.IsBadgeUnlocked(clickedBadge.ID) ? clickedBadge.TextureName : blankBadgeTextureName;
-		descriptionBadgeTitle.text = clickedBadge.Name;
-		descriptionBadgeInfo.text = clickedBadge.Description;
+		AudioManager.Instance.PlayClip("BadgeClicked");
+		ImmutableDataBadge clickedBadge = DataLoaderBadges.GetData(go.name);
+		descBadgeSprite.sprite = SpriteCacheManager.GetBadgeSprite(BadgeManager.Instance.IsBadgeUnlocked(clickedBadge.ID) ? clickedBadge.ID : null);
+		descBadgeTitle.text = clickedBadge.Name;
+		descBadgeInfo.text = clickedBadge.Description;
 		ShowDescriptionPanel();
 	}
 
@@ -193,7 +174,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 	protected override void _OpenUI(){
 		if(!isActive){
-			if(Application.loadedLevelName == SceneUtils.BEDROOM){
+			if(SceneUtils.CurrentScene == SceneUtils.BEDROOM){
 				PetMovement.Instance.StopMoving();
 			}
 			AudioManager.Instance.PlayClip("subMenu");
@@ -221,8 +202,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 			isActive = true;
 
-			if(badgeBoard != null){
-				badgeBoard.GetComponent<Collider>().enabled = false;
+			if(bedroomBadgeBoard != null){
+				bedroomBadgeBoard.GetComponent<Collider>().enabled = false;
 			}
 		}
 	}
@@ -234,8 +215,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 			isActive = false;
 
-			if(badgeBoard != null){
-				badgeBoard.GetComponent<Collider>().enabled = true;
+			if(bedroomBadgeBoard != null){
+				bedroomBadgeBoard.GetComponent<Collider>().enabled = true;
 			}
 
 			CloseUIOpenNext(UIModeTypes.None);
@@ -249,5 +230,9 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 				OnBadgeUIAnimationDone(this, EventArgs.Empty);
 			}
 		}
+	}
+
+	public void OnExitButton() {
+		CloseUI();
 	}
 }

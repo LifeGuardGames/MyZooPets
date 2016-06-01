@@ -161,7 +161,7 @@ public abstract class DecorationZone : MonoBehaviour {
 
 		//Check for badge unlock
 		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
 	}
 	
 	/// <summary>

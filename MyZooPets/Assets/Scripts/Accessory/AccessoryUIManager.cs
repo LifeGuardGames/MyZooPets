@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 /// <summary>
 /// Accessory user interface manager.
@@ -16,11 +17,13 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
-	public UIGrid grid;
+	public GridLayoutGroup grid;
 	public GameObject accessoryTitlePrefab;
 	public GameObject accessoryEntryPrefab;
 	public GameObject backButton;
 	public GameObject zoomItem;
+	public PositionTweenToggle hatButton;
+	public PositionTweenToggle glassesButton;
 
 	// related to zooming into the badge board
 	private float zoomTime  = 0.5f;
@@ -42,40 +45,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	protected override void Start(){
 		base.Start();
 		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
-
-		// Populate the entries with loaded data
-		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
-		AccessoryTypes lastCategory = AccessoryTypes.Hat;
-		bool isFirstTitle = true;
-		foreach(AccessoryItem accessory in accessoryList){
-			// Create a new accessory type label if lastCategory has changed
-			if(lastCategory != accessory.AccessoryType || isFirstTitle){
-				isFirstTitle = false;
-				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
-				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-
-				switch((AccessoryTypes)accessory.AccessoryType){
-				case AccessoryTypes.Hat:
-					localize.key = "ACCESSORIES_TYPE_HAT";
-					break;
-				case AccessoryTypes.Glasses:
-					localize.key = "ACCESSORIES_TYPE_GLASSES";
-					break;
-				case AccessoryTypes.Color:
-					localize.key = "ACCESSORIES_TYPE_COLOR";
-					break;
-				default:
-					Debug.LogError("Invalid accessory type");
-					break;
-				}
-				localize.Localize();	// Force relocalize
-				lastCategory = accessory.AccessoryType;
-			}
-
-			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
-			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
-		}
-		grid.Reposition();
 	}
 
 	protected override void OnDestroy(){
@@ -109,6 +78,82 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			zoomItem.GetComponent<Collider>().enabled = false;
 			
 			backButton.SetActive(true);
+		}
+	}
+
+	public void ShowHats() {
+		hatButton.Hide();
+		glassesButton.Hide();
+		// Populate the entries with loaded data
+		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
+		AccessoryTypes lastCategory = AccessoryTypes.Hat;
+		bool isFirstTitle = true;
+		foreach(AccessoryItem accessory in accessoryList) {
+			if(accessory.AccessoryType == AccessoryTypes.Hat) {
+				// Create a new accessory type label if lastCategory has changed
+				if(lastCategory != accessory.AccessoryType || isFirstTitle) {
+					isFirstTitle = false;
+					GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
+					UILocalize localize = itemUIObject.GetComponent<UILocalize>();
+
+					switch((AccessoryTypes)accessory.AccessoryType) {
+						case AccessoryTypes.Hat:
+							localize.key = "ACCESSORIES_TYPE_HAT";
+							break;
+						case AccessoryTypes.Glasses:
+							localize.key = "ACCESSORIES_TYPE_GLASSES";
+							break;
+						case AccessoryTypes.Color:
+							localize.key = "ACCESSORIES_TYPE_COLOR";
+							break;
+						default:
+							Debug.LogError("Invalid accessory type");
+							break;
+					}
+					localize.Localize();    // Force relocalize
+					lastCategory = accessory.AccessoryType;
+				}
+
+				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
+				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
+			}
+		}
+	}
+
+	public void ShowGlasses() {
+		// Populate the entries with loaded data
+		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
+		AccessoryTypes lastCategory = AccessoryTypes.Hat;
+		bool isFirstTitle = true;
+		foreach(AccessoryItem accessory in accessoryList) {
+			if(accessory.AccessoryType == AccessoryTypes.Glasses) {
+				// Create a new accessory type label if lastCategory has changed
+				if(lastCategory != accessory.AccessoryType || isFirstTitle) {
+					isFirstTitle = false;
+					GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
+					UILocalize localize = itemUIObject.GetComponent<UILocalize>();
+
+					switch((AccessoryTypes)accessory.AccessoryType) {
+						case AccessoryTypes.Hat:
+							localize.key = "ACCESSORIES_TYPE_HAT";
+							break;
+						case AccessoryTypes.Glasses:
+							localize.key = "ACCESSORIES_TYPE_GLASSES";
+							break;
+						case AccessoryTypes.Color:
+							localize.key = "ACCESSORIES_TYPE_COLOR";
+							break;
+						default:
+							Debug.LogError("Invalid accessory type");
+							break;
+					}
+					localize.Localize();    // Force relocalize
+					lastCategory = accessory.AccessoryType;
+				}
+
+				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
+				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
+			}
 		}
 	}
 

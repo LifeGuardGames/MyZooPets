@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public enum AccessoryButtonType{
 	UnboughtLocked,		// Not yet bought, use BuyButton but locked
@@ -26,14 +27,14 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	private AccessoryItem itemData;
 
 	// various elements on the entry
-	public UILabel labelName;
-	public UILabel labelCost;
-	public UISprite spriteIcon;
+	public Text labelName;
+	public Text labelCost;
+	public Image spriteIcon;
 
-	public UISprite buyButtonIcon;
-	public UIButtonMessage buyButtonMessage;
-	public UIButtonMessage equipButtonMessage;
-	public UIButtonMessage unequipButtonMessage;
+	public Image buyButtonIcon;
+	public Button buyButtonMessage;
+	public Button equipButtonMessage;
+	public Button unequipButtonMessage;
 
 	private bool islockExists = false;
 	
@@ -47,10 +48,7 @@ public class AccessoryEntryUIController : MonoBehaviour{
 
 		GameObject itemUIObject = NGUITools.AddChild(goGrid, goPrefab);
 		AccessoryEntryUIController entryController = itemUIObject.GetComponent<AccessoryEntryUIController>();
-		entryController.Init(item, 
-		                     AccessoryUIManager.Instance.gameObject, "OnBuyButton",			// Assigning buy button
-		                     AccessoryUIManager.Instance.gameObject, "OnEquipButton",		// Assigning equip button
-		                     AccessoryUIManager.Instance.gameObject, "OnUnequipButton");	// Assigning unequip button
+		entryController.Init(item);	// Assigning unequip button
 		
 		return itemUIObject;
 	}
@@ -62,10 +60,7 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	/// the incoming item data.
 	/// </summary>
 	/// <param name="itemData">Item data.</param>
-	public void Init(Item newItemData,
-	                 GameObject buyButtonMessageTarget, string buyButtonMessageFunctionName,
-	                 GameObject equipButtonMessageTarget, string equipButtonMessageFunctionName,
-	                 GameObject unequipButtonMessageTarget, string unqeuipButtonMessageFunctionName){
+	public void Init(Item newItemData){
 		// set the proper values on the entry
 		gameObject.name = newItemData.ID;
 
@@ -75,17 +70,13 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		string costText = newItemData.Cost.ToString();
 		labelCost.text = costText;
 		labelName.text = newItemData.Name;
-		spriteIcon.spriteName = newItemData.TextureName;
+		spriteIcon.sprite = Resources.Load(newItemData.TextureName)as Sprite;
 		spriteIcon.GetComponent<SpriteResizer>().Resize();
 
 		// Assign buttons
-		buyButtonMessage.target = buyButtonMessageTarget;
-		buyButtonMessage.functionName = buyButtonMessageFunctionName;
-		equipButtonMessage.target = equipButtonMessageTarget;
-		equipButtonMessage.functionName = equipButtonMessageFunctionName;
-		unequipButtonMessage.target = unequipButtonMessageTarget;
-		unequipButtonMessage.functionName = unqeuipButtonMessageFunctionName;
-
+		buyButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnBuyButton(buyButtonMessage.gameObject));
+		equipButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnEquipButton(equipButtonMessage.gameObject));
+		unequipButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnUnequipButton(unequipButtonMessage.gameObject));
 		CheckState();
 	}
 

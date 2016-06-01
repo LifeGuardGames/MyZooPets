@@ -4,7 +4,8 @@ using System.Collections;
 public class FingerController : MonoBehaviour {
 	private float shakeTime = .15f;
 	//private float shakeOffset = 20f;
-	public void Shake(Vector3 shakeOffset, bool destroyOnComplete=false) {
+	public IEnumerator Shake(Vector3 shakeOffset, float delay=0f, bool destroyOnComplete=false) {
+		yield return new WaitForSeconds(delay);
 		LeanTween.cancel(gameObject);
 		TweenArgument argument = new TweenArgument();
 		argument.destroyOnComplete=destroyOnComplete;
@@ -18,6 +19,13 @@ public class FingerController : MonoBehaviour {
 	private void TweenBack(object tweenArgument){
 		TweenArgument argument = (TweenArgument) tweenArgument;
 		LeanTween.move(gameObject,transform.position-argument.shakeOffset, shakeTime).setEase(LeanTweenType.easeInSine).setDestroyOnComplete(argument.destroyOnComplete);
+	}
+	public IEnumerator RepeatShake(int shakeCount, Vector3 shakeOffset, bool destroyOnComplete=false) {
+		for (int i=0; i<shakeCount-1; i++) {
+			StartCoroutine(Shake(shakeOffset));
+			yield return new WaitForSeconds(shakeTime*3);
+		}
+		StartCoroutine(Shake(shakeOffset,destroyOnComplete: destroyOnComplete));
 	}
 	public class TweenArgument {
 		public bool destroyOnComplete;

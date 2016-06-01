@@ -47,7 +47,7 @@ public class InhalerPopup : MonoBehaviour {
 	}
 
 	private void OnTap() {
-		DoctorMatchManager.Instance.LockZones();
+		DoctorMatchManager.Instance.TempLockZones();
 
 		Color c = Color.red;
 		intensity -= .35f;

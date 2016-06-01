@@ -40,7 +40,7 @@ public class AssemblyLineController : MonoBehaviour {
 		itemQueue = new Queue<AssemblyLineItem>();
 		// Init and throw it into the queue
 		if (!isTutorial)
-			PopulateQueue(StartPosition.position);
+			PopulateQueue();
 	}
 
 	public AssemblyLineItem PopFirstItem() {
@@ -111,15 +111,17 @@ public class AssemblyLineController : MonoBehaviour {
 			LeanTween.move(itemScript.gameObject, StartPosition.position + newIndex * new Vector3(distanceBetween, 0), timeToTake);
 		}
 	}
-	private void PopulateQueue(Vector3 startPos, int indexOffset=0) {
+	public void PopulateQueue(bool show=false, int count=-1) {
 		UpdateVisibleCount();
-		for (int i = 0; i < startingCount + 1; i++) {
+		int toSpawn = (count==-1) ? startingCount + 1 : count;
+		for (int i = 0; i < toSpawn; i++) {
 			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
-			item.transform.position = startPos + i * new Vector3(distanceBetween, 0);
+			item.transform.position = StartPosition.position + i * new Vector3(distanceBetween, 0);
 			AssemblyLineItem itemScript = item.GetComponent<AssemblyLineItem>();
-			itemScript.Init(i+indexOffset);
+			itemScript.Init(i);
 			itemQueue.Enqueue(itemScript);
-			itemScript.CompareVisible(visibleCount);
+			if (!show)
+				itemScript.CompareVisible(visibleCount);
 		}
 	}
 

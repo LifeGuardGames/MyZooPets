@@ -22,6 +22,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public GameObject pointerPrefab;
 	public GameObject floatyPrefab;
 	public GameObject inhalerPrefab;
+	public GameObject arrowObject;
 
 	private int numOfCorrectDiagnose;
 	private bool paused = true;
@@ -31,6 +32,10 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	private int tutorialZone = 0;
 	private FingerController finger = null;
 	private bool spawnInhalers = false;
+	private IEnumerator multipleFinger = null;
+	private float lastPress;
+	private float timeToShake = 2f;
+	//If they do nothing for 5 seconds. Shake the finger
 
 	public bool Paused {
 		get {
@@ -57,6 +62,17 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			SpawnInhalerPopup();
 		}
 		#endif
+		if (tutorial&&finger!=null&&zoneGreen.button.interactable) {
+			lastPress += Time.deltaTime;
+			if (lastPress > timeToShake) {
+				StartCoroutine(finger.Shake(new Vector3(0, 20)));
+				lastPress = 0;
+			}
+		}
+	}
+
+	void OnGUI() {
+		//GUI.Box(new Rect(0, 0, 500, 100), lastPress.ToString() + ":" + timeToShake + "A" + (lastPress>timeToShake));
 	}
 
 	void Awake() {
@@ -65,12 +81,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		quitGameScene = SceneUtils.BEDROOM;
 		comboController.Setup();
 		ResetScore();
-	}
-
-	void OnGUI() {
-		if (GUI.Button(new Rect(0,100,30,30),spawnInhalers.ToString())) {
-			spawnInhalers=!spawnInhalers;
-		}
+		arrowObject.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	protected override void _Start() {
@@ -150,10 +161,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		zoneRed.ToggleButtonInteractable(true);
 
 		doctorMatchTutorial = new DoctorMatchTutorial();
-
-		yield return new WaitForSeconds(.8f);
-		finger.Shake(new Vector3(0, 20));
-
 	}
 
 	public void OnTimerBarEmpty() {
@@ -161,19 +168,29 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	public void SpawnFinger(int zone) {
+		lastPress = 0;
 		tutorialZone = zone;
 		if (finger == null) {
 			finger = Instantiate(pointerPrefab).GetComponent<FingerController>();
+			arrowObject.GetComponent<SpriteRenderer>().enabled = true;
+		} else {
+			LeanTween.cancel(finger.gameObject);
+			LeanTween.alpha(arrowObject, 0, .5f);
 		}
-		finger.transform.position = GetButtonTransform(tutorialZone).position;
-		finger.Shake(new Vector3(0, 20));
-
+		if (tutorialZone == 3) {
+			finger.transform.position = GetCorrectTransform().position;//GetButtonTransform((int)assemblyLineController.PeekFirstItem().ItemType).transform.position;
+		} else {
+			finger.transform.position = GetButtonTransform(tutorialZone).position;
+		}
+		multipleFinger = finger.RepeatShake(3 - tutorialZone, new Vector3(0, 20));
+		StartCoroutine(multipleFinger);
 	}
 
 	public void BarFinger() {
 		finger.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 50));
 		finger.transform.position = lifeBarController.transform.position + new Vector3(120, -30);
-		finger.Shake(new Vector3(20, 0), true);
+		multipleFinger = finger.RepeatShake(2, new Vector3(20, 0), true);
+		StartCoroutine(multipleFinger);
 	}
 
 	public override void UpdateScore(int deltaScore) {
@@ -199,10 +216,24 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			Destroy(toDestroy);
 	}
 
-	public void LockZones() {
+	public void TempLockZones() {
 		zoneGreen.TempLock(.15f);
 		zoneYellow.TempLock(.15f);
 		zoneRed.TempLock(.15f);
+	}
+
+	public void DisableZones() {
+		zoneGreen.button.interactable = false;
+		zoneRed.button.interactable = false;
+		zoneYellow.button.interactable = false;
+		comboController.StopCounting();
+	}
+
+	public void EnableZones() {
+		comboController.StartCounting();
+		zoneGreen.button.interactable = true;
+		zoneRed.button.interactable = true;
+		zoneYellow.button.interactable = true;
 	}
 	// Input coming from button scripts
 	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
@@ -250,17 +281,27 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	private void HandleTutorial(AssemblyLineItem poppedItem, bool correct) { //TODO: Refactor this and HandleNormal into one clean method
-		finger.StopShake(GetButtonTransform(tutorialZone).position);
+		lastPress = 0;
+		if (multipleFinger != null) {
+			StopCoroutine(multipleFinger);
+			multipleFinger = null;
+		}
+		if (tutorialZone == 3) {
+			finger.StopShake(GetCorrectTransform().position);
+		} else {
+			finger.StopShake(GetButtonTransform(tutorialZone).position);
+		}
 		if (correct) {
 			assemblyLineController.PopFirstItem();
 			poppedItem.Activate();
 			assemblyLineController.MoveUpLine();
 			if (assemblyLineController.LineComplete) {
 				doctorMatchTutorial.Advance();
-
+			} else if (tutorialZone == 3) {
+				finger.transform.position = GetCorrectTransform().position;//GetButtonTransform((int)assemblyLineController.PeekFirstItem().ItemType).transform.position;
 			}
 		} else {
-			finger.Shake(new Vector3(0, 20));
+			StartCoroutine(finger.Shake(new Vector3(0, 20), .25f));
 		}
 	}
 
@@ -277,10 +318,12 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 				return null;
 		}
 	}
-	private Transform GetCorrectTransform(){
+
+	private Transform GetCorrectTransform() {
 		AssemblyLineItem item = assemblyLineController.PeekFirstItem();
-		return GetButtonTransform((int)item.ItemType);
+		return GetButtonTransform((int)item.ItemType - 1);
 	}
+
 	private void SpawnInhalerPopup() {
 		/*lifeBarController.StopDraining();
 		zoneGreen.enabled=false;

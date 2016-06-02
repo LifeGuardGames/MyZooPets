@@ -39,7 +39,7 @@ public class PanToMoveCamera : MonoBehaviour{
 		//Move camera to the last saved partition
 		LoadSceneData sceneData = DataManager.Instance.SceneData;
 		if(sceneData != null){
-			if(sceneData.LastScene == Application.loadedLevelName){
+			if(sceneData.LastScene == SceneUtils.CurrentScene) {
 				SetCameraToLocalPartition(sceneData.LastCameraPartition);
 			}
 		}

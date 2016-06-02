@@ -1,5 +1,6 @@
 ﻿//// Copyright (c) 2016 LifeGuard Games Inc.
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 public class OpenScene : Editor {
 	[MenuItem("Open Scene/LoadingScene")]
@@ -53,8 +54,8 @@ public class OpenScene : Editor {
 	}
 
 	static void LoadScene(string name){
-		if(EditorApplication.SaveCurrentSceneIfUserWantsTo()){
-			EditorApplication.OpenScene("Assets/Scenes/" + name + ".unity");
+		if(EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {
+			EditorSceneManager.OpenScene("Assets/Scenes/" + name + ".unity");
 		}
 	}
 }

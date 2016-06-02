@@ -86,7 +86,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 			//Check if notification panel exist. load it if not
 			if(notificationCenterPanel == null){
-				if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+				if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.INHALERGAME|| SceneUtils.CurrentScene == SceneUtils.YARD){
 				GameObject notificationPanelPrefab = (GameObject)Resources.Load("NotificationCenterPanel");
 				notificationCenterPanel = GameObjectUtils.AddChildWithPositionAndScale(anchorCenter, notificationPanelPrefab);
 				}
@@ -94,7 +94,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 			//load the 3D click blocker	
 			if(notificationBackDrop3D == null && mainCamera != null){
-				if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+				if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.INHALERGAME|| SceneUtils.CurrentScene == SceneUtils.YARD){
 					GameObject notificationBackDrop3DPrefab = (GameObject)Resources.Load("NotificationBackDrop3D");
 					notificationBackDrop3D = GameObjectUtils.AddChildWithPositionAndScale(mainCamera, notificationBackDrop3DPrefab);
 				}
@@ -171,7 +171,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.SetSound(sound);
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM 
+			|| SceneUtils.CurrentScene == SceneUtils.INHALERGAME
+			|| SceneUtils.CurrentScene == SceneUtils.YARD){
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 		}
 		else{

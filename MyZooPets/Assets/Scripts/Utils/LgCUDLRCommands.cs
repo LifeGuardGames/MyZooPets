@@ -97,15 +97,6 @@ public static class LgCUDLRCommands{
 		}
 	}
 
-	[CUDLR.Command("load level", "load a new level")]
-	public static void LoadNewLevel(string[] args){
-		if(args.Length < 1){
-			CUDLR.Console.Log("expect a level name");
-			return;
-		}
-		Application.LoadLevel(args[0]);
-	}
-
 	[CUDLR.Command("Screen Resolution", "display screen resolution")]
 	public static void ShowScreenWidthAndHeight(){
 		CUDLR.Console.Log("Screen Width: " + Screen.width + " Screen Height: " + Screen.height);

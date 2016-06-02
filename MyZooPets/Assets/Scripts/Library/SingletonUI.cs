@@ -133,7 +133,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 
 		default:	// Default to base mode
 			// Only run this chunk if in bedroom or yard scene
-			if((Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD)){
+			if((SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD)){
 				// Editdeco mode check
 				if(ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){
 					if(RoomArrowsUIManager.Instance != null){

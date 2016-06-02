@@ -66,7 +66,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// </summary>
 
 	private void Drop(){
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
 		if(!isScrolling && !isClickLock){	// Picked up drop
@@ -120,7 +120,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Start the drag event and perform the dragging.
 	/// </summary>
 	void OnDrag(Vector2 delta){
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
 		if(StoreUIManager.Instance.IsOpen()){
@@ -216,7 +216,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// </summary>
 
 	void OnPress(bool isPressed){
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
 		if(StoreUIManager.Instance.IsOpen()){

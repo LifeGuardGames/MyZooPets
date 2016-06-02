@@ -227,7 +227,7 @@ public abstract class MiniPet : MonoBehaviour {
 
 		if(args.TargetCollider.name == this.gameObject.name && isUIOpen){
 			invItemID = args.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+			InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
 			string preferredFoodID = "";
 
 			preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
@@ -236,7 +236,7 @@ public abstract class MiniPet : MonoBehaviour {
 			if(preferredFoodID == invItem.ItemID){
 				//use item if so
 				args.IsValidTarget = true;
-				InventoryLogic.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
+				InventoryManager.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();
 			}
@@ -250,7 +250,7 @@ public abstract class MiniPet : MonoBehaviour {
 	protected virtual void ShowFoodPreferenceMessage(){
 		if(!isFinishEating){
 			string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
-			Item item = ItemLogic.Instance.GetItem(preferredFoodID);
+			Item item = DataLoaderItems.GetItem(preferredFoodID);
 			miniPetSpeechAI.ShowFoodPreferenceMsg(item.TextureName);
 		}
 	}

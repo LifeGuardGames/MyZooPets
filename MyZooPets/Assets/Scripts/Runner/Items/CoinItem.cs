@@ -44,7 +44,7 @@ public class CoinItem : RunnerItem {
         base.Update();
 		if (magnetized) {
 			//Vector3 aimPosition = PlayerController.Instance.transform.position+PlayerController.Instance.collider.
-			transform.position = Vector3.Lerp(transform.position,PlayerController.Instance.collider.bounds.center,speed*Time.deltaTime);
+			transform.position = Vector3.Lerp(transform.position,PlayerController.Instance.GetComponent<Collider>().bounds.center,speed*Time.deltaTime);
 			speed+=acceleration*Time.deltaTime;
 		}
 	}

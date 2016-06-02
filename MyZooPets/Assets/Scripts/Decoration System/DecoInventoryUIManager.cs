@@ -42,11 +42,11 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	protected override void Start(){
 		base.Start();
-		InventoryLogic.OnItemAddedToDecoInventory += OnItemAddedHandler;
-		InventoryLogic.OnItemUsed += OnItemUsedHandler;
+		InventoryManager.OnItemAddedToDecoInventory += OnItemAddedHandler;
+		InventoryManager.OnItemUsed += OnItemUsedHandler;
 
 		// Spawn items in the decoration inventory for the first time
-		List<InventoryItem> listDecos = InventoryLogic.Instance.AllDecoInventoryItems;
+		List<InventoryItem> listDecos = InventoryManager.Instance.AllDecoInventoryItems;
 		foreach(InventoryItem invItem in listDecos){
 			// Setting isOnLoad option to true for first time loading
 			SpawnInventoryItemInPanel(invItem, isOnLoad:true);
@@ -63,8 +63,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
-		InventoryLogic.OnItemAddedToDecoInventory -= OnItemAddedHandler;
-		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
+		InventoryManager.OnItemAddedToDecoInventory -= OnItemAddedHandler;
+		InventoryManager.OnItemUsed -= OnItemUsedHandler;
 	}
 
 	/// <summary>
@@ -73,7 +73,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// </summary>
 	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
 	public bool IsDecoInventoryScrollable(){
-		return InventoryLogic.Instance.AllDecoInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+		return InventoryManager.Instance.AllDecoInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 	}
 
 	public GameObject GetTutorialItem(){
@@ -92,7 +92,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	}
 
 	//Event listener. listening to when new item is added to the deco inventory
-	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
+	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs e){
 
 		if(e.IsItemNew){
 			SpawnInventoryItemInPanel(e.InvItem);
@@ -107,7 +107,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// Items the used event handler.
 	/// Called to update the bar from deco inventory
 	/// </summary>
-	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+	private void OnItemUsedHandler(object sender, InventoryManager.InventoryEventArgs args){
 		if(currentDragDropItem != null){
 			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
@@ -155,7 +155,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
 	
-		int allDecoInventoryItemsCount = InventoryLogic.Instance.AllDecoInventoryItems.Count;
+		int allDecoInventoryItemsCount = InventoryManager.Instance.AllDecoInventoryItems.Count;
 		// Normal case where you add item during game
 		if(!isOnLoad){
 		
@@ -208,7 +208,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		if(deocInvItemTrans == null){
 			Debug.Log("ksd");
 		}
-		InventoryItem decoInvItem = InventoryLogic.Instance.GetDecoInvItem(itemID);
+		InventoryItem decoInvItem = InventoryManager.Instance.GetDecoInvItem(itemID);
 		decoInvItemPosition = deocInvItemTrans.position;
 		
 		//Offset position if the item is just added to the inventory
@@ -291,7 +291,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 				MiniPetManager.Instance.ToggleAllMinipetVisilibity(false);
 			}
 
-			if(InventoryLogic.Instance.AllDecoInventoryItems.Count == 0){
+			if(InventoryManager.Instance.AllDecoInventoryItems.Count == 0){
 				TogglePulseShopButton(true);
 			}
 		}

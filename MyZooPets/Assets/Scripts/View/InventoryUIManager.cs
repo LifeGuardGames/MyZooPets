@@ -17,11 +17,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	private Transform currentDragDropItem;
 
 	void Start(){
-		InventoryLogic.OnItemAddedToInventory += OnItemAddedHandler;
-		InventoryLogic.OnItemUsed += OnItemUsedHandler;
+		InventoryManager.OnItemAddedToInventory += OnItemAddedHandler;
+		InventoryManager.OnItemUsed += OnItemUsedHandler;
 
 		//Spawn items in the inventory for the first time
-		List<InventoryItem> allInvItems = InventoryLogic.Instance.AllInventoryItems;
+		List<InventoryItem> allInvItems = InventoryManager.Instance.AllInventoryItems;
 		foreach(InventoryItem invItem in allInvItems){
 			// ideally, we might abstract out the inventory to be an inventory of certain things (food, usables, decos, etc)
 			// but for now, I guess just don't show decorations in the inventory
@@ -31,8 +31,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	void OnDestroy(){
-		InventoryLogic.OnItemAddedToInventory -= OnItemAddedHandler;
-		InventoryLogic.OnItemUsed -= OnItemUsedHandler;
+		InventoryManager.OnItemAddedToInventory -= OnItemAddedHandler;
+		InventoryManager.OnItemUsed -= OnItemUsedHandler;
 	}
 
 	/// <summary>
@@ -41,7 +41,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// </summary>
 	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
 	public bool IsInventoryScrollable(){
-		return InventoryLogic.Instance.AllInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+		return InventoryManager.Instance.AllInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 	}
 
 	public Vector3 GetItemFlyToPosition(){
@@ -83,7 +83,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
-		int allInventoryItemsCount = InventoryLogic.Instance.AllInventoryItems.Count;
+		int allInventoryItemsCount = InventoryManager.Instance.AllInventoryItems.Count;
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
@@ -125,7 +125,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 		// Use the position of the item in the inventory panel
 		Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-		InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+		InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
 		invItemPosition = invItemTrans.position;
 		
 		//Offset position if the item is just added to the inventory
@@ -160,7 +160,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// <summary>
 	/// Items the used event handler.
 	/// </summary>
-	private void OnItemUsedHandler(object sender, InventoryLogic.InventoryEventArgs args){
+	private void OnItemUsedHandler(object sender, InventoryManager.InventoryEventArgs args){
 
 		if(currentDragDropItem != null){
 			InventoryItem invItem = args.InvItem;
@@ -198,7 +198,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	//Event listener. listening to when new item is added to the inventory
-	private void OnItemAddedHandler(object sender, InventoryLogic.InventoryEventArgs e){
+	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs e){
 		// inventory doesn't currently care about decorations/accessories
 		if(e.InvItem.ItemType == ItemType.Decorations || e.InvItem.ItemType == ItemType.Accessories)
 			return;

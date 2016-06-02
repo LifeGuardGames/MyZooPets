@@ -165,7 +165,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	/// This does all the check by itself so dont worry when calling this
 	/// </summary>
 	public void CheckStoreButtonPulse(){
-		Item neededItem = ItemLogic.Instance.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
+		Item neededItem = DataLoaderItems.GetItem(MiniPetManager.Instance.GetFoodPreference(SelectedMiniPetID));
 		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
 		bool isPetFed = !DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID);
 		

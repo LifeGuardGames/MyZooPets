@@ -66,7 +66,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			sprite.spriteName = skill.TextureName;
 		}
 
-		List<Item> items = ItemLogic.Instance.GetItemsUnlockAtNextLevel();
+		List<Item> items = ItemManager.Instance.GetItemsUnlockAtNextLevel();
 		foreach(Item item in items){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			UISprite sprite = go.GetComponent<UISprite>();

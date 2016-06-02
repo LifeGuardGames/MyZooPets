@@ -18,7 +18,7 @@ public class ClickableFireCrystalController : MonoBehaviour{
 	}
 
 	public void RewardPlayerFireCrystal(){
-		InventoryLogic.Instance.AddItem("Usable1", 1);
+		InventoryManager.Instance.AddItem("Usable1", 1);
 		StartCoroutine(CloseFireCrystalUIManager());
 	}
 

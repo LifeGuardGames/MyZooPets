@@ -31,7 +31,7 @@ public class InventoryItem{
 	/// </summary>
 	/// <value>The item data.</value>
 	public Item ItemData{
-		get{return ItemLogic.Instance.GetItem(ItemID);}
+		get{return DataLoaderItems.GetItem(ItemID);}
 	}
 
     public InventoryItem(string itemID, ItemType itemType, string textureName){

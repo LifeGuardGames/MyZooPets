@@ -85,7 +85,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		hatButton.Hide();
 		glassesButton.Hide();
 		// Populate the entries with loaded data
-		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
+		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList) {
@@ -122,7 +122,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 	public void ShowGlasses() {
 		// Populate the entries with loaded data
-		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
+		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList) {
@@ -206,7 +206,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public void OnBuyButton(GameObject button){
 		Transform buttonParent = button.transform.parent;
 		string itemID = buttonParent.name;
-		Item itemData = ItemLogic.Instance.GetItem(itemID);
+		Item itemData = DataLoaderItems.GetItem(itemID);
 		
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
@@ -216,7 +216,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				UIImageButton buyButton = button.GetComponent<UIImageButton>();
 				buyButton.isEnabled = false;
 				
-				InventoryLogic.Instance.AddItem(itemID, 1);
+				InventoryManager.Instance.AddItem(itemID, 1);
 				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 
 				// Change the state of the button

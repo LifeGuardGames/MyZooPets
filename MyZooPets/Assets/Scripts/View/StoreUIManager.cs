@@ -229,7 +229,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void OnBuyButton(GameObject button){
 		Transform buttonParent = button.transform.parent.parent;
 		string itemID = buttonParent.name;
-		Item itemData = ItemLogic.Instance.GetItem(itemID);
+		Item itemData = DataLoaderItems.GetItem(itemID);
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
@@ -247,7 +247,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					}
 				}
 				
-				InventoryLogic.Instance.AddItem(itemID, 1);
+				InventoryManager.Instance.AddItem(itemID, 1);
 				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				
@@ -273,7 +273,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public void OnBuyButtonTutorial(GameObject button){
 		Transform buttonParent = button.transform.parent.parent;
 		string itemID = buttonParent.name;
-		Item itemData = ItemLogic.Instance.GetItem(itemID);
+		Item itemData = DataLoaderItems.GetItem(itemID);
 
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
@@ -287,7 +287,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				if(!isDecorationTutorialDone && OnDecorationItemBought != null)
 					OnDecorationItemBought(this, EventArgs.Empty);
 					
-				InventoryLogic.Instance.AddItem(itemID, 1);
+				InventoryManager.Instance.AddItem(itemID, 1);
 
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				
@@ -431,7 +431,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//base on the tab name and the page name, create proper set of item in the store
 		if(currentPage == "Food"){
 			//No sub category so retrieve a list of all food
-			List<Item> foodList = ItemLogic.Instance.FoodList;
+			List<Item> foodList = ItemManager.Instance.FoodList;
 			
 			foreach(Item itemData in foodList){
 				if(!itemData.IsSecretItem){
@@ -441,7 +441,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else if(currentPage == "Items"){
 			//No sub category so retrieve a list of all item
-			List<Item> usableList = ItemLogic.Instance.UsableList;
+			List<Item> usableList = ItemManager.Instance.UsableList;
 			
 			foreach(Item itemData in usableList){
 				if(!itemData.IsSecretItem){
@@ -464,7 +464,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			// our currently selected tab
 			GameObject selectedTab = GameObject.Find(tabName);
 			//Retrieve decoration items base on the tab name (sub category)
-			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
+			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemManager.Instance.DecorationSubCatList;	
 			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 			if(decoDict.ContainsKey(decoType)){
 				List<DecorationItem> decoList = decoDict[decoType];

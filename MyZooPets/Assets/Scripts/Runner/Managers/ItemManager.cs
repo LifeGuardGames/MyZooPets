@@ -1,6 +1,6 @@
 ﻿/* Sean Duane
  * ItemManager.cs
- * 8:27:2013   12:04
+ * 8/27/2013   12:04
  * Description:
  * An item pool holds spawned items in storage to be re-used.
  * This cuts down on the runtime of creating/deleting gameobjcts a bit.
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 using Random = UnityEngine.Random;
 
-public class ItemManager : Singleton<ItemManager> {
+public class RunnerItemManager : Singleton<RunnerItemManager> {
     public int ItemPoolMaxSize = 50;
     public List<CoinItem> CoinItems;
     public List<RunnerItem> ItemPrefabs;

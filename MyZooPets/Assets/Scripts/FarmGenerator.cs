@@ -43,11 +43,11 @@ public class FarmGenerator : MonoBehaviour {
 
 		DateTime lastRedeemTime;
 		if(isFlagResetWhenStart){	// Start from zero
-			ItemLogic.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
+			ItemManager.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
 			lastRedeemTime = LgDateTime.GetTimeNow();
 		}
 		else{						// Get last redeemed time and calculate
-			lastRedeemTime = ItemLogic.Instance.GetFarmLastRedeemTime(itemId);
+			lastRedeemTime = ItemManager.Instance.GetFarmLastRedeemTime(itemId);
 		}
 
 		RefreshLastTimeSinceLastPlayed(lastRedeemTime);
@@ -56,7 +56,7 @@ public class FarmGenerator : MonoBehaviour {
 
 	void OnApplicationPause(bool isPaused){
 		if(isPaused == false){
-			DateTime lastRedeemTime = ItemLogic.Instance.GetFarmLastRedeemTime(itemId);
+			DateTime lastRedeemTime = ItemManager.Instance.GetFarmLastRedeemTime(itemId);
 			RefreshLastTimeSinceLastPlayed(lastRedeemTime);
 		}
 	}
@@ -113,7 +113,7 @@ public class FarmGenerator : MonoBehaviour {
 			StatsManager.Instance.ChangeStats(coinsDelta: (int)current, coinsPos: transform.position, is3DObject: true);
 
 			// Update mutable datas
-			ItemLogic.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
+			ItemManager.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
 
 			// Reset the generator
 			CancelInvoke("RepeatFarm");	// Clear previous invoke before starting new one 

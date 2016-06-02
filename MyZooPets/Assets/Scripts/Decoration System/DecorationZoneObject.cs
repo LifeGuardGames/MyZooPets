@@ -12,7 +12,7 @@ public class DecorationZoneObject : DecorationZone{
 	/// <param name="strID">decoID</param>
 	protected override void _SetDecoration(string decoID, bool isPlacedFromDecoMode){
 		// Build the prefab from the id of the decoration
-		string strResource = ItemLogic.Instance.GetDecoItemPrefabName(decoID);
+		string strResource = DataLoaderItems.GetDecoItemPrefabName(decoID);
 		GameObject goPrefab = Resources.Load(strResource) as GameObject;
 		
 		if(goPrefab){

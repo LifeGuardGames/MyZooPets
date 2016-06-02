@@ -75,7 +75,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 			DecorationItem decoItem = (DecorationItem)itemData;
 
 			if(decoItem.DecorationType == DecorationTypes.Wallpaper){
-				bool isWallpaperBought = InventoryLogic.Instance.CheckForWallpaper(decoItem.ID);
+				bool isWallpaperBought = InventoryManager.Instance.IsWallpaperBought(decoItem.ID);
 
 				if(isWallpaperBought)
 					buttonMessage.gameObject.GetComponent<UIImageButton>().isEnabled = false;

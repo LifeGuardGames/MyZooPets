@@ -37,10 +37,10 @@ public class LevelComponent : MonoBehaviour{
 
 	//Destroy all the items for this component
 	public void DestroyItems(){
-		ItemManager itemManager = ItemManager.Instance; 
+		RunnerItemManager runnerItemManager = RunnerItemManager.Instance; 
 		foreach(RunnerItem currentItem in mSpawnedItems){
 			if(currentItem != null){
-				itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
+				runnerItemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
 			}
 		}
 	}

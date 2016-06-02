@@ -148,7 +148,7 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 		AudioManager.Instance.PlayClip("runnerGameOver");
 
 		//Reset level items
-		ItemManager.Instance.Reset();
+		RunnerItemManager.Instance.Reset();
 	}
 	
 	/// <summary>

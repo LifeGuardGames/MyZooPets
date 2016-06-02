@@ -27,7 +27,7 @@ public abstract class RunnerItem : MonoBehaviour {
 		
 			//Display tutorial if needed	
 			if(hasTutorial) 
-				ItemManager.Instance.DisplayTutorial(ID,true);
+				RunnerItemManager.Instance.DisplayTutorial(ID,true);
 
 			//Each item handles adding points
 

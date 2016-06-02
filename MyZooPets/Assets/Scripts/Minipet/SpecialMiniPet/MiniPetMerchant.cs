@@ -50,7 +50,7 @@ public class MiniPetMerchant : MiniPet{
 	public void BuyItem(){
 		isItemBought = true;
 		DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(MinipetId, true);
-		InventoryLogic.Instance.AddItem(secretMerchantItem.ItemId, 1);
+		InventoryManager.Instance.AddItem(secretMerchantItem.ItemId, 1);
 
 		int cost = DataLoaderItems.GetCost(secretMerchantItem.ItemId);
 		StatsManager.Instance.ChangeStats(coinsDelta: cost * -1);

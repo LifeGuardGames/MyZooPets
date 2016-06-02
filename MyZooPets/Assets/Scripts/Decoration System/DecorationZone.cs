@@ -95,7 +95,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// <returns>The decoration item from inventory.</returns>
 	/// <param name="itemID">Item ID</param>
 	private DecorationItem GetDecorationItemFromInventory(string itemID){
-		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(itemID);
+		InventoryItem item = InventoryManager.Instance.GetDecoInvItem(itemID);
 		if(item == null){
 			return null;
 		}
@@ -139,12 +139,12 @@ public abstract class DecorationZone : MonoBehaviour {
 		DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID] = itemID;		
 		
 		// Notify inventory logic that this item is being used
-		InventoryLogic.Instance.UsePetItem(itemID);
+		InventoryManager.Instance.UsePetItem(itemID);
 
 		_SetDecoration(itemID, isPlacedFromDecoMode);
 
 		// Play a sound
-		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
+		DecorationItem itemDeco = (DecorationItem)DataLoaderItems.GetItem(itemID);
 		if(isPlacedFromDecoMode){
 			if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper){
 				AudioManager.Instance.PlayClip("decoPlacePaper");
@@ -172,7 +172,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		bool isPlaceable = true;	// Start optimistic
 		
 		// Compare the node type to the decoration type
-		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
+		DecorationItem itemDeco = (DecorationItem)DataLoaderItems.GetItem(itemID);
 		DecorationTypes nodeType = GetDecoType();
 		DecorationTypes decoType = itemDeco.DecorationType;
 		isPlaceable = (nodeType == decoType);
@@ -197,7 +197,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		
 		// give the user the decoration back in their inventory
 		if(placedDecoID != null)
-			InventoryLogic.Instance.AddItem(placedDecoID, 1);
+			InventoryManager.Instance.AddItem(placedDecoID, 1);
 		else
 			Debug.LogError("Just removed an illegal decoration?");		
 		

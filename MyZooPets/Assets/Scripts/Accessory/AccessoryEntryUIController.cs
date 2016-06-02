@@ -89,7 +89,7 @@ public class AccessoryEntryUIController : MonoBehaviour{
 				SetState(AccessoryButtonType.BoughtEquipped);
 			}
 			// Check if the item has been bought
-			else if(InventoryLogic.Instance.CheckForAccessory(itemData.ID)){
+			else if(InventoryManager.Instance.IsAccessoryBought(itemData.ID)){
 				// Show the equip button
 				SetState(AccessoryButtonType.BoughtUnequipped);
 			}

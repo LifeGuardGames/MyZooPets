@@ -279,7 +279,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	}
 
     private void SpawnItemsInLevel(LevelComponent inLevelComponent, PointGroup inGroup) {
-        ItemManager itemManager = ItemManager.Instance; 
+		RunnerItemManager runnerItemManager = RunnerItemManager.Instance; 
         switch (inGroup.mSpawnType) {
             case eSpawnType.Coins: {
                 SpawnCoinStrip(inLevelComponent, inGroup);
@@ -287,13 +287,13 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             }
 
             case eSpawnType.Hazards: {
-                HazardItem newHazard = (HazardItem)itemManager.GetRandomItemOfType(typeof(HazardItem), mCurrentLevelGroup.LevelGroupID);
+                HazardItem newHazard = (HazardItem)runnerItemManager.GetRandomItemOfType(typeof(HazardItem), mCurrentLevelGroup.LevelGroupID);
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newHazard);
                 break;
             }
 
             case eSpawnType.Items: {
-                RunnerItem newItem = (RunnerItem)itemManager.GetRandomItemOfType(typeof(RunnerItem), mCurrentLevelGroup.LevelGroupID);
+                RunnerItem newItem = (RunnerItem)runnerItemManager.GetRandomItemOfType(typeof(RunnerItem), mCurrentLevelGroup.LevelGroupID);
                 SpawnitemtAtRandomPointInGroup(inLevelComponent, inGroup, newItem);
                 break;
             }
@@ -301,7 +301,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     }
 
     private void SpawnCoinStrip(LevelComponent inLevelComponent, PointGroup inSpawnGroup) {
-        ItemManager itemManager = ItemManager.Instance; 
+		RunnerItemManager runnerItemManager = RunnerItemManager.Instance; 
 
         switch (inSpawnGroup.mCurveType) {
             case eCurveType.Point:
@@ -320,7 +320,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                         Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
                         // But wait, that's on the prefab. Add in our real world clones position.
                         newCoinPosition += inLevelComponent.transform.position;
-                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
+                        CoinItem newCoin = (CoinItem)runnerItemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
                         newCoin.transform.position = newCoinPosition;
 						newCoin.CoinValue=coinNum;
                         inLevelComponent.AddLevelItem(newCoin);
@@ -366,7 +366,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
                         coinSpawnLocation += inLevelComponent.transform.position;
                         // And spawn
-                        CoinItem newCoin = (CoinItem)itemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
+                        CoinItem newCoin = (CoinItem)runnerItemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
                         newCoin.transform.position = coinSpawnLocation;
 						newCoin.CoinValue=coinNum;
 						inLevelComponent.AddLevelItem(newCoin);

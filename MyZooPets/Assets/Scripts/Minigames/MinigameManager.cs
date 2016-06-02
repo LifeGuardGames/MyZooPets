@@ -316,6 +316,8 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 				PopupNotificationNGUI.Callback button2Function = delegate(){
 				};
 
+				// Remove this refactoring 
+				/*
 				Hashtable notificationEntry = new Hashtable();
 				notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.MiniGameQuitCheck);
 				notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize("MG_DELETE_CONFIRM")); 
@@ -323,6 +325,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 				notificationEntry.Add(NotificationPopupFields.Button2Callback, button2Function);
 
 				NotificationUIManager.Instance.AddToQueue(notificationEntry);
+				*/
 			}
 		}
 		else{

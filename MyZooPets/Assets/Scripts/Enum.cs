@@ -61,20 +61,13 @@ public enum ChallengeType{
 }
 
 public enum NotificationPopupType{
-	OneButton,
-	TwoButtons,
-	GameOverRewardOneButton,
-	GameOverRewardTwoButton,
 	TipWithImage,
 	LevelUp,
-    BadgeUnlocked,
     FireLevelUp,
-//	InhalerRecharging,
 	SuperWellaInhaler,
 	SuperWellaSickReminder,
-	MiniGameQuitCheck,
 	ZeroHealth,
-	NeedFoodTutorial,
+	NeedFoodTutorial
 }
 
 public enum NotificationPopupFields{

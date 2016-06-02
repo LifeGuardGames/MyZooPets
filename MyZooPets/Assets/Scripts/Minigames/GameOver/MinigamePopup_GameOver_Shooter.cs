@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
+/*public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
 	protected override int GetReward(MinigameRewardTypes eType){
 		return ShooterGameManager.Instance.GetReward(eType);
 	}
@@ -19,4 +19,4 @@ public class MinigamePopup_GameOver_Shooter :MinigamePopup_GameOver {
 		ShooterGameManager.Instance.IsNewGameAd = false;
 		return aux;
 	}
-}
+}*/

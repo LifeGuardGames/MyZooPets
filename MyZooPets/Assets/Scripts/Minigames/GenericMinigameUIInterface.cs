@@ -88,7 +88,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		} else if (sceneName == SceneUtils.RUNNER) {
 			//RunnerGameManager.Instance.StartTutorial();
 		} else if (sceneName == SceneUtils.SHOOTER) {
-			//ShooterGameManager.Instance.StartTutorial();
+			ShooterGameManager.Instance.NewGame();
 		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.StartTutorial();
 		} else {

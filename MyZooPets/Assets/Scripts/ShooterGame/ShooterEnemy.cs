@@ -17,22 +17,18 @@ public class ShooterEnemy : MonoBehaviour{
 	// Use this for initialization
 	void Awake(){
 		player = GameObject.FindWithTag("Player");
-		ShooterGameManager.OnStateChanged += OnGameStateChanged;
 		health += ShooterGameManager.Instance.waveNum % 10;
         damage += ShooterGameManager.Instance.waveNum % 10;
 	}
 
-	void OnDestroy(){
-		ShooterGameManager.OnStateChanged -= OnGameStateChanged;
-	}
 
 	// Update is called once per frame
 	void Update(){
 		// work around for enemies who spawn during a state change they seem to miss the event call when this happens
-		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
+		if(ShooterGameManager.Instance.isPaused){
 			LeanTween.pause(this.gameObject);
 		}
-		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.GameOver){
+		if(ShooterGameManager.Instance.isGameOver){
 			StartCoroutine(DestroyEnemy());
 		}
 	}
@@ -94,7 +90,6 @@ public class ShooterEnemy : MonoBehaviour{
 			LeanTween.cancel(this.gameObject);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();
-			ShooterGameManager.OnStateChanged -= OnGameStateChanged;
 			// Visual changes
 			animator.gameObject.SetActive(false);
 			if(particle != null){

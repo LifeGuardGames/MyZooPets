@@ -11,10 +11,6 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public List<GameObject> posList;	//list of positions to spawn enemy from
 	private List<ImmutableDataShooterArmy> spawningList;
 			
-	// Use this for initialization
-	void Start(){
-		ShooterGameManager.OnStateChanged += OnGameStateChanged;
-	}
 
 	// prevents finishing the last wave
 	public void Reset(){
@@ -68,9 +64,6 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	//Spawns all enemies in the list waiting 1 sec inbetween 
 	IEnumerator SpawnEnemies(){
 		for(int i = 0; i < spawningList.Count; i++){
-			if(isSpawing == false){
-				yield return ShooterGameManager.Instance.Sync();
-			}
 			yield return new WaitForSeconds(1.0f);
 			int randomPositionIndex = Random.Range(0, 3);
 			

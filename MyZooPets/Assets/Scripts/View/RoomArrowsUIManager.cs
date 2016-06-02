@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 
 public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 	public TweenToggleDemux roomArrowsDemux;
 	public TweenToggle leftArrowTween;
 	public TweenToggle rightArrowTween;
-	public LgButton rightArrowButtonScript;
+	public Button rightArrowObject;
 
 	void Start(){
 		CameraManager.Instance.PanScript.OnPartitionChanged += ShowPanel;
-
-
 		Invoke("ShowPanel", 0.5f);
 	}
 
@@ -21,8 +19,8 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	}
 
 	// For use in tutorial only
-	public LgButton GetRightArrowReference(){
-		return rightArrowButtonScript;
+	public Button GetRightArrowReference(){
+		return rightArrowObject;
 	}
 
 	public void ShowPanel(object sender, EventArgs args){
@@ -31,12 +29,6 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	
 	// Shows both arrows
 	public void ShowPanel(){
-		//hacky... need to refactor TutorialManager so that it's child class can also be an instance
-//		bool isFlameCrystalTutorialDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FLAME_CRYSTAL);
-//		if(TutorialManager.Instance.IsTutorialActive() || !isFlameCrystalTutorialDone){
-//			return;
-//		};
-
 		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()) return;
 
 		PanToMoveCamera panScript = CameraManager.Instance.PanScript;
@@ -108,11 +100,11 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		leftArrowTween.Hide();
 	}
 
-	public void RightArrowClicked(GameObject sender){
+	public void OnRightArrowClicked(){
 		CameraManager.Instance.PanScript.MoveOneRoomToRight();
 	}
 
-	public void LeftArrowClicked(GameObject sender){
+	public void OnLeftArrowClicked(){
 		CameraManager.Instance.PanScript.MoveOneRoomToLeft();
 	}
 

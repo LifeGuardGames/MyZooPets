@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 //---------------------------------------------------
 // GameTutorial_SmokeIntro
 // Tutorial that introduces the smoke monster.
 //---------------------------------------------------
 public class GameTutorialSmokeIntro : GameTutorial{
+	private Button rightArrowButton;
 
 	public GameTutorialSmokeIntro() : base(){
 	}
@@ -118,12 +119,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		RoomArrowsUIManager.Instance.ShowRightArrow();
 
 		// begin listening for when the inhaler is clicked
-		LgButton rightArrowButton = RoomArrowsUIManager.Instance.GetRightArrowReference();
+		rightArrowButton = RoomArrowsUIManager.Instance.GetRightArrowReference();
 
 		// the inhaler is the only object that can be clicked
 		AddToProcessList(rightArrowButton.gameObject, true);
 
-		rightArrowButton.OnProcessed += RightArrowClicked;
+		rightArrowButton.onClick.AddListener(() => { RightArrowClicked(); });
 
 		// spotlight the arrow
 		SpotlightObject(rightArrowButton.gameObject, true, InterfaceAnchors.Right, 
@@ -141,9 +142,8 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		ShowRetentionPet(true, new Vector3(-281, -86, -160));
 	}
 
-	private void RightArrowClicked(object sender, EventArgs args){
-		LgButton button = (LgButton)sender;
-		button.OnProcessed -= RightArrowClicked;
+	private void RightArrowClicked(){
+		rightArrowButton.onClick.RemoveListener(() => { RightArrowClicked(); });
 
 		RemoveSpotlight();
 		RemoveFingerHint();

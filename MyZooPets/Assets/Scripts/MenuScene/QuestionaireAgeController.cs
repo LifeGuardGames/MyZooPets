@@ -19,7 +19,7 @@ public class QuestionaireAgeController : MonoBehaviour{
 	/// Called by the slider when the value has changed. Rounds up to the nearest integer for age
 	/// </summary>
 	public void OnSliderChange(){
-		int age = (int)slider.value;
+		age = (int)slider.value;
 
 		if(age == (int)slider.maxValue){
 			ageText.text = age.ToString() + "+";

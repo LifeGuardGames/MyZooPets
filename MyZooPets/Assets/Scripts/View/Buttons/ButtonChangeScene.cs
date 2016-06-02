@@ -98,7 +98,7 @@ public class ButtonChangeScene : LgButton{
 		if(shouldSaveSceneData){
 			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentLocalPartition;
 			Vector3 petPos = petObject.transform.position;
-			DataManager.Instance.SceneData = new LoadSceneData(Application.loadedLevelName, petPos, partition);
+			DataManager.Instance.SceneData = new LoadSceneData(SceneUtils.CurrentScene, petPos, partition);
 		}
 		else{
 			if(strScene == SceneUtils.MENU){

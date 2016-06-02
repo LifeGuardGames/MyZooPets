@@ -8,8 +8,8 @@ using System.Collections.Generic;
 /// This class includes the Decoration Inventory as well as UI for decoration.
 /// 
 /// 
-/// InventoryLogic 	- DecoInventoryUIManager	(two separate inventory managers!)
-/// 				\ InventoryUIManager
+/// InventoryManager 	- DecoInventoryUIManager	(two separate inventory managers!)
+/// 					\ InventoryUIManager
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {

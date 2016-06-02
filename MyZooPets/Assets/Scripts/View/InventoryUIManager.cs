@@ -3,6 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// InventoryManager 	- DecoInventoryUIManager	(two separate inventory managers!)
+/// 					\ InventoryUIManager
+/// </summary>
 public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
 
@@ -74,7 +78,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 				}
 			}
 		}
-
 		return retVal;
 	}
 

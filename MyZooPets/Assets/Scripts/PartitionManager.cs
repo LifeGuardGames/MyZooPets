@@ -206,7 +206,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	public bool IsPartitionInCurrentZone(int absolutePartitionNumber){
 		string craftedId = "Partition" + StringUtils.FormatIntToDoubleDigitString(absolutePartitionNumber);
 		ImmutableDataPartition partition = DataLoaderPartitions.GetData(craftedId);
-		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
+		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(SceneUtils.CurrentScene)) ? true : false;
 	}
 
 	/// <summary>

@@ -85,7 +85,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 
 	// checks if all enemies are dead and if yes, begin day transition
 	public void CheckEnemiesInWave(){
-		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(!ShooterGameManager.Instance.isGameOver){
 			if(enemiesInWave == 0){
 				if(ShooterGameManager.Instance.inTutorial){
 					if(OnTutorialStepDone != null){

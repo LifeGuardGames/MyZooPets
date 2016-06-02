@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections;
 
 /// <summary>
@@ -7,7 +6,6 @@ using System.Collections;
 /// Make sure this object follows the camera, either by reference or child object
 /// This is persistent throughout the scene.
 /// </summary>
-
 public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 	//NOTE: This class went from a generic notification system to fairly non generic
@@ -15,9 +13,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	//is that most of the pop we require special notification layout for different events
 	//in the game. We should probably add a feature where you can just specify a notification
 	//prefab when you call NotificationUIManager. Will save us from creating so many switch statements
-
-	public GameObject popupNotificationOneButton;
-	public GameObject popupNotificationTwoButtons;
 	public GameObject popupLevelUpMessage;
 	public GameObject popupTipWithImage;
 	public GameObject popupGameOverRewardMessageOneButton;
@@ -28,7 +23,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	public GameObject popupMiniGameQuitCheck;
 	public GameObject popupZeroHealth;
 
-//	public GameObject popupInhalerRechargeMessage;
 	public GameObject popupSuperWellaInhaler;
 	public GameObject popupSuperWellaSick;
 	public GameObject popupNeedFoodTutorial;
@@ -92,7 +86,7 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 			//Check if notification panel exist. load it if not
 			if(notificationCenterPanel == null){
-				if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+				if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.INHALERGAME|| SceneUtils.CurrentScene == SceneUtils.YARD){
 				GameObject notificationPanelPrefab = (GameObject)Resources.Load("NotificationCenterPanel");
 				notificationCenterPanel = GameObjectUtils.AddChildWithPositionAndScale(anchorCenter, notificationPanelPrefab);
 				}
@@ -100,36 +94,13 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 
 			//load the 3D click blocker	
 			if(notificationBackDrop3D == null && mainCamera != null){
-				if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+				if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.INHALERGAME|| SceneUtils.CurrentScene == SceneUtils.YARD){
 					GameObject notificationBackDrop3DPrefab = (GameObject)Resources.Load("NotificationBackDrop3D");
 					notificationBackDrop3D = GameObjectUtils.AddChildWithPositionAndScale(mainCamera, notificationBackDrop3DPrefab);
 				}
 			}
 			
 			switch((NotificationPopupType)entry[NotificationPopupFields.Type]){
-			case NotificationPopupType.OneButton:
-				ShowPopupNotificationOneButton(
-						(string)entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
-				);
-				break;
-
-			case NotificationPopupType.TwoButtons:
-				ShowPopupNotificationTwoButtons(
-						(string)entry[NotificationPopupFields.Message],
-						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
-						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button2Callback]
-				);
-				break;
-				
-			case NotificationPopupType.GameOverRewardOneButton:
-				ShowGameOverRewardMessage(
-						(int)entry[NotificationPopupFields.DeltaStars],
-						(int)entry[NotificationPopupFields.DeltaPoints],
-						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
-				);
-				break;
-				
 			case NotificationPopupType.TipWithImage:
 				ShowPopupTipWithImage(
 						(string)entry[NotificationPopupFields.Message],
@@ -137,20 +108,11 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
-				
 			case NotificationPopupType.LevelUp:
 				ShowLevelUpMessage(
 						(string)entry[NotificationPopupFields.Message],
 						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
 						(string)entry[NotificationPopupFields.Sound]
-				);
-				break;
-			case NotificationPopupType.BadgeUnlocked:
-				ShowBadgeRewardMessage(
-						(string)entry[NotificationPopupFields.Badge],
-						(string)entry[NotificationPopupFields.Message],
-						(string)entry[NotificationPopupFields.SpriteName],
-						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
 			case NotificationPopupType.FireLevelUp:
@@ -160,11 +122,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
 				);
 				break;
-//			case NotificationPopupType.InhalerRecharging:
-//				ShowInhalerRechargingMessage(
-//					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
-//				);
-//				break;
 			case NotificationPopupType.NeedFoodTutorial:
 				ShowNeedFoodTutorialMessage(
 					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
@@ -175,12 +132,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 				ShowSuperWellaInhalerMessage(
 					(string)entry[NotificationPopupFields.Message],
 					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
-				);
-				break;
-			case NotificationPopupType.MiniGameQuitCheck:
-				ShowMiniGameQuitCheckMessage(
-					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
-					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button2Callback]
 				);
 				break;
 			case NotificationPopupType.ZeroHealth:
@@ -209,40 +160,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	}
 
 	/// <summary>
-	/// Shows the popup notification one button.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <param name="okCallBack">Ok call back.</param>
-	public void ShowPopupNotificationOneButton(string message, PopupNotificationNGUI.Callback okCallBack){
-		PopupNotificationNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupNotificationOneButton);
-		oneButtonMessage.Message = message;
-		oneButtonMessage.Button1Callback = okCallBack;
-		// oneButtonMessage.Button1Text = button;
-		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		
-		StartCoroutine(DisplayAfterInit(oneButtonMessage));
-	}
-	
-	/// <summary>
-	/// Shows the popup notification two buttons.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <param name="okCallBack">Ok call back.</param>
-	/// <param name="cancelCallBack">Cancel call back.</param>
-	public void ShowPopupNotificationTwoButtons(string message, PopupNotificationNGUI.Callback okCallBack,
-		PopupNotificationNGUI.Callback cancelCallBack){
-		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNotificationTwoButtons);
-
-		twoButtonMessage.Message = message;
-		twoButtonMessage.Button1Callback = okCallBack;
-		twoButtonMessage.Button2Callback = cancelCallBack;
-
-		twoButtonMessage.OnHideFinished += TryNextNotification;
-
-		StartCoroutine(DisplayAfterInit(twoButtonMessage));
-	}
-	
-	/// <summary>
 	/// Shows the level up message.
 	/// </summary>
 	/// <param name="message">Message.</param>
@@ -254,7 +171,9 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		oneButtonMessage.Button1Callback = okCallBack;
 		oneButtonMessage.SetSound(sound);
 		oneButtonMessage.OnHideFinished += TryNextNotification; 	// Assign queue behavior to notification
-		if(Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.INHALERGAME|| Application.loadedLevelName == SceneUtils.YARD){
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM 
+			|| SceneUtils.CurrentScene == SceneUtils.INHALERGAME
+			|| SceneUtils.CurrentScene == SceneUtils.YARD){
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 		}
 		else{

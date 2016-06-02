@@ -33,7 +33,7 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 			}
 			
 			PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
-			if(moodState == PetMoods.Sad && Application.loadedLevelName == SceneUtils.BEDROOM){
+			if(moodState == PetMoods.Sad && SceneUtils.CurrentScene == SceneUtils.BEDROOM){
 				bool isMoodDecayTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_MOOD_DEGRADE);
 				if(!isMoodDecayTutorialDone)
 					Invoke("ShowMoodDegradeMessage", 0.25f);

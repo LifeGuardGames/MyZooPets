@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 //---------------------------------------------------
 // MinigameLife
@@ -14,7 +15,7 @@ public class MinigameLife : MonoBehaviour{
 	public int nIndex;
 	
 	// the sprite that this life is uing
-	public UISprite sprite;
+	public Image sprite;
 	
 	// particle systems for this object
 	public ParticleSystemController systemOff;

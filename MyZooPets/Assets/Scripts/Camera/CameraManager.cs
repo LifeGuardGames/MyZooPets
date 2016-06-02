@@ -124,8 +124,6 @@ public class CameraManager : Singleton<CameraManager>{
 		// Make sure to subtract the camera's parent's position from the vPos because the parent moves as the partitions pan
 		position -= gameObject.transform.parent.position;
 		
-		Hashtable hashMove = new Hashtable();
-
 		// If the incoming object isn't null, set up a callback
 		if(cameraDoneCallback != null){
 			FinishCameraMoveCallback = cameraDoneCallback;	// Cache the callback

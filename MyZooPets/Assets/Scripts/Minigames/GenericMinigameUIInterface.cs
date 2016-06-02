@@ -82,7 +82,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		} else if (sceneName == SceneUtils.RUNNER) {
 			NewRunnerGameManager.Instance.NewGame();
 		} else if (sceneName == SceneUtils.SHOOTER) {
-			Debug.LogWarning("OnRestart not set up for Shooter");
+			ShooterGameManager.Instance.NewGame();
 		} else if (sceneName == SceneUtils.TRIGGERNINJA) {
 			Debug.LogWarning("OnRestart not set up for Shooter");
 		} else { //TODO: Add SceneUtils.MEMORY to OnResume, OnRestart, and QuitGame

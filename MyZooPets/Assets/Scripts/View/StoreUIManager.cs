@@ -193,8 +193,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		path[2] = origin;
 		path[3] = itemPosition;
 
-
-		Hashtable optional = new Hashtable();
 		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, itemSpritePrefab);
 		
 		animationSprite.transform.position = origin;
@@ -353,7 +351,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			// Set the default category
 			string defaultTabName = "Carpet";	
-			if(Application.loadedLevelName == SceneUtils.YARD){
+			if(SceneUtils.CurrentScene == SceneUtils.YARD){
 				defaultTabName = "SmallPlant";
 			}
 

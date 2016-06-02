@@ -11,8 +11,10 @@ public class SpawnPetAtLastPosition : MonoBehaviour {
 	void Start () {
         LoadSceneData sceneData = DataManager.Instance.SceneData;
 
-		if(sceneData != null)
-			if(sceneData.LastScene == Application.loadedLevelName)
+		if(sceneData != null) {
+			if(sceneData.LastScene == SceneUtils.CurrentScene) {
 				transform.position = sceneData.LastPetPosition;
+			}
+		}
 	}
 }

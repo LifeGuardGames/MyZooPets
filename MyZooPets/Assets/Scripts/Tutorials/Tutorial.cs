@@ -34,7 +34,6 @@ public abstract class Tutorial{
 	private GameObject goRetentionPet;	// Current retention pet sprite
 	private int currentStep; // step the tutorial is currently on
 
-	
 	public bool CanProcess(GameObject go){
 		bool canProcess = listCanProcess.Contains(go);
 		return canProcess;

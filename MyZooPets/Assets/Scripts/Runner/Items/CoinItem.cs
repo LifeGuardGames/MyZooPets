@@ -27,12 +27,6 @@ public class CoinItem : RunnerItem {
 			}
 		}
 	}
-	public bool Magnetize {
-		set {
-			magnetized=value;
-			acceleration=PlayerController.Instance.Speed;
-		}
-	}
 	// Use this for initialization
 	public override void Start () {
         base.Start();
@@ -42,11 +36,20 @@ public class CoinItem : RunnerItem {
 	// Update is called once per frame
     public override void Update() {
         base.Update();
-		if (magnetized) {
+		if (magnetized&&NewRunnerGameManager.Instance.GameRunning) {
+			acceleration=2*PlayerController.Instance.Speed;
 			//Vector3 aimPosition = PlayerController.Instance.transform.position+PlayerController.Instance.collider.
-			transform.position = Vector3.Lerp(transform.position,PlayerController.Instance.GetComponent<Collider>().bounds.center,speed*Time.deltaTime);
-			speed+=acceleration*Time.deltaTime;
+			Vector3 aimPosition =  PlayerController.Instance.GetComponent<Collider>().bounds.center;
+			transform.position = Vector3.Lerp(transform.position,aimPosition,speed*Time.deltaTime);
+			speed+=acceleration*Time.deltaTime; 
+			if (Vector3.Distance(transform.position,aimPosition)<.5f){
+				transform.position=aimPosition;
+			}
 		}
+	}
+
+	public void Magnetize () {
+		magnetized = true;
 	}
     public override void OnPickup(){
 		// picking up coins plays a special sound, with the pitch depending on the coin streak
@@ -54,7 +57,7 @@ public class CoinItem : RunnerItem {
 		Hashtable hashOverride = new Hashtable();
 		hashOverride["Pitch"] = fPitch;
         hashOverride["Volume"] = 0.5f;
-		AudioManager.Instance.PlayClip("StarSingle", option: hashOverride );
+		//AudioManager.Instance.PlayClip("StarSingle", option: hashOverride );
 		ScoreManager.Instance.AddCoins((int)Mathf.Sqrt(CoinValue)); //Sqrt is used because it makes consecutive strings less super high valued compared to short strings.
         GameObject.Destroy(gameObject); //Still, it gives a better scaling than 1 point coins.
 		MegaHazard.Instance.IncrementHealth(CoinValue);
@@ -74,7 +77,6 @@ public class CoinItem : RunnerItem {
 	public float GetCoinStreakPitch() {
 		int nStreak = ScoreManager.Instance.GetCoinStreak();
 		float fPitch = 1.0f + ( nStreak * fPitchPerCoin );
-
 		return fPitch;
 	}
 	private void Bonus(){

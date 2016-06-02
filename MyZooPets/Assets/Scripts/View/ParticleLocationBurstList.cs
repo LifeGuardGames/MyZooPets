@@ -5,7 +5,7 @@ using System.Collections;
 /// Takes a particle and plays the animation in a list of different locations set by a delay time in between
 /// </summary>
 public class ParticleLocationBurstList : MonoBehaviour {
-	public ParticleSystem particleSystem;
+	public ParticleSystem pSystem;
 	public float delayBetween;
 	public Transform[] locationList;
 	public string particleSound;
@@ -16,8 +16,8 @@ public class ParticleLocationBurstList : MonoBehaviour {
 
 	IEnumerator PlayHelper(){
 		foreach(Transform location in locationList){
-			particleSystem.transform.localPosition = location.transform.localPosition;
-			particleSystem.Play();
+			pSystem.transform.localPosition = location.transform.localPosition;
+			pSystem.Play();
 
 			if(particleSound != null){
 				AudioManager.Instance.PlayClip(particleSound);

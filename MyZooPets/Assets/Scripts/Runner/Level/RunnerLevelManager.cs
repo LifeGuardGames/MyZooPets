@@ -41,9 +41,8 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	
 	// Update is called once per frame
 	void Update() {
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(!NewRunnerGameManager.Instance.GameRunning)
 			return;
-		
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
 
@@ -80,7 +79,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                 removedLevelComponent.ParentGroup.DestroyAndCache(removedLevelComponent.gameObject);
 
 				// Push a new one if not in tutorial mode
-                if(!RunnerGameManager.Instance.IsTutorialRunning()){
+				if(!NewRunnerGameManager.Instance.IsTutorialRunning){
                     LevelComponent nextLevel = PushAndInstantiateRandomComponent();
                     PopulateLevelComponent(nextLevel);
                 }else{
@@ -90,7 +89,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 		}
 
         //only allow level group switching if not in tutorial mode
-        if(!RunnerGameManager.Instance.IsTutorialRunning()){
+		if(!NewRunnerGameManager.Instance.IsTutorialRunning){
             mLevelSwitchPulse -= Time.deltaTime;
 
             if (mLevelSwitchPulse <= 0f) {
@@ -102,7 +101,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 
     public void Reset() {
         CleanUp();
-
         LevelComponent nextLevel;
         nextLevel = PushAndInstantiateRandomComponent(useStartingComponent:true);
         PopulateLevelComponent(nextLevel);
@@ -206,7 +204,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	/// <returns>The instantiated random component.</returns>
 	/// <param name="useStartingComponent">True will load the first component of the level group</param>
 	private LevelComponent PushAndInstantiateRandomComponent(bool useStartingComponent = false, bool tutMode = false) {
-        LevelComponent newComponent = null;
+		LevelComponent newComponent = null;
 
 		if(useStartingComponent)
 			newComponent = mCurrentLevelGroup.GetStartLevelComponent();
@@ -370,7 +368,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                         newCoin.transform.position = coinSpawnLocation;
 						newCoin.CoinValue=coinNum;
 						inLevelComponent.AddLevelItem(newCoin);
-						if (coinNum==1) { //FIXME: Sometimes these are made backwards?
+						if (coinNum==1) {
 							newCoin.NextToCollect=true;
 						} else {
 							lastCoin.nextCoin=newCoin; //The coin after the one before us, is us

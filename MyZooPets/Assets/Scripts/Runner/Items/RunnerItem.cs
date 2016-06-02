@@ -22,7 +22,7 @@ public abstract class RunnerItem : MonoBehaviour {
 	public virtual void Update() { }
 	
 	void OnTriggerEnter(Collider inOther) {
-		if (inOther.gameObject.tag == "Player" && (!hazard||(hazard&&!PlayerController.Instance.Invincible))) { //Make sure we are either not a hazard, or that we are a hazard but not invincible
+		if (inOther.gameObject.tag == "Player" && (!hazard||(hazard&&!PlayerController.Instance.Invincible))) { //Make sure we are either not a hazard, or that we are a hazard and the player is vulnerable
 			OnPickup();
 		
 			//Display tutorial if needed	

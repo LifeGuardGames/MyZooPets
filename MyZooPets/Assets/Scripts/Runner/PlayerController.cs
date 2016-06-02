@@ -68,12 +68,11 @@ public class PlayerController : Singleton<PlayerController>{
 	public Camera nguiCamera;
 	private Vector2 amountToMove; //How much you want the player to move
 	private PlayerPhysics playerPhysics; //Reference to physics
-	private float speedIncreaseCounter = 0f; //Time till we speed up the game
 	private Vector2 initialPosition; //Where the player start
 	private GameObject floatyLocation;
 	private SpriteRenderer[] spriteRendererList; //List of SpriteRenderers loaded by PetSpriteColorLoader
 	private Color[] colorList; //Used by spriteRendererList to revert colors back to original
-	private bool flipColor = false;
+	//TODO: colorList is not actually necessary. When we reset, just go to all white instead
 	private float magnetTime=0; //How long until magnet is disabled
 	private float magnetTimeIncrease=5f; //How much extra time a magnet gives
 	private IEnumerator currentColor;
@@ -116,12 +115,12 @@ public class PlayerController : Singleton<PlayerController>{
 		playerPhysics = GetComponent<PlayerPhysics>();
 		initialPosition = this.transform.position;
 		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
-		RunnerGameManager.OnStateChanged += GameStateChanged;
+		//RunnerGameManager.OnStateChanged += GameStateChanged;
 		Reset();
 	}
     
 	void Update(){
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(!NewRunnerGameManager.Instance.GameRunning)
 			return;
 #if UNITY_EDITOR    
         CheckKeyMovement();
@@ -132,7 +131,7 @@ public class PlayerController : Singleton<PlayerController>{
 	}
 
 	void OnDestroy(){
-		RunnerGameManager.OnStateChanged -= GameStateChanged;
+		//RunnerGameManager.OnStateChanged -= GameStateChanged;
 	}
 
 #if UNITY_EDITOR    
@@ -156,7 +155,7 @@ public class PlayerController : Singleton<PlayerController>{
 		}
 	}
 	void FixedUpdate(){
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(!NewRunnerGameManager.Instance.GameRunning)
 			return;
 
 		//update runner horizontal movement
@@ -175,8 +174,7 @@ public class PlayerController : Singleton<PlayerController>{
 
 	// Listen to finger down gesture
 	void OnTap(TapGesture e){ 
-		if(RunnerGameManager.Instance.GameRunning ){
-			float touchLocationDifference = Camera.main.ScreenToWorldPoint(e.Position).y - floatyLocation.transform.position.y; //Height of touch - height of player
+		if(NewRunnerGameManager.Instance.GameRunning ){
 			if(e.Position.y>Screen.height/2){
 				Jump(movement.jumpHeight);//Jump(Mathf.Clamp(touchLocationDifference,movement.minHeight,movement.maxHeight)); //In world coordinates
 				if(OnJump != null)
@@ -217,10 +215,9 @@ public class PlayerController : Singleton<PlayerController>{
 	/// Reset player position and physics
 	/// </summary>
 	public void Reset(){
-		speedIncreaseCounter = 0f;
 		transform.position = initialPosition;
 		magnetTime=0;
-		MagneticField.Instance.enabled=false;
+		MagneticField.Instance.EnableMagnet(false);
 		movement.verticalSpeed = 0f;
 		movement.currentSpeed = 0f;
 		anim.speed=minAnimSpeed;
@@ -252,7 +249,7 @@ public class PlayerController : Singleton<PlayerController>{
 			magnetTime=magnetTimeIncrease;
 		else
 			magnetTime+=magnetTimeIncrease;
-		MagneticField.Instance.enabled=true;
+		MagneticField.Instance.EnableMagnet(true);
 	}
 	/// <summary>
 	/// Makes the player visible.
@@ -430,8 +427,7 @@ public class PlayerController : Singleton<PlayerController>{
 	// If player falls below the "Dead line" than the player dies
 	//---------------------------------------------------
 	private void CheckAndActOnDeath(){
-		RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
-		if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
+		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver){
 			EndGame();
 		} 
 	}
@@ -439,13 +435,13 @@ public class PlayerController : Singleton<PlayerController>{
 		if (magnetTime>=0)
 			magnetTime-=Time.deltaTime;
 		else 
-			MagneticField.Instance.enabled=false;
+			MagneticField.Instance.EnableMagnet(false);
 	}
 	public void EndGame(){
 		RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
 		runnerLevelManager.mCurrentLevelGroup.ReportDeath();
 		AudioManager.Instance.PlayClip("runnerDie");
-		RunnerGameManager.Instance.ActivateGameOver();    
+		NewRunnerGameManager.Instance.ActivateGameOver();    
 
 	}
 	

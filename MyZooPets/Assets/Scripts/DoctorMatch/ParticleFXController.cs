@@ -8,11 +8,8 @@ public class ParticleFXController : MonoBehaviour {
 	public RectTransform counterTransform;
 	public RectTransform barTransform;
 
-	private ParticleSystem particleSystem;
-	private ParticleSystem.Particle[] particles;
 	private Vector3 particleAim;
 	private float particleRunTime;
-	private int particleCount = 0;
 	private float horizontalRange = 80;
 	private float verticalHeight = 180;
 

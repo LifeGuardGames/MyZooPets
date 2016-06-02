@@ -155,7 +155,7 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
             TutorialPopup script = tutorialGO.GetComponent<TutorialPopup>();
             script.Init(option);
 
-            RunnerGameManager.Instance.PauseGameWithoutPopup();
+			NewRunnerGameManager.Instance.PauseGame(false);
             DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }
     }

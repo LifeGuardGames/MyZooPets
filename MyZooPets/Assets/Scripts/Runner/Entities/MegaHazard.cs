@@ -26,16 +26,16 @@ public class MegaHazard : Singleton<MegaHazard> {
 		//hhpArray = new float[(int)(seconds*updatesPerSecond)];
 		
 		Reset ();
-		RunnerGameManager.OnStateChanged += GameStateChanged;
+		//RunnerGameManager.OnStateChanged += GameStateChanged;
 	}
 	
 	void OnDestroy(){
-		RunnerGameManager.OnStateChanged -= GameStateChanged;
+		//RunnerGameManager.OnStateChanged -= GameStateChanged;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(!NewRunnerGameManager.Instance.GameRunning)
 			return;
 		if (healthTick>maxTicked){
 			maxTicked=healthTick;
@@ -108,14 +108,12 @@ public class MegaHazard : Singleton<MegaHazard> {
 			hpArray[i]=health;
 		}*/
 	}
-	private void GameStateChanged(object sender, GameStateArgs args){
-		MinigameStates gameState = args.GetGameState();
-		if(gameState == MinigameStates.Paused){
-			hazardParticle.Pause();
-			hazardParticle2.Pause();
-		}else if(gameState == MinigameStates.Playing){
-			hazardParticle.Play();
-			hazardParticle2.Play();
-		}
+	public void PauseParticles() {
+		hazardParticle.Pause();
+		hazardParticle2.Pause();
+	}
+	public void PlayParticles() {
+		hazardParticle.Play();
+		hazardParticle2.Play();
 	}
 }

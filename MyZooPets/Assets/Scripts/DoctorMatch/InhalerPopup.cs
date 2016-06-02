@@ -48,8 +48,6 @@ public class InhalerPopup : MonoBehaviour {
 
 	private void OnTap() {
 		DoctorMatchManager.Instance.TempLockZones();
-
-		Color c = Color.red;
 		intensity -= .35f;
 		taps++;
 		GetComponent<SpriteRenderer>().color = new Color(intensity, intensity, intensity);

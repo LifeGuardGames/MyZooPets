@@ -106,7 +106,7 @@ public class PlayerPhysics : MonoBehaviour {
         falling = false;
         jumping = false;
         AllowPassThroughLayer = false;
-		MagneticField.Instance.enabled=false;
+		MagneticField.Instance.EnableMagnet(false);
     }
 	
 	/// <summary>

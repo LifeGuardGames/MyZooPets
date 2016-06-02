@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: ItemLogic
+  m_Name: InventoryManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,6 +27,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -35,58 +36,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e61c33f7e9c8d04b9fe658d786e923a, type: 3}
+  m_Script: {fileID: 11500000, guid: 23e99a4f28ec9814495473c31cc8b794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - name: apple
-    textureName: apple
-    cost: 50
-    category: 0
-    itemreceiver: 2
-    description: Mood +10
-  - name: green apple
-    textureName: appleGreen
-    cost: 50
-    category: 0
-    itemreceiver: 2
-    description: Mood +5
-  - name: sandwich
-    textureName: sandwich
-    cost: 50
-    category: 0
-    itemreceiver: 2
-    description: Mood +30
-  - name: bread
-    textureName: bread
-    cost: 75
-    category: 0
-    itemreceiver: 2
-    description: Mood +15
-  - name: doughnut
-    textureName: doughnut
-    cost: 75
-    category: 0
-    itemreceiver: 2
-    description: Mood +20
-  - name: choco doughnut
-    textureName: doughnutDark
-    cost: 75
-    category: 0
-    itemreceiver: 2
-    description: Mood +25
-  - name: milk
-    textureName: milk
-    cost: 100
-    category: 0
-    itemreceiver: 2
-    description: Mood +40
-  - name: inhaler
-    textureName: inhalerRed
-    cost: 300
-    category: 2
-    itemreceiver: 2
-    description: Health +10
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -98,4 +50,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1

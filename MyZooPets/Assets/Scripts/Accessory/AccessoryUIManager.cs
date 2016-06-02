@@ -24,6 +24,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public GameObject zoomItem;
 	public PositionTweenToggle hatButton;
 	public PositionTweenToggle glassesButton;
+	public bool isShowing = false;
 
 	// related to zooming into the badge board
 	private float zoomTime  = 0.5f;
@@ -84,6 +85,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public void ShowHats() {
 		hatButton.Hide();
 		glassesButton.Hide();
+		isShowing = true;
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
@@ -121,6 +123,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	}
 
 	public void ShowGlasses() {
+		hatButton.Hide();
+		glassesButton.Hide();
+		isShowing = true;
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
@@ -167,6 +172,21 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		toggleDemux.ShowFunctionName = "MovePet";
 	}
 
+	public void OnBackButton() {
+		if(!isShowing) {
+			_CloseUI();
+		}
+		else {
+			int tempChildCount = grid.transform.childCount;
+			for(int i = 0; i < tempChildCount; i++) {
+				Destroy(grid.transform.GetChild(i).gameObject);
+            }
+			hatButton.Show();
+			glassesButton.Show();
+			isShowing = false;
+		}
+	}
+
 	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){
 		if(isActive){
@@ -182,7 +202,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
-			
+			ClickManager.Instance.ReleaseLock();
 			backButton.SetActive(false);
 		}
 	}

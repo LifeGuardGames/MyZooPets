@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.UI;
 
 /// <summary>
 /// UI that appears over anything that is locked by level.
 /// </summary>
 public class LevelLockObject : MonoBehaviour {
 	// elements of this UI
-	public UISprite spriteIcon;
-	public UILabel labelLevel;
+	public Image spriteIcon;
+	public Text labelLevel;
 	
 	// level of this lock
 	private int level;

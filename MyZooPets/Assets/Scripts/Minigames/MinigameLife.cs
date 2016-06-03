@@ -68,10 +68,6 @@ public class MinigameLife : MonoBehaviour{
 			if(Camera.main.GetComponent<Animation>() != null){
 				Camera.main.GetComponent<Animation>().Play();
 			}
-
-			if(bloodPanelControl != null){
-				bloodPanelControl.Play();
-			}
 		}
 		else if(nChange > 0 && nLives == nIndex){
 			//Debug.Log("---Gaining a life");

@@ -39,7 +39,8 @@ public class LoadLevelManager : Singleton<LoadLevelManager> {
 		//loadImage.gameObject.SetActive(false);
 
 		if(additionalTextKey != null) {
-			//loadText.text = LocalizationText.GetText(additionalTextKey);
+			loadText.gameObject.SetActive(true);
+			loadText.text = Localization.Localize(additionalTextKey);
 		}
 		if(additionalImageKey != null) {
 			//loadImage.gameObject.SetActive(true);

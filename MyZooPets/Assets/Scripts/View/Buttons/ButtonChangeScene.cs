@@ -13,6 +13,8 @@ public class ButtonChangeScene : LgButton{
 
 	// name of the scene to be loaded
 	public string strScene;
+	//text key to be on screen
+	public string loadingText;
 	
 	// related to the camera move
 	public Vector3 finalPosition;		// offset of camera on the target
@@ -86,7 +88,9 @@ public class ButtonChangeScene : LgButton{
 	//---------------------------------------------------
 	private void CameraMoveDone(){
 		// the camera move is complete, so now let's start the transition (if it exists)
-		LoadLevelManager.Instance.StartLoadTransition(strScene);
+		if(loadingText != "") {
+			LoadLevelManager.Instance.StartLoadTransition(strScene, loadingText);
+		}
 	}
 
 	//---------------------------------------------------

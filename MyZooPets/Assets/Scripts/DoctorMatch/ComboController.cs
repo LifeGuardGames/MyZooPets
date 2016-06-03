@@ -11,7 +11,6 @@ public class ComboController : MonoBehaviour {
 	private int colorCount = 6;
 	private RawImage[] slotImages;
 	private Color[] colorCache;
-	private bool setup = false;
 	private IEnumerator flashLine;
 	private IEnumerator clearLine;
 	private IEnumerator timeLowLine;
@@ -78,7 +77,6 @@ public class ComboController : MonoBehaviour {
 	public void Setup() {
 		slotImages = new RawImage[(comboBonus * 2)];
 		GameObject slotObject;
-		RectTransform localRectTransform = GetComponent<RectTransform>();
 		for (int i = 0; i < slotImages.Length; i++) {
 			slotObject = Instantiate(UISlotPrefab);
 			slotObject.transform.SetParent(comboTable);
@@ -87,7 +85,6 @@ public class ComboController : MonoBehaviour {
 			slotImages [i] = slotObject.GetComponent<RawImage>();
 			slotImages [i].rectTransform.localPosition = new Vector3(0, slotImages [i].rectTransform.sizeDelta.x * i);
 		}
-		setup = true;
 	}
 
 	public void UpdateScore(int newScore) {

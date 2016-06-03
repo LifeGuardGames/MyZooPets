@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class ShooterUIManager : MinigameUI{
+public class ShooterUIManager : Singleton<ShooterUIManager>{
 
 	public GameObject sun;
 	public GameObject moon;
@@ -52,10 +52,7 @@ public class ShooterUIManager : MinigameUI{
 		LeanTween.cancel(moon);
 	}
 
-	// Use this for initialization
-	void Start(){
-		ShooterGameManager.OnStateChanged += OnGameStateChanged;
-	}
+
 
 	public void Reset(){
 		sun = GameObject.Find("SpriteSun");
@@ -71,7 +68,7 @@ public class ShooterUIManager : MinigameUI{
 	// changes the sun to moon or moon to sun and then sets off the next transition once it is complete
 	public void StartTimeTransition(){
 		if(!ShooterGameManager.Instance.inTutorial){
-			if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
+			if(!ShooterGameManager.Instance.isGameOver){
 				if(ShooterGameManager.Instance.waveNum == 0){
 					GameObject tutorialFinger =  (GameObject)Resources.Load("ShooterPressTut");
 					fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);

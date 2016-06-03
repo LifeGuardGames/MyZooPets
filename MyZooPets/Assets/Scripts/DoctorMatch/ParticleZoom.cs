@@ -11,7 +11,6 @@ public class ParticleZoom : MonoBehaviour {
 	public void StartZoom(Vector3 particleAim) {
 		localSystem = GetComponent<ParticleSystem>();
 		particles = new ParticleSystem.Particle[localSystem.maxParticles]; //We will never need more space than this
-		this.localSystem = localSystem;
 		this.particleAim = particleAim;
 		AnimationCurve newCurve = new AnimationCurve();
 		newCurve.AddKey(0, 0); //Constant zero throughout curve

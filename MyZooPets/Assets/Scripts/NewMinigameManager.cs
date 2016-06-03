@@ -71,8 +71,8 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		AudioManager.Instance.PlayClip("minigameGameOver");
 
 		// Record highest score
-		HighScoreManager.Instance.UpdateMinigameHighScore(minigameKey, score);
-
+		HighScoreManager.Instance.UpdateMinigameHighScore(minigameKey, score); //TODO: For RunnerGame, there needs to be an explicit call to a function get score or the logic of runner must change b/c we are using distance and points to add in to score
+	
 		// Calculate reward
 		rewardXPAux = (int)(score * rewardXPMultiplier);
 		rewardMoneyAux = (int)(score * rewardXPMultiplier);
@@ -91,4 +91,5 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		_QuitGame();
 		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
     }
+
 }

@@ -9,8 +9,12 @@
  */
 using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class ScoreManager : Singleton<ScoreManager>{
+	public Text distanceText;
+	public Text coinsText;
+	public Text comboText;
+
 	public int scorePerIncrement = 3;
 
 	public float scoreDistance = 10.0f; //every 10 unit in distance traveled equals to 10 score points
@@ -53,11 +57,6 @@ public class ScoreManager : Singleton<ScoreManager>{
 		}
 	}
 
-	public void OnGUI(){
-		GUI.Box(new Rect(Screen.width-100,0,100,20),"COMBO: " + comboMod.ToString("N2"));
-		
-	}
-
 	public void IncrementCombo(float increment){
 		comboMod += increment;
 	}
@@ -85,7 +84,7 @@ public class ScoreManager : Singleton<ScoreManager>{
 	}
 
 	void Update(){
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(!NewRunnerGameManager.Instance.GameRunning)
 			return;
 
 		PlayerController playerController = PlayerController.Instance;
@@ -103,6 +102,9 @@ public class ScoreManager : Singleton<ScoreManager>{
 			if(coinStreakCountdown <= 0)
 				SetCoinStreak(0);
 		}
+		distanceText.text = Distance.ToString() + " M";
+		coinsText.text = Coins.ToString();
+		comboText.text = "x" + Combo.ToString("F1");
 	}
 
 	/// <summary>

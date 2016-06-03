@@ -40,10 +40,15 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		set{ isPiercing = value; }
 	}
 
+	void Start() {
+		Reset();
+	}
+
 	// on reset change health to 10 and state to neutral
 	public void Reset(){
 		playerHealth = 5;
 		ChangeState(PlayerStateTypes.Neutral);
+		ChangeFire();
 		this.GetComponent<Collider2D>().enabled = true;
 	}
 
@@ -117,7 +122,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 	// removes health and then calculates state
 	public void ChangeHealth(int deltaHealth){
-		if(ShooterGameManager.Instance.GetGameState() != MinigameStates.GameOver){
+		if(!ShooterGameManager.Instance.isGameOver){
 			if(deltaHealth < 0){
 				AudioManager.Instance.PlayClip("shooterHurt");
 			}
@@ -183,7 +188,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		if(isPiercing){
 			currentFireBall = fireBallPrefabs[3];
 		}
-
+		Debug.Log(currentFireBall.name);
 		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 		ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 		bulletScript.target = lookPos;

@@ -15,14 +15,14 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
     public List<Parallax> ParralaxingTextures = new List<Parallax>();
 	
     void Start(){
-        RunnerGameManager.OnStateChanged += GameStateChange;
-        if(RunnerGameManager.Instance.GameRunning)
+        //RunnerGameManager.OnStateChanged += GameStateChange;
+		if(NewRunnerGameManager.Instance.GameRunning)
             PlayParallax();
 
     }
 	
     void OnDestroy(){
-        RunnerGameManager.OnStateChanged -= GameStateChange;
+        //RunnerGameManager.OnStateChanged -= GameStateChange;
     }
 
     public void SetAlpha(float alpha) {

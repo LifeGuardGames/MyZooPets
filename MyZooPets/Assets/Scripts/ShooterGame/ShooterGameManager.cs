@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class ShooterGameManager : MinigameManager<ShooterGameManager>{
+public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	public EventHandler<EventArgs> OnTutorialStepDone;
 	public EventHandler<EventArgs> OnTutorialTap;
 	public Camera nguiCamera;
@@ -14,35 +14,36 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 	public int highestCombo = 0;
 	public GameObject BouncyWalls;
 	public GameObject tutFinger;
+	public bool isPaused = false;
+	public bool isGameOver = false;
 
 	private ShooterUIManager shooterUI;
 
 	void Awake(){
 		quitGameScene = SceneUtils.BEDROOM;
-	}
+		minigameKey = GetMinigameKey();
+		rewardXPMultiplier = 0.1f;
+		rewardShardMultiplier = 12;
+		rewardMoneyMultiplier = 8;
+    }
 
-	public override string GetMinigameKey(){
+	public string GetMinigameKey(){
 		return "Shooter";
 	}
 
-	protected override bool IsTutorialOn(){
+	protected bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsShooterTutorialOn");
 	}
 	
-	public override int GetReward(MinigameRewardTypes eType){
-		return GetStandardReward(eType);
-	}
 
 	protected override void _Start(){
-		shooterUI = ui as ShooterUIManager;
+		shooterUI = ShooterUIManager.Instance;
+
 	}
 
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
 
 	protected override void _NewGame(){
-		if(IsTutorialOverride() && IsTutorialOn()|| 
+		if(IsTutorialOn()|| 
 		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY)){
 			if(inTutorial){
 				shooterUI.Reset();
@@ -152,8 +153,6 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		}
 	}
 
-	protected override void _Update(){
-	}
 
 	//True: if finger touches NGUI 
 	/// <summary>
@@ -174,18 +173,29 @@ public class ShooterGameManager : MinigameManager<ShooterGameManager>{
 		return isOnNGUILayer;
 	}
 
-	public Coroutine Sync(){
-		return StartCoroutine(PauseRoutine()); 
+	protected override void _PauseGame(bool isShow) {
+		isPaused = isShow;
+		if(isShow) {
+			Time.timeScale = 0.0f;
+		}
+		else {
+			Time.timeScale = 1.0f;
+		}
+		
 	}
 
-	public IEnumerator PauseRoutine(){
-		while(ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
-			yield return new WaitForFixedUpdate();
-		}
-		yield return new WaitForEndOfFrame();
+	protected override void _GameOverReward() {
+		isGameOver = true;
 	}
+
+	protected override void _QuitGame() {
+		throw new NotImplementedException();
+	}
+
 
 	private void StartTutorial(){
-		SetTutorial(new ShooterGameTutorial());
+		Debug.Log("Running Tutorial");
+		ShooterGameTutorial tut = new ShooterGameTutorial();
+		tut.ProcessStep(0);
 	}
 }

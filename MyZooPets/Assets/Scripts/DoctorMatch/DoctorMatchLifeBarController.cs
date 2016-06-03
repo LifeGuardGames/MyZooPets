@@ -10,12 +10,10 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	//X Left to clear
 	private Vector2 barSize;
 	private float barPercentage = 1f;
-	private float hurtPercentage = -0.05f;
 	private float plusPercentage = 0.05f;
 	private float startDrainSpeed = .03333f;
 	//Takes 30 seconds
 	private float currentDrainSpeed;
-	private float drainSpeedIncrement = .001f;
 	private bool isDraining = false;
 
 	public float Percentage {

@@ -62,17 +62,13 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			SpawnInhalerPopup();
 		}
 		#endif
-		if (tutorial&&finger!=null&&zoneGreen.button.interactable) {
+		if (tutorial && finger != null && zoneGreen.button.interactable) {
 			lastPress += Time.deltaTime;
 			if (lastPress > timeToShake) {
 				StartCoroutine(finger.Shake(new Vector3(0, 20)));
 				lastPress = 0;
 			}
 		}
-	}
-
-	void OnGUI() {
-		//GUI.Box(new Rect(0, 0, 500, 100), lastPress.ToString() + ":" + timeToShake + "A" + (lastPress>timeToShake));
 	}
 
 	void Awake() {
@@ -82,72 +78,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		comboController.Setup();
 		ResetScore();
 		arrowObject.GetComponent<SpriteRenderer>().enabled = false;
-	}
-
-	protected override void _Start() {
-		zoneGreen.ToggleButtonInteractable(false);
-		zoneYellow.ToggleButtonInteractable(false);
-		zoneRed.ToggleButtonInteractable(false);
-	}
-
-
-	protected override void _NewGame() { //Reset everything then start again
-		ResetScore();
-
-		if (finger) { //Called if we complete the tutorial or leave restart early
-			BarFinger();
-		}
-
-		paused = false;
-		tutorial = false;
-		StartCoroutine(assemblyLineController.Initialize(false));
-		lifeBarController.ResetBar();
-		lifeBarController.StartDraining();
-
-		zoneGreen.ToggleButtonInteractable(true);
-		zoneYellow.ToggleButtonInteractable(true);
-		zoneRed.ToggleButtonInteractable(true);
-
-	}
-
-	protected override void _PauseGame(bool isShow) {
-		paused = !isShow;
-		if (isShow && !tutorial) {
-			lifeBarController.StartDraining();
-		} else {
-			lifeBarController.StopDraining();
-		}
-	}
-
-	protected override void _GameOver() {
-		lifeBarController.StopDraining();
-		zoneGreen.ToggleButtonInteractable(false);
-		zoneYellow.ToggleButtonInteractable(false);
-		zoneRed.ToggleButtonInteractable(false);
-
-		/*
-		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-		Analytics.Instance.DoctorTimesPlayedTick();
-		#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
-		#endif
-		*/
-
-	}
-
-	// award the actual xp and money, called when tween is complete
-	protected override void _GameOverReward() {
-		StatsManager.Instance.ChangeStats(
-			xpDelta: rewardXPAux,
-			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
-			coinsDelta: rewardMoneyAux,
-			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
-			animDelay: 0.5f);
-		FireCrystalManager.Instance.RewardShards(rewardShardAux);
-		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
-	}
-
-	protected override void _QuitGame() {
 	}
 
 	public IEnumerator StartTutorial() {
@@ -261,6 +191,72 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		} else {
 			HandleNormal(poppedItem);
 		}
+	}
+
+	protected override void _Start() {
+		zoneGreen.ToggleButtonInteractable(false);
+		zoneYellow.ToggleButtonInteractable(false);
+		zoneRed.ToggleButtonInteractable(false);
+	}
+
+
+	protected override void _NewGame() { //Reset everything then start again
+		ResetScore();
+
+		if (finger) { //Called if we complete the tutorial or leave restart early
+			BarFinger();
+		}
+
+		paused = false;
+		tutorial = false;
+		StartCoroutine(assemblyLineController.Initialize(false));
+		lifeBarController.ResetBar();
+		lifeBarController.StartDraining();
+
+		zoneGreen.ToggleButtonInteractable(true);
+		zoneYellow.ToggleButtonInteractable(true);
+		zoneRed.ToggleButtonInteractable(true);
+
+	}
+
+	protected override void _PauseGame(bool isShow) {
+		paused = !isShow;
+		if (isShow && !tutorial) {
+			lifeBarController.StartDraining();
+		} else {
+			lifeBarController.StopDraining();
+		}
+	}
+
+	protected override void _GameOver() {
+		lifeBarController.StopDraining();
+		zoneGreen.ToggleButtonInteractable(false);
+		zoneYellow.ToggleButtonInteractable(false);
+		zoneRed.ToggleButtonInteractable(false);
+
+		/*
+		Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		Analytics.Instance.DoctorTimesPlayedTick();
+		#if UNITY_IOS
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
+		#endif
+		*/
+
+	}
+
+	// award the actual xp and money, called when tween is complete
+	protected override void _GameOverReward() {
+		StatsManager.Instance.ChangeStats(
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
+	}
+
+	protected override void _QuitGame() {
 	}
 
 	private void HandleNormal(AssemblyLineItem poppedItem) {

@@ -5889,6 +5889,7 @@ MonoBehaviour:
   tutFinger: {fileID: 1867077487}
   isPaused: 0
   isGameOver: 0
+  scoreText: {fileID: 811829034}
 --- !u!114 &185100908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16786,7 +16787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -17008,12 +17009,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: 
+      - m_Target: {fileID: 1405736666}
+        m_MethodName: ShooterGameInhalerButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -25872,12 +25873,6 @@ MonoBehaviour:
 Transform:
   m_PrefabParentObject: {fileID: 400026, guid: 5bc953636cce24f4ba45c7b29b27c4d4, type: 2}
   m_PrefabInternal: {fileID: 69752353}
---- !u!114 &792511251 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11400008, guid: 5bc953636cce24f4ba45c7b29b27c4d4,
-    type: 2}
-  m_PrefabInternal: {fileID: 69752353}
-  m_Script: {fileID: 11500000, guid: f42792f9f59fb63429c0918e98fcc60e, type: 3}
 --- !u!114 &792511253 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11400064, guid: 5bc953636cce24f4ba45c7b29b27c4d4,
@@ -27729,7 +27724,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 12345678
+  m_Text: 0
 --- !u!222 &811829035
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -44835,6 +44830,12 @@ MonoBehaviour:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 31a1e8345d16c44ea9fa163fd6cfb4c2, type: 2}
   m_PrefabInternal: {fileID: 1854484255}
+--- !u!114 &1405736666 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400006, guid: 27d0195b19002194fab8e73886b8b910,
+    type: 2}
+  m_PrefabInternal: {fileID: 1597254012}
+  m_Script: {fileID: 11500000, guid: 10045441be12f6842b27e141eeae1ba0, type: 3}
 --- !u!1 &1411003279
 GameObject:
   m_ObjectHideFlags: 0
@@ -58605,19 +58606,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869368477451f0d44b6aea812c4739ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tween: {fileID: 1072524223}
-  demuxHUD: {fileID: 792511251}
-  pauseTween: {fileID: 604049605}
-  labelXP: {fileID: 2055739479}
-  labelStars: {fileID: 1786334109}
-  labelShards: {fileID: 1483270888}
-  labelScore: {fileID: 851490575}
-  goIconStars: {fileID: 408502158}
-  goIconXP: {fileID: 1574997531}
-  tweenButtons: {fileID: 1288328156}
-  nFreebie: 0
-  adParentTween: {fileID: 508546028}
-  IAPController: {fileID: 2095608907}
 --- !u!1 &1939570291
 GameObject:
   m_ObjectHideFlags: 0

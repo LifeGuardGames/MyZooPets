@@ -45,19 +45,18 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 
 
 	protected override void _NewGame(){
-		Debug.Log("Newgame");
 			if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)){
 			if(inTutorial){
-				Debug.Log("tut");
 				shooterUI.Reset();
 				PlayerShooterController.Instance.Reset();
 				StartTutorial();
 			}
 		}
 		else {
-			Debug.Log("game");
 			inTutorial = false;
 			waveNum = 0;
+			score = 0;
+			scoreText.text = "0";
 			ShooterSpawnManager.Instance.Reset();
 			ShooterGameEnemyController.Instance.Reset();
 			shooterUI.Reset();
@@ -199,7 +198,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 
 
 	private void StartTutorial(){
-		Debug.Log("Running Tutorial");
 		ShooterGameTutorial tut = new ShooterGameTutorial();
 		tut.ProcessStep(0);
 	}

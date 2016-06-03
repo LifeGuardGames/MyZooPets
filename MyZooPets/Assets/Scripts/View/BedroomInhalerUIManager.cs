@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 
 public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	public Animation inhalerAnimationController;
-	public GameObject fireOrbParent;
 	public GameObject starParticle;
 	public GameObject rechargeParticle;
 
-	public GameObject progressBar3D;
-	public UILabel coolDownLabel;
-	public UISprite coolDownSprite;
+	public GameObject canvas;
+	public Text coolDownLabel;
+	public Image coolDownSprite;
 
 	private bool isCoolDownMode = false;
 	private bool isInitialCalculatedOffsetCached = false;
@@ -42,8 +41,8 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		rechargeParticle.SetActive(true);
 
 		coolDownLabel.enabled = true;
-		progressBar3D.GetComponent<Animation>().Stop();
-		progressBar3D.transform.localScale = Vector3.one;
+		canvas.GetComponent<Animation>().Stop();
+		canvas.transform.localScale = Vector3.one;
 		
 		isInitialCalculatedOffsetCached = false;	// Force recalculate the cache
 	}
@@ -59,7 +58,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 		coolDownLabel.enabled = false;
 		coolDownSprite.fillAmount = 1f;
-		progressBar3D.GetComponent<Animation>().Play();
+		canvas.GetComponent<Animation>().Play();
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){

@@ -1,12 +1,11 @@
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
-/// Camera manager.
-/// Two parts to this class one camera movement and one that handles camera utility for screen conversion
+/// Two parts to this class:
+///		-Camera movement
+///		-Handles camera utility for screen conversion
 /// </summary>
 public class CameraManager : Singleton<CameraManager>{
-
 	public Camera cameraMain;
 	public Camera CameraMain{
 		get{ return cameraMain; }
@@ -21,6 +20,8 @@ public class CameraManager : Singleton<CameraManager>{
 	public PanToMoveCamera PanScript{
 		get { return scriptPan; }
 	}
+
+	public Animation cameraShakeAnimation;
 
 	private bool isZoomed;		// Is the camera zoomed in
 	private bool isZoomingAux;	// Intermediate check to track if zoomed in or out when zoom is finished
@@ -142,6 +143,10 @@ public class CameraManager : Singleton<CameraManager>{
 			FinishCameraMoveCallback();			// Call the callback
 			FinishCameraMoveCallback = null;	// Unassign the callback once it is called
 		}
+	}
+
+	public void ShakeCamera() {
+		cameraShakeAnimation.Play();
 	}
 	#endregion
 

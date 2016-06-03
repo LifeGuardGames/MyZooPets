@@ -8789,7 +8789,6 @@ Transform:
   - {fileID: 245645407}
   - {fileID: 430803652}
   - {fileID: 5364012}
-  - {fileID: 1369154321}
   - {fileID: 321255188}
   m_Father: {fileID: 1856043663}
   m_RootOrder: 0
@@ -9680,60 +9679,6 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400008, guid: 6a2d31a8f9c2c214bbe280638dfb204b, type: 2}
   m_PrefabInternal: {fileID: 273628694}
---- !u!1001 &920611126
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 797955371}
-    m_Modifications:
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0.6095239
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0.6095581
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_RootOrder
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: uiCamera
-      value: 
-      objectReference: {fileID: 797955372}
-    - target: {fileID: 400004, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0.5904772
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -0.009521484
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &931908871
 Prefab:
   m_ObjectHideFlags: 0
@@ -12662,7 +12607,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 2244a9c14c3f5a64bb0cb9e502ae244e, type: 2}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2244a9c14c3f5a64bb0cb9e502ae244e, type: 2}
@@ -16031,10 +15976,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d68d0cfe6420c42d1ad759d530b72c24, type: 3}
   m_IsPrefabParent: 0
---- !u!4 &1369154321 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 400002, guid: 813bcdcd98f7a4a19a461ef5b320baa1, type: 2}
-  m_PrefabInternal: {fileID: 920611126}
 --- !u!1001 &1379338759
 Prefab:
   m_ObjectHideFlags: 0
@@ -17723,6 +17664,7 @@ GameObject:
   - 114: {fileID: 1648505578}
   - 114: {fileID: 1648505577}
   - 114: {fileID: 1648505579}
+  - 111: {fileID: 1648505572}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -17737,6 +17679,21 @@ AudioListener:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1648505570}
   m_Enabled: 1
+--- !u!111 &1648505572
+Animation:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1648505570}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: bd9685e8cbe28e04d9390eb23b084475, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: bd9685e8cbe28e04d9390eb23b084475, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!92 &1648505573
 Behaviour:
   m_ObjectHideFlags: 0
@@ -17852,6 +17809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraMain: {fileID: 1648505574}
   scriptPan: {fileID: 158023567}
+  cameraShakeAnimation: {fileID: 1648505572}
   ratioX: 0
   ratioY: 0
 --- !u!4 &1657562364 stripped
@@ -19350,11 +19308,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 126360, guid: 5dfd3d951a3793d41bc71ff78cc23de6, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22370884, guid: 5dfd3d951a3793d41bc71ff78cc23de6, type: 2}
       propertyPath: m_RenderMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22370884, guid: 5dfd3d951a3793d41bc71ff78cc23de6, type: 2}
       propertyPath: m_Camera

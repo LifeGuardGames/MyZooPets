@@ -16,7 +16,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public void Reset(){
 		StopCoroutine("SpawnEnemies");
 		spawningList = null;
-
+		isSpawing = true;
 	}
 
 	void OnGameStateChanged(object sender, GameStateArgs args){
@@ -63,22 +63,27 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
 	IEnumerator SpawnEnemies(){
-		for(int i = 0; i < spawningList.Count; i++){
-			yield return new WaitForSeconds(1.0f);
-			int randomPositionIndex = Random.Range(0, 3);
-			
-			//they are spawned in more of a weighted list fashion 
-			//so while one of the first waves has only one hard enemy in it it can spawn more than one
-			int randomSpawnIndex = Random.Range(0, spawningList.Count);
-			if(spawningList[randomSpawnIndex].Id != "Mober_4"){
-			GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
-			GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
+		if(!ShooterGameManager.Instance.isPaused && !ShooterGameManager.Instance.isGameOver) {
+			for(int i = 0; i < spawningList.Count; i++) {
+				yield return new WaitForSeconds(1.0f);
+				int randomPositionIndex = Random.Range(0, 3);
+
+				//they are spawned in more of a weighted list fashion 
+				//so while one of the first waves has only one hard enemy in it it can spawn more than one
+				int randomSpawnIndex = Random.Range(0, spawningList.Count);
+				if(spawningList[randomSpawnIndex].Id != "Mober_4") {
+					GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
+					GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+				}
+				else {
+					randomPositionIndex = Random.Range(3, 5);
+					GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
+					GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+				}
 			}
-			else{
-				randomPositionIndex = Random.Range(3,5);
-				GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
-				GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
-			}
+		}
+		else {
+			StopCoroutine("SpawnEnemies");
 		}
 	}
 }

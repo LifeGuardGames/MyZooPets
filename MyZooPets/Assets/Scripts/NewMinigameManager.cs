@@ -92,4 +92,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
     }
 
+	public void FinishedTutorial() {
+		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(minigameKey);
+	}
 }

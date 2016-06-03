@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	public EventHandler<EventArgs> OnTutorialStepDone;
@@ -16,6 +17,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	public GameObject tutFinger;
 	public bool isPaused = false;
 	public bool isGameOver = false;
+	public Text scoreText;
 
 	private ShooterUIManager shooterUI;
 
@@ -43,15 +45,17 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 
 
 	protected override void _NewGame(){
-		if(IsTutorialOn()|| 
-		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY)){
+		Debug.Log("Newgame");
+			if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)){
 			if(inTutorial){
+				Debug.Log("tut");
 				shooterUI.Reset();
 				PlayerShooterController.Instance.Reset();
 				StartTutorial();
 			}
 		}
-		else{
+		else {
+			Debug.Log("game");
 			inTutorial = false;
 			waveNum = 0;
 			ShooterSpawnManager.Instance.Reset();
@@ -75,6 +79,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _GameOver(){
+		isGameOver = true;
 		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / waveNum + 1, ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
 		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
 		
@@ -121,6 +126,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 
 	public void AddScore(int amount){
 		UpdateScore(amount);
+		scoreText.text = score.ToString();
 		powerUpScore += amount;
 		if(powerUpScore > (75 + 25 * (waveNum %10))){
 			powerUpScore = 0;
@@ -185,11 +191,10 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _GameOverReward() {
-		isGameOver = true;
 	}
 
 	protected override void _QuitGame() {
-		throw new NotImplementedException();
+		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
 	}
 
 

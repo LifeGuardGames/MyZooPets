@@ -18,17 +18,18 @@ public class ShooterGameTutorial {
 		switch(step){
 			//the user simply needs to tap the screen
 		case 0:
-				PlayerShooterController.Instance.OnTutorialMove += MoveAlong;
-				//prompt user to shoot
-				ShooterGameManager.Instance.tutFinger.SetActive(true);
+			PlayerShooterController.Instance.OnTutorialMove += MoveAlong;
+			//prompt user to shoot
+			ShooterGameManager.Instance.tutFinger.SetActive(true);
 			break;
 		case 1:
 			PlayerShooterController.Instance.OnTutorialMove -= MoveAlong;
-			ShooterGameManager.Instance.OnTutorialTap += MoveAlong;
+				Debug.Log("We in Step One now");
 			//prompt user to shoot
 			ShooterGameManager.Instance.tutFinger.SetActive(false);
 			pressHere = (GameObject)Resources.Load("ShooterTut");
-			tutBoards = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), pressHere);
+			tutBoards = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Canvas"), pressHere);
+			ShooterGameManager.Instance.OnTutorialTap += MoveAlong;
 			break;
 		case 2:
 			ShooterGameManager.Instance.OnTutorialTap -= MoveAlong;
@@ -83,16 +84,23 @@ public class ShooterGameTutorial {
 			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight"), tutorialFinger);
 			break;
 			case 9:
+				Debug.Log("step 9");
 				GameObject.Destroy(tutorialInhalerUse);
 				GameObject.Destroy(fingerPos);
-				DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_KEY);
+				ShooterGameManager.Instance.FinishedTutorial();
 				ShooterGameManager.Instance.inTutorial = false;
+                ShooterGameManager.Instance.NewGame();
 			break;
 		}
 	}
 
 
 	private void MoveAlong(object sender, EventArgs args){
-		ProcessStep(currentStep++);
+		if(currentStep < 9) {
+			Debug.Log("current Step: " + currentStep);
+			currentStep++;
+			ProcessStep(currentStep);
+			Debug.Log("After Step: " + currentStep);
+		}
 	}
 }

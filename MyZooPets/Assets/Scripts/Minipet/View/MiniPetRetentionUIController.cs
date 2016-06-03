@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class MiniPetRetentionUIController : MonoBehaviour {
 
-	public UILocalize mission1Localize;
-	public UILocalize mission2Localize;
-	public UILocalize mission3Localize;
-	public UILocalize mission4Localize;
+	public Text mission1Localize;
+	public Text mission2Localize;
+	public Text mission3Localize;
+	public Text mission4Localize;
 	MutableDataWellapadTask task;
 	public TweenToggle slash1;
 	public TweenToggle slash2;
@@ -28,10 +29,8 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 				task = listTasks[1];
 				SetCheckboxSprite(true, slash2);
 				ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				mission1Localize.key = "Task_" + missionTask.GetTaskID().ToString();
-				mission1Localize.Localize();
-				mission2Localize.key = "Task_" + missionTask2.GetTaskID().ToString();
-				mission2Localize.Localize();
+				mission1Localize.text = "Task_" + missionTask.GetTaskID().ToString();
+				mission2Localize.text = "Task_" + missionTask2.GetTaskID().ToString();
 				mission3Localize.gameObject.SetActive(false);
 				mission4Localize.gameObject.SetActive(false);
 				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed
@@ -59,12 +58,9 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 					if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 						rewardButton.SetActive(true);
 					}
-					mission1Localize.key = "Task_" + missionTask.GetTaskID().ToString();
-					mission1Localize.Localize();
-					mission2Localize.key = "Task_" + missionTask2.GetTaskID();
-					mission2Localize.Localize();
-					mission3Localize.key = "Task_" + missionTask3.GetTaskID();
-					mission3Localize.Localize();
+					mission1Localize.text = "Task_" + missionTask.GetTaskID().ToString();
+					mission2Localize.text = "Task_" + missionTask2.GetTaskID().ToString();
+					mission3Localize.text = "Task_" + missionTask3.GetTaskID();
 					mission4Localize.gameObject.SetActive(false);
 			}
 		}

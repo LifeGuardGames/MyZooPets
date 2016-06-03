@@ -2,9 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
-	public UILabel nameLabel;
+	public Text nameLabel;
 
 	public TweenToggle storeTweenParent;
 	private TweenToggle contentTweenParent;

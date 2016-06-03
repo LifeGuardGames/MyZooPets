@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MiniPetMerchantUIController : MonoBehaviour {
-	public UILabel itemNameLabel;
-	public UILabel descriptionLabel;
-	public UIImageButton buyButton;
-	public UILabel cost;
-	public UISprite sprite;
+	public Text itemNameLabel;
+	public Text descriptionLabel;
+	public Button buyButton;
+	public Text cost;
+	public Image sprite;
 	public GameObject itemSpritePrefab;
 	public TweenToggle tweenToggle;
 	private Item secretItem;
@@ -19,8 +20,9 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 
 		itemNameLabel.text = secretItem.Name;
 		descriptionLabel.text = secretItem.Description;
-		sprite.spriteName = DataLoaderItems.GetItemTextureName(itemID);
-		sprite.MakePixelPerfect();
+		//TODO: Fix this - dylan
+		//sprite.spriteName = DataLoaderItems.GetItemTextureName(itemID);
+		
 		cost.text = secretItem.Cost.ToString();
 
 		if(isBoughtAlready){						// Enable some game components here

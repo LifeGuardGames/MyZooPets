@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class MiniPetGameMasterUIController : MonoBehaviour{
-	public UILabel label;
-	public UISprite spriteIcon;
+	public Text label;
+	public Image spriteIcon;
 	public GameObject rewardButton;
 
 	// tween object for when the task is completed
@@ -24,9 +25,8 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 			desc = String.Format(desc, task.Amount);
 		}
 		label.text = desc;
-
-		spriteIcon.spriteName = "mapIcons" + type.ToString();
-		spriteIcon.MakePixelPerfect();
+		//TODO fix this - dylan
+		//spriteIcon.sprite = SpriteCacheManager.Instance.mapIcons" + type.ToString();
 
 		SetCheckboxSprite(true);
 	}

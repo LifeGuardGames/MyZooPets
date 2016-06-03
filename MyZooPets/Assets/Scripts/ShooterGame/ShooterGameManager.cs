@@ -190,6 +190,10 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		
 	}
 
+	protected override void _ContinueGame() {
+		// .....
+	}
+
 	protected override void _GameOverReward() {
 	}
 

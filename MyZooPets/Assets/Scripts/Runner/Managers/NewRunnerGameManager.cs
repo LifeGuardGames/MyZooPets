@@ -79,6 +79,11 @@ public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
 		 * Pause coins under magnetic field?
 		 */
 	}
+
+	protected override void _ContinueGame() {
+		// ....
+	}
+
 	protected override void _GameOver() {
 		/* Player.StopMoving()
 		 * MegaHazard.StopMoving()

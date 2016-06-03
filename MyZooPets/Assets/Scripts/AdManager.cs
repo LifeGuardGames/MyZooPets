@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Advertisements;
-using System.Collections;
 
 public class AdManager : Singleton<AdManager> {
-	[SerializeField] string iOSGameID = "105899";
-	[SerializeField] string androidGameID = "105908";
+	[SerializeField] string iOSGameID = "1077661";
+	[SerializeField] string androidGameID = "1077662";
 
 	public delegate void AdCallback<T>(T value); // Populated by callers
 	private bool isTestMode = false;
@@ -24,16 +23,11 @@ public class AdManager : Singleton<AdManager> {
 
 	// Determine preliminary check
 	public bool IsAdReady(string zone = "rewardedVideoZone"){
-		return Advertisement.isReady(zone);
+		return Advertisement.IsReady(zone);
 	}
 
 	public void ShowAd(AdCallback<bool> onVideoPlayed, string zone = "rewardedVideoZone"){
-		if(DataManager.Instance.IsAdsEnabled && Advertisement.isReady(zone)){
-			
-			//		#if UNITY_EDITOR		// Used for debugging
-			//		StartCoroutine(WaitForAd());
-			//		#endif
-
+		if(DataManager.Instance.IsAdsEnabled && IsAdReady()) {
 			if(string.Equals(zone, "")) {
 				zone = null;
 			}
@@ -55,26 +49,4 @@ public class AdManager : Singleton<AdManager> {
 			Advertisement.Show(zone, options);
 		}
 	}
-
-
-
-	// Coroutine to simulate app pausing in editor
-//	IEnumerator WaitForAd(){
-//		float currentTimeScale = Time.timeScale;
-//		Time.timeScale = 0f;
-//		yield return null;
-//
-//		while(Advertisement.isShowing) {
-//			yield return null;
-//		}
-//
-//		Time.timeScale = currentTimeScale;
-//	}
-
-
-//	void OnGUI(){
-//		if (GUI.Button (new Rect (100f, 100f, 100f, 100f), "Test")) {
-//			ShowAd ("rewardedVideoZone");
-//		}
-//	}
 }

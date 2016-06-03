@@ -76,6 +76,14 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		GameOver();
 	}
 
+	protected override void _ContinueGame() {
+		isGameOver = false;
+		PlayerShooterController.Instance.playerHealth = 5;
+		PlayerShooterController.Instance.ChangeFire();
+		ShooterSpawnManager.Instance.isSpawing = true;
+		ShooterGameEnemyController.Instance.BuildEnemyList();
+    }
+
 	protected override void _GameOver(){
 		isGameOver = true;
 		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);

@@ -40,9 +40,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 
 	protected override void _Start(){
 		shooterUI = ShooterUIManager.Instance;
-
 	}
-
 
 	protected override void _NewGame(){
 			if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)){
@@ -53,6 +51,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 			}
 		}
 		else {
+			isGameOver = false;
 			inTutorial = false;
 			waveNum = 0;
 			score = 0;
@@ -79,7 +78,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 
 	protected override void _GameOver(){
 		isGameOver = true;
-		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / waveNum + 1, ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
+		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
 		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
 		
 
@@ -181,10 +180,12 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	protected override void _PauseGame(bool isShow) {
 		isPaused = isShow;
 		if(isShow) {
+			ShooterSpawnManager.Instance.isSpawing = false;
 			Time.timeScale = 0.0f;
 		}
 		else {
 			Time.timeScale = 1.0f;
+			ShooterSpawnManager.Instance.isSpawing = true;
 		}
 		
 	}

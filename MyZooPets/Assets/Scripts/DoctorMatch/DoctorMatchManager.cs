@@ -228,6 +228,10 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		}
 	}
 
+	protected override void _ContinueGame() {
+		// ....
+	}
+
 	protected override void _GameOver() {
 		lifeBarController.StopDraining();
 		zoneGreen.ToggleButtonInteractable(false);

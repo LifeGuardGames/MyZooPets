@@ -5,6 +5,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	protected abstract void _Start();
 	protected abstract void _NewGame();
 	protected abstract void _PauseGame(bool isShow);
+	protected abstract void _ContinueGame();
 	protected abstract void _GameOver();
 	protected abstract void _GameOverReward();
 	protected abstract void _QuitGame();
@@ -30,6 +31,8 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		get { return score; }
 	}
 
+	protected bool isContinueAllowed;
+
 	IEnumerator Start() {
 		// Have to yield at start because popup UIs need to run Start()
 		yield return 0;
@@ -50,10 +53,10 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		if(score < 0) {
 			score = 0;
 		}
-
 	}
 
 	public void NewGame() {
+		isContinueAllowed = true;
 		rewardXPAux = 0;
 		rewardMoneyAux = 0;
 		rewardShardAux = 0;
@@ -65,6 +68,11 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 
 	public void PauseGame(bool isShow) {
 		_PauseGame(isShow);
+    }
+
+	public void ContinueGame() {
+		isContinueAllowed = false;
+		_ContinueGame();
     }
 
 	public void GameOver() {
@@ -80,7 +88,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 
 		_GameOver();
 
-		GenericMinigameUI.Instance.GameOverUI(score, rewardXPAux, rewardMoneyAux, rewardShardAux);
+		GenericMinigameUI.Instance.GameOverUI(isContinueAllowed, score, rewardXPAux, rewardMoneyAux, rewardShardAux);
     }
 
 	public void GameOverReward() {

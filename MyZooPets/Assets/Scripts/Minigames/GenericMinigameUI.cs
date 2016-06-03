@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+
 /// <summary>
 /// This is modular generic minigame UI manager meant for all minigames, simply drag
 /// and drop this prefab into the canvas and you are good to go!
@@ -10,9 +12,13 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 	public TweenToggle pauseButtonTween;
 	public MinigameStartController startController;
 	public MinigamePauseController pauseController;
+	public MinigameContinueController continueController;
 	public MinigameGameOverController gameOverController;
 	public MinigameExitConfirmController exitConfirmController;
 	public GenericMinigameUIInterface minigameUIInterface;
+
+	// Storing function for game over if user dont want to continue
+	private Action storedGameOverFunction;
 
 	public string GetMinigameKey() {
 		return minigameUIInterface.GetMinigameKey();
@@ -28,9 +34,17 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 		TogglePauseButton(false);
 	}
 
-	public void GameOverUI(int score, int starCount, int coinCount, int shardCount) {
-		gameOverController.PopulateAndShow(score, starCount, coinCount, shardCount);
-		TogglePauseButton(false);
+	public void GameOverUI(bool allowContinue, int score, int starCount, int coinCount, int shardCount) {
+		// If continue is allowed, 40% chance to show ads granted that it is ready
+		if(allowContinue && AdManager.Instance.IsAdReady() && UnityEngine.Random.Range(0, 10) <= 3) {
+			continueController.ShowPanel();
+			storedGameOverFunction = null;
+			storedGameOverFunction = () => gameOverController.PopulateAndShow(score, starCount, coinCount, shardCount);
+		}
+		else {
+			gameOverController.PopulateAndShow(score, starCount, coinCount, shardCount);
+			TogglePauseButton(false);
+		}
     }
 	#endregion
 
@@ -74,8 +88,21 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 	}
 
 	public void OnPlayAd(){
-		// ...
+		AdManager.Instance.ShowAd(delegate (bool result) {
+			if(result) {	// Finished ads
+				minigameUIInterface.OnContinue();
+			}
+			else {          // Ads failed somehow, fail gracefully
+				OnContinueRejected();
+            }
+		});
 	}
+
+	// When the user chooses not to watch an ad
+	public void OnContinueRejected() {
+		// Continue the stored game over function
+		storedGameOverFunction();
+    }
 	#endregion
 
 	// Use for rewarding

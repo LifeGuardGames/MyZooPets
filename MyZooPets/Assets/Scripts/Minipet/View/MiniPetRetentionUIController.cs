@@ -21,7 +21,8 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 
 	public void InitializeContent(string taskID, MiniPetRetentionPet retentionScript){
 		this.retentionScript = retentionScript;
-			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
+		rewardButton.SetActive(false);
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("DailyInhaler")){
 				List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTaskGroup("TutorialPart1"); 
 				task = listTasks[0];
 				ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);

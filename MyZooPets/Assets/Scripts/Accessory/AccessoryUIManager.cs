@@ -120,6 +120,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
 			}
 		}
+		// Adjust the grid height based on the height of the cell and spacing
+		float gridHeight = accessoryList.Count * (grid.cellSize.y + grid.spacing.y);
+		grid.GetComponent<RectTransform>().sizeDelta = new Vector2(grid.cellSize.x, gridHeight);
 	}
 
 	public void ShowGlasses() {

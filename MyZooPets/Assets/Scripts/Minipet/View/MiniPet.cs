@@ -98,7 +98,7 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 	}
 
-	/*private void OnTap(TapGesture gesture){
+	private void OnTap(TapGesture gesture){
 		if(!IsTouchingNGUI(gesture.Position)){
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
 				Analytics.Instance.MiniPetVisited(minipetId);
@@ -125,7 +125,7 @@ public abstract class MiniPet : MonoBehaviour {
 				}
 			}
 		}
-	}*/
+	}
 
 	private void OnMouseDown() {
 		RaycastHit hitObject;

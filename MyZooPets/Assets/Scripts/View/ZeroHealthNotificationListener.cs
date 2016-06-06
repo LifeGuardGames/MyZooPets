@@ -33,9 +33,9 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
             petName, hospitalBillCost.ToString());
 
         Hashtable notificationEntry = new Hashtable();
-        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.ZeroHealth);
-        notificationEntry.Add(NotificationPopupFields.Message, message); 
-        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function); 
+        //notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.ZeroHealth);
+        //notificationEntry.Add(NotificationPopupData.Message, message); 
+        //notificationEntry.Add(NotificationPopupData.Button1Callback, button1Function); 
         
         NotificationUIManager.Instance.AddToQueue(notificationEntry);
 

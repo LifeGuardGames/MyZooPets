@@ -8,13 +8,17 @@ public class PopupController : MonoBehaviour {
 	public Text textArea;
 	public TweenToggleDemux demux;
 
-	private NotificationUIManager notificationManager;
-
 	// Call to prep notification
-	public void Init(Callback _specialButtonCallback, string popupTitle, string popupText) {
-		specialButtonCallback = _specialButtonCallback;
-		title.text = popupTitle;
-        textArea.text = popupText;
+	public void Init(string popupTitle, string popupText, Callback _specialButtonCallback) {
+		if(title != null) {
+			title.text = popupTitle;
+		}
+		if(textArea != null) {
+			textArea.text = popupText;
+		}
+		if(_specialButtonCallback != null) {
+			specialButtonCallback = _specialButtonCallback;
+		}
 	}
 
 	// Exit and do the assigned delegate function
@@ -43,7 +47,7 @@ public class PopupController : MonoBehaviour {
 	// Clear callbacks and continue notification queue
 	public void OnHideFinished() {
 		specialButtonCallback = null;
-		notificationManager.TryNextNotification();
+		NotificationUIManager.Instance.TryNextNotification();
 		Destroy(gameObject);
 	}
 }

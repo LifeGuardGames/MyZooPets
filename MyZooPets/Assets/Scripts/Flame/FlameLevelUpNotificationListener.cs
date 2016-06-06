@@ -26,10 +26,10 @@ public class FlameLevelUpNotificationListener : MonoBehaviour {
         Skill skill = args.UnlockedSkill;    
         Hashtable notificationEntry = new Hashtable();
 
-        notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.FireLevelUp);
-        notificationEntry.Add(NotificationPopupFields.Message, skill.Description); 
-        notificationEntry.Add(NotificationPopupFields.SpriteName, skill.TextureName);
-        notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+        //notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.FireLevelUp);
+        //notificationEntry.Add(NotificationPopupData.Message, skill.Description); 
+        //notificationEntry.Add(NotificationPopupData.SpriteName, skill.TextureName);
+        //notificationEntry.Add(NotificationPopupData.Button1Callback, button1Function);
         
         NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		

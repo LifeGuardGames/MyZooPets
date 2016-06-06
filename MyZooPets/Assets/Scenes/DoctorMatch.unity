@@ -268,6 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraMain: {fileID: 157260447}
   scriptPan: {fileID: 0}
+  cameraShakeAnimation: {fileID: 0}
   ratioX: 0
   ratioY: 0
 --- !u!1 &211979985
@@ -1293,7 +1294,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22491736, guid: a7831b335a676e34e9836be015c684a2, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 22491736, guid: a7831b335a676e34e9836be015c684a2, type: 2}
       propertyPath: m_AnchoredPosition.x
@@ -1335,6 +1336,10 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 11428398, guid: a7831b335a676e34e9836be015c684a2, type: 2}
+      propertyPath: continueController
+      value: 
+      objectReference: {fileID: 1585722246}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a7831b335a676e34e9836be015c684a2, type: 2}
   m_IsPrefabParent: 0
@@ -7349,7 +7354,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 9343e5ccb2ea24697a6ad64059d9103b, type: 2}
       propertyPath: isMusicOn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 9343e5ccb2ea24697a6ad64059d9103b, type: 2}
       propertyPath: backgroundMusic
@@ -7932,6 +7937,12 @@ Animator:
 GameObject:
   m_PrefabParentObject: {fileID: 176722, guid: a7831b335a676e34e9836be015c684a2, type: 2}
   m_PrefabInternal: {fileID: 643613577}
+--- !u!114 &1585722246 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11405084, guid: a7831b335a676e34e9836be015c684a2,
+    type: 2}
+  m_PrefabInternal: {fileID: 643613577}
+  m_Script: {fileID: 11500000, guid: ab8f6ffa6644f924c8a189ade8c9940f, type: 3}
 --- !u!1 &1617551633
 GameObject:
   m_ObjectHideFlags: 0

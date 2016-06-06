@@ -17,7 +17,7 @@ public class ComboController : MonoBehaviour {
 	private int lastCombo = 0;
 	private int combo = 0;
 	//Maximum amount of time for a correct diagnosis
-	private float timeToCombo = 2f;
+	private float timeToCombo = 3f;
 	private float currentComboTime = 0;
 	private int comboBonus = 5;
 	private bool countingDown = true;
@@ -90,7 +90,6 @@ public class ComboController : MonoBehaviour {
 	public void UpdateScore(int newScore) {
 		scoreText.text = "Score: \n" + newScore.ToString();
 	}
-
 	public void TimeLowColor(float timeLeft) {
 		if (flashLine != null) {
 			StopCoroutine(flashLine);
@@ -106,12 +105,11 @@ public class ComboController : MonoBehaviour {
 		return slotImages [combo % (comboBonus * 2)].transform.position;
 	}
 
-	public void IncrementCombo(int deltaCombo) {
-		combo += deltaCombo;
+	public void IncrementCombo() {
+		combo++;
 		UpdateCombo();
 		currentComboTime = timeToCombo;
 	}
-
 	private void UpdateCombo() {
 		comboText.text = "Combo: \n" + combo.ToString();
 		if (combo == 0) {

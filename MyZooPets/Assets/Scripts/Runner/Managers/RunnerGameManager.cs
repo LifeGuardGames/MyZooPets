@@ -50,18 +50,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
-	public void ActivateGameOver(){	
+	public void EndGame(){	
 		UpdateScore(ScoreManager.Instance.Score);
 		GameOver();	
-
-		// Disable the player
-		PlayerController.Instance.MakePlayerVisible(false);
-
-		// play game over sound
-		AudioManager.Instance.PlayClip("runnerGameOver");
-
-		//Reset level items
-		RunnerItemManager.Instance.Reset();
 	}
 	public IEnumerator StartTutorial() {
 		PlayerController.Instance.MakePlayerVisible(true);
@@ -93,6 +84,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		RunnerLevelManager.Instance.Reset();
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
+		RunnerItemManager.Instance.Reset();
+
 	}
 
 	protected override void _PauseGame(bool isShow) {
@@ -108,6 +101,15 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		}
 	}
 	protected override void _GameOver() {
+		UpdateScore(ScoreManager.Instance.Score); 
+		AudioManager.Instance.PlayClip("runnerDie");
+		PlayerController.Instance.MakePlayerVisible(false);
+
+		// play game over sound
+		AudioManager.Instance.PlayClip("runnerGameOver");
+		RunnerLevelManager.Instance.mCurrentLevelGroup.ReportDeath();
+
+
 	}
 	protected override void _GameOverReward() {
 		StatsManager.Instance.ChangeStats(
@@ -124,7 +126,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		Application.targetFrameRate = 30;
 	}
 	protected override void _ContinueGame() {
-		throw new NotImplementedException();
+		PlayerController.Instance.MakePlayerVisible(true);
+		MegaHazard.Instance.Reset();
+		PlayerController.Instance.transform.position = MegaHazard.Instance.bottomPosition.position;
 	}
 	private void ResetScore() {
 		rewardXPMultiplier = 1f;

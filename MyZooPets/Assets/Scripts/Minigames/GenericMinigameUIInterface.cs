@@ -98,13 +98,13 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 
 	public void OnContinue() {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
-			//DoctorMatchManager.Instance.ContinueGame();
+			DoctorMatchManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			//RunnerGameManager.Instance.ContinueGame();
+			RunnerGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			ShooterGameManager.Instance.ContinueGame();

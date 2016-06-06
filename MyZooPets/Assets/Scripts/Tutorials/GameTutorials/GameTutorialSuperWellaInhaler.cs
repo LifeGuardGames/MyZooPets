@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections;
 
 /// <summary>
@@ -34,7 +33,7 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	private IEnumerator ShowSuperWella(){
 		yield return new WaitForSeconds(1f);
 
-		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
+		PopupController.Callback okButtonCallback = delegate(){
 			if(!isDelegateUsed){
 				isDelegateUsed = true;
 				PetAudioManager.Instance.EnableSound = true;
@@ -44,10 +43,10 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 
 		//Display tutorial notification
 		Hashtable notificationEntry = new Hashtable();
-		//notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.SuperWellaInhaler);
-		//notificationEntry.Add(NotificationPopupData.Message, Localization.Localize("TUT_SUPERWELLA_INHALER"));
-		//notificationEntry.Add(NotificationPopupData.Button1Callback, okButtonCallback);
-		
+		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupInhalerReminder");
+		notificationEntry.Add(NotificationPopupData.Title, null);
+		notificationEntry.Add(NotificationPopupData.Message, Localization.Localize("POPUP_INHALER_TUTORIAL"));
+		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, okButtonCallback);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
 		AudioManager.Instance.PlayClip("superWellaInhalerTutorial");

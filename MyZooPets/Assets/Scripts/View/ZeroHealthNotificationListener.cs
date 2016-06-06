@@ -19,8 +19,7 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
         //Unregister the handler so we don't get multiple notifications of the same thing
         StatsManager.OnZeroHealth -= OnZeroHealthNotification;    
 
-        PopupNotificationNGUI.Callback button1Function = delegate(){
-
+        PopupController.Callback button1Function = delegate(){
 			StatsManager.Instance.ChangeStats(coinsDelta: -1 * hospitalBillCost,
 			                                     healthDelta: 100, hungerDelta: -1 * moodPunishment, isFloaty: false);
 
@@ -33,11 +32,11 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
             petName, hospitalBillCost.ToString());
 
         Hashtable notificationEntry = new Hashtable();
-        //notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.ZeroHealth);
-        //notificationEntry.Add(NotificationPopupData.Message, message); 
-        //notificationEntry.Add(NotificationPopupData.Button1Callback, button1Function); 
-        
-        NotificationUIManager.Instance.AddToQueue(notificationEntry);
+		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupZeroHealth");
+		notificationEntry.Add(NotificationPopupData.Title, null);
+		notificationEntry.Add(NotificationPopupData.Message, message);
+		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, button1Function);
+		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
         //Send analytics event
         Analytics.Instance.ZeroHealth();

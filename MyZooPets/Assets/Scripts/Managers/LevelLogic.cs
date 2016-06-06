@@ -1,5 +1,3 @@
-using UnityEngine;
-using System.Collections;
 using System;
 
 //---------------------------------------------------
@@ -39,10 +37,7 @@ public class LevelLogic : Singleton<LevelLogic>{
         return isMaxLevel;
     }
 
-	//------------------------------------------------
-	// NextLevelPoints()
 	// Return the required points for next level up
-	//------------------------------------------------
 	public int NextLevelPoints(){
         int adjustedNextLevel = NextLevel;
 
@@ -55,30 +50,15 @@ public class LevelLogic : Singleton<LevelLogic>{
 		return petLevel.LevelUpCondition;
 	}
 
-	//------------------------------------------------
-	// GetLevelUpMessage()
-	// Return the message to be displayed in notification when
-	// level up
-	//------------------------------------------------
+	// Return the message to be displayed in notification when level up
 	public string GetLevelUpMessage(){
 		Level currentLevel = DataManager.Instance.GameData.Level.CurrentLevel;
 		ImmutableDataPetLevel petLevel = DataLoaderPetLevels.GetLevel(currentLevel);
 		return petLevel.LevelUpMessage;
 	}
 
-	//------------------------------------------------
-	// IncrementLevel()
-	// Levelup
-	//------------------------------------------------
 	public void IncrementLevel(){
 		if(NextLevel <= maxLevel)
 			DataManager.Instance.GameData.Level.CurrentLevel = (Level)NextLevel;
 	}
-
-	// void OnGUI(){
-	//     if(GUI.Button(new Rect(0, 0, 100, 100), "level up")){
-	//         StatsController.Instance.ChangeStats(1000, Vector3.zero, 0, Vector3.zero,
-	//             0, Vector3.zero, 0, Vector3.zero);
-	//     }
-	// }
 }

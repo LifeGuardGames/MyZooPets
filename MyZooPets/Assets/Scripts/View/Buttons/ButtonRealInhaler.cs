@@ -24,29 +24,25 @@ public class ButtonRealInhaler : ButtonChangeScene{
 			OpenRealInhaler();
 		}
 		else{
-//			PlayNotProcessSound();
 			string soundToPlay;
 			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());
-			string popupMessage = "TUT_SUPERWELLA_INHALER";
+			string popupMessage;
 
 			if(currentTimeFrame == TimeFrames.Morning){
-				popupMessage = "NOTIFICATION_INHALER_TONIGHT";
+				popupMessage = "POPUP_INHALER_TONIGHT";
 				soundToPlay = "superWellaInhalerTonight";
 			}
 			else{
-				popupMessage = "NOTIFICATION_INHALER_MORNING";
+				popupMessage = "POPUP_INHALER_MORNING";
 				soundToPlay = "superWellaInhalerMorning";
 			}
-				
-			PopupNotificationNGUI.Callback okButtonCallback = delegate(){	
-			};
 			
 			//Display tutorial notification
 			Hashtable notificationEntry = new Hashtable();
-			//notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.SuperWellaInhaler);
-			//notificationEntry.Add(NotificationPopupData.Message, Localization.Localize(popupMessage));
-			//notificationEntry.Add(NotificationPopupData.Button1Callback, okButtonCallback);
-			
+			notificationEntry.Add(NotificationPopupData.PrefabName, "PopupInhalerRecharging");
+			notificationEntry.Add(NotificationPopupData.Title, null);
+			notificationEntry.Add(NotificationPopupData.Message, Localization.Localize(popupMessage));
+			notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, null);
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
 			AudioManager.Instance.PlayClip(soundToPlay);

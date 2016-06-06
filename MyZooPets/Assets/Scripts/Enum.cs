@@ -74,7 +74,7 @@ public enum NotificationPopupData{
 	PrefabName,
 	Title,
 	Message,
-	Button1Callback,
+	SpecialButtonCallback,
 	ExtraInfo
 }
 

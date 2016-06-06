@@ -2,8 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
-
+public class MoodAndHealthNotificationListener : MonoBehaviour{
 	void Start(){
 		RefreshNotificationListener();
 	}
@@ -48,7 +47,7 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 	}
 
 	private void OnHealthyToSickHandler(object sender, EventArgs args){
-		ShowSuperWellaSickReminder();
+		ShowPopupPetSick();
 	}
 
 	/// <summary>
@@ -68,17 +67,10 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupNoEnergy");
 		notificationEntry.Add(NotificationPopupData.Title, popupTitle);
 		notificationEntry.Add(NotificationPopupData.Message, popupMessage);
-		notificationEntry.Add(NotificationPopupData.Button1Callback, okButtonCallback);
+		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, okButtonCallback);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_MOOD_DEGRADE);	
-	}
-
-	void OnGUI() {
-
-		if(GUI.Button(new Rect(100, 100, 100, 100), "SDF")) {
-			ShowPopupNoEnergy();
-        }
 	}
 
 	// Called from the shortcut mode in shop
@@ -87,27 +79,27 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		ClickManager.Instance.ReleaseLock();
 	}
 
-	private void ShowSuperWellaSickReminder(){
+	private void ShowPopupPetSick(){
 		//unregister listener after notification is shown once
 		StatsManager.OnHealthyToSick -= OnHealthyToSickHandler;
 		StatsManager.OnHealthyToVerySick -= OnHealthyToSickHandler;
 
-		//change the necessary data
+		// Change the necessary data
 		DataManager.Instance.GameData.SickNotification.IsRemindedThisPlayPeriod = true;
 		DataManager.Instance.GameData.SickNotification.DecreaseReminderCount();
 
-		PopupNotificationNGUI.Callback button1Function = delegate(){
+		PopupController.Callback button1Function = delegate(){
 			ClickManager.Instance.Lock(UIModeTypes.Store);
-
 			NavigationUIManager.Instance.HidePanel();
-			
 			StoreUIManager.OnShortcutModeEnd += CloseShop;
 			StoreUIManager.Instance.OpenToSubCategory("Items", true, StoreShortcutType.SickNotification);
 		};
 
 		Hashtable notificationEntry = new Hashtable();
-		//notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.SuperWellaSickReminder);
-		//notificationEntry.Add(NotificationPopupData.Button1Callback, button1Function);
+		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupNoEnergy");
+		notificationEntry.Add(NotificationPopupData.Title, Localization.Localize("POPUP_PET_SICK_TITLE"));
+		notificationEntry.Add(NotificationPopupData.Message, Localization.Localize("POPUP_PET_SICK"));
+		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, button1Function);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
 		AudioManager.Instance.PlayClip("superWellaSick");
@@ -118,6 +110,13 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		ClickManager.Instance.ReleaseLock();
 		
 		StoreUIManager.OnShortcutModeEnd -= CloseShop;
+	}
+
+
+	void OnGUI() {
+		if(GUI.Button(new Rect(100, 100, 100, 100), "SDF")) {
+			ShowPopupPetSick();
+		}
 	}
 }
 

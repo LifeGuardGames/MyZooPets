@@ -1,12 +1,10 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 // Shortcut mode types into store sub panel
 public enum StoreShortcutType{
 	None,
-//	FlameCrystalNeededNotification,
 	DecorationUIStoreButton,
 	DecorationUIStoreButtonTutorial,
 	MinipetUIStoreButton,
@@ -31,6 +29,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject storeBgPanel;			// the bg of the store (sub panel and base panel)
 	public GameObject backButton; 			// exit button reference
 	public GameObject prevTab; 
+
 	// store related sounds
 	public string soundChangeTab;
 	public string soundBuy;
@@ -527,14 +526,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				NavigationUIManager.Instance.HidePanel();
 				break;
-
-			// Exit back to fireblowing room UI
-//			case StoreShortcutType.FlameCrystalNeededNotification:
-//				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-//				InventoryUIManager.Instance.ShowPanel();
-//				RoomArrowsUIManager.Instance.ShowPanel();
-//				DecoInventoryUIManager.Instance.HideDecoInventory();
-//				break;
 
 			// Exit back to default UI
 			case StoreShortcutType.NeedFoodTutorial:

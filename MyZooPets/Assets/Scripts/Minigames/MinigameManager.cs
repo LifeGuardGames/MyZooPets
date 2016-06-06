@@ -307,14 +307,14 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			//double confirm quit game
 			if(ui.IsPopupShowing(MinigamePopups.Pause)){
 
-				PopupNotificationNGUI.Callback button1Function = delegate(){
-					ui.TogglePopup(MinigamePopups.Pause, false);
+				//PopupNotificationNGUI.Callback button1Function = delegate(){
+				//	ui.TogglePopup(MinigamePopups.Pause, false);
 
-					LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
-				};
+				//	LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
+				//};
 
-				PopupNotificationNGUI.Callback button2Function = delegate(){
-				};
+				//PopupNotificationNGUI.Callback button2Function = delegate(){
+				//};
 
 				// Remove this refactoring 
 				/*

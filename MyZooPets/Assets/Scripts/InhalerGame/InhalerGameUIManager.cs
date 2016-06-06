@@ -188,7 +188,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	}
 
 	private void QuitInhalerGame(object sender, EventArgs args){
-		NotificationUIManager.Instance.CleanupNotification();
 		LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 	}
 }

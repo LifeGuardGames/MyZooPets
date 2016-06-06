@@ -21,20 +21,18 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	public DoctorMatchZone zoneRed;
 	public GameObject pointerPrefab;
 	public GameObject floatyPrefab;
-	public GameObject inhalerPrefab;
 	public GameObject arrowObject;
 
 	private int numOfCorrectDiagnose;
 	private bool paused = true;
-	private GameObject inhalerObject;
 	private DoctorMatchTutorial doctorMatchTutorial;
 	private bool tutorial = false;
 	private int tutorialZone = 0;
 	private FingerController finger = null;
-	private bool spawnInhalers = false;
 	private IEnumerator multipleFinger = null;
 	private float lastPress;
 	private float timeToShake = 2f;
+	private int bonusStack = 0;
 	//If they do nothing for 5 seconds. Shake the finger
 
 	public bool Paused {
@@ -58,8 +56,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			OnZoneClicked(DoctorMatchButtonTypes.Yellow);
 		} else if (Input.GetKeyDown(KeyCode.RightArrow)) {
 			OnZoneClicked(DoctorMatchButtonTypes.Red);
-		} else if (Input.GetKeyDown(KeyCode.Q)) {
-			SpawnInhalerPopup();
+		} else if (Input.GetKeyDown(KeyCode.W)) {
+			lifeBarController.KillBar();
 		}
 		#endif
 		if (tutorial && finger != null && zoneGreen.button.interactable) {
@@ -95,7 +93,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	public void OnTimerBarEmpty() {
-		lifeBarController.UpdateCount(assemblyLineController.Count);
+		int toClear = assemblyLineController.Count + bonusStack;
+		lifeBarController.UpdateCount(toClear);
 	}
 
 	public void SpawnFinger(int zone) {
@@ -133,7 +132,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		if (successful) {
 			for (int i = 0; i < 3; i++) {
 				StartCoroutine(particleController.SpawnFirework(comboController.ComboMod, startPosition, comboController.GetComboPosition(comboController.Combo)));
-				comboController.IncrementCombo(1);
+				comboController.IncrementCombo();
 				ComboBonus();
 				yield return new WaitForSeconds(.25f);
 			}
@@ -178,12 +177,11 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			UpdateScore(2);
 			ComboBonus();
 			PlaySoundCorrect();
-			comboController.IncrementCombo(1);
+			comboController.IncrementCombo();
 		} else {
 			comboController.ResetCombo();
 			UpdateScore(-1);
 			AudioManager.Instance.PlayClip("minigameError");
-			cameraShake.Play();
 		}
 		particleController.SpawnFloatyText(comboMod, correct, buttonTransform);
 
@@ -193,7 +191,9 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			HandleNormal(poppedItem);
 		}
 	}
+	public void EndGame() {
 
+	}
 	protected override void _Start() {
 		zoneGreen.ToggleButtonInteractable(false);
 		zoneYellow.ToggleButtonInteractable(false);
@@ -213,7 +213,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		StartCoroutine(assemblyLineController.Initialize(false));
 		lifeBarController.ResetBar();
 		lifeBarController.StartDraining();
-
+		lifeBarController.UpdateCount(-1);
 		zoneGreen.ToggleButtonInteractable(true);
 		zoneYellow.ToggleButtonInteractable(true);
 		zoneRed.ToggleButtonInteractable(true);
@@ -259,21 +259,24 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 	protected override void _QuitGame() {
 	}
+
 	protected override void _ContinueGame() {
-		throw new NotImplementedException();
+		lifeBarController.PlusBar(33);
+		assemblyLineController.PopulateQueue(true);
+		lifeBarController.UpdateCount(-1);
 	}
+
 	private void HandleNormal(AssemblyLineItem poppedItem) {
 		assemblyLineController.PopFirstItem();
 		poppedItem.Activate();
-		if (!lifeBarController.IsEmpty) {
+		int toClear = assemblyLineController.Count + bonusStack;
+		lifeBarController.UpdateCount(toClear);
+		if (!lifeBarController.IsEmpty||bonusStack>0) {
 			assemblyLineController.ShiftAndAddNewItem();
-			if (Random.value > .8f && spawnInhalers) {
-				SpawnInhalerPopup();
-			}
+			if (lifeBarController.IsEmpty && bonusStack > 0)
+				bonusStack--;
 		} else if (!assemblyLineController.LineComplete) {
 			assemblyLineController.MoveUpLine();
-			assemblyLineController.VisibleCount();
-			lifeBarController.UpdateCount(assemblyLineController.Count);
 		} else {
 			GameOver();
 		}
@@ -293,7 +296,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		if (correct) {
 			assemblyLineController.PopFirstItem();
 			poppedItem.Activate();
-			assemblyLineController.MoveUpLine();
+			assemblyLineController.MoveUpLine(false);
 			if (assemblyLineController.LineComplete) {
 				doctorMatchTutorial.Advance();
 			} else if (tutorialZone == 3) {
@@ -322,32 +325,13 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		AssemblyLineItem item = assemblyLineController.PeekFirstItem();
 		return GetButtonTransform((int)item.ItemType - 1);
 	}
-
-	private void SpawnInhalerPopup() {
-		/*lifeBarController.StopDraining();
-		zoneGreen.enabled=false;
-		zoneYellow.enabled=false;
-		zoneRed.enabled=false;*/
-
-		lifeBarController.StopDraining();
-		inhalerObject = Instantiate(inhalerPrefab);
-		Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, -1 * Camera.main.transform.position.z));
-		Vector3 bottomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, -1 * Camera.main.transform.position.z));
-		float inhalerXPos = Random.Range(bottomLeft.x, bottomRight.x);
-		inhalerObject.transform.position = new Vector3(inhalerXPos, bottomRight.y);
-
-		InhalerPopup popup = inhalerObject.GetComponent<InhalerPopup>();
-		popup.Velocity = new Vector3(Random.Range(-100, 100), 300 + Random.Range(-15, 15));
-		popup.bottomY = bottomLeft.y;
-		popup.leftX = bottomLeft.x;
-		popup.RightX = bottomRight.x;
-
-		comboController.StopCounting();
-	}
-
+		
 	private void ComboBonus() {
 		if (comboController.ComboLevel == 2) { //Big combo bonus
-			lifeBarController.PlusBar(1.5f);
+			if (assemblyLineController.Count!=1)
+				bonusStack += 3;
+			else
+				assemblyLineController.PopulateQueue(true,3,1);
 		} else if (comboController.ComboLevel == 1) { //Small combo bonus
 			UpdateScore(comboController.Combo);
 		}

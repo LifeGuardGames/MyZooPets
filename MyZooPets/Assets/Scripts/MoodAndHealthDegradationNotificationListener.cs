@@ -35,8 +35,9 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 			PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
 			if(moodState == PetMoods.Sad && SceneUtils.CurrentScene == SceneUtils.BEDROOM){
 				bool isMoodDecayTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_MOOD_DEGRADE);
-				if(!isMoodDecayTutorialDone)
-					Invoke("ShowMoodDegradeMessage", 0.25f);
+				if(!isMoodDecayTutorialDone) {
+					Invoke("ShowPopupNoEnergy", 0.25f);
+				}
 			}
 		}
 	}
@@ -53,24 +54,31 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 	/// <summary>
 	/// Shows two notifications telling user how to increase the pet's mood
 	/// </summary>
-	private void ShowMoodDegradeMessage(){
-		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string moodDecayTutMessage = String.Format(Localization.Localize("MOOD_DECAY_TUT"), petName);
-
-		PopupNotificationNGUI.Callback okButtonCallback = delegate(){
+	private void ShowPopupNoEnergy(){
+		string popupTitle = Localization.Localize("POPUP_NO_ENERGY_TITLE");
+        string petName = DataManager.Instance.GameData.PetInfo.PetName;
+		string popupMessage = string.Format(Localization.Localize("POPUP_NO_ENERGY"), petName);
+		PopupController.Callback okButtonCallback = delegate(){
 			StoreUIManager.OnShortcutModeEnd += CloseShop;
-			
 			ClickManager.Instance.Lock(UIModeTypes.Store);
 			StoreUIManager.Instance.OpenToSubCategory("Food", true, StoreShortcutType.NeedFoodTutorial);
 		};
 		
 		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.NeedFoodTutorial);
-		notificationEntry.Add(NotificationPopupFields.Message, moodDecayTutMessage);
-		notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupNoEnergy");
+		notificationEntry.Add(NotificationPopupData.Title, popupTitle);
+		notificationEntry.Add(NotificationPopupData.Message, popupMessage);
+		notificationEntry.Add(NotificationPopupData.Button1Callback, okButtonCallback);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 		
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_MOOD_DEGRADE);	
+	}
+
+	void OnGUI() {
+
+		if(GUI.Button(new Rect(100, 100, 100, 100), "SDF")) {
+			ShowPopupNoEnergy();
+        }
 	}
 
 	// Called from the shortcut mode in shop
@@ -98,8 +106,8 @@ public class MoodAndHealthDegradationNotificationListener : MonoBehaviour{
 		};
 
 		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaSickReminder);
-		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
+		//notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.SuperWellaSickReminder);
+		//notificationEntry.Add(NotificationPopupData.Button1Callback, button1Function);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 
 		AudioManager.Instance.PlayClip("superWellaSick");

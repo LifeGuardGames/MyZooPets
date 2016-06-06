@@ -43,9 +43,9 @@ public class ButtonRealInhaler : ButtonChangeScene{
 			
 			//Display tutorial notification
 			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaInhaler);
-			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize(popupMessage));
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
+			//notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.SuperWellaInhaler);
+			//notificationEntry.Add(NotificationPopupData.Message, Localization.Localize(popupMessage));
+			//notificationEntry.Add(NotificationPopupData.Button1Callback, okButtonCallback);
 			
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
 

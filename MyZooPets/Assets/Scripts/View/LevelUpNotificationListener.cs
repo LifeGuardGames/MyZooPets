@@ -27,10 +27,10 @@ public class LevelUpNotificationListener : MonoBehaviour {
 
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
-		notificationEntry.Add(NotificationPopupFields.Message, LevelLogic.Instance.GetLevelUpMessage()); 
-		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Sound, sound );
+		//notificationEntry.Add(NotificationPopupData.Type, NotificationPopupType.LevelUp);
+		//notificationEntry.Add(NotificationPopupData.Message, LevelLogic.Instance.GetLevelUpMessage()); 
+		//notificationEntry.Add(NotificationPopupData.Button1Callback, button1Function);
+		//notificationEntry.Add(NotificationPopupData.Sound, sound );
 		
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 

@@ -70,18 +70,12 @@ public enum NotificationPopupType{
 	NeedFoodTutorial
 }
 
-public enum NotificationPopupFields{
-	Type,
+public enum NotificationPopupData{
+	PrefabName,
+	Title,
 	Message,
 	Button1Callback,
-    Button2Callback,
-	DeltaStars,
-	DeltaPoints,
-	SpriteName,
-	StartsHidden,
-	HideImmediately,
-	Badge,
-	Sound
+	ExtraInfo
 }
 
 public enum TutorialPopupFields{

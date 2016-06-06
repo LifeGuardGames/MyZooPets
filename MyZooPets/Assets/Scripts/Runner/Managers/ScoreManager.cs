@@ -140,16 +140,9 @@ public class ScoreManager : Singleton<ScoreManager>{
 		// can't go below 0 coins -- this sounds silly, but coins right now is the new "points"
 		int pointsToAdd = (int) Mathf.Floor((numOfCoinsToAdd) * comboMod);
 		mPlayerCoins = Mathf.Max(mPlayerCoins + pointsToAdd, 0);
-	}
 
-	public void AddPoints(int inNumPointsToAdd){
-		// score can't go below 0
-		//mPlayerPoints = Mathf.Max( mPlayerPoints + inNumPointsToAdd, 0 );
+	}
 		
-		// points is now being absorbed into coins...should probably be the other way around...
-		AddCoins(inNumPointsToAdd);
-	}
-
 	public void SetDistancePoints(int distancePoints){
 		mPlayerDistancePoints = distancePoints;
 	}

@@ -62,7 +62,7 @@ public class MutableDataTutorial{
 	public void VersionCheck(Version currentDataVersion){
 		if(currentDataVersion <= new Version("2.1.5") && !RunnerTutorialVersionCheckDone){
 			// Changed runner tutorial, so show tutorial again, soft remove
-			ListPlayed.Remove(RunnerTutorial.TUT_KEY);
+			ListPlayed.Remove(OldRunnerTutorial.TUT_KEY);
 			RunnerTutorialVersionCheckDone = true;
 		}
 	}

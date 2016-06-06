@@ -41,7 +41,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 	
 	// Update is called once per frame
 	void Update() {
-		if(!NewRunnerGameManager.Instance.GameRunning)
+		if(!RunnerGameManager.Instance.GameRunning)
 			return;
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
@@ -79,7 +79,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
                 removedLevelComponent.ParentGroup.DestroyAndCache(removedLevelComponent.gameObject);
 
 				// Push a new one if not in tutorial mode
-				if(!NewRunnerGameManager.Instance.IsTutorialRunning){
+				if(!RunnerGameManager.Instance.IsTutorialRunning){
                     LevelComponent nextLevel = PushAndInstantiateRandomComponent();
                     PopulateLevelComponent(nextLevel);
                 }else{
@@ -89,7 +89,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 		}
 
         //only allow level group switching if not in tutorial mode
-		if(!NewRunnerGameManager.Instance.IsTutorialRunning){
+		if(!RunnerGameManager.Instance.IsTutorialRunning){
             mLevelSwitchPulse -= Time.deltaTime;
 
             if (mLevelSwitchPulse <= 0f) {

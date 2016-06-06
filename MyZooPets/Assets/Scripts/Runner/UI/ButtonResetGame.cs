@@ -14,7 +14,7 @@ public class ButtonResetGame : MonoBehaviour {
 	}
 
     void OnClick() {
-        RunnerGameManager gameManager = RunnerGameManager.Instance;
-        gameManager.ResetGame();
+		Debug.LogWarning("This should not be called");
+		RunnerGameManager.Instance.NewGame();
 	}
 }

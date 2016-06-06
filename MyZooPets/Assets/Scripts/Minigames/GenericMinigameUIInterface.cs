@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GenericMinigameUIInterface : MonoBehaviour {
 	private string sceneName;
-
 	void Awake() {
 		sceneName = SceneManager.GetActiveScene().name;
 	}
@@ -22,7 +21,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			return MemoryGameManager.Instance.GetMinigameKey(); // ...
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			return NewRunnerGameManager.Instance.MinigameKey;
+			return RunnerGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			return ShooterGameManager.Instance.GetMinigameKey();
@@ -44,10 +43,10 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			Debug.LogWarning("PauseGame not set up for Memory");
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			NewRunnerGameManager.Instance.PauseGame(isShow);
+			RunnerGameManager.Instance.PauseGame(isShow);
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			Debug.LogWarning("PauseGame not set up for Shooter");
+			ShooterGameManager.Instance.PauseGame(isShow);
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			Debug.LogWarning("PauseGame not set up for TriggerNinja");
@@ -67,9 +66,8 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.StartTutorial();
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
-			//RunnerGameManager.Instance.StartTutorial();
+		} else if (sceneName == SceneUtils.RUNNER) {
+			StartCoroutine(RunnerGameManager.Instance.StartTutorial());
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.StartTutorial();
@@ -109,7 +107,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			//RunnerGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			//ShooterGameManager.Instance.ContinueGame();
+			ShooterGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.ContinueGame();
@@ -126,7 +124,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		else if(sceneName == SceneUtils.MEMORY) {
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			NewRunnerGameManager.Instance.NewGame();
+			RunnerGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			ShooterGameManager.Instance.NewGame();
@@ -147,7 +145,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			//MemoryGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			//RunnerGameManager.Instance.QuitGame();
+			RunnerGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.QuitGame();

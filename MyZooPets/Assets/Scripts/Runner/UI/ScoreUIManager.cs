@@ -18,11 +18,13 @@ public class ScoreUIManager : Singleton<ScoreUIManager> {
     }
 	
 	// Update is called once per frame
-	void Update () {
-        if(!RunnerGameManager.Instance.GameRunning) return;
+	void Update () { //TODO: REMOVEEEEE
+		if(!RunnerGameManager.Instance.GameRunning)
+			return;
         UpdateCoins();
         UpdateDistance();
         UpdateScore();
+		Debug.LogWarning("This should not be called");
 	}
 
     public void Show(){

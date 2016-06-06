@@ -62,7 +62,12 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 			}
 		}
 	}
-
+	public void PlayParallax() {
+		mCurrentBackground.PlayParallax();
+	}
+	public void PauseParallax() {
+		mCurrentBackground.PauseParallax();
+	}
 	private void SpawnAndSetNextBackground(ParallaxingBackgroundGroup nextBackground){
 		mTransitionPulse = TransitionLengthSeconds;
 		mNextBackground = (ParallaxingBackgroundGroup)GameObject.Instantiate(nextBackground);

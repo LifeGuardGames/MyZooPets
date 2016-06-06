@@ -163,47 +163,51 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	public void Move(Vector3 dir){
-		if(ShooterGameManager.Instance.inTutorial) {
-			if(OnTutorialMove!= null) {
-				OnTutorialMove(this, EventArgs.Empty);
+		if(!ShooterGameManager.Instance.isPaused) {
+			if(ShooterGameManager.Instance.inTutorial) {
+				if(OnTutorialMove != null) {
+					OnTutorialMove(this, EventArgs.Empty);
+				}
 			}
+			clickPos = dir;
+			moving = true;
 		}
-		clickPos = dir;
-		moving = true;
 	}
 
 	void FixedUpdate() {
-		if(moving) {
+		if(moving && !ShooterGameManager.Instance.isPaused) {
 			transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, Camera.main.ScreenToWorldPoint(clickPos).y, transform.position.z), moveSpeed * Time.deltaTime);
 		}
 	}
 
 	// shoots a bullet at the current position of the mouse or touch
 	public void Shoot(Vector3 dir){
-		AudioManager.Instance.PlayClip("shooterFire", variations: 3);
-		characterAnim.Shoot();	// Tell the animator to shoot
+		if(!ShooterGameManager.Instance.isPaused) {
+			AudioManager.Instance.PlayClip("shooterFire", variations: 3);
+			characterAnim.Shoot();  // Tell the animator to shoot
 
-		Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
+			Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
 
-		if(isPiercing){
-			currentFireBall = fireBallPrefabs[3];
-		}
-		Debug.Log(currentFireBall.name);
-		GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
-		ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
-		bulletScript.target = lookPos;
-		bulletScript.FindTarget();
-		if(isTriple){
-			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
-			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
-			bulletScript.target = new Vector3(lookPos.x, lookPos.y + 1, lookPos.z);
+			if(isPiercing) {
+				currentFireBall = fireBallPrefabs[3];
+			}
+			Debug.Log(currentFireBall.name);
+			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
+			ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
+			bulletScript.target = lookPos;
 			bulletScript.FindTarget();
-			bulletScript.isPierceing = isPiercing;
+			if(isTriple) {
+				instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
+				bulletScript = instance.GetComponent<ShooterGameBulletScript>();
+				bulletScript.target = new Vector3(lookPos.x, lookPos.y + 1, lookPos.z);
+				bulletScript.FindTarget();
+				bulletScript.isPierceing = isPiercing;
 
-			instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
-			bulletScript = instance.GetComponent<ShooterGameBulletScript>();
-			bulletScript.target = new Vector3(lookPos.x, lookPos.y - 1, lookPos.z);
-			bulletScript.FindTarget();
+				instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
+				bulletScript = instance.GetComponent<ShooterGameBulletScript>();
+				bulletScript.target = new Vector3(lookPos.x, lookPos.y - 1, lookPos.z);
+				bulletScript.FindTarget();
+			}
 		}
 	}
 

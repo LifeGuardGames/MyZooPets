@@ -20,7 +20,9 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update(){
-		transform.Translate(speed * Time.deltaTime, 0, 0);
+		if(!ShooterGameManager.Instance.isPaused) {
+			transform.Translate(speed * Time.deltaTime, 0, 0);
+		}
 	}
 	
 	// when offscreen destroy

@@ -7,15 +7,6 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	public static string TUT_KEY = "DOCTORMATCH_TUT";
 	private DoctorMatchTutorialText tutorialText;
 
-	/*public DoctorMatchTutorial() : base() { //Call the base
-		this.instructionObject=instructionObject;
-		Debug.Log("ART!");
-	}*/
-
-	public DoctorMatchTutorial() : base() {
-		tutorialText = GameObject.FindObjectOfType<DoctorMatchTutorialText>();
-		tutorialText.ShowIntro();
-	}
 	protected override void SetMaxSteps() {
 		maxSteps = 4;
 	}
@@ -25,13 +16,18 @@ public class DoctorMatchTutorial : MinigameTutorial {
 	}
 
 	protected override void _End(bool isFinished) {
-		DoctorMatchManager.Instance.NewGame();
-		//DoctorMatchManager.Instance.BarFinger();
+		if (isFinished) {
+			DoctorMatchManager.Instance.NewGame();
+		} else {
+			tutorialText.StartCoroutine(tutorialText.HideAll());
+		}
 	}
 
 	protected override void ProcessStep(int step) {
 		switch (step) {
-			case 0:
+			case 0: 
+				tutorialText = GameObject.FindObjectOfType<DoctorMatchTutorialText>();
+				tutorialText.ShowIntro();
 				DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(0);
 				break;
 			case 1:

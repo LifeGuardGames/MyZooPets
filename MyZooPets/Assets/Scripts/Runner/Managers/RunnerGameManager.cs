@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 // The sort of 'center' of the game.
 // However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
 // This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
@@ -12,159 +12,124 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class RunnerGameManager : MinigameManager<RunnerGameManager>{
-	public string deathLevel;
-	void Awake(){
-		quitGameScene = SceneUtils.YARD;
-	}
-	
-	// Use this for initialization
-	protected override void _Start(){
-		Application.targetFrameRate = 60;
-	}
-	
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
-
-	//public SceneTransition scriptTransition;
-	public bool GameRunning{
-		get { return GetGameState() == MinigameStates.Playing; }
-	}
-
-	public override int GetScore(){
-		// the score was previously being calculated in that variable as some kind of weird distance traveled / stuff...
-		// return ScoreManager.Instance.Score;    
-		
-		// just changing it to distance run + coins
-		int nDistance = ScoreManager.Instance.Distance;
-		int nCoins = ScoreManager.Instance.Coins;
-		int nScore = nDistance + nCoins;
-		
-		return  nScore;
-	}
-	
-	/// <summary>
-	/// Gets the minigame key.
-	/// </summary>
-	/// <returns>The minigame key.</returns>
-	public override string GetMinigameKey(){
-		return "Runner";	
-	}
-
-	protected override bool IsTutorialOn(){
-		return Constants.GetConstant<bool>("IsRunnerTutorialOn");
-	}
-
-	/// <summary>
-	/// Starts a new game.
-	/// </summary>
-	protected override void _NewGame(){	
-		//check for tutorial here.
-		if(IsTutorialOn() && (IsTutorialOverride() || 
-			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(RunnerTutorial.TUT_KEY))){
-            
-			StartTutorial();
-			ResetGameTutorial();
+public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
+	private bool paused = true;
+	private bool tutorial = false;
+	private bool acceptInput = true; //Used for the start of the tutorial, we are not allowed to jump or drop
+	private bool specialInput = false; //Used for tutorial when a popup shows, everything but the player should be paused and the player can only either jump or drop, but not both
+	private RunnerTutorial runnerTutorial;
+	public bool GameRunning {
+		get {
+			return !paused;
 		}
-		else{
-			ResetGame();
+	}
+	public bool IsTutorialRunning {
+		get {
+			return tutorial;
 		}
-	}	
-
-	/// <summary>
-	/// game over. 
-	/// </summary>
-	protected override void _GameOver(){
-
-		// send out distance task
-		int distance = ScoreManager.Instance.Distance;
-		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), distance);
-		int score = GetScore();
-		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
-		Analytics.Instance.RunnerGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()],deathLevel,distance);
-
-		
-		// send out coins task
-		int coins = ScoreManager.Instance.Coins;
-		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
-
-#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
-#endif
-	}		
-
-	/// <summary>
-	/// Resets all game components to initial state
-	/// </summary>
-	public void ResetGame(){
-		PlayerController.Instance.MakePlayerVisible(true);
-		PlayerController.Instance.Reset();
-		ScoreManager.Instance.Reset();
-		ScoreUIManager.Instance.Show();
-
-		RunnerLevelManager.Instance.Reset();
-		MegaHazard.Instance.Reset();
-		ParallaxingBackgroundManager.Instance.Reset();
 	}
-
-	public void ResetGameTutorial(){
-		PlayerController.Instance.MakePlayerVisible(true);
-		PlayerController.Instance.Reset();
-		ScoreManager.Instance.Reset();
-		RunnerLevelManager.Instance.ResetTutorial();
-		MegaHazard.Instance.Reset();
-		ParallaxingBackgroundManager.Instance.Reset();
+	public bool AcceptInput {
+		get {
+			return acceptInput;
+		}
+		set {
+			acceptInput = value;
+		}
 	}
-
-	public void PauseGameWithoutPopup(){
-		PauseGameWithPopup(false);   
+	public bool SpecialInput {
+		get {
+			return specialInput;
+		}
+		set {
+			specialInput = value;
+		}
 	}
-	
-	/// <summary>
-	/// Wrapper class to ResumeGame from parent class. yield one frame before
-	/// calling the actual resume so the click on the resume button will not
-	/// be picked up by the gesture listener.
-	/// </summary>
-	public void UnPauseGame(){
-		StartCoroutine(ResumeGameHelper());
+	void Awake() {
+		// Parent settings
+		minigameKey = "RUNNER";
+		quitGameScene = SceneUtils.BEDROOM;
+		ResetScore();
 	}
-
-	private IEnumerator ResumeGameHelper(){
-		yield return 0; 
-		base.ResumeGame();  
-	}
-	
-	/// <summary>
-	/// Stop the game and resets the game
-	/// </summary>
-	public void ActivateGameOver(){
+	public void ActivateGameOver(){	
+		UpdateScore(ScoreManager.Instance.Score);
 		GameOver();	
 
 		// Disable the player
 		PlayerController.Instance.MakePlayerVisible(false);
-		
+
 		// play game over sound
 		AudioManager.Instance.PlayClip("runnerGameOver");
 
 		//Reset level items
 		RunnerItemManager.Instance.Reset();
 	}
-	
-	/// <summary>
-	/// Gets the reward.
-	/// </summary>
-	/// <returns>The reward.</returns>
-	/// <param name="eType">type.</param>
-	public override int GetReward(MinigameRewardTypes rewardType){
-		// for now, just use the standard way
-		return GetStandardReward(rewardType);
+	public IEnumerator StartTutorial() {
+		PlayerController.Instance.MakePlayerVisible(true);
+		PlayerController.Instance.Reset();
+		acceptInput=false;
+		ScoreManager.Instance.Reset();
+
+		RunnerLevelManager.Instance.ResetTutorial();
+		MegaHazard.Instance.Reset();
+		ParallaxingBackgroundManager.Instance.Reset();
+
+		yield return new WaitForSeconds(1f);
+		runnerTutorial = new RunnerTutorial();
+		SetTutorial(runnerTutorial);
+	}
+	public void AdvanceTutorial() {
+		runnerTutorial.Advance();
+	}
+	// Use this for initialization
+	protected override void _Start() {
+		Application.targetFrameRate = 60;
 	}
 
-	/// <summary>
-	/// Begin runner game tutorial
-	/// </summary>
-	private void StartTutorial(){
-		SetTutorial(new RunnerTutorial());
+	protected override void _NewGame() {	//Reset everything and start again, not called during tutorial
+		PlayerController.Instance.MakePlayerVisible(true);
+		PlayerController.Instance.Reset();
+		ScoreManager.Instance.Reset();
+
+		RunnerLevelManager.Instance.Reset();
+		MegaHazard.Instance.Reset();
+		ParallaxingBackgroundManager.Instance.Reset();
+	}
+
+	protected override void _PauseGame(bool isShow) {
+		paused = !isShow;
+		if (isShow) {
+			MegaHazard.Instance.PlayParticles();
+			ParallaxingBackgroundManager.Instance.PlayParallax();
+			PlayerController.Instance.PlayAnimation();
+		} else {
+			MegaHazard.Instance.PauseParticles();
+			ParallaxingBackgroundManager.Instance.PauseParallax();
+			PlayerController.Instance.PauseAnimation();
+		}
+	}
+	protected override void _GameOver() {
+	}
+	protected override void _GameOverReward() {
+		StatsManager.Instance.ChangeStats(
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+		//BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
+		//TODO: Implement badges under RunnerGame
+	}
+	protected override void _QuitGame() {
+		Application.targetFrameRate = 30;
+	}
+	protected override void _ContinueGame() {
+		throw new NotImplementedException();
+	}
+	private void ResetScore() {
+		rewardXPMultiplier = 1f;
+		rewardMoneyMultiplier = 1f;
+		rewardShardMultiplier = 1f;
+		score = 0;
 	}
 }

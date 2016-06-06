@@ -16,7 +16,7 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
 	
     void Start(){
         //RunnerGameManager.OnStateChanged += GameStateChange;
-		if(NewRunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.GameRunning)
             PlayParallax();
 
     }
@@ -32,7 +32,15 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
             currentParallax.GetComponent<Renderer>().material.color = currentColor;
          }
     }
+	public void PlayParallax(){
+		foreach(Parallax currentParallax in ParralaxingTextures)
+			currentParallax.Play();
+	}
 
+	public void PauseParallax(){
+		foreach(Parallax currentParallax in ParralaxingTextures)
+			currentParallax.Pause();
+	}
     private void GameStateChange(object sender, GameStateArgs args){
         switch(args.GetGameState()){
 			case MinigameStates.GameOver:
@@ -47,13 +55,5 @@ public class ParallaxingBackgroundGroup : MonoBehaviour {
         }
     }
 
-    private void PlayParallax(){
-        foreach(Parallax currentParallax in ParralaxingTextures)
-            currentParallax.Play();
-    }
 
-    private void PauseParallax(){
-        foreach(Parallax currentParallax in ParralaxingTextures)
-            currentParallax.Pause();
-    }
 }

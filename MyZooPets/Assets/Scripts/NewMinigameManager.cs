@@ -58,14 +58,11 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	}
 
 	public void NewGame() {
-<<<<<<< Updated upstream
 		isContinueAllowed = true;
-=======
 		if (tutorial!=null) {
 			tutorial.Abort();
 			tutorial = null;
 		}
->>>>>>> Stashed changes
 		rewardXPAux = 0;
 		rewardMoneyAux = 0;
 		rewardShardAux = 0;

@@ -123,7 +123,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	protected override void _QuitGame() {
 		Application.targetFrameRate = 30;
 	}
-
+	protected override void _ContinueGame() {
+		throw new NotImplementedException();
+	}
 	private void ResetScore() {
 		rewardXPMultiplier = 1f;
 		rewardMoneyMultiplier = 1f;

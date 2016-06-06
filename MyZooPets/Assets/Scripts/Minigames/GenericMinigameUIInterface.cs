@@ -16,22 +16,14 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 	public string GetMinigameKey() {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
 			return DoctorMatchManager.Instance.MinigameKey;
-<<<<<<< Updated upstream
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			return MemoryGameManager.Instance.GetMinigameKey(); // ...
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			return NewRunnerGameManager.Instance.MinigameKey;
+			return RunnerGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-=======
-		} else if (sceneName == SceneUtils.MEMORY) {
-			return MemoryGameManager.Instance.GetMinigameKey();	// ...
-		} else if (sceneName == SceneUtils.RUNNER) {
-			return RunnerGameManager.Instance.MinigameKey;
-		} else if (sceneName == SceneUtils.SHOOTER) {
->>>>>>> Stashed changes
 			return ShooterGameManager.Instance.GetMinigameKey();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
@@ -49,17 +41,11 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			Debug.LogWarning("PauseGame not set up for Memory");
-<<<<<<< Updated upstream
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			NewRunnerGameManager.Instance.PauseGame(isShow);
+			RunnerGameManager.Instance.PauseGame(isShow);
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-=======
-		} else if (sceneName == SceneUtils.RUNNER) {
-			RunnerGameManager.Instance.PauseGame(isShow);
-		} else if (sceneName == SceneUtils.SHOOTER) {
->>>>>>> Stashed changes
 			Debug.LogWarning("PauseGame not set up for Shooter");
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
@@ -80,14 +66,8 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.StartTutorial();
-<<<<<<< Updated upstream
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
-=======
 		} else if (sceneName == SceneUtils.RUNNER) {
 			StartCoroutine(RunnerGameManager.Instance.StartTutorial());
->>>>>>> Stashed changes
-			//RunnerGameManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			//ShooterGameManager.Instance.StartTutorial();
@@ -140,20 +120,13 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 	public void OnRestart() {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
 			DoctorMatchManager.Instance.NewGame();
-<<<<<<< Updated upstream
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			NewRunnerGameManager.Instance.NewGame();
+			RunnerGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-=======
-		} else if (sceneName == SceneUtils.MEMORY) {
-		} else if (sceneName == SceneUtils.RUNNER) {
-			RunnerGameManager.Instance.NewGame();
-		} else if (sceneName == SceneUtils.SHOOTER) {
->>>>>>> Stashed changes
 			ShooterGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
@@ -170,17 +143,11 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			//MemoryGameManager.Instance.QuitGame();
-<<<<<<< Updated upstream
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			//RunnerGameManager.Instance.QuitGame();
+			RunnerGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-=======
-		} else if (sceneName == SceneUtils.RUNNER) {
-			RunnerGameManager.Instance.QuitGame();
-		} else if (sceneName == SceneUtils.SHOOTER) {
->>>>>>> Stashed changes
 			//ShooterGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {

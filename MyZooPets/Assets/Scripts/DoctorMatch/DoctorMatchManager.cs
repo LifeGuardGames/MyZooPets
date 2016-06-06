@@ -229,10 +229,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		}
 	}
 
-	protected override void _ContinueGame() {
-		// ....
-	}
-
 	protected override void _GameOver() {
 		lifeBarController.StopDraining();
 		zoneGreen.ToggleButtonInteractable(false);
@@ -263,7 +259,9 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 
 	protected override void _QuitGame() {
 	}
-
+	protected override void _ContinueGame() {
+		throw new NotImplementedException();
+	}
 	private void HandleNormal(AssemblyLineItem poppedItem) {
 		assemblyLineController.PopFirstItem();
 		poppedItem.Activate();

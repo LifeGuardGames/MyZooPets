@@ -186,13 +186,13 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _PauseGame(bool isShow) {
-		isPaused = isShow;
-		if(isShow) {
+		Debug.Log(isShow);
+		isPaused = !isShow;
+		if(isPaused) {
 			ShooterSpawnManager.Instance.isSpawing = false;
-			Time.timeScale = 0.0f;
+			
 		}
 		else {
-			Time.timeScale = 1.0f;
 			ShooterSpawnManager.Instance.isSpawing = true;
 		}
 		

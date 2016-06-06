@@ -46,7 +46,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			RunnerGameManager.Instance.PauseGame(isShow);
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			Debug.LogWarning("PauseGame not set up for Shooter");
+			ShooterGameManager.Instance.PauseGame(isShow);
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			Debug.LogWarning("PauseGame not set up for TriggerNinja");
@@ -107,7 +107,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			//RunnerGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			//ShooterGameManager.Instance.ContinueGame();
+			ShooterGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.ContinueGame();

@@ -10,7 +10,7 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	//X Left to clear
 	private Vector2 barSize;
 	private float barPercentage = 1f;
-	private float plusPercentage = 0.05f;
+	private float plusPercentage = 0.01f;
 	private float startDrainSpeed = .03333f;
 	//Takes 30 seconds
 	private float currentDrainSpeed;
@@ -64,13 +64,18 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	}
 
 	public void PlusBar(float multiplier = 1f) {
-		if (isDraining) {
-			UpdateBarPercentage(plusPercentage * multiplier);
-		}
+		UpdateBarPercentage(plusPercentage * multiplier);
 	}
 
 	public void UpdateCount(int count) {
-		barCount.text = count + " LEFT TO CLEAR";
+		if (isDraining||count==-1)
+			barCount.text = "";
+		else
+			barCount.text = count + " LEFT TO CLEAR";
+	}
+
+	public void KillBar() {
+		UpdateBarPercentage(-1f);
 	}
 
 	private void UpdateBarPercentage(float deltaPercent) {

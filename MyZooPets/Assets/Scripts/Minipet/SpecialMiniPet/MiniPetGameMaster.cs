@@ -57,49 +57,52 @@ public class MiniPetGameMaster : MiniPet{
 			int rand = Random.Range(0,2);
 			switch(rand){
 			case 0:
-				return "NinjaS";
+				return "ScoreNinja";
 			case 1:
-				return "NinjaC";
+				return "ComboNinja";
 			default:
-				return "NinjaC";
+				return "ComboNinja";
 			}
 		}
 		else if(type == MinigameTypes.Memory){
-			return "MemoryS";
+			return "ScoreMemory";
 		}
 		else if(type == MinigameTypes.Clinic){
-			return "ClinicS";
+			return "ScoreClinic";
 		}
 		else if(type == MinigameTypes.Shooter){
 			int rand = Random.Range(0,2);
 			switch(rand){
 			case 0:
-				return "ShooterS";
+				return "ScoreShooter";
 			case 1:
-				return "ShooterH";
+				return "SurvivalShooter";
 			default:
-				return "ShooterS";
+				return "ScoreShooter";
 			}
 		}
 		else if(type == MinigameTypes.Runner){
 			int rand = Random.Range(0,3);
 			switch(rand){
 			case 0:
-				return "RunnerS";
+				return "ScoreRunner";
 			case 1:
-				return "RunnerC";
+				return "CoinsRunner";
 			case 2:
-				return "RunnerD";
+				return "DistanceRunner";
 			default:
-				return "RunnerC";
+				return "CoinsRunner";
 			}
 		}		
 		else{
 			Debug.LogError("Invalid minigame type detected");
-			return "NinjaS";
+			return "ScoreNinja";
 		}
 	}
-	
+	public void OnTurnInButton() {
+		TurnInMission();
+	}
+
 	private void TurnInMission(){
 		if(isFinishEating){
 			MutableDataWellapadTask task= WellapadMissionController.Instance.GetTask(minigameTaskId);

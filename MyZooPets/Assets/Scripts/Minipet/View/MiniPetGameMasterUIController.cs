@@ -20,14 +20,13 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 		task = WellapadMissionController.Instance.GetTask(taskID); 
 		ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc = missionTask.GetText();
-		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];
 		if(task.Amount > 0){
 			desc = String.Format(desc, task.Amount);
 		}
 		label.text = desc;
 		//TODO fix this - dylan
 		//spriteIcon.sprite = SpriteCacheManager.Instance.mapIcons" + type.ToString();
-
+		rewardButton.SetActive(false);
 		SetCheckboxSprite(true);
 	}
 

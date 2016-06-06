@@ -39,7 +39,7 @@ public class DoctorMatchTutorial : MinigameTutorial {
 				tutorialText.ShowStage(1f);
 				break;
 			case 3:
-				DoctorMatchManager.Instance.assemblyLineController.PopulateQueue(true,7);
+				DoctorMatchManager.Instance.assemblyLineController.PopulateQueue(false,7);
 				tutorialText.ShowStage(1f);
 				break;
 			default:

@@ -465,7 +465,7 @@ public class PlayerController : Singleton<PlayerController> {
 	//---------------------------------------------------
 	private void CheckAndActOnDeath() {
 		if (transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver) {
-			EndGame();
+			RunnerGameManager.Instance.EndGame();
 		} 
 	}
 
@@ -475,14 +475,7 @@ public class PlayerController : Singleton<PlayerController> {
 		else
 			MagneticField.Instance.EnableMagnet(false);
 	}
-
-	public void EndGame() {
-		RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
-		runnerLevelManager.mCurrentLevelGroup.ReportDeath();
-		AudioManager.Instance.PlayClip("runnerDie");
-		RunnerGameManager.Instance.ActivateGameOver();    
-
-	}
+		
 	
 	#if UNITY_EDITOR
 	//---------------------------------------------------

@@ -339,7 +339,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
         switch(currentLevel) {
 			case Level.Level1:
 				rand = UnityEngine.Random.Range(0, 4);
-				foodID = "Food" + rand;
+				foodID = "Food" + rand.ToString();
 				break;
 			case Level.Level2:
 				rand = UnityEngine.Random.Range(4, 9);
@@ -354,8 +354,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				foodID = "Food" + rand;
 				break;
 		}
-		ImmutableDataFoodPreferences foodPreferenceData = DataLoaderFoodPreferences.GetData(foodID);
-		return foodPreferenceData.GetFoodPreference(currentLevel);;
+		return foodID;
 	}
 
 	/// <summary>

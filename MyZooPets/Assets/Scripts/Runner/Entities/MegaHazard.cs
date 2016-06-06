@@ -4,6 +4,7 @@ using System.Collections;
 public class MegaHazard : Singleton<MegaHazard> {
 	public ParticleSystem hazardParticle;
 	public ParticleSystem hazardParticle2;
+	public Transform bottomPosition;
 	public float maxOffset = 24; //How far to the left of the player should we be when they are at max health
 	public float startingHealth = 100;
 	private float health;
@@ -35,7 +36,7 @@ public class MegaHazard : Singleton<MegaHazard> {
 			lost=true;
 		}
 		if (currentOffset<1&&lost){
-			PlayerController.Instance.EndGame();
+			RunnerGameManager.Instance.EndGame();
 		}
 		if (PlayerController.Instance.StarMode)
 			health+=healthTick*.75f*Time.deltaTime;

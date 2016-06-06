@@ -11,9 +11,11 @@ public class MiniPetRetentionPet : MiniPet {
 
 	public void FigureOutMissions(){
 		if(!DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done()){
-			missionID = "TutorialPart1";
+			Debug.Log("tut");
+			missionID = "DailyInhaler";
 		}
 		else{
+			Debug.Log("crit");
 			missionID = "Critical";
 		}
 	}
@@ -41,6 +43,10 @@ public class MiniPetRetentionPet : MiniPet {
 				DataManager.Instance.GameData.MiniPets.SaveHunger(minipetId, isFinishEating);
 			}
 		}
+	}
+
+	public void OnTurnInButton() {
+		TurnInMission();
 	}
 
 	private void TurnInMission(){

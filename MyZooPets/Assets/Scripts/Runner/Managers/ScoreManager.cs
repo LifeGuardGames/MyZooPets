@@ -84,7 +84,7 @@ public class ScoreManager : Singleton<ScoreManager>{
 	}
 
 	void Update(){
-		if(!NewRunnerGameManager.Instance.GameRunning)
+		if(!RunnerGameManager.Instance.GameRunning)
 			return;
 
 		PlayerController playerController = PlayerController.Instance;

@@ -13,48 +13,28 @@ public class MegaHazard : Singleton<MegaHazard> {
 	private float graceTime=0;
 	private float runTime=0;
 	private bool lost=false;
-	/*private float[] hpArray; //This is used to get the average health from the last 30 updates
-	private float seconds = 15; //How many seconds backs we record for average health
-	private float updatesPerSecond = 5; //How many times we record our health
-	private float updateTime= 0; //How much time until our next update
-	private float average = 0;*/
 	private float maxTicked=0;
 	private float baseMaxHealth = 100;
 	private float maxHealthMultiplier = 15; //Max health is base + healthTick*multiplier
 	// Use this for initialization
 	void Start() {
-		//hhpArray = new float[(int)(seconds*updatesPerSecond)];
-		
 		Reset ();
-		//RunnerGameManager.OnStateChanged += GameStateChanged;
 	}
 	
 	void OnDestroy(){
-		//RunnerGameManager.OnStateChanged -= GameStateChanged;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(!NewRunnerGameManager.Instance.GameRunning)
+		if(!RunnerGameManager.Instance.GameRunning)
 			return;
 		if (healthTick>maxTicked){
 			maxTicked=healthTick;
 		}
-		/*average = 0;
-		for (int i= hpArray.Length-1; i>0; i--){
-			hpArray[i]=hpArray[i-1];
-			average+=hpArray[i];
-		}
-		hpArray[0]=health;
-		average/=(float)hpArray.Length;*/
-
 		if (health<=0&&!lost) { 
-			Debug.Log("You have lost!");
 			lost=true;
 		}
 		if (currentOffset<1&&lost){
-			Debug.Log("END GAME");
-			Debug.Log(maxTicked);
 			PlayerController.Instance.EndGame();
 		}
 		if (PlayerController.Instance.StarMode)
@@ -103,10 +83,6 @@ public class MegaHazard : Singleton<MegaHazard> {
 		health=startingHealth;
 		runTime=0;
 		lost=false;
-		//currentOffset=maxOffset/2; //Nice effect to run away at the start.
-		/*for (int i = 0; i < hpArray.Length; i++) {
-			hpArray[i]=health;
-		}*/
 	}
 	public void PauseParticles() {
 		hazardParticle.Pause();

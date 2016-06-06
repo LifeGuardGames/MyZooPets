@@ -135,9 +135,9 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
     }
 
     public void DisplayTutorial(string itemID, bool hazard){
-        if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)){
+		if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)&&!itemID.Equals("COIN")){
             string hintMessage = Localization.Localize(itemID + "_HINT_MESSAGE");
-            GameObject tutorialGO = NGUITools.AddChild(itemTutorialParent, itemTutorialPrefab);
+            /*GameObject tutorialGO = NGUITools.AddChild(itemTutorialParent, itemTutorialPrefab);
 
             TutorialPopup.Callback button1Function = delegate(){
                 Destroy(tutorialGO);
@@ -155,8 +155,10 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
             TutorialPopup script = tutorialGO.GetComponent<TutorialPopup>();
             script.Init(option);
 
-			NewRunnerGameManager.Instance.PauseGame(false);
-            DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
+			RunnerGameManager.Instance.PauseGame(false);
+            */
+			FindObjectOfType<RunnerGameTutorialText>().ShowItem(hintMessage);
+			DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }
     }
 
@@ -164,7 +166,7 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
     //button is clicked
     private IEnumerator ResumeGame(){
         yield return 0;
-        RunnerGameManager.Instance.UnPauseGame();
+		RunnerGameManager.Instance.PauseGame(true);
     }
 
     private RunnerItem ItemFactory(Type inItemType, LevelGroup.eLevelGroupID levelGroupID) {

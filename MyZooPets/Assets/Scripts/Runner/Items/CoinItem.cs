@@ -36,7 +36,7 @@ public class CoinItem : RunnerItem {
 	// Update is called once per frame
     public override void Update() {
         base.Update();
-		if (magnetized&&NewRunnerGameManager.Instance.GameRunning) {
+		if (magnetized&&RunnerGameManager.Instance.GameRunning) {
 			acceleration=2*PlayerController.Instance.Speed;
 			//Vector3 aimPosition = PlayerController.Instance.transform.position+PlayerController.Instance.collider.
 			Vector3 aimPosition =  PlayerController.Instance.GetComponent<Collider>().bounds.center;

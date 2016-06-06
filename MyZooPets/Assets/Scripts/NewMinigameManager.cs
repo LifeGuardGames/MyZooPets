@@ -22,6 +22,8 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	protected int rewardMoneyAux;
 	protected int rewardShardAux;
 
+	private MinigameTutorial tutorial;
+
 	public string MinigameKey {
 		get { return minigameKey; }
 	}
@@ -56,7 +58,14 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	}
 
 	public void NewGame() {
+<<<<<<< Updated upstream
 		isContinueAllowed = true;
+=======
+		if (tutorial!=null) {
+			tutorial.Abort();
+			tutorial = null;
+		}
+>>>>>>> Stashed changes
 		rewardXPAux = 0;
 		rewardMoneyAux = 0;
 		rewardShardAux = 0;
@@ -96,11 +105,18 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
     }
 
 	public void QuitGame() {
+		if (tutorial!=null) {
+			tutorial.Abort();
+			tutorial = null;
+		}
 		_QuitGame();
 		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
     }
 
 	public void FinishedTutorial() {
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(minigameKey);
+	}
+	protected void SetTutorial(MinigameTutorial tutorial) {
+		this.tutorial=tutorial; //NOTE: If your game crashes when you set this and restart early, that means you are calling NewGame when isFinished is false. Only call NewGame when isFinished is true.
 	}
 }

@@ -91,6 +91,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		zoneRed.ToggleButtonInteractable(true);
 
 		doctorMatchTutorial = new DoctorMatchTutorial();
+		SetTutorial(doctorMatchTutorial);
 	}
 
 	public void OnTimerBarEmpty() {

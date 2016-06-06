@@ -17,14 +17,10 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 	public GameObject popupTipWithImage;
 	public GameObject popupGameOverRewardMessageOneButton;
 	public GameObject popupGameOverRewardMessageTwoButtons;
-	public GameObject popupFireLevelUpMessage;
-
-	public GameObject popupMiniGameQuitCheck;
 	public GameObject popupZeroHealth;
 
 	public GameObject popupSuperWellaInhaler;
 	public GameObject popupSuperWellaSick;
-	public GameObject popupNeedFoodTutorial;
 
 	public TweenToggleDemux fadeDemux;
 
@@ -110,19 +106,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 						(string)entry[NotificationPopupFields.Message],
 						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
 						(string)entry[NotificationPopupFields.Sound]
-				);
-				break;
-			case NotificationPopupType.FireLevelUp:
-				ShowFireLevelUpMessage(
-						(string)entry[NotificationPopupFields.Message],
-						(string)entry[NotificationPopupFields.SpriteName],
-						(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback]
-				);
-				break;
-			case NotificationPopupType.NeedFoodTutorial:
-				ShowNeedFoodTutorialMessage(
-					(PopupNotificationNGUI.Callback)entry[NotificationPopupFields.Button1Callback],
-					(string)entry[NotificationPopupFields.Message]
 				);
 				break;
 			case NotificationPopupType.SuperWellaInhaler:
@@ -223,22 +206,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
 	}
-	
-	/// <summary>
-	/// Shows the fire level up message.
-	/// </summary>
-	/// <param name="message">Message.</param>
-	/// <param name="spriteName">Sprite name.</param>
-	/// <param name="buttonCallBack">Button call back.</param>
-	private void ShowFireLevelUpMessage(string message, string spriteName, PopupNotificationNGUI.Callback buttonCallBack){
-		PopupNotificationWithImageNGUI oneButtonMessage = CreatePopupNotificationNGUI(popupFireLevelUpMessage) as PopupNotificationWithImageNGUI;
-		oneButtonMessage.Message = message;
-		oneButtonMessage.SetSprite(spriteName);
-		oneButtonMessage.Button1Callback = buttonCallBack;
-		oneButtonMessage.OnHideFinished += TryNextNotification;
-
-		StartCoroutine(DisplayAfterInit(oneButtonMessage));
-	}
 
 	/// <summary>
 	/// Shows the inhaler recharging message.
@@ -253,15 +220,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 //		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 //	}
 
-	private void ShowNeedFoodTutorialMessage(PopupNotificationNGUI.Callback okButtonCallBack, string message){
-		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupNeedFoodTutorial);
-		twoButtonMessage.Message = message;
-		twoButtonMessage.Button1Callback = okButtonCallBack;
-		twoButtonMessage.OnHideFinished += TryNextNotification;
-		
-		StartCoroutine(DisplayAfterInit(twoButtonMessage));
-	}
-
 	/// <summary>
 	/// Shows the super wella inhaler message.
 	/// </summary>
@@ -275,18 +233,6 @@ public class NotificationUIManager : Singleton<NotificationUIManager>{
 		oneButtonMessage.OnHideFinished += TryNextNotification;
 
 		StartCoroutine(DisplayAfterInit(oneButtonMessage));
-	}
-
-	private void ShowMiniGameQuitCheckMessage(PopupNotificationNGUI.Callback okButtonCallBack,
-	                                          PopupNotificationNGUI.Callback cancelButtonCallBack){
-
-		PopupNotificationNGUI twoButtonMessage = CreatePopupNotificationNGUI(popupMiniGameQuitCheck);
-		
-		twoButtonMessage.Button1Callback = okButtonCallBack;
-		twoButtonMessage.Button2Callback = cancelButtonCallBack;
-		twoButtonMessage.OnHideFinished += TryNextNotification;
-		
-		StartCoroutine(DisplayAfterInit(twoButtonMessage));
 	}
 
 	private void ShowZeroHealthMessage(string message, PopupNotificationNGUI.Callback okButtonCallBack){

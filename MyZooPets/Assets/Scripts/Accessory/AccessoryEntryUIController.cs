@@ -70,7 +70,7 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		string costText = newItemData.Cost.ToString();
 		labelCost.text = costText;
 		labelName.text = newItemData.Name;
-		spriteIcon.sprite = (Resources.Load(newItemData.TextureName) as Sprite);
+		spriteIcon.sprite = SpriteCacheManager.GetSprite(newItemData.TextureName);
 
 		// Assign buttons
 		buyButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnBuyButton(buyButtonMessage.gameObject));

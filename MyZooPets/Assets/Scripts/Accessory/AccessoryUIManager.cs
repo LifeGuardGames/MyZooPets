@@ -86,6 +86,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		hatButton.Hide();
 		glassesButton.Hide();
 		isShowing = true;
+		int itemCount = 0;
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
@@ -118,10 +119,11 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
+				itemCount++;
 			}
 		}
 		// Adjust the grid height based on the height of the cell and spacing
-		float gridHeight = accessoryList.Count * (grid.cellSize.y + grid.spacing.y);
+		float gridHeight = itemCount * (grid.cellSize.y + grid.spacing.y);
 		grid.GetComponent<RectTransform>().sizeDelta = new Vector2(grid.cellSize.x, gridHeight);
 	}
 
@@ -129,6 +131,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		hatButton.Hide();
 		glassesButton.Hide();
 		isShowing = true;
+		int itemCount = 0;
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
@@ -161,7 +164,11 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
+				itemCount++;
 			}
+			// Adjust the grid height based on the height of the cell and spacing
+			float gridHeight = itemCount * (grid.cellSize.y + grid.spacing.y);
+			grid.GetComponent<RectTransform>().sizeDelta = new Vector2(grid.cellSize.x, gridHeight);
 		}
 	}
 

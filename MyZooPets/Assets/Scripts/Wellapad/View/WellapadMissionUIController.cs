@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 //---------------------------------------------------
 // Wellapad_MissionList
@@ -104,11 +105,11 @@ public class WellapadMissionUIController : MonoBehaviour {
 		// and create the missions anew
 		CreateMissions();
 	
-		StartCoroutine(GridRepo());
+	//	StartCoroutine(GridRepo());
 	}
 
-	private IEnumerator GridRepo(){
-		yield return 0; 
-		goGrid.GetComponent<UIGrid>().Reposition();
-	}
+//	private IEnumerator GridRepo(){
+//		yield return 0; 
+//		goGrid.GetComponent<UIGrid>().Reposition();
+	//}
 }

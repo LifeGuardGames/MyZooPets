@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PetSpeechManager : SpeechController<PetSpeechManager> {
     // Message options keys
@@ -55,24 +56,18 @@ public class PetSpeechManager : SpeechController<PetSpeechManager> {
 		// Assign the follow target for the dialogue box
 		currentMessage.GetComponent<FollowObjectRaycast>().target = (GameObject) message[Keys.Follow3DTarget];
 		
-		UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+		Text label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<Text>();
 		label.text = (string) message[Keys.MessageText];
 		
 		// Change speech bubble sprite if explicit
 		if(message.ContainsKey(Keys.BubbleSpriteName)){
-			UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
-			bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			Image bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<Image>();
+			bubbleSprite.sprite = SpriteCacheManager.GetSprite((string) message[Keys.BubbleSpriteName]);
 		}
 		
-		UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+		Image sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<Image>();
 		
-		//switch atlas if necessary
-		if(message.ContainsKey(Keys.AtlasName)){
-			string atlasName = (string) message[Keys.AtlasName];
-			GameObject atlas = (GameObject) Resources.Load(atlasName);
-			sprite.atlas = atlas.GetComponent<UIAtlas>();
-		}
-		sprite.spriteName = (string) message[Keys.ImageTextureName];
+		sprite.sprite = SpriteCacheManager.GetSprite((string) message[Keys.ImageTextureName]);
 		
 		//also check if the image should be make clickable. 
 		if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
@@ -100,11 +95,11 @@ public class PetSpeechManager : SpeechController<PetSpeechManager> {
 		
 		// Change speech bubble sprite if explicit
 		if(message.ContainsKey(Keys.BubbleSpriteName)){
-			UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
-			bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			Image bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<Image>();
+			bubbleSprite.sprite = SpriteCacheManager.GetSprite((string) message[Keys.BubbleSpriteName]);
 		}
 		
-		UILabel label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<UILabel>();
+		Text label = currentMessage.transform.Find("LabelParent/Label_Message").GetComponent<Text>();
 		label.text = (string) message[Keys.MessageText];
 	}
 
@@ -119,21 +114,14 @@ public class PetSpeechManager : SpeechController<PetSpeechManager> {
 		
 		// Change speech bubble sprite if explicit
 		if(message.ContainsKey(Keys.BubbleSpriteName)){
-			UISprite bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<UISprite>();
-			bubbleSprite.spriteName = (string) message[Keys.BubbleSpriteName];
+			Image bubbleSprite = currentMessage.transform.Find("BubbleParent/Sprite_Bubble").GetComponent<Image>();
+			bubbleSprite.sprite = SpriteCacheManager.GetSprite((string) message[Keys.BubbleSpriteName]);
 		}
 		
-		UISprite sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<UISprite>();
+		Image sprite = currentMessage.transform.Find("Image/Sprite_Message").GetComponent<Image>();
 		
-		//switch atlas if necessary
-		if(message.ContainsKey(Keys.AtlasName)){
-			string atlasName = (string) message[Keys.AtlasName];
-			//				Debug.Log(sprite.atlas.gameObject.name);
-			GameObject atlas = (GameObject) Resources.Load(atlasName);
-			sprite.atlas = atlas.GetComponent<UIAtlas>();
-			//				sprite.atlas = Resources.Load(atlasName, typeof(UIAtlas)) as UIAtlas;
-		}
-		sprite.spriteName = (string) message[Keys.ImageTextureName];
+	
+		sprite.sprite = SpriteCacheManager.GetSprite((string) message[Keys.ImageTextureName]);
 		
 		//also check if the image should be make clickable. 
 		if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){

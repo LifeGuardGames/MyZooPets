@@ -17,16 +17,17 @@ public class FollowObjectRaycast : MonoBehaviour {
 		if(mainCamera == null){
 			mainCamera = Camera.main;
 		}
-
-		RaycastAndMove();
+		gameObject.transform.localPosition = target.transform.localPosition;
+		gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x +200, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z);
+		//RaycastAndMove();
 	}
 
-	void Update(){
+//	void Update(){
 		// Only do raycast of the position of the target has changed since the last frame, account for camera move too
-		if(target.transform.position != targetAuxPosition || mainCamera.transform.position != mainCameraAuxPosition){
-			RaycastAndMove();
-		}
-	}
+	//	if(target.transform.position != targetAuxPosition || mainCamera.transform.position != mainCameraAuxPosition){
+	//		RaycastAndMove();
+	//	}
+//	}
 
 	private void RaycastAndMove(){
 		// Raycast and move

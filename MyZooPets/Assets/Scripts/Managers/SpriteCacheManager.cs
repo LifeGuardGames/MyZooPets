@@ -28,4 +28,9 @@ public class SpriteCacheManager : Singleton<SpriteCacheManager> {
 			return Resources.Load<Sprite>(DataLoaderBadges.GetData(badgeID).TextureName);
 		}
 	}
+
+	public static Sprite GetSprite(string spriteName) {
+		return Resources.Load<Sprite>(spriteName);
+	}
+
 }

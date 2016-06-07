@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 //---------------------------------------------------
 // WellapadTaskUI
@@ -13,7 +14,7 @@ public class WellapadTaskUI : MonoBehaviour{
 	private MutableDataWellapadTask task;
 	
 	// task text
-	public UILabel label;
+	public Text label;
 	
 	// tween object for when the task is completed
 	public TweenToggle slash;
@@ -47,6 +48,7 @@ public class WellapadTaskUI : MonoBehaviour{
 		ImmutableDataWellapadTask data = DataLoaderWellapadTasks.GetTask(task.TaskID);
 
 		string strDesc = data.GetText();
+		Debug.Log(strDesc);
 		// if the task has an amount, we want to integrate that into the string
 		if(task.Amount > 0)
 			strDesc = String.Format(strDesc, task.Amount);	

@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 //---------------------------------------------------
 // WellapadCountdown
@@ -9,9 +10,6 @@ using System.Collections.Generic;
 // "Done" screen is showing, this script will update the time remaining until new missions are available.
 //---------------------------------------------------
 public class WellapadMissionDoneUIController : MonoBehaviour {
-	public UIAtlas atlasBadge;
-	public UIAtlas atlasBedroom;
-	public UIAtlas atlasItem;
 	public GameObject gridUnlockPredictions;
 	public GameObject unlockPredictionEntryPrefab;
 
@@ -53,27 +51,23 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 		ImmutableDataBadge badge = BadgeManager.Instance.GetBadgeUnlockAtNextLevel();
 		if(badge != null){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
-			UISprite sprite = go.GetComponent<UISprite>();
-			sprite.atlas = atlasBadge; 
-			sprite.spriteName = badge.TextureName;
+			Image sprite = go.GetComponent<Image>();
+			sprite.sprite = SpriteCacheManager.GetBadgeSprite(badge.TextureName);
 		}
 
 		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
 		if(skill != null){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
-			UISprite sprite = go.GetComponent<UISprite>();
-			sprite.atlas = atlasBedroom; 
-			sprite.spriteName = skill.TextureName;
+			Image sprite = go.GetComponent<Image>();
+			//Place Holder
+			sprite.sprite = SpriteCacheManager.GetSprite(skill.TextureName);
 		}
 
 		List<Item> items = ItemManager.Instance.GetItemsUnlockAtNextLevel();
 		foreach(Item item in items){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
-			UISprite sprite = go.GetComponent<UISprite>();
-			sprite.atlas = atlasItem;
-			sprite.spriteName = item.TextureName;
+			Image sprite = go.GetComponent<Image>();
+			sprite.sprite = SpriteCacheManager.GetSprite(item.TextureName);
 		}
-
-		gridUnlockPredictions.GetComponent<UIGrid>().Reposition();
 	}
 }

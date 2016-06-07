@@ -5,7 +5,7 @@ public class MiniPetSpeechAI : MonoBehaviour{
 	public void ShowTipMsg(){
 		int rand = Random.Range (0, 4);
 		Hashtable msgOption = new Hashtable();
-		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_RETENTION_TIP_"+ rand.ToString()));
+		msgOption.Add(PetSpeechManager.Keys.MessageText, Localization.Localize("MINIPET_RETENTION_TIP_"+ rand.ToString() + "P1") + DataManager.Instance.GameData.PetInfo.PetName + Localization.Localize("MINIPET_RETENTION_TIP_" + rand.ToString() + "P2"));
 		msgOption.Add(PetSpeechManager.Keys.Follow3DTarget, gameObject);
 		PetSpeechManager.Instance.TalkM(msgOption);
 	}

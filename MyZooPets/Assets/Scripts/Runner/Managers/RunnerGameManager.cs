@@ -8,26 +8,34 @@
 // Handles Resetting, Game Ending, and TimeScale.
 /// </summary>
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
 public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
+	public GameObject pausePanel;
+	public GameObject starFloatyPrefab;
+	public Transform floatyParent;
 	private bool paused = true;
 	private bool tutorial = false;
-	private bool acceptInput = true; //Used for the start of the tutorial, we are not allowed to jump or drop
-	private bool specialInput = false; //Used for tutorial when a popup shows, everything but the player should be paused and the player can only either jump or drop, but not both
+	private bool acceptInput = true;
+	//Used for the start of the tutorial, we are not allowed to jump or drop
+	private bool specialInput = false;
+	//Used for tutorial when a popup shows, everything but the player should be paused and the player can only either jump or drop, but not both
 	private RunnerTutorial runnerTutorial;
+
 	public bool GameRunning {
 		get {
 			return !paused;
 		}
 	}
+
 	public bool IsTutorialRunning {
 		get {
 			return tutorial;
 		}
 	}
+
 	public bool AcceptInput {
 		get {
 			return acceptInput;
@@ -36,6 +44,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 			acceptInput = value;
 		}
 	}
+
 	public bool SpecialInput {
 		get {
 			return specialInput;
@@ -44,20 +53,22 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 			specialInput = value;
 		}
 	}
+
 	void Awake() {
 		// Parent settings
 		minigameKey = "RUNNER";
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
-	public void EndGame(){	
-		UpdateScore(ScoreManager.Instance.Score);
+
+	public void EndGame() {	
 		GameOver();	
 	}
+
 	public IEnumerator StartTutorial() {
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
-		acceptInput=false;
+		acceptInput = false;
 		ScoreManager.Instance.Reset();
 
 		RunnerLevelManager.Instance.ResetTutorial();
@@ -68,6 +79,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		runnerTutorial = new RunnerTutorial();
 		SetTutorial(runnerTutorial);
 	}
+
 	public void AdvanceTutorial() {
 		runnerTutorial.Advance();
 	}
@@ -100,8 +112,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 			PlayerController.Instance.PauseAnimation();
 		}
 	}
+
 	protected override void _GameOver() {
-		UpdateScore(ScoreManager.Instance.Score); 
 		AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
 
@@ -111,6 +123,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 
 	}
+
 	protected override void _GameOverReward() {
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
@@ -122,13 +135,35 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		//BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 		//TODO: Implement badges under RunnerGame
 	}
+
 	protected override void _QuitGame() {
 		Application.targetFrameRate = 30;
 	}
+
 	protected override void _ContinueGame() {
 		PlayerController.Instance.MakePlayerVisible(true);
 		MegaHazard.Instance.Reset();
-		PlayerController.Instance.transform.position = MegaHazard.Instance.bottomPosition.position;
+		PlayerController.Instance.ResetSpeed();
+		Vector3 spawnPos = FindObjectOfType<PlayerPhysics>().FindGroundedPosition(MegaHazard.Instance.bottomPosition.position);
+		PlayerController.Instance.transform.position = spawnPos;
+		acceptInput=false; //Prevent us from input anything until we have waited 3 seconds
+		StartCoroutine(WarmUp());
+	}
+	private IEnumerator WarmUp() {
+		int seconds=3;
+		TweenToggleDemux demux = pausePanel.GetComponent<TweenToggleDemux>();
+		demux.Show();
+		yield return new WaitForEndOfFrame();
+		yield return new WaitForEndOfFrame(); //Skip 2 frames and then pause the game so we are physically on the ground
+		PauseGame(false);
+		while (seconds>0) { //Count from 3 to 0, by 1 second
+			pausePanel.GetComponentInChildren<Text>().text=seconds.ToString();
+			seconds--;
+			yield return new WaitForSeconds(1f);
+		}
+		demux.Hide();
+		PauseGame(true);
+		acceptInput=true;
 	}
 	private void ResetScore() {
 		rewardXPMultiplier = 1f;

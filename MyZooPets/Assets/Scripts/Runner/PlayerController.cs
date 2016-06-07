@@ -70,6 +70,7 @@ public class PlayerController : Singleton<PlayerController> {
 
 	public PlatformerControllerMovement movement = new PlatformerControllerMovement();
 	public float timeUntilTargetSpeedIncrease = 30f;
+	public ParticleSystem magnetSystem;
 	public Animator anim;
 	public float minAnimSpeed = .6f;
 	public float maxAnimSpeed = 1.5f;
@@ -168,13 +169,6 @@ public class PlayerController : Singleton<PlayerController> {
 	//		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
 	//	}
 	#endif
-	void OnGUI() {
-		if (magnetTime > 0) {
-			Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-			GUI.Box(new Rect(screenPos.x - 30, Screen.height - screenPos.y - 20, 60, 40), "MAGNETIC: \n" + magnetTime.ToString());
-		}
-	}
-
 	void FixedUpdate() {
 		if (!RunnerGameManager.Instance.GameRunning)
 			return;
@@ -232,8 +226,17 @@ public class PlayerController : Singleton<PlayerController> {
 		transform.position = initialPosition;
 		magnetTime = 0;
 		MagneticField.Instance.EnableMagnet(false);
+		magnetSystem.Stop();
 		movement.verticalSpeed = 0f;
 		movement.currentSpeed = 0f;
+		anim.speed = minAnimSpeed;
+		movement.ResetTargetSpeed();
+		movement.Gravity = movement.targetSpeed;
+	}
+	/// <summary>
+	/// Reset player speed and physics
+	/// </summary>
+	public void ResetSpeed() {
 		anim.speed = minAnimSpeed;
 		movement.ResetTargetSpeed();
 		movement.Gravity = movement.targetSpeed;
@@ -267,6 +270,7 @@ public class PlayerController : Singleton<PlayerController> {
 		else
 			magnetTime += magnetTimeIncrease;
 		MagneticField.Instance.EnableMagnet(true);
+		magnetSystem.Play();
 	}
 
 	/// <summary>
@@ -278,9 +282,13 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 	public void PlayAnimation() {
 		anim.enabled=true;
+		if (magnetTime>0)
+			magnetSystem.Play();
 	}
 	public void PauseAnimation() {
 		anim.enabled=false;
+		if (magnetTime>0)
+			magnetSystem.Pause();
 	}
 	//---------------------------------------------------
 	// TriggerSlowdown()
@@ -319,6 +327,8 @@ public class PlayerController : Singleton<PlayerController> {
 		for (int i = 0; i < 3; i++) {
 			TurnColor(c);
 			yield return new WaitForSeconds(.2f);
+			//if (!RunnerGameManager.Instance.GameRunning)
+			//While paused, loop forever 
 			RevertColor();
 			yield return new WaitForSeconds(.3f);
 		}
@@ -382,7 +392,7 @@ public class PlayerController : Singleton<PlayerController> {
 			movement.verticalSpeed -= movement.Gravity * Time.deltaTime;
 		}
 
-		//make sure we don't fall nay faster than maxFallSpeed
+		//make sure we don't fall any faster than maxFallSpeed
 		movement.verticalSpeed = Mathf.Max(movement.verticalSpeed, -movement.maxFallSpeed);
 	}
 
@@ -472,8 +482,10 @@ public class PlayerController : Singleton<PlayerController> {
 	private void UpdateMagnet() {
 		if (magnetTime >= 0)
 			magnetTime -= Time.deltaTime;
-		else
+		else {
 			MagneticField.Instance.EnableMagnet(false);
+			magnetSystem.Stop();
+		}
 	}
 		
 	

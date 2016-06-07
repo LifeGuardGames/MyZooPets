@@ -20,7 +20,7 @@ public class ScoreManager : Singleton<ScoreManager>{
 	public float scoreDistance = 10.0f; //every 10 unit in distance traveled equals to 10 score points
 	public float coinStreakTime; // if X seconds elapse without picking up a coin, the streak is over
 
-	
+	private int lastDistancePoints=0;
 	private int mPlayerDistancePoints = 0; //points calculated from distance
 	private int mPlayerPoints = 0; //points accumulated in the game (getting item or hitting trigger)
 	private int mPlayerCoins = 0; //coins collected in the game
@@ -112,6 +112,8 @@ public class ScoreManager : Singleton<ScoreManager>{
 	/// </summary>
 	public void Reset(){
 		mPlayerDistancePoints = 0;
+		lastDistancePoints=0;
+
 		mPlayerPoints = 0;
 		mPlayerCoins = 0;
 		distanceTraveled = 0;
@@ -140,11 +142,14 @@ public class ScoreManager : Singleton<ScoreManager>{
 		// can't go below 0 coins -- this sounds silly, but coins right now is the new "points"
 		int pointsToAdd = (int) Mathf.Floor((numOfCoinsToAdd) * comboMod);
 		mPlayerCoins = Mathf.Max(mPlayerCoins + pointsToAdd, 0);
-
+		RunnerGameManager.Instance.UpdateScore(pointsToAdd);
 	}
 		
 	public void SetDistancePoints(int distancePoints){
+		lastDistancePoints = mPlayerDistancePoints;
 		mPlayerDistancePoints = distancePoints;
+		int deltaDistancePoints = (distancePoints-lastDistancePoints);
+		RunnerGameManager.Instance.UpdateScore(deltaDistancePoints);
 	}
 
 	private void ChangeCoinStreak(int change){

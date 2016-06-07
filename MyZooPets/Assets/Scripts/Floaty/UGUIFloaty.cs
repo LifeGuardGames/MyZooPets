@@ -13,6 +13,10 @@ public class UGUIFloaty : MonoBehaviour {
 		textUI.text = text;
 		textUI.fontSize = textSize;
 		textUI.color=(Color) color;
+		RectTransform[] childRects = GetComponentsInChildren<RectTransform>();
+		for (int i = 1; i < childRects.Length; i++) { //Skip our own rect
+			LeanTween.alpha(childRects[i],0,riseTime*3).setEase(LeanTweenType.easeOutQuad);
+		}
 		LeanTween.textAlpha(GetComponent<RectTransform>(),0,riseTime*3).setEase(LeanTweenType.easeOutQuad);
 		LeanTween.move(gameObject, transform.position+ (Vector3) toMove, riseTime).setOnComplete(OnComplete).setEase(LeanTweenType.easeOutQuad);
 	}

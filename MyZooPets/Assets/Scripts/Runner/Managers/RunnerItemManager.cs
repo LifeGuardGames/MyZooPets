@@ -21,8 +21,6 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
     public List<CoinItem> CoinItems;
     public List<RunnerItem> ItemPrefabs;
     public List<HazardItem> HazardPrefabs;
-    public GameObject itemTutorialPrefab;
-    public GameObject itemTutorialParent;
     public GameObject runnerItemsParent;
 
     //Item pool for Coin and Items
@@ -137,26 +135,6 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
     public void DisplayTutorial(string itemID, bool hazard){
 		if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)&&!itemID.Equals("COIN")){
             string hintMessage = Localization.Localize(itemID + "_HINT_MESSAGE");
-            /*GameObject tutorialGO = NGUITools.AddChild(itemTutorialParent, itemTutorialPrefab);
-
-            TutorialPopup.Callback button1Function = delegate(){
-                Destroy(tutorialGO);
-                StartCoroutine(ResumeGame());
-				//PlayerController.Instance.StartCoroutine("FlashColor");
-				if (hazard)
-					PlayerController.Instance.FlashColor(Color.red);
-					//StartCoroutine(PlayerController.Instance.FlashColor());
-            };
-
-            Hashtable option = new Hashtable();
-            option.Add(TutorialPopupFields.Message, hintMessage);
-            option.Add(TutorialPopupFields.Button1Callback, button1Function);
-
-            TutorialPopup script = tutorialGO.GetComponent<TutorialPopup>();
-            script.Init(option);
-
-			RunnerGameManager.Instance.PauseGame(false);
-            */
 			FindObjectOfType<RunnerGameTutorialText>().ShowItem(hintMessage);
 			DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
         }

@@ -233,6 +233,7 @@ public class PlayerController : Singleton<PlayerController> {
 		movement.ResetTargetSpeed();
 		movement.Gravity = movement.targetSpeed;
 	}
+
 	/// <summary>
 	/// Reset player speed and physics
 	/// </summary>
@@ -280,14 +281,16 @@ public class PlayerController : Singleton<PlayerController> {
 	public void MakePlayerVisible(bool isVisible) {
 		this.transform.Find("Body").gameObject.SetActive(isVisible);
 	}
+
 	public void PlayAnimation() {
-		anim.enabled=true;
-		if (magnetTime>0)
+		anim.enabled = true;
+		if (magnetTime > 0)
 			magnetSystem.Play();
 	}
+
 	public void PauseAnimation() {
-		anim.enabled=false;
-		if (magnetTime>0)
+		anim.enabled = false;
+		if (magnetTime > 0)
 			magnetSystem.Pause();
 	}
 	//---------------------------------------------------
@@ -326,11 +329,10 @@ public class PlayerController : Singleton<PlayerController> {
 
 		for (int i = 0; i < 3; i++) {
 			TurnColor(c);
-			yield return new WaitForSeconds(.2f);
-			//if (!RunnerGameManager.Instance.GameRunning)
-			//While paused, loop forever 
+			yield return WaitSecondsPause(.2f);
+
 			RevertColor();
-			yield return new WaitForSeconds(.3f);
+			yield return WaitSecondsPause(.3f);
 		}
 		movement.invincible = false;
 	}
@@ -340,13 +342,23 @@ public class PlayerController : Singleton<PlayerController> {
 		movement.starMode = true;
 		movement.publicStarMode = true;
 		TurnColor(c);
-		yield return new WaitForSeconds(time);
+		yield return WaitSecondsPause(time);
+
 		movement.starMode = false;
-		yield return new WaitForSeconds(1f); //Give them a second (figurative) to get oriented and avoid smoke clouds
+		yield return WaitSecondsPause(1f); //Give them a second to get oriented with slowdown and avoid smoke clouds
+
 		RevertColor();
 		movement.invincible = false;
-		//movement.publicStarMode=false;
 		
+	}
+
+	private IEnumerator WaitSecondsPause(float time) { //Like wait for seconds, but pauses w/ RunnerGameManager
+		for (float i = 0; i <= time; i += .1f) {
+			yield return new WaitForSeconds(.1f);
+			while (!RunnerGameManager.Instance.GameRunning) {
+				yield return new WaitForEndOfFrame();
+			}
+		}
 	}
 
 	private void TurnColor(Color c) {

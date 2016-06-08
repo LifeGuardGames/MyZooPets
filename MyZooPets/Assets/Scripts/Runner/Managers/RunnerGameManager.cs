@@ -98,18 +98,20 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		ParallaxingBackgroundManager.Instance.Reset();
 		RunnerItemManager.Instance.Reset();
 
+		RunnerGameTutorialText.Instance.StartCoroutine(RunnerGameTutorialText.Instance.HideAll());
 	}
 
 	protected override void _PauseGame(bool isShow) {
-		paused = !isShow;
-		if (isShow) {
-			MegaHazard.Instance.PlayParticles();
-			ParallaxingBackgroundManager.Instance.PlayParallax();
-			PlayerController.Instance.PlayAnimation();
-		} else {
+		if (!isShow) {
+			paused = !isShow;
 			MegaHazard.Instance.PauseParticles();
 			ParallaxingBackgroundManager.Instance.PauseParallax();
 			PlayerController.Instance.PauseAnimation();
+		} else if (!RunnerGameTutorialText.Instance.IsVisible) { //Don't continue the game unless there are no popups on screen
+			paused = !isShow;
+			MegaHazard.Instance.PlayParticles();
+			ParallaxingBackgroundManager.Instance.PlayParallax();
+			PlayerController.Instance.PlayAnimation();
 		}
 	}
 

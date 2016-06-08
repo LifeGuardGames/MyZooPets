@@ -41,7 +41,6 @@ public class AssemblyLineController : MonoBehaviour {
 		DestroyItems();
 		yield return new WaitForEndOfFrame();
 		itemQueue = new Queue<AssemblyLineItem>();
-		// Init and throw it into the queue
 		if (!isTutorial)
 			PopulateQueue(true);
 	}
@@ -110,7 +109,7 @@ public class AssemblyLineController : MonoBehaviour {
 	}
 
 	private void UpdateVisibleCount() {
-		float percentage = DoctorMatchManager.Instance.lifeBarController.Percentage;
+		float percentage = DoctorMatchManager.Instance.lifeBarController.Percentage; //Connection w/o manager
 		if (constantCount || itemQueue == null || DoctorMatchManager.Instance.Paused)
 			return;
 		if (percentage < .2f) {

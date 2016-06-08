@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class DoctorMatchTutorialText : MonoBehaviour {
+public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText> {
 	public GameObject introTextObject;
 	public GameObject stageTextObject;
 	private int toShow = 0;

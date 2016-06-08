@@ -27,13 +27,13 @@ public abstract class RunnerItem : MonoBehaviour {
 
 	void OnTriggerEnter(Collider inOther) {
 		if (inOther.gameObject.tag == "Player" && (!hazard || (hazard && !PlayerController.Instance.Invincible))) { //Make sure we are either not a hazard, or that we are a hazard and the player is vulnerable
-			OnPickup();
 		
-			//Display tutorial if needed	
+			//Display tutorial first if needed	
 			if (hasTutorial)
 				RunnerItemManager.Instance.DisplayTutorial(ID, true);
 
-			//Each item handles adding points
+			//Each item handles their own pickup
+			OnPickup();
 
 			//Play sound
 			if (!string.IsNullOrEmpty(strSoundPickup)) //If this sound exists play it if we are not a hazard, 

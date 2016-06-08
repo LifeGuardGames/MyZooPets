@@ -4,7 +4,6 @@ using System;
 
 public class LevelUpNotificationListener : MonoBehaviour {
 	void Start () {
-		OnLevelUpNotification(this, null);
     	HUDAnimator.OnLevelUp += OnLevelUpNotification;
 	}
 

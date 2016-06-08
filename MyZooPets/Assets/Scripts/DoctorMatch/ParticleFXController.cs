@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/* Both SpawnFirework and SpawnFloatyText access ComboController through DoctorMatchManager
+ * but do not ping DoctorMatchManager
+ */
 public class ParticleFXController : MonoBehaviour {
 	public GameObject fireworkPrefab;
 	public GameObject floatyPrefab;

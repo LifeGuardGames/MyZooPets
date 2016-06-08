@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class HighScoreEntryUIController : MonoBehaviour {
-    public UILabel miniGameName;
-    public UILabel miniGameHighScore;
+    public Text miniGameName;
+    public Text miniGameHighScore;
 
     public void Init(string miniGameKey, int score){
         string titleKey = "HIGHSCORE_BOARD_" + miniGameKey;

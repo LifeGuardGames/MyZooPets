@@ -148,7 +148,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			RunnerGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			//ShooterGameManager.Instance.QuitGame();
+			ShooterGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			//NinjaManager.Instance.QuitGame();

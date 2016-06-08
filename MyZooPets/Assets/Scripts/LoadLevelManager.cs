@@ -80,5 +80,6 @@ public class LoadLevelManager : Singleton<LoadLevelManager> {
 	void OnLevelWasLoaded() {
 		AudioManager.Instance.PlayClip("loadingSlideOpen");
 		loadDemux.Hide();
+		loadText.gameObject.SetActive(false);
 	}
 }

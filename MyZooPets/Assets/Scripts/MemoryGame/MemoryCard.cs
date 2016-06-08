@@ -59,19 +59,19 @@ public class MemoryCard : MonoBehaviour {
 	}
 
 	void OnTap(TapGesture gesture){
-		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(isClickable && MemoryGameManager.Instance.IsGameActive) {
 			CardFlipped();
 		}
 	}
 
 	void OnFingerDown(FingerDownEvent e){
-		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(isClickable && MemoryGameManager.Instance.IsGameActive) {
 			gameObject.transform.localScale = new Vector3(pressDownScale, pressDownScale, 1f);
 		}
 	}
 
 	void OnFingerHover( FingerHoverEvent e){
-		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(isClickable && MemoryGameManager.Instance.IsGameActive) {
 			if( e.Phase == FingerHoverPhase.Exit){
 				GameObjectUtils.ResetLocalScale(this.gameObject);
 			}

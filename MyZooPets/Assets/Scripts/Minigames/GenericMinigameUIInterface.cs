@@ -18,7 +18,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			return DoctorMatchManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
-			return MemoryGameManager.Instance.GetMinigameKey(); // ...
+			return MemoryGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
 			return RunnerGameManager.Instance.MinigameKey;
@@ -101,7 +101,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			DoctorMatchManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
-			//MemoryGameManager.Instance.ContinueGame();
+			// Continues not allowed for this minigame
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
 			RunnerGameManager.Instance.ContinueGame();

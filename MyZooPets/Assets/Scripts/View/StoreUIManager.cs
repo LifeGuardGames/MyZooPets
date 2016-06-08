@@ -29,7 +29,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject tabArea; 				//Where all the tabs for sub category are
 	public GameObject storeBgPanel;			// the bg of the store (sub panel and base panel)
 	public GameObject backButton; 			// exit button reference
-	public GameObject prevTab; 
+	public GameObject prevTab;
+	private Vector3 gridStartPosition;
 
 	// store related sounds
 	public string soundChangeTab;
@@ -51,7 +52,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		base.Start();
 		// Reposition all the things nicely to stretch to the end of the screen
 		
-		// Position the UIPanel clipping range
+		/*// Position the UIPanel clipping range
 		UIPanel itemAreaPanel = itemArea.GetComponent<UIPanel>();
 		Vector4 oldRange = itemAreaPanel.clipRange;
 		
@@ -63,7 +64,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(
 			(-1f * (CameraManager.Instance.NativeWidth / 2)) - itemArea.transform.localPosition.x,
-			gridPosition.y, gridPosition.z);
+			gridPosition.y, gridPosition.z);*/
+
+		gridStartPosition = grid.transform.position;
 	}
 
 	/// <summary>
@@ -99,6 +102,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		HUDUIManager.Instance.ToggleLabels(true);
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+	}
+
+	public void OnCloseButton() {
+		CloseUI();
 	}
 
 	protected override void _CloseUI(){
@@ -197,7 +204,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(90, 90, 1);
-		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
+		animationSprite.GetComponent<Image>().sprite = sprite.GetComponent<Image>().sprite;
 
 		Debug.LogWarning("Sprite delete test start");
 
@@ -237,11 +244,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					DecorationItem decoItem = (DecorationItem)itemData;
 					
 					if(decoItem.DecorationType == DecorationTypes.Wallpaper){
-						UIImageButton buyButton = button.GetComponent<UIImageButton>();
+						Button buyButton = button.GetComponent<Button>();
 						
 						//Disable the buy button so user can't buy the same wallpaper anymore 
 						if(buyButton)
-							buyButton.isEnabled = false;
+							buyButton.gameObject.SetActive(false);
 					}
 				}
 				
@@ -304,8 +311,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// Then call other methods to create the items
 	/// </summary>
 	/// <param name="page">Page.</param>
-	public void CreateSubCategoryItems(GameObject page){
-		CreateSubCategoryItemsWithString(page.name);
+	public void CreateSubCategoryItems(string page){
+		CreateSubCategoryItemsWithString(page);
 	}
 
 	/// <summary>
@@ -362,8 +369,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				if(counter < decorationEnums.Length){
 					tabParent.name = decorationEnums[counter];
 					
-					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
-					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
+					Image imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<Image>();
+					imageSprite.sprite = SpriteCacheManager.GetSprite("iconDeco" + tabParent.name + "2");
 
 					// Call resizer
 					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
@@ -399,7 +406,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// public method to be called by button
 	//----------------------------------------------------
 	public void CreateSubCategoryItemsTab(GameObject tab){
-		UISprite backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
+		Image backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<Image>();
 		Color tabColor = backgroundSprite.color;
 		CreateSubCategoryItemsTab(tab.GetParent().name, tabColor);
 	}
@@ -424,7 +431,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		currentTab = tabName;
 		
 		//set panel background color
-		storeSubPanelBg.GetComponent<UISprite>().color = tabColor;
+		storeSubPanelBg.GetComponent<Image>().color = tabColor;
 		
 		//base on the tab name and the page name, create proper set of item in the store
 		if(currentPage == "Food"){
@@ -469,18 +476,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 				// If we havent changed tabs, dont set reset anything
 				if(prevTab != null){
-					UIImageButton imageButtonPrev = prevTab.transform.Find("Tab").GetComponent<UIImageButton>();
-					imageButtonPrev.normalSprite = "buttonCategory";
-					imageButtonPrev.hoverSprite = "buttonCategory";
-					imageButtonPrev.pressedSprite = "buttonCategory";
+					Button imageButtonPrev = prevTab.transform.Find("Tab").GetComponent<Button>();
+					//imageButtonPrev.normalSprite = "buttonCategory";
+					//imageButtonPrev.hoverSprite = "buttonCategory";
+					//imageButtonPrev.pressedSprite = "buttonCategory";
 					imageButtonPrev.enabled = false;
 					imageButtonPrev.enabled = true;
 				}
 				// Change the sprite of the current tab to active
-				UIImageButton imageButtonSeletected = selectedTab.transform.Find("Tab").GetComponent<UIImageButton>();
-				imageButtonSeletected.normalSprite = "buttonCategoryActive";
-				imageButtonSeletected.hoverSprite = "buttonCategoryActive";
-				imageButtonSeletected.pressedSprite = "buttonCategoryActive";
+				Button imageButtonSeletected = selectedTab.transform.Find("Tab").GetComponent<Button>();
+				//imageButtonSeletected.normalSprite = "buttonCategoryActive";
+				//imageButtonSeletected.hoverSprite = "buttonCategoryActive";
+				//imageButtonSeletected.pressedSprite = "buttonCategoryActive";
 				imageButtonSeletected.enabled = false;
 				imageButtonSeletected.enabled = true;
 
@@ -491,7 +498,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				}
 			}
 		}
-		grid.GetComponent<UIGrid>().Reposition();
 	}
 
 	//------------------------------------------
@@ -594,13 +600,14 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	//-----------------------------------------
 	// HideUnuseTab()
-	// If the tab is not used. turn the UISprite 
+	// If the tab is not used. turn the Image 
 	// script and the collider off
 	//------------------------------------------
 	private void HideUnuseTab(Transform tab){
-		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = false;
-		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = false;
-		tab.GetComponent<Collider>().enabled = false;
+		tab.GetComponent<Button>().gameObject.SetActive(false);
+		tab.FindChild("TabBackground").gameObject.GetComponent<Image>().enabled = false;
+		tab.FindChild("TabImage").gameObject.GetComponent<Image>().enabled = false;
+		//tab.GetComponent<Collider>().enabled = false;
 	}
 
 	/// <summary>
@@ -608,10 +615,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	/// <param name="tab">Tab transform</param>
 	private void ShowActiveTab(Transform tab){
-		tab.GetComponent<UIImageButton>().isEnabled = true;
-		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.GetComponent<Collider>().enabled = true;
+		tab.GetComponent<Button>().gameObject.SetActive(true);
+		tab.FindChild("TabBackground").gameObject.GetComponent<Image>().enabled = true;
+		tab.FindChild("TabImage").gameObject.GetComponent<Image>().enabled = true;
+		//tab.GetComponent<Collider>().enabled = true;
 	}
 
 	/// <summary>
@@ -619,9 +626,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	/// <param name="tab">Tab transform</param>
 	private void ShowInactiveTab(Transform tab){
-		tab.GetComponent<UIImageButton>().isEnabled = false;
-		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
+		tab.GetComponent<Button>().gameObject.SetActive(false);
+		tab.FindChild("TabBackground").gameObject.GetComponent<Image>().enabled = true;
+		tab.FindChild("TabImage").gameObject.GetComponent<Image>().enabled = true;
 		tab.GetComponent<Collider>().enabled = false;
 	}
 
@@ -630,16 +637,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// reset the clip range for the item area so that scrolling starts from the beginning
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
-		Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
-		
-		// Stop the springing action when switching
-		SpringPanel spring = itemArea.GetComponent<SpringPanel>();
-		if(spring != null){
-			spring.enabled = false;	
-		}
-		
-		// Reset the localposition and clipping position
-		itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
-		itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
+		grid.transform.position = gridStartPosition;
 	}
 }

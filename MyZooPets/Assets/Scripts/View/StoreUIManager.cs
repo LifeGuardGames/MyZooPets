@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 // Shortcut mode types into store sub panel
 public enum StoreShortcutType{

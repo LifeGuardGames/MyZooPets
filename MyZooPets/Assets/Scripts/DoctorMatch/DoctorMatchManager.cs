@@ -167,11 +167,11 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 	// Input coming from button scripts
 	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
-		AssemblyLineItem poppedItem = assemblyLineController.PeekFirstItem();
-		bool correct = poppedItem.ItemType == buttonType;
+		AssemblyLineItem peakedItem = assemblyLineController.PeekFirstItem();
+		bool correct = peakedItem.ItemType == buttonType;
 		Transform buttonTransform = GetButtonTransform((int)buttonType - 1);
 		float comboMod = comboController.ComboMod;
-		if (correct) {
+		if (correct) { //The same feedback is provided whether or not the game is in tutorial
 			StartCoroutine(particleController.SpawnFirework(comboMod, assemblyLineController.StartPosition.position));
 			numOfCorrectDiagnose++;
 			UpdateScore(2);
@@ -185,10 +185,10 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		}
 		particleController.SpawnFloatyText(comboMod, correct, buttonTransform);
 
-		if (tutorial) {
-			HandleTutorial(poppedItem, correct);
+		if (tutorial) { //But line movement and populating is different in each mode
+			HandleTutorial(peakedItem, correct);
 		} else {
-			HandleNormal(poppedItem);
+			HandleNormal(peakedItem);
 		}
 	}
 	public void EndGame() {
@@ -204,7 +204,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	protected override void _NewGame() { //Reset everything then start again
 		ResetScore();
 
-		if (finger) { //Called if we complete the tutorial or leave restart early
+		if (finger) { //Called if we complete the tutorial or restart early
 			BarFinger();
 		}
 
@@ -217,7 +217,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		zoneGreen.ToggleButtonInteractable(true);
 		zoneYellow.ToggleButtonInteractable(true);
 		zoneRed.ToggleButtonInteractable(true);
-
+		bonusStack=0; 
 	}
 
 	protected override void _PauseGame(bool isShow) {
@@ -288,6 +288,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			StopCoroutine(multipleFinger);
 			multipleFinger = null;
 		}
+		Debug.Log("Tut: " + assemblyLineController.Count + ":" + tutorialZone);
 		if (tutorialZone == 3) {
 			finger.StopShake(GetCorrectTransform().position);
 		} else {
@@ -327,7 +328,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 		
 	private void ComboBonus() {
-		if (comboController.ComboLevel == 2) { //Big combo bonus
+		if (comboController.ComboLevel == 2&&!tutorial) { //Big combo bonus (does not apply during tutorial)
 			if (assemblyLineController.Count!=1)
 				bonusStack += 3;
 			else

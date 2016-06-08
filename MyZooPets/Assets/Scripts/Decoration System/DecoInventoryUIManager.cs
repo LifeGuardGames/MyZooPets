@@ -31,7 +31,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	public GameObject uiGridObject;
 	public GameObject decorationItemPrefab;
 
-	private float collapsedPos = -164f;
+	private int maxInventoryDisplay = 6;
+    private float collapsedPos = -164f;
 
 	public Transform currentDragDropItem;
 
@@ -73,7 +74,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	/// </summary>
 	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
 	public bool IsDecoInventoryScrollable(){
-		return InventoryManager.Instance.AllDecoInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+		return InventoryManager.Instance.AllDecoInventoryItems.Count > maxInventoryDisplay;
 	}
 
 	public GameObject GetTutorialItem(){
@@ -159,7 +160,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		if(!isOnLoad){
 		
 			// Adjust the bar length based on how many items we want showing at all times
-			if(allDecoInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+			if(allDecoInventoryItemsCount <= maxInventoryDisplay) {
 				
 				// Update position of the bar if inventory is open
 				LeanTween.moveLocalX(decorationGridPanel, collapsedPos - allDecoInventoryItemsCount * 90, 0.4f)
@@ -169,8 +170,8 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		// Scene loading case, dont want to tween here so set them explicitly
 		else{
 			// Adjust the bar length based on how many items we want showing at all times
-			if(allDecoInventoryItemsCount > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
-				allDecoInventoryItemsCount = Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+			if(allDecoInventoryItemsCount > maxInventoryDisplay) {
+				allDecoInventoryItemsCount = maxInventoryDisplay;
 			}
 			if(decorationGridPanel.transform.localPosition.x != collapsedPos - allDecoInventoryItemsCount * 90){
 				decorationGridPanel.transform.localPosition = new Vector3(collapsedPos - allDecoInventoryItemsCount * 90,

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
+/// Consumable Inventory UI manager
 /// InventoryManager 	- DecoInventoryUIManager	(two separate inventory managers!)
 /// 					\ InventoryUIManager
 /// </summary>
@@ -11,11 +12,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	public GameObject inventoryPanel;
 	public bool isDebug;
-	public UIPanel gridPanel;
-	public GameObject uiGridObject;
+//	public UIPanel gridPanel;
+	public RectTransform gridTransform;
 	public GameObject spritePet;
 	public GameObject inventoryItemPrefab;
 	public Transform itemFlyToTransform;
+
+	private int maxInventoryDisplay = 6;
 	private float collapsedPos = -164f;
 	private Transform currentDragDropItem;
 
@@ -38,13 +41,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		InventoryManager.OnItemUsed -= OnItemUsedHandler;
 	}
 
-	/// <summary>
-	/// Check if the inventory is scrollable
-	/// If the item types in invetory is greater than the max display item type count, make it scrollable
-	/// </summary>
-	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
+	// If items in inventory greater than max count, it scrollable
 	public bool IsInventoryScrollable(){
-		return InventoryManager.Instance.AllUsableInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+		return InventoryManager.Instance.AllUsableInventoryItems.Count > maxInventoryDisplay;
 	}
 
 	public Vector3 GetItemFlyToPosition(){
@@ -58,7 +57,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// <returns>The fire orb reference.</returns>
 	public GameObject GetFireOrbReference(){
 		GameObject retVal = null;
-		foreach(Transform item in uiGridObject.transform){
+		foreach(Transform item in gridTransform) {
 			if(item.name == "Usable1"){
 				Transform trans = item.Find("Usable1");
 				if(trans != null){
@@ -80,16 +79,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		return retVal;
 	}
 
-	/// <summary>
-	/// Updates the bar position.
-	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
 		int allInventoryItemsCount = InventoryManager.Instance.AllUsableInventoryItems.Count;
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
-			if(allInventoryItemsCount <= Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
+			if(allInventoryItemsCount <= maxInventoryDisplay){
 
 				// Update position of the bar if inventory is open
 				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f)
@@ -99,8 +95,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		// Scene loading case, dont want to tween here so set them explicitly
 		else{
 			// Adjust the bar length based on how many items we want showing at all times
-			if(allInventoryItemsCount > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay")){
-				allInventoryItemsCount = Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+			if(allInventoryItemsCount > maxInventoryDisplay) {
+				allInventoryItemsCount = maxInventoryDisplay;
 			}
 			
 			if(inventoryPanel.transform.localPosition.x != collapsedPos - allInventoryItemsCount * 90){
@@ -109,14 +105,10 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 				                                                     inventoryPanel.transform.localPosition.z);
 			}
 		}
-		
-		uiGridObject.GetComponent<UIGrid>().Reposition();
-		
+				
 		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
-		Vector3 oldPanelPos = gridPanel.transform.localPosition;
-		gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
-		Vector4 oldClipRange = gridPanel.clipRange;
-		gridPanel.clipRange = new Vector4(116f, oldClipRange.y, oldClipRange.z, oldClipRange.w);	//TODO CHANGE THIS WHEN CHANGING CLIPPING
+		//Vector3 oldPanelPos = gridPanel.transform.localPosition;
+		//gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
 	}
 	
 	//Find the position of Inventory Item game object with invItemID
@@ -126,7 +118,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		Vector3 invItemPosition;
 
 		// Use the position of the item in the inventory panel
-		Transform invItemTrans = uiGridObject.transform.Find(invItemID);
+		Transform invItemTrans = gridTransform.Find(invItemID);
 		InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 		invItemPosition = invItemTrans.position;
 		
@@ -146,10 +138,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
 	}
 
-	//Event listener. listening to when item is dragged out of the inventory on drop
-	//on something in the game
-	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-
+	private void OnItemDropHandler(object sender, InventoryDragDrop.InvDragDropArgs e){
 		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
 			currentDragDropItem = e.ParentTransform;
 
@@ -159,11 +148,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		}
 	}
 
-	/// <summary>
-	/// Items the used event handler.
-	/// </summary>
 	private void OnItemUsedHandler(object sender, InventoryManager.InventoryEventArgs args){
-
 		if(currentDragDropItem != null){
 			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
@@ -199,25 +184,25 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 //		}
 	}
 
-	//Event listener. listening to when new item is added to the inventory
-	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs e){
+	// When new item is added to the inventory
+	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs args){
 		// inventory doesn't currently care about decorations/accessories
-		if(e.InvItem.ItemType == ItemType.Decorations || e.InvItem.ItemType == ItemType.Accessories)
+		if(args.InvItem.ItemType == ItemType.Decorations || args.InvItem.ItemType == ItemType.Accessories) {
 			return;
-		
-		if(e.IsItemNew){
-			SpawnInventoryItemInPanel(e.InvItem);
+		}
+		if(args.IsItemNew){
+			SpawnInventoryItemInPanel(args.InvItem);
 		}
 		else{
-			Transform invItem = uiGridObject.transform.Find(e.InvItem.ItemID);
-			invItem.Find("Label_Amount").GetComponent<UILabel>().text = e.InvItem.Amount.ToString();
+			Transform invItem = gridTransform.Find(args.InvItem.ItemID);
+			invItem.Find("Label_Amount").GetComponent<UILabel>().text = args.InvItem.Amount.ToString();
 		}
 	}
 
 	//Create the NGUI object and populate the fields with InventoryItem data
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
 		//Create inventory item
-		GameObject inventoryItemObject = NGUITools.AddChild(uiGridObject, inventoryItemPrefab);
+		GameObject inventoryItemObject = NGUITools.AddChild(gridTransform.gameObject, inventoryItemPrefab);
 
 		//get reference to all the GO and scripts
 		Transform itemWrapper = inventoryItemObject.transform.Find("Icon");
@@ -240,7 +225,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		invDragDrop.OnItemDrop += statsHint.OnItemDrop;
 
 		//listen to on drop event
-		invDragDrop.OnItemDrop += OnItemDrop;
+		invDragDrop.OnItemDrop += OnItemDropHandler;
 		invDragDrop.OnItemPress += OnItemPress;
 
 		UpdateBarPosition(isOnLoad);

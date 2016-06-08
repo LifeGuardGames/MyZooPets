@@ -17,10 +17,11 @@ public abstract class RunnerItem : MonoBehaviour {
 	public bool hasTutorial;
 	//Whether this item has a tutorial or not
 	protected bool hazard = false;
+
 	// Use this for initialization
 	public virtual void Start() {
 	}
-	
+
 	// Update is called once per frame
 	public virtual void Update() {
 	}
@@ -47,24 +48,12 @@ public abstract class RunnerItem : MonoBehaviour {
 	public abstract void OnPickup();
 
 	/// <summary>
-	/// Spawns the floaty text. Replace the tutorial messages
+	/// Spawns the floaty text.
 	/// </summary>
 	protected void SpawnFloatyText(string toDisplay = "", float floatingTime = -1) {
-		/*Hashtable floatyOption = new Hashtable();
-//		string hintMessage = Localization.Localize(ID + "_HINT_MESSAGE");
-
-		floatyOption.Add("prefab", "FloatyTextRunner");
-		floatyOption.Add("parent", PlayerController.Instance.FloatyLocation);
-		floatyOption.Add("textSize", 2f);
-		floatyOption.Add("text", toDisplay);
-		if (floatingTime!=-1) {
-			floatyOption.Add("floatingTime", floatingTime);
-		}
-		FloatyUtil.SpawnFloatyText(floatyOption);*/
 		GameObject starFloaty = Instantiate(RunnerGameManager.Instance.starFloatyPrefab);
 		Vector3 playerPos = PlayerController.Instance.FloatyLocation.transform.position;
-		//Vector3 screenPos = Camera.main.WorldToScreenPoint(new Vector3(playerPos.x,playerPos.x,-1*Camera.main.transform.position.z));
 		starFloaty.transform.SetParent(RunnerGameManager.Instance.floatyParent);
-		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, riseTime: .5f, toMove: new Vector3(0,10));
+		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, riseTime: .5f, toMove: new Vector3(0, 10)); //Because Canvas is a Screen Space - Camera there is no need for WorldToScreenSpace
 	}
 }

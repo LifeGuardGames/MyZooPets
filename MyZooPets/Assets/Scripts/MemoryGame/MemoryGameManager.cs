@@ -1,14 +1,12 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 /// <summary>
-/// Memory game manager.
 /// The scoring would be done in a count down fashion, so your final score is the score
 /// that you get when you complete all the matches.
 /// There are also combos if you get 2+ in a row, this adds a multiplier to your score
 /// </summary>
-public class MemoryGameManager : MinigameManager<MemoryGameManager> {
+public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	public MemoryBoardController boardController;
 	public EventHandler<EventArgs> proceed;
 	public int startScoreValue = 500;
@@ -22,43 +20,78 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 	private bool pauseDelayActive = false;
 	private float cardDelayTimer = 0.8f;
 	private int combo = 0;
-	private bool isPaused = false;
 	public bool inTutorial = true;
 	public GameObject tutButton;
 
-	private MemoryGameUIManager memoryUI;
+	public MemoryGameUIManager memoryUI;
+	private bool isPaused = false;
+
+	private bool isGameActive = false;
+	public bool IsGameActive {
+		get { return isGameActive; }
+	}
 
 	void Awake(){
-		quitGameScene = SceneUtils.BEDROOM;
+		minigameKey = "MEMORY";
+        quitGameScene = SceneUtils.BEDROOM;
+		isContinueAllowed = false;	// Disable continue game functionality for this game
 	}
 
-	#region Overridden Functions
-	protected override void _Start(){
-		MemoryGameManager.OnStateChanged += GameStateChange;
-		memoryUI = ui as MemoryGameUIManager;
+	protected override void _Start() {
 	}
 
-	protected override void _OnDestroy(){
-		MemoryGameManager.OnStateChanged -= GameStateChange;
-	}
-
-	public override string GetMinigameKey(){
-		return "Memory";
-	}
-
-	protected override void _NewGame(){
-		if(IsTutorialOn() && IsTutorialOverride()|| 
-		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
+	protected override void _NewGame() {
+		if(IsTutorialOn() && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)) {
 			StartTutorial();
 			tutButton.SetActive(true);
 		}
-		else{
+		else {
+			isGameActive = true;
 			Reset();
-		}
+        }
 	}
-	protected override bool IsTutorialOn(){
+
+	protected override void _PauseGame(bool isShow) {
+		isPaused = isShow;
+		isGameActive = !isShow;
+	}
+
+	protected override void _ContinueGame() {
+		// Nothing to implement for memory game
+	}
+
+	protected override void _GameOver() {
+		isGameActive = false;
+        memoryUI.FinishBoard();
+	}
+
+	protected override void _GameOverReward() {
+		WellapadMissionController.Instance.TaskCompleted("Score" + MinigameKey, Score);
+
+		StatsManager.Instance.ChangeStats(
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Memory, Score, true);
+
+		Analytics.Instance.MemoryGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey]);
+		#if UNITY_IOS
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "MemoryLeaderBoard");
+		#endif
+	}
+
+	protected override void _QuitGame() {
+	}
+	
+
+
+	protected bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsMemoryTutorialOn");
 	}
+
 	public void Reset(){
 		flip1 = null;
 		flip2 = null;
@@ -70,10 +103,9 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		memoryUI.SetComboText(combo);
 
 		CancelInvoke("StartScoreCountdown");
-		SetScore(startScoreValue);
+		score = startScoreValue;
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
-		if(!IsTutorialOn()&& !IsTutorialOverride()|| 
-		   DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
+		if(!IsTutorialOn() || DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
 		ResetBoard();
 		}
 	}
@@ -83,51 +115,16 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 		memoryUI.StartBoard();
 	}
 
-	protected override void _Update(){
-	}
-
-	protected override void _GameOver(){
-		memoryUI.FinishBoard();
-		WellapadMissionController.Instance.TaskCompleted("Score" + GetMinigameKey(), GetScore());
-
-		Analytics.Instance.MemoryGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "MemoryLeaderBoard");
-#endif
-	}
-
-	private void GameStateChange(object sender, GameStateArgs args){
-		switch(args.GetGameState()){
-		case MinigameStates.GameOver:
-			break;
-		case MinigameStates.Paused:
-			isPaused = true;
-			break;
-		case MinigameStates.Playing:
-			isPaused = false;
-			break;
-		}
-	}
-
-	public override int GetReward(MinigameRewardTypes eType){
-		return GetStandardReward(eType);
-	}
-	#endregion
-
 	#region Game Specific Functions
-	/// <summary>
-	/// Starts the score countdown.
-	/// InvokeRepeating method from _NewGame()
-	/// </summary>
+	// InvokeRepeating method from _NewGame()
 	private void StartScoreCountdown(){
-
 		if(!isPaused){
 			// Check for negative score
-			if(GetScore() - scoreDecrementValue >= 0){
+			if(Score - scoreDecrementValue >= 0){
 				UpdateScore(scoreDecrementValue * -1);
 			}
 			else{
-				SetScore(0);
+				score = 0;
 			}
 		}
 	}
@@ -225,10 +222,10 @@ public class MemoryGameManager : MinigameManager<MemoryGameManager> {
 			proceed(this, EventArgs.Empty);
 	}
 
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-//			GameOver();
-//		}
-//	}
+	//	void OnGUI(){
+	//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
+	//			GameOver();
+	//		}
+	//	}
 	#endregion
 }

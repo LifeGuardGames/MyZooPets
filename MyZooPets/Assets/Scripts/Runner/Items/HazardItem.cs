@@ -11,12 +11,6 @@ public class HazardItem : RunnerItem {
         base.Start();
 		hazard=true;
 	}
-	
-	// Update is called once per frame
-    public override void Update() {
-        base.Update();
-	}
-
 	public override void OnPickup(){
         // Player, sloooooowwww downnnnnnnn
 		if (!PlayerController.Instance.Invincible){

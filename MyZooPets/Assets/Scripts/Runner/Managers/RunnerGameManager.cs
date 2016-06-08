@@ -75,12 +75,12 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
 
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(1f); //The character should run for a second before we pause the game and show the first panel
 		runnerTutorial = new RunnerTutorial();
 		SetTutorial(runnerTutorial);
 	}
 
-	public void AdvanceTutorial() {
+	public void AdvanceTutorial() { //Called by RunnerGameTutorialText b/c we are the only ones w/ access to our tutorial
 		runnerTutorial.Advance();
 	}
 	// Use this for initialization
@@ -104,12 +104,12 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 	protected override void _PauseGame(bool isShow) {
 		if (!isShow) {
-			paused = !isShow;
+			paused = true;
 			MegaHazard.Instance.PauseParticles();
 			ParallaxingBackgroundManager.Instance.PauseParallax();
 			PlayerController.Instance.PauseAnimation();
 		} else if (!RunnerGameTutorialText.Instance.IsVisible) { //Don't continue the game unless there are no popups on screen
-			paused = !isShow;
+			paused = false;
 			MegaHazard.Instance.PlayParticles();
 			ParallaxingBackgroundManager.Instance.PlayParallax();
 			PlayerController.Instance.PlayAnimation();

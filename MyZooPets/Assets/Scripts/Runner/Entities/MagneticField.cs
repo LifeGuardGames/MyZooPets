@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+/* Follows camera and basically just helps a collider hit coins and magnetize them
+ * disabled and enabled by PlayerController
+ */
 public class MagneticField : Singleton<MagneticField> {
 	// Update is called once per frame
 	void Update () {

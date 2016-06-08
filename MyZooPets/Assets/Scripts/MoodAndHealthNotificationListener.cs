@@ -113,10 +113,10 @@ public class MoodAndHealthNotificationListener : MonoBehaviour{
 	}
 
 
-	void OnGUI() {
+	/*void OnGUI() {
 		if(GUI.Button(new Rect(100, 100, 100, 100), "SDF")) {
 			ShowPopupPetSick();
 		}
-	}
+	}*/
 }
 

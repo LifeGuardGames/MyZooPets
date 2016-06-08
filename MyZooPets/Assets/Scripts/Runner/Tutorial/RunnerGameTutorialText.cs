@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 	public GameObject stageTextObject;
+	public Text topText;
+	public Text bottomText;
 	public GameObject outroTextObject;
 	public GameObject itemTextObject;
 	private int toShow = 0;
@@ -43,7 +45,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 	public IEnumerator HideAll() {
 		StopAllCoroutines();
 		HideHelper();
-		yield return new WaitForSeconds(.5f); //If they are still in the process of showing, this must wait for them to appear
+		yield return new WaitForSeconds(1f); //If the panels are still in the process of showing, we must wait for them to appear
 		HideHelper();
 	}
 
@@ -71,7 +73,12 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 
 	private IEnumerator StageIEnum() {
 		stageTextObject.GetComponent<TweenToggleDemux>().Show();
-		stageTextObject.GetComponentInChildren<Text>().text = Localization.Localize("RUNNER_TUT_" + toShow);
+		if (toShow==0){
+			topText.text = Localization.Localize("RUNNER_TUT_" + toShow);
+		} else {
+			topText.text = "";
+			bottomText.text = Localization.Localize("RUNNER_TUT_" + toShow);
+		}
 		RunnerGameManager.Instance.PauseGame(false);
 		yield return new WaitForSeconds(.5f);
 		RunnerGameManager.Instance.SpecialInput = true;

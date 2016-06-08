@@ -97,6 +97,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
 		RunnerItemManager.Instance.Reset();
+		FindObjectOfType<CameraFollow>().Reset();
 
 		RunnerGameTutorialText.Instance.StartCoroutine(RunnerGameTutorialText.Instance.HideAll());
 	}

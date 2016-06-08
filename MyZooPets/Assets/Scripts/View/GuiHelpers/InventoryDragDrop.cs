@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System;
 
 /// <summary>
@@ -214,7 +213,6 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// <summary>
 	/// Start or stop the drag operation.
 	/// </summary>
-
 	void OnPress(bool isPressed){
 		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;

@@ -24,7 +24,6 @@ public class ShooterGameTutorial {
 			break;
 		case 1:
 			PlayerShooterController.Instance.OnTutorialMove -= MoveAlong;
-				Debug.Log("We in Step One now");
 			//prompt user to shoot
 			ShooterGameManager.Instance.tutFinger.SetActive(false);
 			pressHere = (GameObject)Resources.Load("ShooterTut");
@@ -97,10 +96,8 @@ public class ShooterGameTutorial {
 
 	private void MoveAlong(object sender, EventArgs args){
 		if(currentStep < 9) {
-			Debug.Log("current Step: " + currentStep);
 			currentStep++;
 			ProcessStep(currentStep);
-			Debug.Log("After Step: " + currentStep);
 		}
 	}
 }

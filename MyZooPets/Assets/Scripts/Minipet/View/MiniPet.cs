@@ -227,7 +227,7 @@ public abstract class MiniPet : MonoBehaviour {
 
 		if(args.TargetCollider.name == this.gameObject.name && isUIOpen){
 			invItemID = args.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
+			InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 			string preferredFoodID = "";
 
 			preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);

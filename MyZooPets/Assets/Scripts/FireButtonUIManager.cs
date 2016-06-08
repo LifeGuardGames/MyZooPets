@@ -114,7 +114,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
 		if(args.TargetCollider.name == fireOrbDropTarget.name){
 			string invItemID = args.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
+			InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 			int numOfFireBreaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
 
 			//only works if item is flame crystal and pet can't breathe fire yet

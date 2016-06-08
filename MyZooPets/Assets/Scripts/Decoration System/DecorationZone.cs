@@ -95,7 +95,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// <returns>The decoration item from inventory.</returns>
 	/// <param name="itemID">Item ID</param>
 	private DecorationItem GetDecorationItemFromInventory(string itemID){
-		InventoryItem item = InventoryManager.Instance.GetDecoInvItem(itemID);
+		InventoryItem item = InventoryManager.Instance.GetDecoInInventory(itemID);
 		if(item == null){
 			return null;
 		}

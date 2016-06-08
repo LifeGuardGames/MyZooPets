@@ -373,7 +373,7 @@ public class GatingManager : Singleton<GatingManager>{
 		// check if there's fire orb in the inventory
 		else{
 			// if there's a fire orb in the inventory prompt the user to use it
-			InventoryItem fireOrb = InventoryManager.Instance.GetInvItem("Usable1");
+			InventoryItem fireOrb = InventoryManager.Instance.GetItemInInventory("Usable1");
 			if(fireOrb != null){
 			}
 			// if not tell user to buy flame crystal

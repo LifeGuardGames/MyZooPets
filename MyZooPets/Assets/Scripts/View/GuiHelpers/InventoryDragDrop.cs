@@ -186,7 +186,7 @@ public class InventoryDragDrop : MonoBehaviour{
 			else if(mIsDragging){
 				// if item is being dragged and is not usable items play eat anticipation
 				string invItemID = this.gameObject.name;
-				InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
+				InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 				if(invItem != null && invItem.ItemType != ItemType.Usables){
 					if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()){
 						PetAnimationManager.Instance.WaitingToBeFed();

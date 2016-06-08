@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -25,7 +24,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		InventoryManager.OnItemUsed += OnItemUsedHandler;
 
 		//Spawn items in the inventory for the first time
-		List<InventoryItem> allInvItems = InventoryManager.Instance.AllInventoryItems;
+		List<InventoryItem> allInvItems = InventoryManager.Instance.AllUsableInventoryItems;
 		foreach(InventoryItem invItem in allInvItems){
 			// ideally, we might abstract out the inventory to be an inventory of certain things (food, usables, decos, etc)
 			// but for now, I guess just don't show decorations in the inventory
@@ -45,7 +44,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// </summary>
 	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
 	public bool IsInventoryScrollable(){
-		return InventoryManager.Instance.AllInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
+		return InventoryManager.Instance.AllUsableInventoryItems.Count > Constants.GetConstant<int>("HudSettings_MaxInventoryDisplay");
 	}
 
 	public Vector3 GetItemFlyToPosition(){
@@ -86,7 +85,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// </summary>
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
-		int allInventoryItemsCount = InventoryManager.Instance.AllInventoryItems.Count;
+		int allInventoryItemsCount = InventoryManager.Instance.AllUsableInventoryItems.Count;
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
@@ -128,7 +127,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 		// Use the position of the item in the inventory panel
 		Transform invItemTrans = uiGridObject.transform.Find(invItemID);
-		InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
+		InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 		invItemPosition = invItemTrans.position;
 		
 		//Offset position if the item is just added to the inventory

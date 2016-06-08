@@ -99,7 +99,7 @@ public class PetInteractionManager : MonoBehaviour{
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
 		if(args.TargetCollider.name == this.gameObject.name){
 			string invItemID = args.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryManager.Instance.GetInvItem(invItemID);
+			InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 
 			// don't allow fire orb drop on pet
 			if(invItemID == "Usable1") return;

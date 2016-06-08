@@ -21,11 +21,7 @@ public class InventoryManager : Singleton<InventoryManager>{
 	private bool listNeedsUpdate = true;
 	private List<InventoryItem> inventoryItemList; //list of all consumable items
 
-	/// <summary>
-	/// Gets all inventory items.
-	/// </summary>
-	/// <value>All inventory items.</value>
-	public List<InventoryItem> AllInventoryItems{ 
+	public List<InventoryItem> AllUsableInventoryItems{ 
 		get{
 			if(inventoryItemList == null || listNeedsUpdate){
 				inventoryItemList = (from keyValuePair in DataManager.Instance.GameData.Inventory.InventoryItems
@@ -36,10 +32,6 @@ public class InventoryManager : Singleton<InventoryManager>{
 		}
 	}
 
-	/// <summary>
-	/// Gets all decoration inventory items.
-	/// </summary>
-	/// <value>All decoration inventory items.</value>
 	public List<InventoryItem> AllDecoInventoryItems{
 		get{
 			// get the list of decorations the user owns
@@ -49,90 +41,72 @@ public class InventoryManager : Singleton<InventoryManager>{
 		}
 	}
 
-	/// <summary>
-	/// Gets all decoration inventory items ordered by type.
-	/// </summary>
-	/// <value>All decoration inventory items.</value>
 	public List<InventoryItem> GetDecorationInventoryItemsOrderyByType(DecorationTypes type){
-		// get the list of decorations the user owns
 		List<InventoryItem> decorations = AllDecoInventoryItems;
-		
-		// now order the list by the type of decoration we are looking for
-		decorations = decorations.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == type).ToList();	
-
+		// Order list by type of deco
+		decorations = decorations.OrderBy(i => ((DecorationItem)i.ItemData).DecorationType == type).ToList();
 		return decorations;
 	}
 
 	public bool IsWallpaperBought(string itemID){
-		bool isWallpaperBought = false;
 		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
-		isWallpaperBought = oneTimePurchasedInv.Contains(itemID);
-		return isWallpaperBought;
+		return oneTimePurchasedInv.Contains(itemID);
 	}
 
 	public bool IsAccessoryBought(string itemID){
-		bool isAccessoryBought = false;
 		List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
-		isAccessoryBought = oneTimePurchasedInv.Contains(itemID);
-		return isAccessoryBought;
+		return oneTimePurchasedInv.Contains(itemID);
 	}
 	
 	/// <summary>
 	/// Gets the inv item. Return null if inventory item has been removed
 	/// </summary>
-	/// <returns>The inv item.</returns>
-	/// <param name="itemID">Item ID.</param>
-	public InventoryItem GetInvItem(string itemID){
+	public InventoryItem GetItemInInventory(string itemID){
 		Dictionary<string, InventoryItem> invItems = DataManager.Instance.GameData.Inventory.InventoryItems;
-		InventoryItem invItem = null;
-
 		if(invItems.ContainsKey(itemID)){
-			invItem = invItems[itemID];
+			return invItems[itemID];
 		}
-
-		return invItem;
+		else {
+			return null;
+		}
 	}
 
 	/// <summary>
 	/// Gets the deco inv item. Return null if deco inventory item has been removed
 	/// </summary>
-	/// <returns>The inv item.</returns>
-	/// <param name="itemID">Item ID.</param>
-	public InventoryItem GetDecoInvItem(string itemID){
-		Dictionary<string, InventoryItem> decoInvItems = DataManager.Instance.GameData.Inventory.DecorationItems;
-		InventoryItem decoInvItem = null;
-		
+	public InventoryItem GetDecoInInventory(string itemID){
+		Dictionary<string, InventoryItem> decoInvItems = DataManager.Instance.GameData.Inventory.DecorationItems;		
 		if(decoInvItems.ContainsKey(itemID)){
-			decoInvItem = decoInvItems[itemID];
+			return decoInvItems[itemID];
 		}
-		
-		return decoInvItem;
+		else {
+			return null;
+		}
 	}
 
 	public void AddItem(string itemID, int count){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
+		Dictionary<string, InventoryItem> specificTypeInventory = GetInventoryTypeForItem(itemID);
 		Item itemData = DataLoaderItems.GetItem(itemID);
 
 		InventoryItem invItem = null;
 		bool itemNew = false;
 		listNeedsUpdate = true;
 
-		if(invItems.ContainsKey(itemID)){ //If item already in dict. increment amount
-
+		if(specificTypeInventory.ContainsKey(itemID)){  //If item already in dict. increment amount
 			//if in the inventory already check if it's wallpaper/accessory
 			//if it's wallpaper/accessory don't increment count just return
 			if(IsWallpaperBought(itemID) || IsAccessoryBought(itemID)){
 				return;
 			}
 
-			invItem = invItems[itemID];
+			invItem = specificTypeInventory[itemID];
 			invItem.Amount += count; 
-			invItems[itemID] = invItem;
+			specificTypeInventory[itemID] = invItem;
 		}
 		else{ //Add InventoryItem into dict if key doesn't exist
 			itemNew = true;
 			invItem = new InventoryItem(itemID, itemData.Type, itemData.TextureName);
-			invItems[itemID] = invItem;
+			specificTypeInventory[itemID] = invItem;
 
 			//special case: keep track of bought wallpaper in another list.
 			if(itemData.Type == ItemType.Decorations){
@@ -177,7 +151,7 @@ public class InventoryManager : Singleton<InventoryManager>{
 	/// </summary>
 	/// <param name="itemID">Item ID.</param>
 	public void UsePetItem(string itemID){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
+		Dictionary<string, InventoryItem> invItems = GetInventoryTypeForItem(itemID);
 		InventoryItem invItem = null;
 		listNeedsUpdate = true;
 		
@@ -197,11 +171,6 @@ public class InventoryManager : Singleton<InventoryManager>{
 			                                         	Analytics.ITEM_STATS_MOOD, DataManager.Instance.GameData.Stats.Mood);
 			}
 			
-			// play the item's sound, if it has one
-//			string itemSound = invItem.ItemData.SoundUsed;
-//			if(!string.IsNullOrEmpty(itemSound))
-//				AudioManager.Instance.PlayClip(itemSound);
-			
 			//remove inv item if there is none left
 			if(invItem.Amount == 0)
 				invItems.Remove(itemID);
@@ -217,14 +186,14 @@ public class InventoryManager : Singleton<InventoryManager>{
 	}
 
 	public void UseMiniPetItem(string itemID){
-		Dictionary<string, InventoryItem> invItems = GetInventoryForItem(itemID);
+		Dictionary<string, InventoryItem> invItems = GetInventoryTypeForItem(itemID);
 		InventoryItem invItem = null;
 		listNeedsUpdate = true;
 		if(invItems.ContainsKey(itemID)){
 			invItem = invItems[itemID];
 			invItem.Amount--;
 
-			//remove inv item if there is none left
+			// remove inv item if there is none left
 			if(invItem.Amount == 0){
 				invItems.Remove(itemID);
 			}
@@ -243,24 +212,18 @@ public class InventoryManager : Singleton<InventoryManager>{
 	/// Gets the inventory for item. Based on the item type of itemID, this function
 	/// will return the proper inventory for it
 	/// </summary>
-	/// <returns>The inventory for item.</returns>
-	/// <param name="itemID">Item I.</param>
-	private Dictionary<string, InventoryItem> GetInventoryForItem(string itemID){
+	private Dictionary<string, InventoryItem> GetInventoryTypeForItem(string itemID){
 		// what list the item is placed in depends on what kind of item it is
 		ItemType eType = DataLoaderItems.GetItemType(itemID);
 		Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 		
 		switch(eType){
 		case ItemType.Decorations:
-			inventory = DataManager.Instance.GameData.Inventory.DecorationItems;
-			break;
+			return DataManager.Instance.GameData.Inventory.DecorationItems;
 		case ItemType.Accessories:
-			inventory = DataManager.Instance.GameData.Inventory.AccessoryItems;
-			break;
+			return DataManager.Instance.GameData.Inventory.AccessoryItems;
 		default:
-			inventory = DataManager.Instance.GameData.Inventory.InventoryItems;
-			break;
+			return DataManager.Instance.GameData.Inventory.InventoryItems;
 		}
-		return inventory;
 	}
 }

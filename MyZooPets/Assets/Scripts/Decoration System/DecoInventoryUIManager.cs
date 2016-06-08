@@ -93,7 +93,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	//Event listener. listening to when new item is added to the deco inventory
 	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs e){
-
 		if(e.IsItemNew){
 			SpawnInventoryItemInPanel(e.InvItem);
 		}
@@ -208,7 +207,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		if(deocInvItemTrans == null){
 			Debug.Log("ksd");
 		}
-		InventoryItem decoInvItem = InventoryManager.Instance.GetDecoInvItem(itemID);
+		InventoryItem decoInvItem = InventoryManager.Instance.GetDecoInInventory(itemID);
 		decoInvItemPosition = deocInvItemTrans.position;
 		
 		//Offset position if the item is just added to the inventory

@@ -6,7 +6,7 @@ public class PetSleepController : MonoBehaviour {
 
 	public GameObject blackScreen;
 	public bool isNight;
-	Color c;
+	private Color c;
     public void OnTapped(){
 		if(!isNight){
 				PetSpeechAI.Instance.ShowSleepingMessageMsg();

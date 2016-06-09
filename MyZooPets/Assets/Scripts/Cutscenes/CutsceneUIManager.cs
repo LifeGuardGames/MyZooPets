@@ -7,7 +7,7 @@ using System.Collections;
 /// </summary>
 public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 
-	public NGUIAlphaTween background;
+	public FadeTweener background;
 
 	public float fadeInDuration = 0.5f;				// Time for screen to black out for cutscene
 	public float pauseBeforePlayDuration = 0.3f;	// Time to wait after black out to playing animations
@@ -56,11 +56,11 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 	}
 
 	protected override void _OpenUI(){
-		background.StartAlphaTween(0f, 1f, 0f, fadeInDuration);
+		background.BlackOutScreen();
 	}
 
 	protected override void _CloseUI(){
-		background.StartAlphaTween(1f, 0f, 0f, fadeOutDuration);
+		background.LightsUpScreen();
 		Invoke("DisableBackground", fadeOutDuration + 0.5f);
 	}
 

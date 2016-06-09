@@ -27,11 +27,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		InventoryManager.OnItemUsed += OnItemUsedHandler;
 
 		//Spawn items in the inventory for the first time
-		List<InventoryItem> allInvItems = InventoryManager.Instance.AllUsableInventoryItems;
+		List<InventoryItem> allInvItems = InventoryManager.Instance.AllConsumableInventoryItems;
 		foreach(InventoryItem invItem in allInvItems){
-			// ideally, we might abstract out the inventory to be an inventory of certain things (food, usables, decos, etc)
-			// but for now, I guess just don't show decorations in the inventory
-			//if ( invItem.ItemType != ItemType.Decorations )
 			SpawnInventoryItemInPanel(invItem, isOnLoad : true);
 		}
 	}
@@ -43,7 +40,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	// If items in inventory greater than max count, it scrollable
 	public bool IsInventoryScrollable(){
-		return InventoryManager.Instance.AllUsableInventoryItems.Count > maxInventoryDisplay;
+		return InventoryManager.Instance.AllConsumableInventoryItems.Count > maxInventoryDisplay;
 	}
 
 	public Vector3 GetItemFlyToPosition(){
@@ -81,7 +78,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
 	public void UpdateBarPosition(bool isOnLoad = false){
-		int allInventoryItemsCount = InventoryManager.Instance.AllUsableInventoryItems.Count;
+		int allInventoryItemsCount = InventoryManager.Instance.AllConsumableInventoryItems.Count;
 		// Normal case where you add item during game
 		if(!isOnLoad){
 			// Adjust the bar length based on how many items we want showing at all times
@@ -186,47 +183,46 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 
 	// When new item is added to the inventory
 	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs args){
-		// inventory doesn't currently care about decorations/accessories
-		if(args.InvItem.ItemType == ItemType.Decorations || args.InvItem.ItemType == ItemType.Accessories) {
-			return;
-		}
 		if(args.IsItemNew){
 			SpawnInventoryItemInPanel(args.InvItem);
 		}
 		else{
 			Transform invItem = gridTransform.Find(args.InvItem.ItemID);
-			invItem.Find("Label_Amount").GetComponent<UILabel>().text = args.InvItem.Amount.ToString();
+			invItem.GetComponent<InventoryTokenController>().SetAmount(args.InvItem.Amount);
 		}
 	}
 
-	//Create the NGUI object and populate the fields with InventoryItem data
+	//Create new InventoryToken and populate the fields with InventoryItem data
 	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
+		GameObject inventoryToken = GameObjectUtils.AddChild(gridTransform.gameObject, inventoryItemPrefab);
+		inventoryToken.GetComponent<InventoryTokenController>().Init(invItem);
+
 		//Create inventory item
-		GameObject inventoryItemObject = NGUITools.AddChild(gridTransform.gameObject, inventoryItemPrefab);
+//		GameObject inventoryItemObject = NGUITools.AddChild(gridTransform.gameObject, inventoryItemPrefab);
 
 		//get reference to all the GO and scripts
-		Transform itemWrapper = inventoryItemObject.transform.Find("Icon");
-		UISprite itemSprite = inventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
-		UILabel itemAmountLabel = inventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
-		InventoryItemStatsHintController statsHint = itemWrapper.GetComponent<InventoryItemStatsHintController>();
-		InventoryDragDrop invDragDrop = itemWrapper.GetComponent<InventoryDragDrop>();
-
-		//Set value to UI element
-		itemWrapper.name = invItem.ItemID;
-		inventoryItemObject.name = invItem.ItemID;
-		itemSprite.spriteName = invItem.ItemTextureName;
-		itemAmountLabel.text = invItem.Amount.ToString();
-
-		//Create stats hint
-		statsHint.PopulateStatsHints((StatsItem)invItem.ItemData);
-
-		//Listen to on press and on drop
-		invDragDrop.OnItemDrag += statsHint.OnItemDrag;
-		invDragDrop.OnItemDrop += statsHint.OnItemDrop;
-
-		//listen to on drop event
-		invDragDrop.OnItemDrop += OnItemDropHandler;
-		invDragDrop.OnItemPress += OnItemPress;
+//		Transform itemWrapper = inventoryItemObject.transform.Find("Icon");
+//		UISprite itemSprite = inventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
+//		UILabel itemAmountLabel = inventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
+//		InventoryItemStatsHintController statsHint = itemWrapper.GetComponent<InventoryItemStatsHintController>();
+//		InventoryDragDrop invDragDrop = itemWrapper.GetComponent<InventoryDragDrop>();
+//
+//		//Set value to UI element
+//		itemWrapper.name = invItem.ItemID;
+//		inventoryItemObject.name = invItem.ItemID;
+//		itemSprite.spriteName = invItem.ItemTextureName;
+//		itemAmountLabel.text = invItem.Amount.ToString();
+//
+//		//Create stats hint
+//		statsHint.PopulateStatsHints((StatsItem)invItem.ItemData);
+//
+//		//Listen to on press and on drop
+//		invDragDrop.OnItemDrag += statsHint.OnItemDrag;
+//		invDragDrop.OnItemDrop += statsHint.OnItemDrop;
+//
+//		//listen to on drop event
+//		invDragDrop.OnItemDrop += OnItemDropHandler;
+//		invDragDrop.OnItemPress += OnItemPress;
 
 		UpdateBarPosition(isOnLoad);
 	}

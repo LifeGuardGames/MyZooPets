@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /// <summary>
 /// Store item entry.
 /// </summary>
 public class StoreItemEntryUIController : MonoBehaviour{
 	// various elements on the entry
-	public UILabel labelName;
-	public UILabel labelDesc;
-	public UILabel labelCost;
-	public UISprite spriteIcon;
-	public UISprite buttonIcon;
-	public UIButtonMessage buttonMessage;
+	public Text labelName;
+	public Text labelDesc;
+	public Text labelCost;
+	public Image spriteIcon;
+	public Image buttonIcon;
+	public Button buttonMessage;
 	public AnimationControl tutorialWiggleAnimation;
 
 	/// <summary>
@@ -36,7 +37,7 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	                               Item item, GameObject buyButtonMessageTarget = null,
 	                               string buyButtonMessageFunctionName = ""){
 
-		GameObject itemUIObject = NGUITools.AddChild(goGrid, goPrefab);
+		GameObject itemUIObject = GameObjectUtils.AddChildGUI(goGrid, goPrefab);
 
 		//set default buy button message target/function name if they are null
 		if(buyButtonMessageTarget == null || string.IsNullOrEmpty(buyButtonMessageFunctionName)){
@@ -66,9 +67,8 @@ public class StoreItemEntryUIController : MonoBehaviour{
 		string costText = itemData.Cost.ToString();
 		labelCost.text = costText;
 		labelName.text = itemData.Name;
-		spriteIcon.spriteName = itemData.TextureName;
-		buttonMessage.target = buyButtonMessageTarget;
-		buttonMessage.functionName = buyButtonMessageFunctionName;		
+		spriteIcon.sprite = SpriteCacheManager.GetSprite(itemData.TextureName);
+		buttonMessage.onClick.AddListener(() => StoreUIManager.Instance.OnBuyButton(buttonMessage.gameObject));
 	
 		//Check if wallpaper has already been bought. Disable the buy button if so
 		if(itemData.Type == ItemType.Decorations){

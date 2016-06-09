@@ -246,7 +246,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				UIImageButton buyButton = button.GetComponent<UIImageButton>();
 				buyButton.isEnabled = false;
 				
-				InventoryManager.Instance.AddItem(itemID, 1);
+				InventoryManager.Instance.AddItemToInventory(itemID);
 				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 
 				// Change the state of the button

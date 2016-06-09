@@ -197,7 +197,7 @@ public abstract class DecorationZone : MonoBehaviour {
 		
 		// give the user the decoration back in their inventory
 		if(placedDecoID != null)
-			InventoryManager.Instance.AddItem(placedDecoID, 1);
+			InventoryManager.Instance.AddItemToInventory(placedDecoID);
 		else
 			Debug.LogError("Just removed an illegal decoration?");		
 		

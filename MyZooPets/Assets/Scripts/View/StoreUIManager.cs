@@ -252,7 +252,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					}
 				}
 				
-				InventoryManager.Instance.AddItem(itemID, 1);
+				InventoryManager.Instance.AddItemToInventory(itemID);
 				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				
@@ -292,7 +292,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				if(!isDecorationTutorialDone && OnDecorationItemBought != null)
 					OnDecorationItemBought(this, EventArgs.Empty);
 					
-				InventoryManager.Instance.AddItem(itemID, 1);
+				InventoryManager.Instance.AddItemToInventory(itemID);
 
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
 				

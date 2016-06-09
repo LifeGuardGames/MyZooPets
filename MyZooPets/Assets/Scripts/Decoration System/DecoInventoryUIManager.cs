@@ -92,7 +92,7 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		return shopButton;
 	}
 
-	//Event listener. listening to when new item is added to the deco inventory
+	// Listening to when new item is added to the deco inventory
 	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs e){
 		if(e.IsItemNew){
 			SpawnInventoryItemInPanel(e.InvItem);

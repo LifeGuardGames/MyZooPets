@@ -18,7 +18,7 @@ public enum StoreShortcutType{
 public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
 	public static EventHandler<EventArgs> OnDecorationItemBought;
-	public GameObject grid;
+	public GridLayoutGroup grid;
 	public GameObject itemStorePrefab;		//basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject itemSpritePrefab; 	// item sprite for inventory
@@ -30,7 +30,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public GameObject storeBgPanel;			// the bg of the store (sub panel and base panel)
 	public GameObject backButton; 			// exit button reference
 	public GameObject prevTab;
-	private Vector3 gridStartPosition;
+	private float gridStartPositionX;
 
 	// store related sounds
 	public string soundChangeTab;
@@ -66,7 +66,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			(-1f * (CameraManager.Instance.NativeWidth / 2)) - itemArea.transform.localPosition.x,
 			gridPosition.y, gridPosition.z);*/
 
-		gridStartPosition = grid.transform.position;
+		gridStartPositionX = grid.GetComponent<RectTransform>().position.x;
 	}
 
 	/// <summary>
@@ -372,10 +372,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					Image imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<Image>();
 					imageSprite.sprite = SpriteCacheManager.GetSprite("iconDeco" + tabParent.name + "2");
 
-					// Call resizer
-					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
-					resizer.enabled = true;	// Resize automatically
-
+					//Debug.Log(tabParent.name);
 					// If the gate xml has the deco type allowed, enable button
 					if(unlockedDecoList.Contains(tabParent.name)){
 						ShowActiveTab(tabParent.FindChild("Tab"));
@@ -437,31 +434,42 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		if(currentPage == "Food"){
 			//No sub category so retrieve a list of all food
 			List<Item> foodList = ItemManager.Instance.FoodList;
-			
+			int itemCount = 0;
 			foreach(Item itemData in foodList){
 				if(!itemData.IsSecretItem){
-					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+					StoreItemEntryUIController.CreateEntry(grid.gameObject, itemStorePrefabStats, itemData);
+					itemCount++;
 				}
 			}
+			// Adjust the grid height based on the height of the cell and spacing
+			float gridWidth = itemCount * .5f * (grid.cellSize.x + grid.spacing.x);
+			grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.cellSize.y);
 		}
+
 		else if(currentPage == "Items"){
 			//No sub category so retrieve a list of all item
 			List<Item> usableList = ItemManager.Instance.UsableList;
 			
 			foreach(Item itemData in usableList){
 				if(!itemData.IsSecretItem){
+					int itemCount = 0;
 					// Need emergency inhaler shortcut, only show emergency inhaler
 					if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
 						if(itemData.ID == "Usable0"){
-							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+							itemCount++;
+							StoreItemEntryUIController.CreateEntry(grid.gameObject, itemStorePrefabStats, itemData);
 							break;
 						}
 						continue;
 					}
 					// Default case, show everything
 					else{	
-						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+						StoreItemEntryUIController.CreateEntry(grid.gameObject, itemStorePrefabStats, itemData);
+						itemCount++;
 					}
+					// Adjust the grid height based on the height of the cell and spacing
+					float gridWidth = itemCount * .5f * (grid.cellSize.x + grid.spacing.x);
+					grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.cellSize.y);
 				}
 			}
 		}
@@ -490,12 +498,16 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				//imageButtonSeletected.pressedSprite = "buttonCategoryActive";
 				imageButtonSeletected.enabled = false;
 				imageButtonSeletected.enabled = true;
-
+				int itemCount = 0;
 				foreach(DecorationItem decoItemData in decoList){
 					if(!decoItemData.IsSecretItem){
-						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+						StoreItemEntryUIController.CreateEntry(grid.gameObject, itemStorePrefab, (Item)decoItemData);
+						itemCount++;
 					}
 				}
+				// Adjust the grid height based on the height of the cell and spacing
+				float gridWidth = itemCount *.5f* (grid.cellSize.x + grid.spacing.x);
+				grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.GetComponent<RectTransform>().sizeDelta.y);
 			}
 		}
 	}
@@ -629,7 +641,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		tab.GetComponent<Button>().gameObject.SetActive(false);
 		tab.FindChild("TabBackground").gameObject.GetComponent<Image>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<Image>().enabled = true;
-		tab.GetComponent<Collider>().enabled = false;
+		//tab.GetComponent<Collider>().enabled = false;
 	}
 
 	//------------------------------------------
@@ -637,6 +649,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// reset the clip range for the item area so that scrolling starts from the beginning
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
-		grid.transform.position = gridStartPosition;
+		grid.transform.position = new Vector3 (gridStartPositionX, grid.transform.position.y, grid.transform.position.z);
 	}
 }

@@ -12,10 +12,7 @@ using UnityEngine.UI;
 
 public class MinigameLife : MonoBehaviour{
 	// index of this life
-	public int nIndex;
-	
-	// the sprite that this life is uing
-	public Image sprite;
+	public List<Image> Inhalers;
 	
 	// particle systems for this object
 	public ParticleSystemController systemOff;
@@ -26,53 +23,43 @@ public class MinigameLife : MonoBehaviour{
 	// the state of this life
 	//private bool bOn;
 	
-	void Start(){
-		// FFFFFFUFUUUUUUUUUUU
-		if(NinjaManager.Instance != null){
-			NinjaManager.OnNewGame += OnNewGame;
-			NinjaManager.OnLivesChanged += OnLivesChanged;			
-		}
-	}
-
-	void OnDestroy(){
-		if(NinjaManager.Instance != null){
-			NinjaManager.OnNewGame -= OnNewGame;
-			NinjaManager.OnLivesChanged -= OnLivesChanged;			
-		}
-	}
 	
 	//---------------------------------------------------
 	// OnNewGame()
 	// When the user restarts the game and a new game
 	// begins.
 	//---------------------------------------------------
-	private void OnNewGame(object sender, EventArgs args){
+	private void OnNewGame(){
 		// since a new game is beginning, toggle on
-		Toggle(true);
+		//Toggle(true);
 	}	
 	
 	//---------------------------------------------------
 	// OnLivesChanged()
 	//---------------------------------------------------
-	private void OnLivesChanged(object sender, LivesChangedArgs args){
+	public void OnLivesChanged(int changeInLife){
 		// get the number of lives there are
 		int nLives = GetLives();
-		int nChange = args.GetChange();
+		int nChange = changeInLife;
+		Debug.Log(nChange);
 		//Debug.Log("Preparing life..." + nLives + " " + nChange);
-		if(nChange < 0 && nLives + 1 == nIndex){
+		if(nChange < 0){
 			//Debug.Log("----Loosing a life");
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
-			Toggle(false);
+			Toggle(false, Inhalers[nLives]);
 
 			// Play the camera shake animation
 			if(Camera.main.GetComponent<Animation>() != null){
 				Camera.main.GetComponent<Animation>().Play();
+				if(nLives == 0) {
+					NinjaManager.Instance.GameOver();
+				}
 			}
 		}
-		else if(nChange > 0 && nLives == nIndex){
+		else if(nChange > 0){
 			//Debug.Log("---Gaining a life");
 			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
-			Toggle(true);
+			Toggle(true, Inhalers[nLives]);
 		}
 	}
 	
@@ -88,14 +75,14 @@ public class MinigameLife : MonoBehaviour{
 	// Toggle()
 	// Turn this life on or off.
 	//---------------------------------------------------	
-	public void Toggle(bool bOn){
+	public void Toggle(bool bOn, Image inhal){
 		//Debug.Log("TOGGLING " + bOn);
 		// cache the state of this life
 		//this.bOn = bOn;
-		
+		Debug.Log(bOn);
 		// change the tint based on on/off
 		Color tint = bOn ? new Color(255, 255, 255, 255) : new Color(0, 0, 0, 255);
-		sprite.color = tint;
+		inhal.color = tint;
 		
 		// play the particle system associated with this toggle, if it exists
 		ParticleSystemController system = bOn ? systemOn : systemOff;

@@ -41,18 +41,11 @@ public class NinjaTrigger : MonoBehaviour{
 		// we don't want our objects colliding with each other
 		GetComponent<Rigidbody>().detectCollisions = false;	
 		
-		// event listeners
-		NinjaManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
-		NinjaManager.OnNewGame += OnNewGame;				// new game	
 
 		AudioManager.Instance.PlayClip(strSoundLaunch, variations:3);
 	}
 	
-	void OnDestroy(){
-		// event listeners
-		NinjaManager.OnStateChanged -= OnGameStateChanged; 	// game state changes so the character can react appropriately
-		NinjaManager.OnNewGame -= OnNewGame;				// new game			
-	}
+
 	
 	//---------------------------------------------------
 	// OnCut()
@@ -198,8 +191,8 @@ public class NinjaTrigger : MonoBehaviour{
 
 		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
 		// despite the game being over (because the object was becoming invisible).
-		MinigameStates eState = NinjaManager.Instance.GetGameState();
-		if(eState == MinigameStates.GameOver || eState == MinigameStates.Restarting)
+
+		if(NinjaManager.Instance.isGameOver)
 			return;	
 		
 		// if the object is going invisible and was cut, just destroy it

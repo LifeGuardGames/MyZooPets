@@ -32,6 +32,7 @@ public class NinjaTutorial : MinigameTutorial {
 				GameObject.Destroy(trigger1Object);
 			}
 		}
+		NinjaManager.Instance.isTutorialRunning = false;
 
 		if(swipeTutObject != null)
 			GameObject.Destroy(swipeTutObject);

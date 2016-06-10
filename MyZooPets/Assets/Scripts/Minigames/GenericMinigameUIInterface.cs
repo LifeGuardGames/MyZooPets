@@ -27,7 +27,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			return ShooterGameManager.Instance.GetMinigameKey();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
-			return NinjaManager.Instance.GetMinigameKey();
+			return NinjaManager.Instance.MinigameKey;
 		}
 		else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
@@ -49,7 +49,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			ShooterGameManager.Instance.PauseGame(isShow);
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
-			Debug.LogWarning("PauseGame not set up for TriggerNinja");
+			NinjaManager.Instance.PauseGame(isShow);
 		}
 		else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
@@ -130,7 +130,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			ShooterGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
-			Debug.LogWarning("OnRestart not set up for Shooter");
+			NinjaManager.Instance.NewGame();
 		}
 		else { //TODO: Add SceneUtils.MEMORY to OnResume, OnRestart, and QuitGame
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
@@ -151,7 +151,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			ShooterGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
-			//NinjaManager.Instance.QuitGame();
+			NinjaManager.Instance.QuitGame();
 		}
 		else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);

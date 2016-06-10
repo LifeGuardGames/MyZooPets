@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NinjaManager : MinigameManager<NinjaManager>{
+public class NinjaManager : NewMinigameManager<NinjaManager>{
 	public float comboMaxTime;				// max time between cuts for a combo
 	public GestureTrail trail; 				// the gesture trail that follows the user's finger around
 	public float timeBetweenSpawnGroups;	// time between spawn groups
@@ -23,27 +23,30 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	private List<NinjaDataEntry> currentTriggerEntries;		// current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection;	// record the last drag direction
 	public bool isBouncyTime = false;
+	public bool isTutorialRunning = false;
+	private bool isPlaying = false;
+	public bool isGameOver = true;
+	private int lives;
+	public MinigameLife life;
 
 	void Awake(){
 		Application.targetFrameRate = 60;
+		minigameKey = "Ninja";
 		quitGameScene = SceneUtils.BEDROOM;
+		rewardMoneyMultiplier = 2;
+		rewardShardMultiplier = 4;
+		rewardXPMultiplier = 0.01f;
 	}
 
 	protected override void _Start(){
-	}
+		
+    }
 	
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
 
 	public Vector2 GetTrailDeltaMove(){
 		return trailDeltaMove;
 	}
 			
-	public override int GetReward(MinigameRewardTypes eType){
-		// for now, just use the standard way
-		return GetStandardReward(eType);
-	}
 
 	public void IncreaseChain(){
 		chain++;
@@ -83,7 +86,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	}	
 
 	public void IncreaseCombo(int num){
-		if(!IsTutorialRunning()){
+		if(!isTutorialRunning){
 			// increase the combo
 			int nCombo = GetCombo();
 			nCombo += num;
@@ -96,7 +99,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 
 	void OnDrag(DragGesture gesture){
 		// check is playing
-		if(GetGameState() != MinigameStates.Playing){
+		if(!isPlaying){
 			return;
 		}
 		
@@ -119,11 +122,13 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		
 		switch(gesture.Phase){
 		case ContinuousGesturePhase.Updated:
-
+			
 			GameObject go = gesture.Selection;
+			
 			if(go){
-				//Debug.Log("Touching " + go.name);
-				NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
+					Debug.Log(go.name);
+					//Debug.Log("Touching " + go.name);
+					NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
 				
 				// if the trigger is null, check the parent...a little hacky, but sue me!
 				if(trigger == null){
@@ -138,8 +143,9 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		}
 	}
 
-	protected override void _NewGame(){		
+	protected override void _NewGame(){
 		// reset variables
+		lives = 3;
 		comboTime = 0;
 		combo = 0;
 		bestCombo = 0;
@@ -151,15 +157,22 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		bonusVisualController.StopBonusVisuals();
 		bonusRound = false;
 		spawning = true;
+		isPlaying = true;
+		isGameOver = false;
 
-		if(IsTutorialOn() && (IsTutorialOverride() || 
-			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY))){
+		if(IsTutorialOn() || 
+			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)){
 
 			StartTutorial();
 		}
 	}
-			
-	protected override void _GameOver(){
+
+	protected override void _QuitGame() {
+		Application.targetFrameRate = 30;
+	}
+
+	protected override void _GameOver() {
+	isPlaying = false;
 		Time.timeScale = 1.0f;
 		// Reset all states - Remove any visuals for combos
 		bonusVisualController.StopBonusVisuals();
@@ -168,23 +181,37 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 
 		// send out combo task
 		int nBestCombo = GetComboBest();
-		WellapadMissionController.Instance.TaskCompleted("Combo" + GetMinigameKey(), nBestCombo);
-		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()], bonusRoundCounter);
+		WellapadMissionController.Instance.TaskCompleted("Combo" + MinigameKey, nBestCombo);
+		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey], bonusRoundCounter);
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "NinjaLeaderBoard");
 #endif
 	}
 
-	public override string GetMinigameKey(){
-		return "Ninja";	
+	protected override void _GameOverReward() {
+
 	}
 
-	protected override bool IsTutorialOn(){
+	protected override void _PauseGame(bool isShow) {
+		if(!isShow) {
+			Time.timeScale = 0.0f;
+		}
+
+		else {
+			Time.timeScale = 1.0f;
+        }
+	}
+
+	protected override void _ContinueGame() {
+		
+	}
+
+	protected bool IsTutorialOn(){
 		return Constants.GetConstant<bool>("IsTriggerSlashTutorialOn");
 	}
 
-	protected override void _Update(){
-		if(IsTutorialRunning()){
+	void Update(){
+		if(isTutorialRunning || isGameOver){
 			return;
 		}
 
@@ -366,7 +393,7 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	/// </summary>
 	/// <returns>The scoring key.</returns>
 	private NinjaScoring GetScoringKey(){
-		int nScore = GetScore();
+		int nScore = Score;
 		NinjaScoring eScore;
 
 		if(bonusRound == true){
@@ -439,18 +466,19 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 		
 		// reset the combo down to 0
 		SetCombo(0);
-		if(GetScore() > 50){
+		if(Score > 50){
 			Time.timeScale = 1.25f;
 		}
-		else if(GetScore() > 150){
+		else if(Score > 150){
 			Time.timeScale = 1.5f; 
 		}
-		else if (GetScore() > 250){
+		else if (Score > 250){
 			Time.timeScale = 2.0f;
 		}
 	}
 	
 	private void StartTutorial(){
+		isTutorialRunning = true;
 		SetTutorial(new NinjaTutorial());
 	}
 
@@ -482,5 +510,14 @@ public class NinjaManager : MinigameManager<NinjaManager>{
 	IEnumerator EndBounceTime(){
 		yield return new WaitForSeconds(10.0f);
 		isBouncyTime = false;
+	}
+
+	public int GetLives() {
+		return lives;
+	}
+
+	public void UpdateLives(int _lives) {
+		lives += _lives;
+		life.OnLivesChanged(_lives);
 	}
 }

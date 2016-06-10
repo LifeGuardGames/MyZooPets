@@ -39,7 +39,7 @@ public class NinjaTriggerTarget : NinjaTrigger{
 		
 	protected override void _OnCut(){
 		// award points
-		NinjaManager.Instance.UpdateScore(points);
+		NinjaManager.Instance._UpdateScore(points);
 
 		if(!NinjaManager.Instance.bonusRound){
 			NinjaManager.Instance.IncreaseChain();

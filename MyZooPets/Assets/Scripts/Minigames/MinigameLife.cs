@@ -43,7 +43,7 @@ public class MinigameLife : MonoBehaviour{
 		int nChange = changeInLife;
 		Debug.Log(nChange);
 		//Debug.Log("Preparing life..." + nLives + " " + nChange);
-		if(nChange < 0){
+		if(nChange < 0 && nLives -nChange >= 0){
 			//Debug.Log("----Loosing a life");
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
 			Toggle(false, Inhalers[nLives]);
@@ -52,11 +52,12 @@ public class MinigameLife : MonoBehaviour{
 			if(Camera.main.GetComponent<Animation>() != null){
 				Camera.main.GetComponent<Animation>().Play();
 				if(nLives == 0) {
+					Debug.Log("GameOver");
 					NinjaManager.Instance.GameOver();
 				}
 			}
 		}
-		else if(nChange > 0){
+		else if(nChange > 0 && nLives - nChange >= 0) {
 			//Debug.Log("---Gaining a life");
 			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
 			Toggle(true, Inhalers[nLives]);
@@ -71,6 +72,12 @@ public class MinigameLife : MonoBehaviour{
 		return nLives;
 	}
 	
+	public void Reset() {
+		foreach(Image inhalr in Inhalers) {
+			Toggle(true, inhalr);
+		}
+	}
+
 	//---------------------------------------------------
 	// Toggle()
 	// Turn this life on or off.

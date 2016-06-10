@@ -7,4 +7,8 @@ public class BouncyPowerUp : NinjaTrigger {
 		NinjaManager.Instance.BeginBoucePowerUp();
 		Destroy(this.gameObject);
 	}
+
+	void OnBecameVisible() {
+		this.GetComponent<Rigidbody>().detectCollisions = true;
+	}
 }

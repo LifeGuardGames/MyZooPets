@@ -22,4 +22,8 @@ public class NinjaTriggerBomb : NinjaTrigger {
 		// then destroy the object
 		Destroy(gameObject);		
 	}
+
+	void OnBecameVisible() {
+		this.GetComponent<Rigidbody>().detectCollisions = true;
+	}
 }

@@ -9,13 +9,13 @@ using System.Collections.Generic;
 public class FloatyController : MonoBehaviour {
     public Vector3 floatingUpPos;
     public float floatingTime;
-    public List<NGUIAlphaTween> alphaScripts = new List<NGUIAlphaTween>(); //all the alpha script in this floaty prefab
+    public List<FadeTweener> alphaScripts = new List<FadeTweener>(); //all the alpha script in this floaty prefab
 
 	void Start () {
         FloatUp();
-        foreach(NGUIAlphaTween alphaScript in alphaScripts){
+        foreach(FadeTweener alphaScript in alphaScripts){
 			if(alphaScript.gameObject.activeSelf){	// NOTE: Floaty stats will bypass this funtion call
-            	alphaScript.StartAlphaTween();
+            	alphaScript.FadeText();
 			}
         }
 	}

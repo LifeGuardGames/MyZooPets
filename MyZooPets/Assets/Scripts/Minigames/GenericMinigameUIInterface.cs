@@ -70,10 +70,10 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			StartCoroutine(RunnerGameManager.Instance.StartTutorial());
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			//ShooterGameManager.Instance.StartTutorial();
+			ShooterGameManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
-			//NinjaManager.Instance.StartTutorial();
+			NinjaManager.Instance.StartTutorial();
 		}
 		else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);

@@ -207,7 +207,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	}
 
 
-	private void StartTutorial(){
+	public void StartTutorial(){
 		ShooterGameTutorial tut = new ShooterGameTutorial();
 		tut.ProcessStep(0);
 	}

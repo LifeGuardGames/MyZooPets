@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class NinjaManager : NewMinigameManager<NinjaManager>{
 	public float comboMaxTime;				// max time between cuts for a combo
@@ -11,7 +12,8 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	public int bonusRoundEnemies;
 	public int bonusRoundCounter;			// tracks number of boss round
 	public int chain = 0;					// number of enemies killed with out hitting a bomb 
-	public BonusVisualController bonusVisualController;		// Controller that controls the bonus UI
+	public BonusVisualController bonusVisualController;     // Controller that controls the bonus UI
+	public Text scoreText;
 
 	private bool spawning = true;			// stops the spawning to prevent the play from being horribly murdered mid bonus round
 	private float comboTime = 0;			// time counter
@@ -172,12 +174,12 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	}
 
 	protected override void _GameOver() {
-	isPlaying = false;
+		isGameOver = true;
 		Time.timeScale = 1.0f;
 		// Reset all states - Remove any visuals for combos
 		bonusVisualController.StopBonusVisuals();
 		bonusRound = false;
-		spawning = true;
+		spawning = false;
 
 		// send out combo task
 		int nBestCombo = GetComboBest();
@@ -193,7 +195,8 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	}
 
 	protected override void _PauseGame(bool isShow) {
-		if(!isShow) {
+		
+		if(!isShow && !isGameOver) {
 			Time.timeScale = 0.0f;
 		}
 
@@ -203,7 +206,11 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	}
 
 	protected override void _ContinueGame() {
-		
+		lives = 3;
+		bonusRound = false;
+		spawning = true;
+		isPlaying = true;
+		isGameOver = false;
 	}
 
 	protected bool IsTutorialOn(){
@@ -431,11 +438,16 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 			OnComboEnd();
 	}
 
+	public void _UpdateScore(int score) {
+		UpdateScore(score);
+		scoreText.text = Score.ToString();
+	}
+
 	private void OnComboEnd(){
 		// give the player an additional point for each level of their combo
 		int combo = GetCombo();
 		if(combo > 2){
-			UpdateScore(combo);
+			_UpdateScore(combo);
 				        	
 			// get the right text for combo
 			string strText = Localization.Localize("NINJA_COMBO");
@@ -449,7 +461,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	
 			// set up the hashtable full of options
 			Hashtable option = new Hashtable();
-			option.Add("parent", GameObject.Find("Anchor-Center"));
+			option.Add("parent", GameObject.Find("Canvas"));
 			option.Add("text", strText);
 			option.Add("prefab", "NinjaComboFloatyText");
 			option.Add("position", position);
@@ -477,8 +489,10 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 		}
 	}
 	
-	private void StartTutorial(){
+	public void StartTutorial(){
 		isTutorialRunning = true;
+		isPlaying = true;
+		isGameOver = false;
 		SetTutorial(new NinjaTutorial());
 	}
 

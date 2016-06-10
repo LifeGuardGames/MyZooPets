@@ -56,11 +56,11 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 	}
 
 	protected override void _OpenUI(){
-		background.BlackOutScreen();
+		background.FadeImage();
 	}
 
 	protected override void _CloseUI(){
-		background.LightsUpScreen();
+		background.FadeUpImageScreen();
 		Invoke("DisableBackground", fadeOutDuration + 0.5f);
 	}
 

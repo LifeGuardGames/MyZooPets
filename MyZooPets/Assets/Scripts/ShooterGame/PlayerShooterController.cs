@@ -58,15 +58,12 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 		switch(state){
 		case PlayerStateTypes.Happy:
 			characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Happy);
-			currentFireBall = fireBallPrefabs[0];	// Big fireball prefab
 			break;
 		case PlayerStateTypes.Neutral:
 			characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Neutral);
-			currentFireBall = fireBallPrefabs[1];	// Medium fireball prefab
 			break;
 		case PlayerStateTypes.Distressed:
 			characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Distressed);
-			currentFireBall = fireBallPrefabs[2];	// Small fireball prefab
 			break;
 		}
 	}
@@ -188,9 +185,6 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 			Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
 
-			if(isPiercing) {
-				currentFireBall = fireBallPrefabs[3];
-			}
 			Debug.Log(currentFireBall.name);
 			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 			ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();

@@ -17,10 +17,14 @@ public class ShooterEnemy : MonoBehaviour{
 	// Use this for initialization
 	void Awake(){
 		player = GameObject.FindWithTag("Player");
-		health += ShooterGameManager.Instance.waveNum % 10;
-        damage += ShooterGameManager.Instance.waveNum % 10;
+		health += ShooterGameManager.Instance.waveNum / 10;
+        damage += ShooterGameManager.Instance.waveNum / 10;
+		ShooterGameManager.onRestart += WipeOnRestart;
 	}
 
+	public void WipeOnRestart() {
+		StartCoroutine("DestroyEnemy");
+	}
 
 	// Update is called once per frame
 	void Update(){
@@ -28,28 +32,14 @@ public class ShooterEnemy : MonoBehaviour{
 		if(ShooterGameManager.Instance.isPaused){
 			LeanTween.pause(this.gameObject);
 		}
+		else {
+			LeanTween.resume(this.gameObject);
+		}
 		if(ShooterGameManager.Instance.isGameOver){
 			StartCoroutine(DestroyEnemy());
 		}
 	}
 
-	void OnGameStateChanged(object sender, GameStateArgs args){
-		MinigameStates eState = args.GetGameState();
-		switch(eState){
-		case MinigameStates.GameOver:
-			StartCoroutine(DestroyEnemy());
-			break;
-		case MinigameStates.Paused:
-			LeanTween.pause(this.gameObject);
-			break;
-		case MinigameStates.Playing:
-			LeanTween.resume(this.gameObject);
-			break;
-		case MinigameStates.Restarting:
-			StartCoroutine(DestroyEnemy());
-			break;
-		}
-	}
 
 	// handles collision not too much special there
 	void OnTriggerEnter2D(Collider2D collider){
@@ -79,7 +69,8 @@ public class ShooterEnemy : MonoBehaviour{
 
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
 	private IEnumerator DestroyEnemy(){
-		if(isMarkedForDestroy){		// Make sure this only gets called once
+		if(isMarkedForDestroy){     // Make sure this only gets called once
+			ShooterGameManager.onRestart -= WipeOnRestart;
 			isMarkedForDestroy = false;
 			particleDead.gameObject.SetActive(true);
 			AudioManager.Instance.PlayClip("shooterEnemyDie", variations:3);

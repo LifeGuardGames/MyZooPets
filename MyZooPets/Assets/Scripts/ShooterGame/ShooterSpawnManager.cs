@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public GameObject enemyPrefab;		//enemy prefab
-	public bool isSpawing;
 	private float lastSpawn;
 	public float spawnTime;
 
@@ -14,25 +13,10 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 
 	// prevents finishing the last wave
 	public void Reset(){
-		StopCoroutine("SpawnEnemies");
+		StopAllCoroutines();
 		spawningList = null;
-		isSpawing = true;
 	}
 
-	void OnGameStateChanged(object sender, GameStateArgs args){
-		MinigameStates eState = args.GetGameState();
-		switch(eState){
-		case MinigameStates.GameOver:
-			StopCoroutine("SpawnEnemies");
-			break;
-		case MinigameStates.Paused:
-			isSpawing = false;
-			break;
-		case MinigameStates.Playing:
-			isSpawing = true;
-			break;
-		}
-	}
 
 	public void Quit(){
 		StopCoroutine("SpawnEnemies");
@@ -62,10 +46,10 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
-	IEnumerator SpawnEnemies(){
-		if(!ShooterGameManager.Instance.isPaused && !ShooterGameManager.Instance.isGameOver) {
-			for(int i = 0; i < spawningList.Count; i++) {
-				yield return new WaitForSeconds(1.0f);
+	IEnumerator SpawnEnemies() {
+		yield return new WaitForSeconds(1.0f);
+		if(ShooterGameEnemyController.Instance.enemiesInWave > 0) {
+			if(!ShooterGameManager.Instance.isPaused && !ShooterGameManager.Instance.isGameOver) {
 				int randomPositionIndex = Random.Range(0, 3);
 
 				//they are spawned in more of a weighted list fashion 
@@ -80,10 +64,22 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 					GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
 					GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
 				}
+				StartCoroutine("SpawnEnemies");
+			}
+			else {
+				StartCoroutine("WaitASec");
 			}
 		}
-		else {
-			StopCoroutine("SpawnEnemies");
-		}
 	}
+	
+
+	IEnumerator WaitASec() {
+		yield return new WaitForSeconds(0.1f);
+		if(ShooterGameManager.Instance.isPaused) {
+			StartCoroutine(WaitASec());
+		}
+		else {
+			StartCoroutine("SpawnEnemies");
+		}
+    }
 }

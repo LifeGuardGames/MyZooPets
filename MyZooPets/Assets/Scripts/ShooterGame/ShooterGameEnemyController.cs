@@ -22,6 +22,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 	public ImmutableDataWave buildWave(int waveNumber){
 		int difficulty = 0;
 		if(waveNumber % 10 == 0 && waveNumber !=0){
+		//Debug.Log(waveNumber);
+		//if(waveNumber == 1) {
+			Debug.Log("hit");
 			return DataLoaderWaves.GetData("Boss Wave_1");
 		}
 		if(waveNumber == 0){

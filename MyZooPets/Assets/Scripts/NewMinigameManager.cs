@@ -67,7 +67,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		rewardMoneyAux = 0;
 		rewardShardAux = 0;
 		// Decrease the pet's hunger after each new game
-		StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
+		//StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
 
 		_NewGame();
 	}

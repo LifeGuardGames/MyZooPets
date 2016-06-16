@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	public EventHandler<EventArgs> OnTutorialStepDone;
@@ -18,6 +19,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	public bool isPaused = false;
 	public bool isGameOver = false;
 	public Text scoreText;
+	public delegate void OnRestart();
+	public static event OnRestart onRestart;
 
 	private ShooterUIManager shooterUI;
 
@@ -43,7 +46,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	}
 
 	protected override void _NewGame(){
-			if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)){
+		if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)){
 			if(inTutorial){
 				shooterUI.Reset();
 				PlayerShooterController.Instance.Reset();
@@ -51,6 +54,9 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 			}
 		}
 		else {
+			if(onRestart != null) {
+				onRestart();
+			}
 			isGameOver = false;
 			inTutorial = false;
 			waveNum = 0;
@@ -80,7 +86,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		isGameOver = false;
 		PlayerShooterController.Instance.playerHealth = 5;
 		PlayerShooterController.Instance.ChangeFire();
-		ShooterSpawnManager.Instance.isSpawing = true;
 		ShooterGameEnemyController.Instance.BuildEnemyList();
     }
 
@@ -134,7 +139,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		UpdateScore(amount);
 		scoreText.text = score.ToString();
 		powerUpScore += amount;
-		if(powerUpScore > (75 + 25 * (waveNum %10))){
+		Debug.Log(waveNum);
+		if(powerUpScore > (75 + 25 * (waveNum /10))){
 			powerUpScore = 0;
 			ShooterSpawnManager.Instance.SpawnPowerUp();
 		}
@@ -188,14 +194,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	protected override void _PauseGame(bool isShow) {
 		Debug.Log(isShow);
 		isPaused = !isShow;
-		if(isPaused) {
-			ShooterSpawnManager.Instance.isSpawing = false;
-			
-		}
-		else {
-			ShooterSpawnManager.Instance.isSpawing = true;
-		}
-		
 	}
 
 

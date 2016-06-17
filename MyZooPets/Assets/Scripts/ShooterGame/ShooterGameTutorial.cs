@@ -59,9 +59,9 @@ public class ShooterGameTutorial {
 			ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 			ShooterInhalerManager.Instance.proceed += MoveAlong;
 			GameObject useInhalerTut = (GameObject)Resources.Load("ShooterInhalerTutorial");
-			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), useInhalerTut);
+			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Canvas"), useInhalerTut);
 			tutorialFinger = (GameObject)Resources.Load("ShooterPressTut");
-			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight"), tutorialFinger);
+			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Canvas"), tutorialFinger);
 			break;
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
 		case 7:
@@ -78,9 +78,9 @@ public class ShooterGameTutorial {
 			ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 			ShooterInhalerManager.Instance.proceed += MoveAlong;
 			useInhalerTut = (GameObject)Resources.Load("ShooterInhalerTutorial");
-			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), useInhalerTut);
+			tutorialInhalerUse = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Canvas"), useInhalerTut);
 			tutorialFinger = (GameObject)Resources.Load("ShooterPressTut");
-			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-BottomRight"), tutorialFinger);
+			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Canvas"), tutorialFinger);
 			break;
 			case 9:
 				Debug.Log("step 9");

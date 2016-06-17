@@ -20,6 +20,11 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 		}
 	}
 
+	public void Reset() {
+		combo = 5;
+		missed = 0;
+	}
+
 	//on button Tap
 	public void ShooterGameInhalerButton(){
 		hit = true;

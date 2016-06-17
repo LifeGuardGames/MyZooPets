@@ -64,6 +64,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 			scoreText.text = "0";
 			ShooterSpawnManager.Instance.Reset();
 			ShooterGameEnemyController.Instance.Reset();
+			ShooterInhalerManager.Instance.Reset();
 			shooterUI.Reset();
 			PlayerShooterController.Instance.Reset();
 			RemoveInhalerFingerTutorial();
@@ -139,7 +140,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		UpdateScore(amount);
 		scoreText.text = score.ToString();
 		powerUpScore += amount;
-		Debug.Log(waveNum);
 		if(powerUpScore > (75 + 25 * (waveNum /10))){
 			powerUpScore = 0;
 			ShooterSpawnManager.Instance.SpawnPowerUp();

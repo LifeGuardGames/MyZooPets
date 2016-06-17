@@ -185,7 +185,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 
 			Vector3 lookPos = Camera.main.ScreenToWorldPoint(dir);
 
-			Debug.Log(currentFireBall.name);
+
 			GameObject instance = Instantiate(currentFireBall, bulletSpawnLocation.transform.position, currentFireBall.transform.rotation) as GameObject;
 			ShooterGameBulletScript bulletScript = instance.GetComponent<ShooterGameBulletScript>();
 			bulletScript.target = lookPos;

@@ -83,7 +83,6 @@ public class ShooterGameTutorial {
 			fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Canvas"), tutorialFinger);
 			break;
 			case 9:
-				Debug.Log("step 9");
 				GameObject.Destroy(tutorialInhalerUse);
 				GameObject.Destroy(fingerPos);
 				ShooterGameManager.Instance.FinishedTutorial();

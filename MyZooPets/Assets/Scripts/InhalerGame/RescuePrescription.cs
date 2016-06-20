@@ -48,7 +48,7 @@ public class RescuePrescription : InhalerPart{
 #endif
 
     private void PrescriptionAnimation(){
-        Vector3 to = new Vector3(transform.localPosition.x, 1.5f, transform.localPosition.z);
+        Vector3 to = new Vector3(transform.localPosition.x, 5.8f, transform.localPosition.z);
         LeanTween.moveLocal(gameObject, to, 0.5f);
     }
 

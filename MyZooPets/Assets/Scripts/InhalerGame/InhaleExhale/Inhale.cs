@@ -94,7 +94,6 @@ public class Inhale : InhalerPart{
 
 	private void BreatheInEndEventHandler(object sender, EventArgs args){
 		LgInhalerAnimationEventHandler.BreatheInEndEvent -= BreatheInEndEventHandler;
-		InhalerGameProgressBarUIManager.Instance.UpdateNodeColors();
 		AudioManager.Instance.FadeOutPlayNewBackground("inhalerCapstone", isLoop: false);
 		petAnimator.SetTrigger("Backflip");
 

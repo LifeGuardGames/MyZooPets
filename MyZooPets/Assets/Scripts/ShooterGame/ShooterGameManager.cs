@@ -57,6 +57,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 			if(onRestart != null) {
 				onRestart();
 			}
+			StopAllCoroutines();
 			isGameOver = false;
 			inTutorial = false;
 			waveNum = 0;

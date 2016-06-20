@@ -12,8 +12,10 @@ public class MiniPetPowerUp : MonoBehaviour {
 	}
 
 	public void WakeUp() {
-		this.gameObject.SetActive(true);
-		StartCoroutine("Fire");
+		if(!this.gameObject.activeSelf) {
+			this.gameObject.SetActive(true);
+			StartCoroutine("Fire");
+		}
 	}
 
 	IEnumerator Fire() {

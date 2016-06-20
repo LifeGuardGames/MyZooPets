@@ -17,8 +17,8 @@ public class ShooterEnemy : MonoBehaviour{
 	// Use this for initialization
 	void Awake(){
 		player = GameObject.FindWithTag("Player");
-		health += ShooterGameManager.Instance.waveNum / 10;
-        damage += ShooterGameManager.Instance.waveNum / 10;
+		health += ShooterGameManager.Instance.waveNum / 5;
+        damage += ShooterGameManager.Instance.waveNum / 5;
 		ShooterGameManager.onRestart += WipeOnRestart;
 	}
 

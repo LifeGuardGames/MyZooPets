@@ -140,7 +140,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		UpdateScore(amount);
 		scoreText.text = score.ToString();
 		powerUpScore += amount;
-		if(powerUpScore > (75 + 25 * (waveNum /10))){
+		if(powerUpScore > (75 + 25 * (waveNum /5))){
 			powerUpScore = 0;
 			ShooterSpawnManager.Instance.SpawnPowerUp();
 		}

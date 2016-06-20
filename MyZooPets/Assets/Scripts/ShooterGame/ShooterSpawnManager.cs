@@ -40,10 +40,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 
 	public void SpawnPowerUp(){
 		int randPowerUp = Random.Range(5,8);
-		Debug.Log(DataLoaderShooterArmy.GetData("Mober_" + 7.ToString()).PrefabName);
-		GameObject spawnPrefab = Resources.Load("ShooterPowerUpMiniPet") as GameObject;
+		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_" + randPowerUp.ToString()).PrefabName) as GameObject;
 		int randomPositionIndex = Random.Range(0, 3);
-		Debug.Log(spawnPrefab.name);
 		GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
 	}
 

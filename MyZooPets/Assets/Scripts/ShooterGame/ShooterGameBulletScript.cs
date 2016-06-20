@@ -44,13 +44,13 @@ public class ShooterGameBulletScript : MonoBehaviour{
 			canHitPlayer = true;
 		}
 		else if (collider.gameObject.tag == "ShooterBouncyWallTop") {
-			target = new Vector3(-target.x, -target.y, target.z);
+			target = new Vector3(target.x, -target.y, target.z);
 			FindTarget();
 		}
 		else if(collider.gameObject.tag == "ShooterBouncyWallBottom") {
-			target = new Vector3(-target.x, -target.y, target.z);
-			speed = -speed;
+			target = new Vector3(target.x, target.y+ 500, target.z);
 			FindTarget();
+			target = new Vector3(target.x, target.y - 500, target.z);
 		}
 		else if(collider.gameObject.tag == "Player"){
 			if(canHitPlayer){

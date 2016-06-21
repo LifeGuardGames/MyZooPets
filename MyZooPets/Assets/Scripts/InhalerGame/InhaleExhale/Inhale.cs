@@ -64,7 +64,7 @@ public class Inhale : InhalerPart{
 				petAnimator.SetTrigger("BreatheIn");
 				
 				Hashtable option = new Hashtable();
-				option.Add("parent", GameObject.Find("Anchor-Center"));
+				option.Add("parent", GameObject.Find("Canvas"));
 				option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
 				option.Add("textSize", 100f);
 				option.Add("color", Color.white);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class FloatyUtil {
     private const int NGUI_FLOAT_YPOSITION = 100; //use this to make floaty object move up
@@ -57,15 +58,15 @@ public class FloatyUtil {
 				Debug.LogError("textSize cast invalid error: " + e.Message);
 			}
             
-            floaty.transform.Find("Label").localScale = new Vector3(textSize, textSize, 1);
+            floaty.transform.Find("Label").GetComponent<Text>().fontSize = (int)textSize;
         }
 
         if(option.ContainsKey("text")){
-            floaty.transform.Find("Label").GetComponent<UILabel>().text = (string) option["text"];
+            floaty.transform.Find("Label").GetComponent<Text>().text = (string) option["text"];
         }
 		
 		if(option.ContainsKey("color")){
-			floaty.transform.Find("Label").GetComponent<UILabel>().color = (Color) option["color"];
+			floaty.transform.Find("Label").GetComponent<Text>().color = (Color) option["color"];
 		}
 		
 		// If NOT prefab
@@ -75,7 +76,7 @@ public class FloatyUtil {
             if(option.ContainsKey("floatingUpPos"))
                 floatyController.floatingUpPos = (Vector3) option["floatingUpPos"];
             else
-                floatyController.floatingUpPos = new Vector3(0, NGUI_FLOAT_YPOSITION, 0);
+                floatyController.floatingUpPos = new Vector3(floatyController.transform.position.x, NGUI_FLOAT_YPOSITION, floatyController.transform.position.z);
 
             if(option.ContainsKey("floatingTime"))
                 floatyController.floatingTime = (float) option["floatingTime"];
@@ -115,47 +116,47 @@ public class FloatyUtil {
 		int offsetTracker = 1; // Each stat that is not 0 will offset from previous one
 		
 		if(option.ContainsKey("deltaPoints")){
-			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
+			Text label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<Text>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaPoints"];
 			
-			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
+			Image sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<Image>();
 			sprite.gameObject.SetActive(true);
-			sprite.spriteName = (string) option["spritePoints"];
+			sprite.sprite = SpriteCacheManager.GetSprite((string) option["spritePoints"]);
 			
 			offsetTracker++;
 		}
 		if(option.ContainsKey("deltaHealth")){
-			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
+			Text label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<Text>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaHealth"];
 			
-			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
+			Image sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<Image>();
 			sprite.gameObject.SetActive(true);
-			sprite.spriteName = (string) option["spriteHealth"];
+			sprite.sprite = SpriteCacheManager.GetSprite((string) option["spriteHealth"]);
 			
 			offsetTracker++;
 		}
 		if(option.ContainsKey("deltaMood")){
-			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
+			Text label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<Text>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaMood"];
 			
-			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
+			Image sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<Image>();
 			sprite.gameObject.SetActive(true);
-			sprite.spriteName = (string) option["spriteHunger"];
+			sprite.sprite = SpriteCacheManager.GetSprite((string) option["spriteHunger"]);
 			
 			offsetTracker++;
 		}
 		// Add more stats here in the future if needed
 		if(option.ContainsKey("deltaStars")){
-			UILabel label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<UILabel>();
+			Text label = floaty.transform.Find("Label_StatsChange" + offsetTracker).GetComponent<Text>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaStars"];
 			
-			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<UISprite>();
+			Image sprite = floaty.transform.Find("Sprite_StatsIcon" + offsetTracker).GetComponent<Image>();
 			sprite.gameObject.SetActive(true);
-			sprite.spriteName = (string) option["spriteStars"];
+			sprite.sprite = SpriteCacheManager.GetSprite((string) option["spriteStars"]);
 			
 			offsetTracker++;
 		}
@@ -184,10 +185,10 @@ public class FloatyUtil {
         }
 
         if(option.ContainsKey("text"))
-            floaty.transform.Find("Label_StatsChange").GetComponent<UILabel>().text = (string) option["text"];
+            floaty.transform.Find("Label_StatsChange").GetComponent<Text>().text = (string) option["text"];
 
         if(option.ContainsKey("spriteName"))
-            floaty.transform.Find("Sprite_StatsIcon").GetComponent<UISprite>().spriteName = (string) option["spriteName"];
+            floaty.transform.Find("Sprite_StatsIcon").GetComponent<Image>().sprite = SpriteCacheManager.GetSprite((string) option["spriteName"]);
     }
 
 	public static void SpawnFloatyFireCrystal(Hashtable option){
@@ -209,11 +210,11 @@ public class FloatyUtil {
 		}
 
 		if(option.ContainsKey("deltaShards")){
-			UILabel label = floaty.transform.Find("Label_StatsChange1").GetComponent<UILabel>();
+			Text label = floaty.transform.Find("Label_StatsChange1").GetComponent<Text>();
 			label.gameObject.SetActive(true);
 			label.text = (string)option["deltaShards"];
 			
-			UISprite sprite = floaty.transform.Find("Sprite_StatsIcon1").GetComponent<UISprite>();
+			Image sprite = floaty.transform.Find("Sprite_StatsIcon1").GetComponent<Image>();
 			sprite.gameObject.SetActive(true);
 		}
 	}

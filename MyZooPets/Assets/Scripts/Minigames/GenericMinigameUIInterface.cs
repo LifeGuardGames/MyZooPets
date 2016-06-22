@@ -122,6 +122,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			DoctorMatchManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
+			MemoryGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
 			RunnerGameManager.Instance.NewGame();
@@ -142,7 +143,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			DoctorMatchManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
-			//MemoryGameManager.Instance.QuitGame();
+			MemoryGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
 			RunnerGameManager.Instance.QuitGame();

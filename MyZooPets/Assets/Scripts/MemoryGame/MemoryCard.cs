@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /// <summary>
 /// Memory card controller.
@@ -11,10 +12,10 @@ public class MemoryCard : MonoBehaviour {
 	public string TriggerName{
 		get{ return triggerName; }
 	}
-	public UISprite coverSprite;
-	public UISprite triggerSprite;
+	public Image coverSprite;
+	public Image triggerSprite;
 	public UILocalize triggerLabelLocalize;
-	public GameObject NGUIParent;
+	public GameObject cardParent;
 
 	public float pressDownScale = 0.9f;
 	public float activeTweenTime = 0.2f;
@@ -36,9 +37,8 @@ public class MemoryCard : MonoBehaviour {
 
 		// Set components on start
 		if(isSprite){
-			triggerSprite.type = UISprite.Type.Simple;
-			triggerSprite.spriteName = triggerData.SpriteName;
-			triggerSprite.MakePixelPerfect();
+			Debug.Log(triggerData.SpriteName);
+			triggerSprite.sprite = SpriteCacheManager.GetSprite(triggerData.SpriteName);
 			triggerSprite.name = triggerData.SpriteName;
 			tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;	// Get grandfather
 			triggerLabelLocalize.transform.parent.gameObject.SetActive(false);	// Disable the unused half
@@ -138,7 +138,7 @@ public class MemoryCard : MonoBehaviour {
 	/// <param name="isSuccess">If set to <c>true</c> is success.</param>
 	public void FlipResult(bool isSuccess){
 		if(isSuccess){
-			LeanTween.scale(NGUIParent, new Vector3(0, 0, 0), 0.1f).setOnComplete(SuccessHelper);
+			LeanTween.scale(cardParent, new Vector3(0, 0, 0), 0.1f).setOnComplete(SuccessHelper);
 		}
 		else{
 			PlayFlipSequenceClose();

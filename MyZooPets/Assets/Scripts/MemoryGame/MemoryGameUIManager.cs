@@ -1,15 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.UI;
 
-public class MemoryGameUIManager : MinigameUI{
+public class MemoryGameUIManager : MonoBehaviour{
 
-	public UILabel labelComboScore;
-	public UISprite backboard;
+	public Text labelComboScore;
+	public Text score;
+	public Image backboard;
 	public TweenToggleDemux memoryHudDemux;
 
 	public void SetComboText(int comboScore){
 		labelComboScore.text = comboScore.ToString();
+	}
+
+	public void UpdateScoreText(int _score) {
+		score.text = _score.ToString();
 	}
 
 	public void StartBoard(){

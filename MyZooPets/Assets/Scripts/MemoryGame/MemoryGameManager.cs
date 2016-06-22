@@ -34,6 +34,9 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	void Awake(){
 		minigameKey = "MEMORY";
         quitGameScene = SceneUtils.BEDROOM;
+		rewardXPMultiplier = 0.01f;
+		rewardMoneyMultiplier = 24;
+		rewardShardMultiplier = 84;
 		isContinueAllowed = false;	// Disable continue game functionality for this game
 	}
 
@@ -42,10 +45,12 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 
 	protected override void _NewGame() {
 		if(IsTutorialOn() && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)) {
+			Debug.Log("tut");
 			StartTutorial();
 			tutButton.SetActive(true);
 		}
 		else {
+			Debug.Log("game");
 			isGameActive = true;
 			Reset();
         }
@@ -62,7 +67,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 
 	protected override void _GameOver() {
 		isGameActive = false;
-        memoryUI.FinishBoard();
+        //memoryUI.FinishBoard();
 	}
 
 	protected override void _GameOverReward() {
@@ -105,14 +110,14 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		CancelInvoke("StartScoreCountdown");
 		score = startScoreValue;
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
-		if(!IsTutorialOn() || DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
+		//if(!IsTutorialOn() || DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
 		ResetBoard();
-		}
+		//}
 	}
 
 	private void ResetBoard(){
 		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
-		memoryUI.StartBoard();
+		//memoryUI.StartBoard();
 	}
 
 	#region Game Specific Functions
@@ -212,7 +217,8 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	}
 
 	private void StartTutorial(){
-		SetTutorial(new MemoryGameTut());
+		MemoryGameTut tut = new MemoryGameTut();
+		tut.ProcessStep(0);
 		//StartCoroutine (StudyTime ());
 	}
 

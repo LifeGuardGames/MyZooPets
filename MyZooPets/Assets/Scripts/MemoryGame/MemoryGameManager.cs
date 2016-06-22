@@ -127,9 +127,11 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 			// Check for negative score
 			if(Score - scoreDecrementValue >= 0){
 				UpdateScore(scoreDecrementValue * -1);
+				memoryUI.UpdateScoreText(score);
 			}
 			else{
 				score = 0;
+				memoryUI.UpdateScoreText(score);
 			}
 		}
 	}
@@ -167,6 +169,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 				combo++;
 				if(combo >= 1){
 					UpdateScore(combo * comboMultiplier);
+					memoryUI.UpdateScoreText(score);
 				}
 			}
 			else{
@@ -216,7 +219,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		flip2 = null;
 	}
 
-	private void StartTutorial(){
+	public void StartTutorial(){
 		MemoryGameTut tut = new MemoryGameTut();
 		tut.ProcessStep(0);
 		//StartCoroutine (StudyTime ());

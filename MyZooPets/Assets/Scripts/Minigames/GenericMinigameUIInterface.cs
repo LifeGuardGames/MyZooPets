@@ -65,7 +65,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			StartCoroutine(DoctorMatchManager.Instance.StartTutorial());    //This one needs to be a coroutine
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
-			//MemoryGameManager.Instance.StartTutorial();
+			MemoryGameManager.Instance.StartTutorial();
 		} else if (sceneName == SceneUtils.RUNNER) {
 			StartCoroutine(RunnerGameManager.Instance.StartTutorial());
 		}

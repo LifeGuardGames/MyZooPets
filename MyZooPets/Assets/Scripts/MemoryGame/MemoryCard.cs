@@ -37,7 +37,6 @@ public class MemoryCard : MonoBehaviour {
 
 		// Set components on start
 		if(isSprite){
-			Debug.Log(triggerData.SpriteName);
 			triggerSprite.sprite = SpriteCacheManager.GetSprite(triggerData.SpriteName);
 			triggerSprite.name = triggerData.SpriteName;
 			tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;	// Get grandfather

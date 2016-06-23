@@ -2,12 +2,12 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
-public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
+public class CustomizationUIManager:Singleton<CustomizationUIManager>{
 	public TweenToggle colorTweenParent;	// Part 1 of the selection process
 	public TweenToggle nameTweenParent;		// Part 2 of the selection process
-    public UILabel nameField;
-	public Camera NGUICamera;
+    public Text nameField;
 	public ParticleSystemController leafParticle;
 	public Animation requireNameAnimation;
 	public Animation requireColorAnimation;
@@ -20,25 +20,21 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
     private Color currentRenderColor;
 
 	private int hatchClicksCount = 7;
+
 	
-    protected override void Awake(){
-		base.Awake();
-        eModeType = UIModeTypes.CustomizePet;
-    }
-	
-	protected override void _OpenUI(){
+	public void  _OpenUI(){
 		logoTitleTween.Hide();
         ShowFirstChooseUI();
 	}
 	
 	// Used when pressing back button in the panel
-	protected override void _CloseUI(){
+	public void _CloseUI(){
 		nameTweenParent.Hide();
 	}
     
-    public void ChangeEggColor(string spriteName, string petColor){
+    public void ChangeEggColor(string petColor){
 		poofParticle.Play();
-		EggController.Instance.ChangeColor(spriteName);
+		EggController.Instance.ChangeColor("egg"+petColor);
 		this.petColor = petColor;     
     }
 
@@ -70,7 +66,7 @@ public class CustomizationUIManager:SingletonUI<CustomizationUIManager>{
 	public void SecondFinishClicked(){
 		if(!String.IsNullOrEmpty(nameField.text)){
 			petName = nameField.text;
-			CloseUI();
+			_CloseUI();
 
 			Analytics.Instance.PetColorChosen(this.petColor);
 

@@ -20,6 +20,6 @@ public class ButtonChangeEggColor : LgButton{
 	}
 	
 	protected override void ProcessClick(){
-		CustomizationUIManager.Instance.ChangeEggColor(strSprite, strColor);
+		//CustomizationUIManager.Instance.ChangeEggColor(strSprite, strColor);
 	}
 }

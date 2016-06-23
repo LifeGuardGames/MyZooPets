@@ -67,7 +67,7 @@ public class SelectionUIManager : Singleton<SelectionUIManager>{
 		
 		if(!isHatched){
 			//Open CustomizationUIManager to create/initiate new pet game data
-			CustomizationUIManager.Instance.OpenUI();
+			CustomizationUIManager.Instance._OpenUI();
 		}
 		else{
 			//open up pet start panel

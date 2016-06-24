@@ -49,7 +49,6 @@ public class AttackGate : Singleton<AttackGate>{
 	public void FinishAttack(){
 		PetAnimationManager.Instance.FinishFireBlow();
 
-		FireButtonUIManager.Instance.FireButtonCollider.enabled = false;
 		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
 

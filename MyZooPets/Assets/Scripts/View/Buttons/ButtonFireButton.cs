@@ -20,10 +20,10 @@ public class ButtonFireButton : LgButtonHold{
 		bool isCamMoving = CameraManager.Instance.IsCameraMoving();
 
 		if(isActive && isCamMoving){
-			NGUITools.SetActive(goIcon, false);	// if the button is on and the camera is moving, deactivate it
+			goIcon.SetActive(false);	// if the button is on and the camera is moving, deactivate it
 		}
 		else if(!isActive && !isCamMoving){
-			NGUITools.SetActive(goIcon, true);	// if the button is off and the camera isn't moving, activate it
+			goIcon.SetActive(true);	// if the button is off and the camera isn't moving, activate it
 		}
 	}
 
@@ -31,6 +31,9 @@ public class ButtonFireButton : LgButtonHold{
 		this.gate = gate;
 	}
 
+	public void FireButtonClicked() {
+		ProcessClick();
+	}
 	/// <summary>
 	/// Processes the click.
 	/// When the user presses down on the fire meter button. This will begin
@@ -71,6 +74,11 @@ public class ButtonFireButton : LgButtonHold{
 		int damage = curSkill.DamagePoint;
 		return damage;
 	}
+
+	public void FireButtonReleased() {
+		ButtonReleased();
+	}
+
 
 	protected override void ButtonReleased(){
 		if(!isLegal){

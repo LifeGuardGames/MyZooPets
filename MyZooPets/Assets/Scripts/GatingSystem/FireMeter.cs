@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 //---------------------------------------------------
 // FireMeter
@@ -18,12 +19,12 @@ public class FireMeter : MonoBehaviour{
 	public static EventHandler<EventArgs> OnMeterFilled;   		// when the meter is 100% full
 	public static EventHandler<EventArgs> OnMeterStartFilling;	// when meter is filling up 
 
-	public UISlider slider;				// the slider that the meter fills up
+	public Image slider;				// the slider that the meter fills up
 	public float fillTime = 2f;
 	public string fillSound;
 
 	void Start(){
-		slider.sliderValue = 0;		// reset the slider vlaue
+		slider.fillAmount = 0;		// reset the slider vlaue
 	}
 	
 	// Call this function when the meter should start filling.	
@@ -42,13 +43,13 @@ public class FireMeter : MonoBehaviour{
 
 	// Callback update value function for start filling
 	public void UpdateSliderValueCallback(float value){
-		slider.sliderValue = value;
+		slider.fillAmount = value;
 	}
 
 	// Stops filling the meter and empties it.
 	public void Empty(){
 		LeanTween.cancel(gameObject);	// Cancel any leantweens going on
-		slider.sliderValue = 0;
+		slider.fillAmount = 0;
 		AudioManager.Instance.StopClip(fillSound);
 	}
 
@@ -61,6 +62,6 @@ public class FireMeter : MonoBehaviour{
 
 	// Returns whether or not this meter is full.
 	public bool IsMeterFull(){
-		return slider.sliderValue >= 1;
+		return slider.fillAmount >= 1;
 	}
 }

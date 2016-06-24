@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public static EventHandler<EventArgs> FireButtonActive;
@@ -16,7 +17,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 	// Components of fireButton
-	private UIImageButton imageButton;
+	public Image imageButton;
 	private ButtonFireButton fireButtonScript;
 	public ButtonFireButton FireButtonScript{
 		get{ return fireButtonScript; }
@@ -36,7 +37,6 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 	void Start () {
-		imageButton = fireButton.GetComponent<UIImageButton>();
 		fireButtonCollider = fireButton.GetComponent<Collider>();
 		fireButtonScript = fireButton.GetComponent<ButtonFireButton>();
 
@@ -78,12 +78,8 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public void FireEffectOff(){
 		animHelper.buttonAnimation.Stop();
 		sunBeam.SetActive(false);
-		
-		imageButton.hoverSprite = inactiveButtonSpriteName;
-		imageButton.normalSprite = inactiveButtonSpriteName;
-		imageButton.disabledSprite = inactiveButtonSpriteName;
-		imageButton.pressedSprite = inactiveButtonSpriteName;
 
+		imageButton.sprite = SpriteCacheManager.GetSprite(inactiveButtonSpriteName);
 		imageButton.gameObject.SetActive(false);
 		imageButton.gameObject.SetActive(true);
 	}
@@ -102,10 +98,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		sunBeam.SetActive(true);
 
 		//change button image 
-		imageButton.hoverSprite = activeButtonSpriteName;
-		imageButton.normalSprite = activeButtonSpriteName;
-		imageButton.disabledSprite = activeButtonSpriteName;
-		imageButton.pressedSprite = activeButtonSpriteName;
+		imageButton.sprite = SpriteCacheManager.GetSprite(activeButtonSpriteName);
 
 		imageButton.gameObject.SetActive(false);
 		imageButton.gameObject.SetActive(true);

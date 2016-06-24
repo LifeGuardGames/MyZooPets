@@ -11,7 +11,8 @@ public class ButtonRealInhaler : ButtonChangeScene{
 	/// <summary>
 	/// Processes the click.
 	/// </summary>
-	protected override void ProcessClick(){
+	public void OnInhalerButtonClicked(){
+		Debug.Log("Clicked");
 		CheckToOpenInhaler();
 	}
 	

@@ -80,7 +80,7 @@ public class AttackGate : Singleton<AttackGate>{
 
 		//make button clickable again
 		if(FireButtonUIManager.Instance){
-			FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
+			//FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
 		}
 
 		// release fire breathing lock

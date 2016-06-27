@@ -33,7 +33,7 @@ public class AttackGate : Singleton<AttackGate>{
 	public void Cancel(){
 		PetAnimationManager.Instance.AbortFireBlow();
 	
-		FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
+		//FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
 
 		//release lock if fire breathing lock was called previously
 		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;

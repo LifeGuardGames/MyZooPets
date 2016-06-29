@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.UI;
 
 /// <summary>
 /// Decoration zone.
@@ -15,9 +16,9 @@ public abstract class DecorationZone : MonoBehaviour {
 		return nodeType;
 	}
 
-	public UISprite spriteIcon;
-	public UISprite spriteOutline;
-	public UISprite spriteFill;
+	public Image spriteIcon;
+	public Image spriteOutline;
+	public Image spriteFill;
 	public Color neutralColorOutline;
 	public Color neutralColorFill;
 	public Color activeColorOutline;
@@ -44,19 +45,19 @@ public abstract class DecorationZone : MonoBehaviour {
 		// Set the decoration icon
 		switch(nodeType){
 		case DecorationTypes.Carpet:
-			spriteIcon.spriteName = "iconDecoCarpet2";
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconDecoCarpet2");
 			break;
 		case DecorationTypes.Poster:
-			spriteIcon.spriteName = "iconDecoPoster2";
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconDecoPoster2");
 			break;
 		case DecorationTypes.SmallPlant:
-			spriteIcon.spriteName = "iconDecoSmallPlant2";
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconDecoSmallPlant2");
 			break;
 		case DecorationTypes.Wallpaper:
-			spriteIcon.spriteName = "iconDecoWallpaper2";
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconDecoWallpaper2");
 			break;
 		case DecorationTypes.BigFurniture:
-			spriteIcon.spriteName = "iconDecoBigFurniture2";
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconDecoBigFurniture2");
 			break;
 		}
 
@@ -250,8 +251,8 @@ public abstract class DecorationZone : MonoBehaviour {
 				GetComponent<Animation>().Stop();
 			}
 
-			spriteOutline.color = inactiveColorOutline;
-			spriteFill.color = inactiveColorFill;
+			//spriteOutline.color = inactiveColorOutline;
+			//spriteFill.color = inactiveColorFill;
 		}
 		// Correct state, play the active state
 		else{

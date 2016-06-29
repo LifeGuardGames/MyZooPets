@@ -73,7 +73,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 
 		foreach(var group in query){
 			foreach(var badge in group.Elements){
-				GameObject badgeGO = GameObjectUtils.AddChild(badgeGrid.gameObject, badgePrefab);
+				GameObject badgeGO = GameObjectUtils.AddChildGUI(badgeGrid.gameObject, badgePrefab);
 				badgeGO.name = badge.ID;
 				badgeGO.GetComponent<BadgeController>().Init(badge);
 			}

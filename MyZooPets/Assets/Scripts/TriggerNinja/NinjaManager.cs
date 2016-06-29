@@ -28,12 +28,17 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	public bool isTutorialRunning = false;
 	private bool isPlaying = false;
 	public bool isGameOver = true;
-	private int lives;
-	public MinigameLife life;
+	
+	public TriggerUIManager uiManager;
+
+	private int lifeCount;
+	public int LifeCount {
+		get { return lifeCount; }
+	}
 
 	void Awake(){
 		Application.targetFrameRate = 60;
-		minigameKey = "Ninja";
+		minigameKey = "NINJA";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardMoneyMultiplier = 2;
 		rewardShardMultiplier = 4;
@@ -44,12 +49,10 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 		
     }
 	
-
 	public Vector2 GetTrailDeltaMove(){
 		return trailDeltaMove;
 	}
-			
-
+	
 	public void IncreaseChain(){
 		chain++;
 		if(chain % 25 == 0){
@@ -128,7 +131,6 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 			GameObject go = gesture.Selection;
 			
 			if(go){
-					Debug.Log(go.name);
 					//Debug.Log("Touching " + go.name);
 					NinjaTrigger trigger = go.GetComponent<NinjaTrigger>();
 				
@@ -147,7 +149,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 
 	protected override void _NewGame(){
 		// reset variables
-		lives = 3;
+		lifeCount = 3;
 		comboTime = 0;
 		combo = 0;
 		bestCombo = 0;
@@ -162,9 +164,9 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 		isPlaying = true;
 		isGameOver = false;
 
-		if(IsTutorialOn() || 
-			!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)){
+		uiManager.NewGameUI();
 
+		if(IsTutorialOn() || !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)){
 			StartTutorial();
 		}
 	}
@@ -205,7 +207,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 	}
 
 	protected override void _ContinueGame() {
-		lives = 3;
+		lifeCount = 3;
 		bonusRound = false;
 		spawning = true;
 		isPlaying = true;
@@ -524,13 +526,9 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 		yield return new WaitForSeconds(10.0f);
 		isBouncyTime = false;
 	}
-
-	public int GetLives() {
-		return lives;
-	}
-
-	public void UpdateLives(int _lives) {
-		lives += _lives;
-		life.OnLivesChanged(_lives);
+	
+	public void UpdateLife(int deltaLife) {
+		lifeCount += deltaLife;
+		uiManager.OnLivesChanged(deltaLife);
 	}
 }

@@ -194,15 +194,14 @@ public class NinjaManager : NewMinigameManager<NinjaManager>{
 
 	}
 
-	protected override void _PauseGame(bool isShow) {
-		
-		if(!isShow && !isGameOver) {
+	protected override void _PauseGame() {
+		if(!isGameOver) {
 			Time.timeScale = 0.0f;
 		}
+	}
 
-		else {
-			Time.timeScale = 1.0f;
-        }
+	protected override void _ResumeGame() {
+		Time.timeScale = 1.0f;
 	}
 
 	protected override void _ContinueGame() {

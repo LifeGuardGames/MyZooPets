@@ -20,7 +20,7 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update(){
-		if(!ShooterGameManager.Instance.isPaused) {
+		if(!ShooterGameManager.Instance.IsPaused) {
 			transform.Translate(speed * Time.deltaTime, 0, 0);
 		}
 	}

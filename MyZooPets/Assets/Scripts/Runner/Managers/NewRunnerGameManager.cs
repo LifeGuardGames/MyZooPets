@@ -1,26 +1,18 @@
-﻿/// <summary>
-// The sort of 'center' of the game.
-// However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
-// This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
-// You must 'unglue' everything you want to use elsewhere, sorry!
-// The upside is it's a bit faster.
-// 
-// Handles Resetting, Game Ending, and TimeScale.
-/// </summary>
-using UnityEngine;
-using System;
+﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
+using System;
 
+/// <summary>
+/// The sort of 'center' of the game.
+/// However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
+/// This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
+/// You must 'unglue' everything you want to use elsewhere, sorry!
+/// The upside is it's a bit faster.
+/// 
+/// Handles Resetting, Game Ending, and TimeScale.
+/// </summary>
 public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
-	private bool paused = true;
 	private bool tutorial = false;
-
-	public bool GameRunning {
-		get {
-			return !paused;
-		}
-	}
 	public bool IsTutorialRunning {
 		get {
 			return tutorial;
@@ -33,9 +25,9 @@ public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
-	public void ActivateGameOver(){	
+	public void ActivateGameOver() {
 		UpdateScore(ScoreManager.Instance.Score);
-		GameOver();	
+		GameOver();
 
 		// Disable the player
 		PlayerController.Instance.MakePlayerVisible(false);
@@ -56,28 +48,27 @@ public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
 		Application.targetFrameRate = 60;
 	}
 
-	protected override void _NewGame() {	//Reset everything and start again, not called during tutorial
+	protected override void _NewGame() {    //Reset everything and start again, not called during tutorial
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
 		ScoreManager.Instance.Reset();
-//		ScoreUIManager.Instance.Show(); //TODO: Custom UI for Runner and reset it here
+		//		ScoreUIManager.Instance.Show(); //TODO: Custom UI for Runner and reset it here
 
 		RunnerLevelManager.Instance.Reset();
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
 	}
 
-	protected override void _PauseGame(bool isShow) {
-		paused = !isShow;
-		if (isShow) {
-			MegaHazard.Instance.PlayParticles();
-		} else {
-			MegaHazard.Instance.PauseParticles();
-		}
+	protected override void _PauseGame() {
+		MegaHazard.Instance.PauseParticles();
 		/* Player.StopMoving()
 		 * MegaHazard.StopMoving()
 		 * Pause coins under magnetic field?
 		 */
+	}
+
+	protected override void _ResumeGame() {
+			MegaHazard.Instance.PlayParticles();
 	}
 
 	protected override void _ContinueGame() {

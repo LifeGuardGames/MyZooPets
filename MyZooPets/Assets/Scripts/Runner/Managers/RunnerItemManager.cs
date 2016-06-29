@@ -144,7 +144,7 @@ public class RunnerItemManager : Singleton<RunnerItemManager> {
     //button is clicked
     private IEnumerator ResumeGame(){
         yield return 0;
-		RunnerGameManager.Instance.PauseGame(true);
+		RunnerGameManager.Instance.ResumeGame();
     }
 
     private RunnerItem ItemFactory(Type inItemType, LevelGroup.eLevelGroupID levelGroupID) {

@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 //---------------------------------------------------
 // ScoreUIManager
 // This is strictly a view controller, for displaying
 // information to the player
 //---------------------------------------------------
-
 public class ScoreUIManager : Singleton<ScoreUIManager> {
     public UILabel coinLabel;
     public UILabel distanceLabel;
@@ -19,9 +17,11 @@ public class ScoreUIManager : Singleton<ScoreUIManager> {
 	
 	// Update is called once per frame
 	void Update () { //TODO: REMOVEEEEE
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.IsPaused) {
 			return;
-        UpdateCoins();
+		}
+
+		UpdateCoins();
         UpdateDistance();
         UpdateScore();
 		Debug.LogWarning("This should not be called");

@@ -26,8 +26,9 @@ public class MegaHazard : Singleton<MegaHazard> {
 	
 	// Update is called once per frame
 	void Update() {
-		if (!RunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.IsPaused) {
 			return;
+		}
 		runTime += Time.deltaTime;
 		graceTime -= Time.deltaTime;
 		HandleHealth();

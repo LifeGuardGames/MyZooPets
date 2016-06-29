@@ -49,7 +49,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	IEnumerator SpawnEnemies() {
 		yield return new WaitForSeconds(1.0f);
 		if(ShooterGameEnemyController.Instance.enemiesInWave > 0) {
-			if(!ShooterGameManager.Instance.isPaused && !ShooterGameManager.Instance.isGameOver) {
+			if(!ShooterGameManager.Instance.IsPaused && !ShooterGameManager.Instance.isGameOver) {
 				int randomPositionIndex = Random.Range(0, 3);
 
 				//they are spawned in more of a weighted list fashion 
@@ -75,7 +75,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 
 	IEnumerator WaitASec() {
 		yield return new WaitForSeconds(0.1f);
-		if(ShooterGameManager.Instance.isPaused) {
+		if(ShooterGameManager.Instance.IsPaused) {
 			StartCoroutine(WaitASec());
 		}
 		else {

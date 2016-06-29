@@ -16,7 +16,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 	public int highestCombo = 0;
 	public GameObject BouncyWalls;
 	public GameObject tutFinger;
-	public bool isPaused = false;
 	public bool isGameOver = false;
 	public Text scoreText;
 	public delegate void OnRestart();
@@ -192,11 +191,13 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager>{
 		return isOnNGUILayer;
 	}
 
-	protected override void _PauseGame(bool isShow) {
-		Debug.Log(isShow);
-		isPaused = !isShow;
+	protected override void _PauseGame() {
+		// IsPaused tracked by parent
 	}
 
+	protected override void _ResumeGame() {
+		// IsPaused tracked by parent
+	}
 
 	protected override void _GameOverReward() {
 	}

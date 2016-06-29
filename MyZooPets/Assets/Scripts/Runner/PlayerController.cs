@@ -96,63 +96,49 @@ public class PlayerController : Singleton<PlayerController> {
 	// used just for testing keyboard input in unity editor
 	private bool bDelay = false;
 	#endif
+
 	public float Speed {
-		get {
-			return movement.currentSpeed;
-		}
+		get { return movement.currentSpeed; }
 	}
 
 	public float MinSpeed {
-		get {
-			return movement.minSpeed;
-		}
+		get { return movement.minSpeed; }
 	}
 
 	public float MaxSpeed {
-		get {
-			return movement.maxSpeed;
-		}
+		get { return movement.maxSpeed; }
 	}
 
 	public bool StarMode {
-		get {
-			return movement.publicStarMode;
-		}
+		get { return movement.publicStarMode; }
 	}
 
 	public bool Invincible {
-		get {
-			return movement.invincible || movement.publicStarMode;
-		}
+		get { return movement.invincible || movement.publicStarMode; }
 	}
 
 	public GameObject FloatyLocation {
-		get {
-			return floatyLocation;
-		}
+		get { return floatyLocation; }
 	}
 
 	void Start() {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		initialPosition = this.transform.position;
 		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
-		//RunnerGameManager.OnStateChanged += GameStateChanged;
 		Reset();
 	}
 
 	void Update() {
-		if (!RunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.IsPaused) {
 			return;
-#if UNITY_EDITOR    
+		}
+
+#if UNITY_EDITOR
 		CheckKeyMovement();
 #endif
 		UpdateSpeed();
 		CheckAndActOnDeath();
 		UpdateMagnet();
-	}
-
-	void OnDestroy() {
-		//RunnerGameManager.OnStateChanged -= GameStateChanged;
 	}
 
 	#if UNITY_EDITOR
@@ -170,8 +156,9 @@ public class PlayerController : Singleton<PlayerController> {
 	//	}
 	#endif
 	void FixedUpdate() {
-		if (!RunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.IsPaused) {
 			return;
+		}
 
 		//update runner horizontal movement
 		UpdateHorizontalMovement();
@@ -198,26 +185,6 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 
 	}
-	
-	/* Listen to swipe down gesture
-	void OnSwipe(SwipeGesture gesture){
-		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
-			FingerGestures.SwipeDirection direction = gesture.Direction;
-			if(direction == FingerGestures.SwipeDirection.Down){
-				Drop();
-				
-				if(OnDrop != null)
-					OnDrop(this, EventArgs.Empty);
-			}
-			else if (direction == FingerGestures.SwipeDirection.Up){
-				Jump();
-			
-			if(OnJump != null)
-				OnJump(this, EventArgs.Empty);
-			
-		}
-		}
-	}*/
 	
 	/// <summary>
 	/// Reset player position and physics
@@ -279,19 +246,21 @@ public class PlayerController : Singleton<PlayerController> {
 	/// </summary>
 	/// <param name="isVisible">If set to <c>true</c> is visible.</param>
 	public void MakePlayerVisible(bool isVisible) {
-		this.transform.Find("Body").gameObject.SetActive(isVisible);
+		transform.Find("Body").gameObject.SetActive(isVisible);
 	}
 
 	public void PlayAnimation() {
 		anim.enabled = true;
-		if (magnetTime > 0)
+		if(magnetTime > 0) {
 			magnetSystem.Play();
+		}
 	}
 
 	public void PauseAnimation() {
 		anim.enabled = false;
-		if (magnetTime > 0)
+		if(magnetTime > 0) {
 			magnetSystem.Pause();
+		}
 	}
 	//---------------------------------------------------
 	// TriggerSlowdown()
@@ -308,8 +277,9 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	public void SolidColor(Color c, float time = 3f) {
-		if (currentColor != null) //If there is a coroutine running right now
+		if(currentColor != null) { //If there is a coroutine running right now
 			StopCoroutine(currentColor);
+		}
 		RevertColor();
 		currentColor = SolidIEnumerator(c, time);
 		StartCoroutine(currentColor);
@@ -317,8 +287,9 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	public void FlashColor(Color c) {
-		if (currentColor != null) //If there is a coroutine running right now
+		if(currentColor != null) { //If there is a coroutine running right now
 			StopCoroutine(currentColor);
+		}
 		RevertColor();
 		currentColor = FlashIEnumerator(c);
 		StartCoroutine(currentColor);
@@ -326,7 +297,6 @@ public class PlayerController : Singleton<PlayerController> {
 
 	private IEnumerator FlashIEnumerator(Color c) { //HACK: Both flash and solid have code extra to simply changing the color. Still, this seems better than having to pass a function to this coroutine
 		movement.invincible = true;
-
 		for (int i = 0; i < 3; i++) {
 			TurnColor(c);
 			yield return WaitSecondsPause(.2f);
@@ -355,7 +325,7 @@ public class PlayerController : Singleton<PlayerController> {
 	private IEnumerator WaitSecondsPause(float time) { //Like wait for seconds, but pauses w/ RunnerGameManager
 		for (float i = 0; i <= time; i += .1f) {
 			yield return new WaitForSeconds(.1f);
-			while (!RunnerGameManager.Instance.GameRunning) {
+			while (RunnerGameManager.Instance.IsPaused) {
 				yield return new WaitForEndOfFrame();
 			}
 		}
@@ -394,7 +364,6 @@ public class PlayerController : Singleton<PlayerController> {
 	/// movement
 	/// </summary>
 	private void ApplyGravity() {
-
 		//if grounded just set speed to gravity speed
 		if (playerPhysics.Grounded && !playerPhysics.Jumping) {
 			movement.verticalSpeed = -movement.Gravity * Time.deltaTime;
@@ -414,19 +383,18 @@ public class PlayerController : Singleton<PlayerController> {
 	/// <returns>The vertical speed.</returns>
 	/// <param name="targetJumpHeight">Target jump height.</param>
 	private float CalculateJumpVerticalSpeed(float targetJumpHeight) {
-		// from jump height and gravity we deduce the upwards speed for character
-		// at apex
+		// from jump height and gravity we deduce the upwards speed for character at apex
 		return Mathf.Sqrt(2 * targetJumpHeight * movement.Gravity);
 	}
+
 	//heightMultiplier multiplies movement.jumpHeight to increase speed and max heiht achieved.
 	private void Jump(float height) {
-		bool validInput = (RunnerGameManager.Instance.AcceptInput && (RunnerGameManager.Instance.GameRunning || (RunnerGameManager.Instance.SpecialInput && OnJump != null)));
+		bool validInput = (RunnerGameManager.Instance.AcceptInput && (!RunnerGameManager.Instance.IsPaused || (RunnerGameManager.Instance.SpecialInput && OnJump != null)));
 		if (playerPhysics.Grounded && validInput) {
-			if (OnJump != null)
+			if(OnJump != null) {
 				OnJump(this, EventArgs.Empty);
-			//   AudioManager.Instance.PlayClip("runnerJumpUp", variations: 3);
+			}
 			AudioManager.Instance.PlayClip("runnerJumpUp");
-			//movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
 			movement.Gravity = movement.targetSpeed;
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(height);
 			playerPhysics.Jumping = true;
@@ -434,9 +402,10 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	private void Drop() {
-		bool validInput = (RunnerGameManager.Instance.AcceptInput && (RunnerGameManager.Instance.GameRunning || (RunnerGameManager.Instance.SpecialInput && OnDrop != null)));
-		if (!validInput)
+		bool validInput = (RunnerGameManager.Instance.AcceptInput && (!RunnerGameManager.Instance.IsPaused || (RunnerGameManager.Instance.SpecialInput && OnDrop != null)));
+		if(!validInput) {
 			return;
+		}
 		AudioManager.Instance.PlayClip("runnerJumpDown");
 
 		if (OnDrop != null)
@@ -492,8 +461,9 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	private void UpdateMagnet() {
-		if (magnetTime >= 0)
+		if(magnetTime >= 0) {
 			magnetTime -= Time.deltaTime;
+		}
 		else {
 			MagneticField.Instance.EnableMagnet(false);
 			magnetSystem.Stop();

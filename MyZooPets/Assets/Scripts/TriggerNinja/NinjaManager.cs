@@ -26,7 +26,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 	private bool isPlaying = false;
 	public bool isGameOver = true;
 
-	public TriggerUIManager uiManager;
+	public NinjaUIManager uiManager;
 
 	private int lifeCount;
 	public int LifeCount {
@@ -421,27 +421,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		// give the player an additional point for each level of their combo
 		if(combo > 2) {
 			_UpdateScore(combo);
-
-			// get the right text for combo
-			string strText = Localization.Localize("NINJA_COMBO");
-			strText = string.Format(strText, combo);
-
-			// get the position of where to spawn the floaty text -- the last place the user's finger was (using this for now)
-			Vector3 position = lastPos;
-			position.y *= CameraManager.Instance.GetRatioDifference();
-			position.x *= CameraManager.Instance.GetRatioDifference();
-			position = CameraManager.Instance.TransformAnchorPosition(position, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
-
-			// set up the hashtable full of options
-			Hashtable option = new Hashtable();
-			option.Add("parent", GameObject.Find("Canvas"));
-			option.Add("text", strText);
-			option.Add("prefab", "NinjaComboFloatyText");
-			option.Add("position", position);
-			option.Add("textSize", Constants.GetConstant<float>("Ninja_ComboTextSize"));
-
-			// spawn floaty text
-			FloatyUtil.SpawnFloatyText(option);
+			uiManager.SpawnComboFloaty(lastPos, combo);
 		}
 
 		// if the current combo was better than their best, update it

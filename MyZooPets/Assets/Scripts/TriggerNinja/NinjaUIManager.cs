@@ -2,8 +2,10 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class TriggerUIManager : MonoBehaviour {
+public class NinjaUIManager : MonoBehaviour {
 	public List<Image> InhalerLifeList;
+	public GameObject FloatyParent;
+	public GameObject FloatyComboPrefab;
 
 	public void NewGameUI() {
 		// Set all life to true
@@ -41,4 +43,11 @@ public class TriggerUIManager : MonoBehaviour {
 		inhalerSprite.color = isOn ? Color.white : Color.black;
 	}
 	#endregion
+
+	public void SpawnComboFloaty(Vector3 worldPosition, int combo) {
+		string comboText = string.Format(Localization.Localize("NINJA_COMBO"), combo);
+
+		GameObject floatyObject = GameObjectUtils.AddChildGUI(FloatyParent, FloatyComboPrefab);
+		floatyObject.GetComponent<FloatyController>().InitAndActivate(customText: comboText);
+	}
 }

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class NinjaUIManager : MonoBehaviour {
+	public Camera UICamera;
 	public List<Image> InhalerLifeList;
 	public GameObject FloatyParent;
 	public GameObject FloatyComboPrefab;
@@ -44,10 +45,9 @@ public class NinjaUIManager : MonoBehaviour {
 	}
 	#endregion
 
-	public void SpawnComboFloaty(Vector3 worldPosition, int combo) {
+	public void SpawnComboFloaty(Vector3 position, int combo) {
 		string comboText = string.Format(Localization.Localize("NINJA_COMBO"), combo);
-
 		GameObject floatyObject = GameObjectUtils.AddChildGUI(FloatyParent, FloatyComboPrefab);
-		floatyObject.GetComponent<FloatyController>().InitAndActivate(worldPosition, customText: comboText);
+        floatyObject.GetComponent<FloatyController>().InitAndActivate(position, customText:comboText);
 	}
 }

@@ -10,8 +10,8 @@ public class FloatyController : MonoBehaviour {
 
 	private RectTransform rectTrans;
 
-	public void InitAndActivate(Vector3 position, string customText = null, Sprite spriteData = null) {
-		gameObject.transform.position = new Vector3(position.x, position.y, 0f);
+	public void InitAndActivate(Vector3 UIPosition, string customText = null, Sprite spriteData = null) {
+		gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(UIPosition.x, UIPosition.y);
 		
 		// Set default CanvasGroup behaviour
 		CanvasGroup canvasGroup = GetComponent<CanvasGroup>();

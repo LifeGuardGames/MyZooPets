@@ -18,7 +18,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 	public float comboMaxTime = 0.25f;      // max time between cuts for a combo to increase
 	private float timeCount = 0;            // used to count time between groups and between entries within a group
 	private Vector2 trailDeltaMove;
-	private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
+	//private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
 	private List<NinjaDataEntry> currentTriggerEntries;     // current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection;    // record the last drag direction
 	public bool isBouncyTime = false;
@@ -309,8 +309,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		}
 
 		// save the last position for use with displaying combo
-		lastPos = vPos;
-
+		//lastPos = vPos;
 		trailDeltaMove = gesture.DeltaMove;
 	}
 
@@ -425,7 +424,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		// give the player an additional point for each level of their combo
 		if(combo > 2) {
 			_UpdateScore(combo);
-			uiManager.SpawnComboFloaty(lastPos, combo);
+			uiManager.SpawnComboFloaty(Vector3.zero, combo);
 		}
 
 		// if the current combo was better than their best, update it

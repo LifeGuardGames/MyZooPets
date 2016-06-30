@@ -18,13 +18,14 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 	public float comboMaxTime = 0.25f;      // max time between cuts for a combo to increase
 	private float timeCount = 0;            // used to count time between groups and between entries within a group
 	private Vector2 trailDeltaMove;
-	private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
+	//private Vector3 lastPos = Vector3.zero; // the last position of the user's trail - comboing
 	private List<NinjaDataEntry> currentTriggerEntries;     // current list of entries to spawn triggers from
 	private FingerGestures.SwipeDirection lastDirection;    // record the last drag direction
 	public bool isBouncyTime = false;
 	public bool isTutorialRunning = false;
 	private bool isPlaying = false;
 	public bool isGameOver = true;
+	public GameObject spawnParent;
 
 	public NinjaUIManager uiManager;
 
@@ -246,30 +247,33 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		Vector3 triggerLocation;
 		switch(num) {
 			case 1:
-				triggerLocation = new Vector3(0, 1.8962f, 0);
+				triggerLocation = new Vector3(-4.5f, -2.7f, 0);
 				break;
 			case 2:
-				triggerLocation = new Vector3(1.4f, 2.9321f, 0);
+				triggerLocation = new Vector3(-3.3f, -1.4f, 0);
 				break;
 			case 3:
-				triggerLocation = new Vector3(-1.9353f, 1.0183f, 0);
+				triggerLocation = new Vector3(-1.8f, 0.25f, 0);
 				break;
 			case 4:
-				triggerLocation = new Vector3(3.0671f, 3.8541f, 0);
+				triggerLocation = new Vector3(0.05f, 1.3f, 0);
 				break;
 			case 5:
-				triggerLocation = new Vector3(-3.5413f, -0.14406f, 0);
+				triggerLocation = new Vector3(2f, 2f, 0);
 				break;
 			case 6:
-				triggerLocation = new Vector3(4.7322f, 4.5339f, 0);
+				triggerLocation = new Vector3(4f, 2.4f, 0);
 				break;
 			default:
 				triggerLocation = new Vector3(0, 2.8f, 0);
 				break;
 		}
-		//instantiate trigger 
-		GameObject triggerObject = (GameObject)Instantiate(triggerPrefab, triggerLocation,
-															triggerPrefab.transform.localRotation);
+
+		//instantiate trigger
+		GameObject triggerObject = GameObjectUtils.AddChild(spawnParent, triggerPrefab);
+		triggerObject.transform.position = triggerLocation;
+		triggerObject.transform.localEulerAngles = triggerPrefab.transform.localEulerAngles;
+
 		Rigidbody triggerObjectRigidbody = triggerObject.GetComponent<Rigidbody>();
 		triggerObjectRigidbody.useGravity = false;
 		triggerObjectRigidbody.constraints = RigidbodyConstraints.None;
@@ -305,8 +309,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		}
 
 		// save the last position for use with displaying combo
-		lastPos = vPos;
-
+		//lastPos = vPos;
 		trailDeltaMove = gesture.DeltaMove;
 	}
 
@@ -421,7 +424,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		// give the player an additional point for each level of their combo
 		if(combo > 2) {
 			_UpdateScore(combo);
-			uiManager.SpawnComboFloaty(lastPos, combo);
+			uiManager.SpawnComboFloaty(Vector3.zero, combo);
 		}
 
 		// if the current combo was better than their best, update it

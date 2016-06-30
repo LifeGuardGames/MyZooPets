@@ -112,9 +112,17 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
-		#if DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD
 		PlayerPrefs.DeleteAll();
-		#endif
+#endif
+		Amplitude amplitude = Amplitude.Instance;
+		//Live Amplitude
+		//amplitude.logging = true;
+		//amplitude.init("");
+		//Dev Amplitude
+
+		amplitude.logging = true;
+		amplitude.init("a06f151d06c754bdbbff7bdbaffe12e2");
 
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;

@@ -61,7 +61,7 @@ public class Analytics : MonoBehaviour {
 	#region Ninja Trigger
 	public void NinjaGameData(int score, int bonus) {
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Ninja HighScore", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Ninja HighScore", new Dictionary<string, object>{
 				{ "High Score: ", score},
 				{ "Bonus: ", bonus},
 			});
@@ -73,7 +73,7 @@ public class Analytics : MonoBehaviour {
 	#region Shooter Game
 	public void ShooterGameData(int score, int percentage, string waveName, int combo) {
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Shooter HighScore", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Shooter HighScore", new Dictionary<string, object>{
 				{ "High Score: ", score},
 				{ "Inhaler misses: ", percentage},
 				{"Wave Number died at: ", waveName },
@@ -87,7 +87,7 @@ public class Analytics : MonoBehaviour {
 	#region Memory Game
 	public void MemoryGameData(int score){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Memory HighScore", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Memory HighScore", new Dictionary<string, object>{
 				{ "Memory HighScore: ", score}
 			});
 		}
@@ -99,7 +99,7 @@ public class Analytics : MonoBehaviour {
 
 	public void RunnerGameData(int score, string level, int distanceRan) {
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Runner HighScore", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Runner HighScore", new Dictionary<string, object>{
 				{ "Runner HighScore: ", score},
 				{ "Died at: ", level},
 				{ "Distance Ran: ", distanceRan}
@@ -114,7 +114,7 @@ public class Analytics : MonoBehaviour {
     //Which steps in inhaler game does the kids need help the most
     public void InhalerHintRequired(int stepID){
         if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Inhaler Hint", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Inhaler Hint", new Dictionary<string, object>{
 				{ "Hint: ", stepID}
 			});
 		}
@@ -124,7 +124,7 @@ public class Analytics : MonoBehaviour {
 	#region Doctor Match
 	public void DoctorHighScore (int score){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Doctor HighScore", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Doctor HighScore", new Dictionary<string, object>{
 				{ "Doctor High Score: ", score}
 			});
 		}
@@ -137,7 +137,7 @@ public class Analytics : MonoBehaviour {
 	public void MiniPetLevelUp(string miniPetID, int currentLevel){
 		string levelString = currentLevel.ToString();
 		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
-			Mixpanel.SendEvent("Minipet Level Up", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Minipet Level Up", new Dictionary<string, object>{
 				{ miniPetID + "Level up: ", currentLevel}
 			});
 		}
@@ -145,7 +145,7 @@ public class Analytics : MonoBehaviour {
 
 	public void MiniPetVisited(string miniPetID){
 		if(!String.IsNullOrEmpty(miniPetID) && isAnalyticsEnabled){
-			Mixpanel.SendEvent("Times Visited Minipet", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Times Visited Minipet", new Dictionary<string, object>{
 				{ "Times Visited: ", miniPetID}
 			});
 		}
@@ -157,7 +157,7 @@ public class Analytics : MonoBehaviour {
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
         if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled){
-			Mixpanel.SendEvent("Pet Color", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Pet Color", new Dictionary<string, object>{
 				{ "Color chosen: ", petColor}
 			});
 		}
@@ -166,13 +166,13 @@ public class Analytics : MonoBehaviour {
 	//start game from menu scene
 	public void StartGame(){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Start Game");
+			Amplitude.Instance.logEvent("Start Game");
 		}
 	}
 
 	public void RemainingTriggers(int triggers){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Remaining Triggers", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Remaining Triggers", new Dictionary<string, object>{
 				{ "Remainder: ", triggers}
 			});
 		}
@@ -181,7 +181,7 @@ public class Analytics : MonoBehaviour {
     //Badges unlock
     public void BadgeUnlocked(string badgeID){
         if(!String.IsNullOrEmpty(badgeID) && isAnalyticsEnabled)
-			Mixpanel.SendEvent("Badge Unlocked", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Badge Unlocked", new Dictionary<string, object>{
 				{ "Badge: ", badgeID}
 			});
 	}
@@ -189,13 +189,13 @@ public class Analytics : MonoBehaviour {
     //Items used or purchased
     public void ItemEvent(string itemStatus, ItemType itemType, string itemID){
 		if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled) {
-			if(itemStatus == "Bought") { 
-				Mixpanel.SendEvent("Item Bought", new Dictionary<string, object>{
+			if(itemStatus == "Bought") {
+				Amplitude.Instance.logEvent("Item Bought", new Dictionary<string, object>{
 					{ itemType.ToString()+": ", itemID}
 				});
 			}
 			else {
-				Mixpanel.SendEvent("Item Used", new Dictionary<string, object>{
+				Amplitude.Instance.logEvent("Item Used", new Dictionary<string, object>{
 					{ itemType.ToString()+": ", itemID}
 				});
 			}
@@ -205,7 +205,7 @@ public class Analytics : MonoBehaviour {
     //What is the pet's health or mood when an item is used
     public void ConsumableEventWithPetStats(string itemID, string statsType, int statsValue){
         if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType) && isAnalyticsEnabled){
-			Mixpanel.SendEvent(statsType + "Increased", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent(statsType + "Increased", new Dictionary<string, object>{
 					{ itemID+": ", statsValue}
 				});
 		}
@@ -215,7 +215,7 @@ public class Analytics : MonoBehaviour {
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
         if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && 
             !String.IsNullOrEmpty(taskID) && isAnalyticsEnabled)
-			Mixpanel.SendEvent("Task Status", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Task Status", new Dictionary<string, object>{
 					{ taskID +": ", taskStatus}
 				});
 	}
@@ -223,13 +223,13 @@ public class Analytics : MonoBehaviour {
     //Wellapad xp reward claim
     public void ClaimWellapadReward(){
 		if(isAnalyticsEnabled)
-			Mixpanel.SendEvent("Reward Claimed");
+			Amplitude.Instance.logEvent("Reward Claimed");
     }
 
     //Gating
     public void GateUnlocked(string gateID){
         if(!String.IsNullOrEmpty(gateID) && isAnalyticsEnabled)
-			Mixpanel.SendEvent("Gate Unlocked", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Gate Unlocked", new Dictionary<string, object>{
 					{ "Gate Unlocked: ", gateID}
 				});
 	}
@@ -237,7 +237,7 @@ public class Analytics : MonoBehaviour {
     //Tutorial completed
     public void TutorialCompleted(string tutorialID){
         if(!String.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
-			Mixpanel.SendEvent("Tutorial Completed", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Tutorial Completed", new Dictionary<string, object>{
 					{ "Tutorial Completed: ", tutorialID}
 				});
 	}
@@ -245,26 +245,26 @@ public class Analytics : MonoBehaviour {
     //Pet level up
     public void LevelUnlocked(Level levelID){
         if(isAnalyticsEnabled)
-			Mixpanel.SendEvent("Level Unlocked", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Level Unlocked", new Dictionary<string, object>{
 					{ "Level Unlocked: ", levelID}
 				});
 	}
 
     public void ZeroHealth(){
         if(isAnalyticsEnabled)
-            Mixpanel.SendEvent("ZeroHealth");
+			Amplitude.Instance.logEvent("ZeroHealth");
     }
 
 	public void UserAge(int age){
 		if(isAnalyticsEnabled)
-			Mixpanel.SendEvent("User Age", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("User Age", new Dictionary<string, object>{
 					{ "User Age: ", age}
 				});
 	}
 
 	public void UserAsthma(bool hasAsthma){
 		if(isAnalyticsEnabled)
-			Mixpanel.SendEvent("User Asthma", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("User Asthma", new Dictionary<string, object>{
 					{ "User Asthma: ", hasAsthma}
 				});
 	}
@@ -273,13 +273,13 @@ public class Analytics : MonoBehaviour {
 		if(isAnalyticsEnabled){
 			if(hours < 2000){
 				if(hours > 0){
-					Mixpanel.SendEvent("Time data", new Dictionary<string, object>{
+					Amplitude.Instance.logEvent("Time data", new Dictionary<string, object>{
 					{ "Time between sessions: ",hours}
 				});
 					//GA_Design.NewEvent("Avg time between session", hours);
 				}
 				else{
-					Mixpanel.SendEvent("Time between session:" + "< 1 hr");
+					Amplitude.Instance.logEvent("Time between session:" + "< 1 hr");
 				}
 			}
 		}
@@ -287,7 +287,7 @@ public class Analytics : MonoBehaviour {
 
 	public void DidUseInhaler(bool choice){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Did Use Inhaler", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Did Use Inhaler", new Dictionary<string, object>{
 					{ "Did use Inhaler: ", choice}
 				});
 		}
@@ -296,7 +296,7 @@ public class Analytics : MonoBehaviour {
 
 	public void QuitGame(string scene){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Quit Game", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Quit Game", new Dictionary<string, object>{
 					{ "Quit At: ", scene}
 				});
 		}
@@ -304,7 +304,7 @@ public class Analytics : MonoBehaviour {
 
 	public void BlowFire (string timesFireBlow){
 		if(isAnalyticsEnabled){
-			Mixpanel.SendEvent("Blow Fire", new Dictionary<string, object>{
+			Amplitude.Instance.logEvent("Blow Fire", new Dictionary<string, object>{
 					{ "Times blown fire: ", timesFireBlow}
 				});
 		}

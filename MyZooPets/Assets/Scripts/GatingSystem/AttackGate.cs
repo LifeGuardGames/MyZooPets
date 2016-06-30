@@ -78,10 +78,6 @@ public class AttackGate : Singleton<AttackGate>{
 		// wait a frame to do our other stuff because the fire breathing animation is still technically playing
 		yield return 0;
 
-		//make button clickable again
-		if(FireButtonUIManager.Instance){
-			//FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
-		}
 
 		// release fire breathing lock
 		ClickManager.Instance.ReleaseLock();

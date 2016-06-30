@@ -1,3 +1,6 @@
+using UnityEngine;
+using System.Collections.Generic;
+
 /* 
  * Description:
  * Handles the pushing, popping, and management of all levelcomponents.
@@ -13,11 +16,6 @@
  * Based on each ones spawn chance, it rolls for a random one.
  * Then, we take that bundle, and spawn everything within it on that level component.
  */
-
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
 public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     // public int BottomLayer = 31;
 	public float LevelTooLowYValueGameOver = -80.0f; //Game over if player drops below
@@ -33,16 +31,16 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
     public LevelGroup mCurrentLevelGroup;
 	private Queue<LevelComponent> mLevelComponentQueue = new Queue<LevelComponent>();
 
-	// Use this for initialization
 	void Start() {
-		if (LevelGroups.Count <= 0)
+		if(LevelGroups.Count <= 0) {
 			Debug.LogError("No level groups found.");
+		}
 	}
 	
-	// Update is called once per frame
 	void Update() {
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.IsPaused) {
 			return;
+		}
 		// Assuming there is a runner and a level.
 		PlayerController playerController = PlayerController.Instance;
 
@@ -149,7 +147,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
 		foreach(LevelGroup lvGroup in LevelGroups){
 			lvGroup.Reset();
 		}
-
     }
 
 	/// <summary>
@@ -185,8 +182,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager> {
             // Now that we succesfully transitioned, determine if there is a level transition component.
             foreach (LevelTransitionComponent currentTransition in LevelTransitionGroups) {
                 if (currentTransition.FromGroupID == currentGroupID
-                    && currentTransition.ToGroupID == newGroupID) 
-                {
+                    && currentTransition.ToGroupID == newGroupID) {
                     // Push this component nowww
                     PushAndInstantiateRandomComponent(currentTransition);
                 }

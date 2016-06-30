@@ -24,21 +24,31 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 		return minigameUIInterface.GetMinigameKey();
 	}
 
+	public void OnPauseButton() {
+		pauseController.ShowPanel();
+		minigameUIInterface.OnPause();
+		TogglePauseButton(false);
+	}
+
+	private void TogglePauseButton(bool isShow) {
+		if(isShow) {
+			pauseButtonTween.Show();
+		}
+		else {
+			pauseButtonTween.Hide();
+		}
+	}
+
 	#region GameManager Calls
 	public void StartUI(){
 		startController.ShowPanel();
 	}
-
-	public void PauseUI(){
-		pauseController.ShowPanel();
-		TogglePauseButton(false);
-	}
-
+	
 	public void GameOverUI(bool allowContinue, int score, int starCount, int coinCount, int shardCount) {
 		// If continue is allowed, 40% chance to show ads granted that it is ready
 		if(allowContinue && AdManager.Instance.IsAdReady() && UnityEngine.Random.Range(0, 10) <= 3) {
 			continueController.ShowPanel();
-			minigameUIInterface.PauseToggle(false); //NOTE: Pause the game when the continue button shows up. Unpaused under OnContinue
+			minigameUIInterface.OnPause(); //NOTE: Pause the game when the continue button shows up. Unpaused under OnContinue
 			storedGameOverFunction = null;
 			storedGameOverFunction = () => gameOverController.PopulateAndShow(score, starCount, coinCount, shardCount);
 		}
@@ -48,21 +58,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 		}
     }
 	#endregion
-
-	private void ExitConfirmUI() {
-		exitConfirmController.ShowPanel();
-    }
-
-	private void TogglePauseButton(bool isShow) {
-		minigameUIInterface.PauseToggle(isShow);
-		if(isShow) {
-			pauseButtonTween.Show();
-		}
-		else {
-			pauseButtonTween.Hide();
-		}
-	}
-
+	
 	#region Calls from components, NOT from buttons
 	public void OnTutorial(){
 		minigameUIInterface.OnTutorial();
@@ -84,15 +80,15 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 			minigameUIInterface.QuitGame();
 		}
 		else{
-			ExitConfirmUI();
-        }
+			exitConfirmController.ShowPanel();
+		}
 	}
 
 	public void OnPlayAd(){
 		AdManager.Instance.ShowAd(delegate (bool result) {
 			if(result) {	// Finished ads
 				minigameUIInterface.OnContinue();
-				minigameUIInterface.PauseToggle(true);
+				minigameUIInterface.OnPause();
 			}
 			else {          // Ads failed somehow, fail gracefully
 				OnContinueRejected();

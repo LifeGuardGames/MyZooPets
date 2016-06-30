@@ -22,7 +22,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 
 	public void HideStage() {
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
-		RunnerGameManager.Instance.PauseGame(true);
+		RunnerGameManager.Instance.ResumeGame();
 		RunnerGameManager.Instance.SpecialInput = false;
 		RunnerGameManager.Instance.AcceptInput = false;
 	}
@@ -32,7 +32,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 	}
 
 	public void ShowOutro() {
-		RunnerGameManager.Instance.PauseGame(false);
+		RunnerGameManager.Instance.PauseGame();
 		outroTextObject.GetComponent<TweenToggleDemux>().Show();
 		outroTextObject.GetComponentInChildren<Text>().text = Localization.Localize("RUNNER_TUT_OUTRO");
 	}
@@ -50,7 +50,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 	}
 
 	public void ShowItem(string toDisplay) {
-		RunnerGameManager.Instance.PauseGame(false);
+		RunnerGameManager.Instance.PauseGame();
 		itemTextObject.GetComponent<TweenToggleDemux>().Show();
 		itemTextObject.GetComponentInChildren<Text>().text = toDisplay;
 	}
@@ -62,12 +62,12 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 
 	private IEnumerator UnpauseItemIEnum() {
 		yield return new WaitForSeconds(.3f);
-		RunnerGameManager.Instance.PauseGame(true);
+		RunnerGameManager.Instance.ResumeGame();
 	}
 
 	private IEnumerator UnpauseTutIEnum() {
 		yield return new WaitForSeconds(.3f);
-		RunnerGameManager.Instance.PauseGame(true);
+		RunnerGameManager.Instance.ResumeGame();
 		RunnerGameManager.Instance.AdvanceTutorial();
 	}
 
@@ -79,7 +79,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 			topText.text = "";
 			bottomText.text = Localization.Localize("RUNNER_TUT_" + toShow);
 		}
-		RunnerGameManager.Instance.PauseGame(false);
+		RunnerGameManager.Instance.PauseGame();
 		yield return new WaitForSeconds(.5f);
 		RunnerGameManager.Instance.SpecialInput = true;
 		toShow++;
@@ -89,7 +89,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 		outroTextObject.GetComponent<TweenToggleDemux>().Hide();
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
 		itemTextObject.GetComponent<TweenToggleDemux>().Hide();
-		RunnerGameManager.Instance.PauseGame(true);
+		RunnerGameManager.Instance.ResumeGame();
 	}
 
 }

@@ -1,6 +1,4 @@
-﻿
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 /// <summary>
 /// Camera follow. Camera follows the player
@@ -38,12 +36,11 @@ public class CameraFollow : MonoBehaviour {
 		//We are now following the player, so calculate our offset based on the player's current speed and its total and put us at the offset
 		speedPercentage = (PlayerController.Instance.Speed - minSpeed) / (maxSpeed - minSpeed); //Between 0 and 1 depending on percentage of currentSpeed from minSpeed to maxSpeed
 		currentOffset = maxOffset + (minOffset - maxOffset) * speedPercentage; //Now make our offset somewhere between maxOffset and minOffset depending on speedPercentage
-		this.transform.position = new Vector3(playerTransform.position.x + currentOffset, height, this.transform.position.z); //playerTransform.position.x+offset
+		transform.position = new Vector3(playerTransform.position.x + currentOffset, height, this.transform.position.z); //playerTransform.position.x+offset
 	}
 
 	public void Reset() {
 		following = false;
-		transform.position=playerTransform.position + new Vector3(42f,15f,-14f);
+		transform.position = playerTransform.position + new Vector3(42f, 15f, -14f);
 	}
-
 }

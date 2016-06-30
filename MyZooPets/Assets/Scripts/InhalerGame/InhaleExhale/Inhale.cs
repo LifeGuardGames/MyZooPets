@@ -30,7 +30,9 @@ public class Inhale : InhalerPart{
 				LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
 				AudioManager.Instance.PlayClip("inhalerInhale"); 
 				petAnimator.SetTrigger("BreatheIn");
-				
+
+				Debug.LogWarning("FLOATY SPAWN HERE");
+				/*
 				Hashtable option = new Hashtable();
 				option.Add("parent", GameObject.Find("Canvas"));
 				option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
@@ -39,6 +41,8 @@ public class Inhale : InhalerPart{
 				option.Add("color", Color.white);
 				
 				FloatyUtil.SpawnFloatyText(option);
+				*/
+
 				if(finish != null){
 					finish(this, EventArgs.Empty);
 				}
@@ -63,7 +67,9 @@ public class Inhale : InhalerPart{
 				LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
 				AudioManager.Instance.PlayClip("inhalerInhale"); 
 				petAnimator.SetTrigger("BreatheIn");
-				
+
+				Debug.LogWarning("FLOATY SPAWN HERE");
+				/*
 				Hashtable option = new Hashtable();
 				option.Add("parent", GameObject.Find("Canvas"));
 				option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
@@ -72,6 +78,8 @@ public class Inhale : InhalerPart{
 				option.Add("color", Color.white);
 				
 				FloatyUtil.SpawnFloatyText(option);
+				*/
+
 				if(finish != null){
 					finish(this, EventArgs.Empty);
 				}

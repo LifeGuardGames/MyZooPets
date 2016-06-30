@@ -4,7 +4,8 @@ using System.Collections;
 public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	protected abstract void _Start();
 	protected abstract void _NewGame();
-	protected abstract void _PauseGame(bool isShow);
+	protected abstract void _PauseGame();
+	protected abstract void _ResumeGame();
 	protected abstract void _ContinueGame();
 	protected abstract void _GameOver();
 	protected abstract void _GameOverReward();
@@ -33,6 +34,11 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		get { return score; }
 	}
 
+	protected bool isPaused;
+	public bool IsPaused {
+		get { return isPaused; }
+	}
+
 	protected bool isContinueAllowed;
 
 	IEnumerator Start() {
@@ -58,23 +64,33 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	}
 
 	public void NewGame() {
-		isContinueAllowed = true;
-		if (tutorial!=null) {
+		if(tutorial != null) {
 			tutorial.Abort();
 			tutorial = null;
 		}
+
+		isPaused = false;
+		isContinueAllowed = true;
+
 		rewardXPAux = 0;
 		rewardMoneyAux = 0;
 		rewardShardAux = 0;
+
 		// Decrease the pet's hunger after each new game
-		//StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
+		StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
 
 		_NewGame();
 	}
 
-	public void PauseGame(bool isShow) {
-		_PauseGame(isShow);
+	public void PauseGame() {
+		isPaused = true;
+		_PauseGame();
     }
+
+	public void ResumeGame() {
+		isPaused = false;
+		_ResumeGame();
+	}
 
 	public void ContinueGame() {
 		isContinueAllowed = false;

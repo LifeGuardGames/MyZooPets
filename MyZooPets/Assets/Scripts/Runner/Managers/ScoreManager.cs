@@ -84,8 +84,9 @@ public class ScoreManager : Singleton<ScoreManager>{
 	}
 
 	void Update(){
-		if(!RunnerGameManager.Instance.GameRunning)
+		if(RunnerGameManager.Instance.IsPaused) {
 			return;
+		}
 
 		PlayerController playerController = PlayerController.Instance;
 		distanceTraveled = (int)playerController.transform.position.x;

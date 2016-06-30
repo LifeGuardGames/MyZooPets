@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -18,7 +17,8 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	private ParallaxingBackgroundGroup mCurrentBackground = null;
 	private ParallaxingBackgroundGroup mNextBackground = null;
 	private Queue<ParallaxingBackgroundGroup> mNextTransition = new Queue<ParallaxingBackgroundGroup>();
-	private bool paused=false;
+	private bool paused = false;
+
 	void Start() {
 		TransitionToBackground(startingLevelGroup.parallaxBackgroundPrefab);
 	}
@@ -79,8 +79,9 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	}
 
 	private void SetNextGroupAsCurrentAndDeleteCurrent() {
-		if (mCurrentBackground != null)
-			GameObject.Destroy(mCurrentBackground.gameObject);
+		if(mCurrentBackground != null) {
+			Destroy(mCurrentBackground.gameObject);
+		}
 
 		mCurrentBackground = mNextBackground;
 		mCurrentBackground.SetAlpha(1f);

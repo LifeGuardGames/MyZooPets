@@ -29,7 +29,7 @@ public class ShooterEnemy : MonoBehaviour{
 	// Update is called once per frame
 	void Update(){
 		// work around for enemies who spawn during a state change they seem to miss the event call when this happens
-		if(ShooterGameManager.Instance.isPaused){
+		if(ShooterGameManager.Instance.IsPaused) {
 			LeanTween.pause(this.gameObject);
 		}
 		else {

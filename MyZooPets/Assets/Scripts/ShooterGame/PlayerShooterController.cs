@@ -160,7 +160,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	public void Move(Vector3 dir){
-		if(!ShooterGameManager.Instance.isPaused) {
+		if(!ShooterGameManager.Instance.IsPaused) {
 			if(ShooterGameManager.Instance.inTutorial) {
 				if(OnTutorialMove != null) {
 					OnTutorialMove(this, EventArgs.Empty);
@@ -172,14 +172,14 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	}
 
 	void FixedUpdate() {
-		if(moving && !ShooterGameManager.Instance.isPaused) {
+		if(moving && !ShooterGameManager.Instance.IsPaused) {
 			transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, Camera.main.ScreenToWorldPoint(clickPos).y, transform.position.z), moveSpeed * Time.deltaTime);
 		}
 	}
 
 	// shoots a bullet at the current position of the mouse or touch
 	public void Shoot(Vector3 dir){
-		if(!ShooterGameManager.Instance.isPaused) {
+		if(!ShooterGameManager.Instance.IsPaused) {
 			AudioManager.Instance.PlayClip("shooterFire", variations: 3);
 			characterAnim.Shoot();  // Tell the animator to shoot
 

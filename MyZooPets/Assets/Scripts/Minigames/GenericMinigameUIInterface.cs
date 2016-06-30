@@ -35,21 +35,42 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 	}
 
-	public void PauseToggle(bool isShow) {
+	public void OnPause() {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
-			DoctorMatchManager.Instance.PauseGame(isShow);
+			DoctorMatchManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			Debug.LogWarning("PauseGame not set up for Memory");
 		}
 		else if(sceneName == SceneUtils.RUNNER) {
-			RunnerGameManager.Instance.PauseGame(isShow);
+			RunnerGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			ShooterGameManager.Instance.PauseGame(isShow);
+			ShooterGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
-			NinjaManager.Instance.PauseGame(isShow);
+			NinjaManager.Instance.PauseGame();
+		}
+		else {
+			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
+		}
+	}
+
+	public void OnResume() {
+		if(sceneName == SceneUtils.DOCTORMATCH) {
+			DoctorMatchManager.Instance.ResumeGame();
+		}
+		else if(sceneName == SceneUtils.MEMORY) {
+			Debug.LogWarning("ResumeGame not set up for Memory");
+		}
+		else if(sceneName == SceneUtils.RUNNER) {
+			RunnerGameManager.Instance.ResumeGame();
+		}
+		else if(sceneName == SceneUtils.SHOOTER) {
+			ShooterGameManager.Instance.ResumeGame();
+		}
+		else if(sceneName == SceneUtils.TRIGGERNINJA) {
+			NinjaManager.Instance.ResumeGame();
 		}
 		else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
@@ -74,22 +95,6 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			NinjaManager.Instance.StartTutorial();
-		}
-		else {
-			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);
-		}
-	}
-
-	public void OnResume() {
-		if(sceneName == SceneUtils.DOCTORMATCH) {
-		}
-		else if(sceneName == SceneUtils.MEMORY) {
-		}
-		else if(sceneName == SceneUtils.RUNNER) {
-		}
-		else if(sceneName == SceneUtils.SHOOTER) {
-		}
-		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 		}
 		else {
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);

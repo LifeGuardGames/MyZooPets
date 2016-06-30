@@ -24,7 +24,6 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	public GameObject tutButton;
 
 	public MemoryGameUIManager memoryUI;
-	private bool isPaused = false;
 
 	private bool isGameActive = false;
 	public bool IsGameActive {
@@ -56,9 +55,12 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
         }
 	}
 
-	protected override void _PauseGame(bool isShow) {
-		isPaused = isShow;
-		isGameActive = !isShow;
+	protected override void _PauseGame() {
+		isGameActive = false;
+	}
+
+	protected override void _ResumeGame() {
+		isGameActive = true;
 	}
 
 	protected override void _ContinueGame() {
@@ -123,7 +125,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	#region Game Specific Functions
 	// InvokeRepeating method from _NewGame()
 	private void StartScoreCountdown(){
-		if(!isPaused){
+		if(!IsPaused){
 			// Check for negative score
 			if(Score - scoreDecrementValue >= 0){
 				UpdateScore(scoreDecrementValue * -1);

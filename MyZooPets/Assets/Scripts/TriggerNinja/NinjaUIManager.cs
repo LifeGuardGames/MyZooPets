@@ -48,6 +48,6 @@ public class NinjaUIManager : MonoBehaviour {
 		string comboText = string.Format(Localization.Localize("NINJA_COMBO"), combo);
 
 		GameObject floatyObject = GameObjectUtils.AddChildGUI(FloatyParent, FloatyComboPrefab);
-		floatyObject.GetComponent<FloatyController>().InitAndActivate(customText: comboText);
+		floatyObject.GetComponent<FloatyController>().InitAndActivate(worldPosition, customText: comboText);
 	}
 }

@@ -1,6 +1,3 @@
-using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
@@ -8,31 +5,20 @@ using System.Collections.Generic;
 // Spawns a bunch of triggers at random, unique
 // locations.
 //---------------------------------------------------
-
 public class SpawnGroupSeparate : SpawnGroup {
-	//---------------------------------------------------
-	// SpawnGroup_Separate()
-	//---------------------------------------------------	
-	public SpawnGroupSeparate( List<string> listObjects ) : base(listObjects){
+	public SpawnGroupSeparate(List<string> listObjects) : base(listObjects) {
 	}
-	
-	//---------------------------------------------------
-	// CheckCount()
-	//---------------------------------------------------	
-	protected override bool CheckCount( List<string> listObjects ) {
+
+	protected override bool CheckCount(List<string> listObjects) {
 		bool bOK = listObjects.Count <= listLocations.Count && listObjects.Count > 0;
-	
 		return bOK;
 	}
-	
-	//---------------------------------------------------
-	// SpawnObjects()
-	//---------------------------------------------------	
-	protected override void SpawnObjects( List<string> listObjects ) {
+
+	protected override void SpawnObjects(List<string> listObjects) {
 		// get a number of random, non-repeating spawn points
-		List<float> listSpawnLocs = ListUtils.GetRandomElements<float>( listLocations, listObjects.Count );
-		
+		List<float> listSpawnLocs = ListUtils.GetRandomElements<float>(listLocations, listObjects.Count);
+
 		// and then spawn the objects!
-		SpawnObjects( listObjects, listSpawnLocs );		
-	}	
+		SpawnObjects(listObjects, listSpawnLocs);
+	}
 }

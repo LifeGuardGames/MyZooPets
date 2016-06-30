@@ -21,7 +21,6 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	private float cardDelayTimer = 0.8f;
 	private int combo = 0;
 	public bool inTutorial = true;
-	public GameObject tutButton;
 
 	public MemoryGameUIManager memoryUI;
 
@@ -30,13 +29,13 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		get { return isGameActive; }
 	}
 
-	void Awake(){
+	void Awake() {
 		minigameKey = "MEMORY";
-        quitGameScene = SceneUtils.BEDROOM;
+		quitGameScene = SceneUtils.BEDROOM;
 		rewardXPMultiplier = 0.01f;
 		rewardMoneyMultiplier = 24;
 		rewardShardMultiplier = 84;
-		isContinueAllowed = false;	// Disable continue game functionality for this game
+		isContinueAllowed = false;  // Disable continue game functionality for this game
 	}
 
 	protected override void _Start() {
@@ -46,13 +45,12 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		if(IsTutorialOn() && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)) {
 			Debug.Log("tut");
 			StartTutorial();
-			tutButton.SetActive(true);
 		}
 		else {
 			Debug.Log("game");
 			isGameActive = true;
 			Reset();
-        }
+		}
 	}
 
 	protected override void _PauseGame() {
@@ -69,7 +67,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 
 	protected override void _GameOver() {
 		isGameActive = false;
-        //memoryUI.FinishBoard();
+		//memoryUI.FinishBoard();
 	}
 
 	protected override void _GameOverReward() {
@@ -85,24 +83,24 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Memory, Score, true);
 
 		Analytics.Instance.MemoryGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey]);
-		#if UNITY_IOS
+#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "MemoryLeaderBoard");
-		#endif
+#endif
 	}
 
 	protected override void _QuitGame() {
 	}
-	
 
 
-	protected bool IsTutorialOn(){
+
+	protected bool IsTutorialOn() {
 		return Constants.GetConstant<bool>("IsMemoryTutorialOn");
 	}
 
-	public void Reset(){
+	public void Reset() {
 		flip1 = null;
 		flip2 = null;
-		
+
 		cardsCount = MemoryBoardController.ROW_COUNT * MemoryBoardController.COLUMN_COUNT;
 
 		// Reset the combo
@@ -117,21 +115,21 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		//}
 	}
 
-	private void ResetBoard(){
+	private void ResetBoard() {
 		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
 		//memoryUI.StartBoard();
 	}
 
 	#region Game Specific Functions
 	// InvokeRepeating method from _NewGame()
-	private void StartScoreCountdown(){
-		if(!IsPaused){
+	private void StartScoreCountdown() {
+		if(!IsPaused) {
 			// Check for negative score
-			if(Score - scoreDecrementValue >= 0){
+			if(Score - scoreDecrementValue >= 0) {
 				UpdateScore(scoreDecrementValue * -1);
 				memoryUI.UpdateScoreText(score);
 			}
-			else{
+			else {
 				score = 0;
 				memoryUI.UpdateScoreText(score);
 			}
@@ -142,39 +140,39 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	/// Determines if flip allowed, check called from MemoryCard.cs itself
 	/// </summary>
 	/// <returns><c>true</c> if this instance is flip allowed; otherwise, <c>false</c>.</returns>
-	public bool IsFlipAllowed(MemoryCard card){
+	public bool IsFlipAllowed(MemoryCard card) {
 		// Prevent the same card from being clicked
-		if(flip1 != null && flip2 == null && card == flip1){
+		if(flip1 != null && flip2 == null && card == flip1) {
 			return false;
 		}
-		return !pauseDelayActive ;
+		return !pauseDelayActive;
 	}
 
 	/// <summary>
 	/// Function that is called whenever a valid flip is done
 	/// </summary>
 	/// <param name="card">Card</param>
-	public void NotifyClicked(MemoryCard card){
-		if(flip1 == null){
+	public void NotifyClicked(MemoryCard card) {
+		if(flip1 == null) {
 			flip1 = card;
 		}
-		else if(flip2 == null && card != flip1){ // Prevent clicking on self
+		else if(flip2 == null && card != flip1) { // Prevent clicking on self
 			flip2 = card;
 
 			pauseDelayActive = true;
 
-			if(flip1.TriggerName == flip2.TriggerName){
+			if(flip1.TriggerName == flip2.TriggerName) {
 				// Match! play scoring sequence after delay
 				Invoke("UnlockDelaySuccess", cardDelayTimer);
 
 				// Increase the combo
 				combo++;
-				if(combo >= 1){
+				if(combo >= 1) {
 					UpdateScore(combo * comboMultiplier);
 					memoryUI.UpdateScoreText(score);
 				}
 			}
-			else{
+			else {
 				// Failed, flip back again after delay
 				Invoke("UnlockDelayFailure", cardDelayTimer);
 
@@ -187,7 +185,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		}
 	}
 
-	private void UnlockDelaySuccess(){
+	private void UnlockDelaySuccess() {
 		AudioManager.Instance.PlayClip("memorySuccess");
 
 		// Tell cards to play success state
@@ -203,13 +201,13 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		cardsCount -= 2;
 
 		// Final calculations to the score before game over
-		if(cardsCount <= 0){
+		if(cardsCount <= 0) {
 			CancelInvoke("StartScoreCountdown");
 			GameOver();
 		}
 	}
 
-	private void UnlockDelayFailure(){
+	private void UnlockDelayFailure() {
 		// Tell cards to flip back
 		flip1.FlipResult(false);
 		flip2.FlipResult(false);
@@ -221,22 +219,16 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		flip2 = null;
 	}
 
-	public void StartTutorial(){
+	public void StartTutorial() {
 		MemoryGameTut tut = new MemoryGameTut();
 		tut.ProcessStep(0);
-		//StartCoroutine (StudyTime ());
 	}
 
-	public void MoveOn(){
-		tutButton.SetActive(false);
-		if(proceed != null)
+	// Button call from MemoryTutorialController
+	public void OnTutorialComplete() {
+		if(proceed != null) {
 			proceed(this, EventArgs.Empty);
+		}
 	}
-
-	//	void OnGUI(){
-	//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-	//			GameOver();
-	//		}
-	//	}
 	#endregion
 }

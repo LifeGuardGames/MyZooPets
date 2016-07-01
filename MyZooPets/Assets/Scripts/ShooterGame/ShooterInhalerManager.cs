@@ -1,13 +1,12 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using System.Collections;
 
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public EventHandler<EventArgs> proceed;
 	public bool canUseInhalerButton = true;
 	public bool hit = false;
-	public GameObject badTimingObject;
+	public Animation badTimingAnim;
 	public ParticleSystem goodTimingParticle;
 	public int missed = 0;
 	public int combo = 5;
@@ -24,9 +23,8 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 		combo = 5;
 		missed = 0;
 	}
-
-	//on button Tap
-	public void ShooterGameInhalerButton(){
+	
+	public void OnShooterGameInhalerButton(){
 		hit = true;
 		// if they can use the inhaler reward them with health and points
 		if(CanUseInhalerButton == false){
@@ -49,16 +47,11 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 		else if(CanUseInhalerButton == true){
 			combo = 0;
 			missed++;
-			Debug.Log(badTimingObject.name);
-			badTimingObject.SetActive(true);
 
 			AudioManager.Instance.PlayClip("minigameError");
-			StartCoroutine(DeactivateText());
-		}
-	}
 
-	IEnumerator DeactivateText(){
-		yield return new WaitForSeconds (2.0f);
-		badTimingObject.SetActive(false);
+			badTimingAnim.gameObject.SetActive(true);
+			badTimingAnim.Play();
+		}
 	}
 }

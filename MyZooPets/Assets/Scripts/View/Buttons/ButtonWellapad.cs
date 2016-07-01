@@ -21,7 +21,7 @@ public class ButtonWellapad : LgButton {
 		if(!isWellapadOn)
 			NGUITools.SetActive( gameObject, false );
 
-		tutDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		tutDone = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
 		if(tutDone){
 			//Listens to update event from wellapad mission controller
 			//WellapadMissionController.Instance.OnTaskUpdated += EnableButtonBounce;

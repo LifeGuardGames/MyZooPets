@@ -32,7 +32,7 @@ public class DegradTrigger : MonoBehaviour{
 		emitter.targetDestination = DegradationUIManager.Instance.petHitLocation;
 		
 		// if the trigger tutorial has been played, activate the trigger
-		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
 		if(areTutorialsFinished || DegradationUIManager.Instance.IsTesting()){
 			ActivateParticles();		
 		}

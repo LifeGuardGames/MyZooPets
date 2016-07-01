@@ -103,7 +103,6 @@ public abstract class Tutorial{
 	/// </summary>
 	/// <param name="isFinished">If set to <c>true</c> is finished.</param>
 	protected virtual void End(bool isFinished){
-		// debug message
 		// Debug.Log("Tutorial Ending: " + GetKey());
 		
 		// let children know the tutorial is over
@@ -111,7 +110,9 @@ public abstract class Tutorial{
 		
 		// save the fact that the user completed this tutorial
 		if(isFinished){
-			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(GetKey());
+			if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(GetKey())) {
+				DataManager.Instance.GameData.Tutorial.ListPlayed.Add(GetKey());
+			}
 			Analytics.Instance.TutorialCompleted(GetKey());
 			//DataManager.Instance.SaveGameData();
 		}

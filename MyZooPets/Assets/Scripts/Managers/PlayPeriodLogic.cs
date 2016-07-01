@@ -79,7 +79,7 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		bool retVal = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed < GetCurrentPlayPeriod();
 
 		// If you didnt finish tutorial-1 and the tutorial is done
-		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done();
+		bool isPart1TutorialDone = DataManager.Instance.GameData.Tutorial.IsFlameTutorialDone();
 		bool isInhalerTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);
 		if(!isPart1TutorialDone && isInhalerTutorialDone){
 			retVal = false;

@@ -71,13 +71,13 @@ public class Analytics : MonoBehaviour {
 	#endregion
 
 	#region Shooter Game
-	public void ShooterGameData(int score, int percentage, string waveName, int combo) {
+	public void ShooterGameData(int highScore, int percentage, string waveName, int combo) {
 		if(isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Shooter HighScore", new Dictionary<string, object>{
-				{ "High Score: ", score},
+				{ "High Score: ", highScore},
 				{ "Inhaler misses: ", percentage},
-				{"Wave Number died at: ", waveName },
-				{"Inhaler combo: ", combo }
+				{ "Wave Number died at: ", waveName },
+				{ "Inhaler combo: ", combo }
 			});
 		}
 	}

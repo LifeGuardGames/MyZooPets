@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -125,6 +126,12 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		}
 	}
 
+	protected override void _StartTutorial() {
+		isTutorialRunning = true;
+		isPlaying = true;
+		isGameOver = false;
+	}
+
 	protected override void _NewGame() {
 		// reset variables
 		lifeCount = 3;
@@ -144,7 +151,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 
 		uiManager.NewGameUI();
 
-		if(IsTutorialOn() || !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)) {
+		if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)) {
 			StartTutorial();
 		}
 	}
@@ -189,10 +196,6 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		spawning = true;
 		isPlaying = true;
 		isGameOver = false;
-	}
-
-	protected bool IsTutorialOn() {
-		return Constants.GetConstant<bool>("IsTriggerSlashTutorialOn");
 	}
 
 	void Update() {
@@ -443,13 +446,6 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		else if(Score > 250) {
 			Time.timeScale = 2.0f;
 		}
-	}
-
-	public void StartTutorial() {
-		isTutorialRunning = true;
-		isPlaying = true;
-		isGameOver = false;
-		SetTutorial(new NinjaTutorial());
 	}
 
 	IEnumerator WaitASec(int _rand, List<string> listObjects) {

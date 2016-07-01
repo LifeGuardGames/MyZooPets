@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
 using System;
 
-public class MemoryGameTut {
-	public static string TUT_KEY = "MEMORY_TUT";
+public class MemoryGameTutorial : MinigameTutorial {
 	GameObject tutBoards;				// Gameobject that positions the tutorial boards			
-	GameObject memoryCards;     		// memory prefab
+	GameObject memoryCards;             // Memory cards layout prefab
 	
+	protected override void SetKey() {
+		tutorialKey = "MEMORY_TUT";
+    }
+
+	protected override void SetMaxSteps() {
+		maxSteps = 1;
+    }
+
 	// in each case we are going to listen to events that tell us to move along
-	public void ProcessStep(int nStep){
+	protected override void ProcessStep(int nStep){
 		switch (nStep) {
 		//runs for about 4 sec then starts the game the timer is in the memory game manager
 		case 0:
@@ -20,7 +27,7 @@ public class MemoryGameTut {
 	}
 
 	// once we are done destroy the remaining board and reset for the game
-	public void _End(bool isFinished){
+	protected override void _End(bool isFinished){
 		GameObject.Destroy(tutBoards);
 		MemoryGameManager.Instance.inTutorial = false;
 		if(!isFinished){

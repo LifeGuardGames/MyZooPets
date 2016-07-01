@@ -3,6 +3,7 @@ using System.Collections;
 
 public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehaviour {
 	protected abstract void _Start();
+	protected abstract void _StartTutorial();
 	protected abstract void _NewGame();
 	protected abstract void _PauseGame();
 	protected abstract void _ResumeGame();
@@ -54,7 +55,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		GenericMinigameUI.Instance.StartUI();
 
 		_Start();
-    }
+	}
 
 	public virtual void UpdateScore(int deltaScore) {
 		score += deltaScore;
@@ -63,29 +64,43 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		}
 	}
 
-	public void NewGame() {
-		if(tutorial != null) {
-			tutorial.Abort();
-			tutorial = null;
+	/// <summary>
+	/// Tutorial does not track "inTutorial" state, track it in child if you need it
+	/// </summary>
+	public void StartTutorial() {
+		// Save the tutorial key to complete if not existing already
+		if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)) {
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(minigameKey);
 		}
+		_StartTutorial();
+	}
 
-		isPaused = false;
-		isContinueAllowed = true;
+	/// <summary>
+	/// Checks if tutorial is already complete. If not, run tutorial logic instead
+	/// </summary>
+	public void NewGame() {
+		if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)) {
+			StartTutorial();
+		}
+		else {
+			isPaused = false;
+			isContinueAllowed = true;
 
-		rewardXPAux = 0;
-		rewardMoneyAux = 0;
-		rewardShardAux = 0;
+			rewardXPAux = 0;
+			rewardMoneyAux = 0;
+			rewardShardAux = 0;
 
-		// Decrease the pet's hunger after each new game
-		StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
+			// Decrease the pet's hunger after each new game
+			StatsManager.Instance.ChangeStats(hungerDelta: -5, isInternal: true);
 
-		_NewGame();
+			_NewGame();
+		}
 	}
 
 	public void PauseGame() {
 		isPaused = true;
 		_PauseGame();
-    }
+	}
 
 	public void ResumeGame() {
 		isPaused = false;
@@ -95,14 +110,14 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	public void ContinueGame() {
 		isContinueAllowed = false;
 		_ContinueGame();
-    }
+	}
 
 	public void GameOver() {
 		AudioManager.Instance.PlayClip("minigameGameOver");
 
 		// Record highest score
 		HighScoreManager.Instance.UpdateMinigameHighScore(minigameKey, score); //TODO: For RunnerGame, there needs to be an explicit call to a function get score or the logic of runner must change b/c we are using distance and points to add in to score
-	
+
 		// Calculate reward
 		rewardXPAux = (int)(score * rewardXPMultiplier);
 		rewardMoneyAux = (int)(score * rewardXPMultiplier);
@@ -111,25 +126,14 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		_GameOver();
 
 		GenericMinigameUI.Instance.GameOverUI(isContinueAllowed, score, rewardXPAux, rewardMoneyAux, rewardShardAux);
-    }
+	}
 
 	public void GameOverReward() {
 		_GameOverReward();
-    }
+	}
 
 	public void QuitGame() {
-		if (tutorial!=null) {
-			tutorial.Abort();
-			tutorial = null;
-		}
 		_QuitGame();
 		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
-    }
-
-	public void FinishedTutorial() {
-		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(minigameKey);
-	}
-	protected void SetTutorial(MinigameTutorial tutorial) {
-		this.tutorial=tutorial; //NOTE: If your game crashes when you set this and restart early, that means you are calling NewGame when isFinished is false. Only call NewGame when isFinished is true.
 	}
 }

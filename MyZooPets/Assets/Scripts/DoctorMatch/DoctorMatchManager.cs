@@ -81,7 +81,11 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		arrowObject.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
-	public IEnumerator StartTutorial() {
+	protected override void _StartTutorial() {
+		StartCoroutine(StartTutorialHelper());
+	}
+
+	public IEnumerator StartTutorialHelper() {
 		ResetScore();
 		tutorial = true;
 		yield return assemblyLineController.Initialize(true); //If a tutorial is called after a game is played, we need to wait a frame for objects to be cleared
@@ -92,7 +96,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		zoneRed.ToggleButtonInteractable(true);
 
 		doctorMatchTutorial = new DoctorMatchTutorial();
-		SetTutorial(doctorMatchTutorial);
 	}
 
 	public void OnTimerBarEmpty() {

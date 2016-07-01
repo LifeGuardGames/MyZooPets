@@ -41,16 +41,13 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	protected override void _Start() {
 	}
 
+	protected override void _StartTutorial() {
+		MemoryGameTutorial tut = new MemoryGameTutorial();
+	}
+
 	protected override void _NewGame() {
-		if(IsTutorialOn() && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)) {
-			Debug.Log("tut");
-			StartTutorial();
-		}
-		else {
-			Debug.Log("game");
-			isGameActive = true;
-			Reset();
-		}
+		isGameActive = true;
+		Reset();
 	}
 
 	protected override void _PauseGame() {
@@ -91,12 +88,6 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	protected override void _QuitGame() {
 	}
 
-
-
-	protected bool IsTutorialOn() {
-		return Constants.GetConstant<bool>("IsMemoryTutorialOn");
-	}
-
 	public void Reset() {
 		flip1 = null;
 		flip2 = null;
@@ -110,9 +101,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		CancelInvoke("StartScoreCountdown");
 		score = startScoreValue;
 		InvokeRepeating("StartScoreCountdown", 0f, scoreDecrementTimer);
-		//if(!IsTutorialOn() || DataManager.Instance.GameData.Tutorial.IsTutorialFinished(MemoryGameTut.TUT_KEY)){
 		ResetBoard();
-		//}
 	}
 
 	private void ResetBoard() {
@@ -218,12 +207,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		flip1 = null;
 		flip2 = null;
 	}
-
-	public void StartTutorial() {
-		MemoryGameTut tut = new MemoryGameTut();
-		tut.ProcessStep(0);
-	}
-
+	
 	// Button call from MemoryTutorialController
 	public void OnTutorialComplete() {
 		if(proceed != null) {

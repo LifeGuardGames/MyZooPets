@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 	public EventHandler<EventArgs> proceed;

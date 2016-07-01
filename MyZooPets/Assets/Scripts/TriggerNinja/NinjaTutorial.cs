@@ -1,12 +1,12 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 public class NinjaTutorial : MinigameTutorial {
     public static string TUT_KEY = "NINJA_TUT";
 
 	private Animation swipeTutAnimation;
 	private GameObject swipeTutObject;
+
 	// one game object for each type of trigger
 	private GameObject trigger1Object;
 	private GameObject trigger2Object;
@@ -14,17 +14,18 @@ public class NinjaTutorial : MinigameTutorial {
 	private GameObject trigger4Object;
 	private GameObject trigger5Object;
 	private GameObject trigger6Object;
+
 	// number of triggers cut, this is a subsitute from having more steps
 	private int numOfTriggersCut;
 	  
-    protected override void SetMaxSteps(){
-        maxSteps = 1;
-    }
-	     
     protected override void SetKey(){
-        tutorialKey = TUT_KEY;
+        tutorialKey = "NINJA_TUT";
     }
 
+	protected override void SetMaxSteps(){
+        maxSteps = 1;
+    }
+	
 	protected override void _End(bool isFinished){
 		if(!isFinished){
 			if(trigger1Object){

@@ -106,7 +106,7 @@ public class DegradationLogic : Singleton<DegradationLogic>{
 
 	private void StatsDegradationCheck(){
 		// don't do these checks if the player has not yet finished the tutorials (we don't want them losing health/hunger)
-		bool isTutorialDone = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		bool isTutorialDone = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
 		if(!isTutorialDone){
 			return;
 		}

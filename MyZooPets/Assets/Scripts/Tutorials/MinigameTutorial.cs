@@ -1,5 +1,2 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public abstract class MinigameTutorial : Tutorial {
+﻿public abstract class MinigameTutorial : Tutorial {
 }

@@ -14,7 +14,7 @@ public class IntroduceNewEntrance : MonoBehaviour{
 	}
 
 	private void CheckToHighlightEntrance(){
-		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
+		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
 
 		if(areTutorialsFinished){
 			this.gameObject.SetActive(true);

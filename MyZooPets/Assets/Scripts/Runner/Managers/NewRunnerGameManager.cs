@@ -38,14 +38,20 @@ public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
 		//Reset level items
 		RunnerItemManager.Instance.Reset();
 	}
-	public IEnumerator StartTutorial() {
-		ResetScore();
-		tutorial = true;
-		yield return new WaitForEndOfFrame();
-	}
+
 	// Use this for initialization
 	protected override void _Start() {
 		Application.targetFrameRate = 60;
+	}
+
+	protected override void _StartTutorial() {
+		StartCoroutine(StartTutorialHelper());
+	}
+
+	public IEnumerator StartTutorialHelper() {
+		ResetScore();
+		tutorial = true;
+		yield return new WaitForEndOfFrame();
 	}
 
 	protected override void _NewGame() {    //Reset everything and start again, not called during tutorial
@@ -80,6 +86,7 @@ public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
 		 * MegaHazard.StopMoving()
 		 */
 	}
+
 	protected override void _GameOverReward() {
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
@@ -91,6 +98,7 @@ public class NewRunnerGameManager : NewMinigameManager<NewRunnerGameManager> {
 		//BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 		//TODO: Implement badges under RunnerGame
 	}
+
 	protected override void _QuitGame() {
 		Application.targetFrameRate = 30;
 	}

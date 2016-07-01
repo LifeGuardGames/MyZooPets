@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System;
-using System.Collections;
 
 public class DoctorMatchTutorial : MinigameTutorial {
-	public static string TUT_KEY = "DOCTORMATCH_TUT";
 	private DoctorMatchTutorialText tutorialText;
+
+	protected override void SetKey() {
+		tutorialKey = "DOCTORMATCH_TUT";
+	}
 
 	protected override void SetMaxSteps() {
 		maxSteps = 4;
-	}
-
-	protected override void SetKey() {
-		tutorialKey = TUT_KEY;
 	}
 
 	protected override void _End(bool isFinished) {

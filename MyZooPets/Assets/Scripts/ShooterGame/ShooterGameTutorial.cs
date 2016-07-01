@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 public class ShooterGameTutorial {
 	public static string TUT_KEY = "SHOOT_TUT";
@@ -11,7 +10,6 @@ public class ShooterGameTutorial {
 	GameObject tutEnemy;				// tutorial enemies
 	GameObject fingerPos;
 	private int currentStep = 0;
-
 
 	// in each case we are going to listen to events that tell us to move along
 	public void ProcessStep(int step){
@@ -85,14 +83,12 @@ public class ShooterGameTutorial {
 			case 9:
 				GameObject.Destroy(tutorialInhalerUse);
 				GameObject.Destroy(fingerPos);
-				ShooterGameManager.Instance.FinishedTutorial();
 				ShooterGameManager.Instance.inTutorial = false;
                 ShooterGameManager.Instance.NewGame();
 			break;
 		}
 	}
-
-
+	
 	private void MoveAlong(object sender, EventArgs args){
 		if(currentStep < 9) {
 			currentStep++;

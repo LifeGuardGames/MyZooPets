@@ -49,8 +49,19 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	public void EndGame() {
 		GameOver();
 	}
+	
+	// Use this for initialization
+	protected override void _Start() {
+		Application.targetFrameRate = 60;
+		PauseGame();
+	}
 
-	public IEnumerator StartTutorial() {
+	// Entry point for tutorial
+	protected override void _StartTutorial() {
+		StartCoroutine(StartTutorialHelper());
+	}
+
+	public IEnumerator StartTutorialHelper() {
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
 		acceptInput = false;
@@ -60,18 +71,14 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
 
-		yield return new WaitForSeconds(1f); //The character should run for a second before we pause the game and show the first panel
+		//The character should run for a second before we pause the game and show the first panel
+		yield return new WaitForSeconds(1f);
 		runnerTutorial = new RunnerTutorial();
-		SetTutorial(runnerTutorial);
 	}
 
-	public void AdvanceTutorial() { //Called by RunnerGameTutorialText b/c we are the only ones w/ access to our tutorial
+	//Called by RunnerGameTutorialText b/c we are the only ones w/access to our tutorial
+	public void AdvanceTutorial() {
 		runnerTutorial.Advance();
-	}
-	// Use this for initialization
-	protected override void _Start() {
-		Application.targetFrameRate = 60;
-		PauseGame();
 	}
 
 	protected override void _NewGame() {    //Reset everything and start again, not called during tutorial

@@ -24,7 +24,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 			return RunnerGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
-			return ShooterGameManager.Instance.GetMinigameKey();
+			return ShooterGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA) {
 			return NinjaManager.Instance.MinigameKey;
@@ -77,18 +77,15 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 		}
 	}
 
-	public void OnTutorial() { //These should/could be Coroutines
+	public void OnTutorial() {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
-			//TODO: Determine if coroutine is necessary for DoctorMatch.
-			//The one thing holding it back is the fact that Initialize under
-			//AssemblyLineController is a coroutine, but it may not actually need to be.
-			//That would simply this considerably.
-			StartCoroutine(DoctorMatchManager.Instance.StartTutorial());    //This one needs to be a coroutine
+			DoctorMatchManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			MemoryGameManager.Instance.StartTutorial();
-		} else if (sceneName == SceneUtils.RUNNER) {
-			StartCoroutine(RunnerGameManager.Instance.StartTutorial());
+		}
+		else if (sceneName == SceneUtils.RUNNER) {
+			RunnerGameManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.SHOOTER) {
 			ShooterGameManager.Instance.StartTutorial();

@@ -10,12 +10,10 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void FigureOutMissions(){
-		if(!DataManager.Instance.GameData.Tutorial.IsTutorialPart1Done()){
-			Debug.Log("tut");
+		if(!DataManager.Instance.GameData.Tutorial.IsFlameTutorialDone()){
 			missionID = "DailyInhaler";
 		}
 		else{
-			Debug.Log("crit");
 			missionID = "Critical";
 		}
 	}

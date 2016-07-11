@@ -260,7 +260,7 @@ public abstract class MinigameManager<T> : Singleton<T> where T : MonoBehaviour{
 			ui.TogglePopup(MinigamePopups.Pause, false);
 		
 		if(IsTutorialRunning()){
-			tutorial.Abort();
+//			tutorial.Abort();
 			tutorial = null;	
 		}
 

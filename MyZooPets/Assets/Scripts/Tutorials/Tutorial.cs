@@ -92,13 +92,6 @@ public abstract class Tutorial{
 	}	
 
 	/// <summary>
-	/// Ends the tutorial early
-	/// </summary>
-	public void Abort(){
-		End(false);	
-	}
-
-	/// <summary>
 	/// When this tutorial is finished.
 	/// </summary>
 	/// <param name="isFinished">If set to <c>true</c> is finished.</param>

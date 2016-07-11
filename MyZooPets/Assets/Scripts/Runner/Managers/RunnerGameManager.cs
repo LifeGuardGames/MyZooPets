@@ -58,7 +58,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 	// Entry point for tutorial
 	protected override void _StartTutorial() {
-		isPaused=false; //HACK: This pause should really be called by our parent but that could break other games, so it will be used here
+		isPaused=false;
 		StartCoroutine(StartTutorialHelper());
 	}
 
@@ -111,7 +111,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	protected override void _GameOver() {
 		AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
-		isPaused=true; //HACK: This pause should really be called by our parent but that could break other games, so it will be used here
+
 		// play game over sound
 		AudioManager.Instance.PlayClip("runnerGameOver");
 		RunnerLevelManager.Instance.mCurrentLevelGroup.ReportDeath();

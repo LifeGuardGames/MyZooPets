@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class DoctorMatchZone : MonoBehaviour {
+public class DoctorMatchZone : MonoBehaviour{
 	public Button button;
 	public DoctorMatchManager.DoctorMatchButtonTypes buttonType;
 	public ParticleSystem particle;
@@ -9,23 +9,25 @@ public class DoctorMatchZone : MonoBehaviour {
 	private float lockTime = 0.05f;
 	private bool isLocked = false;
 
-	public void ToggleButtonInteractable(bool isInteractive) {
+	public void ToggleButtonInteractable(bool isInteractive){
 		button.interactable = isInteractive;
 	}
 
 	public void OnZoneClicked(){
-		if(!isLocked) {
+		if(!isLocked){
 			TempLock(lockTime);// Lock to prevent accidental double tapping
 			DoctorMatchManager.Instance.OnZoneClicked(buttonType);
 			particle.Play();
 		}
 	}
+
 	public void TempLock(float timeToLock){
 		isLocked = true;	
 		Invoke("TempUnlock", timeToLock);
 		ToggleButtonInteractable(false);
 	}
-	public void TempUnlock() {
+
+	public void TempUnlock(){
 		isLocked = false;
 		ToggleButtonInteractable(true);
 	}

@@ -58,6 +58,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 	// Entry point for tutorial
 	protected override void _StartTutorial() {
+		isPaused=false;
 		StartCoroutine(StartTutorialHelper());
 	}
 

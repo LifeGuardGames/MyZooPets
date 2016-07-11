@@ -9,7 +9,7 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class RunnerItem : MonoBehaviour {
+public abstract class RunnerItem : MonoBehaviour{
 	public string ID = "";
 	public int pointValue = 0;
 	public string strSoundPickup;
@@ -19,25 +19,25 @@ public abstract class RunnerItem : MonoBehaviour {
 	protected bool hazard = false;
 
 	// Use this for initialization
-	public virtual void Start() {
+	public virtual void Start(){
 	}
 
 	// Update is called once per frame
-	public virtual void Update() {
+	public virtual void Update(){
 	}
 
-	void OnTriggerEnter(Collider inOther) {
-		if (inOther.gameObject.tag == "Player" && (!hazard || (hazard && !PlayerController.Instance.Invincible))) { //Make sure we are either not a hazard, or that we are a hazard and the player is vulnerable
+	void OnTriggerEnter(Collider inOther){
+		if(inOther.gameObject.tag == "Player" && (!hazard || (hazard && !PlayerController.Instance.Invincible))){ //Make sure we are either not a hazard, or that we are a hazard and the player is vulnerable
 		
 			//Display tutorial first if needed	
-			if (hasTutorial)
+			if(hasTutorial)
 				RunnerItemManager.Instance.DisplayTutorial(ID, true);
 
 			//Each item handles their own pickup
 			OnPickup();
 
 			//Play sound
-			if (!string.IsNullOrEmpty(strSoundPickup)) //If this sound exists play it if we are not a hazard, 
+			if(!string.IsNullOrEmpty(strSoundPickup)) //If this sound exists play it if we are not a hazard, 
 				AudioManager.Instance.PlayClip(strSoundPickup); //or if we are a hazard, we must not be invicibile
 		}
 	}
@@ -50,7 +50,7 @@ public abstract class RunnerItem : MonoBehaviour {
 	/// <summary>
 	/// Spawns the floaty text.
 	/// </summary>
-	protected void SpawnFloatyText(string toDisplay = "", float floatingTime = -1) {
+	protected void SpawnFloatyText(string toDisplay = "", float floatingTime = -1){
 		GameObject starFloaty = Instantiate(RunnerGameManager.Instance.starFloatyPrefab);
 		Vector3 playerPos = PlayerController.Instance.FloatyLocation.transform.position;
 		starFloaty.transform.SetParent(RunnerGameManager.Instance.floatyParent);

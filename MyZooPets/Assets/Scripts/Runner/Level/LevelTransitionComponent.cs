@@ -13,7 +13,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class LevelTransitionComponent : LevelComponent {
-    public LevelGroup.eLevelGroupID FromGroupID;
-    public LevelGroup.eLevelGroupID ToGroupID;
+public class LevelTransitionComponent : LevelComponent{
+	public LevelGroup.eLevelGroupID FromGroupID;
+	public LevelGroup.eLevelGroupID ToGroupID;
 }

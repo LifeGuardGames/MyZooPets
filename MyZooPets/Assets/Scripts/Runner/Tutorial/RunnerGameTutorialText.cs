@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
+public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText>{
 	public GameObject stageTextObject;
 	public Text topText;
 	public Text bottomText;
@@ -10,72 +10,73 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 	public GameObject itemTextObject;
 	private int toShow = 0;
 
-	public bool IsVisible {
-		get {
+	public bool IsVisible{
+		get{
 			bool visible = false;
-			foreach (TweenToggleDemux toggleDemux in GetComponentsInChildren<TweenToggleDemux>()) {
+			foreach(TweenToggleDemux toggleDemux in GetComponentsInChildren<TweenToggleDemux>()){
 				visible |= toggleDemux.IsShowing;
 			}
 			return visible;
 		}
 	}
 
-	public void HideStage() {
+	public void HideStage(){
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
 		RunnerGameManager.Instance.ResumeGame();
 		RunnerGameManager.Instance.SpecialInput = false;
 		RunnerGameManager.Instance.AcceptInput = false;
 	}
 
-	public void ShowStage() {
+	public void ShowStage(){
 		StartCoroutine(StageIEnum());
 	}
 
-	public void ShowOutro() {
+	public void ShowOutro(){
 		RunnerGameManager.Instance.PauseGame();
 		outroTextObject.GetComponent<TweenToggleDemux>().Show();
 		outroTextObject.GetComponentInChildren<Text>().text = Localization.Localize("RUNNER_TUT_OUTRO");
 	}
 
-	public void HideOutro() {
+	public void HideOutro(){
 		outroTextObject.GetComponent<TweenToggleDemux>().Hide();
 		StartCoroutine(UnpauseTutIEnum());
 	}
 
-	public IEnumerator HideAll() {
+	public IEnumerator HideAll(){
 		StopAllCoroutines();
 		HideHelper();
 		yield return new WaitForSeconds(1f); //If the panels are still in the process of showing, we must wait for them to appear
 		HideHelper();
 	}
 
-	public void ShowItem(string toDisplay) {
+	public void ShowItem(string toDisplay){
 		RunnerGameManager.Instance.PauseGame();
 		itemTextObject.GetComponent<TweenToggleDemux>().Show();
 		itemTextObject.GetComponentInChildren<Text>().text = toDisplay;
 	}
 
-	public void HideItem() {
+	public void HideItem(){
 		itemTextObject.GetComponent<TweenToggleDemux>().Hide();
 		StartCoroutine(UnpauseItemIEnum());
 	}
 
-	private IEnumerator UnpauseItemIEnum() {
+	private IEnumerator UnpauseItemIEnum(){
 		yield return new WaitForSeconds(.3f);
 		RunnerGameManager.Instance.ResumeGame();
 	}
 
-	private IEnumerator UnpauseTutIEnum() {
+	private IEnumerator UnpauseTutIEnum(){
 		yield return new WaitForSeconds(.3f);
 		RunnerGameManager.Instance.ResumeGame();
 		RunnerGameManager.Instance.AdvanceTutorial();
 	}
 
-	private IEnumerator StageIEnum() {
+	private IEnumerator StageIEnum(){
 		stageTextObject.GetComponent<TweenToggleDemux>().Show();
-		if (toShow==0){
+		if(toShow == 0){
 			topText.text = Localization.Localize("RUNNER_TUT_" + toShow);
-		} else {
+		}
+		else{
 			topText.text = "";
 			bottomText.text = Localization.Localize("RUNNER_TUT_" + toShow);
 		}
@@ -85,7 +86,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 		toShow++;
 	}
 
-	private void HideHelper() {
+	private void HideHelper(){
 		outroTextObject.GetComponent<TweenToggleDemux>().Hide();
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
 		itemTextObject.GetComponent<TweenToggleDemux>().Hide();

@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ButtonResetGame : MonoBehaviour {
+public class ButtonResetGame : MonoBehaviour{
 
 	// Use this for initialization
-	void Start () {
+	void Start(){
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update(){
 	
 	}
 
-    void OnClick() {
+	void OnClick(){
 		Debug.LogWarning("This should not be called");
 		RunnerGameManager.Instance.NewGame();
 	}

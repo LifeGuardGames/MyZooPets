@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText> {
+public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText>{
 	public GameObject introTextObject;
 	public GameObject stageTextObject;
 	private int toShow = 0;
@@ -19,15 +19,15 @@ public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText> {
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
 	}
 
-	public void ShowIntro() {
+	public void ShowIntro(){
 		DoctorMatchManager.Instance.DisableZones();
 		introTextObject.GetComponent<TweenToggleDemux>().Show();
 		introTextObject.GetComponentInChildren<Text>().text = Localization.Localize("DOCTOR_TUT_INTRO");
 		showTime = Time.time;
 	}
 
-	public void HideIntro() {
-		if (Time.time - showTime < minShow) {
+	public void HideIntro(){
+		if(Time.time - showTime < minShow){
 			showTime -= minShow;
 			return;
 		}
@@ -35,13 +35,13 @@ public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText> {
 		ShowStage(1f);
 	}
 
-	public void ShowStage(float timeBeforeDisplay) {
+	public void ShowStage(float timeBeforeDisplay){
 		StartCoroutine(StageIEnum());
 		showTime = Time.time;
 	}
 
-	public void HideStage() {
-		if (Time.time - showTime < minShow) {
+	public void HideStage(){
+		if(Time.time - showTime < minShow){
 			showTime -= minShow;
 			return;
 		}
@@ -50,7 +50,7 @@ public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText> {
 		DoctorMatchManager.Instance.SpawnFinger(toShow - 1);
 	}
 
-	private IEnumerator StageIEnum() {
+	private IEnumerator StageIEnum(){
 		DoctorMatchManager.Instance.DisableZones();
 		yield return new WaitForSeconds(.5f);
 		stageTextObject.GetComponent<TweenToggleDemux>().Show();

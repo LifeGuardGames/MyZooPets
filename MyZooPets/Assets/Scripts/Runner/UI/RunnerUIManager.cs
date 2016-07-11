@@ -8,15 +8,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class RunnerUIManager : Singleton<RunnerUIManager> {
- //    public UIPanel GameOverPanel;
- //    public UILabel FinalScoreLabel;
- //    public UILabel FinalDistanceLabel;
- //    public UILabel FinalCoinsLabel;
+public class RunnerUIManager : Singleton<RunnerUIManager>{
+	//    public UIPanel GameOverPanel;
+	//    public UILabel FinalScoreLabel;
+	//    public UILabel FinalDistanceLabel;
+	//    public UILabel FinalCoinsLabel;
 
 	// // Use this for initialization
 	// void Start () {
- //        GameOverPanel.gameObject.SetActive(false);
+	//        GameOverPanel.gameObject.SetActive(false);
 	// }
 	
 	// // Update is called once per frame
@@ -24,22 +24,22 @@ public class RunnerUIManager : Singleton<RunnerUIManager> {
 	
 	// }
 
- //    public void ActivateGameOverPanel() {
- //        // Show our panel
- //        GameOverPanel.gameObject.SetActive(true);
+	//    public void ActivateGameOverPanel() {
+	//        // Show our panel
+	//        GameOverPanel.gameObject.SetActive(true);
 
- //        // Determine the pointss
- //        float numCoins = ScoreManager.Instance.Coins;
- //        float numScore = ScoreManager.Instance.GetScore();
- //        float distance = PlayerController.Instance.transform.position.x;
+	//        // Determine the pointss
+	//        float numCoins = ScoreManager.Instance.Coins;
+	//        float numScore = ScoreManager.Instance.GetScore();
+	//        float distance = PlayerController.Instance.transform.position.x;
 
- //        FinalScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + numScore;
- //        FinalDistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distance.ToString("F1");
- //        FinalCoinsLabel.text = Localization.Localize( "RUNNER_COINS" ) + numCoins;
- //    }
+	//        FinalScoreLabel.text = Localization.Localize( "RUNNER_SCORE" ) + numScore;
+	//        FinalDistanceLabel.text = Localization.Localize( "RUNNER_DISTANCE" ) + distance.ToString("F1");
+	//        FinalCoinsLabel.text = Localization.Localize( "RUNNER_COINS" ) + numCoins;
+	//    }
 
- //    public void DeActivateGameOverPanel() {
- //        // Show our panel
- //        GameOverPanel.gameObject.SetActive(false);
- //    }
+	//    public void DeActivateGameOverPanel() {
+	//        // Show our panel
+	//        GameOverPanel.gameObject.SetActive(false);
+	//    }
 }

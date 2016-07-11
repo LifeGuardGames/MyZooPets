@@ -3,8 +3,8 @@ using UnityEngine;
 using System.Collections;
 using Random = UnityEngine.Random;
 
-public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
-	public enum DoctorMatchButtonTypes {
+public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
+	public enum DoctorMatchButtonTypes{
 		None,
 		Green,
 		Yellow,
@@ -35,44 +35,44 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	private int bonusStack = 0;
 	//If they do nothing for 5 seconds. Shake the finger
 
-	public bool Paused {
-		get {
+	public bool Paused{
+		get{
 			return paused;
 		}
 	}
 
-	public int NumOfCorrectDiagnose {
+	public int NumOfCorrectDiagnose{
 		get { return numOfCorrectDiagnose; }
 	}
 
-	void Update() {
+	void Update(){
 		if(paused)
 			return;
 #if UNITY_EDITOR
 
-		if(Input.GetKeyDown(KeyCode.LeftArrow)) {
+		if(Input.GetKeyDown(KeyCode.LeftArrow)){
 			OnZoneClicked(DoctorMatchButtonTypes.Green);
 		}
-		else if(Input.GetKeyDown(KeyCode.UpArrow)) {
+		else if(Input.GetKeyDown(KeyCode.UpArrow)){
 			OnZoneClicked(DoctorMatchButtonTypes.Yellow);
 		}
-		else if(Input.GetKeyDown(KeyCode.RightArrow)) {
+		else if(Input.GetKeyDown(KeyCode.RightArrow)){
 			OnZoneClicked(DoctorMatchButtonTypes.Red);
 		}
-		else if(Input.GetKeyDown(KeyCode.W)) {
+		else if(Input.GetKeyDown(KeyCode.W)){
 			lifeBarController.KillBar();
 		}
 #endif
-		if(tutorial && finger != null && zoneGreen.button.interactable) {
+		if(tutorial && finger != null && zoneGreen.button.interactable){
 			lastPress += Time.deltaTime;
-			if(lastPress > timeToShake) {
+			if(lastPress > timeToShake){
 				StartCoroutine(finger.Shake(new Vector3(0, 20)));
 				lastPress = 0;
 			}
 		}
 	}
 
-	void Awake() {
+	void Awake(){
 		// Parent settings
 		minigameKey = "DOCTOR";
 		quitGameScene = SceneUtils.BEDROOM;
@@ -81,11 +81,11 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		arrowObject.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
-	protected override void _StartTutorial() {
+	protected override void _StartTutorial(){
 		StartCoroutine(StartTutorialHelper());
 	}
 
-	public IEnumerator StartTutorialHelper() {
+	public IEnumerator StartTutorialHelper(){
 		ResetScore();
 		tutorial = true;
 		yield return assemblyLineController.Initialize(true); //If a tutorial is called after a game is played, we need to wait a frame for objects to be cleared
@@ -98,54 +98,54 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		doctorMatchTutorial = new DoctorMatchTutorial();
 	}
 
-	public void OnTimerBarEmpty() {
+	public void OnTimerBarEmpty(){
 		int toClear = assemblyLineController.Count + bonusStack;
 		lifeBarController.UpdateCount(toClear);
 	}
 
-	public void SpawnFinger(int zone) {
+	public void SpawnFinger(int zone){
 		lastPress = 0;
 		tutorialZone = zone;
-		if(finger == null) {
+		if(finger == null){
 			finger = Instantiate(pointerPrefab).GetComponent<FingerController>();
 			arrowObject.GetComponent<SpriteRenderer>().enabled = true;
 		}
-		else {
+		else{
 			LeanTween.cancel(finger.gameObject);
 			LeanTween.alpha(arrowObject, 0, .5f);
 		}
-		if(tutorialZone == 3) {
+		if(tutorialZone == 3){
 			finger.transform.position = GetCorrectTransform().position;//GetButtonTransform((int)assemblyLineController.PeekFirstItem().ItemType).transform.position;
 		}
-		else {
+		else{
 			finger.transform.position = GetButtonTransform(tutorialZone).position;
 		}
 		multipleFinger = finger.RepeatShake(3 - tutorialZone, new Vector3(0, 20));
 		StartCoroutine(multipleFinger);
 	}
 
-	public void BarFinger() {
+	public void BarFinger(){
 		finger.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 50));
 		finger.transform.position = lifeBarController.transform.position + new Vector3(120, -30);
 		multipleFinger = finger.RepeatShake(2, new Vector3(20, 0), true);
 		StartCoroutine(multipleFinger);
 	}
 
-	public override void UpdateScore(int deltaScore) {
+	public override void UpdateScore(int deltaScore){
 		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
 	}
 
-	public IEnumerator FinishInhalerPopup(bool successful, Vector3 startPosition = default(Vector3), GameObject toDestroy = null) {
-		if(successful) {
-			for(int i = 0; i < 3; i++) {
+	public IEnumerator FinishInhalerPopup(bool successful, Vector3 startPosition = default(Vector3), GameObject toDestroy = null){
+		if(successful){
+			for(int i = 0; i < 3; i++){
 				StartCoroutine(particleController.SpawnFirework(comboController.ComboMod, startPosition, comboController.GetComboPosition(comboController.Combo)));
 				comboController.IncrementCombo();
 				ComboBonus();
 				yield return new WaitForSeconds(.25f);
 			}
 		}
-		else {
+		else{
 			comboController.ResetCombo();
 		}
 		yield return new WaitForEndOfFrame();
@@ -155,32 +155,32 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			Destroy(toDestroy);
 	}
 
-	public void TempLockZones() {
+	public void TempLockZones(){
 		zoneGreen.TempLock(.15f);
 		zoneYellow.TempLock(.15f);
 		zoneRed.TempLock(.15f);
 	}
 
-	public void DisableZones() {
+	public void DisableZones(){
 		zoneGreen.button.interactable = false;
 		zoneRed.button.interactable = false;
 		zoneYellow.button.interactable = false;
 		comboController.StopCounting();
 	}
 
-	public void EnableZones() {
+	public void EnableZones(){
 		comboController.StartCounting();
 		zoneGreen.button.interactable = true;
 		zoneRed.button.interactable = true;
 		zoneYellow.button.interactable = true;
 	}
 	// Input coming from button scripts
-	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
+	public void OnZoneClicked(DoctorMatchButtonTypes buttonType){
 		AssemblyLineItem peakedItem = assemblyLineController.PeekFirstItem();
 		bool correct = peakedItem.ItemType == buttonType;
 		Transform buttonTransform = GetButtonTransform((int)buttonType - 1);
 		float comboMod = comboController.ComboMod;
-		if(correct) { //The same feedback is provided whether or not the game is in tutorial
+		if(correct){ //The same feedback is provided whether or not the game is in tutorial
 			StartCoroutine(particleController.SpawnFirework(comboMod, assemblyLineController.StartPosition.position));
 			numOfCorrectDiagnose++;
 			UpdateScore(2);
@@ -188,34 +188,36 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 			PlaySoundCorrect();
 			comboController.IncrementCombo();
 		}
-		else {
+		else{
 			comboController.ResetCombo();
 			UpdateScore(-1);
 			AudioManager.Instance.PlayClip("minigameError");
 		}
 		particleController.SpawnFloatyText(comboMod, correct, buttonTransform);
 
-		if(tutorial) { //But line movement and populating is different in each mode
+		if(tutorial){ //But line movement and populating is different in each mode
 			HandleTutorial(peakedItem, correct);
 		}
-		else {
+		else{
 			HandleNormal(peakedItem);
 		}
 	}
-	public void EndGame() {
+
+	public void EndGame(){
 
 	}
-	protected override void _Start() {
+
+	protected override void _Start(){
 		zoneGreen.ToggleButtonInteractable(false);
 		zoneYellow.ToggleButtonInteractable(false);
 		zoneRed.ToggleButtonInteractable(false);
 	}
 
 
-	protected override void _NewGame() { //Reset everything then start again
+	protected override void _NewGame(){ //Reset everything then start again
 		ResetScore();
 
-		if(finger) { //Called if we complete the tutorial or restart early
+		if(finger){ //Called if we complete the tutorial or restart early
 			BarFinger();
 		}
 
@@ -231,17 +233,17 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		bonusStack = 0;
 	}
 
-	protected override void _PauseGame() {
+	protected override void _PauseGame(){
 		lifeBarController.StopDraining();
 	}
 
-	protected override void _ResumeGame() {
-		if(!tutorial) {
+	protected override void _ResumeGame(){
+		if(!tutorial){
 			lifeBarController.StartDraining();
 		}
 	}
 
-	protected override void _GameOver() {
+	protected override void _GameOver(){
 		lifeBarController.StopDraining();
 		zoneGreen.ToggleButtonInteractable(false);
 		zoneYellow.ToggleButtonInteractable(false);
@@ -258,7 +260,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 	}
 
 	// award the actual xp and money, called when tween is complete
-	protected override void _GameOverReward() {
+	protected override void _GameOverReward(){
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
 			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
@@ -269,94 +271,94 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 	}
 
-	protected override void _QuitGame() {
+	protected override void _QuitGame(){
 	}
 
-	protected override void _ContinueGame() {
+	protected override void _ContinueGame(){
 		lifeBarController.PlusBar(33);
-		assemblyLineController.PopulateQueue(true);
+		assemblyLineController.PopulateQueue(compare: true);
 		lifeBarController.UpdateCount(-1);
 	}
 
-	private void HandleNormal(AssemblyLineItem poppedItem) {
+	private void HandleNormal(AssemblyLineItem poppedItem){
 		assemblyLineController.PopFirstItem();
 		poppedItem.Activate();
 		int toClear = assemblyLineController.Count + bonusStack;
 		lifeBarController.UpdateCount(toClear);
-		if(!lifeBarController.IsEmpty || bonusStack > 0) {
+		if(!lifeBarController.IsEmpty || bonusStack > 0){
 			assemblyLineController.ShiftAndAddNewItem();
 			if(lifeBarController.IsEmpty && bonusStack > 0)
 				bonusStack--;
 		}
-		else if(!assemblyLineController.LineComplete) {
+		else if(!assemblyLineController.LineComplete){
 			assemblyLineController.MoveUpLine();
 		}
-		else {
+		else{
 			GameOver();
 		}
 	}
 
-	private void HandleTutorial(AssemblyLineItem poppedItem, bool correct) { //TODO: Refactor this and HandleNormal into one clean method
+	private void HandleTutorial(AssemblyLineItem poppedItem, bool correct){ //TODO: Refactor this and HandleNormal into one clean method
 		lastPress = 0;
-		if(multipleFinger != null) {
+		if(multipleFinger != null){
 			StopCoroutine(multipleFinger);
 			multipleFinger = null;
 		}
 		Debug.Log("Tut: " + assemblyLineController.Count + ":" + tutorialZone);
-		if(tutorialZone == 3) {
+		if(tutorialZone == 3){
 			finger.StopShake(GetCorrectTransform().position);
 		}
-		else {
+		else{
 			finger.StopShake(GetButtonTransform(tutorialZone).position);
 		}
-		if(correct) {
+		if(correct){
 			assemblyLineController.PopFirstItem();
 			poppedItem.Activate();
 			assemblyLineController.MoveUpLine(false);
-			if(assemblyLineController.LineComplete) {
+			if(assemblyLineController.LineComplete){
 				doctorMatchTutorial.Advance();
 			}
-			else if(tutorialZone == 3) {
+			else if(tutorialZone == 3){
 				finger.transform.position = GetCorrectTransform().position;//GetButtonTransform((int)assemblyLineController.PeekFirstItem().ItemType).transform.position;
 			}
 		}
-		else {
+		else{
 			StartCoroutine(finger.Shake(new Vector3(0, 20), .25f));
 		}
 	}
 
-	private Transform GetButtonTransform(int buttonType) {
-		switch(buttonType) {
-			case 0:
-				return zoneGreen.transform;
-			case 1:
-				return zoneYellow.transform;
-			case 2:
-				return zoneRed.transform;
-			default:
-				Debug.LogWarning("Invalid Zone");
-				return null;
+	private Transform GetButtonTransform(int buttonType){
+		switch(buttonType){
+		case 0:
+			return zoneGreen.transform;
+		case 1:
+			return zoneYellow.transform;
+		case 2:
+			return zoneRed.transform;
+		default:
+			Debug.LogWarning("Invalid Zone");
+			return null;
 		}
 	}
 
-	private Transform GetCorrectTransform() {
+	private Transform GetCorrectTransform(){
 		AssemblyLineItem item = assemblyLineController.PeekFirstItem();
 		return GetButtonTransform((int)item.ItemType - 1);
 	}
 
-	private void ComboBonus() {
-		if(comboController.ComboLevel == 2 && !tutorial) { //Big combo bonus (does not apply during tutorial)
+	private void ComboBonus(){
+		if(comboController.ComboLevel == 2 && !tutorial){ //Big combo bonus (does not apply during tutorial)
 			if(assemblyLineController.Count != 1)
 				bonusStack += 3;
 			else
-				assemblyLineController.PopulateQueue(true, 3, 1);
+				assemblyLineController.PopulateQueue(compare: true, count: 3, indexOffset: 1);
 		}
-		else if(comboController.ComboLevel == 1) { //Small combo bonus
+		else if(comboController.ComboLevel == 1){ //Small combo bonus
 			UpdateScore(comboController.Combo);
 		}
 	}
 
-	private void ResetScore() {
+	private void ResetScore(){
 		rewardXPMultiplier = 1f;
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;
@@ -365,7 +367,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager> {
 		comboController.UpdateScore(0);
 	}
 
-	private void PlaySoundCorrect() {
+	private void PlaySoundCorrect(){
 		Hashtable hashOverride = new Hashtable();
 		hashOverride["Pitch"] = .9f + ((float)comboController.ComboMod) / 30f;//Mathf.Clamp(.9f + ((float)comboController.Combo / 30), 0, 1.25f); //Goes from .9 to 1.25 by increments of .0333 and then caps
 		AudioManager.Instance.PlayClip("clinicCorrect", option: hashOverride);

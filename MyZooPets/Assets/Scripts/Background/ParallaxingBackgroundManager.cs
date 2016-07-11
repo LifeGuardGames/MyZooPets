@@ -35,7 +35,8 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 				//If there is a queue of background waiting, get it from the queue
 				if (mNextTransition.Count > 0)
 					SpawnAndSetNextBackground(mNextTransition.Dequeue());
-			} else {
+			} 
+			else {
 				float currentAlpha = mTransitionPulse / TransitionLengthSeconds;
 				float inverseAlpha = 1f - currentAlpha;
                 
@@ -55,7 +56,8 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 		if (parallaxingBackgroundPrefab != null) {
 			if (mNextTransition.Count == 0) {
 				SpawnAndSetNextBackground(parallaxingBackgroundPrefab);
-			} else {
+			}
+			else {
 				mNextTransition.Enqueue(parallaxingBackgroundPrefab);
 			}
 		}

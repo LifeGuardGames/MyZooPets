@@ -13,6 +13,7 @@ public static class SceneUtils{
 	public static string RUNNER = "Runner";
 	public static string SHOOTER = "ShooterGame";
 	public static string TRIGGERNINJA = "TriggerNinja";
+	public static string MICROMIX = "MicroMix";
 
 	// Not really convention but hey
 	public static string CurrentScene {

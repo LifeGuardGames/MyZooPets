@@ -40,4 +40,8 @@ public static class CameraUtils {
         }
         return isOnPet;
     }
+	public static Vector3 RandomWorldPointOnScreen(Camera camera) {
+		Vector3 screenPos = new Vector3(Random.value*Screen.width,Random.value*Screen.height,camera.transform.position.z*-1);
+		return camera.ScreenToWorldPoint(screenPos);
+	}
 }

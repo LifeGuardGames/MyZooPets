@@ -35,7 +35,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 	private int bonusStack = 0;
 	//If they do nothing for 5 seconds. Shake the finger
 
-	public bool Paused{
+	public bool Paused{ //TODO: Merge with base.isPaused
 		get{
 			return paused;
 		}
@@ -96,6 +96,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		zoneRed.ToggleButtonInteractable(true);
 
 		doctorMatchTutorial = new DoctorMatchTutorial();
+		base.tutorial = doctorMatchTutorial;
+
 	}
 
 	public void OnTimerBarEmpty(){
@@ -112,7 +114,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		}
 		else{
 			LeanTween.cancel(finger.gameObject);
-			LeanTween.alpha(arrowObject, 0, .5f);
+			FadeArrow();
 		}
 		if(tutorialZone == 3){
 			finger.transform.position = GetCorrectTransform().position;//GetButtonTransform((int)assemblyLineController.PeekFirstItem().ItemType).transform.position;
@@ -130,30 +132,15 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		multipleFinger = finger.RepeatShake(2, new Vector3(20, 0), true);
 		StartCoroutine(multipleFinger);
 	}
+	public void FadeArrow() {
+		LeanTween.alpha(arrowObject, 0, .5f);
 
+	}
 	public override void UpdateScore(int deltaScore){
 		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
 	}
-
-	public IEnumerator FinishInhalerPopup(bool successful, Vector3 startPosition = default(Vector3), GameObject toDestroy = null){
-		if(successful){
-			for(int i = 0; i < 3; i++){
-				StartCoroutine(particleController.SpawnFirework(comboController.ComboMod, startPosition, comboController.GetComboPosition(comboController.Combo)));
-				comboController.IncrementCombo();
-				ComboBonus();
-				yield return new WaitForSeconds(.25f);
-			}
-		}
-		else{
-			comboController.ResetCombo();
-		}
-		yield return new WaitForEndOfFrame();
-		comboController.StartCounting();
-		lifeBarController.StartDraining();
-		if(toDestroy != null)
-			Destroy(toDestroy);
-	}
+		
 
 	public void TempLockZones(){
 		zoneGreen.TempLock(.15f);
@@ -193,7 +180,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 			UpdateScore(-1);
 			AudioManager.Instance.PlayClip("minigameError");
 		}
-		particleController.SpawnFloatyText(comboMod, correct, buttonTransform);
+		//particleController.SpawnFloatyText(comboMod, correct, buttonTransform);
 
 		if(tutorial){ //But line movement and populating is different in each mode
 			HandleTutorial(peakedItem, correct);
@@ -304,7 +291,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 			StopCoroutine(multipleFinger);
 			multipleFinger = null;
 		}
-		Debug.Log("Tut: " + assemblyLineController.Count + ":" + tutorialZone);
 		if(tutorialZone == 3){
 			finger.StopShake(GetCorrectTransform().position);
 		}

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AssemblyLineController : MonoBehaviour{
 	public Transform StartPosition;
-	public Transform EndPosition;
+	public Transform ThirdPosition;
 	public Transform OffscreenPosition;
 	public GameObject itemParent;
 	public GameObject itemPrefab;
@@ -14,7 +14,7 @@ public class AssemblyLineController : MonoBehaviour{
 	private int visibleCount = 2;
 	public bool constantCount = false;
 	private Queue<AssemblyLineItem> itemQueue;
-	private float distanceBetween = -50;
+	private float distanceBetween = -84;
 	private int startingCount = 4;
 	private float clearTime = .05f;
 	private const float moveTime = .2f;
@@ -58,20 +58,21 @@ public class AssemblyLineController : MonoBehaviour{
 		// Add new item
 		GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
 		int newItemIndex = itemQueue.Count;
-		item.transform.position = StartPosition.position + newItemIndex * new Vector3(distanceBetween, 0);
+		item.transform.position = GetPosition(index: newItemIndex);//StartPosition.position + newItemIndex * new Vector3(distanceBetween, 0);
 		AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
 		newItemScript.Init(newItemIndex);
 		itemQueue.Enqueue(newItemScript);
-		newItemScript.CompareVisible(visibleCount);
+		newItemScript.CompareVisible(visibleCount,true);
 	}
 
 	public void SpawnTutorialSet(int stage){
 		for(int i = 1; i < AssemblyLineItem.SPRITE_COUNT; i++){
 			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
-			item.transform.position = StartPosition.position + (i - 1) * new Vector3(distanceBetween, 0);
+			item.transform.position = GetPosition(index: i, indexOffset: -1);//StartPosition.position + (i - 1) * new Vector3(distanceBetween, 0);
 			AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
 			newItemScript.Init(i - 1, stage, i); 
 			itemQueue.Enqueue(newItemScript);
+			newItemScript.CompareVisible(visibleCount,false);
 		}
 	}
 
@@ -88,9 +89,8 @@ public class AssemblyLineController : MonoBehaviour{
 		foreach(AssemblyLineItem itemScript in itemQueue){
 			int newIndex = itemScript.GetIncrementIndex();
 			LeanTween.cancel(itemScript.gameObject);
-			LeanTween.move(itemScript.gameObject, StartPosition.position + newIndex * new Vector3(distanceBetween, 0), moveTime);
-			if(compare)
-				itemScript.CompareVisible(visibleCount);
+			LeanTween.move(itemScript.gameObject, GetPosition(index: newIndex), moveTime);//StartPosition.position + newIndex * new Vector3(distanceBetween, 0), moveTime);
+			itemScript.CompareVisible(visibleCount, compare);
 		}
 	}
 
@@ -99,12 +99,11 @@ public class AssemblyLineController : MonoBehaviour{
 		int toSpawn = (count == -1) ? startingCount + 1 : count;
 		for(int i = 0; i < toSpawn; i++){
 			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
-			item.transform.position = StartPosition.position + (i + indexOffset) * new Vector3(distanceBetween, 0);
+			item.transform.position = GetPosition(index: i, indexOffset: indexOffset);
 			AssemblyLineItem itemScript = item.GetComponent<AssemblyLineItem>();
 			itemScript.Init((i + indexOffset));
 			itemQueue.Enqueue(itemScript);
-			if(compare)
-				itemScript.CompareVisible(visibleCount);
+			itemScript.CompareVisible(visibleCount, compare);
 		}
 	}
 
@@ -126,6 +125,19 @@ public class AssemblyLineController : MonoBehaviour{
 		}
 		else{
 			visibleCount = (growsLowHealth) ? 1 : 5;
+		}
+	}
+
+	private Vector3 GetPosition(int index, int indexOffset = 0){
+		index += indexOffset;
+		if(index < 3){
+			return StartPosition.position + index * new Vector3(distanceBetween, 0);
+		}
+		else if(index == 3){
+			return ThirdPosition.position;
+		}
+		else{
+			return OffscreenPosition.position;
 		}
 	}
 }

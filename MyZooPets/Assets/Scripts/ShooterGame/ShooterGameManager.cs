@@ -34,6 +34,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 
 	protected override void _StartTutorial() {
 		shooterUI.Reset();
+		isPaused = false;
 		PlayerShooterController.Instance.Reset();
 		ShooterGameTutorial tut = new ShooterGameTutorial();
 		tut.ProcessStep(0);
@@ -46,6 +47,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		StopAllCoroutines();
 		isGameOver = false;
 		inTutorial = false;
+		isPaused = false;
 		waveNum = 0;
 		score = 0;
 		scoreText.text = "0";
@@ -109,8 +111,10 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
 			if(Camera.main.ScreenToWorldPoint(mousePos).x <= PlayerShooterController.Instance.gameObject.transform.position.x + 1.0f) {
 				PlayerShooterController.Instance.Move(mousePos);
+				Debug.Log("Move");
 			}
 			else {
+				Debug.Log("shoot");
 				PlayerShooterController.Instance.Shoot(mousePos);
 				startTime = Time.time;
 			}

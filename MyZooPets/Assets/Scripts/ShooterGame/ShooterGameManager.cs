@@ -47,7 +47,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		StopAllCoroutines();
 		isGameOver = false;
 		inTutorial = false;
-		isPaused = false;
 		waveNum = 0;
 		score = 0;
 		scoreText.text = "0";

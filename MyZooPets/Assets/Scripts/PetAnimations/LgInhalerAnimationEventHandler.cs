@@ -14,6 +14,7 @@ public class LgInhalerAnimationEventHandler : MonoBehaviour {
 
 
 	public void InhalerAnimationEvent(string eventName){
+		Debug.Log("ANIMATE");
 		switch(eventName){
 		case "BreatheOut":
 			if(BreatheOutEndEvent != null)

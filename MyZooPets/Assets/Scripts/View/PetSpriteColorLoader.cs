@@ -34,6 +34,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 	}
 
 	private void LoadAndSetColor(string petColor){
+
 //		Debug.Log("Loading Colors...");
 		Sprite[] sprites = Resources.LoadAll<Sprite>(spriteSetPrefix + petColor);
 
@@ -44,7 +45,9 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			// Set their sprites according to index from metadata
 			spriteRenderer.sprite = sprites[atlasIndex];
 		}
-		PlayerController.Instance.SetRenderers(spriteRendererList);
+		if(SceneUtils.CurrentScene == SceneUtils.RUNNER){
+			PlayerController.Instance.SetRenderers(spriteRendererList);
+		}
 //		Debug.Log("Loading Colors done...");
 	}
 

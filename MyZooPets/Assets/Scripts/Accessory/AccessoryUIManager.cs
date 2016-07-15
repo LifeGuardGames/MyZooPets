@@ -42,18 +42,34 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	protected override void Start(){
 		base.Start();
 		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
+	}
 
+	public void UpdateList(){
+		int x = grid.transform.childCount;
+		for(int i = 0; i < x; i++){
+			GameObject go = grid.transform.GetChild(0).gameObject;
+			go.transform.SetParent(null);
+			Destroy(go);
+		}
+		accessoryEntryList.Clear ();
+		grid.Reposition();
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList){
+			if((AccessoryTypes)accessory.AccessoryType == AccessoryTypes.special){
+				Debug.Log("special");
+				if(!DataManager.Instance.GameData.Inventory.isSecretItemUnlocked.Contains(accessory.ID)){
+					continue;
+				}
+			}
 			// Create a new accessory type label if lastCategory has changed
 			if(lastCategory != accessory.AccessoryType || isFirstTitle){
 				isFirstTitle = false;
 				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
 				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-
+				
 				switch((AccessoryTypes)accessory.AccessoryType){
 				case AccessoryTypes.Hat:
 					localize.key = "ACCESSORIES_TYPE_HAT";
@@ -64,6 +80,9 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				case AccessoryTypes.Color:
 					localize.key = "ACCESSORIES_TYPE_COLOR";
 					break;
+				case AccessoryTypes.special:
+					localize.key = "ACCESSORIES_TYPE_SPECIAL";
+					break;
 				default:
 					Debug.LogError("Invalid accessory type");
 					break;
@@ -71,9 +90,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				localize.Localize();	// Force relocalize
 				lastCategory = accessory.AccessoryType;
 			}
-
 			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
-			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
+				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
 		}
 		grid.Reposition();
 	}
@@ -87,7 +105,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	protected override void _OpenUI(){
 		if(!isActive){
 			AudioManager.Instance.PlayClip("subMenu");
-
+			UpdateList();
 			// Zoom into the item
 			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
 

@@ -157,7 +157,8 @@ public enum DecorationTypes {
 public enum AccessoryTypes{
 	Hat,
 	Glasses,
-	Color
+	Color,
+	special,
 }
 
 // mini game states

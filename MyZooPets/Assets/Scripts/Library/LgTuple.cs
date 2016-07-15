@@ -9,7 +9,11 @@ public class LgTuple<T,U>{
 		Item1 = item1;
 		Item2 = item2;
 	}
+	public void setItem1(T item1){
+		Item1 = item1;
+	}
 }
+
 
 public static class LgTuple{
 	public static LgTuple<T, U> Create<T, U>(T item1, U item2){

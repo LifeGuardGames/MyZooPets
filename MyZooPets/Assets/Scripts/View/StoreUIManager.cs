@@ -41,6 +41,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private bool changePage;
 	private string currentPage; //The current category. i.e food, usable, decorations
 	private string currentTab; //The current sub category. only decorations have sub cat right now
+	private LgTuple <string,string> secretCodeEntry;
+	public PositionTweenToggle codeEntryUi;
 
 	protected override void Awake(){
 		base.Awake();
@@ -50,7 +52,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	protected override void Start(){
 		base.Start();
 		// Reposition all the things nicely to stretch to the end of the screen
-		
+		secretCodeEntry = new LgTuple<string,string> ("","");
 		// Position the UIPanel clipping range
 		UIPanel itemAreaPanel = itemArea.GetComponent<UIPanel>();
 		Vector4 oldRange = itemAreaPanel.clipRange;
@@ -248,7 +250,20 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 							buyButton.isEnabled = false;
 					}
 				}
-				
+
+				if(itemData.ID == DataManager.Instance.GameData.Inventory.secretCode.Item1 && secretCodeEntry.Item1 != DataManager.Instance.GameData.Inventory.secretCode.Item1){
+					secretCodeEntry.setItem1(itemData.ID);
+					Debug.Log("correct item 1");
+				}
+				else if (secretCodeEntry.Item1 == DataManager.Instance.GameData.Inventory.secretCode.Item1 && itemData.ID == DataManager.Instance.GameData.Inventory.secretCode.Item2){
+					ShowCodeEntry();
+					Debug.Log("code accepted");
+				}
+				else{
+					secretCodeEntry.setItem1("");
+					Debug.Log("incorrect");
+				}
+
 				InventoryLogic.Instance.AddItem(itemID, 1);
 				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
 				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
@@ -264,6 +279,23 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;
+		}
+	}
+
+	public void ShowCodeEntry(){
+		codeEntryUi.Show ();
+	}
+
+	public void CloseCode(){
+		codeEntryUi.Hide();
+	}
+
+	void OnSubmit(string input){
+		if (input == "wella") {
+			Debug.Log ("Unlocked Item");
+			CloseCode();
+			InventoryLogic.Instance.AddItem("specialBCH",1);
+			DataManager.Instance.GameData.Inventory.isSecretItemUnlocked.Add("specialBCH");
 		}
 	}
 

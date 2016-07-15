@@ -13,6 +13,8 @@ public class MutableDataInventory{
 	public Dictionary<string, InventoryItem> AccessoryItems {get; set;} //Key: itemID, Value: InventoryItem instance
     public List<string> OneTimePurchasedItems {get; set;} // Key:itemID  keep tracks of the items that can only be purchased once 
 	public List<string> UnopenedItemBoxes {get; set;} // unopened item box ids
+	public LgTuple <string,string> secretCode;
+	public List <string> isSecretItemUnlocked;
 
     //-------------------Initialization---------------------
     public MutableDataInventory(){
@@ -25,5 +27,7 @@ public class MutableDataInventory{
 		AccessoryItems = new Dictionary<string, InventoryItem>();
         OneTimePurchasedItems = new List<string>();
 		UnopenedItemBoxes = new List<string>();
+		secretCode = new LgTuple <string,string>("Food3","Food0");
+		isSecretItemUnlocked = new List<string> ();
     }
 }

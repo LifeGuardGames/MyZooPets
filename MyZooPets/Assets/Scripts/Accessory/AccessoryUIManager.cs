@@ -58,9 +58,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		AccessoryTypes lastCategory = AccessoryTypes.Hat;
 		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList){
-			if((AccessoryTypes)accessory.AccessoryType == AccessoryTypes.special){
+			if(accessory.IsSpecial){
 				Debug.Log("special");
 				if(!DataManager.Instance.GameData.Inventory.isSecretItemUnlocked.Contains(accessory.ID)){
+					Debug.Log("working");
 					continue;
 				}
 			}

@@ -19,6 +19,11 @@ public class AccessoryItem : Item{
 		get{return prefabName;}
 	}
 
+	private bool isSpecial;
+	public bool IsSpecial{
+		get { return isSpecial;}
+	}
+
 	public AccessoryItem(string id, ItemType type, Hashtable hashItemData) : base(id, type, hashItemData){
 		// Get the type of this decoration
 		string strType = XMLUtils.GetString(hashItemData["AccessoryType"] as IXMLNode);
@@ -27,5 +32,6 @@ public class AccessoryItem : Item{
 		if(hashItemData.Contains("PrefabName"))
 			prefabName = XMLUtils.GetString(hashItemData["PrefabName"] as IXMLNode);
 
+		isSpecial = XMLUtils.GetBool(hashItemData["IsSpecial"] as IXMLNode);
 	}
 }

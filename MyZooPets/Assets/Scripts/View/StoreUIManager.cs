@@ -252,18 +252,20 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					}
 				}
 
+				/////////// SECRET CODE UNLOCK /////////////
 				if(itemData.ID == DataManager.Instance.GameData.Inventory.secretCode.Item1 && secretCodeEntry.Item1 != DataManager.Instance.GameData.Inventory.secretCode.Item1){
 					secretCodeEntry.setItem1(itemData.ID);
 					Debug.Log("correct item 1");
 				}
 				else if (secretCodeEntry.Item1 == DataManager.Instance.GameData.Inventory.secretCode.Item1 && itemData.ID == DataManager.Instance.GameData.Inventory.secretCode.Item2){
 					ShowCodeEntry();
-					Debug.Log("code accepted");
+					Debug.Log("Showing Code Entry");
 				}
 				else{
 					secretCodeEntry.setItem1("");
 					Debug.Log("incorrect");
 				}
+				////////////////////////////////////////////
 
 				InventoryLogic.Instance.AddItem(itemID, 1);
 				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
@@ -291,12 +293,13 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		codeEntryUi.Hide();
 	}
 
-	void OnSubmit(string input){
+	public void OnSubmit(string input){
 		if (input == "wella") {
 			Debug.Log ("Unlocked Item");
 			CloseCode();
-			InventoryLogic.Instance.AddItem("specialBCH",1);
+			InventoryLogic.Instance.AddItem("specialBCH", 1);
 			DataManager.Instance.GameData.Inventory.isSecretItemUnlocked.Add("specialBCH");
+			AccessoryUIManager.Instance.Equip("specialBCH");
 			codeRedeemedUi.Show();
 		}
 	}

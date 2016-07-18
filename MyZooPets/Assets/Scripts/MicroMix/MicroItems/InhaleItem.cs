@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEditor;
 
 public class InhaleItem : MicroItem{
-	public Micro parent;
 	public GameObject inhaler;
 	private bool complete = false;
 	private Vector3 inhaleDelta = new Vector3(-.4f, .4f);
@@ -11,7 +10,7 @@ public class InhaleItem : MicroItem{
 	private Vector3 exhaleDelta = new Vector3(.2f, -.3f);
 
 	public override void StartItem(){
-		GetComponent<ScreenRaycaster>().Cameras = new Camera[1] { Camera.main };
+		//GetComponent<ScreenRaycaster>().Cameras = new Camera[1] { Camera.main };
 	}
 
 	public override void OnComplete(){

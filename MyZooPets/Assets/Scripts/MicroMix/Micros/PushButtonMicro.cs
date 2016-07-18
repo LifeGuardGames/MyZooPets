@@ -10,8 +10,10 @@ public class PushButtonMicro : Micro{
 		}
 	}
 
-	public override void StartMicro(int difficulty){
-		base.StartMicro(difficulty);
+	protected override void _StartMicro(int difficulty){
 		inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f);
+	}
+	protected override void _EndMicro(){
+		//Nothing to be done here
 	}
 }

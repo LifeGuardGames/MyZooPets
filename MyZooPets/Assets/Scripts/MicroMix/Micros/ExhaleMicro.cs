@@ -12,14 +12,11 @@ public class ExhaleMicro : Micro {
 		}
 	}
 	// Use this for initialization
-	public override void StartMicro(int difficulty){
-		base.StartMicro(difficulty);
+	protected override void _StartMicro(int difficulty){
 		petInstance = (GameObject) Instantiate(petPrefab,Vector3.zero,Quaternion.identity);
 		petInstance.transform.SetParent(transform);
-		petInstance.GetComponentInChildren<ExhaleItem>().parent=this;
 	}
-	protected override void OnComplete(){
-		base.OnComplete();
+	protected override void _EndMicro(){
 		Destroy(petInstance);
 	}
 	void Update(){

@@ -15,22 +15,16 @@ public class InhaleMicro : Micro{
 	}
 
 	// Use this for initialization
-	public override void StartMicro(int difficulty){
+	protected override void _StartMicro(int difficulty){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);
 		GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
 		InhaleItem item = petInstance.GetComponentInChildren<InhaleItem>();
-		item.parent = this;
-		item.inhaler=inhaler;
-		inhaler.transform.position=petInstance.transform.position+new Vector3(3.2f,2f);
-		base.StartMicro(difficulty);
+		item.inhaler = inhaler;
+		inhaler.transform.position = petInstance.transform.position + new Vector3(3.2f, 2f);
 	}
 
-	protected override void OnComplete(){
-		base.OnComplete();
+	protected override void _EndMicro(){
 		Destroy(petInstance);
-	}
-
-	void Update(){
 	}
 }

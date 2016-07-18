@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class ExhaleItem : MicroItem{
-	public Micro parent;
 	private bool complete = false;
 
 	public override void StartItem(){

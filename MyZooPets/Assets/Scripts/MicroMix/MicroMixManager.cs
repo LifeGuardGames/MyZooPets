@@ -6,7 +6,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Text titleText;
 	public Micro[] microList;
 	public Micro currentMicro;
-	private float speed;
 	private float maxTimeScale = 2f;
 	private float timeScaleIncrement = .2f;
 	private int won;
@@ -69,6 +68,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 	protected override void _NewGame(){
 		StartMicro();
+		Time.timeScale=1f;
+		won=0;
+		lost=0;
+		difficulty=1;
 	}
 
 	protected override void _PauseGame(){
@@ -113,13 +116,13 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		titleText.color=Color.white;
 		//LeanTween.l(titleText.rectTransform,0,1.5f).setEase(LeanTweenType.easeOutQuad);
 		titleText.rectTransform.localScale=Vector3.one*1.5f;
-		LeanTween.scale(titleText.rectTransform,Vector3.one,.5f).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
+		LeanTween.scale(titleText.rectTransform,Vector3.one,.5f*Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
 	}
 	private void tweenFinished(){
 		StartCoroutine(HideText());
 	}
 	private IEnumerator HideText(){
-		yield return new WaitForSeconds(.2f);
+		yield return new WaitForSeconds(.2f*Time.timeScale); //This will be constant, regardless of how fast game is
 		titleText.color=Color.clear;
 	}
 	private void ResetScore(){

@@ -4,7 +4,6 @@ using System.Collections;
 public class CapItem : MicroItem{
 	//The Vector3 we want to animate along once we are pulled up close
 	public Vector3 animDelta;
-	public Micro parent;
 	private float angleDeviation = 25f;
 	private bool complete=false;
 	public override void StartItem(){

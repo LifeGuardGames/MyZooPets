@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class ButtonItem : MicroItem{
-	public Micro parent;
 	private Vector3 animDelta = new Vector3(0, -.5f);
 	private bool complete = false;
 

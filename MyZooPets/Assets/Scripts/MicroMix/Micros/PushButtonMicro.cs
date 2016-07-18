@@ -9,11 +9,6 @@ public class PushButtonMicro : Micro{
 			return "Push Button";
 		}
 	}
-	protected override bool ResetPosition{
-		get{
-			return true;
-		}
-	}
 
 	public override void StartMicro(int difficulty){
 		base.StartMicro(difficulty);

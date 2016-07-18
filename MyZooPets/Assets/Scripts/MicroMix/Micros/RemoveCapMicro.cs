@@ -9,11 +9,6 @@ public class RemoveCapMicro : Micro{
 			return "Remove Cap";
 		}
 	}
-	protected override bool ResetPosition{
-		get{
-			return true;
-		}
-	}
 
 	public override void StartMicro(int difficulty){
 		base.StartMicro(difficulty);

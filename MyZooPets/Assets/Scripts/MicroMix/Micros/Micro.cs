@@ -6,11 +6,8 @@ public abstract class Micro : MonoBehaviour{
 	private bool won = false;
 	private bool playing = false;
 	private int seconds = 0;
-	private Dictionary<Transform, LgTuple<Vector3, bool>> positions = new Dictionary<Transform, LgTuple<Vector3, bool>>();
-
-	protected abstract bool ResetPosition{
-		get;
-	}
+	//private Dictionary<Transform, LgTuple<Vector3, bool>> positions = new Dictionary<Transform, LgTuple<Vector3, bool>>();
+	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
 
 	public abstract string Title{
 		get;
@@ -23,23 +20,16 @@ public abstract class Micro : MonoBehaviour{
 	public virtual void StartMicro(int difficulty){
 		playing = true;
 		StartCoroutine(EndMicro());
-		positions.Clear();
 		won = false;
-		int x=0;
-		foreach(Transform child in GetComponentsInChildren<Transform>(true)){
-			if(child == transform){
-				continue;
-			}
-			Debug.Log(child.gameObject.name);
-			x++;
-			positions.Add(child, new LgTuple<Vector3, bool>(child.position,child.gameObject.activeSelf));
+		foreach(Transform child in transform){ //Turn on all parents
 			child.gameObject.SetActive(true);
+		}
+		foreach(Transform child in positions.Keys){ //Tell everyone, no matter how many layers in, we are starting
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
 				mi.StartItem();
 			}
 		}
-		Debug.Log(x);
 	}
 
 	protected virtual void OnComplete(){
@@ -50,23 +40,17 @@ public abstract class Micro : MonoBehaviour{
 		for(seconds = 4; seconds > 0; seconds--){
 			yield return new WaitForSeconds(1f);
 		}
-		int x=0;
-		foreach(Transform child in positions.Keys){
-			if(child == transform){
-				continue;
-			}
-			x++;
-			if (ResetPosition){
-				Debug.Log("Called");
-//				child.position = positions[child];
-			}
+		foreach(Transform child in transform){ //Turn of all parents
+			child.gameObject.SetActive(false);
+		}
+		foreach(Transform child in positions.Keys){ //Here is where we need the transforms
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
 				mi.OnComplete();
 			}
-			child.gameObject.SetActive(false);
+			child.transform.position = positions[child];
+
 		}
-		Debug.Log(x);
 		OnComplete();
 		playing = false;
 
@@ -76,6 +60,24 @@ public abstract class Micro : MonoBehaviour{
 		else{
 			MicroMixManager.Instance.LoseMicro();
 		}
+	}
+
+	void Awake(){
+		foreach(Transform child in GetComponentsInChildren<Transform>(true)){
+			if(child == transform){
+				continue;
+			}
+			Renderer rend = child.GetComponent<Renderer>();
+			positions.Add(child, child.transform.position);
+		}
+		foreach(Transform child in transform){
+			child.gameObject.SetActive(false);
+		}
+	}
+
+	private IEnumerator WaitThenHide(){
+		yield return new WaitForSeconds(.1f);
+
 	}
 
 	void OnGUI(){

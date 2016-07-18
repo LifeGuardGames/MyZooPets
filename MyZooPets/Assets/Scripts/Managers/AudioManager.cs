@@ -76,4 +76,47 @@ public class AudioManager : LgAudioManager<AudioManager>{
 			backgroundSource.Play();
 		}
 	}
+
+	void OnLevelWasLoaded() {
+		string currentScene = SceneUtils.CurrentScene;
+		if(currentScene == SceneUtils.LOADING) {
+			isMusicOn = true;
+		}
+		if(currentScene == SceneUtils.INHALERGAME) {
+			backgroundMusic = "bgInhaler";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.MENU) {
+			backgroundMusic = "bgMenuScene";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.BEDROOM) {
+			backgroundMusic = "bgBedroom";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.YARD) {
+			backgroundMusic = "bgYard";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.TRIGGERNINJA) {
+			backgroundMusic = "bgTriggerNinja";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.DOCTORMATCH) {
+			backgroundMusic = "bgClinic";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.MEMORY) {
+			backgroundMusic = "bgMemory";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.SHOOTER) {
+			backgroundMusic = "bgShooter";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+		else if(currentScene == SceneUtils.RUNNER) {
+			backgroundMusic = "bgRunner";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
+	}
 }

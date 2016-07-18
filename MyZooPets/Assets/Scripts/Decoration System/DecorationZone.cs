@@ -62,8 +62,8 @@ public abstract class DecorationZone : MonoBehaviour {
 		}
 
 		// Turn on resizer and resize
-		SpriteResizer resizer = spriteIcon.GetComponent<SpriteResizer>();
-		resizer.enabled = true;	// Resize automatically
+		//SpriteResizer resizer = spriteIcon.GetComponent<SpriteResizer>();
+		//resizer.enabled = true;	// Resize automatically
 
 		nodeID = transform.parent.name;
 

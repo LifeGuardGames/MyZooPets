@@ -12,7 +12,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System;
 
-public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
+public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	public GameObject pausePanel;
 	public GameObject starFloatyPrefab;
 	public Transform floatyParent;
@@ -25,44 +25,45 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	//Used for tutorial when a popup shows, everything but the player should be paused and the player can only either jump or drop, but not both
 	private RunnerTutorial runnerTutorial;
 
-	public bool IsTutorialRunning {
+	public bool IsTutorialRunning{
 		get { return tutorial; }
 	}
 
-	public bool AcceptInput {
+	public bool AcceptInput{
 		get { return acceptInput; }
 		set { acceptInput = value; }
 	}
 
-	public bool SpecialInput {
+	public bool SpecialInput{
 		get { return specialInput; }
 		set { specialInput = value; }
 	}
 
-	void Awake() {
+	void Awake(){
 		// Parent settings
 		minigameKey = "RUNNER";
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
 
-	public void EndGame() {
+	public void EndGame(){
 		GameOver();
 	}
 	
 	// Use this for initialization
-	protected override void _Start() {
+	protected override void _Start(){
 		Application.targetFrameRate = 60;
 		PauseGame();
 	}
 
 	// Entry point for tutorial
-	protected override void _StartTutorial() {
-		isPaused=false;
+	protected override void _StartTutorial(){
+		isPaused = false; //HACK: This pause should really be set by our parent under StartTutorial() but that could break other games, so it will be used here
 		StartCoroutine(StartTutorialHelper());
+
 	}
 
-	public IEnumerator StartTutorialHelper() {
+	public IEnumerator StartTutorialHelper(){
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
 		acceptInput = false;
@@ -75,14 +76,15 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		//The character should run for a second before we pause the game and show the first panel
 		yield return new WaitForSeconds(1f);
 		runnerTutorial = new RunnerTutorial();
+		base.tutorial = runnerTutorial;
 	}
 
 	//Called by RunnerGameTutorialText b/c we are the only ones w/access to our tutorial
-	public void AdvanceTutorial() {
+	public void AdvanceTutorial(){
 		runnerTutorial.Advance();
 	}
 
-	protected override void _NewGame() {    //Reset everything and start again, not called during tutorial
+	protected override void _NewGame(){    //Reset everything and start again, not called during tutorial
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
 		ScoreManager.Instance.Reset();
@@ -93,31 +95,31 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		RunnerItemManager.Instance.Reset();
 		FindObjectOfType<CameraFollow>().Reset();
 
-		RunnerGameTutorialText.Instance.StartCoroutine(RunnerGameTutorialText.Instance.HideAll());
+		//RunnerGameTutorialText.Instance.HideAll();
 	}
 
-	protected override void _PauseGame() {
+	protected override void _PauseGame(){
 		MegaHazard.Instance.PauseParticles();
 		ParallaxingBackgroundManager.Instance.PauseParallax();
 		PlayerController.Instance.PauseAnimation();
 	}
 
-	protected override void _ResumeGame() {
+	protected override void _ResumeGame(){
 		MegaHazard.Instance.PlayParticles();
 		ParallaxingBackgroundManager.Instance.PlayParallax();
 		PlayerController.Instance.PlayAnimation();
 	}
 
-	protected override void _GameOver() {
+	protected override void _GameOver(){
 		AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
-
+		isPaused = false; //HACK: This pause should really be called by our parent but that could break other games, so it will be used here
 		// play game over sound
 		AudioManager.Instance.PlayClip("runnerGameOver");
 		RunnerLevelManager.Instance.mCurrentLevelGroup.ReportDeath();
 	}
 
-	protected override void _GameOverReward() {
+	protected override void _GameOverReward(){
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
 			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
@@ -129,11 +131,11 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		//TODO: Implement badges under RunnerGame
 	}
 
-	protected override void _QuitGame() {
+	protected override void _QuitGame(){
 		Application.targetFrameRate = 30;
 	}
 
-	protected override void _ContinueGame() {
+	protected override void _ContinueGame(){
 		PlayerController.Instance.MakePlayerVisible(true);
 		MegaHazard.Instance.Reset();
 		PlayerController.Instance.ResetSpeed();
@@ -142,14 +144,15 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		acceptInput = false; //Prevent us from input anything until we have waited 3 seconds
 		StartCoroutine(WarmUp());
 	}
-	private IEnumerator WarmUp() {
+
+	private IEnumerator WarmUp(){
 		int seconds = 3;
 		TweenToggleDemux demux = pausePanel.GetComponent<TweenToggleDemux>();
 		demux.Show();
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame(); //Skip 2 frames and then pause the game so we are physically on the ground
 		PauseGame();
-		while(seconds > 0) { //Count from 3 to 0, by 1 second
+		while(seconds > 0){ //Count from 3 to 0, by 1 second
 			pausePanel.GetComponentInChildren<Text>().text = seconds.ToString();
 			seconds--;
 			yield return new WaitForSeconds(1f);
@@ -158,7 +161,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		ResumeGame();
 		acceptInput = true;
 	}
-	private void ResetScore() {
+
+	private void ResetScore(){
 		rewardXPMultiplier = 1f;
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;

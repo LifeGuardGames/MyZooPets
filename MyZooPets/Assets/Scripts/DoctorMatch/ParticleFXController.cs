@@ -16,7 +16,7 @@ public class ParticleFXController : MonoBehaviour{
 	private float horizontalRange = 80;
 	private float verticalHeight = 180;
 
-	public IEnumerator SpawnFirework(float comboMod, Vector3 startPosition, Vector3 givenAim = default(Vector3)){
+	public IEnumerator SpawnFirework(float comboMod, Vector3 startPosition){
 		GameObject firework = Instantiate(fireworkPrefab);
 		firework.transform.position = startPosition;
 		ParticleSystem pSystem = firework.GetComponent<ParticleSystem>();
@@ -36,7 +36,7 @@ public class ParticleFXController : MonoBehaviour{
 			yieldTime = .4f;
 		}
 		else{
-			toAim = DoctorMatchManager.Instance.comboController.GetComboPosition(DoctorMatchManager.Instance.comboController.Combo);
+			toAim = DoctorMatchManager.Instance.comboController.comboText.transform.position;//GetComboPosition(DoctorMatchManager.Instance.comboController.Combo);
 		}
 		ParticleSystem.LimitVelocityOverLifetimeModule emissionModule = pSystem.limitVelocityOverLifetime; //HACK: Currently, you cannot modify particle system module curves directly, so we save it here and modify it later
 		AnimationCurve ourCurve = new AnimationCurve();
@@ -46,10 +46,7 @@ public class ParticleFXController : MonoBehaviour{
 		emissionModule.limit = new ParticleSystem.MinMaxCurve((1 + comboMod / 20) * comboBonusScalar, ourCurve);
 		pSystem.startSize *= (1 + comboMod / 10) * comboBonusScalar;
 		yield return new WaitForSeconds(yieldTime); //Need to wait for the burst to fully stretch before we move it
-		if(givenAim != Vector3.zero && comboBonusScalar == 1)
-			pSystem.GetComponent<ParticleZoom>().StartZoom(givenAim);
-		else
-			pSystem.GetComponent<ParticleZoom>().StartZoom(toAim);
+		pSystem.GetComponent<ParticleZoom>().StartZoom(toAim);
 	}
 
 	public void SpawnFloatyText(float comboMod, bool correct, Transform buttonTransform){

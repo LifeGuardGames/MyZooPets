@@ -21,15 +21,18 @@ public class RunnerTutorial : MinigameTutorial{
 			RunnerGameManager.Instance.NewGame();
 		}
 		else{
-			if(PlayerController.OnJump != null)
+			if(PlayerController.OnJump != null){
 				PlayerController.OnJump -= TutorialJump;
-			if(PlayerController.OnDrop != null)
+			}
+			if(PlayerController.OnDrop != null){
 				PlayerController.OnDrop -= TutorialDrop;
-			if(waitAdvance != null)
+			}
+			if(waitAdvance != null){
 				RunnerGameManager.Instance.StopCoroutine(waitAdvance);
+			}
 			RunnerGameManager.Instance.AcceptInput = true;
 			RunnerGameManager.Instance.SpecialInput = false;
-			tutorialText.StartCoroutine(tutorialText.HideAll());
+			tutorialText.HideAll();
 		}
 	}
 

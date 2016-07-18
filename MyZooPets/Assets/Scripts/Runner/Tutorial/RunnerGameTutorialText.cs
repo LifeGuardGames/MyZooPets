@@ -42,11 +42,20 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText>{
 		StartCoroutine(UnpauseTutIEnum());
 	}
 
-	public IEnumerator HideAll(){
+	public void HideAll(){
+		/*outroTextObject.GetComponent<TweenToggleDemux>().
+		stageTextObject.GetComponent<TweenToggleDemux>().hideImmediately();
+		itemTextObject.GetComponent<TweenToggleDemux>().hideImmediately();
+		outroTextObject.GetComponent<TweenToggleDemux>().hideImmediately=true;
+		stageTextObject.GetComponent<TweenToggleDemux>().hideImmediately=true;
+		itemTextObject.GetComponent<TweenToggleDemux>().hideImmediately=true;*/
+		Debug.Log("HIDE");
+		outroTextObject.GetComponent<TweenToggleDemux>().Hide();
+		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
+		itemTextObject.GetComponent<TweenToggleDemux>().Hide();
+
+
 		StopAllCoroutines();
-		HideHelper();
-		yield return new WaitForSeconds(1f); //If the panels are still in the process of showing, we must wait for them to appear
-		HideHelper();
 	}
 
 	public void ShowItem(string toDisplay){
@@ -72,6 +81,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText>{
 	}
 
 	private IEnumerator StageIEnum(){
+		Debug.Log("SHOW");
 		stageTextObject.GetComponent<TweenToggleDemux>().Show();
 		if(toShow == 0){
 			topText.text = Localization.Localize("RUNNER_TUT_" + toShow);
@@ -84,13 +94,6 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText>{
 		yield return new WaitForSeconds(.5f);
 		RunnerGameManager.Instance.SpecialInput = true;
 		toShow++;
-	}
-
-	private void HideHelper(){
-		outroTextObject.GetComponent<TweenToggleDemux>().Hide();
-		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
-		itemTextObject.GetComponent<TweenToggleDemux>().Hide();
-		RunnerGameManager.Instance.ResumeGame();
 	}
 
 }

@@ -63,8 +63,8 @@ public class AssemblyLineItem : MonoBehaviour{
 		return spriteData;
 	}
 
-	public void CompareVisible(int toCompare){
-		if(index >= toCompare){
+	public void CompareVisible(int toCompare, bool compare){
+		if((index >= toCompare && compare) || index>=4){
 			itemSprite.enabled = false;
 		}
 		else{

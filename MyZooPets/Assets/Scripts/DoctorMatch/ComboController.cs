@@ -116,7 +116,7 @@ public class ComboController : MonoBehaviour{
 	}
 
 	private void UpdateCombo(){
-		comboText.text = "Combo: \n" + combo.ToString();
+		comboText.text = "x" + combo.ToString();
 		if(combo == 0){
 			StopColor();
 		}

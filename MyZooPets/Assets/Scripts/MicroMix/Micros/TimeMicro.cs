@@ -12,6 +12,12 @@ public class TimeMicro : Micro{
 		}
 	}
 
+	public override int Background{
+		get{
+			return 0;
+		}
+	}
+
 	protected override void _StartMicro(int difficulty){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	

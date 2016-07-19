@@ -20,6 +20,9 @@ public abstract class Micro : MonoBehaviour{
 	public abstract string Title{
 		get;
 	}
+	public abstract int Background{
+		get;
+	}
 
 	public void SetWon(bool won){
 		this.won = won;
@@ -34,6 +37,8 @@ public abstract class Micro : MonoBehaviour{
 			if(child == transform){
 				continue;
 			}
+//			Debug.Log(child +"A");
+
 			positions.Add(child, child.transform.position);
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
@@ -79,6 +84,7 @@ public abstract class Micro : MonoBehaviour{
 		else{
 			MicroMixManager.Instance.LoseMicro();
 		}
+
 	}
 
 	private IEnumerator WaitThenHide(){

@@ -11,6 +11,11 @@ public class ExhaleMicro : Micro {
 			return "Exhale";
 		}
 	}
+	public override int Background{
+		get{
+			return 0;
+		}
+	}
 	// Use this for initialization
 	protected override void _StartMicro(int difficulty){
 		petInstance = (GameObject) Instantiate(petPrefab,Vector3.zero,Quaternion.identity);

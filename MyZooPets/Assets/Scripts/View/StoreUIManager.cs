@@ -43,6 +43,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private string currentTab; //The current sub category. only decorations have sub cat right now
 	private LgTuple <string,string> secretCodeEntry;
 	public PositionTweenToggle codeEntryUi;
+	public PositionTweenToggle codeRedeemedUi;
 
 	protected override void Awake(){
 		base.Awake();
@@ -296,7 +297,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			CloseCode();
 			InventoryLogic.Instance.AddItem("specialBCH",1);
 			DataManager.Instance.GameData.Inventory.isSecretItemUnlocked.Add("specialBCH");
+			codeRedeemedUi.Show();
 		}
+	}
+
+	public void CloseRedeemUi(){
+		codeRedeemedUi.Hide ();
 	}
 
 	/// <summary>

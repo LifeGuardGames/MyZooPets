@@ -17,10 +17,11 @@ public class TimeItem : MicroItem {
 	public override void StartItem(){
 		complete = false;
 		if (Random.value>.5f){
-			currentDegree=Random.Range(range,180-range);
+			//currentDegree=Random.Range(range,180-range);
+			currentDegree=90f;
 		} else {
-			currentDegree=Random.Range(180+range,360-range);
-
+			//currentDegree=Random.Range(180+range,360-range);
+			currentDegree=270f;
 		}
 		solarSystem.transform.rotation= Quaternion.Euler(new Vector3(0f,0f,currentDegree));
 	}

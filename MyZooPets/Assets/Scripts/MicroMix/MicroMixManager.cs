@@ -6,7 +6,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Text titleText;
 	public Micro[] microList;
 	public Micro currentMicro;
-	private float maxTimeScale = 2f;
+	public GameObject[] backgrounds;
+	private float maxTimeScale = 1.6f;
 	private float timeScaleIncrement = .2f;
 	private int won;
 	private int lost;
@@ -114,9 +115,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		currentMicro.StartMicro(difficulty);
 		titleText.text=currentMicro.Title;
 		titleText.color=Color.white;
-		//LeanTween.l(titleText.rectTransform,0,1.5f).setEase(LeanTweenType.easeOutQuad);
 		titleText.rectTransform.localScale=Vector3.one*1.5f;
 		LeanTween.scale(titleText.rectTransform,Vector3.one,.5f*Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
+
+		for(int i = 0; i < backgrounds.Length; i++){
+			backgrounds[i].SetActive((currentMicro.Background==i)? true : false);//Set our background 
+		}
 	}
 	private void tweenFinished(){
 		StartCoroutine(HideText());

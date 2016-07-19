@@ -1,24 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PushButtonMicro : Micro{
-	public GameObject inhaler;
-
+public class RoachMicro : Micro {
+	public GameObject cockroach;
+	public GameObject trap;
 	public override string Title{
 		get{
-			return "Push Button";
+			return "Catch Cockroach";
 		}
 	}
 	public override int Background{
 		get{
-			return 0;
+			return 1;
 		}
 	}
 
 	protected override void _StartMicro(int difficulty){
-		inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f);
+		cockroach.transform.position=CameraUtils.RandomWorldPointOnScreen(Camera.main,.2f,.2f);
+
 	}
 	protected override void _EndMicro(){
-		//Nothing to be done here
 	}
+
 }

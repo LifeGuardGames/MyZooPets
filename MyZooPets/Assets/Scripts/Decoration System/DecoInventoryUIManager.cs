@@ -13,8 +13,6 @@ using System.Collections.Generic;
 /// 
 /// </summary>
 public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
-
-	public static EventHandler<EventArgs> OnDecoOpened;
 	public static EventHandler<InventoryDragDrop.InvDragDropArgs> OnDecoDroppedOnTarget;
 
 	public static EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
@@ -43,8 +41,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	protected override void Start(){
 		base.Start();
-		InventoryManager.OnItemAddedToDecoInventory += OnItemAddedHandler;
-		InventoryManager.OnItemUsed += OnItemUsedHandler;
 
 		// Spawn items in the decoration inventory for the first time
 		List<InventoryItem> listDecos = InventoryManager.Instance.AllDecoInventoryItems;
@@ -64,8 +60,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
-		InventoryManager.OnItemAddedToDecoInventory -= OnItemAddedHandler;
-		InventoryManager.OnItemUsed -= OnItemUsedHandler;
 	}
 
 	/// <summary>
@@ -92,24 +86,22 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		return shopButton;
 	}
 
-	// Listening to when new item is added to the deco inventory
-	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs e){
-		if(e.IsItemNew){
-			SpawnInventoryItemInPanel(e.InvItem);
+	// New item is added to the deco inventory
+	public void OnItemAddedUI(InventoryItem invItem, bool isItemNew) {
+		if(isItemNew) {
+			SpawnInventoryItemInPanel(invItem);
 		}
-		else{
-			Transform invItem = uiGridObject.transform.Find(e.InvItem.ItemID);
-			invItem.Find("Label_Amount").GetComponent<UILabel>().text = e.InvItem.Amount.ToString();
+		else{	// Update amount
+			Transform gridObj = uiGridObject.transform.Find(invItem.ItemID);
+			gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
 		}
 	}
 
 	/// <summary>
-	/// Items the used event handler.
-	/// Called to update the bar from deco inventory
+	/// Called to update the bar from deco inventory, from InventoryManager
 	/// </summary>
-	private void OnItemUsedHandler(object sender, InventoryManager.InventoryEventArgs args){
+	public void OnItemUsedUI(InventoryItem invItem){
 		if(currentDragDropItem != null){
-			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
 				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
 			}
@@ -267,16 +259,11 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		decorationGridPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
 	}
 
-	//When the highscore board is clicked and zoomed into
 	protected override void _OpenUI(){
 		if(!isActive){
 			isActive = true;
 
-			if(OnDecoOpened != null){
-				OnDecoOpened(this, EventArgs.Empty);
-			}
-
-			this.GetComponent<TweenToggleDemux>().Show();
+			GetComponent<TweenToggleDemux>().Show();
 			ShowDecoInventory();
 			RoomArrowsUIManager.Instance.ShowPanel();
 

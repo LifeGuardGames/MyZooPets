@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-/// <summary>
+﻿/// <summary>
 /// Items that are stored in the inventory. 
 /// Mutable data but contains reference to immutable data
 /// </summary>

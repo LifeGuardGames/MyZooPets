@@ -23,19 +23,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	private Transform currentDragDropItem;
 
 	void Start(){
-		InventoryManager.OnItemAddedToInventory += OnItemAddedHandler;
-		InventoryManager.OnItemUsed += OnItemUsedHandler;
-
 		//Spawn items in the inventory for the first time
 		List<InventoryItem> allInvItems = InventoryManager.Instance.AllConsumableInventoryItems;
 		foreach(InventoryItem invItem in allInvItems){
 			SpawnInventoryItemInPanel(invItem, isOnLoad : true);
 		}
-	}
-
-	void OnDestroy(){
-		InventoryManager.OnItemAddedToInventory -= OnItemAddedHandler;
-		InventoryManager.OnItemUsed -= OnItemUsedHandler;
 	}
 
 	// If items in inventory greater than max count, it scrollable
@@ -145,9 +137,9 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		}
 	}
 
-	private void OnItemUsedHandler(object sender, InventoryManager.InventoryEventArgs args){
+	// Called from InventoryManager
+	public void OnItemUsedUI(InventoryItem invItem){
 		if(currentDragDropItem != null){
-			InventoryItem invItem = args.InvItem;
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
 				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
 			}
@@ -182,13 +174,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 
 	// When new item is added to the inventory
-	private void OnItemAddedHandler(object sender, InventoryManager.InventoryEventArgs args){
-		if(args.IsItemNew){
-			SpawnInventoryItemInPanel(args.InvItem);
+	public void OnItemAddedUI(InventoryItem invItem, bool isItemNew){
+		if(isItemNew) {
+			SpawnInventoryItemInPanel(invItem);
 		}
-		else{
-			Transform invItem = gridTransform.Find(args.InvItem.ItemID);
-			invItem.GetComponent<InventoryTokenController>().SetAmount(args.InvItem.Amount);
+		else{	// Update amount
+			Transform gridObj = gridTransform.Find(invItem.ItemID);
+			gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
 		}
 	}
 

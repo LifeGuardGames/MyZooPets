@@ -63,7 +63,6 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// <summary>
 	/// Drop the dragged object.
 	/// </summary>
-
 	private void Drop(){
 		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;

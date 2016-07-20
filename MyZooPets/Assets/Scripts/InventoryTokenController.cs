@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 // Actual class that handles the UI for the inventory slot items
+// For use for both Inventory and DecoInventory items
 public class InventoryTokenController : MonoBehaviour {
 
 	public Image itemSprite;

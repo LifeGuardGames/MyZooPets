@@ -81,7 +81,7 @@ public class MutableDataGatingProgress{
 	private void Init(){
 		GatingProgress = new Dictionary<string, int>();
 		LastRecurringGateSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
-		
+		GatingProgress.Add ("Gate_Bedroom_1", 0);
 		// load all our gating data from xml
 		LoadFromXML();		
 	}

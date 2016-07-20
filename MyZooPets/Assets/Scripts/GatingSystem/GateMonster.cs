@@ -36,6 +36,9 @@ public class GateMonster : Gate{
 		}
 		// New way to show monster health - having multiple heads
 		currentHealth = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
+		if (currentHealth <= 3){
+			currentHealth = 1;
+		}
 		if(currentHealth <= smokeMonsterHeads.Length){
 			for(int i = currentHealth; i <= smokeMonsterHeads.Length - 1; i++){
 				smokeMonsterHeads[i].gameObject.SetActive(false);

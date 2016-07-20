@@ -4,11 +4,12 @@ using UnityEngine.UI;
 
 public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Text titleText;
-	public Micro[] microList;
-	public Micro currentMicro;
+	public Micro debugMicro;
 	public GameObject[] backgrounds;
-	private float maxTimeScale = 1.6f;
-	private float timeScaleIncrement = .2f;
+	private Micro currentMicro;
+	private Micro[] microList;
+	private float maxTimeScale = 1.3f;
+	private float timeScaleIncrement = .1f;
 	private int won;
 	private int lost;
 	private int difficulty = 1;
@@ -51,13 +52,18 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		}
 		if(lost >= 3){
 			GameOver();
-		} else {
+		}
+		else{
 			StartMicro();
 		}
 		//AudioManager.Instance.PlayClip("microLose");	
 	}
 
 	protected override void _Start(){
+		microList = FindObjectsOfType<Micro>();
+		foreach(Micro micro in microList){
+			micro.gameObject.SetActive(false);
+		}
 		//PauseGame(); //Not sure if this is necessary?
 	}
 
@@ -69,10 +75,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 	protected override void _NewGame(){
 		StartMicro();
-		Time.timeScale=1f;
-		won=0;
-		lost=0;
-		difficulty=1;
+		Time.timeScale = 1f;
+		won = 0;
+		lost = 0;
+		difficulty = 1;
 	}
 
 	protected override void _PauseGame(){
@@ -110,32 +116,50 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	private void StartMicro(){
-		int index = Random.Range(0,microList.Length);
-		currentMicro=microList[index];
+		if(currentMicro != null){
+			currentMicro.gameObject.SetActive(false);
+			backgrounds[currentMicro.Background].SetActive(false);
+		}
+		if(debugMicro == null){
+			int index = Random.Range(0, microList.Length);
+			currentMicro = microList[index];
+		} else {
+			currentMicro = debugMicro;
+		}
+		currentMicro.gameObject.SetActive(true);
 		currentMicro.StartMicro(difficulty);
-		titleText.text=currentMicro.Title;
-		titleText.color=Color.white;
-		titleText.rectTransform.localScale=Vector3.one*1.5f;
-		LeanTween.scale(titleText.rectTransform,Vector3.one,.5f*Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
-
-		for(int i = 0; i < backgrounds.Length; i++){
-			backgrounds[i].SetActive((currentMicro.Background==i)? true : false);//Set our background 
+		titleText.text = currentMicro.Title;
+		titleText.color = Color.white;
+		titleText.rectTransform.localScale = Vector3.one * 1.5f;
+		LeanTween.scale(titleText.rectTransform, Vector3.one, .5f * Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
+		if (currentMicro.Background==0){
+			//if (Random.value>.5f){ This will be moved to each specific minigame that can use day and night
+				backgrounds[currentMicro.Background].SetActive(true);
+			//} else {
+			//	backgrounds[6].SetActive(true);
+			//}
+		} else {
+			backgrounds[currentMicro.Background].SetActive(true);
 		}
 	}
+
 	private void tweenFinished(){
 		StartCoroutine(HideText());
 	}
+
 	private IEnumerator HideText(){
-		yield return new WaitForSeconds(.2f*Time.timeScale); //This will be constant, regardless of how fast game is
-		titleText.color=Color.clear;
+		yield return new WaitForSeconds(.2f * Time.timeScale); //This will be constant, regardless of how fast game is
+		titleText.color = Color.clear;
 	}
+
 	private void ResetScore(){
 		rewardXPMultiplier = 1f;
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;
 		score = 0;
 	}
+
 	void OnGUI(){
-		GUI.Box(new Rect(100,0,100,100),won.ToString()+":"+lost.ToString()+":"+Time.timeScale);
+		GUI.Box(new Rect(100, 0, 100, 100), won.ToString() + ":" + lost.ToString() + ":" + Time.timeScale);
 	}
 }

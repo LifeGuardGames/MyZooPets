@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
 /* MicroMixManager calls StartMicro on this, which calls _StartMicro and then afterward sets up the MicroItems and finally calls Timer
  * TimeMicro waits for four seconds, then call EndMicro, which closes up all the items, and then calls _EndMicro
  * Individual micros that override this must hanlde _StartMicro and _EndMicro, as well as instantiating any objects they need
@@ -9,6 +10,7 @@ using System.Collections.Generic;
  */
 public abstract class Micro : MonoBehaviour{
 	protected abstract void _StartMicro(int difficulty);
+
 	protected abstract void _EndMicro();
 
 	private bool won = false;
@@ -20,6 +22,7 @@ public abstract class Micro : MonoBehaviour{
 	public abstract string Title{
 		get;
 	}
+
 	public abstract int Background{
 		get;
 	}
@@ -27,23 +30,21 @@ public abstract class Micro : MonoBehaviour{
 	public void SetWon(bool won){
 		this.won = won;
 	}
-	public void StartMicro(int difficulty){
-		_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
 
-		playing = true; //Now we set up our own stuff
+	public void StartMicro(int difficulty){
 		won = false;
+		_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
+		playing = true; //Now we set up our own stuff
 		positions.Clear();
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems
 			if(child == transform){
 				continue;
 			}
-//			Debug.Log(child +"A");
-
 			positions.Add(child, child.transform.position);
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
 				mi.StartItem();
-				mi.parent=this;
+				mi.SetParent(this);
 			}
 		}
 		foreach(Transform child in transform){

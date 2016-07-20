@@ -8,7 +8,7 @@ public class MoldItem : MicroItem{
 	}
 
 	void Update(){
-		if(Vector3.Distance(transform.position, Vector3.zero) < .5f){
+		if(Vector3.Distance(transform.position, Vector3.zero) < .8f){
 			MoldMicro dm = (MoldMicro)parent;
 			dm.Cleaned();
 			gameObject.SetActive(false);

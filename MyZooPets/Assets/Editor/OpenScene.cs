@@ -52,6 +52,10 @@ public class OpenScene : Editor {
 	public static void OpenRunner(){
 		LoadScene("Runner");
 	}
+	[MenuItem("Open Scene/MicroMix")]
+	public static void OpenMicroMix(){
+		LoadScene("MicroMix");
+	}
 
 	static void LoadScene(string name){
 		if(EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) {

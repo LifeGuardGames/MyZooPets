@@ -13,6 +13,11 @@ public class InhaleMicro : Micro{
 			return "Inhale";
 		}
 	}
+	public override int Background{
+		get{
+			return 0;
+		}
+	}
 
 	// Use this for initialization
 	protected override void _StartMicro(int difficulty){

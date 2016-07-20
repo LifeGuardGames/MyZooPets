@@ -49,11 +49,8 @@ public class ComicPlayer : MonoBehaviour{
 			transition.Darken(false);
 		}
 	}
-
-    //---------------------------------------------------
-    // NextPage()
-    // Setup the callback function name.
-    //---------------------------------------------------
+	
+    // Setup the callback function name
     public void NextPage(){
 		if(currentPageNum < pages.Count){
 			// Turn off all the other pages that isnt the current page
@@ -69,10 +66,4 @@ public class ComicPlayer : MonoBehaviour{
 			}
 		}
     }
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "Play")){
-//			StartComic();
-//		}
-//	}
 }

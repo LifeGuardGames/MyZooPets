@@ -6,6 +6,7 @@ public class AlphaTweenToggle : TweenToggle {
 
 	private float showingAlpha;
 	private float hiddenAlpha;
+	private SpriteRenderer spriteRenderer;
 
 	protected override void RememberPositions(){
 		if(isGUI){
@@ -13,9 +14,10 @@ public class AlphaTweenToggle : TweenToggle {
 			hiddenAlpha = showingAlpha - hideDeltaAlpha;
 		}
 		else{
-			Debug.LogWarning("Tween alpha not implemented");
-//			showingAlpha = GUIRectTransform.GetComponent<Image>().color.a;
-//			hiddenAlpha = showingAlpha - hideDeltaAlpha;
+			// Assume SpriteRenderer is default
+			spriteRenderer = GetComponent<SpriteRenderer>();
+			showingAlpha = spriteRenderer.color.a;
+			hiddenAlpha = showingAlpha - hideDeltaAlpha;
 		}
 
 		// Sanity check on hidden alpha values, sometimes we want to override simply
@@ -35,8 +37,8 @@ public class AlphaTweenToggle : TweenToggle {
 				GUIRectTransform.GetComponent<Image>().color = new Color(colorAux.r, colorAux.g, colorAux.b, hiddenAlpha);
 			}
 			else{
-				Debug.LogWarning("Tween alpha not implemented");
-//				gameObject.transform.localPosition = hiddenPos;
+				spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b,
+												 hiddenAlpha);
 			}
 			
 			// Need to call show first
@@ -65,12 +67,11 @@ public class AlphaTweenToggle : TweenToggle {
 						.setOnComplete(ShowSendCallback);
 			}
 			else{
-				Debug.LogWarning("Tween alpha not implemented");
-//				LeanTween.alpha(gameObject, showingAlpha, time)
-//					.setEase(easeShow)
-//						.setDelay(showDelay)
-//						.setUseEstimatedTime(isUseEstimatedTime)
-//						.setOnComplete(ShowSendCallback);
+				LeanTween.alpha(gameObject, showingAlpha, time)
+					.setEase(easeShow)
+						.setDelay(showDelay)
+						.setUseEstimatedTime(isUseEstimatedTime)
+						.setOnComplete(ShowSendCallback);
 			}
 		}
 	}
@@ -90,12 +91,11 @@ public class AlphaTweenToggle : TweenToggle {
 						.setOnComplete(HideSendCallback);
 			}
 			else{
-				Debug.LogWarning("Tween alpha not implemented");
-//				LeanTween.alpha(gameObject, hiddenAlpha, time)
-//					.setEase(easeHide)
-//						.setDelay(hideDelay)
-//						.setUseEstimatedTime(isUseEstimatedTime)
-//						.setOnComplete(HideSendCallback);
+				LeanTween.alpha(gameObject, hiddenAlpha, time)
+					.setEase(easeHide)
+						.setDelay(hideDelay)
+						.setUseEstimatedTime(isUseEstimatedTime)
+						.setOnComplete(HideSendCallback);
 			}
 		}
 	}

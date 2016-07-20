@@ -83,7 +83,7 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 		OpenMathQuestion();
 
 		ParentPortalManager.Instance.RefreshData();
-		SelectionUIManager.Instance.gameObject.SetActive(false);
+		MenuSceneManager.Instance.gameObject.SetActive(false);
 	}
 
 	protected override void _CloseUI(){
@@ -93,7 +93,7 @@ public class ParentPortalUIManager : SingletonUI<ParentPortalUIManager> {
 		CloseMathQuestion();
 		CloseParentPortal();
 
-		SelectionUIManager.Instance.gameObject.SetActive(true);
+		MenuSceneManager.Instance.gameObject.SetActive(true);
 	}
 
 	private void OpenBackground(){

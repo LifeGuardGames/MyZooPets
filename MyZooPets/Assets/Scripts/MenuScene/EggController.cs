@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class EggController : Singleton<EggController>{
 	public Animation eggAnimation;
@@ -7,6 +6,7 @@ public class EggController : Singleton<EggController>{
 	public ParticleSystem shellParticle;
 	public ParticleColorChange colorChange;
 	public GameObject fingerHint;
+	public Collider2D eggCollider;
 
 	public GameObject crack1;
 	public GameObject crack2;
@@ -19,7 +19,20 @@ public class EggController : Singleton<EggController>{
 		crack2.SetActive(false);
 		fingerHint.SetActive(false);
 	}
-	
+
+	void OnMouseUpAsButton() {
+		if(!CustomizationUIManager.Instance.isHatchingPet) {
+			CustomizationUIManager.Instance.ShowColorChooseUI();
+		}
+		else {
+			CustomizationUIManager.Instance.HatchEggTap();
+        }
+	}
+
+	public void ToggleEggCollider(bool isColliderOn) {
+		eggCollider.enabled = isColliderOn;
+    }
+
 	public void EggCrack(int crackNumber){
 		shellParticle.Play();
 		AudioManager.Instance.PlayClip("eggCrack", variations:3);
@@ -39,10 +52,8 @@ public class EggController : Singleton<EggController>{
 			break;
 		}
 	}
-
-	/// <summary>
-	/// Turn egg wiggle animation on/off
-	/// </summary>
+	
+	// Turn egg wiggle animation on/off
 	public void ToggleEggIdleAnimation(bool isOn){
 		if(isOn){
 			eggAnimation["eggIdle"].wrapMode = WrapMode.Loop;
@@ -63,6 +74,7 @@ public class EggController : Singleton<EggController>{
 		fingerHint.SetActive(isOn ? true : false);
 	}
 
+	// User tapping the egg
 	public void EggHatchingTapped(){
 		eggAnimation.Play("eggClickCrack");
 		shellParticle.Play();

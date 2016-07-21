@@ -13,6 +13,7 @@ public class InhaleMicro : Micro{
 			return "Inhale";
 		}
 	}
+
 	public override int Background{
 		get{
 			return 0;

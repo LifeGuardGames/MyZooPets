@@ -5,13 +5,15 @@ public class MoldMicro : Micro{
 	public GameObject[] moldItems;
 	private int count;
 	private float moldSpeed = .8f;
-	private float startTime; //Time which this minigame started;
+	private float startTime;
+	//Time which this minigame started;
 	//Pretty fast, but not quite as fast as the gesture
 	public override string Title{
 		get{
-			return "Toss Mold";
+			return "Toss";
 		}
 	}
+
 	public override int Background{
 		get{
 			return 1;
@@ -29,7 +31,7 @@ public class MoldMicro : Micro{
 			moldItems[i].transform.position = spawnPos;
 		}
 		count = moldItems.Length;
-		startTime=Time.time;
+		startTime = Time.time;
 	}
 
 	protected override void _EndMicro(){
@@ -44,7 +46,7 @@ public class MoldMicro : Micro{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null||gesture.StartTime<startTime){ //If the gesture is older than the minigame, we have been holding over
+		if(gesture.StartSelection == null || gesture.StartTime < startTime || MicroMixManager.Instance.IsPaused){ //If the gesture is older than the minigame, we have been holding over
 			return;
 		}
 

@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RoachMicro : Micro {
+public class RoachMicro : Micro{
 	public GameObject cockroach;
 	public GameObject trap;
+
 	public override string Title{
 		get{
-			return "Catch Cockroach";
+			return "Trap";
 		}
 	}
+
 	public override int Background{
 		get{
 			return 1;
@@ -16,9 +18,10 @@ public class RoachMicro : Micro {
 	}
 
 	protected override void _StartMicro(int difficulty){
-		cockroach.transform.position=CameraUtils.RandomWorldPointOnScreen(Camera.main,.2f,.2f);
+		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 
 	}
+
 	protected override void _EndMicro(){
 	}
 

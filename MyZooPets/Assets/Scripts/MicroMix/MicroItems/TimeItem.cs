@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class TimeItem : MicroItem{
 	public GameObject solarSystem;
+	public GameObject sun;
+	public GameObject moon;
 	public GameObject petInstance;
 	public GameObject dayBackground;
 	public GameObject nightBackground;
@@ -13,20 +16,19 @@ public class TimeItem : MicroItem{
 	private bool isDay = false;
 
 	void Update(){
+		if(MicroMixManager.Instance.IsPaused){
+			return;
+		}
 		currentDegree -= 45 * Time.deltaTime;
-
 		if(currentDegree <= 0){
 			currentDegree += 360;
 			if(isDay){
-				Debug.Log("WAW");
-
 				isDay = false;
 				LeanTween.alpha(dayBackground, 0, .5f);
 				LeanTween.alpha(nightBackground, 1, .5f);
 			}
 		}
 		if(currentDegree <= 180 && !isDay){
-			Debug.Log("CALLED");
 			isDay = true;
 			LeanTween.alpha(dayBackground, 1, .5f);
 			LeanTween.alpha(nightBackground, 0, .5f);
@@ -38,23 +40,27 @@ public class TimeItem : MicroItem{
 		complete = false;
 		dayBackground.SetActive(true);
 		nightBackground.SetActive(true);
+		solarSystem.transform.rotation = Quaternion.Euler(Vector3.zero);
+		sun.transform.localPosition = new Vector3(5, 0);
+		moon.transform.localPosition = new Vector3(-5, 0);
 		if(Random.value > .5f){
 			currentDegree = 90f;
 			isDay = true;
-			dayBackground.GetComponent<SpriteRenderer>().color = Color.white;
-			nightBackground.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
+			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
 		}
 		else{
 			currentDegree = 270f;
 			isDay = false;
-			dayBackground.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-			nightBackground.GetComponent<SpriteRenderer>().color = Color.white;
+			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
+			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
 		}
-		Debug.Log(currentDegree + ":" + isDay);
 		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
 	}
 
 	public override void OnComplete(){
+		dayBackground.GetComponent<SpriteRenderer>().color = Color.white;
+		nightBackground.GetComponent<SpriteRenderer>().color = Color.white;
 		dayBackground.SetActive(false);
 		nightBackground.SetActive(false);
 		LeanTween.cancel(dayBackground);
@@ -62,7 +68,7 @@ public class TimeItem : MicroItem{
 	}
 
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || complete){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused){
 			return;
 		}
 		else if(gesture.StartSelection.Equals(gameObject)){
@@ -73,9 +79,5 @@ public class TimeItem : MicroItem{
 				petInstance.GetComponentInChildren<Animator>().SetTrigger("InhalerHappy1");
 			} 
 		}
-	}
-
-	void OnGUI(){
-		GUI.Box(new Rect(Screen.width - 100, 0, 100, 100), currentDegree.ToString() + ":" + isDay.ToString());
 	}
 }

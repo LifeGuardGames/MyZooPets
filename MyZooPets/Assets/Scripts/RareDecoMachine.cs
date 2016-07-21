@@ -1,29 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class RareDecoMachine : MonoBehaviour {
 
 	public int level;
+	private int levelCost = 2000;
 	public PositionTweenToggle openingScreen;
-	public PositionTweenToggle outPutScreen;
+	public PositionTweenToggle rewardScreen;
 	public PositionTweenToggle levelUpScreen;
+	public Text levelText;
+	public Text oldLevelText;
+	public Text newLevelText;
+	public Image decoImage;
 
 	void Start() {
 		level = DataManager.Instance.GameData.Decorations.capsuleMachineLevel;
+		levelText.text = level.ToString();
+
     }
 
 	public void OnUse() {
 		openingScreen.Show();
 	}
 
-	public void RollOnDeco() {
+	public void OnBuyButton() {
 		openingScreen.Hide();
 		ImmutableDataRareDeco capsule = DataLoaderRareDeco.GetDecoAtTier(level);
+		decoImage.sprite = SpriteCacheManager.GetItemSprite(capsule.TextureName);
+		rewardScreen.Show();
+	
 		InventoryManager.Instance.AddItemToInventory(capsule.ID);
 	}
 
+	public void OnLevelUpButton() {
+		openingScreen.Hide();
+		levelUpScreen.Show();
+	}
+
 	public void Upgrade() {
-		level++;
-		DataManager.Instance.GameData.Decorations.capsuleMachineLevel++;
+		if(DataManager.Instance.GameData.Stats.Stars < levelCost) {
+			StatsManager.Instance.ChangeStats(coinsDelta: levelCost);
+			level++;
+			levelText.text = level.ToString();
+			DataManager.Instance.GameData.Decorations.capsuleMachineLevel++;
+			levelUpScreen.Hide();
+			openingScreen.Show();
+		}
+	}
+
+	public void OnExitButtonLevel() {
+		levelUpScreen.Hide();
+		openingScreen.Hide();
+	}
+
+	public void OnAcceptButtonReward() {
+		rewardScreen.Hide();
 	}
 }

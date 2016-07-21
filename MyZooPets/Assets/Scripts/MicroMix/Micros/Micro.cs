@@ -75,7 +75,7 @@ public abstract class Micro : MonoBehaviour{
 	private IEnumerator WaitTimer(){
 		//Used for deactivating and closing off the micro, and alerting the manager
 		for(seconds = 4; seconds > 0; seconds--){
-			yield return new WaitForSeconds(1f);
+			yield return WaitSecondsPause(1f);
 		}
 		EndMicro();
 		yield return 0; //Give everything that needs to be destroyed a second...
@@ -91,6 +91,15 @@ public abstract class Micro : MonoBehaviour{
 	private IEnumerator WaitThenHide(){
 		yield return new WaitForSeconds(.1f);
 
+	}
+
+	private IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ RunnerGameManager
+		for(float i = 0; i <= time; i += .1f){
+			yield return new WaitForSeconds(.1f);
+			while(MicroMixManager.Instance.IsPaused){
+				yield return new WaitForEndOfFrame();
+			}
+		}
 	}
 
 	void OnGUI(){

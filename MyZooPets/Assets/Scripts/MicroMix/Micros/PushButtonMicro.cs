@@ -9,6 +9,7 @@ public class PushButtonMicro : Micro{
 			return "Push Button";
 		}
 	}
+
 	public override int Background{
 		get{
 			return 0;
@@ -18,6 +19,7 @@ public class PushButtonMicro : Micro{
 	protected override void _StartMicro(int difficulty){
 		inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f);
 	}
+
 	protected override void _EndMicro(){
 		//Nothing to be done here
 	}

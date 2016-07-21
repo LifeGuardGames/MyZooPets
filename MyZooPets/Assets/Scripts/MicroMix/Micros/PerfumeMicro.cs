@@ -7,7 +7,7 @@ public class PerfumeMicro : Micro{
 
 	public override string Title{
 		get{
-			return "Avoid Perfume";
+			return "Avoid";
 		}
 	}
 
@@ -22,7 +22,7 @@ public class PerfumeMicro : Micro{
 		SetWon(true);
 		foreach(PerfumeItem perf in perfumes){
 			perf.GetComponent<ParticleSystem>().Stop();
-			perf.GetComponent<Collider>().enabled=false;
+			perf.GetComponent<Collider>().enabled = false;
 		}
 		StartCoroutine(SpawnPerfume());
 
@@ -31,17 +31,28 @@ public class PerfumeMicro : Micro{
 	protected override void _EndMicro(){
 		
 	}
+
 	private IEnumerator SpawnPerfume(){
-		yield return new WaitForSeconds(.3f);
+		yield return WaitSecondsPause(.3f);
 		foreach(PerfumeItem perf in perfumes){
 			Vector3 startPos = GetRandomPositionOnEdge();
-			Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main,.25f,.25f);
+			Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
 			perf.GetComponent<ParticleSystem>().Play();
-			perf.GetComponent<Collider>().enabled=true;
-			perf.Setup(startPos,aim);
-			yield return new WaitForSeconds(.9f);
+			perf.GetComponent<Collider>().enabled = true;
+			perf.Setup(startPos, aim);
+			yield return WaitSecondsPause(.9f);
 		}
 	}
+
+	private IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ RunnerGameManager
+		for(float i = 0; i <= time; i += .1f){
+			yield return new WaitForSeconds(.1f);
+			while(MicroMixManager.Instance.IsPaused){
+				yield return new WaitForEndOfFrame();
+			}
+		}
+	}
+
 	private Vector3 GetRandomPositionOnEdge(){
 		float x;
 		float y;
@@ -64,6 +75,6 @@ public class PerfumeMicro : Micro{
 			x = Random.Range(0, Screen.width);
 
 		}
-		return CameraUtils.ScreenToWorldPointZero(Camera.main,new Vector2(x,y));
+		return CameraUtils.ScreenToWorldPointZero(Camera.main, new Vector2(x, y));
 	}
 }

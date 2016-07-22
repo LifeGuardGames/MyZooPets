@@ -15,10 +15,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	private int lost;
 	private int difficulty = 1;
 
-	public Micro Current{
-		get{
-			return currentMicro;
-		}
+	public bool IsTutorial{
+		get;
+		set;
 	}
 
 	void Awake(){

@@ -22,7 +22,7 @@ public class DodgeItem : MicroItem{
 	}
 
 	void Update(){
-		if(complete || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
+		if(complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, Input.mousePosition);

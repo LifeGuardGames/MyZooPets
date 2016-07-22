@@ -9,7 +9,7 @@ public class ExhaleItem : MicroItem{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
+		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition);

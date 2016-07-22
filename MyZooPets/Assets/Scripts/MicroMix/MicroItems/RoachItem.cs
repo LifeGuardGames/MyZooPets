@@ -11,7 +11,7 @@ public class RoachItem : MicroItem{
 	}
 
 	void Update(){
-		if(MicroMixManager.Instance.IsPaused || parent.IsTutorial){
+		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		lastPos = transform.position;

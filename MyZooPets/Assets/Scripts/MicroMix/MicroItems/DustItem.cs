@@ -13,11 +13,13 @@ public class DustItem : MicroItem{
 		transform.localScale = new Vector3(size, size, size);
 		tapCount = 3;
 	}
+
 	public override void OnComplete(){
-		GetComponent<Renderer>().enabled=true;
+		GetComponent<Renderer>().enabled = true;
 	}
+
 	public void Drag(){
-		if (complete){
+		if(complete){
 			return;
 		}
 		size -= .1f;
@@ -27,21 +29,22 @@ public class DustItem : MicroItem{
 			DustMicro dm = (DustMicro)parent;
 			dm.Cleaned();
 			complete = true;
-			GetComponent<Renderer>().enabled=false;
+			GetComponent<Renderer>().enabled = false;
 			tapParticle.Play();
 		}
 	}
+
 	public void Tap(){
-		if (complete){
+		if(complete){
 			return;
 		}
 		size -= .3f;
 		transform.localScale = new Vector3(size, size, size);
-		complete=true;
+		complete = true;
 		DustMicro dm = (DustMicro)parent;
 		dm.Cleaned();
 		complete = true;
-		GetComponent<Renderer>().enabled=false;
+		GetComponent<Renderer>().enabled = false;
 		tapParticle.Play();
 	}
 }

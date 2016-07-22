@@ -11,7 +11,7 @@ public class ShakeItem : MicroItem{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position);

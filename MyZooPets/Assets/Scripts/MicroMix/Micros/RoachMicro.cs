@@ -19,7 +19,6 @@ public class RoachMicro : Micro{
 
 	protected override void _StartMicro(int difficulty){
 		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
-
 	}
 
 	protected override void _EndMicro(){

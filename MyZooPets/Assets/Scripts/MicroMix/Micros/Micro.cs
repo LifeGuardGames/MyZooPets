@@ -18,7 +18,6 @@ public abstract class Micro : MonoBehaviour{
 	private bool won = false;
 	private bool playing = false;
 	private int seconds = 0;
-	private bool inTutorial = false;
 	//private Dictionary<Transform, LgTuple<Vector3, bool>> positions = new Dictionary<Transform, LgTuple<Vector3, bool>>();
 	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
 
@@ -29,18 +28,14 @@ public abstract class Micro : MonoBehaviour{
 	public abstract int Background{
 		get;
 	}
-	public bool IsTutorial{
-		get {
-			return inTutorial;
-		}
-	}
+
 	public void SetWon(bool won){
 		this.won = won;
 	}
 
 	public void StartMicro(int difficulty){
 		won = false;
-		inTutorial=false;
+		MicroMixManager.Instance.IsTutorial = false;
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
 			StartCoroutine(Tutorial(difficulty));
 			return; //Do not continue on
@@ -68,14 +63,16 @@ public abstract class Micro : MonoBehaviour{
 		StartCoroutine(WaitTimer());
 
 	}
+
 	private IEnumerator Tutorial(int difficulty){
-		inTutorial=true;
+		MicroMixManager.Instance.IsTutorial = true;
 		yield return StartCoroutine(_Tutorial());
 		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(Title);
 		yield return 0; //Wait for them to destroy their objects
 		StartMicro(difficulty); //This is only called after we have told everyone who our parent is. We should return after this is called ABOVE
 		//and then go back. Or maybe yield?
 	}
+
 	private void EndMicro(){
 		foreach(Transform child in positions.Keys){ //Here is where we need the transforms
 			MicroItem mi = child.GetComponent<MicroItem>();

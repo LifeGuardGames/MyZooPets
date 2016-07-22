@@ -25,6 +25,10 @@ public class RemoveCapMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		CapItem cap = inhaler.GetComponentInChildren<CapItem>();
+		yield return finger.MoveTo(cap.transform.position, cap.transform.position + cap.animDelta, delay: .5f, time: 1f);
+		finger.gameObject.SetActive(false);
 	}
 }

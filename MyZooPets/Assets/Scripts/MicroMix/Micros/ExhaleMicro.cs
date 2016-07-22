@@ -29,6 +29,15 @@ public class ExhaleMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+		petInstance.transform.SetParent(transform);
+		ExhaleItem exhale = petInstance.GetComponentInChildren<ExhaleItem>();
+
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		Vector3 moveTo = new Vector3(2f, 0f);
+		Vector3 offset = new Vector3(.5f, .5f);
+		yield return finger.MoveTo(exhale.transform.position + offset, exhale.transform.position + offset + moveTo, delay: .5f, time: 1f);
+		finger.gameObject.SetActive(false);
 	}
 }

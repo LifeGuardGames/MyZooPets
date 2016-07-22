@@ -23,7 +23,13 @@ public class PushButtonMicro : Micro{
 	protected override void _EndMicro(){
 		//Nothing to be done here
 	}
+
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		ButtonItem button = inhaler.GetComponentInChildren<ButtonItem>();
+		Vector3 offset = new Vector3(0,.5f);
+		yield return finger.ShakeToBack(button.transform.position + offset, button.transform.position + button.animDelta + offset, delay: .5f, time: 1f);
+		finger.gameObject.SetActive(false);
 	}
 }

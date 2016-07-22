@@ -44,14 +44,14 @@ public class DustMicro : Micro{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.Selection == null || MicroMixManager.Instance.IsPaused || IsTutorial){
+		if(gesture.Selection == null || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		gesture.Selection.GetComponent<DustItem>().Drag();
 	}
 
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused || IsTutorial){
+		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		gesture.StartSelection.GetComponent<DustItem>().Tap();

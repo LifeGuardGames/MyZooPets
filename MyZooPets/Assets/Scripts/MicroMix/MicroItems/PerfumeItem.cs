@@ -17,7 +17,7 @@ public class PerfumeItem : MicroItem{
 	}
 
 	void Update(){
-		if(started && !MicroMixManager.Instance.IsPaused && !parent.IsTutorial){
+		if(started && !MicroMixManager.Instance.IsPaused && !MicroMixManager.Instance.IsTutorial){
 			transform.position += velocity * speed;
 		}
 	}

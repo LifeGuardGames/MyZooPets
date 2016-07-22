@@ -50,7 +50,7 @@ public class MoldMicro : Micro{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || gesture.StartTime < startTime || MicroMixManager.Instance.IsPaused  || IsTutorial){ //If the gesture is older than the minigame, we have been holding over
+		if(gesture.StartSelection == null || gesture.StartTime < startTime || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){ //If the gesture is older than the minigame, we have been holding over
 			return;
 		}
 

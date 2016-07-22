@@ -26,7 +26,7 @@ public class TrapItem : MicroItem{
 	}
 
 	void Update(){
-		if(MicroMixManager.Instance.IsPaused || parent.IsTutorial){
+		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			lastPauseTime = Time.time;
 			return;
 		}

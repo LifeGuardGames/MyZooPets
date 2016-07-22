@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ButtonItem : MicroItem{
-	private Vector3 animDelta = new Vector3(0, -.5f);
+	public Vector3 animDelta = new Vector3(0, -.5f);
 	private bool complete = false;
 
 	public override void StartItem(){
@@ -14,7 +14,7 @@ public class ButtonItem : MicroItem{
 	}
 
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		if(gesture.StartSelection.Equals(gameObject)){

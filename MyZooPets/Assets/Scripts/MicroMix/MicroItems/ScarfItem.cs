@@ -10,7 +10,7 @@ public class ScarfItem : MicroItem{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
 			return;
 		}
 		if(gesture.StartSelection.gameObject != this){

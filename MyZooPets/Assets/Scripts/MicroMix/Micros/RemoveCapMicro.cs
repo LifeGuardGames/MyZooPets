@@ -23,4 +23,8 @@ public class RemoveCapMicro : Micro{
 	protected override void _EndMicro(){
 		//Nothing to be done here
 	}
+
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
 }

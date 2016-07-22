@@ -16,7 +16,7 @@ public class TimeItem : MicroItem{
 	private bool isDay = false;
 
 	void Update(){
-		if(MicroMixManager.Instance.IsPaused){
+		if(MicroMixManager.Instance.IsPaused || parent.IsTutorial){
 			return;
 		}
 		currentDegree -= 45 * Time.deltaTime;
@@ -68,7 +68,7 @@ public class TimeItem : MicroItem{
 	}
 
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
 			return;
 		}
 		else if(gesture.StartSelection.Equals(gameObject)){

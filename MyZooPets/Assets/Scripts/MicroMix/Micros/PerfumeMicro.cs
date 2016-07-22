@@ -32,7 +32,11 @@ public class PerfumeMicro : Micro{
 		
 	}
 
-	private IEnumerator SpawnPerfume(){
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
+
+	private IEnumerator SpawnPerfume(){ //Not called during tutorial
 		yield return WaitSecondsPause(.3f);
 		foreach(PerfumeItem perf in perfumes){
 			Vector3 startPos = GetRandomPositionOnEdge();
@@ -41,15 +45,6 @@ public class PerfumeMicro : Micro{
 			perf.GetComponent<Collider>().enabled = true;
 			perf.Setup(startPos, aim);
 			yield return WaitSecondsPause(.9f);
-		}
-	}
-
-	private IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ RunnerGameManager
-		for(float i = 0; i <= time; i += .1f){
-			yield return new WaitForSeconds(.1f);
-			while(MicroMixManager.Instance.IsPaused){
-				yield return new WaitForEndOfFrame();
-			}
 		}
 	}
 

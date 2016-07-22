@@ -38,6 +38,10 @@ public class MoldMicro : Micro{
 		GetComponent<GestureRecognizer>().enabled = false;
 	}
 
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
+
 	public void Cleaned(){ //Called when we clean up a single dust item
 		count--;
 		if(count == 0){
@@ -46,11 +50,12 @@ public class MoldMicro : Micro{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || gesture.StartTime < startTime || MicroMixManager.Instance.IsPaused){ //If the gesture is older than the minigame, we have been holding over
+		if(gesture.StartSelection == null || gesture.StartTime < startTime || MicroMixManager.Instance.IsPaused  || IsTutorial){ //If the gesture is older than the minigame, we have been holding over
 			return;
 		}
 
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position);
 		gesture.StartSelection.transform.position = Vector3.MoveTowards(gesture.StartSelection.transform.position, currentPos, moldSpeed);
 	}
+
 }

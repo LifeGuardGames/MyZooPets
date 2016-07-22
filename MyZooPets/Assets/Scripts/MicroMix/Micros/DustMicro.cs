@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DustMicro : Micro{
-	public GameObject[] dustItems;
+	private DustItem[] dustItems;
 	private int count;
 
 	public override string Title{
@@ -19,8 +19,9 @@ public class DustMicro : Micro{
 
 	protected override void _StartMicro(int difficulty){
 		GetComponent<GestureRecognizer>().enabled = true;
+		dustItems = GetComponentsInChildren<DustItem>(true);
 		for(int i = 0; i < dustItems.Length; i++){
-			dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+			dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .05f, .05f);
 		}
 		count = dustItems.Length;
 	}
@@ -31,6 +32,10 @@ public class DustMicro : Micro{
 
 	}
 
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
+
 	public void Cleaned(){ //Called when we clean up a single dust item
 		count--;
 		if(count == 0){
@@ -38,8 +43,15 @@ public class DustMicro : Micro{
 		}
 	}
 
+	void OnDrag(DragGesture gesture){
+		if(gesture.Selection == null || MicroMixManager.Instance.IsPaused || IsTutorial){
+			return;
+		}
+		gesture.Selection.GetComponent<DustItem>().Drag();
+	}
+
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused){
+		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused || IsTutorial){
 			return;
 		}
 		gesture.StartSelection.GetComponent<DustItem>().Tap();

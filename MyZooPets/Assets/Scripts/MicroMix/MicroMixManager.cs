@@ -6,6 +6,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Text titleText;
 	public Micro debugMicro;
 	public GameObject[] backgrounds;
+	public MicroMixFinger finger;
 	private Micro currentMicro;
 	private Micro[] microList;
 	private float maxTimeScale = 1.3f;

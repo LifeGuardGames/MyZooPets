@@ -28,5 +28,7 @@ public class TimeMicro : Micro{
 		Destroy(petInstance);
 	}
 
-
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
 }

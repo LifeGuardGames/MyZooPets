@@ -21,4 +21,8 @@ public class ShakeMicro : Micro{
 	protected override void _EndMicro(){
 		
 	}
+
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
 }

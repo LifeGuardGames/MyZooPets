@@ -13,9 +13,12 @@ public abstract class Micro : MonoBehaviour{
 
 	protected abstract void _EndMicro();
 
+	protected abstract IEnumerator _Tutorial();
+
 	private bool won = false;
 	private bool playing = false;
 	private int seconds = 0;
+	private bool inTutorial = false;
 	//private Dictionary<Transform, LgTuple<Vector3, bool>> positions = new Dictionary<Transform, LgTuple<Vector3, bool>>();
 	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
 
@@ -26,14 +29,25 @@ public abstract class Micro : MonoBehaviour{
 	public abstract int Background{
 		get;
 	}
-
+	public bool IsTutorial{
+		get {
+			return inTutorial;
+		}
+	}
 	public void SetWon(bool won){
 		this.won = won;
 	}
 
 	public void StartMicro(int difficulty){
 		won = false;
-		_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
+		inTutorial=false;
+		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
+			StartCoroutine(Tutorial(difficulty));
+			return; //Do not continue on
+		}
+		else{
+			_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
+		}
 		playing = true; //Now we set up our own stuff
 		positions.Clear();
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems
@@ -54,13 +68,19 @@ public abstract class Micro : MonoBehaviour{
 		StartCoroutine(WaitTimer());
 
 	}
-
+	private IEnumerator Tutorial(int difficulty){
+		inTutorial=true;
+		yield return StartCoroutine(_Tutorial());
+		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(Title);
+		yield return 0; //Wait for them to destroy their objects
+		StartMicro(difficulty); //This is only called after we have told everyone who our parent is. We should return after this is called ABOVE
+		//and then go back. Or maybe yield?
+	}
 	private void EndMicro(){
 		foreach(Transform child in positions.Keys){ //Here is where we need the transforms
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
 				mi.OnComplete();
-
 			}
 			child.transform.position = positions[child];
 		}
@@ -93,7 +113,7 @@ public abstract class Micro : MonoBehaviour{
 
 	}
 
-	private IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ RunnerGameManager
+	protected IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager
 		for(float i = 0; i <= time; i += .1f){
 			yield return new WaitForSeconds(.1f);
 			while(MicroMixManager.Instance.IsPaused){

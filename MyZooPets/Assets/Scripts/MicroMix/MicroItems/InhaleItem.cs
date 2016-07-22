@@ -14,7 +14,7 @@ public class InhaleItem : MicroItem{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || gesture.Selection == null || MicroMixManager.Instance.IsPaused){
+		if(gesture.StartSelection == null || gesture.Selection == null || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
 			return;
 		}
 		if(gesture.StartSelection.Equals(inhaler) && gesture.Selection.Equals(gameObject) && !complete){

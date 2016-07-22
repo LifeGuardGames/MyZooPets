@@ -13,17 +13,35 @@ public class DustItem : MicroItem{
 		transform.localScale = new Vector3(size, size, size);
 		tapCount = 3;
 	}
-
-	public void Tap(){
+	public override void OnComplete(){
+		GetComponent<Renderer>().enabled=true;
+	}
+	public void Drag(){
+		if (complete){
+			return;
+		}
 		size -= .1f;
 		transform.localScale = new Vector3(size, size, size);
 		tapCount--;
-		tapParticle.Play();
 		if(tapCount == 0){
 			DustMicro dm = (DustMicro)parent;
 			dm.Cleaned();
 			complete = true;
-			gameObject.SetActive(false);
+			GetComponent<Renderer>().enabled=false;
+			tapParticle.Play();
 		}
+	}
+	public void Tap(){
+		if (complete){
+			return;
+		}
+		size -= .3f;
+		transform.localScale = new Vector3(size, size, size);
+		complete=true;
+		DustMicro dm = (DustMicro)parent;
+		dm.Cleaned();
+		complete = true;
+		GetComponent<Renderer>().enabled=false;
+		tapParticle.Play();
 	}
 }

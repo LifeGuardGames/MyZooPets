@@ -5,6 +5,7 @@ public class ColdMicro : Micro{
 	public GameObject petPrefab;
 	public GameObject scarfItem;
 	private GameObject petInstance;
+	private bool repeated = false;
 
 	public override string Title{
 		get{
@@ -25,10 +26,37 @@ public class ColdMicro : Micro{
 			scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
 			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 		} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 2f);
-
 	}
 
 	protected override void _EndMicro(){
 		Destroy(petInstance);
 	}
+	protected override IEnumerator _Tutorial(){
+		repeated = false;
+		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+		petInstance.transform.SetParent(transform);	
+		do{
+			scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
+			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+		} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 4f);
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		yield return finger.MoveTo(scarfItem.transform.position,FindObjectOfType<ScarfItem>().transform.position,1f);
+		Destroy(petInstance);
+		MicroMixManager.Instance.finger.gameObject.SetActive(false);
+	}
+
+	/*private void MoveFingerToHead(){
+		GameObject finger = MicroMixManager.Instance.finger.gameObject;
+		finger.transform.position = scarfItem.transform.position;	
+		GameObject petHead = FindObjectOfType<ScarfItem>().gameObject;
+		if(!repeated){
+			LeanTween.move(finger, petHead.transform.position, 1f).setEase(LeanTweenType.easeOutQuad).setOnComplete(MoveFingerToHead);
+			repeated=true;
+		}
+		else{
+			LeanTween.move(finger, petHead.transform.position, 1f).setEase(LeanTweenType.easeOutQuad);
+
+		}
+	}*/
 }

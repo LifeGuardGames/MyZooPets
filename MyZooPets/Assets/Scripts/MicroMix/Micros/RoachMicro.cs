@@ -25,4 +25,8 @@ public class RoachMicro : Micro{
 	protected override void _EndMicro(){
 	}
 
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
+
 }

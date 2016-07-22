@@ -16,7 +16,7 @@ public class CapItem : MicroItem{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || parent.IsTutorial){
 			return;
 		}
 		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition);

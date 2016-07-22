@@ -33,4 +33,8 @@ public class InhaleMicro : Micro{
 	protected override void _EndMicro(){
 		Destroy(petInstance);
 	}
+
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
+	}
 }

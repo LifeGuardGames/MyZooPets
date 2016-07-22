@@ -28,6 +28,7 @@ public class ExhaleMicro : Micro{
 		Destroy(petInstance);
 	}
 
-	void Update(){
+	protected override IEnumerator _Tutorial(){
+		yield return 0;
 	}
 }

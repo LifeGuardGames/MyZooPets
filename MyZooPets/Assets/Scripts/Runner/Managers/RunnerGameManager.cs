@@ -15,7 +15,7 @@ using System.Collections.Generic;
 public class RunnerGameManager : MinigameManager<RunnerGameManager>{
     
 	void Awake(){
-		quitGameScene = SceneUtils.YARD;
+		quitGameScene = SceneUtils.BEDROOM;
 	}
 	
 	// Use this for initialization

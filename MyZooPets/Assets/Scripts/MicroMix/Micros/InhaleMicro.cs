@@ -50,5 +50,6 @@ public class InhaleMicro : Micro{
 		Vector3 offset = new Vector3(0f, -.3f);
 		yield return finger.MoveTo(inhaler.transform.position + offset, item.transform.position + moveTo + offset, delay: .5f, time: 1f);
 		finger.gameObject.SetActive(false);
+		Destroy(petInstance);
 	}
 }

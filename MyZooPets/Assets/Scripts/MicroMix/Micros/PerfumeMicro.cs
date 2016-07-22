@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PerfumeMicro : Micro{
+	public GameObject dashedLine;
 	private int count;
 	private PerfumeItem[] perfumes;
 
@@ -33,7 +34,28 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
+		perfume.transform.position = GetRandomPositionOnEdge();
+		dashedLine.transform.position = perfume.transform.position;
+		dashedLine.GetComponent<Renderer>().enabled=true;
+		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
+		Vector3 delta = aim-dashedLine.transform.position;
+		float angle = Mathf.Atan2(delta.y,delta.x)*Mathf.Rad2Deg-90;
+
+		perfume.GetComponent<ParticleSystem>().Play();
+		dashedLine.transform.rotation = Quaternion.Euler(new Vector3(0,0,angle));
+
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		Vector3 playerAim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
+
+		GameObject dodgeObject= GetComponentInChildren<DodgeItem>().gameObject;
+		dodgeObject.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
+		yield return finger.MoveTo(dodgeObject.transform.position,playerAim,.5f,1f);
+
+		dashedLine.GetComponent<Renderer>().enabled=false;
+		finger.gameObject.SetActive(false);
+
 	}
 
 	private IEnumerator SpawnPerfume(){ //Not called during tutorial

@@ -18,22 +18,21 @@ public class DustMicro : Micro{
 	}
 
 	protected override void _StartMicro(int difficulty){
-		GetComponent<GestureRecognizer>().enabled = true;
-		dustItems = GetComponentsInChildren<DustItem>(true);
-		for(int i = 0; i < dustItems.Length; i++){
-			dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .05f, .05f);
-		}
-		count = dustItems.Length;
+		Setup();
 	}
 
 	protected override void _EndMicro(){
-		//Nothing to do here
-		GetComponent<GestureRecognizer>().enabled = false;
-
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		Setup();
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+
+		for(int i = 0; i < dustItems.Length; i++){ //Now point them all towards the trash
+			yield return finger.ShakeToBack(dustItems[i].transform.position + Vector3.down, dustItems[i].transform.position + Vector3.up, .1f, .3f);
+		}
+		finger.gameObject.SetActive(false);
 	}
 
 	public void Cleaned(){ //Called when we clean up a single dust item
@@ -48,6 +47,14 @@ public class DustMicro : Micro{
 			return;
 		}
 		gesture.Selection.GetComponent<DustItem>().Drag();
+	}
+
+	private void Setup(){
+		dustItems = GetComponentsInChildren<DustItem>(true);
+		for(int i = 0; i < dustItems.Length; i++){
+			dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .05f, .05f);
+		}
+		count = dustItems.Length;
 	}
 
 	void OnTap(TapGesture gesture){

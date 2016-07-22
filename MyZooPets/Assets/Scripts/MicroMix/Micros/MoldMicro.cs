@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 public class MoldMicro : Micro{
-	public GameObject[] moldItems;
+	private MoldItem[] moldItems;
 	private int count;
 	private float moldSpeed = .8f;
 	private float startTime;
@@ -21,25 +20,22 @@ public class MoldMicro : Micro{
 	}
 
 	protected override void _StartMicro(int difficulty){
-		GetComponent<GestureRecognizer>().enabled = true;
-
-		for(int i = 0; i < moldItems.Length; i++){
-			Vector3 spawnPos;
-			do{
-				spawnPos = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
-			} while (Vector3.Distance(spawnPos, Vector3.zero) < 2f); //Don't let them spawn right at the center;
-			moldItems[i].transform.position = spawnPos;
-		}
+		Setup();
 		count = moldItems.Length;
 		startTime = Time.time;
 	}
 
 	protected override void _EndMicro(){
-		GetComponent<GestureRecognizer>().enabled = false;
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		Setup();
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		foreach (MoldItem mold in moldItems){
+			yield return finger.MoveTo(mold.transform.position,Vector3.zero,.2f,.4f);
+		}
+		finger.gameObject.SetActive(false);
 	}
 
 	public void Cleaned(){ //Called when we clean up a single dust item
@@ -56,6 +52,16 @@ public class MoldMicro : Micro{
 
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position);
 		gesture.StartSelection.transform.position = Vector3.MoveTowards(gesture.StartSelection.transform.position, currentPos, moldSpeed);
+	}
+	private void Setup(){
+		moldItems = GetComponentsInChildren<MoldItem>(true);
+		for(int i = 0; i < moldItems.Length; i++){
+			Vector3 spawnPos;
+			do{
+				spawnPos = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+			} while (Vector3.Distance(spawnPos, Vector3.zero) < 3f); //Don't let them spawn right at the center;
+			moldItems[i].transform.position = spawnPos;
+		}
 	}
 
 }

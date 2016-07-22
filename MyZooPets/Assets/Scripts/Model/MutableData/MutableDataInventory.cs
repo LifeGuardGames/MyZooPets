@@ -27,7 +27,7 @@ public class MutableDataInventory{
 		AccessoryItems = new Dictionary<string, InventoryItem>();
         OneTimePurchasedItems = new List<string>();
 		UnopenedItemBoxes = new List<string>();
-		secretCode = new LgTuple <string,string>("Food3","Food0");
+		secretCode = new LgTuple <string,string>("Food3","Food2");
 		isSecretItemUnlocked = new List<string> ();
     }
 }

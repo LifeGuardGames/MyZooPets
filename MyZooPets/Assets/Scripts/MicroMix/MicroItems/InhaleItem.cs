@@ -9,16 +9,12 @@ public class InhaleItem : MicroItem{
 	//How far we move during tween
 	private Vector3 exhaleDelta = new Vector3(.2f, -.3f);
 
-	public override void StartItem(){
-		//GetComponent<ScreenRaycaster>().Cameras = new Camera[1] { Camera.main };
-	}
-
 	public override void OnComplete(){
-		LeanTween.cancel(inhaler,false);
+		LeanTween.cancel(inhaler, false);
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null || gesture.Selection == null){
+		if(gesture.StartSelection == null || gesture.Selection == null || MicroMixManager.Instance.IsPaused){
 			return;
 		}
 		if(gesture.StartSelection.Equals(inhaler) && gesture.Selection.Equals(gameObject) && !complete){

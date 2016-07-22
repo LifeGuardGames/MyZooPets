@@ -7,8 +7,9 @@ public class ExhaleItem : MicroItem{
 	public override void StartItem(){
 		GetComponent<ScreenRaycaster>().Cameras = new Camera[1] { Camera.main };
 	}
+
 	void OnDrag(DragGesture gesture){
-		if(gesture.StartSelection == null){
+		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused){
 			return;
 		}
 		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition);

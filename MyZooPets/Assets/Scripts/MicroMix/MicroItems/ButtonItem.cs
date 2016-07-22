@@ -14,7 +14,7 @@ public class ButtonItem : MicroItem{
 	}
 
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || complete){
+		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused){
 			return;
 		}
 		if(gesture.StartSelection.Equals(gameObject)){

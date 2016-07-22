@@ -16,7 +16,7 @@ public class GameTutorialFlame : GameTutorial{
 	}	
 			
 	protected override void SetMaxSteps(){
-		maxSteps = 2;
+		maxSteps = 3;
 	}
 
 	protected override void SetKey(){
@@ -57,6 +57,12 @@ public class GameTutorialFlame : GameTutorial{
 			// Check off the time that tutorial1 is done for next play period
 			TutorialManagerBedroom tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManagerBedroom>();
 			tutorialManager.CheckOffTutorial1DoneTime();
+			break;
+		case 2:		// NOTE: Custom build just for BCH build
+			if (SecretUIController.Instance != null) {
+				SecretUIController.Instance.ShowPanel ();	// Panel has delay
+			}
+			Advance();
 			break;
 		}
 	}

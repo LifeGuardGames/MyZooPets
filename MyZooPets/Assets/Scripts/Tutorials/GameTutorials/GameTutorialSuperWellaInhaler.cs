@@ -24,9 +24,9 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 	}
 	
 	protected override void ProcessStep(int step){
-		switch(step){
+		switch (step) {
 		case 0:
-			TutorialManager.Instance.StartCoroutine(ShowSuperWella());
+			TutorialManager.Instance.StartCoroutine (ShowSuperWella ());
 			break;
 		}
 	}

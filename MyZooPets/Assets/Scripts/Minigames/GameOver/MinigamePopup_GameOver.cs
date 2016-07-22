@@ -39,6 +39,8 @@ public abstract class MinigamePopup_GameOver : MinigamePopup{
 	}
 
 	protected override void _OnShow(){
+		DataManager.Instance.MinigamePlayCount++;
+
 		// the game over screen is showing, so we need to set our stats properly
 		
 		// set the score

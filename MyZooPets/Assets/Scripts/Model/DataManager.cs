@@ -7,6 +7,8 @@ using fastJSON;
 //This class handles all game data. No game logic
 //Saves and loads data into player preference
 public class DataManager : Singleton<DataManager>{
+	public int MinigamePlayCount = 0;
+
 	public class SerializerEventArgs : EventArgs{
 		public bool IsSuccessful { get; set; }
 	}
@@ -98,9 +100,7 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
-		#if DEVELOPMENT_BUILD
 		PlayerPrefs.DeleteAll();
-		#endif
 
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;

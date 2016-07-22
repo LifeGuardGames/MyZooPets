@@ -31,7 +31,7 @@ public class DataLoaderRareDeco : XMLLoaderGeneric<DataLoaderRareDeco> {
 
 
 	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage) {
-		ImmutableDataRareDeco data = new ImmutableDataRareDeco(id, ItemType.Decorations, hashData);
+		ImmutableDataRareDeco data = new ImmutableDataRareDeco(id, xmlNode, errorMessage);
 
 		// store the data
 		if(hashData.ContainsKey(id))

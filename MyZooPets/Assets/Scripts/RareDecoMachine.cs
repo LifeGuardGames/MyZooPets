@@ -27,10 +27,9 @@ public class RareDecoMachine : MonoBehaviour {
 	public void OnBuyButton() {
 		openingScreen.Hide();
 		ImmutableDataRareDeco capsule = DataLoaderRareDeco.GetDecoAtTier(level);
-		decoImage.sprite = SpriteCacheManager.GetItemSprite(capsule.TextureName);
+		decoImage.sprite = SpriteCacheManager.GetItemSprite(capsule.ItemId);
 		rewardScreen.Show();
-	
-		InventoryManager.Instance.AddItemToInventory(capsule.ID);
+		InventoryManager.Instance.AddItemToInventory(capsule.ItemId);
 	}
 
 	public void OnLevelUpButton() {

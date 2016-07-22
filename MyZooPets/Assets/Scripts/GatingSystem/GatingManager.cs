@@ -353,7 +353,6 @@ public class GatingManager : Singleton<GatingManager>{
 		int hp = DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID];
 		hp = Mathf.Max(hp - damage, 0);
 		DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] = hp;
-		
 		// then return whether or not the gate has been destroyed
 		bool isDestroyed = hp <= 0;
 

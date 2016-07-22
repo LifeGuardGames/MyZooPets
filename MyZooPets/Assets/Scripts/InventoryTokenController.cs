@@ -3,23 +3,25 @@ using UnityEngine.UI;
 
 // Actual class that handles the UI for the inventory slot items
 // For use for both Inventory and DecoInventory items
-public class InventoryTokenController : MonoBehaviour {
-
-	public Image itemSprite;
+// Controller manages and resets the InventoryTokenDragElement as required
+public class InventoryTokenController : MonoBehaviour{
 	public Text amountLabel;
-	private string itemID;
+	public InventoryTokenDragElement dragElement;		// Child gameobject for actual dragging
 
-	public void Init(InventoryItem invItem){
+	private string itemID;
+	private bool pointerDownAux = false;
+
+	public void Init(InventoryItem invItem) {
 		itemID = invItem.ItemID;
 		gameObject.name = invItem.ItemID;
-		itemSprite.sprite = SpriteCacheManager.GetItemSprite(itemID);
 		SetAmount(invItem.Amount);
 
+		// Initialize the child dragging element
+		dragElement.Init(itemID, transform);
 	}
 
-	public void SetAmount(int amount){
+	public void SetAmount(int amount) {
 		amountLabel.text = amount.ToString();
+		// TODO reset the drag element here, if it doesnt get deleted
 	}
-
-	//TODO Handle StatHintController
 }

@@ -64,6 +64,13 @@ public abstract class XMLLoaderGeneric<T> where T : new() {
 		return data;
 	}
 
+	protected bool IsDataExist(string id) {
+		if(hashData == null)
+			SetupData();
+
+		return hashData.ContainsKey(id);
+    }
+
 	/// <summary>
 	/// Gets the data list.
 	/// </summary>

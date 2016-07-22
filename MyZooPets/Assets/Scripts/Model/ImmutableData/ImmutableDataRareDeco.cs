@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
 public class ImmutableDataRareDeco {
 	private string id;
 	public string ID {
 		get { return id; }
 	}
+
 	private ItemType type;
 	public ItemType Type {
 		get { return type; }

@@ -1,18 +1,15 @@
 using System.Collections.Generic;
-using System;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Contains all items the pet owns, not to be confused with ItemManager
 /// This class handles the different types of inventory ItemTypes - Consumables(Food + Usables), Decorations, and Accessories
 /// </summary>
 public class InventoryManager : Singleton<InventoryManager> {
-	public static event EventHandler<InventoryEventArgs> OnItemAddedToInventory;    // Call when an item is added
-	public static event EventHandler<InventoryEventArgs> OnItemAddedToDecoInventory;// Call when an deco item is added
-
-	public class InventoryEventArgs : EventArgs {
-		public bool IsItemNew { get; set; }
-		public InventoryItem InvItem { get; set; }
+	public GameObject itemDragParent;
+	public GameObject ItemDragParent {
+		get { return itemDragParent; }
 	}
 
 	public List<InventoryItem> AllConsumableInventoryItems {

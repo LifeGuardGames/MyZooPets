@@ -5,7 +5,7 @@ using UnityEditor;
 public class TimeItem : MicroItem{
 	public GameObject petInstance;
 	private bool complete = false;
-	private float timeStart = Time.time;
+	private float timeStart;
 	public override void StartItem(){
 		complete = false;
 		timeStart = Time.time;

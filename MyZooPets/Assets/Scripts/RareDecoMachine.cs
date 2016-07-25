@@ -25,11 +25,14 @@ public class RareDecoMachine : MonoBehaviour {
 	}
 
 	public void OnBuyButton() {
-		openingScreen.Hide();
-		ImmutableDataRareDeco capsule = DataLoaderRareDeco.GetDecoAtTier(level);
-		decoImage.sprite = SpriteCacheManager.GetItemSprite(capsule.ItemId);
-		rewardScreen.Show();
-		InventoryManager.Instance.AddItemToInventory(capsule.ItemId);
+		if(DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey("Usable1")) {
+			DataManager.Instance.GameData.Inventory.InventoryItems.Remove("Usable1");
+			openingScreen.Hide();
+			ImmutableDataRareDeco capsule = DataLoaderRareDeco.GetDecoAtTier(level);
+			decoImage.sprite = SpriteCacheManager.GetItemSprite(capsule.ItemId);
+			rewardScreen.Show();
+			InventoryManager.Instance.AddItemToInventory(capsule.ItemId);
+		}
 	}
 
 	public void OnLevelUpButton() {

@@ -16,18 +16,16 @@ public class CapItem : MicroItem{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(MicroMixManager.Instance.IsTutorial || gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused){
+		if(MicroMixManager.Instance.IsTutorial || gesture.StartSelection != gameObject || complete || MicroMixManager.Instance.IsPaused){
 			return;
 		}
 		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition);
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position);
 		Vector3 deltaPos = currentPos - startPos;
-		if(Vector3.Angle(deltaPos, animDelta) < angleDeviation && gesture.StartSelection.Equals(gameObject)){
+		if(Vector3.Angle(deltaPos, animDelta) < angleDeviation){
 			complete = true;
 			LeanTween.move(gameObject, (transform.position + animDelta), .5f).setEase(LeanTweenType.easeOutQuad);
 			parent.SetWon(true);
-
 		}
 	}
-
 }

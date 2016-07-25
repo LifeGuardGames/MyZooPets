@@ -57,7 +57,7 @@ public abstract class Micro : MonoBehaviour{
 			}
 		}
 		foreach(Transform child in transform){
-			child.gameObject.SetActive(true);
+			//child.gameObject.SetActive(true);
 		}
 
 		StartCoroutine(WaitTimer());
@@ -82,7 +82,7 @@ public abstract class Micro : MonoBehaviour{
 			child.transform.position = positions[child];
 		}
 		foreach(Transform child in transform){ //Turn of all parents
-			child.gameObject.SetActive(false);
+			//child.gameObject.SetActive(false);
 		}
 		playing = false;
 

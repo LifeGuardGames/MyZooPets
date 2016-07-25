@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class ExhaleMicro : Micro{
-	//public LgInhalerAnimationEventHandler animHandler;
-	//public Animator petAnimator;
 	public GameObject petPrefab;
 	private GameObject petInstance;
 
@@ -22,6 +20,9 @@ public class ExhaleMicro : Micro{
 	protected override void _StartMicro(int difficulty, bool randomize){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);
+		if (randomize){
+			petInstance.transform.position=CameraUtils.RandomWorldPointOnScreen(Camera.main,.2f,.2f);
+		}
 	}
 
 	protected override void _EndMicro(){

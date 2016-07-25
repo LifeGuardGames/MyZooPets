@@ -6,6 +6,7 @@ public class ColdMicro : Micro{
 	public GameObject scarfItem;
 	private GameObject petInstance;
 	private Vector3 lastPos;
+
 	public override string Title{
 		get{
 			return "Cover Up";
@@ -26,9 +27,11 @@ public class ColdMicro : Micro{
 				scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
 				petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 			} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 2f);
-		} else {
-			petInstance.transform.position=lastPos;
 		}
+		else{
+			petInstance.transform.position = lastPos;
+		}
+		scarfItem.GetComponent<ScarfItem>().pet=petInstance;
 	}
 
 	protected override void _EndMicro(){

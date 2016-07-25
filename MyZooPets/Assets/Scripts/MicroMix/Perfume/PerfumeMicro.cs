@@ -8,7 +8,7 @@ public class PerfumeMicro : Micro{
 
 	public override string Title{
 		get{
-			return "Avoid";
+			return "Dodge";
 		}
 	}
 
@@ -34,6 +34,12 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
+		yield return 0;
+		Vector3	startPos = GetRandomPositionOnEdge();
+		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
+		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
+		perfume.Setup(startPos,aim);
+		/*
 		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
 		perfume.transform.position = GetRandomPositionOnEdge();
 		dashedLine.transform.position = perfume.transform.position;
@@ -55,7 +61,7 @@ public class PerfumeMicro : Micro{
 
 		dashedLine.GetComponent<Renderer>().enabled = false;
 		finger.gameObject.SetActive(false);
-
+		*/
 	}
 
 	private IEnumerator SpawnPerfume(bool randomize){ //Not called during tutorial

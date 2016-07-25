@@ -53,7 +53,7 @@ public class DustMicro : Micro{
 		dustItems = GetComponentsInChildren<DustItem>(true);
 		if(randomize){
 			for(int i = 0; i < dustItems.Length; i++){
-				dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .05f, .05f);
+				dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
 			}
 		}
 		count = dustItems.Length;

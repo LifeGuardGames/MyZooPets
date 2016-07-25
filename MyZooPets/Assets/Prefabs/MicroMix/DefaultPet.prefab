@@ -249,7 +249,7 @@ GameObject:
   - 4: {fileID: 460634}
   - 114: {fileID: 11491644}
   m_Layer: 0
-  m_Name: ScarfPet
+  m_Name: DefaultPet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -295,9 +295,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 498090}
-  - 114: {fileID: 11417578}
-  - 114: {fileID: 11446780}
-  - 114: {fileID: 11439576}
   m_Layer: 0
   m_Name: Head_Node
   m_TagString: Untagged
@@ -2122,7 +2119,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 122848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.437881, y: -1.2260259, z: 0}
+  m_LocalPosition: {x: -7.216831, y: -6.695739, z: 0}
   m_LocalScale: {x: -0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 433700}
@@ -2668,17 +2665,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteSetIndexToLoad: 12
---- !u!114 &11417578
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 128292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abe97be696ef644d999c5e16a63bed53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11427030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2786,24 +2772,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteSetIndexToLoad: 1
---- !u!114 &11439576
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 128292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf945d278a7402a4cb9cd26aec5c0fe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Cameras: []
-  IgnoreLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  RayThickness: 0
-  VisualizeRaycasts: 1
-  UsePhysics2D: 1
 --- !u!114 &11442424
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2840,31 +2808,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteSetIndexToLoad: 13
---- !u!114 &11446780
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 128292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29fe0f62e9c5bb14d98ea3ee7ce170a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  requiredFingerCount: 1
-  DistanceUnit: 2
-  MaxSimultaneousGestures: 1
-  ResetMode: 0
-  Raycaster: {fileID: 0}
-  ClusterManager: {fileID: 0}
-  Delegate: {fileID: 0}
-  UseSendMessage: 1
-  EventMessageName: OnDrag
-  EventMessageTarget: {fileID: 0}
-  SendMessageToSelection: 0
-  IsExclusive: 0
-  MoveTolerance: 0.25
-  ApplySameDirectionConstraint: 0
 --- !u!114 &11452248
 MonoBehaviour:
   m_ObjectHideFlags: 1

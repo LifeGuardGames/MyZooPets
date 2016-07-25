@@ -287,11 +287,15 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	public void ShowCodeEntry(){
-		codeEntryUi.Show ();
+		if (codeEntryUi != null) {
+			codeEntryUi.Show ();
+		}
 	}
 
 	public void CloseCode(){
-		codeEntryUi.Hide();
+		if (codeEntryUi != null) {
+			codeEntryUi.Hide ();
+		} 
 	}
 
 	public void OnSubmit(string input){

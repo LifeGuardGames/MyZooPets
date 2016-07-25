@@ -180,6 +180,15 @@ public class Analytics : MonoBehaviour {
 	#endregion
 
     //=======================General Analytics==================================
+
+	public void UnlockedCodePanel(){
+		GA_Design.NewEvent ("Unlocked Code Panel");
+	}
+
+	public void EnteredCodePanel(){
+		GA_Design.NewEvent ("Entered Code");
+	}
+
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
         if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled){

@@ -259,6 +259,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 				}
 				else if (secretCodeEntry.Item1 == DataManager.Instance.GameData.Inventory.secretCode.Item1 && itemData.ID == DataManager.Instance.GameData.Inventory.secretCode.Item2){
 					ShowCodeEntry();
+					Analytics.Instance.UnlockedCodePanel();
 					Debug.Log("Showing Code Entry");
 				}
 				else{
@@ -295,6 +296,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	public void OnSubmit(string input){
 		if (input == "wella") {
+			Analytics.Instance.EnteredCodePanel();
 			Debug.Log ("Unlocked Item");
 			CloseCode();
 			InventoryLogic.Instance.AddItem("specialBCH", 1);

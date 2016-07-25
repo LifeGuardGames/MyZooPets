@@ -24,6 +24,7 @@ public class PetGameData{
 	public MutableDataSickNotification SickNotification {get; set;}
 	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataMiniPetLocations MiniPetLocations {get; set;}
+	public MutableDataMicroMix MicroMix {get; set;}
 
 	private List<MutableData> allMutableData;
 	
@@ -55,6 +56,7 @@ public class PetGameData{
 		SickNotification = new MutableDataSickNotification();
 		MiniPets = new  MutableDataMiniPets();
 		MiniPetLocations = new MutableDataMiniPetLocations();
+		MicroMix = new MutableDataMicroMix();
     }
 
 	/// <summary>

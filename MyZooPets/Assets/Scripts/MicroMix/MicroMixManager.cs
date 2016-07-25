@@ -6,6 +6,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Text titleText;
 	public Micro debugMicro;
 	public GameObject[] backgrounds;
+	public MicroMixFinger finger;
 	private Micro currentMicro;
 	private Micro[] microList;
 	private float maxTimeScale = 1.3f;
@@ -14,10 +15,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	private int lost;
 	private int difficulty = 1;
 
-	public Micro Current{
-		get{
-			return currentMicro;
-		}
+	public bool IsTutorial{
+		get;
+		set;
 	}
 
 	void Awake(){
@@ -123,7 +123,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		if(debugMicro == null){
 			int index = Random.Range(0, microList.Length);
 			currentMicro = microList[index];
-		} else {
+		}
+		else{
 			currentMicro = debugMicro;
 		}
 		currentMicro.gameObject.SetActive(true);
@@ -132,13 +133,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		titleText.color = Color.white;
 		titleText.rectTransform.localScale = Vector3.one * 1.5f;
 		LeanTween.scale(titleText.rectTransform, Vector3.one, .5f * Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
-		if (currentMicro.Background==0){
+		if(currentMicro.Background == 0){
 			//if (Random.value>.5f){ This will be moved to each specific minigame that can use day and night
-				backgrounds[currentMicro.Background].SetActive(true);
+			backgrounds[currentMicro.Background].SetActive(true);
 			//} else {
 			//	backgrounds[6].SetActive(true);
 			//}
-		} else {
+		}
+		else{
 			backgrounds[currentMicro.Background].SetActive(true);
 		}
 	}

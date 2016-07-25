@@ -4,8 +4,17 @@ using System.Collections;
 public class TimeMicro : Micro{
 	public GameObject inhalerButton;
 	public GameObject petPrefab;
+	public GameObject solarSystem;
+	public GameObject sun;
+	public GameObject moon;
+	public GameObject dayBackground;
+	public GameObject nightBackground;
 	private GameObject petInstance;
-
+	private float currentDegree;
+	private bool isPaused = false;
+	//How far off 180 and 360 we can be
+	private float range = 30;
+	private bool isDay = false;
 	public override string Title{
 		get{
 			return "Time Inhaler";
@@ -18,15 +27,104 @@ public class TimeMicro : Micro{
 		}
 	}
 
+	void Update(){
+		if(MicroMixManager.Instance.IsPaused || isPaused){
+			return;
+		}
+		currentDegree -= 45 * Time.deltaTime;
+		if(currentDegree <= 0){
+			currentDegree += 360;
+			if(isDay){
+				isDay = false;
+				LeanTween.alpha(dayBackground, 0, .5f);
+				LeanTween.alpha(nightBackground, 1, .5f);
+				if(MicroMixManager.Instance.IsTutorial){
+					isPaused = true;
+					StartCoroutine(ShowFinger());
+				}
+				//If we are in the tutorial, we want to pause;
+			}
+		}
+		if(currentDegree <= 180 && !isDay){
+			isDay = true;
+			LeanTween.alpha(dayBackground, 1, .5f);
+			LeanTween.alpha(nightBackground, 0, .5f);
+			if(MicroMixManager.Instance.IsTutorial){
+				isPaused = true;
+				StartCoroutine(ShowFinger());
+			}
+			//If we are in the tutorial, we want to pause;
+		}
+		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
+	}
+
+	public bool IsValid(){
+		return (currentDegree <= range || currentDegree >= 360 - range//From 330 to 30 (or is used because x cannot be less than 0 or greater than 360, but these situations are separate
+		|| currentDegree <= 180 + range && currentDegree >= 180 - range); //From 150 to 210
+	}
+
 	protected override void _StartMicro(int difficulty){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	
 		inhalerButton.GetComponent<TimeItem>().petInstance = petInstance;
+
+		Setup();
 	}
 
 	protected override void _EndMicro(){
-		Destroy(petInstance);
+		Close();
 	}
 
+	protected override IEnumerator _Tutorial(){
+		Setup();
+		inhalerButton.SetActive(false);
+		yield return WaitSecondsPause(3.5f);
+	}
 
+	private void Setup(){
+		dayBackground.SetActive(true);
+		nightBackground.SetActive(true);
+		solarSystem.transform.rotation = Quaternion.Euler(Vector3.zero);
+		sun.transform.localPosition = new Vector3(5, 0);
+		moon.transform.localPosition = new Vector3(-5, 0);
+		if(Random.value > .5f){
+			currentDegree = 90f;
+			isDay = true;
+			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
+			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
+		}
+		else{
+			currentDegree = 270f;
+			isDay = false;
+			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
+			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
+		}
+		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
+	}
+
+	private void Close(){
+		Destroy(petInstance);
+
+		dayBackground.GetComponent<SpriteRenderer>().color = Color.white;
+		nightBackground.GetComponent<SpriteRenderer>().color = Color.white;
+		dayBackground.SetActive(false);
+		nightBackground.SetActive(false);
+		LeanTween.cancel(dayBackground);
+		LeanTween.cancel(nightBackground);
+
+	}
+
+	private IEnumerator ShowFinger(){
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		Vector3 offset = new Vector3(0, .75f);
+		inhalerButton.SetActive(true);
+		finger.EnableBlur(false);
+		yield return finger.ShakeToBack(inhalerButton.transform.position, inhalerButton.transform.position + offset, delay: .5f, time: .5f);
+		finger.EnableBlur(true);
+		isPaused = false;
+		finger.gameObject.SetActive(false);
+		Destroy(petInstance);
+
+	}
 }

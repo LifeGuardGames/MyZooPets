@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,6 +10,11 @@ public class DataLoaderRareDeco : XMLLoaderGeneric<DataLoaderRareDeco> {
 
 		return instance.GetData<ImmutableDataRareDeco>(id);
 
+	}
+
+	public static bool IsItemExist(string id) {
+		instance.InitXMLLoader();
+		return instance.IsDataExist(id);
 	}
 
 	public static List<ImmutableDataRareDeco> GetItemList() {
@@ -31,7 +35,7 @@ public class DataLoaderRareDeco : XMLLoaderGeneric<DataLoaderRareDeco> {
 
 
 	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage) {
-		ImmutableDataRareDeco data = new ImmutableDataRareDeco(id, ItemType.Decorations, hashData);
+		ImmutableDataRareDeco data = new ImmutableDataRareDeco(id, xmlNode, errorMessage);
 
 		// store the data
 		if(hashData.ContainsKey(id))

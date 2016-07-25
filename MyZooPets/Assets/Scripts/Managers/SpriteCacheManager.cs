@@ -30,6 +30,7 @@ public class SpriteCacheManager : Singleton<SpriteCacheManager> {
 	}
 
 	public static Sprite GetItemSprite(string itemID) {
+		Debug.Log(itemID);
 		return Resources.Load<Sprite>(DataLoaderItems.GetItemTextureName(itemID));
 	}
 

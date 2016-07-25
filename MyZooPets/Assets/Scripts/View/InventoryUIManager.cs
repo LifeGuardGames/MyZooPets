@@ -141,7 +141,8 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public void OnItemUsedUI(InventoryItem invItem){
 		if(currentDragDropItem != null){
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
+				Transform gridObj = gridTransform.Find(invItem.ItemID);
+				gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
 			}
 			else{ //destroy object if it has been used up
 				Destroy(currentDragDropItem.gameObject);

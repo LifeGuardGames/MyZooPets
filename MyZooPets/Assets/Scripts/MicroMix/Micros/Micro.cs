@@ -13,6 +13,8 @@ public abstract class Micro : MonoBehaviour{
 
 	protected abstract void _EndMicro();
 
+	protected abstract IEnumerator _Tutorial();
+
 	private bool won = false;
 	private bool playing = false;
 	private int seconds = 0;
@@ -33,7 +35,14 @@ public abstract class Micro : MonoBehaviour{
 
 	public void StartMicro(int difficulty){
 		won = false;
-		_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
+		MicroMixManager.Instance.IsTutorial = false;
+		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
+			StartCoroutine(Tutorial(difficulty));
+			return; //Do not continue on
+		}
+		else{
+			_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
+		}
 		playing = true; //Now we set up our own stuff
 		positions.Clear();
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems
@@ -55,12 +64,20 @@ public abstract class Micro : MonoBehaviour{
 
 	}
 
+	private IEnumerator Tutorial(int difficulty){
+		MicroMixManager.Instance.IsTutorial = true;
+		yield return StartCoroutine(_Tutorial());
+		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(Title);
+		yield return 0; //Wait for them to destroy their objects
+		StartMicro(difficulty); //This is only called after we have told everyone who our parent is. We should return after this is called ABOVE
+		//and then go back. Or maybe yield?
+	}
+
 	private void EndMicro(){
 		foreach(Transform child in positions.Keys){ //Here is where we need the transforms
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
 				mi.OnComplete();
-
 			}
 			child.transform.position = positions[child];
 		}
@@ -75,7 +92,7 @@ public abstract class Micro : MonoBehaviour{
 	private IEnumerator WaitTimer(){
 		//Used for deactivating and closing off the micro, and alerting the manager
 		for(seconds = 4; seconds > 0; seconds--){
-			yield return new WaitForSeconds(1f);
+			yield return WaitSecondsPause(1f);
 		}
 		EndMicro();
 		yield return 0; //Give everything that needs to be destroyed a second...
@@ -91,6 +108,15 @@ public abstract class Micro : MonoBehaviour{
 	private IEnumerator WaitThenHide(){
 		yield return new WaitForSeconds(.1f);
 
+	}
+
+	protected IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager
+		for(float i = 0; i <= time; i += .1f){
+			yield return new WaitForSeconds(.1f);
+			while(MicroMixManager.Instance.IsPaused){
+				yield return new WaitForEndOfFrame();
+			}
+		}
 	}
 
 	void OnGUI(){

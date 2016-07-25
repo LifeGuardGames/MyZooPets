@@ -9,6 +9,7 @@ public class PerfumeItem : MicroItem{
 	public override void StartItem(){
 		velocity = Vector3.zero;
 	}
+
 	public void Setup(Vector3 startPos, Vector3 aim){
 		transform.position = startPos;
 		velocity = (aim - startPos).normalized;
@@ -16,7 +17,7 @@ public class PerfumeItem : MicroItem{
 	}
 
 	void Update(){
-		if(started){
+		if(started && !MicroMixManager.Instance.IsPaused && !MicroMixManager.Instance.IsTutorial){
 			transform.position += velocity * speed;
 		}
 	}

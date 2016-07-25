@@ -5,7 +5,7 @@ public class ColdMicro : Micro{
 	public GameObject petPrefab;
 	public GameObject scarfItem;
 	private GameObject petInstance;
-
+	private Vector3 lastPos;
 	public override string Title{
 		get{
 			return "Cover Up";
@@ -18,13 +18,17 @@ public class ColdMicro : Micro{
 		}
 	}
 
-	protected override void _StartMicro(int difficulty){
+	protected override void _StartMicro(int difficulty, bool randomize){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	
-		do{
-			scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
-			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
-		} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 2f);
+		if(randomize){
+			do{
+				scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
+				petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+			} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 2f);
+		} else {
+			petInstance.transform.position=lastPos;
+		}
 	}
 
 	protected override void _EndMicro(){
@@ -38,6 +42,7 @@ public class ColdMicro : Micro{
 			scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
 			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 		} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 4f);
+		lastPos = petInstance.transform.position;
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 		yield return finger.MoveTo(scarfItem.transform.position, FindObjectOfType<ScarfItem>().transform.position, delay: .5f, time: 1f);

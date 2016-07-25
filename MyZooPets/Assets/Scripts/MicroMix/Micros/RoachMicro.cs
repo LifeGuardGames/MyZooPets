@@ -5,7 +5,7 @@ public class RoachMicro : Micro{
 	public GameObject cockroach;
 	public GameObject trap;
 	public GameObject dashedLine;
-
+	private Vector3 lastVelocity;
 	public override string Title{
 		get{
 			return "Trap";
@@ -18,8 +18,14 @@ public class RoachMicro : Micro{
 		}
 	}
 
-	protected override void _StartMicro(int difficulty){
-		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+	protected override void _StartMicro(int difficulty, bool randomize){
+		if(randomize){
+			cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+			cockroach.GetComponent<RoachItem>().Setup(Random.insideUnitCircle);
+		} else {
+			cockroach.GetComponent<RoachItem>().Setup(lastVelocity);
+		}
+
 	}
 
 	protected override void _EndMicro(){
@@ -37,9 +43,10 @@ public class RoachMicro : Micro{
 		dashedLine.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 		dashedLine.transform.position = cockroach.transform.position;
 
-		Vector3 direction = new Vector3(Mathf.Cos((angle+90)*Mathf.Deg2Rad),Mathf.Sin((angle+90)*Mathf.Deg2Rad));
-		yield return finger.ShakeToBack(cockroach.transform.position+direction*4.2f,cockroach.transform.position+direction*3.8f,.3f,.4f);
-
+		Vector3 direction = new Vector3(Mathf.Cos((angle + 90) * Mathf.Deg2Rad), Mathf.Sin((angle + 90) * Mathf.Deg2Rad));
+		yield return finger.ShakeToBack(cockroach.transform.position + direction * 4.2f, cockroach.transform.position + direction * 3.8f, .3f, .4f);
+		lastVelocity = direction;
+	
 		finger.gameObject.SetActive(false);
 		dashedLine.GetComponent<SpriteRenderer>().enabled = false;
 	}

@@ -17,15 +17,15 @@ public class DustMicro : Micro{
 		}
 	}
 
-	protected override void _StartMicro(int difficulty){
-		Setup();
+	protected override void _StartMicro(int difficulty, bool randomize){
+		Setup(randomize);
 	}
 
 	protected override void _EndMicro(){
 	}
 
 	protected override IEnumerator _Tutorial(){
-		Setup();
+		Setup(true);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 
@@ -49,10 +49,12 @@ public class DustMicro : Micro{
 		gesture.Selection.GetComponent<DustItem>().Drag();
 	}
 
-	private void Setup(){
+	private void Setup(bool randomize){
 		dustItems = GetComponentsInChildren<DustItem>(true);
-		for(int i = 0; i < dustItems.Length; i++){
-			dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .05f, .05f);
+		if(randomize){
+			for(int i = 0; i < dustItems.Length; i++){
+				dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .05f, .05f);
+			}
 		}
 		count = dustItems.Length;
 	}

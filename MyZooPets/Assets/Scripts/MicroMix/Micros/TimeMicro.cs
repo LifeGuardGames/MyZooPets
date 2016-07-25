@@ -63,7 +63,7 @@ public class TimeMicro : Micro{
 		|| currentDegree <= 180 + range && currentDegree >= 180 - range); //From 150 to 210
 	}
 
-	protected override void _StartMicro(int difficulty){
+	protected override void _StartMicro(int difficulty, bool randomize){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	
 		inhalerButton.GetComponent<TimeItem>().petInstance = petInstance;

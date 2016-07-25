@@ -19,7 +19,7 @@ public class ExhaleMicro : Micro{
 		}
 	}
 	// Use this for initialization
-	protected override void _StartMicro(int difficulty){
+	protected override void _StartMicro(int difficulty, bool randomize){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);
 	}

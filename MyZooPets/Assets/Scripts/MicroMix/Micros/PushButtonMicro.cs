@@ -16,8 +16,10 @@ public class PushButtonMicro : Micro{
 		}
 	}
 
-	protected override void _StartMicro(int difficulty){
-		inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f);
+	protected override void _StartMicro(int difficulty, bool randomize){
+		if(randomize){
+			inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f);
+		}
 	}
 
 	protected override void _EndMicro(){
@@ -28,7 +30,7 @@ public class PushButtonMicro : Micro{
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 		ButtonItem button = inhaler.GetComponentInChildren<ButtonItem>();
-		Vector3 offset = new Vector3(0,.5f);
+		Vector3 offset = new Vector3(0, .5f);
 		yield return finger.ShakeToBack(button.transform.position + offset, button.transform.position + button.animDelta + offset, delay: .5f, time: 1f);
 		finger.gameObject.SetActive(false);
 	}

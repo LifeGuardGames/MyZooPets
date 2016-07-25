@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PerfumeItem : MicroItem{
+	public Vector3 aim;
 	private Vector3 velocity;
 	private float speed = .12f;
 	private bool started = false;
@@ -14,6 +15,7 @@ public class PerfumeItem : MicroItem{
 		transform.position = startPos;
 		velocity = (aim - startPos).normalized;
 		started = true;
+		this.aim=aim;
 	}
 
 	void Update(){

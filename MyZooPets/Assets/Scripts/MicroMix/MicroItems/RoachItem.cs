@@ -3,15 +3,21 @@ using System.Collections;
 
 public class RoachItem : MicroItem{
 	private Vector3 lastPos;
-	Vector3 velocity;
-	float speed = 5f;
+	private Vector3 velocity;
+	private float speed = 5f;
+	private bool setup = false;
 
-	public override void StartItem(){
-		velocity = new Vector3(Random.value, Random.value).normalized * speed;
+	public override void OnComplete(){
+		setup = false;
+	}
+
+	public void Setup(Vector3 velocity){
+		this.velocity = velocity.normalized * speed;
+		setup = true;
 	}
 
 	void Update(){
-		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
+		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || !setup){
 			return;
 		}
 		lastPos = transform.position;

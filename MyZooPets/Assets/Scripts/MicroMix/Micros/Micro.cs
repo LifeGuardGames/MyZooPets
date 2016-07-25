@@ -9,7 +9,7 @@ using System.Collections.Generic;
  * Though the individual MicroItem.parent is public and can be set manually in the inspector, this overwrites that setting
  */
 public abstract class Micro : MonoBehaviour{
-	protected abstract void _StartMicro(int difficulty);
+	protected abstract void _StartMicro(int difficulty, bool randomize);
 
 	protected abstract void _EndMicro();
 
@@ -33,7 +33,7 @@ public abstract class Micro : MonoBehaviour{
 		this.won = won;
 	}
 
-	public void StartMicro(int difficulty){
+	public void StartMicro(int difficulty, bool randomize=true){
 		won = false;
 		MicroMixManager.Instance.IsTutorial = false;
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
@@ -41,7 +41,7 @@ public abstract class Micro : MonoBehaviour{
 			return; //Do not continue on
 		}
 		else{
-			_StartMicro(difficulty); //Have them instantiate everything they need, and then we handle setup for them
+			_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
 		}
 		playing = true; //Now we set up our own stuff
 		positions.Clear();
@@ -69,7 +69,7 @@ public abstract class Micro : MonoBehaviour{
 		yield return StartCoroutine(_Tutorial());
 		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(Title);
 		yield return 0; //Wait for them to destroy their objects
-		StartMicro(difficulty); //This is only called after we have told everyone who our parent is. We should return after this is called ABOVE
+		StartMicro(difficulty, false); //This is only called after we have told everyone who our parent is. We should return after this is called ABOVE
 		//and then go back. Or maybe yield?
 	}
 

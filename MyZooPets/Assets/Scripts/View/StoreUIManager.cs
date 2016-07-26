@@ -299,7 +299,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	public void OnSubmit(string input){
-		if (input == "wella") {
+		if (input == "wella" || input == "Wella") {
 			Analytics.Instance.EnteredCodePanel();
 			Debug.Log ("Unlocked Item");
 			CloseCode();

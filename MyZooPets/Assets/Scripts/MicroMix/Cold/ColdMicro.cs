@@ -48,7 +48,7 @@ public class ColdMicro : Micro{
 		lastPos = petInstance.transform.position;
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-		yield return finger.MoveTo(scarfItem.transform.position, FindObjectOfType<ScarfItem>().transform.position, delay: .5f, time: 1f);
+		yield return finger.MoveTo(scarfItem.transform.position, petInstance.transform.position, delay: .5f, time: 1f);
 		Destroy(petInstance);
 		MicroMixManager.Instance.finger.gameObject.SetActive(false);
 	}

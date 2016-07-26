@@ -24,6 +24,7 @@ public class RoachMicro : Micro{
 		if(randomize){
 			cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 			cockroach.GetComponent<RoachItem>().Setup(Random.insideUnitCircle);
+			cockroach.SetActive(true);
 		}
 		else{
 			cockroach.GetComponent<RoachItem>().Setup(lastVelocity);
@@ -33,13 +34,19 @@ public class RoachMicro : Micro{
 	protected override void _EndMicro(){
 	}
 
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
+	}
+
 	protected override IEnumerator _Tutorial(){
 		circle.gameObject.SetActive(true);
-		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .3f, .3f);
+		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .4f, .4f);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		trap.transform.position = new Vector3(100, 100);
 		finger.gameObject.SetActive(true);
-		dashedLine.GetComponent<SpriteRenderer>().enabled = true;
+		dashedLine.GetComponentInChildren<SpriteRenderer>().enabled = true;
 
 		float angle = Random.Range(0, 360);
 		cockroach.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
@@ -53,7 +60,7 @@ public class RoachMicro : Micro{
 		lastVelocity = direction;
 		finger.gameObject.SetActive(false);
 		circle.gameObject.SetActive(false);
-		dashedLine.GetComponent<SpriteRenderer>().enabled = false;
+		dashedLine.GetComponentInChildren<SpriteRenderer>().enabled = false;
 
 	}
 

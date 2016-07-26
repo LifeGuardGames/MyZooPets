@@ -28,7 +28,12 @@ public class SpacerMicro : Micro{
 	}
 
 	protected override void _EndMicro(){
-		//Nothing for now	
+	}
+
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
 	}
 
 	protected override IEnumerator _Tutorial(){

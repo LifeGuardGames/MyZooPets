@@ -4,6 +4,8 @@ using System.Collections;
 public class ExhaleMicro : Micro{
 	public GameObject petPrefab;
 	private GameObject petInstance;
+	private GameObject neckObject;
+	private bool complete;
 
 	public override string Title{
 		get{
@@ -18,29 +20,50 @@ public class ExhaleMicro : Micro{
 	}
 	// Use this for initialization
 	protected override void _StartMicro(int difficulty, bool randomize){
-		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-		petInstance.transform.SetParent(transform);
-		if (randomize){
-			petInstance.transform.position=CameraUtils.RandomWorldPointOnScreen(Camera.main,.2f,.2f);
+		complete = false;
+		if(randomize){
+			petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+			petInstance.transform.SetParent(transform);
+			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 		}
+		neckObject = petInstance.GetComponent<MicroMixAnatomy>().neck;
 	}
 
 	protected override void _EndMicro(){
 		Destroy(petInstance);
 	}
 
+
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
+	}
+
 	protected override IEnumerator _Tutorial(){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);
-		ExhaleItem exhale = petInstance.GetComponentInChildren<ExhaleItem>();
 
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-		Vector3 moveTo = new Vector3(2f, 0f);
-		Vector3 offset = new Vector3(.5f, .5f);
-		yield return finger.MoveTo(exhale.transform.position + offset, exhale.transform.position + offset + moveTo, delay: .5f, time: 1f);
-		finger.gameObject.SetActive(false);
-		Destroy(petInstance);
+		Vector3 mouthPos = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
+		yield return finger.MoveTo(mouthPos, mouthPos + Vector3.right * 5, delay: .5f, time: 1f);
 
+		finger.gameObject.SetActive(false);
+		complete = false;
+	}
+
+	void OnDrag(DragGesture gesture){
+		if(gesture.StartSelection != neckObject || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || complete){
+			return;
+		}
+		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position);
+		Vector3 deltaPos = currentPos - startPos;
+		if(deltaPos.x > 2){
+			petInstance.GetComponentInChildren<Animator>().SetTrigger("BreatheOut");
+			complete = true;
+			SetWon(true);
+		}
 	}
 }

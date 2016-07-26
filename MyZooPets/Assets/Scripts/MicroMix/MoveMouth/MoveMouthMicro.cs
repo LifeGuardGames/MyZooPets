@@ -19,22 +19,40 @@ public class MoveMouthMicro : Micro{
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
-		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-		petInstance.transform.SetParent(transform);	
 		if(randomize){
+			petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+			petInstance.transform.SetParent(transform);	
 			do{
 				inhalerItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
 				petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 			} while (Vector3.Distance(inhalerItem.transform.position, petInstance.transform.position) < 2f);
 		}
-		inhalerItem.GetComponent<MoveMouthItem>().pet=petInstance;
+		inhalerItem.GetComponent<MoveMouthItem>().pet = petInstance;
 	}
 
 	protected override void _EndMicro(){
 		Destroy(petInstance);
 	}
 
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
+	}
+
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+
+		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+		petInstance.transform.SetParent(transform);	
+		do{
+			inhalerItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
+			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
+		} while (Vector3.Distance(inhalerItem.transform.position, petInstance.transform.position) < 2f);
+
+		yield return finger.MoveTo(inhalerItem.transform.position, petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position, delay: .5f, time: 1f);
+
+		finger.gameObject.SetActive(false);
 	}
 }

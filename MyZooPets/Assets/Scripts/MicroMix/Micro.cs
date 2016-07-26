@@ -9,6 +9,10 @@ using System.Collections.Generic;
  * Though the individual MicroItem.parent is public and can be set manually in the inspector, this overwrites that setting
  */
 public abstract class Micro : MonoBehaviour{
+	protected abstract void _Pause();
+
+	protected abstract void _Resume();
+
 	protected abstract void _StartMicro(int difficulty, bool randomize);
 
 	protected abstract void _EndMicro();
@@ -33,7 +37,7 @@ public abstract class Micro : MonoBehaviour{
 		this.won = won;
 	}
 
-	public void StartMicro(int difficulty, bool randomize=true){
+	public void StartMicro(int difficulty, bool randomize = true){
 		won = false;
 		MicroMixManager.Instance.IsTutorial = false;
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
@@ -56,12 +60,16 @@ public abstract class Micro : MonoBehaviour{
 				mi.SetParent(this);
 			}
 		}
-		foreach(Transform child in transform){
-			//child.gameObject.SetActive(true);
-		}
-
 		StartCoroutine(WaitTimer());
 
+	}
+
+	public void Pause(){
+		_Pause();
+	}
+
+	public void Resume(){
+		_Resume();
 	}
 
 	private IEnumerator Tutorial(int difficulty){
@@ -80,9 +88,6 @@ public abstract class Micro : MonoBehaviour{
 				mi.OnComplete();
 			}
 			child.transform.position = positions[child];
-		}
-		foreach(Transform child in transform){ //Turn of all parents
-			//child.gameObject.SetActive(false);
 		}
 		playing = false;
 

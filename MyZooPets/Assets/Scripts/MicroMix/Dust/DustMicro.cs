@@ -24,6 +24,12 @@ public class DustMicro : Micro{
 	protected override void _EndMicro(){
 	}
 
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
+	}
+
 	protected override IEnumerator _Tutorial(){
 		Setup(true);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
@@ -54,6 +60,7 @@ public class DustMicro : Micro{
 		if(randomize){
 			for(int i = 0; i < dustItems.Length; i++){
 				dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f);
+				dustItems[i].gameObject.SetActive(true);
 			}
 		}
 		count = dustItems.Length;

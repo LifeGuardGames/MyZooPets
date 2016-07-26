@@ -31,11 +31,17 @@ public class ColdMicro : Micro{
 		else{
 			petInstance.transform.position = lastPos;
 		}
-		scarfItem.GetComponent<ScarfItem>().pet=petInstance;
+		scarfItem.GetComponent<ScarfItem>().pet = petInstance;
 	}
 
 	protected override void _EndMicro(){
 		Destroy(petInstance);
+	}
+
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
 	}
 
 	protected override IEnumerator _Tutorial(){
@@ -48,9 +54,9 @@ public class ColdMicro : Micro{
 		lastPos = petInstance.transform.position;
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-		yield return finger.MoveTo(scarfItem.transform.position, petInstance.transform.position, delay: .5f, time: 1f);
+		Vector3 neckPos = petInstance.GetComponent<MicroMixAnatomy>().neck.transform.position;
+		yield return finger.MoveTo(scarfItem.transform.position, neckPos, delay: .5f, time: 1f);
 		Destroy(petInstance);
 		MicroMixManager.Instance.finger.gameObject.SetActive(false);
 	}
-
 }

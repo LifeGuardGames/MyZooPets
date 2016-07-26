@@ -23,7 +23,12 @@ public class PushButtonMicro : Micro{
 	}
 
 	protected override void _EndMicro(){
-		//Nothing to be done here
+	}
+
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
 	}
 
 	protected override IEnumerator _Tutorial(){

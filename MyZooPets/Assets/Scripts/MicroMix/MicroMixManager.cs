@@ -82,11 +82,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	protected override void _PauseGame(){
-		//currentGame.Pause();
+		Debug.Log("PAAAAUSE");
+		currentMicro.Pause();
 	}
 
 	protected override void _ResumeGame(){
-		//currentGame.Resume();
+		currentMicro.Resume();
 	}
 
 	protected override void _ContinueGame(){

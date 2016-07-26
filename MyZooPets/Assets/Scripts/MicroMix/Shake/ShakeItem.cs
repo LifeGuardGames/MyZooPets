@@ -10,6 +10,9 @@ public class ShakeItem : MicroItem{
 		complete = false;
 	}
 
+	public override void OnComplete(){
+	}
+
 	void OnDrag(DragGesture gesture){
 		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;

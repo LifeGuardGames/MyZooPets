@@ -42,7 +42,8 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		int randPowerUp = Random.Range(5,8);
 		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_" + randPowerUp.ToString()).PrefabName) as GameObject;
 		int randomPositionIndex = Random.Range(0, 3);
-		GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
+		GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
+		go.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
@@ -57,12 +58,24 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 				int randomSpawnIndex = Random.Range(0, spawningList.Count);
 				if(spawningList[randomSpawnIndex].Id != "Mober_4") {
 					GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
-					GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+					if(spawningList[randomSpawnIndex].Id == "Mober_1") {
+						go.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+					}
+					else if(spawningList[randomSpawnIndex].Id == "Mober_0") {
+						go.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+					}
 				}
 				else {
 					randomPositionIndex = Random.Range(3, 5);
 					GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
-					GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+					if(randomPositionIndex == 3) {
+						go.transform.Rotate(new Vector3(0, 0, -45));
+					}
+					else {
+						go.transform.Rotate(new Vector3(0, 0, 45));
+					}
 				}
 				StartCoroutine("SpawnEnemies");
 			}

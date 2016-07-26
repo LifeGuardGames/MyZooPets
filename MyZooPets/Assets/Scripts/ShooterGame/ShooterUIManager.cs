@@ -16,36 +16,6 @@ public class ShooterUIManager : Singleton<ShooterUIManager>{
 		get{ return fingerPos; }
 	}
 
-	// handles the game state changes
-	void OnGameStateChanged(object sender, GameStateArgs args){
-		MinigameStates eState = args.GetGameState();
-		switch(eState){
-		case MinigameStates.GameOver:
-			if(sun != null)
-				LeanTween.cancel(sun);
-			if(moon != null)
-				LeanTween.cancel(moon);
-			break;
-		case MinigameStates.Paused:
-			if(sun != null)
-				LeanTween.pause(sun);
-			if(moon != null)
-				LeanTween.pause(moon);
-			break;
-		case MinigameStates.Playing:
-			if(sun != null)
-				LeanTween.resume(sun);
-			if(moon != null)
-				LeanTween.resume(moon);
-			break;
-		case MinigameStates.Restarting:
-			if(sun != null)
-				LeanTween.cancel(sun);
-			if(moon != null)
-				LeanTween.cancel(moon);
-			break;
-		}
-	}
 
 	public void Quit(){
 		LeanTween.cancel(sun);
@@ -57,9 +27,9 @@ public class ShooterUIManager : Singleton<ShooterUIManager>{
 	public void Reset(){
 		sun = GameObject.Find("SpriteSun");
 		moon = GameObject.Find("SpriteMoon");
-		sun.transform.position = posSky.position;
 		sun.GetComponent<MovingSky>().inSky = true;
 		moon.GetComponent<MovingSky>().inSky = false;
+		sun.transform.position = posSky.position;
 		moon.transform.position = posBottom.position;
 		dayTween.InstantShow();
 		nightTween.InstantHide();
@@ -94,7 +64,9 @@ public class ShooterUIManager : Singleton<ShooterUIManager>{
 
 	public void TutChange(){
 		// if its the tutorial go to next step
-		LeanTween.move(moon, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
+		if(ShooterGameManager.Instance.inTutorial) {
+			LeanTween.move(moon, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
+		}
 	}
 
 	// Finishes the time transition and starts new wave

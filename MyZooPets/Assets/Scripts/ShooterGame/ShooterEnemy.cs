@@ -62,7 +62,12 @@ public class ShooterEnemy : MonoBehaviour{
 			PlayerShooterController.Instance.ChangeHealth(-damage);
 			StartCoroutine(DestroyEnemy());
 		}
-		else if(collider.gameObject.tag == "ShooterWall"|| collider.gameObject.tag == "ShooterMiniPetFireball"){
+
+		else if(collider.gameObject.tag == "ShooterMiniPetFireball") {
+			health -= 2;
+		}
+
+		else if(collider.gameObject.tag == "ShooterWall"){
 			StartCoroutine(DestroyEnemy());
 		}
 	}

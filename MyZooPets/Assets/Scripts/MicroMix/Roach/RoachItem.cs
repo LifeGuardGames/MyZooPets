@@ -7,6 +7,9 @@ public class RoachItem : MicroItem{
 	private float speed = 5f;
 	private bool setup = false;
 
+	public override void StartItem(){
+	}
+
 	public override void OnComplete(){
 		setup = false;
 	}

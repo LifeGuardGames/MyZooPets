@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class InhaleMicro : Micro{
-	//public LgInhalerAnimationEventHandler animHandler;
-	//public Animator petAnimator;
 	public GameObject petPrefab;
 	public GameObject inhaler;
 	private GameObject petInstance;
@@ -20,19 +18,25 @@ public class InhaleMicro : Micro{
 		}
 	}
 
-	// Use this for initialization
 	protected override void _StartMicro(int difficulty, bool randomize){
-		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-		petInstance.transform.SetParent(transform);
-		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
-
-		InhaleItem item = petInstance.GetComponentInChildren<InhaleItem>();
-		item.inhaler = inhaler;
-		inhaler.transform.position = petInstance.transform.position + new Vector3(3.2f, 2f);
+		if(randomize){
+			petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+			petInstance.transform.SetParent(transform);
+			petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
+			inhaler.transform.position = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
+		}
+		InhaleItem item = inhaler.GetComponent<InhaleItem>();
+		item.petInstance = petInstance;
 	}
 
 	protected override void _EndMicro(){
 		Destroy(petInstance);
+	}
+
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
 	}
 
 	protected override IEnumerator _Tutorial(){
@@ -40,16 +44,11 @@ public class InhaleMicro : Micro{
 		petInstance.transform.SetParent(transform);
 		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
 
-		InhaleItem item = petInstance.GetComponentInChildren<InhaleItem>();
-		item.inhaler = inhaler;
-		inhaler.transform.position = petInstance.transform.position + new Vector3(3.2f, 2f);
+		inhaler.transform.position = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
 
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-		Vector3 moveTo = new Vector3(.5f, .6f);
-		Vector3 offset = new Vector3(0f, -.3f);
-		yield return finger.MoveTo(inhaler.transform.position + offset, item.transform.position + moveTo + offset, delay: .5f, time: 1f);
+		yield return finger.MoveTo(inhaler.transform.position + new Vector3(3f, .5f), inhaler.transform.position + new Vector3(.3f, -.3f), delay: .5f, time: 1f);
 		finger.gameObject.SetActive(false);
-		Destroy(petInstance);
 	}
 }

@@ -15,6 +15,7 @@ public class TimeMicro : Micro{
 	//How far off 180 and 360 we can be
 	private float range = 30;
 	private bool isDay = false;
+
 	public override string Title{
 		get{
 			return "Time Inhaler";
@@ -67,12 +68,21 @@ public class TimeMicro : Micro{
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	
 		inhalerButton.GetComponent<TimeItem>().petInstance = petInstance;
+		if(!randomize){
+			inhalerButton.SetActive(true);
+		}
 
 		Setup();
 	}
 
 	protected override void _EndMicro(){
 		Close();
+	}
+
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
 	}
 
 	protected override IEnumerator _Tutorial(){
@@ -121,6 +131,7 @@ public class TimeMicro : Micro{
 		inhalerButton.SetActive(true);
 		finger.EnableBlur(false);
 		yield return finger.ShakeToBack(inhalerButton.transform.position, inhalerButton.transform.position + offset, delay: .5f, time: .5f);
+		inhalerButton.SetActive(false);
 		finger.EnableBlur(true);
 		isPaused = false;
 		finger.gameObject.SetActive(false);

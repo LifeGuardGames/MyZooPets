@@ -7,6 +7,9 @@ public class MoldItem : MicroItem{
 	public override void StartItem(){
 	}
 
+	public override void OnComplete(){
+	}
+
 	void Update(){
 		if(Vector3.Distance(transform.position, Vector3.zero) < 1f && !MicroMixManager.Instance.IsPaused && !MicroMixManager.Instance.IsTutorial){
 			MoldMicro dm = (MoldMicro)parent;

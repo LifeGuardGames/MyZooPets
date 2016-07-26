@@ -30,7 +30,24 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override void _EndMicro(){
-		
+	}
+
+	protected override void _Pause(){
+		foreach(Animation anim in GetComponentsInChildren<Animation>()){
+			anim.enabled = false;
+		}
+		foreach(ParticleSystem pSystem in GetComponentsInChildren<ParticleSystem>()){
+			pSystem.Pause();
+		}
+	}
+
+	protected override void _Resume(){
+		foreach(Animation anim in GetComponentsInChildren<Animation>()){
+			anim.enabled = true;
+		}
+		foreach(ParticleSystem pSystem in GetComponentsInChildren<ParticleSystem>()){
+			pSystem.Play();
+		}
 	}
 
 	protected override IEnumerator _Tutorial(){
@@ -38,7 +55,7 @@ public class PerfumeMicro : Micro{
 		Vector3	startPos = GetRandomPositionOnEdge();
 		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
 		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
-		perfume.Setup(startPos,aim);
+		perfume.Setup(startPos, aim);
 		/*
 		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
 		perfume.transform.position = GetRandomPositionOnEdge();
@@ -80,8 +97,10 @@ public class PerfumeMicro : Micro{
 			}
 			perf.GetComponent<ParticleSystem>().Play();
 			perf.GetComponent<Collider>().enabled = true;
+			perf.transform.position = startPos;
+			yield return WaitSecondsPause(.3f);
 			perf.Setup(startPos, aim);
-			yield return WaitSecondsPause(.9f);
+			yield return WaitSecondsPause(.6f);
 		}
 	}
 

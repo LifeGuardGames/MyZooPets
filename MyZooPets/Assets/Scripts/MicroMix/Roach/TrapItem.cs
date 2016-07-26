@@ -18,7 +18,8 @@ public class TrapItem : MicroItem{
 		complete = false;
 		falling = false;
 	}
-
+	public override void OnComplete(){
+	}
 	void OnTap(TapGesture gesture){
 		if(Time.time - lastPauseTime > .05f){ //If we are paused right now or very recently
 			StartCoroutine(CheckPlace(gesture));

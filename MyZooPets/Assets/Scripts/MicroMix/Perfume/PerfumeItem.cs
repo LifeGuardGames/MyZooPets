@@ -10,7 +10,8 @@ public class PerfumeItem : MicroItem{
 	public override void StartItem(){
 		velocity = Vector3.zero;
 	}
-
+	public override void OnComplete(){
+	}
 	public void Setup(Vector3 startPos, Vector3 aim){
 		transform.position = startPos;
 		velocity = (aim - startPos).normalized;

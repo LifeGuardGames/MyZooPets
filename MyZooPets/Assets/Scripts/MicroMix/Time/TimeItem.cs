@@ -6,11 +6,13 @@ public class TimeItem : MicroItem{
 	public GameObject petInstance;
 	private bool complete = false;
 	private float timeStart;
+
 	public override void StartItem(){
 		complete = false;
 		timeStart = Time.time;
 	}
-
+	public override void OnComplete(){
+	}
 	void OnTap(TapGesture gesture){
 		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || (Time.time-timeStart)<.3f){
 			return;

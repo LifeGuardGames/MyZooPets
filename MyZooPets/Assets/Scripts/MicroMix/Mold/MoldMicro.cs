@@ -29,6 +29,12 @@ public class MoldMicro : Micro{
 	protected override void _EndMicro(){
 	}
 
+	protected override void _Pause(){
+	}
+
+	protected override void _Resume(){
+	}
+
 	protected override IEnumerator _Tutorial(){
 		Setup(true);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
@@ -64,6 +70,7 @@ public class MoldMicro : Micro{
 					spawnPos = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f);
 				} while (Vector3.Distance(spawnPos, Vector3.zero) < 3f); //Don't let them spawn right at the center;
 				moldItems[i].transform.position = spawnPos;
+				moldItems[i].gameObject.SetActive(true); //They are set inactive by our script, so this will bring them back
 			}
 		}
 	}

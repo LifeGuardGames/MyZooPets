@@ -14,6 +14,9 @@ public class DodgeItem : MicroItem{
 		startTime = Time.time;
 	}
 
+	public override void OnComplete(){
+	}
+
 	void OnTriggerEnter(Collider other){
 		if(!complete && other.CompareTag("MicroMixPerfume")){
 			complete = true;

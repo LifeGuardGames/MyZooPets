@@ -8,6 +8,8 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	public TweenToggle leftArrowTween;
 	public TweenToggle rightArrowTween;
 	public Button rightArrowObject;
+	private int endOfHouseParition = 4;
+	private int currentPartition;
 
 	void Start(){
 		CameraManager.Instance.PanScript.OnPartitionChanged += ShowPanel;
@@ -33,6 +35,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 		PanToMoveCamera panScript = CameraManager.Instance.PanScript;
 		int currentLocalPartition = panScript.currentLocalPartition;
+		currentPartition = currentLocalPartition;
 		int firstPartition = panScript.firstPartition;
 		int lastPartition = panScript.lastPartition;
 		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled"); //check for gating
@@ -85,13 +88,24 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 	public void ShowBothArrows(){
 		leftArrowTween.Show();
-		rightArrowTween.Show();
+		if(rightArrowTween.gameObject.transform.childCount > 0) {
+			rightArrowTween.gameObject.transform.GetChild(0).GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("navArrowRight");
+		}
+		//rightArrowTween.Show();
 	}
 
 	// Shows left arrow
 	public void ShowLeftArrow(){
 		leftArrowTween.Show();
-		rightArrowTween.Hide();
+		if(currentPartition == endOfHouseParition) {
+			rightArrowTween.Hide();
+		}
+		else {
+			if(rightArrowTween.gameObject.transform.childCount > 0) {
+				rightArrowTween.gameObject.transform.GetChild(0).GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("navArrowRightInactive");
+			}
+		}
+
 	}
 
 	// Shows right arrow

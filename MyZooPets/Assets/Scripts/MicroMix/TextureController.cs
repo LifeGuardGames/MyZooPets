@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+
 /* We must make our own mesh for now if we want to use this because it sems like Unity's plane mesh is not exactly just a tesselation of triangles
  * So we must make our own and then use the shaded out below to destroy them for now
  */
@@ -20,7 +21,7 @@ public class TextureController : MonoBehaviour{
 		Vector3[] vertices = mesh.vertices;
 		Vector3[] normals = mesh.normals;
 		Vector3 mousePosition = Input.mousePosition;
-		Vector3 realPos = CameraUtils.ScreenToWorldPointZero(Camera.main, mousePosition);
+		Vector3 realPos = CameraUtils.ScreenToWorldPointZero(Camera.main, mousePosition, 50f);
 		float distance = Mathf.Infinity;
 		Vector3 closest = Vector3.zero;
 		int vertIndex = -1; //We have found the index of the vertex we want to remove
@@ -57,8 +58,8 @@ public class TextureController : MonoBehaviour{
 			}
 
 			mesh.triangles = newTris;*/
-			vertices[vertIndex] = new Vector3(0,0,0);
-			mesh.vertices=vertices;
+			vertices[vertIndex] = new Vector3(0, 0, 0);
+			mesh.vertices = vertices;
 			Debug.Log(vertIndex);
 		}
 	}

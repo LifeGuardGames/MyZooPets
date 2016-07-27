@@ -70,6 +70,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 					randomPositionIndex = Random.Range(3, 5);
 					GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
 					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+					go.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 					if(randomPositionIndex == 3) {
 						go.transform.Rotate(new Vector3(0, 0, -45));
 					}

@@ -7,7 +7,7 @@ public class ShooterEnemyBulletCollision : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col){
 		if(col.gameObject.tag =="ShooterWall"){
-			if(!isTrap){
+			if(isTrap){
 				StartCoroutine("TrapTimer");
 			}
 			else{

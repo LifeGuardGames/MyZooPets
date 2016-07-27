@@ -43,7 +43,7 @@ public class MiniPetPowerUp : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D (Collider2D col) {
-		if(col.gameObject.tag == "ShooterEnemy") {
+		if(col.gameObject.tag == "ShooterEnemy" || col.gameObject.tag == "ShooterEnemyBullet") {
 			Hit();
 		}
 

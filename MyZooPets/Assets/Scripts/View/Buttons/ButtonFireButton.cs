@@ -45,17 +45,22 @@ public class ButtonFireButton : LgButtonHold{
 
 		// if can breathe fire, attack the gate!!
 		if(canBreathFire){
-			isLegal = true;
+			if(SceneUtils.CurrentScene != SceneUtils.YARD) {
+				isLegal = true;
 
-			// kick off the attack script
-			int damage = GetDamage();
-			attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
-			attackScript.Init(gate, damage);
+				// kick off the attack script
+				int damage = GetDamage();
+				attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
+				attackScript.Init(gate, damage);
 
-			PetAnimationManager.Instance.StartFireBlow();
-			
-			// turn the fire meter on
-			scriptFireMeter.StartFilling();
+				PetAnimationManager.Instance.StartFireBlow();
+
+				// turn the fire meter on
+				scriptFireMeter.StartFilling();
+			}
+			else {
+				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.MICROMIX);
+			}
 		}
 		// else can't breathe fire. explain why
 		else{

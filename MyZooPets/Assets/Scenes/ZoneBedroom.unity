@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.4402985, g: 0.4402985, b: 0.4402985, a: 1}
+  m_AmbientSkyColor: {r: 1, g: 1, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.4402985, g: 0.4402985, b: 0.4402985, a: 1}
   m_AmbientGroundColor: {r: 0.4402985, g: 0.4402985, b: 0.4402985, a: 1}
   m_AmbientIntensity: 1
@@ -2092,7 +2092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUsingDemultiplexer: 0
-  startsHidden: 0
+  startsHidden: 1
   hideDeltaX: 0
   hideDeltaY: 700
   hideDeltaZ: 0
@@ -4800,6 +4800,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 11468226, guid: f2d8e91fdc3da8b4bb6201390550aab5, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed80f44fa36e8c4419b5d88303fe002b,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f2d8e91fdc3da8b4bb6201390550aab5, type: 2}
   m_IsPrefabParent: 0
@@ -7827,7 +7832,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1645322218}
-  - {fileID: 1522763497}
+  - {fileID: 1144255908}
   - {fileID: 1254368574}
   - {fileID: 1008479047}
   - {fileID: 453010936}
@@ -8022,7 +8027,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8071afd131fd04d8fb3db7884728685d, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8071afd131fd04d8fb3db7884728685d, type: 2}
@@ -12620,7 +12625,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 166a2eeed8813427aab068d31c780e04, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 100234, guid: 166a2eeed8813427aab068d31c780e04, type: 2}
       propertyPath: m_IsActive
@@ -15705,6 +15710,34 @@ CanvasRenderer:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 8a7148f4fcb2e4cb09f1f62e2b34004a, type: 2}
   m_PrefabInternal: {fileID: 1981579666}
+--- !u!1 &1144255907
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1522763496}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1144255908}
+  m_Layer: 0
+  m_Name: Missing Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1144255908
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1522763496}
+  m_GameObject: {fileID: 1144255907}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1522763497}
+  m_Father: {fileID: 614338483}
+  m_RootOrder: 1
 --- !u!1 &1149883671
 GameObject:
   m_ObjectHideFlags: 0
@@ -20864,10 +20897,18 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8af0a417382214921b179d7f1be402d2, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &1522763497 stripped
+--- !u!4 &1522763497
 Transform:
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 1522763496}
+  m_GameObject: {fileID: 2129542974}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1144255908}
+  m_RootOrder: 0
 --- !u!4 &1523515882 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 110eff9da2c9f494fafe96db4b106b40, type: 2}
@@ -21059,19 +21100,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_AnchorMin.x
@@ -21079,7 +21120,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_AnchorMax.x
@@ -21087,7 +21128,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22477614, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
       propertyPath: m_Pivot.x
@@ -22326,7 +22367,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive
@@ -23526,7 +23567,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22492566, guid: 5dfd3d951a3793d41bc71ff78cc23de6, type: 2}
       propertyPath: m_RootOrder
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 22492566, guid: 5dfd3d951a3793d41bc71ff78cc23de6, type: 2}
       propertyPath: m_AnchoredPosition.x
@@ -25661,6 +25702,21 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2123546128}
+--- !u!1 &2129542974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1522763496}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1522763497}
+  m_Layer: 0
+  m_Name: Missing Prefab (Dummy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &2131699044
 GameObject:
   m_ObjectHideFlags: 0

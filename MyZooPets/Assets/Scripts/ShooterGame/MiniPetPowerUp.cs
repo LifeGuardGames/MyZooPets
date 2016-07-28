@@ -46,6 +46,5 @@ public class MiniPetPowerUp : MonoBehaviour {
 		if(col.gameObject.tag == "ShooterEnemy" || col.gameObject.tag == "ShooterEnemyBullet") {
 			Hit();
 		}
-
 	}
 }

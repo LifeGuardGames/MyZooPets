@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -11,46 +10,45 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 	public Image tokenImage;
 	public Animator dragAnimator;
 
-	private Transform originalParent;
-	private Canvas guiCanvas;
-	private Camera guiCamera;
+	public Transform originalParent;		// TODO Set this to private
 
 	public void Init(string itemID, Transform _originalParent) {
 		tokenImage.sprite = SpriteCacheManager.GetItemSprite(itemID);
 		originalParent = _originalParent;
-
-		guiCanvas = GetComponentInParent<Canvas>();
-		guiCamera = guiCanvas.worldCamera;
 	}
 
 	//TODO Handle StatHintController
 
 
-
-
 	#region Dragging implementation
 	public void OnBeginDrag(PointerEventData eventData) {
-		Debug.Log("BEINGING DRAG");
+		transform.SetParent(DragItemParentMeta.Instance.DragItemParent);
 		dragAnimator.SetTrigger("PickedUp");
 		itemBeingDragged = gameObject;
 		// ...
 	}
 
 	public void OnDrag(PointerEventData eventData) {
-		Debug.Log("DRAGGING");
 		// Screen space overlay dragging - http://forum.unity3d.com/threads/mouse-position-for-screen-space-camera.294458/
 #if UNITY_EDITOR
 		Vector3 pointerPosition = Input.mousePosition;
 #else
 		Vector3 pointerPosition = Input.GetTouch(0).position;
 #endif
-		pointerPosition.z = guiCanvas.planeDistance;   // Get the parent canvas plane distance
+		pointerPosition.z = DragItemParentMeta.Instance.GuiCanvas.planeDistance;   // Get the parent canvas plane distance
 		itemBeingDragged.transform.position = Camera.main.ScreenToWorldPoint(pointerPosition);
 	}
 
 	public void OnEndDrag(PointerEventData eventData) {
 		dragAnimator.SetTrigger("Dropped");
 		itemBeingDragged = null;
+	}
+
+	// Called from animator
+	public void DropCompleteEvent() {
+		transform.SetParent(originalParent);
+		transform.SetAsFirstSibling();
+		transform.localPosition = Vector3.zero;
 	}
 	#endregion
 

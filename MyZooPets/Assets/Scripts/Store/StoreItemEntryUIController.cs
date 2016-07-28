@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
 /// <summary>
@@ -13,19 +12,6 @@ public class StoreItemEntryUIController : MonoBehaviour{
 	public Image spriteIcon;
 	public Image buttonIcon;
 	public Button buttonMessage;
-	public AnimationControl tutorialWiggleAnimation;
-
-	/// <summary>
-	/// Plaies the wiggle animation.
-	/// </summary>
-	public void PlayWiggleAnimation(){
-		tutorialWiggleAnimation.Play();
-	}
-
-	public void StopWiggleAnimation(){
-		tutorialWiggleAnimation.resetAfterStop = true;
-		tutorialWiggleAnimation.Stop();
-	}
 
 	/// <summary>
 	/// Creates the entry.

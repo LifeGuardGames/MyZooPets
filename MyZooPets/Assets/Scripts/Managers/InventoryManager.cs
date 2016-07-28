@@ -1,17 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 /// <summary>
 /// Contains all items the pet owns, not to be confused with ItemManager
 /// This class handles the different types of inventory ItemTypes - Consumables(Food + Usables), Decorations, and Accessories
 /// </summary>
 public class InventoryManager : Singleton<InventoryManager> {
-	public GameObject itemDragParent;
-	public GameObject ItemDragParent {
-		get { return itemDragParent; }
-	}
-
 	public List<InventoryItem> AllConsumableInventoryItems {
 		get {
 			List<InventoryItem> consumables = (from keyValuePair in DataManager.Instance.GameData.Inventory.InventoryItems

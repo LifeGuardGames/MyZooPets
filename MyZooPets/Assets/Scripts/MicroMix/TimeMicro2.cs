@@ -42,7 +42,10 @@ public class TimeMicro2 : Micro{
 		moon.transform.position=moonHigh;
 		sunParent.gameObject.SetActive(false);
 		//background.SetActive(true); 
-		//background.GetComponent<Animator>().Play("NIGHTSKY", 0, 0); (Maybe we can just use a reset)
+		//background.GetComponent<Animator>().Play("MicroMixBackgroundSky", 0, 1); //(Maybe we can just use a reset)
+		//background.GetComponent<Animator>().speed=-1;
+		background.GetComponent<Animator>().speed=-1;
+		background.GetComponent<Animator>().SetTime(4f);
 	}
 
 	protected override void _EndMicro(){ //Not necessary to set clocks or background inactive, because we are their parent and will set them inactive regardless

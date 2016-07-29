@@ -36,6 +36,7 @@ public abstract class MiniPet : MonoBehaviour {
 	public GameObject accessory1;
 	public GameObject accessory2;
 	public GameObject accessory3;
+	public Transform petPosition;
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
 	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
@@ -109,7 +110,7 @@ public abstract class MiniPet : MonoBehaviour {
 				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 				if(!isMiniPetColliderLocked){
-					if(Application.loadedLevelName == "ZoneBedroom"){
+					if(LoadLevelManager.Instance.GetCurrentSceneName() == "ZoneBedroom"){
 						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
 							if(OnTutorialMinipetClicked != null){
 								OnTutorialMinipetClicked(this, EventArgs.Empty);
@@ -119,8 +120,10 @@ public abstract class MiniPet : MonoBehaviour {
 					}
 					if(!isUIOpened && isModeLockEmpty){
 						AudioManager.Instance.PlayClip("talkMinipet");
-						ZoomInToMiniPet();
-						OpenChildUI();	// Further child UI calls
+						PetMovement.Instance.MovePet(petPosition.position);
+						PetMovement.Instance.OnReachedDest += ZoomInToMiniPet;
+						//ZoomInToMiniPet();
+						//OpenChildUI();	// Further child UI calls
 					}
 				}
 			}
@@ -150,8 +153,7 @@ public abstract class MiniPet : MonoBehaviour {
 					}
 					if(!isUIOpened && isModeLockEmpty) {
 						AudioManager.Instance.PlayClip("talkMinipet");
-						ZoomInToMiniPet();
-						OpenChildUI();  // Further child UI calls
+						//ZoomInToMiniPet();
 					}
 				}
 			}
@@ -161,7 +163,9 @@ public abstract class MiniPet : MonoBehaviour {
 	protected abstract void OpenChildUI();
 
 
-	private void ZoomInToMiniPet(){
+	private void ZoomInToMiniPet(System.Object sender,EventArgs args){
+		OpenChildUI();  // Further child UI calls
+						//if pet not finish eating yet. finish eating logic
 		Vector3 position = this.transform.position + zoomPositionOffset;
 
 		isMiniPetColliderLocked = true;
@@ -170,6 +174,7 @@ public abstract class MiniPet : MonoBehaviour {
 			CameraMoveDone();
 		};
 		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 0.5f, cameraDoneFunction);
+		PetMovement.Instance.OnReachedDest -= ZoomInToMiniPet;
 	}
 
 	/// <summary>
@@ -181,8 +186,7 @@ public abstract class MiniPet : MonoBehaviour {
 		MiniPetHUDUIManager.Instance.SelectedMiniPetName = name;
 		MiniPetHUDUIManager.Instance.SelectedMiniPetGameObject = this.gameObject;
 		MiniPetHUDUIManager.Instance.OpenUI();
-
-		//if pet not finish eating yet. finish eating logic
+		
 		if(!isFinishEating){
 			//InventoryLogic.Instance.UseMiniPetItem(invItemID);
 			//MiniPetManager.Instance.IncreaseXP(id);

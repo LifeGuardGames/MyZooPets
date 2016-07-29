@@ -115,6 +115,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 			Debug.LogError("No minipet type found: " + type.ToString());
 			return;
 		}
+
 	}
 
 
@@ -122,7 +123,14 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		yield return new WaitForSeconds(1.0f);
 		if(contentTweenParent != null){
 			contentTweenParent.Show();
+			StartCoroutine(HidePet());
 		}
+	}
+
+	IEnumerator HidePet() {
+		yield return new WaitForSeconds(0.5f);
+		PetAnimationManager.Instance.DisableVisibility();
+		PetAudioManager.Instance.EnableSound = false;
 	}
 
 	#region Overridden functions
@@ -136,8 +144,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		HUDUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.HidePanel();
-		PetAnimationManager.Instance.DisableVisibility();
-		PetAudioManager.Instance.EnableSound = false;
+		
 	}
 
 	protected override void _CloseUI(){

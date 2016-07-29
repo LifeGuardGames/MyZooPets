@@ -17,6 +17,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public Text scoreText;
 	public delegate void OnRestart();
 	public static event OnRestart onRestart;
+	public GameObject minipetPowerUp;
 
 	private ShooterUIManager shooterUI;
 
@@ -44,6 +45,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		if(onRestart != null) {
 			onRestart();
 		}
+		minipetPowerUp.SetActive(false);
 		StopAllCoroutines();
 		isGameOver = false;
 		inTutorial = false;

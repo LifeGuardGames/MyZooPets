@@ -9,7 +9,6 @@ public class ScarfItem : MicroItem{
 
 	public override void StartItem(){
 		complete = false;
-		Debug.Log(pet);
 		neckObject = pet.GetComponent<MicroMixAnatomy>().neck;
 	}
 

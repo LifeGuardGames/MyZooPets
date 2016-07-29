@@ -309,26 +309,6 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 	}
 
 	/// <summary>
-	/// Opens the shop directly to decoration category and jumps to specific
-	/// decoration type
-	/// </summary>
-	/// <param name="decorationType">Decoration type.</param>
-	private void OpenShopForTutorial(){
-		// hide swipe arrow because not needed in shop mode
-		RoomArrowsUIManager.Instance.HidePanel();
-		
-		// push the shop mode type onto the click manager stack
-		ClickManager.Instance.Lock(UIModeTypes.Store);
-		
-		// open the shop
-		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
-		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButtonTutorial);
-
-		string tabName = DecorationTypes.Carpet.ToString();
-		StoreUIManager.Instance.CreateSubCategoryItemsTab(tabName, Color.white);
-	}
-
-	/// <summary>
 	/// Open store directly to decoration category
 	/// </summary>
 	private void OpenShop(){

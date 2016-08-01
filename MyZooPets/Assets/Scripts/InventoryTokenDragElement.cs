@@ -36,7 +36,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		Vector3 pointerPosition = Input.GetTouch(0).position;
 #endif
 		pointerPosition.z = DragItemParentMeta.Instance.GuiCanvas.planeDistance;   // Get the parent canvas plane distance
-		itemBeingDragged.transform.position = Camera.main.ScreenToWorldPoint(pointerPosition);
+		itemBeingDragged.transform.position = DragItemParentMeta.Instance.GuiCamera.ScreenToWorldPoint(pointerPosition);
 	}
 
 	public void OnEndDrag(PointerEventData eventData) {

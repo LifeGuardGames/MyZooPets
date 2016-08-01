@@ -12,7 +12,7 @@ public class ClickableFireCrystalController : MonoBehaviour{
 
 	public void ObjectClicked(){
 		thisCollider.enabled = false;
-		LeanTween.move(this.gameObject, InventoryUIManager.Instance.GetItemFlyToPosition(), 1f)
+		LeanTween.move(this.gameObject, InventoryUIManager.Instance.itemFlyToTransform, 1f)
 			.setEase(LeanTweenType.easeOutQuad)
 			.setOnComplete(RewardPlayerFireCrystal);
 	}

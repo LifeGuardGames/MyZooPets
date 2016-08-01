@@ -154,9 +154,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Called when item bought, creates a sprite for the item and move it to correct inventory
 	public void OnBuyAnimation(StoreItemController storeItemScript){
 		Vector3 origin = storeItemScript.GetSpritePosition();
-		Vector3 endPosition = Vector3.zero; // TODO change this
+		Vector3 endPosition = InventoryUIManager.Instance.itemFlyToTransform.position; // TODO change this
 
-		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, boughtItemTweenPrefab);
+		GameObject animationSprite = GameObjectUtils.AddChild(storeSubPanel, boughtItemTweenPrefab);
 		animationSprite.GetComponentInChildren<Image>().sprite = SpriteCacheManager.GetItemSprite(storeItemScript.ItemData.ID);
 		animationSprite.transform.position = origin;
 
@@ -170,7 +170,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private void OnBuyAnimationDone(System.Object obj) {
 		Destroy((GameObject)obj);
 
-		// TODO update the bar here
+		InventoryUIManager.Instance.PulseItem();
+		InventoryUIManager.Instance.RefreshPage();
 	}
 
 	/// <summary>

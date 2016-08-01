@@ -19,9 +19,9 @@ public class MutableDataStats {
 		Health = 80;
 		Mood = 80;
 		Points = 0;
-		Stars = 100;
+		Stars = 1000;
 		Shards = 0;
-		TotalStars = 100;
+		TotalStars = 1000;
 	}
 
 	#region Stat manipulation calls

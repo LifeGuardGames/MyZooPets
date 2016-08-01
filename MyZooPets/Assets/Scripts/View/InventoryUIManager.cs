@@ -10,34 +10,30 @@ using System.Collections.Generic;
 public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
 
-	public GameObject inventoryPanel;
-	public bool isDebug;
-//	public UIPanel gridPanel;
-	public RectTransform gridTransform;
-	public GameObject spritePet;
-	public GameObject inventoryItemPrefab;
+	public TweenToggle inventoryTween;
+	public RectTransform slotParent;
+	public GameObject inventoryTokenPrefab;
+	public List<Transform> inventorySlotList;
 	public Transform itemFlyToTransform;
+	public Animation addItemPulseAnim;
 
-	private int maxInventoryDisplay = 6;
-	private float collapsedPos = -164f;
+	private int inventoryPage = 0;
+	private int inventoryPageSize = 5;
+
+	public GameObject leftButton;
+	public GameObject rightButton;
+
 	private Transform currentDragDropItem;
+
+	public List<InventoryItem> AllInvItems {
+		get { return InventoryManager.Instance.AllConsumableInventoryItems; }
+	}
 
 	void Start(){
 		//Spawn items in the inventory for the first time
-		List<InventoryItem> allInvItems = InventoryManager.Instance.AllConsumableInventoryItems;
-		foreach(InventoryItem invItem in allInvItems){
-			SpawnInventoryItemInPanel(invItem, isOnLoad : true);
-		}
-	}
-
-	// If items in inventory greater than max count, it scrollable
-	public bool IsInventoryScrollable(){
-		return InventoryManager.Instance.AllConsumableInventoryItems.Count > maxInventoryDisplay;
-	}
-
-	public Vector3 GetItemFlyToPosition(){
-		return itemFlyToTransform.position;
-	}
+		ShowPage(0);
+		RefreshButtonShowStatus();
+    }
 
 	/// <summary>
 	/// Gets the fire orb reference.
@@ -46,7 +42,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	/// <returns>The fire orb reference.</returns>
 	public GameObject GetFireOrbReference(){
 		GameObject retVal = null;
-		foreach(Transform item in gridTransform) {
+		foreach(Transform item in slotParent) {
 			if(item.name == "Usable1"){
 				Transform trans = item.Find("Usable1");
 				if(trans != null){
@@ -67,38 +63,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		}
 		return retVal;
 	}
-
-	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
-	public void UpdateBarPosition(bool isOnLoad = false){
-		int allInventoryItemsCount = InventoryManager.Instance.AllConsumableInventoryItems.Count;
-		// Normal case where you add item during game
-		if(!isOnLoad){
-			// Adjust the bar length based on how many items we want showing at all times
-			if(allInventoryItemsCount <= maxInventoryDisplay){
-
-				// Update position of the bar if inventory is open
-				LeanTween.moveLocalX(inventoryPanel, collapsedPos - allInventoryItemsCount * 90, 0.4f)
-					.setEase(LeanTweenType.easeOutBounce);
-			}
-		}
-		// Scene loading case, dont want to tween here so set them explicitly
-		else{
-			// Adjust the bar length based on how many items we want showing at all times
-			if(allInventoryItemsCount > maxInventoryDisplay) {
-				allInventoryItemsCount = maxInventoryDisplay;
-			}
-			
-			if(inventoryPanel.transform.localPosition.x != collapsedPos - allInventoryItemsCount * 90){
-				inventoryPanel.transform.localPosition = new Vector3(collapsedPos - allInventoryItemsCount * 90,
-				                                                     inventoryPanel.transform.localPosition.y,
-				                                                     inventoryPanel.transform.localPosition.z);
-			}
-		}
-				
-		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
-		//Vector3 oldPanelPos = gridPanel.transform.localPosition;
-		//gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
-	}
 	
 	//Find the position of Inventory Item game object with invItemID
 	//Used for animation position in StoreUIManager
@@ -107,7 +71,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		Vector3 invItemPosition;
 
 		// Use the position of the item in the inventory panel
-		Transform invItemTrans = gridTransform.Find(invItemID);
+		Transform invItemTrans = slotParent.Find(invItemID);
 		InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 		invItemPosition = invItemTrans.position;
 		
@@ -120,11 +84,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	}
 	
 	public void ShowPanel(){
-		inventoryPanel.GetComponent<TweenToggle>().Show();
+		inventoryTween.Show();
 	}
 	
 	public void HidePanel(){
-		inventoryPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
+		inventoryTween.Hide();
 	}
 
 	private void OnItemDropHandler(object sender, InventoryDragDrop.InvDragDropArgs e){
@@ -141,12 +105,11 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public void OnItemUsedUI(InventoryItem invItem){
 		if(currentDragDropItem != null){
 			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-				Transform gridObj = gridTransform.Find(invItem.ItemID);
+				Transform gridObj = slotParent.Find(invItem.ItemID);
 				gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
 			}
 			else{ //destroy object if it has been used up
 				Destroy(currentDragDropItem.gameObject);
-				UpdateBarPosition();
 			}
 		}
 	}
@@ -174,49 +137,66 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 //		}
 	}
 
-	// When new item is added to the inventory
-	public void OnItemAddedUI(InventoryItem invItem, bool isItemNew){
-		if(isItemNew) {
-			SpawnInventoryItemInPanel(invItem);
+	public void PulseItem() {
+		addItemPulseAnim.Play();
+	}
+
+	#region Page sorting functions
+	// Checks to see if the buttons need to appear
+	public void RefreshButtonShowStatus() {
+		// Check left most limit
+		if(inventoryPage == 0) {
+			leftButton.SetActive(false);
 		}
-		else{	// Update amount
-			Transform gridObj = gridTransform.Find(invItem.ItemID);
-			gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
+		else {
+			leftButton.SetActive(true);
+		}
+		// Check right most limit
+		if((inventoryPage * inventoryPageSize) + inventoryPageSize >= AllInvItems.Count) {
+			rightButton.SetActive(false);
+		}
+		else {
+			rightButton.SetActive(true);
 		}
 	}
 
-	//Create new InventoryToken and populate the fields with InventoryItem data
-	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
-		GameObject inventoryToken = GameObjectUtils.AddChild(gridTransform.gameObject, inventoryItemPrefab);
-		inventoryToken.GetComponent<InventoryTokenController>().Init(invItem);
-
-		//Create inventory item
-//		GameObject inventoryItemObject = NGUITools.AddChild(gridTransform.gameObject, inventoryItemPrefab);
-
-		//get reference to all the GO and scripts
-//		Transform itemWrapper = inventoryItemObject.transform.Find("Icon");
-//		UISprite itemSprite = inventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
-//		UILabel itemAmountLabel = inventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
-//		InventoryItemStatsHintController statsHint = itemWrapper.GetComponent<InventoryItemStatsHintController>();
-//		InventoryDragDrop invDragDrop = itemWrapper.GetComponent<InventoryDragDrop>();
-//
-//		//Set value to UI element
-//		itemWrapper.name = invItem.ItemID;
-//		inventoryItemObject.name = invItem.ItemID;
-//		itemSprite.spriteName = invItem.ItemTextureName;
-//		itemAmountLabel.text = invItem.Amount.ToString();
-//
-//		//Create stats hint
-//		statsHint.PopulateStatsHints((StatsItem)invItem.ItemData);
-//
-//		//Listen to on press and on drop
-//		invDragDrop.OnItemDrag += statsHint.OnItemDrag;
-//		invDragDrop.OnItemDrop += statsHint.OnItemDrop;
-//
-//		//listen to on drop event
-//		invDragDrop.OnItemDrop += OnItemDropHandler;
-//		invDragDrop.OnItemPress += OnItemPress;
-
-		UpdateBarPosition(isOnLoad);
+	public void OnPageButtonClicked(bool isRightButton) {
+		if(isRightButton) {
+			inventoryPage++;
+		}
+		else {
+			inventoryPage--;
+		}
+		ShowPage(inventoryPage);
+		RefreshButtonShowStatus();
 	}
+
+	public void RefreshPage() {
+		ShowPage(inventoryPage);
+		RefreshButtonShowStatus();
+	}
+
+	// Either refreshes current page, or shows a new page given page number
+	private void ShowPage(int inventoryPage) {
+		// Destroy children beforehand
+		foreach(Transform slot in inventorySlotList) {
+			foreach(Transform child in slot) {  // Auto detect all/none children
+				Destroy(child.gameObject);
+			}
+		}
+
+		int startingIndex = inventoryPage * inventoryPageSize;
+		int endingIndex = startingIndex + inventoryPageSize;
+
+		for(int i = startingIndex; i < endingIndex; i++) {
+			if(AllInvItems.Count == i) {    // Reached the end of list
+				break;
+			}
+			else {
+				GameObject inventoryToken = GameObjectUtils.AddChildGUI(inventorySlotList[i % inventoryPageSize].gameObject, inventoryTokenPrefab);
+				inventoryToken.GetComponent<InventoryTokenController>().Init(AllInvItems[i]);
+			}
+		}
+	}
+	#endregion
 }

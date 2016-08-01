@@ -118,6 +118,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Start the drag event and perform the dragging.
 	/// </summary>
 	void OnDrag(Vector2 delta){
+		/*
 		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
@@ -207,6 +208,7 @@ public class InventoryDragDrop : MonoBehaviour{
 				isScrolling = true;
 			}
 		}
+		*/
 	}
 
 	/// <summary>

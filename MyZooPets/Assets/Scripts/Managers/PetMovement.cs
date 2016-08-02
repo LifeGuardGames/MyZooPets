@@ -179,7 +179,7 @@ public class PetMovement : Singleton<PetMovement>{
 			return;
 		
 		// bit of a hack...remove if this causes any issues -- prevent pet movement if the edit decos UI is open
-		if(DecoInventoryUIManager.Instance && DecoInventoryUIManager.Instance.IsOpen()){
+		if(DecoModeUIManager.Instance && DecoModeUIManager.Instance.IsOpen()){
 			return;
 		}
 

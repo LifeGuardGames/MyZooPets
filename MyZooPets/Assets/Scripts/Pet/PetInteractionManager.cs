@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 //change this to PetInteraction Manager to handle item drop as well
 public class PetInteractionManager : MonoBehaviour{

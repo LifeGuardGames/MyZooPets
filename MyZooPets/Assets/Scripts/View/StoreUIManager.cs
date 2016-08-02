@@ -159,6 +159,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		GameObject animationSprite = GameObjectUtils.AddChild(storeSubPanel, boughtItemTweenPrefab);
 		animationSprite.GetComponentInChildren<Image>().sprite = SpriteCacheManager.GetItemSprite(storeItemScript.ItemData.ID);
 		animationSprite.transform.position = origin;
+		animationSprite.name = storeItemScript.ItemData.ID;
 
 		LeanTween.move(animationSprite, endPosition, 0.666f)
 			.setEase(LeanTweenType.easeOutQuad)
@@ -168,10 +169,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 	// Show the updated inventory bar with new item and destroy the tweening sprite
 	private void OnBuyAnimationDone(System.Object obj) {
-		Destroy((GameObject)obj);
+		string itemID = ((GameObject)obj).name;
+		ItemType type = DataLoaderItems.GetItem(itemID).Type;
+        if(type == ItemType.Foods || type == ItemType.Usables) {
+			InventoryUIManager.Instance.PulseItem();
+			InventoryUIManager.Instance.RefreshPage();
+		}
+		else if(type == ItemType.Decorations) {
+			DecoInventoryUIManager.Instance.PulseItem();
+			DecoInventoryUIManager.Instance.RefreshPage();
+		}
 
-		InventoryUIManager.Instance.PulseItem();
-		InventoryUIManager.Instance.RefreshPage();
+		Destroy((GameObject)obj);
 	}
 
 	/// <summary>
@@ -228,7 +237,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
 			InventoryUIManager.Instance.ShowPanel();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+			DecoInventoryUIManager.Instance.HidePanel();
 
 			foreach(Transform tab in tabArea.transform){
 				ToggleTab(tab, false);
@@ -238,7 +247,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else if(currentPage == "Items"){
 			InventoryUIManager.Instance.ShowPanel();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+			DecoInventoryUIManager.Instance.HidePanel();
 
 			foreach(Transform tab in tabArea.transform){
 				ToggleTab(tab, false);
@@ -248,7 +257,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else if(currentPage == "Decorations"){
 			InventoryUIManager.Instance.HidePanel();
-			DecoInventoryUIManager.Instance.ShowDecoInventory();
+			DecoInventoryUIManager.Instance.ShowPanel();
 
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
@@ -459,7 +468,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else{
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+			DecoInventoryUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 		}
 	}

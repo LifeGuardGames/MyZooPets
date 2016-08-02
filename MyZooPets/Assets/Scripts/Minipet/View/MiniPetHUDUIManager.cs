@@ -1,8 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 	public Text nameLabel;
@@ -161,7 +160,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		RoomArrowsUIManager.Instance.ShowPanel();
 		PetAnimationManager.Instance.EnableVisibility();
 		PetAudioManager.Instance.EnableSound = true;
-		DecoInventoryUIManager.Instance.HideDecoInventory();
+		DecoInventoryUIManager.Instance.HidePanel();
 		if(content != null){
 			Destroy(content.gameObject);
 		}
@@ -178,7 +177,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		bool isNeedItem = !DataManager.Instance.GameData.Inventory.InventoryItems.ContainsKey(neededItem.ID);
 		bool isPetFed = !DataManager.Instance.GameData.MiniPets.IsPetFinishedEating(SelectedMiniPetID);
 		
-		if(isNeedItem && MiniPetHUDUIManager.Instance.IsOpen() && isPetFed){
+		if(isNeedItem && IsOpen() && isPetFed){
 			storeButtonPulseAnim.Play();
 			storeButtonSunbeam.SetActive(true);
 		}

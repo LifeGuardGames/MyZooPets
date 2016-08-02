@@ -35,12 +35,8 @@ public abstract class DecorationZone : MonoBehaviour {
 	protected abstract void _RemoveDecoration();										// removes the decoration
 	protected abstract void _SetDecoration(string decoID, bool isPlacedFromDecoMode);	// set the deco to this node
 
-	void Start(){ 
-		DecoInventoryUIManager.OnDecoDroppedOnTarget += OnDecorationDroppedInZone;
-		DecoInventoryUIManager.OnDecoPickedUp += OnDecorationPickedUp;
-		DecoInventoryUIManager.OnDecoDropped += OnDecorationDropped;
-
-		DecoInventoryUIManager.Instance.OnManagerOpen += OnDecoMode;
+	void Start(){
+		DecoModeUIManager.Instance.OnManagerOpen += ShowDecoZones;
 
 		// Set the decoration icon
 		switch(nodeType){
@@ -71,11 +67,8 @@ public abstract class DecorationZone : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		DecoInventoryUIManager.OnDecoPickedUp -= OnDecorationPickedUp;
-		DecoInventoryUIManager.OnDecoDropped -= OnDecorationDropped;
-		DecoInventoryUIManager.OnDecoDroppedOnTarget -= OnDecorationDroppedInZone;
-		if(DecoInventoryUIManager.Instance){
-			DecoInventoryUIManager.Instance.OnManagerOpen -= OnDecoMode;
+		if(DecoModeUIManager.Instance){
+			DecoModeUIManager.Instance.OnManagerOpen -= ShowDecoZones;
 		}
 	}
 	
@@ -265,7 +258,7 @@ public abstract class DecorationZone : MonoBehaviour {
 	}
 
 	// Event listener. listening to when decoration mode is enabled/disabled
-	private void OnDecoMode(object sender, UIManagerEventArgs e){
+	private void ShowDecoZones(object sender, UIManagerEventArgs e){
 		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
 		if(e.Opening){
 			toggle.Show();		// edit mode is opening, so turn this node on

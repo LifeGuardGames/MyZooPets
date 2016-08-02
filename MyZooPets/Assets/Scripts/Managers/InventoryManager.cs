@@ -129,10 +129,10 @@ public class InventoryManager : Singleton<InventoryManager> {
 
 			// Update UI to reflect changes based on their type
 			if(invItem.ItemType == ItemType.Foods || invItem.ItemType == ItemType.Usables) {
-				InventoryUIManager.Instance.OnItemUsedUI(invItem);
+				InventoryUIManager.Instance.RefreshPage();
 			}
-			if(invItem.ItemType == ItemType.Decorations) {  // Doesnt check presence of DecoInventoryUIManager for now, change it here
-				DecoInventoryUIManager.Instance.OnItemUsedUI(invItem);
+			if(invItem.ItemType == ItemType.Decorations && DecoInventoryUIManager.Instance != null) {
+				DecoInventoryUIManager.Instance.RefreshPage();
 			}
 		}
 	}
@@ -153,10 +153,10 @@ public class InventoryManager : Singleton<InventoryManager> {
 
 			// Update UI to reflect changes based on their type
 			if(invItem.ItemType == ItemType.Foods || invItem.ItemType == ItemType.Usables) {
-				InventoryUIManager.Instance.OnItemUsedUI(invItem);
+				InventoryUIManager.Instance.RefreshPage();
 			}
-			if(invItem.ItemType == ItemType.Decorations) {  // Doesnt check presence of DecoInventoryUIManager for now, change it here
-				DecoInventoryUIManager.Instance.OnItemUsedUI(invItem);
+			if(invItem.ItemType == ItemType.Decorations && DecoInventoryUIManager.Instance != null) {
+				DecoInventoryUIManager.Instance.RefreshPage();
 			}
 		}
 	}

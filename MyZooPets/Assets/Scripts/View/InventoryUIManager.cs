@@ -64,25 +64,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		return retVal;
 	}
 	
-	//Find the position of Inventory Item game object with invItemID
-	//Used for animation position in StoreUIManager
-	public Vector3 GetPositionOfInvItem(string invItemID){
-		// position to use
-		Vector3 invItemPosition;
-
-		// Use the position of the item in the inventory panel
-		Transform invItemTrans = slotParent.Find(invItemID);
-		InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
-		invItemPosition = invItemTrans.position;
-		
-		//Offset position if the item is just added to the inventory
-		if(invItem.Amount == 1){
-			invItemPosition += new Vector3(-0.22f, 0, 0);
-		}
-		
-		return invItemPosition;
-	}
-	
 	public void ShowPanel(){
 		inventoryTween.Show();
 	}
@@ -99,42 +80,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 				ItemDroppedOnTargetEvent(this, e);
 			}
 		}
-	}
-
-	// Called from InventoryManager
-	public void OnItemUsedUI(InventoryItem invItem){
-		if(currentDragDropItem != null){
-			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-				Transform gridObj = slotParent.Find(invItem.ItemID);
-				gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
-			}
-			else{ //destroy object if it has been used up
-				Destroy(currentDragDropItem.gameObject);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Handles the item press event.
-	/// </summary>
-	private void OnItemPress(object sender, InventoryDragDrop.InvDragDropArgs e){
-//		bool isTutDone = DataManager.Instance.GameData.Tutorial.ListPlayed.Contains(TutorialManagerBedroom.TUT_FEED_PET);
-//
-//		//remove drag hint on the next time user press on any item 
-//		if(fingerHintGO != null)
-//			Destroy(fingerHintGO);
-//
-//		//if user is pressing the item for the first time show hint
-//		if(!isTutDone){
-//			Vector3 hintPos = e.ParentTransform.position;
-//			GameObject fingerHintResource = Resources.Load("inventorySwipeTut") as GameObject;
-//			fingerHintGO = (GameObject)Instantiate(fingerHintResource, hintPos, Quaternion.identity);
-//			fingerHintGO.transform.parent = GameObject.Find("Anchor-BottomRight").transform;
-//			fingerHintGO.transform.localScale = new Vector3(1, 1, 1);
-//
-//			// fingerHintGO.transform.position = hintPos; 
-//			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_FEED_PET);
-//		}
 	}
 
 	public void PulseItem() {

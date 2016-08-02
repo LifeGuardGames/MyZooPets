@@ -27,7 +27,7 @@ namespace CreativeSpore.SuperTilemapEditor
             return new TileColliderData { vertices = clonedVertices, type = type };
         }
 
-        public void FlipV()
+        public void FlipH()
         {
             for(int i = 0; i < vertices.Length; ++i)
             {
@@ -36,7 +36,7 @@ namespace CreativeSpore.SuperTilemapEditor
             Array.Reverse(vertices);
         }
 
-        public void FlipH()
+        public void FlipV()
         {
             for (int i = 0; i < vertices.Length; ++i)
             {
@@ -158,19 +158,20 @@ namespace CreativeSpore.SuperTilemapEditor
     public class Tileset : ScriptableObject
     {
         public const int k_TileId_Empty = 0x0000FFFF; //NOTE: same value as k_TileDataMask_TileId
-        public const int k_BrushId_Empty = 0; // brush id 0 is used for undefined brush
+        //NOTE: if the tileData is empty 0xFFFFFFFF, the GetBrushIdFromTileData will return -1. Sometimes it's better "if(brushId > 0)" to check if there is a valid brush
+        public const int k_BrushId_Default = 0; // brush id 0 is used for default brush (used by tiles drawn without using a brush asset)
         public const uint k_TileData_Empty = 0xFFFFFFFF;
         // Tile Data Masks
         public const uint k_TileDataMask_TileId = 0x0000FFFF; // up to 256x256(65536 - 1) tiles (in a max. texture size of 8192x8192, min. tile size should be 32x32)
         public const uint k_TileDataMask_BrushId = 0x0FFF0000; // up to 4096 - 1 ( id 0 is used for undefined brush )
         public const uint k_TileDataMask_Flags = 0xF0000000; // Flags: (1bit)FlipX, (1bit)FlipY, (1bits)Rot90, (1 bit reserved)
         // Tile Data Flags
-        public const uint k_TileFlag_FlipH = 0x80000000;
-        public const uint k_TileFlag_FlipV = 0x40000000;
+        public const uint k_TileFlag_FlipV = 0x80000000;
+        public const uint k_TileFlag_FlipH = 0x40000000;
         public const uint k_TileFlag_Rot90 = 0x20000000;
         public const uint k_TileFlag_Updated = 0x10000000; // used by brushes to check when a tile should be updated or not
 
-        public static int GetBrushIdFromTileData(uint tileData) { return tileData != k_TileData_Empty ? (int)((tileData & k_TileDataMask_BrushId) >> 16) : 0; }
+        public static int GetBrushIdFromTileData(uint tileData) { return tileData != k_TileData_Empty ? (int)((tileData & k_TileDataMask_BrushId) >> 16) : -1; }
         public static int GetTileIdFromTileData(uint tileData) { return (int)(tileData & k_TileDataMask_TileId); }
         /// <summary>
         /// Merge flags and keeps rotation coherence
@@ -209,8 +210,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public int VisualTilePadding = 1;
         public int TileRowLength = 8;        
 
-        public int Width { get { return m_tilesetWidth; } }
-        public int Height { get { return m_tilesetHeight; } }
+        public int Width { get { return m_tilesetWidth > 0? m_tilesetWidth : Mathf.RoundToInt(AtlasTexture.width / TilePxSize.x); } }
+        public int Height { get { return m_tilesetHeight > 0 ? m_tilesetHeight : Mathf.RoundToInt(AtlasTexture.height / TilePxSize.y); } }
 
         public bool GetGroupAutotiling(int groupA, int groupB) 
         { 
@@ -243,6 +244,8 @@ namespace CreativeSpore.SuperTilemapEditor
         public IList<Tile> Tiles { get { return m_tiles.AsReadOnly(); } }
         public float PixelsPerUnit { get { return m_pixelsPerUnit; } set { m_pixelsPerUnit = value; } }
 
+        public void SetTiles(List<Tile> tiles) { m_tiles = tiles; }
+
         public Vector2 CalculateTileTexelSize()
         {
             return AtlasTexture != null ? Vector2.Scale(AtlasTexture.texelSize, TilePxSize) : Vector2.zero;
@@ -268,7 +271,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 //if (m_selectedTileId != k_TileId_Empty) // commented to fix select empty tile from tilemap
                 {
                     m_tileSelection = null;
-                    m_selectedBrushId = k_BrushId_Empty;
+                    m_selectedBrushId = k_BrushId_Default;
                 }
                 //Debug.Log("SelectedTileId: " + SelectedTileId);
                 if (OnTileSelected != null)
@@ -313,7 +316,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (m_tileSelection != null)
                 {
                     m_selectedTileId = k_TileId_Empty;
-                    m_selectedBrushId = k_BrushId_Empty;
+                    m_selectedBrushId = k_BrushId_Default;
                 }
                 if (prevValue != m_tileSelection && OnTileSelectionChanged != null)
                 {
@@ -340,7 +343,7 @@ namespace CreativeSpore.SuperTilemapEditor
         [SerializeField]
         private string[] m_brushGroupNames = Enumerable.Range(0, 32).Select( x => x == 0? "Default" : "").ToArray();
         [SerializeField]
-        private uint[] m_brushGroupAutotilingMatrix = new uint[32];
+        private uint[] m_brushGroupAutotilingMatrix = Enumerable.Range(0, 31).Select(x => 1u << x).ToArray();
 
         private int m_selectedTileId = k_TileId_Empty;
         private int m_selectedBrushId = -1;
@@ -348,83 +351,15 @@ namespace CreativeSpore.SuperTilemapEditor
         #endregion
 
         #region Public Methods
-#if UNITY_EDITOR
-        public void UpdateTilesetConfigFromAtlasImportSettings()
+
+        public Tile GetTile(int tileId)
         {
-            if (AtlasTexture != null)
+            if(tileId >= 0 && tileId < m_tiles.Count)
             {
-                string assetPath = UnityEditor.AssetDatabase.GetAssetPath(AtlasTexture);
-                if (!string.IsNullOrEmpty(assetPath))
-                {
-                    UnityEditor.TextureImporter textureImporter = UnityEditor.AssetImporter.GetAtPath(assetPath) as UnityEditor.TextureImporter;
-                    if (textureImporter != null)
-                    {
-                        m_pixelsPerUnit = textureImporter.spritePixelsPerUnit;
-                        if(textureImporter.textureType == UnityEditor.TextureImporterType.Sprite)
-                        {
-                            if(textureImporter.spriteImportMode == UnityEditor.SpriteImportMode.Multiple)
-                            {
-                                List<Tile> tiles = new List<Tile>();
-                                if (textureImporter.spritesheet.Length >= 2)
-                                {
-                                    UnityEditor.SpriteMetaData spr0 = textureImporter.spritesheet[0];
-                                    UnityEditor.SpriteMetaData spr1 = textureImporter.spritesheet[1];
-                                    TilePxSize = textureImporter.spritesheet[0].rect.size;
-                                    SliceOffset = spr0.rect.position; SliceOffset.y = AtlasTexture.height - spr0.rect.y - spr0.rect.height;
-                                    SlicePadding.x = spr1.rect.x - spr0.rect.xMax;                                    
-                                }
-                                //+++Ask before importing tiles
-                                if (textureImporter.spritesheet.Length >= 2 && m_tiles.Count > 0)
-                                {
-                                    if( !UnityEditor.EditorUtility.DisplayDialog("Import Sprite Sheet?", "This texture atlas contain sliced sprites. Do you want to overwrite current tiles with these ones?", "Yes", "No") )
-                                    {
-                                        return;
-                                    }
-                                }
-                                //---
-                                m_tilesetHeight = 0;
-                                foreach( UnityEditor.SpriteMetaData spriteData in textureImporter.spritesheet )
-                                {
-                                    Rect rUV = new Rect(Vector2.Scale(spriteData.rect.position, AtlasTexture.texelSize), Vector2.Scale(spriteData.rect.size, AtlasTexture.texelSize));
-                                    tiles.Add(new Tile() { uv = rUV });
-                                    if (tiles.Count >= 2)
-                                    {
-                                        if (tiles[tiles.Count - 2].uv.y != tiles[tiles.Count - 1].uv.y)
-                                        {           
-                                            if(m_tilesetHeight == 1)
-                                            {
-                                                m_tilesetWidth = tiles.Count - 1;
-                                                SlicePadding.y = textureImporter.spritesheet[tiles.Count - 2].rect.y - textureImporter.spritesheet[tiles.Count - 1].rect.yMax;
-                                            }
-                                            ++m_tilesetHeight;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ++m_tilesetHeight;
-                                    }
-                                }
-                                TileRowLength = m_tilesetWidth;
-                                //Copy data from previous tiles
-#if UNITY_EDITOR
-                                if (m_tiles != null && m_tiles.Count > 0 && UnityEditor.EditorUtility.DisplayDialog("Keep previous tile properties?", "Keeping previous tile properties will copy the collider and paramters of previous tiles", "Yes", "No"))
-#endif
-                                {
-                                    for (int i = 0; i < m_tiles.Count && i < tiles.Count; ++i)
-                                    {
-                                        tiles[i].collData = m_tiles[i].collData;
-                                        tiles[i].paramContainer = m_tiles[i].paramContainer;
-                                        tiles[i].prefabData = m_tiles[i].prefabData;
-                                    }
-                                }
-                                m_tiles = tiles;
-                            }
-                        }
-                    }
-                }
+                return m_tiles[tileId];
             }
+            return null;
         }
-#endif
 
         public void AddTileView(string name, TileSelection tileSelection, int idx = -1)
         {
@@ -513,10 +448,8 @@ namespace CreativeSpore.SuperTilemapEditor
         Dictionary<int, TilesetBrush> m_brushCache = new Dictionary<int, TilesetBrush>();
         public TilesetBrush FindBrush(int brushId)
         {
-            if (brushId == Tileset.k_BrushId_Empty)
-            {
-                return null;
-            }
+            if (brushId <= 0) return null;
+
             TilesetBrush tileBrush = null;
             if (!m_brushCache.TryGetValue(brushId, out tileBrush))
             {
@@ -572,6 +505,85 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
             }
         }
+
+#if UNITY_EDITOR
+        public void UpdateTilesetConfigFromAtlasImportSettings()
+        {
+            if (AtlasTexture != null)
+            {
+                string assetPath = UnityEditor.AssetDatabase.GetAssetPath(AtlasTexture);
+                if (!string.IsNullOrEmpty(assetPath))
+                {
+                    UnityEditor.TextureImporter textureImporter = UnityEditor.AssetImporter.GetAtPath(assetPath) as UnityEditor.TextureImporter;
+                    if (textureImporter != null)
+                    {
+                        m_pixelsPerUnit = textureImporter.spritePixelsPerUnit;
+                        if (textureImporter.textureType == UnityEditor.TextureImporterType.Sprite)
+                        {
+                            if (textureImporter.spriteImportMode == UnityEditor.SpriteImportMode.Multiple)
+                            {
+                                List<Tile> tiles = new List<Tile>();
+                                if (textureImporter.spritesheet.Length >= 2)
+                                {
+                                    UnityEditor.SpriteMetaData spr0 = textureImporter.spritesheet[0];
+                                    UnityEditor.SpriteMetaData spr1 = textureImporter.spritesheet[1];
+                                    TilePxSize = textureImporter.spritesheet[0].rect.size;
+                                    SliceOffset = spr0.rect.position; SliceOffset.y = AtlasTexture.height - spr0.rect.y - spr0.rect.height;
+                                    SlicePadding.x = spr1.rect.x - spr0.rect.xMax;
+                                }
+                                //+++Ask before importing tiles
+                                if (textureImporter.spritesheet.Length >= 2 && m_tiles.Count > 0)
+                                {
+                                    if (!UnityEditor.EditorUtility.DisplayDialog("Import Sprite Sheet?", "This texture atlas contain sliced sprites. Do you want to overwrite current tiles with these ones?", "Yes", "No"))
+                                    {
+                                        return;
+                                    }
+                                }
+                                //---
+                                m_tilesetHeight = 0;
+                                foreach (UnityEditor.SpriteMetaData spriteData in textureImporter.spritesheet)
+                                {
+                                    Rect rUV = new Rect(Vector2.Scale(spriteData.rect.position, AtlasTexture.texelSize), Vector2.Scale(spriteData.rect.size, AtlasTexture.texelSize));
+                                    tiles.Add(new Tile() { uv = rUV });
+                                    if (tiles.Count >= 2)
+                                    {
+                                        if (tiles[tiles.Count - 2].uv.y != tiles[tiles.Count - 1].uv.y)
+                                        {
+                                            if (m_tilesetHeight == 1)
+                                            {
+                                                m_tilesetWidth = tiles.Count - 1;
+                                                SlicePadding.y = textureImporter.spritesheet[tiles.Count - 2].rect.y - textureImporter.spritesheet[tiles.Count - 1].rect.yMax;
+                                            }
+                                            ++m_tilesetHeight;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ++m_tilesetHeight;
+                                    }
+                                }
+                                TileRowLength = m_tilesetWidth;
+                                //Copy data from previous tiles
+#if UNITY_EDITOR
+                                if (m_tiles != null && m_tiles.Count > 0 && UnityEditor.EditorUtility.DisplayDialog("Keep previous tile properties?", "Keeping previous tile properties will copy the collider and paramters of previous tiles", "Yes", "No"))
+#endif
+                                {
+                                    for (int i = 0; i < m_tiles.Count && i < tiles.Count; ++i)
+                                    {
+                                        tiles[i].collData = m_tiles[i].collData;
+                                        tiles[i].paramContainer = m_tiles[i].paramContainer;
+                                        tiles[i].prefabData = m_tiles[i].prefabData;
+                                    }
+                                }
+                                m_tiles = tiles;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+#endif
+
         #endregion
     }
 }

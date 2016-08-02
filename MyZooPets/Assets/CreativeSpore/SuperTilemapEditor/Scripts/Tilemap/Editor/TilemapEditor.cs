@@ -28,6 +28,7 @@ namespace CreativeSpore.SuperTilemapEditor
         }
     }
 
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(Tilemap))]
     public class TilemapEditor : Editor
     {
@@ -59,24 +60,29 @@ namespace CreativeSpore.SuperTilemapEditor
         }
 
         private Tilemap m_tilemap;
+        private Tileset m_tilemapTileset; //NOTE: needed to Unregister tileset events. When tilemap is destroyed, m_tilemap is nulled during OnDisable
         //private Editor m_matEditor;
         private TilesetControl m_tilesetCtrl;
 
         void OnEnable()
         {
             m_tilemap = (Tilemap)target;
-            if (m_tilemap)
+            m_tilemapTileset = m_tilemap.Tileset;
+            RegisterTilesetEvents(m_tilemapTileset);
+            //fix missing material on prefabs tilemaps (when pressing play for example)
+            if(!string.IsNullOrEmpty(AssetDatabase.GetAssetPath(m_tilemap.gameObject)))
             {
-                RegisterTilesetEvents(m_tilemap.Tileset);
+                m_tilemap.Refresh(true, false, false, false);
+            }
+            if (m_tilemap.ParentTilemapGroup)
+            {
+                m_tilemap.ParentTilemapGroup.SelectedTilemap = m_tilemap;
             }
         }
 
         void OnDisable()
         {
-            if (m_tilemap)
-            {
-                UnregisterTilesetEvents(m_tilemap.Tileset);
-            }
+            UnregisterTilesetEvents(m_tilemapTileset);
             BrushBehaviour.SetVisible(false);
         }
 
@@ -199,6 +205,7 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 UnregisterTilesetEvents(prevTileset);
                 RegisterTilesetEvents(m_tilemap.Tileset);
+                m_tilemapTileset = m_tilemap.Tileset;
             }
 
             if (m_tilemap.Tileset == null)
@@ -207,10 +214,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
+            string[] editModeNames = System.Enum.GetNames(typeof(eEditMode));
+            s_editMode = (eEditMode)GUILayout.Toolbar((int)s_editMode, editModeNames);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             {
-                string[] editModeNames = System.Enum.GetNames(typeof(eEditMode));
-                s_editMode = (eEditMode)GUILayout.Toolbar((int)s_editMode, editModeNames);
                 if (s_editMode == eEditMode.Renderer)
                 {
                     EditorGUI.BeginChangeCheck();
@@ -241,24 +248,16 @@ namespace CreativeSpore.SuperTilemapEditor
                     */
                     //---
 
-                    m_tilemap.Material.color = EditorGUILayout.ColorField("Color", m_tilemap.Material.color);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("m_tintColor"));
 
                     //Pixel Snap
                     if (m_tilemap.Material.HasProperty("PixelSnap"))
                     {
                         EditorGUI.BeginChangeCheck();
-                        bool isPixelSnapOn = EditorGUILayout.Toggle("Pixel Snap", m_tilemap.Material.IsKeywordEnabled("PIXELSNAP_ON"));
+                        bool isPixelSnapOn = EditorGUILayout.Toggle("Pixel Snap", m_tilemap.PixelSnap);
                         if (EditorGUI.EndChangeCheck())
                         {
-                            m_tilemap.Material.SetFloat("PixelSnap", isPixelSnapOn ? 1f : 0f);
-                            if (isPixelSnapOn)
-                            {
-                                m_tilemap.Material.EnableKeyword("PIXELSNAP_ON");
-                            }
-                            else
-                            {
-                                m_tilemap.Material.DisableKeyword("PIXELSNAP_ON");
-                            }
+                            m_tilemap.PixelSnap = isPixelSnapOn;
                         }
                     }
 
@@ -299,7 +298,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("m_cellSize"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ShowGrid"), new GUIContent("Show Grid", "Show the tilemap grid."));
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("ShowGrid"), new GUIContent("Show Grid", "Show the tilemap grid."));                    
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.Space();
 
@@ -307,31 +306,33 @@ namespace CreativeSpore.SuperTilemapEditor
 
                     //+++ Display Map Bounds
                     EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                    EditorGUILayout.LabelField("Map Bounds (in tiles):", EditorStyles.boldLabel);
-                    m_toggleMapBoundsEdit = EditorUtils.DoToggleIconButton("Edit Map Bounds", m_toggleMapBoundsEdit, EditorGUIUtility.IconContent("EditCollider"));
-
-                    float savedLabelWidth = EditorGUIUtility.labelWidth;
-                    EditorGUIUtility.labelWidth = 80;
-                    EditorGUI.indentLevel += 2;
-
-                    EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("m_minGridX"), new GUIContent("Left"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("m_minGridY"), new GUIContent("Bottom"));
-                    EditorGUILayout.EndVertical();
-
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("m_maxGridX"), new GUIContent("Right"));
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("m_maxGridY"), new GUIContent("Top"));
-                    EditorGUILayout.EndVertical();
-                    if (EditorGUI.EndChangeCheck())
                     {
-                        serializedObject.ApplyModifiedProperties();
-                        m_tilemap.RecalculateMapBounds();
-                    }
+                        EditorGUILayout.LabelField("Map Bounds (in tiles):", EditorStyles.boldLabel);
+                        m_toggleMapBoundsEdit = EditorUtils.DoToggleIconButton("Edit Map Bounds", m_toggleMapBoundsEdit, EditorGUIUtility.IconContent("EditCollider"));
 
-                    EditorGUI.indentLevel -= 2;
-                    EditorGUIUtility.labelWidth = savedLabelWidth;
+                        float savedLabelWidth = EditorGUIUtility.labelWidth;
+                        EditorGUIUtility.labelWidth = 80;
+                        EditorGUI.indentLevel += 2;
+
+                        EditorGUI.BeginChangeCheck();
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_minGridX"), new GUIContent("Left"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_minGridY"), new GUIContent("Bottom"));
+                        EditorGUILayout.EndVertical();
+
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_maxGridX"), new GUIContent("Right"));
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_maxGridY"), new GUIContent("Top"));
+                        EditorGUILayout.EndVertical();
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            serializedObject.ApplyModifiedProperties();
+                            m_tilemap.RecalculateMapBounds();
+                        }
+
+                        EditorGUI.indentLevel -= 2;
+                        EditorGUIUtility.labelWidth = savedLabelWidth;
+                    }
                     EditorGUILayout.EndVertical();
                     //---
 
@@ -345,6 +346,21 @@ namespace CreativeSpore.SuperTilemapEditor
                     {
                         m_tilemap.ShrinkMapBoundsToVisibleArea();
                     }
+
+                    EditorGUILayout.Space();
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                    {
+                        EditorGUILayout.LabelField("Advanced Options", EditorStyles.boldLabel);
+                        EditorGUI.BeginChangeCheck();
+                        bool isChunksVisible = IsTilemapChunksVisible();
+                        isChunksVisible = EditorGUILayout.Toggle(new GUIContent("Show Tile Chunks", "Show tilemap chunk objects for debugging or other purposes. Hiding will be refreshed after collapsing the tilemap."), isChunksVisible);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            SetTilemapChunkHideFlag(HideFlags.HideInHierarchy, !isChunksVisible);
+                        }
+                        EditorGUILayout.PropertyField(serializedObject.FindProperty("m_enableUndoWhilePainting"), new GUIContent("Enable Undo", "Disable Undo when painting on big maps to improve performance."));
+                    }
+                    EditorGUILayout.EndVertical();
                 }
                 else if (s_editMode == eEditMode.Collider)
                 {
@@ -375,9 +391,19 @@ namespace CreativeSpore.SuperTilemapEditor
                         else if (m_tilemap.ColliderType == eColliderType._2D)
                         {
                             EditorGUILayout.PropertyField(serializedObject.FindProperty("Collider2DType"));
+                            EditorGUILayout.PropertyField(serializedObject.FindProperty("ShowColliderNormals"));
                         }
 
                         EditorGUILayout.PropertyField(serializedObject.FindProperty("m_isTrigger"));
+
+                        if(m_tilemap.IsTrigger)
+                        {
+                            EditorGUILayout.HelpBox("Activating IsTrigger could generate wrong collider lines if not used properly. Use Show Tilechunks in Map section to display the real collider lines.", MessageType.Warning);
+                        }
+                        else if(m_tilemap.ColliderType == eColliderType._2D && m_tilemap.Collider2DType == e2DColliderType.PolygonCollider2D)
+                        {
+                            EditorGUILayout.HelpBox("Using Polygon colliders could generate wrong collider lines if not used properly. Use Show Tilechunks in Map section to display the real collider lines.", MessageType.Warning);
+                        }
                     }
                     if (EditorGUI.EndChangeCheck())
                     {
@@ -417,6 +443,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         MouseDblClick m_dblClick = new MouseDblClick();
         bool m_brushVisible = false;
+        List<Vector2> m_fillPreview = new List<Vector2>(500);
         public void OnSceneGUI()
         {
             m_dblClick.Update();
@@ -430,6 +457,18 @@ namespace CreativeSpore.SuperTilemapEditor
             if(s_editMode == eEditMode.Paint)
             {
                 DoPaintInspector();
+
+                if(GetBrushMode() == eBrushMode.Fill && Event.current.type == EventType.Repaint)
+                {
+                    Color fillPreviewColor = new Color(1f, 1f, 1f, 0.2f);
+                    Color emptyColor = new Color(0f, 0f, 0f, 0f);
+                    Rect rTile = new Rect(Vector2.zero, m_tilemap.CellSize);
+                    foreach (Vector2 tilePos in m_fillPreview)
+                    {
+                        rTile.position = tilePos;
+                        HandlesEx.DrawRectWithOutline(m_tilemap.transform, rTile, fillPreviewColor, emptyColor);
+                    }
+                }
             }
             else if(s_editMode == eEditMode.Map)
             {
@@ -544,6 +583,13 @@ namespace CreativeSpore.SuperTilemapEditor
                                 m_mouseGridY = BrushUtil.GetGridY(m_localPaintPos, tilemap.CellSize);
                             }
                             bool isMouseGridChanged = prevMouseGridX != m_mouseGridX || prevMouseGridY != m_mouseGridY;
+                            //Update Fill Preview
+                            if(GetBrushMode() == eBrushMode.Fill && isMouseGridChanged)
+                            {
+                                m_fillPreview.Clear();
+                                TilemapDrawingUtils.FloodFillPreview(tilemap, brush.Offset + m_localPaintPos, brush.BrushTilemap.GetTileData(0, 0), m_fillPreview);
+                            }
+
                             if (
                                 (EditorWindow.focusedWindow == EditorWindow.mouseOverWindow) && // fix painting tiles when closing another window popup over the SceneView like GameObject Selection window
                                 (e.type == EventType.MouseDown || e.type == EventType.MouseDrag && isMouseGridChanged)
@@ -599,17 +645,26 @@ namespace CreativeSpore.SuperTilemapEditor
                                     if (selectionSize.x <= m_tilemap.CellSize.x && selectionSize.y <= m_tilemap.CellSize.y)
                                     {
                                         uint tileData = tilemap.GetTileData(m_localPaintPos);
-                                        int brushId = Tileset.GetBrushIdFromTileData(tileData);
-                                        int tileId = Tileset.GetTileIdFromTileData(tileData);
-                                        
-                                        // Select the copied tile in the tileset, alternating between the brush and the tile drawn by the brush
-                                        if (brushId > 0 && tileId == tilemap.Tileset.SelectedTileId)
+                                        if (tileData == Tileset.k_TileData_Empty)
                                         {
-                                            tilemap.Tileset.SelectedBrushId = brushId;
-                                        }                                        
+                                            tilemap.Tileset.SelectedTileId = Tileset.k_TileId_Empty;
+                                            brush.BrushTilemap.SetTileData(0, 0, Tileset.k_TileData_Empty);
+                                        }
                                         else
                                         {
-                                            tilemap.Tileset.SelectedTileId = tileId;
+                                            int brushId = Tileset.GetBrushIdFromTileData(tileData);
+                                            int tileId = Tileset.GetTileIdFromTileData(tileData);
+
+                                            // Select the copied tile in the tileset, alternating between the brush and the tile drawn by the brush
+                                            if (brushId > 0 && brushId != tilemap.Tileset.SelectedBrushId)
+                                            {
+                                                tilemap.Tileset.SelectedBrushId = brushId;
+                                            }
+                                            else
+                                            {
+                                                tilemap.Tileset.SelectedTileId = tileId;
+                                                brush.BrushTilemap.SetTileData(0, 0, tileData & ~Tileset.k_TileDataMask_BrushId); // keep tile flags
+                                            }
                                         }
 
                                         // Cut tile if key shift is pressed
@@ -619,10 +674,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                             int startGridY = BrushUtil.GetGridY(startPos, m_tilemap.CellSize);
                                             brush.CutRect(tilemap, startGridX, startGridY, startGridX, startGridY);
                                         }
-                                        else
-                                        {
-                                            brush.BrushTilemap.SetTileData(0, 0, tileData);
-                                        }
+
                                         brush.BrushTilemap.UpdateMesh();
                                         brush.Offset = Vector2.zero;
                                     }
@@ -665,7 +717,7 @@ namespace CreativeSpore.SuperTilemapEditor
                                         fillColor = new Color(0, 0, 0, 0);
                                         break;
                                     case eBrushMode.Erase:
-                                        fillColor = new Color(1f, 0f, 0f, 0.2f);
+                                        fillColor = new Color(1f, 0f, 0f, 0.1f);
                                         break;
                                     case eBrushMode.Fill:
                                         fillColor = new Color(1f, 1f, 0f, 0.2f);
@@ -694,7 +746,6 @@ namespace CreativeSpore.SuperTilemapEditor
 
             SceneView.RepaintAll();
             GUIUtility.hotControl = saveControl;
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void DoMapInspector()
@@ -728,6 +779,8 @@ namespace CreativeSpore.SuperTilemapEditor
             s_brushFlipH = s_brushFlipV = s_brushRot90 = false;
         }
 
+        #region Toolbar Methods
+
         static Color s_toolbarBoxBgColor = new Color(0f, 0f, .4f, 0.4f);
         static Color s_toolbarBoxOutlineColor = new Color(.25f, .25f, 1f, 0.70f);
         bool DoToolBar()
@@ -738,7 +791,7 @@ namespace CreativeSpore.SuperTilemapEditor
             GUIContent selectedTileOrBrushId = null;
             if (tilemap.Tileset.SelectedTileId != Tileset.k_TileId_Empty)
                 selectedTileOrBrushId = new GUIContent("<b> Selected Tile Id: " + tilemap.Tileset.SelectedTileId.ToString() + "</b>");
-            else if (tilemap.Tileset.SelectedBrushId != Tileset.k_BrushId_Empty)
+            else if (tilemap.Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
                 selectedTileOrBrushId = new GUIContent("<b> Selected Brush Id: " + tilemap.Tileset.SelectedBrushId.ToString() + "</b>");
             else
                 selectedTileOrBrushId = new GUIContent("<b> Empty tile selected</b>");
@@ -894,6 +947,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 " - <b>Fill:</b>\t Double Click\n\n" +
                 " - <b>Copy</b> tiles by dragging and holding right mouse button\n\n" +
                 " - <b>Cut</b> copy while holding Shift key\n\n" +
+                " - <b>Select</b> a tile or brush by right clicking over the tile.\n    If it's a brush, the brush will be selected first and second time the\n    tile painted by the brush will be selected cycling between them\n\n" +
                 " - <b>Rotating and flipping:</b>\n" +
                 "   * <b>Rotate</b> ±90º by using <b>comma ','</b> and <b>period '.'</b>\n" +
                 "   * <b>Vertical Flip</b> by pressing X\n" +
@@ -908,6 +962,27 @@ namespace CreativeSpore.SuperTilemapEditor
             GUILayout.Label(sHelp, Styles.Instance.toolbarBoxStyle);
             GUILayout.EndArea();
             Handles.EndGUI();
+        }
+
+        #endregion
+
+        bool IsTilemapChunksVisible()
+        {
+            TilemapChunk chunk = m_tilemap.GetComponentInChildren<TilemapChunk>();
+            return chunk && (chunk.gameObject.hideFlags & HideFlags.HideInHierarchy) == 0;
+        }
+
+        void SetTilemapChunkHideFlag(HideFlags flags, bool value)
+        {
+            TilemapChunk[] chunks = m_tilemap.GetComponentsInChildren<TilemapChunk>();
+            foreach (TilemapChunk chunk in chunks)
+            {
+                if (value)
+                    chunk.gameObject.hideFlags |= flags;
+                else
+                    chunk.gameObject.hideFlags &= ~flags;
+
+            }
         }
     }
 }

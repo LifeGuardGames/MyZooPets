@@ -1,3 +1,65 @@
+--- v1.3.6 ---
+- Added an unselected color multiplier in the tilemap group to be multiplied by the unselected tilemaps tint color to highligh the selected tilemap
+- Added preview of tiles to be filled when using the fill tool
+- Added an option to disable Undo/Redo while painting, to improve the painting performance
+- Added multiediting support in tilemap inspector
+- Improvements in tilemap material management, now using Material Property Block, reducing the memory allocated.
+- Improvements in access to the tilemap data, using a dictionary for tilechunks
+- TileObjectBehaviour sets also tilemap sorting order and sorting layer were it is created
+- If only a single empty tile is selected from a tilemap, the brush will erase when painting
+- Fixed empty contacts array when receiving a collision event from a tileChunk with a MeshCollider
+- Fixed error when calling UpdateMesh for a tilemap during a collision event
+- Fixed issues when dragging a tilemap into a tilemap group
+- Fixed creating assets in the current project view, not in the root folder
+- Fixed some issues when creating a prefab of a tilemap or tilemap group
+- Fixed an issue selecting a tilemap from a tilemap group with a children that is not a tilemap
+- Fixed selecting an empty tile sets the selected tile to empty
+- Fixed updating the tileObjects transform when refreshing the tilemap after changing the CellSize
+- Fixed memory leaks when importing tmx maps
+
+--- v1.3.5 ---
+- Added TMX import options
+- Flipping Horizontally and Vertically properly (not in the opposite way)
+- Painting brush now copy the tilemap material instead using always the Sprite\Defult
+- When creating a tilemap prefab, the tilemap material is now linked to the prefab
+- Fixed missing tilemap prefab material when pressing play, making the preview to be pink
+- Fixed creation of a tilemap prefab from brush selection when the scene was not saved in disk
+- Fixed unregister tileset events properly in TilemapEditor when the tilemap is destroyed (causing a BrushBehaviour exception)
+
+--- v1.3.4 ---
+- Added Show Collider Normals in Tilemap Collider section when using 2D colliders
+- Added two new menu options: Create Tilemap From Selection and Create Prefab From Selection
+- Improved the random tile brush to help in the creation
+- Fixed some cases where random brushes where not painting any tile
+- Fixed showing the bottom right part of the tileset when scrollbars are visible
+- Fixed null exception when setting tile collider in the tile properties window
+- Fixed selecting the right tileset when selecting a tilemap from the scene
+
+--- v1.3.3 ---
+- Added warning message when using Polygon collider or activating isTrigger in the tilemap collider section
+- Added Tile Prefab Setting multi editing to change the prefab setting for a selection of tiles at the same time
+- Added "Show Tile Chunks" to unhide tilemap chunk gameobjects for debugging purposes
+- Added GetTile to Tilemap.cs to return the tileset tile displayed in a tilemap position
+- Added message OnTilePrefabCreation to be sent to the gameobject created for tiles with a prefab attached
+- Added TileobjectBehaviour (when attached to a gameobject used as tile prefab, it will change the sprite renderer to display the tile that has instantiated the prefab)
+- Added collider normal display in tile collider properties, to display the side were the collider is blocking other colliders to pass through.
+- SetParam in ParameterContainer now creates the parameter if it doesn't exist instead of throwing a warning
+- Fixed collider issues when a tile collider vertex was overlapping another vertex by removing duplicated.
+- Fixed: apply atlas texture to a tilemap when it becomes a prefab and it's dragged into the scene for the first time
+- Fixed "Display Brushes List" in tile Palette Window with a scroll bar
+- Fixed: keep tile flags when copying a single tile from a tilemap
+
+--- v1.3.2 ---
+- Added RemoveRedundantVertices and SplitSegments to tilemapChunks (improving performance and fixing lighting issues)
+- Added probability weights to tiles in a random brush
+- Added Randomize Flags mask in random brush to randomize selected flags when painting tiles
+- Added Tileset selector in Tile Palette Window
+- Now, right clicking a tile in the tilemap will first select the brush if any, and second time the tile painted by the brush will be selected.
+- Normal tiles, not painted with a brush, are now considered to be in group Default or group 0 in relation to brush autotiling mode "Group"
+- Fixed some bugs using brush groups
+- Fixed creation/destruction of prefabs asigned to tiles when they are painted using a brush
+- Fixed memory leak issue in TilemapGroupEditor by properly destroying the tilemapEditor object
+
 --- v1.3.1 ---
 - Added Erase method in Tilemap.cs 
 - Added user friendly methods to Tilemap.cs to set tile data using parameters for tileId, brushId and tile flags 

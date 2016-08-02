@@ -7,8 +7,17 @@ namespace CreativeSpore.SuperTilemapEditor
     [System.Flags]
     public enum eAutotilingMode
     {
+        /// <summary>
+        /// Autotiling with brushes of the same type
+        /// </summary>
         Self = 1,
+        /// <summary>
+        /// Autotiling  with tiles of different brush or any tile not empty
+        /// </summary>
         Other = 1 << 1,
+        /// <summary>
+        /// Checks the Group Autotiling Mask to see if the relation between this brush and the neighbor brush is checked to do the autotiling
+        /// </summary>
         Group = 1 << 2,
     }
 
@@ -40,6 +49,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 if(brush)
                 {
                     return Tileset.GetGroupAutotiling(Group, brush.Group);
+                }
+                else if (otherBrushId == Tileset.k_BrushId_Default)
+                {
+                    return Tileset.GetGroupAutotiling(Group, 0); //with normal tiles, use default group (0)
                 }
             }
             return false;

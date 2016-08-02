@@ -13,11 +13,13 @@ using System.Collections.Generic;
 /// </summary>
 public class PartitionManager : Singleton<PartitionManager> {
 	public Transform partitionParent;
-
+	public List<Transform> petWanderPoints;
 	private Dictionary<int, Transform> partitionInteractableDictionary = new Dictionary<int, Transform>();
 	private List<ImmutableDataPartitionLocation> openMinipetLocationsList;
 	private bool isOpenLocationsInitalized = false;
 	private bool isMinigameRandomCallLocked = false;
+	public PanToMoveCamera cameraGO;
+	private int lastKnownWanderPoint;
 
 	public void Awake(){
 		// Populate the partition interactable parent dictionary, only for ones existing
@@ -220,6 +222,22 @@ public class PartitionManager : Singleton<PartitionManager> {
 		return new List<string>(partitionData.DecoCategoriesStore);
 	}
 
+	public Vector3 GetWanderPoint() {
+		int currentPartition = cameraGO.currentLocalPartition;
+		Vector3 wanderPoint;
+		int rand = UnityEngine.Random.Range(0,4);
+		while (rand == lastKnownWanderPoint) {
+			rand = UnityEngine.Random.Range(0, 4);
+			Debug.Log("hit" + rand);
+		}
+		lastKnownWanderPoint = rand;
+		wanderPoint = petWanderPoints[currentPartition].GetChild(rand).position;
+        return wanderPoint;
+	}
+	public int GetCurrentPartition() {
+		int currentPartition = cameraGO.currentLocalPartition;
+		return currentPartition;
+	}
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "base")){
 //			Debug.Log(GetBasePositionInBedroom());

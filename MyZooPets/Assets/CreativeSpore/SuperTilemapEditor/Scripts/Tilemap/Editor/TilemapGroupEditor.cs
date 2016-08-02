@@ -19,13 +19,20 @@ namespace CreativeSpore.SuperTilemapEditor
 
         private ReorderableList m_tilemapReordList;
         private TilemapEditor m_tilemapEditor;
+        private TilemapGroup m_target;
 
         private void OnEnable()
         {
-            var targetObj = target as TilemapGroup;
-            targetObj.Refresh();
+            m_target = target as TilemapGroup;
+            m_target.Refresh();
             m_tilemapReordList = CreateTilemapReorderableList();
             m_tilemapReordList.index = serializedObject.FindProperty("m_selectedIndex").intValue;
+        }
+
+        private void OnDisable()
+        {
+            if (m_tilemapEditor)
+                TilemapEditor.DestroyImmediate(m_tilemapEditor);
         }
 
         public override void OnInspectorGUI()
@@ -42,8 +49,8 @@ namespace CreativeSpore.SuperTilemapEditor
             serializedObject.FindProperty("m_selectedIndex").intValue = m_tilemapReordList.index = Mathf.Clamp(m_tilemapReordList.index, -1, targetObj.Tilemaps.Count - 1);
 
             // Draw Tilemap List
-            m_reordIdx = 0;
             m_tilemapReordList.DoLayoutList();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("m_unselectedColorMultiplier"));
             EditorGUILayout.Space();
 
             // Draw Tilemap Inspector
@@ -79,18 +86,20 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 if (targetObj.SelectedTilemap)
                 {
+                    if (m_tilemapEditor)
+                        TilemapEditor.DestroyImmediate(m_tilemapEditor);
                     m_tilemapEditor = TilemapEditor.CreateEditor(targetObj.SelectedTilemap) as TilemapEditor;
                 }
                 else
                 {
+                    if (m_tilemapEditor)
+                        TilemapEditor.DestroyImmediate(m_tilemapEditor);
                     m_tilemapEditor = null;
                 }
             }
             return m_tilemapEditor;
         }
 
-        private Dictionary<int, Rect> m_reordListRectsDic = new Dictionary<int, Rect>();
-        private int m_reordIdx;
         private ReorderableList CreateTilemapReorderableList()
         {
             ReorderableList reordList = new ReorderableList(serializedObject, serializedObject.FindProperty("m_tilemaps"), true, true, true, true);
@@ -101,40 +110,34 @@ namespace CreativeSpore.SuperTilemapEditor
                 Texture2D btnTexture = reordList.elementHeight == 0f ? EditorGUIUtility.FindTexture("winbtn_win_max_h") : EditorGUIUtility.FindTexture("winbtn_win_min_h");
                 if (GUI.Button(new Rect(rect.width - rect.height, rect.y, rect.height, rect.height), btnTexture, EditorStyles.label))
                 {
-                    reordList.elementHeight = reordList.elementHeight == 0f ? EditorGUIUtility.singleLineHeight : 0f;
+                    reordList.elementHeight = reordList.elementHeight == 0f ? 21f : 0f;
                     reordList.draggable = reordList.elementHeight > 0f;
                 }
             };
             reordList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                var element = reordList.serializedProperty.GetArrayElementAtIndex(index);
-                
-                if (Event.current.type == EventType.Repaint)
-                {
-                    m_reordListRectsDic[m_reordIdx] = rect;
-                }
-                else if (Event.current.type == EventType.Layout)
-                {
-                    m_reordListRectsDic.TryGetValue(m_reordIdx, out rect);
-                }
-                m_reordIdx++;
-
+                if (reordList.elementHeight == 0)
+                    return;
+                var element = reordList.serializedProperty.GetArrayElementAtIndex(index);               
                 rect.y += 2;
-
                 Tilemap tilemap = element.objectReferenceValue as Tilemap;
                 SerializedObject tilemapSerialized = new SerializedObject(tilemap);
                 SerializedObject tilemapObjSerialized = new SerializedObject(tilemapSerialized.FindProperty("m_GameObject").objectReferenceValue);
-                
-                GUILayout.BeginArea(rect);
-                EditorGUILayout.BeginHorizontal();
-                tilemap.IsVisible = EditorGUILayout.Toggle(tilemap.IsVisible, GUILayout.Width(16));
-                EditorGUILayout.PropertyField(tilemapObjSerialized.FindProperty("m_Name"), GUIContent.none);
+
+                Rect rToggle = new Rect(rect.x, rect.y, 16f, EditorGUIUtility.singleLineHeight);
+                Rect rName = new Rect(rect.x + 20f, rect.y, rect.width - 130f - 20f, EditorGUIUtility.singleLineHeight);
+                Rect rColliders = new Rect(rect.x + rect.width - 125f, rect.y, 125f, EditorGUIUtility.singleLineHeight);
+                Rect rSortingLayer = new Rect(rect.x + rect.width - 125f, rect.y, 80f, EditorGUIUtility.singleLineHeight);
+                Rect rSortingOrder = new Rect(rect.x + rect.width - 40f, rect.y, 40f, EditorGUIUtility.singleLineHeight);
+
+                tilemap.IsVisible = EditorGUI.Toggle(rToggle, GUIContent.none, tilemap.IsVisible);
+                EditorGUI.PropertyField(rName, tilemapObjSerialized.FindProperty("m_Name"), GUIContent.none);
                 if (TilemapEditor.EditMode == TilemapEditor.eEditMode.Collider)
                 {
                     SerializedProperty colliderTypeProperty = tilemapSerialized.FindProperty("ColliderType");
                     string[] colliderTypeNames = new List<string>(System.Enum.GetNames(typeof(eColliderType)).Select(x => x.Replace('_', ' '))).ToArray();
                     EditorGUI.BeginChangeCheck();
-                    colliderTypeProperty.intValue = GUILayout.Toolbar(colliderTypeProperty.intValue, colliderTypeNames, GUILayout.MaxHeight(0.9f * EditorGUIUtility.singleLineHeight));
+                    colliderTypeProperty.intValue = GUI.Toolbar(rColliders, colliderTypeProperty.intValue, colliderTypeNames);
                     if (EditorGUI.EndChangeCheck())
                     {
                         tilemapSerialized.ApplyModifiedProperties();
@@ -145,11 +148,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     // Sorting Layer and Order in layer            
                     EditorGUI.BeginChangeCheck();
-                    EditorGUIUtility.labelWidth = 1;
-                    EditorGUILayout.PropertyField(tilemapSerialized.FindProperty("m_sortingLayer"), new GUIContent(" "));
-                    EditorGUIUtility.labelWidth = 40;
-                    EditorGUILayout.PropertyField(tilemapSerialized.FindProperty("m_orderInLayer"), new GUIContent("Order"), GUILayout.MaxWidth(90));
-                    EditorGUIUtility.labelWidth = 0;
+                    EditorGUI.PropertyField(rSortingLayer, tilemapSerialized.FindProperty("m_sortingLayer"), GUIContent.none);
+                    EditorGUI.PropertyField(rSortingOrder, tilemapSerialized.FindProperty("m_orderInLayer"), GUIContent.none);
                     tilemapSerialized.FindProperty("m_orderInLayer").intValue = (tilemapSerialized.FindProperty("m_orderInLayer").intValue << 16) >> 16; // convert from int32 to int16 keeping sign
                     if (EditorGUI.EndChangeCheck())
                     {
@@ -159,8 +159,6 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                     //--- 
                 }
-                EditorGUILayout.EndHorizontal();
-                GUILayout.EndArea();
 
                 if(GUI.changed)
                 {
@@ -200,7 +198,6 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     UnityEditorInternal.ComponentUtility.CopyComponent(copiedTilemap);
                     UnityEditorInternal.ComponentUtility.PasteComponentValues(newTilemap);
-                    obj.SendMessage("_DoDuplicate");
                     obj.name = GameObjectUtility.GetUniqueNameForSibling(obj.transform.parent, copiedTilemap.name);
                 }
             };

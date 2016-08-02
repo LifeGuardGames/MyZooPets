@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace CreativeSpore.SuperTilemapEditor
 {
-
+    //TODO: use this instead CreateAsset method in the Editor class for all assets
+    //[CreateAssetMenu(fileName = "New A2X2Brush", menuName = "SuperTilemapEditor/Brush/A2X2Brush")]
     public class A2X2Brush : TilesetBrush
     {
         // '╔', '╗' | 2, 3,

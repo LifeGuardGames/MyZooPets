@@ -91,6 +91,11 @@ namespace CreativeSpore.SuperTilemapEditor
                     EditorGUILayout.EndVertical();
                 }
                 EditorGUILayout.Separator();
+                if (GUILayout.Button("Import TMX into the Scene"))
+                {
+                    CreativeSpore.TiledImporter.TmxImporter.ImportTmxIntoTheScene(tileset);
+                }
+                EditorGUILayout.Separator();
                 string[] modeNames = System.Enum.GetNames(typeof(eMode));
                 s_mode = (eMode)GUILayout.Toolbar((int)s_mode, modeNames);
                 switch(s_mode)
@@ -107,6 +112,7 @@ namespace CreativeSpore.SuperTilemapEditor
                             m_groupsList.DoLayoutList();
                         }
                         GroupMatrixGUI.DoGUI("Group Autotiling Mask", tileset.BrushGroupNames, ref s_brushAutotilingMaskFoldout, ref s_brushGroupMatrixScrollPos, GetValue, SetValue);
+                        EditorGUILayout.HelpBox("Check the group that should autotile between them when Autotiling Mode Group is enabled in a brush", MessageType.Info);
                         break;
                 }
             }
@@ -225,12 +231,12 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                 };
                 if (tileset.TileSelection != null)
-                    menu.AddItem(new GUIContent("Add Tile Selection to TileView"), false, addTileSelectionFunc);
+                    menu.AddItem(new GUIContent("Add Tile Selection"), false, addTileSelectionFunc);
                 else
                     menu.AddDisabledItem(new GUIContent("Add Tile Selection to TileView"));
                 
                 if (BrushBehaviour.GetBrushTileset() == tileset && BrushBehaviour.CreateTileSelection() != null)
-                    menu.AddItem(new GUIContent("Add Brush Selection to TileView"), false, addBrushSelectionFunc);
+                    menu.AddItem(new GUIContent("Add Brush Selection"), false, addBrushSelectionFunc);
                                 
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("Remove All TileViews"), false, removeAllTileViewsFunc);
@@ -312,8 +318,8 @@ namespace CreativeSpore.SuperTilemapEditor
             int tileId = (int)(tileData & Tileset.k_TileDataMask_TileId);
             if (tileId != Tileset.k_TileId_Empty)
             {
-                if ((tileData & Tileset.k_TileFlag_FlipH) != 0) GUIUtility.ScaleAroundPivot(new Vector2(1f, -1f), dstRect.center);
-                if ((tileData & Tileset.k_TileFlag_FlipV) != 0) GUIUtility.ScaleAroundPivot(new Vector2(-1f, 1f), dstRect.center);
+                if ((tileData & Tileset.k_TileFlag_FlipV) != 0) GUIUtility.ScaleAroundPivot(new Vector2(1f, -1f), dstRect.center);
+                if ((tileData & Tileset.k_TileFlag_FlipH) != 0) GUIUtility.ScaleAroundPivot(new Vector2(-1f, 1f), dstRect.center);
                 if ((tileData & Tileset.k_TileFlag_Rot90) != 0) GUIUtility.RotateAroundPivot(90f, dstRect.center);
                 GUI.DrawTextureWithTexCoords(dstRect, tileset.AtlasTexture, customUV == default(Rect) ? tileset.Tiles[tileId].uv : customUV, true);
                 GUI.matrix = Matrix4x4.identity;
@@ -350,7 +356,7 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 scrollPos = GUILayout.BeginScrollView(scrollPos, new GUILayoutOption[]
 				{
-					GUILayout.MinHeight(120f),
+					GUILayout.MinHeight(250f),
 					GUILayout.MaxHeight((float)(100 + (num + 1) * 16))
 				});
                 Rect rect = GUILayoutUtility.GetRect((float)(16 * num + 100), 100f);

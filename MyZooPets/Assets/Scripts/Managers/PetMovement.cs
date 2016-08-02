@@ -42,6 +42,7 @@ public class PetMovement : Singleton<PetMovement>{
 	private float sickSpeed;
 	private float verySickSpeed;
 	public bool movingToAccessory;
+	public bool isWandering;
 
 	void Awake(){
 		GatingManager.OnDestroyedGate += MoveToCenter;
@@ -160,8 +161,19 @@ public class PetMovement : Singleton<PetMovement>{
 				StopMoving();
 			}
 		}
+		if(!isWandering) {
+			isWandering = true;
+			StartCoroutine("WanderAround");
+		}
 	}
-
+	IEnumerator WanderAround() {
+		yield return new WaitForSeconds(10.0f);
+		int rand = UnityEngine.Random.Range(0, 10);
+		if(rand > 5 && !GatingManager.Instance.HasActiveGate(PartitionManager.Instance.GetCurrentPartition())){
+			MovePet(PartitionManager.Instance.GetWanderPoint());
+		}
+		isWandering = false;
+    }
 	//---------------------------------------------------
 	// ProcessTap()
 	// This function is called by PetMovementListener when user taps on an area

@@ -156,11 +156,14 @@ namespace CreativeSpore.SuperTilemapEditor
             }
             //---
 
-            // keep values safe
+            string sTileIdLabel = Tileset.SelectedTileId != Tileset.k_TileId_Empty? " (id:" + Tileset.SelectedTileId + ")" : "";
+            EditorGUILayout.LabelField("Tile Palette" + sTileIdLabel, EditorStyles.boldLabel);
+
+            // keeps values safe
             m_tileViewRowLength = Mathf.Max(1, m_tileViewRowLength);
 
-            float tileAreaWidth = m_tileViewRowLength * (Tileset.VisualTileSize.x + visualTilePadding);
-            float tileAreaHeight = (Tileset.VisualTileSize.y + visualTilePadding) * (1 + (m_visibleTileCount - 1) / m_tileViewRowLength);
+            float tileAreaWidth = m_tileViewRowLength * (Tileset.VisualTileSize.x + visualTilePadding) + 4f;
+            float tileAreaHeight = (Tileset.VisualTileSize.y + visualTilePadding) * (1 + (m_visibleTileCount - 1) / m_tileViewRowLength) + 4f;
             m_tileViewRowLength = m_viewMode == eViewMode.TileView && tileView != null ? tileView.tileSelection.rowLength : Tileset.TileRowLength;
 
             m_tilesScrollPos = EditorGUILayout.BeginScrollView(m_tilesScrollPos, m_scrollStyle);
@@ -287,7 +290,8 @@ namespace CreativeSpore.SuperTilemapEditor
             }
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Brush Palette", EditorStyles.boldLabel);
+            string sBrushIdLabel = Tileset.SelectedBrushId > 0 ? " (id:" + Tileset.SelectedBrushId + ")" : "";
+            EditorGUILayout.LabelField("Brush Palette" + sBrushIdLabel, EditorStyles.boldLabel);
             m_displayBrushReordList = EditorUtils.DoToggleButton("Display List", m_displayBrushReordList);
             EditorGUILayout.EndHorizontal();
 
@@ -326,7 +330,7 @@ namespace CreativeSpore.SuperTilemapEditor
                             //Fix Missing Tileset reference
                             if(brushCont.BrushAsset.Tileset == null)
                             {
-                                Debug.LogWarning("Fixed missing tileset reference in brush " + brushCont.BrushAsset.name + "Id("+brushCont.Id+")");
+                                Debug.LogWarning("Fixed missing tileset reference in brush " + brushCont.BrushAsset.name + " Id("+brushCont.Id+")");
                                 brushCont.BrushAsset.Tileset = Tileset;
                             }
                             uint tileData = Tileset.k_TileData_Empty;

@@ -117,41 +117,37 @@ namespace CreativeSpore.SuperTilemapEditor
         public void SetParam(string name, bool value)
         {
             Parameter param = FindParam(name);
-            Debug.Assert(param != null, string.Format(k_warning_msg_paramNotFound, name));
             if (param != null)
-            {
                 param.SetValue(value);
-            }
+            else
+                AddParam<bool>(name, value);
         }
 
         public void SetParam(string name, int value)
         {
             Parameter param = FindParam(name);
-            Debug.Assert(param != null, string.Format(k_warning_msg_paramNotFound, name));
             if (param != null)
-            {
                 param.SetValue(value);
-            }
+            else
+                AddParam<int>(name, value);
         }
 
         public void SetParam(string name, float value)
         {
             Parameter param = FindParam(name);
-            Debug.Assert(param != null, string.Format(k_warning_msg_paramNotFound, name));
             if (param != null)
-            {
                 param.SetValue(value);
-            }
+            else
+                AddParam<float>(name, value);
         }
 
         public void SetParam(string name, UnityEngine.Object value)
         {
             Parameter param = FindParam(name);
-            Debug.Assert(param != null, string.Format(k_warning_msg_paramNotFound, name));
             if (param != null)
-            {
                 param.SetValue(value);
-            }
+            else
+                AddParam<UnityEngine.Object>(name, value);
         }
 
         public int GetIntParam(string name, int defaultValue = 0)

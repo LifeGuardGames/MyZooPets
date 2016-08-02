@@ -44,11 +44,45 @@ namespace CreativeSpore.SuperTilemapEditor
         }
         #endregion
 
-        public float Alpha
+#if UNITY_EDITOR
+        [MenuItem("SuperTilemapEditor/Brush/Create Tilemap From Selection %t")]
+        private static GameObject CreateTilemapFromBrush()
         {
-            get { return m_brushTilemap.Material.color.a; }
-            set { m_brushTilemap.Material.color = new Color(m_brushTilemap.Material.color.r, m_brushTilemap.Material.color.g, m_brushTilemap.Material.color.b, value); }
+            if(s_instance)
+            {
+                GameObject brushTilemap = new GameObject( GameObjectUtility.GetUniqueNameForSibling(null, "TilemapSelection"));
+                brushTilemap.transform.position = s_instance.transform.position;
+                brushTilemap.transform.rotation = s_instance.transform.rotation;
+                brushTilemap.transform.localScale = s_instance.transform.localScale;
+                Tilemap tilemapBhv = brushTilemap.AddComponent<Tilemap>();
+                tilemapBhv.Tileset = s_instance.BrushTilemap.Tileset;
+                tilemapBhv.Material = s_instance.BrushTilemap.Material;
+                s_instance.Paint(tilemapBhv, Vector2.zero);
+                return brushTilemap;
+            }
+            return null;
         }
+
+        [MenuItem("SuperTilemapEditor/Brush/Create Prefab From Selection %#t")]
+        private static void CreatePrefabFromBrush()
+        {
+            if (s_instance)
+            {
+                GameObject brushTilemap = CreateTilemapFromBrush();
+                string path = AssetDatabase.GetAssetOrScenePath(Selection.activeObject);
+                if(string.IsNullOrEmpty(path))
+                {
+                    path = "Assets/";
+                }
+                path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), brushTilemap.name + ".prefab").Replace(@"\", @"/");
+                path = AssetDatabase.GenerateUniqueAssetPath(path);       
+                GameObject prefab = PrefabUtility.CreatePrefab(path, brushTilemap);
+                Selection.activeObject = prefab;
+                EditorGUIUtility.PingObject(prefab);
+                GameObject.DestroyImmediate(brushTilemap);
+            }
+        }
+#endif
 
         public Tilemap BrushTilemap { get { return m_brushTilemap; } }
         public Vector2 Offset;
@@ -62,15 +96,18 @@ namespace CreativeSpore.SuperTilemapEditor
             if (brush.m_brushTilemap == null)
             {
                 brush.m_brushTilemap = brush.GetComponent<Tilemap>();
-                brush.m_brushTilemap.IsUndoEnabled = false;
-                brush.m_brushTilemap.ColliderType = eColliderType.None;
-                brush.Alpha = 0.7f;
             }
+            brush.IsUndoEnabled = tilemap.EnableUndoWhilePainting;
+            brush.m_brushTilemap.ColliderType = eColliderType.None;
             bool needsRefresh = brush.m_brushTilemap.Tileset != tilemap.Tileset;
             brush.m_brushTilemap.Tileset = tilemap.Tileset;
             brush.m_brushTilemap.CellSize = tilemap.CellSize;
             brush.m_brushTilemap.SortingLayerID = tilemap.SortingLayerID;
             brush.m_brushTilemap.OrderInLayer = tilemap.OrderInLayer;
+            brush.m_brushTilemap.Material = tilemap.Material;
+            brush.m_brushTilemap.TintColor = tilemap.TintColor * 0.7f;
+            
+
             //NOTE: dontsave brush give a lot of problems, like duplication of brushes FindObjectsOfType is not finding them
             //brush.m_brushTilemap.Material.hideFlags = HideFlags.DontSave; 
             //brush.gameObject.hideFlags = HideFlags.HideAndDontSave;
@@ -131,6 +168,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_brushTilemap.ClearMap();
             }
         }
+
+        #region Drawing Methods
 
         public void FlipH(bool changeFlags = true)
         {
@@ -247,7 +286,10 @@ namespace CreativeSpore.SuperTilemapEditor
                 for (int gridX = minGridX; gridX <= maxGridX; ++gridX, ++dstGx)
                 {
                     uint tileData = m_brushTilemap.GetTileData(gridX, gridY);
-                    if (tileData != Tileset.k_TileData_Empty)
+                    if (
+                        tileData != Tileset.k_TileData_Empty // don't copy empty tiles
+                        || m_brushTilemap.GridWidth == 1 && m_brushTilemap.GridHeight == 1 // unless the brush size is one
+                        )
                     {
                         tilemap.SetTileData(dstGx, dstGy, tileData);
                     }
@@ -284,5 +326,7 @@ namespace CreativeSpore.SuperTilemapEditor
             tilemap.UpdateMesh();
             tilemap.IsUndoEnabled = false;
         }
+
+        #endregion
     }
 }

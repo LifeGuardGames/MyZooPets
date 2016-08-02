@@ -336,7 +336,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 brush = (TilesetBrush)EditorGUILayout.ObjectField("Brush", brush, typeof(TilesetBrush), false);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    brushId = brush != null ? tileset.FindBrushId(brush.name) : Tileset.k_BrushId_Empty;
+                    brushId = brush != null ? tileset.FindBrushId(brush.name) : Tileset.k_BrushId_Default;
                     int tileId = brush != null ? (int)(brush.PreviewTileData() & Tileset.k_TileDataMask_TileId) : Tileset.GetTileIdFromTileData(tileData);
                     tileData &= Tileset.k_TileDataMask_Flags;
                     tileData |= (uint)(brushId << 16) & Tileset.k_TileDataMask_BrushId;

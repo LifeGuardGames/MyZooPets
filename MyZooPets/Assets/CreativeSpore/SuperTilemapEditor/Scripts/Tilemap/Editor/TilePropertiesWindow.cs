@@ -26,7 +26,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public static void Show(Tileset tileset = null)
         {
-            s_instance = (TilePropertiesWindow)EditorWindow.GetWindow(typeof(TilePropertiesWindow), false, "Tile Properties", true);
+            s_instance = (TilePropertiesWindow)EditorWindow.GetWindow(typeof(TilePropertiesWindow), false, "Tile Properties", true);            
             s_instance.m_tilePropertiesControl.Tileset = tileset;
             if (tileset == null)
             {
@@ -57,6 +57,7 @@ namespace CreativeSpore.SuperTilemapEditor
         void OnEnable()
         {
             s_instance = this;
+            minSize = new Vector2(200f, 200f);
         }
 
         void OnSelectionChange()
@@ -77,6 +78,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
+            Tilemap selectedTilemap = Selection.activeGameObject ? Selection.activeGameObject.GetComponent<Tilemap>() : null;
+            if (selectedTilemap && selectedTilemap.Tileset != m_tilePropertiesControl.Tileset)
+            {
+                Refresh();
+            }
             m_tilePropertiesControl.Display();
 
             Repaint();

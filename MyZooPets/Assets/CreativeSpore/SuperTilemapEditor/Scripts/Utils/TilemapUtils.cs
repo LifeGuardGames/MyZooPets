@@ -17,7 +17,7 @@ namespace CreativeSpore.SuperTilemapEditor
         /// <summary>
         /// This is true when tileData has the special value 0xFFFFFFFF, meaning the tile will not be drawn
         /// </summary>
-        public bool IsEmpty { get { return brushId == Tileset.k_BrushId_Empty && tileId == Tileset.k_TileId_Empty; } }
+        public bool IsEmpty { get { return brushId == Tileset.k_BrushId_Default && tileId == Tileset.k_TileId_Empty; } }
 
         public TileData()
         {

@@ -74,6 +74,7 @@ namespace CreativeSpore.SuperTilemapEditor
             Refresh();        
         }
 
+        private static Vector2 s_scrollPos;
         void OnGUI()
         {
             Event e = Event.current;
@@ -103,8 +104,15 @@ namespace CreativeSpore.SuperTilemapEditor
                 Repaint();
                 return;
             }
+            Tilemap selectedTilemap = Selection.activeGameObject? Selection.activeGameObject.GetComponent<Tilemap>() : null;
+            if (selectedTilemap && selectedTilemap.Tileset != m_tilesetControl.Tileset)
+            {
+                Refresh();
+            }
 
+            s_scrollPos = EditorGUILayout.BeginScrollView(s_scrollPos);
             m_tilesetControl.Display();
+            EditorGUILayout.EndScrollView();
 
             Repaint();
         }

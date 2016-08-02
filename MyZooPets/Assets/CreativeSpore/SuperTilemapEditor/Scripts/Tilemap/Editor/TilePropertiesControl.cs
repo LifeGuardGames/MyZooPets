@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEditor;
 using System;
 using UnityEditorInternal;
+using System.Linq;
 
 namespace CreativeSpore.SuperTilemapEditor
 {
@@ -62,7 +63,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 return;
             }
 
-            if (Tileset.SelectedTileId == Tileset.k_TileId_Empty && Tileset.TileSelection == null && Tileset.SelectedBrushId == Tileset.k_BrushId_Empty)
+            if (Tileset.SelectedTileId == Tileset.k_TileId_Empty && Tileset.TileSelection == null && Tileset.SelectedBrushId == Tileset.k_BrushId_Default)
             {
                 EditorGUILayout.HelpBox("There is no tile selected", MessageType.Info);
                 return;
@@ -89,26 +90,27 @@ namespace CreativeSpore.SuperTilemapEditor
         
         private void DisplayPrefab()
         {
-            TileSelection tileSelection = Tileset.TileSelection;
-            if (tileSelection != null)
-            {
-                EditorGUILayout.LabelField("Multi-tile editing not allowed", EditorStyles.boldLabel);
-            }
-            else if (Tileset.SelectedBrushId != Tileset.k_BrushId_Empty)
+            if (Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
             {
                 EditorGUILayout.LabelField("Brush tile editing not allowed", EditorStyles.boldLabel);
             }
             else
             {
+                bool isMultiselection = Tileset.TileSelection != null;
+                Tile selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
                 GUILayoutUtility.GetRect(1, 1, GUILayout.Width(Tileset.VisualTileSize.x), GUILayout.Height(Tileset.VisualTileSize.y));
-                Rect tileUV = Tileset.SelectedTile.uv;
+                Rect tileUV = selectedTile.uv;
                 GUI.color = Tileset.BackgroundColor;
                 GUI.DrawTextureWithTexCoords(GUILayoutUtility.GetLastRect(), EditorGUIUtility.whiteTexture, tileUV, true);
                 GUI.color = Color.white;
                 GUI.DrawTextureWithTexCoords(GUILayoutUtility.GetLastRect(), Tileset.AtlasTexture, tileUV, true);
 
+                if (isMultiselection)
+                {
+                    EditorGUILayout.LabelField("* Multi-selection Edition", EditorStyles.boldLabel);
+                }
                 EditorGUI.BeginChangeCheck();
-                TilePrefabData prefabData = Tileset.SelectedTile.prefabData;
+                TilePrefabData prefabData = selectedTile.prefabData;
                 float savedLabelWidth = EditorGUIUtility.labelWidth;
                 EditorGUIUtility.labelWidth = 80;
                 prefabData.offset = EditorGUILayout.Vector3Field("Offset", prefabData.offset);
@@ -116,7 +118,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 prefabData.prefab = (GameObject)EditorGUILayout.ObjectField("Prefab", prefabData.prefab, typeof(GameObject), false);
                 EditorGUIUtility.labelWidth = savedLabelWidth;
 
-                Texture2D prefabPreview = AssetPreview.GetAssetPreview(Tileset.SelectedTile.prefabData.prefab);
+                Texture2D prefabPreview = AssetPreview.GetAssetPreview(selectedTile.prefabData.prefab);
                 GUILayout.Box(prefabPreview, prefabPreview != null? (GUIStyle)"Box" : GUIStyle.none);
 
                 if( prefabData.prefab )
@@ -127,7 +129,18 @@ namespace CreativeSpore.SuperTilemapEditor
                 if(EditorGUI.EndChangeCheck())
                 {
                     Undo.RecordObject(Tileset, "Tile Prefab Data Changed");
-                    Tileset.SelectedTile.prefabData = prefabData;
+                    if (isMultiselection)
+                    {
+                        for (int i = 0; i < Tileset.TileSelection.selectionData.Count; ++i)
+                        {
+                            Tile tile = Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[i] & Tileset.k_TileDataMask_TileId)];
+                            tile.prefabData = prefabData;
+                        }
+                    }
+                    else
+                    {
+                        selectedTile.prefabData = prefabData;
+                    }
                     EditorUtility.SetDirty(Tileset);
                 }                
             }
@@ -148,7 +161,7 @@ namespace CreativeSpore.SuperTilemapEditor
             else
             {
                 UnityEngine.Object prevOwner = m_parameterListOwner;
-                if (Tileset.SelectedBrushId != Tileset.k_BrushId_Empty)
+                if (Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
                 {
                     m_parameterListOwner = Tileset.FindBrush(Tileset.SelectedBrushId);
                 }
@@ -207,12 +220,13 @@ namespace CreativeSpore.SuperTilemapEditor
         private bool m_isDragging = false;
         private TileColliderData m_copiedColliderData;
         private Color m_prevBgColor;
+        private Vector2[] m_savedVertexData;
         static private bool s_showHelp = false;
         private void DisplayCollider()
         {
             Event e = Event.current;
 
-            if (Tileset.SelectedBrushId != Tileset.k_BrushId_Empty)
+            if (Tileset.SelectedBrushId != Tileset.k_BrushId_Default)
             {
                 EditorGUILayout.LabelField("Brush tile editing not allowed", EditorStyles.boldLabel);
                 return;
@@ -220,10 +234,16 @@ namespace CreativeSpore.SuperTilemapEditor
 
             bool isMultiselection = Tileset.TileSelection != null;
             bool saveChanges = false;
+            Tile selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
 
             if (e.type == EventType.MouseDown)
             {
                 m_isDragging = true;
+                if (selectedTile.collData.vertices != null)
+                {
+                    m_savedVertexData = new Vector2[selectedTile.collData.vertices.Length];
+                    selectedTile.collData.vertices.CopyTo(m_savedVertexData, 0);
+                }
             }
             else if (e.type == EventType.MouseUp)
             {
@@ -239,7 +259,6 @@ namespace CreativeSpore.SuperTilemapEditor
                 Styles.Instance.colliderBgStyle.normal.background.Apply();
             }
 
-            Tile selectedTile = isMultiselection ? Tileset.Tiles[(int)(Tileset.TileSelection.selectionData[0] & Tileset.k_TileDataMask_TileId)] : Tileset.SelectedTile;
             float aspectRatio = Tileset.TilePxSize.x / Tileset.TilePxSize.y;
             float padding = 2; // pixel size of the border around the tile
             //Rect rCollArea = GUILayoutUtility.GetRect(1, 1, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(EditorGUIUtility.currentViewWidth / aspectRatio));
@@ -301,7 +320,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     Vector2 s0 = collVertices[i];
                     s0.x = m_rTile.x + m_rTile.width * s0.x; s0.y = m_rTile.yMax - m_rTile.height * s0.y;
-                    Vector2 s1 = collVertices[i == (collVertices.Length - 1) ? 0 : i + 1];
+                    Vector2 s1 = collVertices[(i + 1) % collVertices.Length];
                     s1.x = m_rTile.x + m_rTile.width * s1.x; s1.y = m_rTile.yMax - m_rTile.height * s1.y;
 
                     polyEdges[i] = s0;
@@ -309,6 +328,13 @@ namespace CreativeSpore.SuperTilemapEditor
 
                     Handles.color = Color.green;
                     Handles.DrawLine(s0, s1);
+                    //Draw normals
+                    {
+                        Handles.color = Color.white;
+                        Vector3 normPos = (s0 + s1) / 2f;
+                        Handles.DrawLine(normPos, normPos + Vector3.Cross(s1 - s0, Vector3.forward).normalized * m_rTile.yMin);
+                    }
+
                     Handles.color = savedHandleColor;
                 }
 
@@ -368,8 +394,8 @@ namespace CreativeSpore.SuperTilemapEditor
                         {
                             if (i == m_activeVertexIdx)
                             {
-                                Styles.Instance.vertexCoordStyle.fontSize = (int)(pixelSize);
-                                GUI.Label(new Rect(m_rTile.x, m_rTile.yMax, m_rTile.width, 3 * pixelSize), Vector2.Scale(collVertices[i], Tileset.TilePxSize).ToString(), Styles.Instance.vertexCoordStyle);
+                                Styles.Instance.vertexCoordStyle.fontSize = (int)(Mathf.Min( 10f, m_rTile.yMin / 2f));
+                                GUI.Label(new Rect(0, 0, m_rTile.width, m_rTile.yMin), Vector2.Scale(collVertices[i], Tileset.TilePxSize).ToString(), Styles.Instance.vertexCoordStyle);
                             }
                             GUI.color = m_activeVertexIdx == i ? (isRemovingVertexOn ? Color.red : Color.cyan) : new Color(0.7f, 0.7f, 0.7f, 0.8f);
                             Styles.Instance.collVertexHandleStyle.Draw(new Rect(s0.x - Styles.Instance.collVertexHandleStyle.normal.background.width / 2, s0.y - Styles.Instance.collVertexHandleStyle.normal.background.height / 2, 1, 1), i.ToString(), false, false, false, false);
@@ -417,10 +443,21 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (e.type == EventType.MouseUp)
                 {
                     saveChanges = true;
+                    //remove duplicated vertex
+                    selectedTile.collData.vertices = selectedTile.collData.vertices.Distinct().ToArray();
+                    if(selectedTile.collData.vertices.Length <= 2)
+                    {
+                        selectedTile.collData.vertices = m_savedVertexData;
+                    }
                 }
             }
 
             GUI.EndGroup();
+
+            if( GUILayout.Button("Reverse Normals") )
+            {
+                selectedTile.collData.vertices = selectedTile.collData.vertices.Reverse().ToArray();
+            }
 
             EditorGUILayout.Space();
 
@@ -428,7 +465,8 @@ namespace CreativeSpore.SuperTilemapEditor
                 //"Using Polygon collider:" + "\n" +
                 "  - Click and drag over a vertex to move it" + "\n" +
                 "  - Hold Shift + Click for adding a new vertex" + "\n" +
-                "  - Hold "+((Application.platform == RuntimePlatform.OSXEditor)? "Command" : "Ctrl")+" + Click for removing a vertex" + "\n" +
+                "  - Hold "+((Application.platform == RuntimePlatform.OSXEditor)? "Command" : "Ctrl")+" + Click for removing a vertex. (should be more than 3)" + "\n" +
+                "  - Check the normals for each edge. The normal is displayed in the collision side" + "\n" +
                 "";
             s_showHelp = EditorGUILayout.Foldout(s_showHelp, "Help");
             if (s_showHelp)

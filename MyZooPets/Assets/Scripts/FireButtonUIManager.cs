@@ -18,8 +18,8 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 	// Components of fireButton
 	public Image imageButton;
-	private ButtonFireButton fireButtonScript;
-	public ButtonFireButton FireButtonScript{
+	private FireButton fireButtonScript;
+	public FireButton FireButtonScript{
 		get{ return fireButtonScript; }
 	}
 
@@ -38,7 +38,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 
 	void Start () {
 		fireButtonCollider = fireButton.GetComponent<Collider>();
-		fireButtonScript = fireButton.GetComponent<ButtonFireButton>();
+		fireButtonScript = fireButton.GetComponent<FireButton>();
 
 		toggleParent.SetActive(false);
 		CameraManager.Instance.PanScript.OnPartitionChanging += OnPartitionChanging;
@@ -124,4 +124,6 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 			}
 		}
 	}
+
+
 }

@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class FireButtonAnimHelper : MonoBehaviour {
 	public Animation buttonAnimation;
-	public Animation EnableFireButtonAnimation;
+	public Animation enableFireButtonAnimation;
 	public ParticleSystem buttonChargeParticle;
 	public ParticleSystem buttonBurstParticle;
 
 	// Start the animation for the fire button enabling process, this will call the below 4 functions
 	public void StartFireButtonAnimation(){
-		EnableFireButtonAnimation.Play();
+		enableFireButtonAnimation.Play();
 	}
 
 	// This is called from the animation event
 	public void FireButtonAnimationActivate(){
-		EnableFireButtonAnimation.Stop();
+		enableFireButtonAnimation.Stop();
 		buttonAnimation.Play();
 	}
 	

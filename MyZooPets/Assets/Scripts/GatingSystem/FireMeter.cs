@@ -1,15 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
-
-//---------------------------------------------------
-// FireMeter
-// This is the object that is created when the user
-// presses down on the fire button to begin the
-// pet breathing fire.
-//---------------------------------------------------	
 
 public class FireMeter : MonoBehaviour{
 	//=======================Events========================
@@ -24,13 +16,14 @@ public class FireMeter : MonoBehaviour{
 	public string fillSound;
 
 	void Start(){
-		slider.fillAmount = 0;		// reset the slider vlaue
+		slider.rectTransform.sizeDelta = new Vector2(0f, 32f);      // reset the slider vlaue
 	}
 	
 	// Call this function when the meter should start filling.	
 	public void StartFilling(){
 		LeanTween.value(gameObject, UpdateSliderValueCallback, 0f, 1f, fillTime)
-			.setEase(LeanTweenType.easeInQuad).setOnComplete(OnFillComplete);
+			.setEase(LeanTweenType.easeInQuad)
+			.setOnComplete(OnFillComplete);
 
 		if(OnMeterStartFilling != null){
 			OnMeterStartFilling(this, EventArgs.Empty);
@@ -43,13 +36,13 @@ public class FireMeter : MonoBehaviour{
 
 	// Callback update value function for start filling
 	public void UpdateSliderValueCallback(float value){
-		slider.fillAmount = value;
+		slider.rectTransform.sizeDelta = new Vector2(value, 32f);
 	}
 
 	// Stops filling the meter and empties it.
 	public void Empty(){
-		LeanTween.cancel(gameObject);	// Cancel any leantweens going on
-		slider.fillAmount = 0;
+		LeanTween.cancel(gameObject);   // Cancel any leantweens going on
+		slider.rectTransform.sizeDelta = new Vector2(0f, 32f);
 		AudioManager.Instance.StopClip(fillSound);
 	}
 
@@ -62,6 +55,6 @@ public class FireMeter : MonoBehaviour{
 
 	// Returns whether or not this meter is full.
 	public bool IsMeterFull(){
-		return slider.fillAmount >= 1;
+		return slider.rectTransform.sizeDelta.x >= 250;
 	}
 }

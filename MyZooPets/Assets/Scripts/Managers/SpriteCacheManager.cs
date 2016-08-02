@@ -27,6 +27,10 @@ public class SpriteCacheManager : Singleton<SpriteCacheManager> {
 		}
 	}
 
+	public static Sprite GetDecoIconSprite(DecorationTypes decoType) {
+		return Resources.Load<Sprite>("iconDeco" + decoType.ToString());
+	}
+
 	public static Sprite GetItemSprite(string itemID) {
 		return Resources.Load<Sprite>(DataLoaderItems.GetItemTextureName(itemID));
 	}

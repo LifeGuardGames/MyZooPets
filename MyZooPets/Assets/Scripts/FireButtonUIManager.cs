@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public static EventHandler<EventArgs> FireButtonActive;
@@ -11,25 +10,18 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public GameObject fireOrbDropTarget;
 	public GameObject sunBeam;
 
-	public GameObject fireButton;
-	public GameObject FireButton{
-		get{ return fireButton; }
+	public GameObject fireButtonObject;
+	public GameObject FireButtonObject{
+		get{ return fireButtonObject; }
 	}
+
+	public FireMeter fireMeterScript;
 
 	// Components of fireButton
 	public Image imageButton;
-	private FireButton fireButtonScript;
-	public FireButton FireButtonScript{
-		get{ return fireButtonScript; }
-	}
 
-	private Collider fireButtonCollider;
-	public Collider FireButtonCollider{
-		get{ return fireButtonCollider; }
-	}
-
-	private string activeButtonSpriteName = "fireButtonOn";
-	private string inactiveButtonSpriteName = "fireButtonOff";
+	public Sprite activeFireButtonSprite;
+	public Sprite inactiveFireButtonSprite;
 
 	private bool isActive = false;
 	public bool IsActive{
@@ -37,9 +29,6 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 	void Start () {
-		fireButtonCollider = fireButton.GetComponent<Collider>();
-		fireButtonScript = fireButton.GetComponent<FireButton>();
-
 		toggleParent.SetActive(false);
 		CameraManager.Instance.PanScript.OnPartitionChanging += OnPartitionChanging;
 	}
@@ -79,9 +68,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		animHelper.buttonAnimation.Stop();
 		sunBeam.SetActive(false);
 
-		imageButton.sprite = SpriteCacheManager.GetSprite(inactiveButtonSpriteName);
-		imageButton.gameObject.SetActive(false);
-		imageButton.gameObject.SetActive(true);
+		imageButton.sprite = inactiveFireButtonSprite;
 	}
 
 	// This is called from the animation event / or from start
@@ -98,10 +85,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 		sunBeam.SetActive(true);
 
 		//change button image 
-		imageButton.sprite = SpriteCacheManager.GetSprite(activeButtonSpriteName);
-
-		imageButton.gameObject.SetActive(false);
-		imageButton.gameObject.SetActive(true);
+		imageButton.sprite = activeFireButtonSprite;
 	}
 
 	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
@@ -126,4 +110,82 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	}
 
 
+
+
+
+
+
+	
+
+	private AttackGate attackScript;        // attack gate script
+	private Gate gate;                      // the gate that this button is for
+	private bool isLegal;                   // is this button being pressed legally? Mainly used as a stop gap for now
+
+	public void SetGate(Gate gate) {
+		this.gate = gate;
+	}
+
+	/// <summary>
+	/// When the user presses down on the fire meter button. This will begin
+	/// some pet animation prep and start to fill the attached meter
+	/// </summary>
+	public void OnClick() {
+		isLegal = false;
+		bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+
+		// if can breathe fire, attack the gate!!
+		if(canBreathFire) {
+			if(SceneUtils.CurrentScene != SceneUtils.YARD) {
+				isLegal = true;
+
+				// kick off the attack script
+				attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
+				attackScript.Init(gate);
+
+				PetAnimationManager.Instance.StartFireBlow();
+
+				// turn the fire meter on
+				fireMeterScript.StartFilling();
+			}
+			else {
+				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.MICROMIX);
+			}
+		}
+		// else can't breathe fire. explain why
+		else {
+			if(!TutorialManager.Instance.IsTutorialActive()) {
+				GatingManager.Instance.IndicateNoFire();
+			}
+		}
+	}
+
+
+
+	public void OnButtonReleased() {
+		if(!isLegal) {
+			//			Debug.Log("Something going wrong with the fire button.  Aborting");
+			return;
+		}
+
+		if(fireMeterScript.IsMeterFull()) {
+			// if the meter was full on release, complete the attack!
+			attackScript.FinishAttack();
+
+			// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
+			// fire mode cheat is active and the gate is still alive
+			if(gate.GetGateHP() <= 1) {
+				Deactivate();
+			}
+			else {
+				//disable button
+				FireEffectOff();
+			}
+		}
+		else {
+			// if the meter was not full, cancel the attack
+			attackScript.Cancel();
+		}
+		// regardless we want to empty the meter
+		fireMeterScript.Reset();
+	}
 }

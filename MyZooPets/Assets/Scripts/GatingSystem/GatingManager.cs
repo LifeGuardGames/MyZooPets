@@ -501,7 +501,7 @@ public class GatingManager : Singleton<GatingManager>{
 		Gate gate = activeGates[scriptPan.currentLocalPartition];
 
 		if(gate){
-			FireButtonUIManager.Instance.FireButtonScript.SetGate(gate);
+			FireButtonUIManager.Instance.SetGate(gate);
 		}
 		else{
 			Debug.LogError("Destination callback being called for non gated room");

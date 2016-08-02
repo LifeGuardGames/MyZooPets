@@ -11,8 +11,8 @@ public class GameTutorialFlame : GameTutorial{
 
 	public GameTutorialFlame() : base(){		
 		FireMeter.OnMeterFilled += OnMeterFilled;					// set up callback for when the player fully charges their meter
-		FireMeter.OnMeterStartFilling += OnMeterStartFilling;
-		PetAnimationManager.OnBreathEnded += OnBreathEnded;			// callback for when the pet finishes breathing fire
+		FireMeter.OnMeterStartFilling += RemoveFingerHint;
+		PetAnimationManager.OnBreathEnded += FireBlowComplete;			// callback for when the pet finishes breathing fire
 	}	
 			
 	protected override void SetMaxSteps(){
@@ -80,7 +80,7 @@ public class GameTutorialFlame : GameTutorial{
 		// wait one frame so that the flame button can appear
 		yield return 0;
 
-		GameObject fireButton = FireButtonUIManager.Instance.FireButton;
+		GameObject fireButton = FireButtonUIManager.Instance.FireButtonObject;
 
 		SpotlightObject(fireButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton", fingerHint: true,
 		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 0f, fingerHintOffsetY: -40f,
@@ -109,11 +109,8 @@ public class GameTutorialFlame : GameTutorial{
 	/// <summary>
 	/// When the meter starts filling up remove hint.
 	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnMeterStartFilling(object sender, EventArgs args){
-		FireMeter.OnMeterStartFilling -= OnMeterStartFilling;
-
+	private void RemoveFingerHint(object sender, EventArgs args){
+		FireMeter.OnMeterStartFilling -= RemoveFingerHint;
 		RemoveFingerHint();
 	}
 
@@ -122,9 +119,9 @@ public class GameTutorialFlame : GameTutorial{
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void OnBreathEnded(object sender, EventArgs args){
+	private void FireBlowComplete(object sender, EventArgs args){
 		// unsub from callback
-		PetAnimationManager.OnBreathEnded -= OnBreathEnded;
+		PetAnimationManager.OnBreathEnded -= FireBlowComplete;
 		
 		// pet began to breath fire, so advance the tut
 		Advance();

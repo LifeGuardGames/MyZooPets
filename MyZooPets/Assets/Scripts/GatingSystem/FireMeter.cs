@@ -4,20 +4,18 @@ using System;
 using System.Collections;
 
 public class FireMeter : MonoBehaviour{
-	//=======================Events========================
-	//listeners will probably have to
-	//unregister themselves when they receive the event; otherwise, the listeners will
-	//keep getting the event
+	// Listeners will probably have to unregister themselves when they receive the event;
+	// otherwise, the listeners will keep getting the event
 	public static EventHandler<EventArgs> OnMeterFilled;   		// when the meter is 100% full
 	public static EventHandler<EventArgs> OnMeterStartFilling;	// when meter is filling up 
 
-	public Image slider;				// the slider that the meter fills up
+	public Image slider;										// the slider that the meter fills up
 	public float fillTime = 2f;
 	public string fillSound;
 
 	void Start(){
-		slider.rectTransform.sizeDelta = new Vector2(0f, 32f);      // reset the slider vlaue
-	}
+		Reset();
+    }
 	
 	// Call this function when the meter should start filling.	
 	public void StartFilling(){
@@ -35,12 +33,12 @@ public class FireMeter : MonoBehaviour{
 	}
 
 	// Callback update value function for start filling
-	public void UpdateSliderValueCallback(float value){
+	private void UpdateSliderValueCallback(float value){
 		slider.rectTransform.sizeDelta = new Vector2(value, 32f);
 	}
 
 	// Stops filling the meter and empties it.
-	public void Empty(){
+	public void Reset(){
 		LeanTween.cancel(gameObject);   // Cancel any leantweens going on
 		slider.rectTransform.sizeDelta = new Vector2(0f, 32f);
 		AudioManager.Instance.StopClip(fillSound);

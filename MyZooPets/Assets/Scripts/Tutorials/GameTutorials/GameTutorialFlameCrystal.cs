@@ -34,7 +34,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			//add fire orb to the clickable list
 			FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
 			fireOrbItemReference = InventoryUIManager.Instance.GetFireOrbReference();
-			fireButtonReference = FireButtonUIManager.Instance.FireButton;
+			fireButtonReference = FireButtonUIManager.Instance.FireButtonObject;
 			Vector3 fireOrbItemPosition = LgNGUITools.GetScreenPosition(fireOrbItemReference);
 			Vector3 fireButtonPosition = LgNGUITools.GetScreenPosition(fireButtonReference);
 			

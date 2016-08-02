@@ -1,7 +1,5 @@
-using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Attack gate. Script put on a pet when it is ready to attack a gate
@@ -11,20 +9,17 @@ public class AttackGate : Singleton<AttackGate>{
 	private Gate gateTarget; // gate to attack
 	private int damage; // damage to deal
 
-
 	void Start(){
 		PetAnimationManager.OnBreathEnded += ExecutePostAttackLogic;
-
 	}
 
 	void OnDestroy(){
-
 		PetAnimationManager.OnBreathEnded -= ExecutePostAttackLogic;
 	}
 
-	public void Init(Gate gateTarget, int damage){
+	public void Init(Gate gateTarget){
 		this.gateTarget = gateTarget;
-		this.damage = damage;
+		this.damage = 1;
 	}
 
 	/// <summary>
@@ -37,8 +32,9 @@ public class AttackGate : Singleton<AttackGate>{
 
 		//release lock if fire breathing lock was called previously
 		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
-		if(currentLockMode == UIModeTypes.FireBreathing)
+		if(currentLockMode == UIModeTypes.FireBreathing) {
 			ClickManager.Instance.ReleaseLock();
+		}
 		
 		Destroy(this);
 	}
@@ -48,7 +44,6 @@ public class AttackGate : Singleton<AttackGate>{
 	/// </summary>
 	public void FinishAttack(){
 		PetAnimationManager.Instance.FinishFireBlow();
-
 		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
 
@@ -56,8 +51,6 @@ public class AttackGate : Singleton<AttackGate>{
 	/// Executes the post attack logic.
 	/// </summary>
 	public void ExecutePostAttackLogic(object sender, EventArgs args){
-
-
 		StartCoroutine(PostAttackLogic());
 	}
 
@@ -77,8 +70,7 @@ public class AttackGate : Singleton<AttackGate>{
 		
 		// wait a frame to do our other stuff because the fire breathing animation is still technically playing
 		yield return 0;
-
-
+		
 		// release fire breathing lock
 		ClickManager.Instance.ReleaseLock();
 

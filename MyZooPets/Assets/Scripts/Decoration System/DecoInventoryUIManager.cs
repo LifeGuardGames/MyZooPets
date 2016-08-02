@@ -1,380 +1,119 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Decoration user interface manager.
+/// Decoration UI manager
 /// This class includes the Decoration Inventory as well as UI for decoration.
-/// 
-/// 
 /// InventoryManager 	- DecoInventoryUIManager	(two separate inventory managers!)
 /// 					\ InventoryUIManager
-/// 
 /// </summary>
-public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
+public class DecoInventoryUIManager : Singleton<DecoInventoryUIManager> {
 	public static EventHandler<InventoryDragDrop.InvDragDropArgs> OnDecoDroppedOnTarget;
 
-	public static EventHandler<EventArgs> OnDecoPickedUp;   // when a decoration is picked up
-	public static EventHandler<EventArgs> OnDecoDropped;   // when a decoration is dropped
+	public TweenToggle decoInventoryTween;
+	public RectTransform slotParent;
+	public GameObject decoInventoryTokenPrefab;
+	public List<Transform> decoInventorySlotList;
+	public Transform itemFlyToTransform;
+	public Animation addItemPulseAnim;
 
-	private bool isActive = false;
+	private int inventoryPage = 0;
+	private int inventoryPageSize = 5;
 
-	public GameObject shopButtonParent;
-	private GameObject sunbeamObject = null;
-	public GameObject backButton;
-	public GameObject shopButton;
-	public GameObject decorationGridPanel;
-	public UIPanel gridPanel;
-	public GameObject uiGridObject;
-	public GameObject decorationItemPrefab;
+	public GameObject leftButton;
+	public GameObject rightButton;
 
-	private int maxInventoryDisplay = 6;
-    private float collapsedPos = -164f;
+	private Transform currentDragDropItem;
 
-	public Transform currentDragDropItem;
-
-	protected override void Awake(){
-		base.Awake();
-		eModeType = UIModeTypes.EditDecos;
+	public List<InventoryItem> AllDecoInvItems {
+		get { return InventoryManager.Instance.AllDecoInventoryItems; }
 	}
 
-	protected override void Start(){
-		base.Start();
-
-		// Spawn items in the decoration inventory for the first time
-		List<InventoryItem> listDecos = InventoryManager.Instance.AllDecoInventoryItems;
-		foreach(InventoryItem invItem in listDecos){
-			// Setting isOnLoad option to true for first time loading
-			SpawnInventoryItemInPanel(invItem, isOnLoad:true);
-		}
-
-		// Workaround for start hidden, the position setting conflicts with tween
-		StartCoroutine(NextFrameHelper());
+	void Start() {
+		//Spawn items in the inventory for the first time
+		ShowPage(0);
+		RefreshButtonShowStatus();
 	}
 
-	IEnumerator NextFrameHelper(){
-		yield return 0;
-		HideDecoInventory();
+	public void ShowPanel() {
+		decoInventoryTween.Show();
 	}
 
-	protected override void OnDestroy(){
-		base.OnDestroy();
+	public void HidePanel() {
+		decoInventoryTween.Hide();
 	}
 
-	/// <summary>
-	/// Check if the deco inventory is scrollable
-	/// If the item types in invetory is greater than the max display item type count, make it scrollable
-	/// </summary>
-	/// <returns><c>true</c> if this instance is inventory scrollable; otherwise, <c>false</c>.</returns>
-	public bool IsDecoInventoryScrollable(){
-		return InventoryManager.Instance.AllDecoInventoryItems.Count > maxInventoryDisplay;
-	}
-
-	public GameObject GetTutorialItem(){
-		GameObject tutorialObject = null;
-
-		if(uiGridObject.transform.childCount != 0){
-			Transform parent = uiGridObject.transform.GetChild(0);
-			tutorialObject = parent.FindChild(parent.name).gameObject;
-		}
-
-		return tutorialObject;
-	}
-
-	public GameObject GetShopButton(){
-		return shopButton;
-	}
-
-	// New item is added to the deco inventory
-	public void OnItemAddedUI(InventoryItem invItem, bool isItemNew) {
-		if(isItemNew) {
-			SpawnInventoryItemInPanel(invItem);
-		}
-		else{	// Update amount
-			Transform gridObj = uiGridObject.transform.Find(invItem.ItemID);
-			gridObj.GetComponent<InventoryTokenController>().SetAmount(invItem.Amount);
-		}
-	}
-
-	/// <summary>
-	/// Called to update the bar from deco inventory, from InventoryManager
-	/// </summary>
-	public void OnItemUsedUI(InventoryItem invItem){
-		if(currentDragDropItem != null){
-			if(invItem != null && invItem.Amount > 0){ //Redraw count label if item not 0
-				currentDragDropItem.Find("Label_Amount").GetComponent<UILabel>().text = invItem.Amount.ToString();
-			}
-			else{ //destroy object if it has been used up
-				Destroy(currentDragDropItem.gameObject);
-				UpdateBarPosition();
-			}
-		}
-	}
-
-	//Create the NGUI object and populate the fields with InventoryItem data
-	private void SpawnInventoryItemInPanel(InventoryItem invItem, bool isOnLoad = false){
-		//Create inventory item
-		GameObject decoInventoryItemObject = NGUITools.AddChild(uiGridObject, decorationItemPrefab);
-
-		//get reference to all the GO and scripts
-		Transform itemWrapper = decoInventoryItemObject.transform.Find("Icon");
-		UISprite itemSprite = decoInventoryItemObject.transform.Find("Icon/Sprite_Image").GetComponent<UISprite>();
-		UILabel itemAmountLabel = decoInventoryItemObject.transform.Find("Label_Amount").GetComponent<UILabel>();
-		InventoryDragDrop invDragDrop = itemWrapper.GetComponent<InventoryDragDrop>();
-		
-		//Set value to UI element
-		itemWrapper.name = invItem.ItemID;
-		decoInventoryItemObject.name = invItem.ItemID;
-		itemSprite.spriteName = invItem.ItemTextureName;
-		itemAmountLabel.text = invItem.Amount.ToString();
-		
-//		//Listen to on press and on drop
-//		invDragDrop.OnItemDrag += statsHint.OnItemDrag;
-//		invDragDrop.OnItemDrop += statsHint.OnItemDrop;
-//		
-//		//listen to on drop event
-		invDragDrop.OnItemDrop += OnItemDrop;
-		invDragDrop.OnItemDrag += OnItemDrag;
-//		invDragDrop.OnItemPress += OnItemPress;
-		
-		UpdateBarPosition(isOnLoad);
-	}
-
-	/// <summary>
-	/// Updates the bar position.
-	/// </summary>
-	/// <param name="isOnLoad">If set to <c>true</c> does tweening instantly, used for loading into scene check only</param>
-	public void UpdateBarPosition(bool isOnLoad = false){
-	
-		int allDecoInventoryItemsCount = InventoryManager.Instance.AllDecoInventoryItems.Count;
-		// Normal case where you add item during game
-		if(!isOnLoad){
-		
-			// Adjust the bar length based on how many items we want showing at all times
-			if(allDecoInventoryItemsCount <= maxInventoryDisplay) {
-				
-				// Update position of the bar if inventory is open
-				LeanTween.moveLocalX(decorationGridPanel, collapsedPos - allDecoInventoryItemsCount * 90, 0.4f)
-					.setEase(LeanTweenType.easeInOutQuad);
-			}
-		}
-		// Scene loading case, dont want to tween here so set them explicitly
-		else{
-			// Adjust the bar length based on how many items we want showing at all times
-			if(allDecoInventoryItemsCount > maxInventoryDisplay) {
-				allDecoInventoryItemsCount = maxInventoryDisplay;
-			}
-			if(decorationGridPanel.transform.localPosition.x != collapsedPos - allDecoInventoryItemsCount * 90){
-				decorationGridPanel.transform.localPosition = new Vector3(collapsedPos - allDecoInventoryItemsCount * 90,
-				                                                          decorationGridPanel.transform.localPosition.y,
-				                                                          decorationGridPanel.transform.localPosition.z);
-			}
-		}
-		
-		uiGridObject.GetComponent<UIGrid>().Reposition();
-		
-		// Reset the gridPanel again, dont want trailing white spaces in the end of scrolled down there already
-		Vector3 oldPanelPos = gridPanel.transform.localPosition;
-		gridPanel.transform.localPosition = new Vector3(361f, oldPanelPos.y, oldPanelPos.z);	// TODO CHANGE THIS WHEN CHANGING CLIPPING
-		Vector4 oldClipRange = gridPanel.clipRange;
-		gridPanel.clipRange = new Vector4(116f, oldClipRange.y, oldClipRange.z, oldClipRange.w);	//TODO CHANGE THIS WHEN CHANGING CLIPPING
-
-		// Pulse shop icon where appropriate
-		if(allDecoInventoryItemsCount == 0){
-			TogglePulseShopButton(true);
-		}
-		else{
-			TogglePulseShopButton(false);
-		}
-	}
-
-	//Find the position of Decoration Item game object with invItemID
-	//Used for animation position in StoreUIManager
-	public Vector3 GetPositionOfDecoInvItem(string itemID){
-		// position to use
-		Vector3 decoInvItemPosition;
-		
-		// Use the position of the item in the inventory panel
-		Transform deocInvItemTrans = uiGridObject.transform.Find(itemID);
-		if(deocInvItemTrans == null){
-			Debug.Log("ksd");
-		}
-		InventoryItem decoInvItem = InventoryManager.Instance.GetDecoInInventory(itemID);
-		decoInvItemPosition = deocInvItemTrans.position;
-		
-		//Offset position if the item is just added to the inventory
-		if(decoInvItem.Amount == 1)
-			decoInvItemPosition += new Vector3(-0.22f, 0, 0);
-		
-		return decoInvItemPosition;
-	}
-
-	//Event listener. listening to when item is dragged out of the deco inventory on drop
-	//on something in the game
-	private void OnItemDrop(object sender, InventoryDragDrop.InvDragDropArgs e){
-//		bool dropOnTarget = false;
-		//delete tutorial GO if still alive
-//		if(fingerHintGO != null)
-//			Destroy(fingerHintGO);
-//		Debug.Log(e.ItemTransform.gameObject); //TODO
-		if(e.TargetCollider && e.TargetCollider.tag == "DecoItemTarget"){
+	private void OnItemDropHandler(object sender, InventoryDragDrop.InvDragDropArgs e) {
+		if(e.TargetCollider && e.TargetCollider.tag == "DecoItemTarget") {
 			currentDragDropItem = e.ParentTransform;
-			
-			if(OnDecoDroppedOnTarget != null)
+
+			if(OnDecoDroppedOnTarget != null) {
 				OnDecoDroppedOnTarget(this, e);
-		}
-
-		// Regardless of drop, reset the node state
-		if(OnDecoDropped != null){
-			OnDecoDropped(this, e);
-		}
-
-		currentDragDropItem = null;
-	}
-
-	private void OnItemDrag(object sender, EventArgs e){
-		GameObject go = ((InventoryDragDrop)sender).gameObject;
-
-		if(currentDragDropItem == null || go != currentDragDropItem.gameObject){
-			currentDragDropItem = go.transform;
-
-			if(OnDecoPickedUp != null){
-				OnDecoPickedUp(go, e);
 			}
 		}
 	}
 
-	/// <summary>
-	/// Show only the decoration inventory bar
-	/// </summary>
-	public void ShowDecoInventory(){
-		decorationGridPanel.GetComponent<TweenToggle>().Show();
+	public void PulseItem() {
+		addItemPulseAnim.Play();
 	}
 
-	/// <summary>
-	/// Hide only the decoration inventory bar
-	/// </summary>
-	public void HideDecoInventory(){
-		decorationGridPanel.GetComponent<TweenToggle>().HideWithUpdatedPosition();
-	}
-
-	protected override void _OpenUI(){
-		if(!isActive){
-			isActive = true;
-
-			GetComponent<TweenToggleDemux>().Show();
-			ShowDecoInventory();
-			RoomArrowsUIManager.Instance.ShowPanel();
-
-			//Hide other UI objects
-			NavigationUIManager.Instance.HidePanel();
-			HUDUIManager.Instance.HidePanel();
-			InventoryUIManager.Instance.HidePanel();
-
-			// Hide the pet/minipet so it doesn't get in the way
-			PetAnimationManager.Instance.DisableVisibility();
-			if(MiniPetManager.Instance){
-				MiniPetManager.Instance.ToggleAllMinipetVisilibity(false);
-			}
-
-			if(InventoryManager.Instance.AllDecoInventoryItems.Count == 0){
-				TogglePulseShopButton(true);
-			}
+	#region Page sorting functions
+	// Checks to see if the buttons need to appear
+	public void RefreshButtonShowStatus() {
+		// Check left most limit
+		if(inventoryPage == 0) {
+			leftButton.SetActive(false);
 		}
-	}
-	
-	//The back button on the left top corner is clicked to zoom out of the highscore board
-	protected override void _CloseUI(){
-		if(isActive){
-			isActive = false;
-
-			this.GetComponent<TweenToggleDemux>().Hide();
-			HideDecoInventory();
-			
-			//Show other UI Objects
-			NavigationUIManager.Instance.ShowPanel();
-			HUDUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
-			RoomArrowsUIManager.Instance.ShowPanel();
-
-			// Show the pet/minipet again
-			PetAnimationManager.Instance.EnableVisibility();
-			if(MiniPetManager.Instance){
-				MiniPetManager.Instance.ToggleAllMinipetVisilibity(true);
-			}
-
-			TogglePulseShopButton(false);
+		else {
+			leftButton.SetActive(true);
+		}
+		// Check right most limit
+		if((inventoryPage * inventoryPageSize) + inventoryPageSize >= AllDecoInvItems.Count) {
+			rightButton.SetActive(false);
+		}
+		else {
+			rightButton.SetActive(true);
 		}
 	}
 
-	/// <summary>
-	/// Opens the shop directly to decoration category and jumps to specific
-	/// decoration type
-	/// </summary>
-	/// <param name="decorationType">Decoration type.</param>
-	private void OpenShopForTutorial(){
-		// hide swipe arrow because not needed in shop mode
-		RoomArrowsUIManager.Instance.HidePanel();
-		
-		// push the shop mode type onto the click manager stack
-		ClickManager.Instance.Lock(UIModeTypes.Store);
-		
-		// open the shop
-		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
-		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButtonTutorial);
-
-		string tabName = DecorationTypes.Carpet.ToString();
-		StoreUIManager.Instance.CreateSubCategoryItemsTab(tabName, Color.white);
+	public void OnPageButtonClicked(bool isRightButton) {
+		if(isRightButton) {
+			inventoryPage++;
+		}
+		else {
+			inventoryPage--;
+		}
+		ShowPage(inventoryPage);
+		RefreshButtonShowStatus();
 	}
 
-	/// <summary>
-	/// Open store directly to decoration category
-	/// </summary>
-	private void OpenShop(){
-		// hide swipe arrow because not needed in shop mode
-		RoomArrowsUIManager.Instance.HidePanel();
-
-		// push the shop mode type onto the click manager stack
-		ClickManager.Instance.Lock(UIModeTypes.Store);
-		
-		// open the shop
-		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
-		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButton);
+	public void RefreshPage() {
+		ShowPage(inventoryPage);
+		RefreshButtonShowStatus();
 	}
 
-	/// <summary>
-	/// This function is called from the store UI when the store closes and the user had opened the store from the deco system.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void ReopenChooseMenu(object sender, EventArgs args){
-		// show swipe arrows
-		RoomArrowsUIManager.Instance.ShowPanel();
-		
-		// pop the mode we pushed earlier from the click manager
-		ClickManager.Instance.ReleaseLock();
-		
-		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
-	}
-
-	private void TogglePulseShopButton(bool isPulseShopButton){
-		// Cache the sunbeam
-		if(sunbeamObject == null){
-			sunbeamObject = shopButtonParent.transform.FindChild("SunBeamRotating").gameObject;
-			if(sunbeamObject == null){
-				Debug.LogWarning("Cannot find sunbeam object from deco mode shop");
+	// Either refreshes current page, or shows a new page given page number
+	private void ShowPage(int inventoryPage) {
+		// Destroy children beforehand
+		foreach(Transform slot in decoInventorySlotList) {
+			foreach(Transform child in slot) {  // Auto detect all/none children
+				Destroy(child.gameObject);
 			}
 		}
 
-		if(isPulseShopButton){
-			shopButtonParent.GetComponent<Animation>().Play();
-			sunbeamObject.SetActive(true);
-		}
-		else{
-			shopButtonParent.GetComponent<Animation>().Stop();
-			GameObjectUtils.ResetLocalScale(shopButtonParent);
-			sunbeamObject.SetActive(false);
+		int startingIndex = inventoryPage * inventoryPageSize;
+		int endingIndex = startingIndex + inventoryPageSize;
+
+		for(int i = startingIndex; i < endingIndex; i++) {
+			if(AllDecoInvItems.Count == i) {    // Reached the end of list
+				break;
+			}
+			else {
+				GameObject inventoryToken = GameObjectUtils.AddChildGUI(decoInventorySlotList[i % inventoryPageSize].gameObject, decoInventoryTokenPrefab);
+				inventoryToken.GetComponent<InventoryTokenController>().Init(AllDecoInvItems[i]);
+			}
 		}
 	}
+	#endregion
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MiniPetMerchantUIController : MonoBehaviour {
 	public Text itemNameLabel;
@@ -41,7 +41,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	/// update its new position (after eating food) before it should be hidden
 	/// </summary>
 	public void ShowDecoInventoryHelper(){
-		DecoInventoryUIManager.Instance.ShowDecoInventory();
+		DecoInventoryUIManager.Instance.ShowPanel();
 		InventoryUIManager.Instance.HidePanel();
 	}
 
@@ -65,13 +65,13 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		// depending on what type of item the user bought, the animation has the item going to different places
 		switch(itemData.Type){
 		case ItemType.Decorations:
-			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(secretItem.ID);
+			itemPosition = DecoInventoryUIManager.Instance.itemFlyToTransform.position;
 			break;
 		case ItemType.Accessories:
 			 Debug.LogError("Not implemented yet!");
 			break;
 		default:	// Everything else
-			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(secretItem.ID);
+			itemPosition = InventoryUIManager.Instance.itemFlyToTransform.position;
 			break;
 		}
 		

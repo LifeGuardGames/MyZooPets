@@ -69,7 +69,6 @@ public class InventoryManager : Singleton<InventoryManager> {
 		Item itemData = DataLoaderItems.GetItem(itemID);
 
 		InventoryItem invItem = null;
-		bool itemNew = false;
 
 		// If item already in dictionary increment amount
 		if(specificTypeInventory.ContainsKey(itemID)) {
@@ -81,7 +80,6 @@ public class InventoryManager : Singleton<InventoryManager> {
 			specificTypeInventory[itemID].Amount += count;
 		}
 		else { //Add InventoryItem into dict if key doesn't exist
-			itemNew = true;
 			invItem = new InventoryItem(itemID, itemData.Type, itemData.TextureName);
 			specificTypeInventory[itemID] = invItem;
 
@@ -100,13 +98,7 @@ public class InventoryManager : Singleton<InventoryManager> {
 			}
 		}
 
-		// Add items to their respective UIs
-		if(itemData.Type == ItemType.Foods || itemData.Type == ItemType.Usables) {
-			InventoryUIManager.Instance.OnItemAddedUI(invItem, itemNew);
-		}
-		else if(itemData.Type == ItemType.Decorations) {
-			DecoInventoryUIManager.Instance.OnItemAddedUI(invItem, itemNew);
-		}
+		// NOTE: No need to add items to UI here, the complete buy tween will refresh by itself
 	}
 
 	// Item used on pet
@@ -137,10 +129,10 @@ public class InventoryManager : Singleton<InventoryManager> {
 
 			// Update UI to reflect changes based on their type
 			if(invItem.ItemType == ItemType.Foods || invItem.ItemType == ItemType.Usables) {
-				InventoryUIManager.Instance.OnItemUsedUI(invItem);
+				InventoryUIManager.Instance.RefreshPage();
 			}
-			if(invItem.ItemType == ItemType.Decorations) {  // Doesnt check presence of DecoInventoryUIManager for now, change it here
-				DecoInventoryUIManager.Instance.OnItemUsedUI(invItem);
+			if(invItem.ItemType == ItemType.Decorations && DecoInventoryUIManager.Instance != null) {
+				DecoInventoryUIManager.Instance.RefreshPage();
 			}
 		}
 	}
@@ -161,10 +153,10 @@ public class InventoryManager : Singleton<InventoryManager> {
 
 			// Update UI to reflect changes based on their type
 			if(invItem.ItemType == ItemType.Foods || invItem.ItemType == ItemType.Usables) {
-				InventoryUIManager.Instance.OnItemUsedUI(invItem);
+				InventoryUIManager.Instance.RefreshPage();
 			}
-			if(invItem.ItemType == ItemType.Decorations) {  // Doesnt check presence of DecoInventoryUIManager for now, change it here
-				DecoInventoryUIManager.Instance.OnItemUsedUI(invItem);
+			if(invItem.ItemType == ItemType.Decorations && DecoInventoryUIManager.Instance != null) {
+				DecoInventoryUIManager.Instance.RefreshPage();
 			}
 		}
 	}

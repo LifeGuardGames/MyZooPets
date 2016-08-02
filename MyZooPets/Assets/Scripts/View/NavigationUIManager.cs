@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class NavigationUIManager : Singleton<NavigationUIManager> {
 	public TweenToggleDemux demux;
 	
@@ -14,7 +12,7 @@ public class NavigationUIManager : Singleton<NavigationUIManager> {
 	// Modetype notInited, check CM
 	public void OnEditRoomButton() {
 		// if we are currently in edit deco mode, close the UI, otherwise, open it
-		DecoInventoryUIManager.Instance.OpenUI();
+		DecoModeUIManager.Instance.OpenUI();
 	}
 
 	// Modetype notInited, check CM

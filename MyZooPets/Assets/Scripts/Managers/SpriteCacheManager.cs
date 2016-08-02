@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 // Custom loader to cache all the sprite data from images
 public class SpriteCacheManager : Singleton<SpriteCacheManager> {
@@ -30,12 +28,10 @@ public class SpriteCacheManager : Singleton<SpriteCacheManager> {
 	}
 
 	public static Sprite GetItemSprite(string itemID) {
-		Debug.Log(itemID);
 		return Resources.Load<Sprite>(DataLoaderItems.GetItemTextureName(itemID));
 	}
 
 	public static Sprite GetSprite(string spriteName) {
 		return Resources.Load<Sprite>(spriteName);
 	}
-
 }

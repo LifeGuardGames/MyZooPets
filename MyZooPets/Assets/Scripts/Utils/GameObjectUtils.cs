@@ -39,7 +39,7 @@ public static class GameObjectUtils{
 			Transform t = go.transform;
 
 			if(parent != null){
-				t.parent = parent.transform;
+				t.SetParent(parent.transform);
 
 				if(!isPreserveLayer){
 					go.layer = parent.layer;

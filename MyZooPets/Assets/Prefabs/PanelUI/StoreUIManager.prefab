@@ -866,18 +866,14 @@ MonoBehaviour:
   blockGUI: 0
   grid: {fileID: 11422276}
   itemStorePrefab: {fileID: 100006, guid: 8506279022df3442aaaa7ffb2596bab5, type: 2}
-  itemStorePrefabStats: {fileID: 100020, guid: e4e1d10938adc4a4a8ed746da74c9f4f, type: 2}
-  itemSpritePrefab: {fileID: 100000, guid: a6b00c21ca05e5e499c07a37e6d1da08, type: 2}
+  itemStorePrefabStats: {fileID: 116388, guid: 49d11dd3053aa864392f1cc5315ce091, type: 2}
+  boughtItemTweenPrefab: {fileID: 100000, guid: a6b00c21ca05e5e499c07a37e6d1da08,
+    type: 2}
   storeBasePanel: {fileID: 100012}
   storeSubPanel: {fileID: 100078}
-  storeSubPanelBg: {fileID: 0}
   itemArea: {fileID: 100120}
   tabArea: {fileID: 100066}
   storeBgPanel: {fileID: 100060}
-  backButton: {fileID: 0}
-  prevTab: {fileID: 0}
-  soundChangeTab: shopChangeTab
-  soundBuy: shopBuy
 --- !u!114 &11400016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1687,15 +1683,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 20
+    m_Right: 20
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 3
   m_StartCorner: 0
-  m_StartAxis: 0
+  m_StartAxis: 1
   m_CellSize: {x: 450, y: 250}
-  m_Spacing: {x: 475, y: 150}
+  m_Spacing: {x: 10, y: 10}
   m_Constraint: 2
   m_ConstraintCount: 2
 --- !u!114 &11423566
@@ -2924,10 +2920,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22477186}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 32, y: 259.81}
-  m_SizeDelta: {x: 1186, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22418588
 RectTransform:
@@ -3088,7 +3084,7 @@ RectTransform:
   m_Children:
   - {fileID: 22442598}
   m_Father: {fileID: 22491610}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 70, y: -70}
@@ -3268,10 +3264,10 @@ RectTransform:
   - {fileID: 22411178}
   m_Father: {fileID: 22499916}
   m_RootOrder: 1
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -83.46918}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -160, y: -85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22485328
 RectTransform:
@@ -3335,8 +3331,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 22444652}
   - {fileID: 22499916}
+  - {fileID: 22444652}
   m_Father: {fileID: 22403024}
   m_RootOrder: 2
   m_AnchorMin: {x: 0, y: 0}
@@ -3446,11 +3442,11 @@ RectTransform:
   - {fileID: 22446158}
   - {fileID: 22477186}
   m_Father: {fileID: 22491610}
-  m_RootOrder: 1
-  m_AnchorMin: {x: 0, y: 0.08}
-  m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: 0.000030517578, y: -1}
-  m_SizeDelta: {x: 145, y: 86}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0.03, y: 0.08}
+  m_AnchorMax: {x: 0.97, y: 0.75}
+  m_AnchoredPosition: {x: 0, y: 53}
+  m_SizeDelta: {x: 210, y: 86}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &100100000
 Prefab:

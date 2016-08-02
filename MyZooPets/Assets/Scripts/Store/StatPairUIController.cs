@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Stat pair user interface controller.
-/// </summary>
 public class StatPairUIController : MonoBehaviour{
 	// the sprite and label for this stat pair
 	public Image spriteIcon;
@@ -23,7 +20,7 @@ public class StatPairUIController : MonoBehaviour{
 		else { }
 		
 		// set the label to whatever the amount is, with a + or -, and then add the amount for the text
-		string strModifier = amount > 0 ? "+" : "";
-		labelAmount.text = strModifier + amount;
+		string prefix = amount > 0 ? "+" : "";
+		labelAmount.text = prefix + amount;
 	}
 }

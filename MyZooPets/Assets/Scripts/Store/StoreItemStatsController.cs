@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +6,7 @@ using System.Linq;
 /// Store item entry stats. An individual item entry in the sore UI for a stats
 /// item
 /// </summary>
-public class StoreItemEntryStats : StoreItemEntryUIController{
+public class StoreItemStatsController : StoreItemController{
 	// list of stat pair objects
 	public List<StatPairUIController> listStats;
 
@@ -16,7 +14,7 @@ public class StoreItemEntryStats : StoreItemEntryUIController{
 	/// Sets the desc.
 	/// </summary>
 	/// <param name="itemData">Item data.</param>
-	protected override void SetDesc(Item itemData){
+	protected override void SetDescription(Item itemData){
 		// do some bounds and null checking
 		StatsItem item = (StatsItem)itemData;
 		if(item == null){

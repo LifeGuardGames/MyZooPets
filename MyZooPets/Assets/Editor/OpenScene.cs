@@ -52,9 +52,15 @@ public class OpenScene : Editor {
 	public static void OpenRunner(){
 		LoadScene("Runner");
 	}
+
 	[MenuItem("Open Scene/MicroMix")]
-	public static void OpenMicroMix(){
+	public static void OpenMicroMix() {
 		LoadScene("MicroMix");
+	}
+
+	[MenuItem("Open Scene/Salon")]
+	public static void OpenSalon() {
+		LoadScene("WizdyPetSalon");
 	}
 
 	static void LoadScene(string name){

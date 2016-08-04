@@ -56,11 +56,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400012}
-  - 65: {fileID: 6500000}
-  - 114: {fileID: 11400006}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400004}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Entrance_Inhaler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,18 +263,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 0
---- !u!65 &6500000
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.84, y: 12.72, z: 4.04}
-  m_Center: {x: 0, y: 4, z: 0}
 --- !u!111 &11100000
 Animation:
   m_ObjectHideFlags: 1
@@ -324,21 +310,6 @@ MonoBehaviour:
   canvas: {fileID: 162222}
   coolDownLabel: {fileID: 11403112}
   coolDownSprite: {fileID: 11448276}
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c041f61e4a9fbf4e830210f5d933ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tweenTarget: {fileID: 0}
-  hover: {x: 1, y: 1, z: 1}
-  pressed: {x: 1.1, y: 1.1, z: 1.1}
-  duration: 0.1
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -356,7 +327,7 @@ MonoBehaviour:
   isCheckingClickManager: 1
   isSprite: 0
   strScene: InhalerGame
-  loadingText: 
+  loadingText: InhalerGame
   finalPosition: {x: 15.94, y: 10.3, z: 28.4}
   finalRotation: {x: 4.8985, y: 3.562836, z: 0.2358398}
   shouldSaveSceneData: 1

@@ -8,18 +8,18 @@ using System.Collections.Generic;
 public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 	public static EventHandler<FlameLevelEventArgs> OnFlameLevelUp;
 	public class FlameLevelEventArgs : EventArgs {
-		private Skill unlockedSkill;
+		private ImmutableDataSkill unlockedSkill;
 
-		public Skill UnlockedSkill {
+		public ImmutableDataSkill UnlockedSkill {
 			get { return unlockedSkill; }
 		}
 
-		public FlameLevelEventArgs(Skill skill) {
+		public FlameLevelEventArgs(ImmutableDataSkill skill) {
 			unlockedSkill = skill;
 		}
 	}
 
-	private List<Skill> allSkills;
+	private List<ImmutableDataSkill> allSkills;
 
 	void Awake() {
 		allSkills = SortList(DataLoaderSkills.GetDataList());
@@ -33,21 +33,11 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 		HUDAnimator.OnLevelUp -= CheckFlameLevelUp;
 	}
 
-	public Skill GetSkillData(string skillID) {
-		Skill data = DataLoaderSkills.GetData(skillID);
-		return data;
-	}
-
-	public Skill GetCurrentSkill() {
-		Skill currentSkill = GetSkillData(DataManager.Instance.GameData.Flame.CurrentSkillID);
-		return currentSkill;
-	}
-
-	public Skill GetSkillUnlockAtNextLevel() {
+	public ImmutableDataSkill GetSkillUnlockAtNextLevel() {
 		int nextLevel = LevelLogic.Instance.NextLevel;
-		Skill selectedSkill = null;
+		ImmutableDataSkill selectedSkill = null;
 
-		foreach(Skill skill in allSkills) {
+		foreach(ImmutableDataSkill skill in allSkills) {
 			if(skill.UnlockLevel == nextLevel) {
 				selectedSkill = skill;
 			}
@@ -64,17 +54,12 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 		}
 
 		int currentLevel = (int)LevelLogic.Instance.CurrentLevel;
-		foreach(Skill skill in allSkills) {
-			if(skill.UnlockLevel <= currentLevel) {
-				if(!skill.IsUnlocked) {
-					DataManager.Instance.GameData.Flame.UpdateSkillStatus(skill.ID, true);
-					DataManager.Instance.GameData.Flame.CurrentSkillID = skill.ID;
 
-					if(OnFlameLevelUp != null) {
-						FlameLevelEventArgs flameArgs = new FlameLevelEventArgs(skill);
-						OnFlameLevelUp(this, flameArgs);
-					}
-				}
+		ImmutableDataSkill skillData = DataLoaderSkills.NewFlameOnLevelUp(currentLevel);
+        if(skillData != null) {
+			if(OnFlameLevelUp != null) {
+				FlameLevelEventArgs flameArgs = new FlameLevelEventArgs(skillData);
+				OnFlameLevelUp(this, flameArgs);
 			}
 		}
 	}
@@ -82,8 +67,8 @@ public class FlameLevelLogic : Singleton<FlameLevelLogic> {
 	/// <summary>
 	/// Selects the list from dictionary and sort.
 	/// </summary>
-	private List<Skill> SortList(List<Skill> skills) {
-		List<Skill> skillList = (from skill in skills
+	private List<ImmutableDataSkill> SortList(List<ImmutableDataSkill> skills) {
+		List<ImmutableDataSkill> skillList = (from skill in skills
 								 orderby skill.UnlockLevel ascending
 								 select skill).ToList();
 		return skillList;

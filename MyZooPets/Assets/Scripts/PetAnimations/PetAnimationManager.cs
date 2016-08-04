@@ -164,7 +164,7 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 		animator.SetBool("IsFireBlowIn", false);
 
 		// spawn the particle effect
-		Skill curSkill = FlameLevelLogic.Instance.GetCurrentSkill();
+		ImmutableDataSkill curSkill = DataLoaderSkills.GetFlameAtLevel((int)LevelLogic.Instance.CurrentLevel);
 		string flameResourceString = curSkill.FlameResource;
 		GameObject flamePrefab = Resources.Load(flameResourceString) as GameObject;
 		GameObject flameObject = Instantiate(flamePrefab, new Vector3(0, 0, 0), flamePrefab.transform.rotation) as GameObject;

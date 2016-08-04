@@ -1,44 +1,56 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 using UnityEngine;
-using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
-/// Data loader skills.
-/// Hash -- Key: SkillID, Value: Skill
-/// </summary>
+// Get data for flames
 public class DataLoaderSkills : XMLLoaderGeneric<DataLoaderSkills>{
-
-	/// <summary>
-	/// Gets the data.
-	/// </summary>
-	/// <returns>The data.</returns>
-	/// <param name="skillID">Skill ID.</param>
-	public static Skill GetData(string skillID){
+	public static ImmutableDataSkill GetData(string skillID){
 		instance.InitXMLLoader();
-		
-		return instance.GetData<Skill>(skillID);
+		return instance.GetData<ImmutableDataSkill>(skillID);
+	}
+	
+	public static List<ImmutableDataSkill> GetDataList(){
+		instance.InitXMLLoader();
+		return instance.GetDataList<ImmutableDataSkill>();
 	}
 
-	/// <summary>
-	/// Gets the data list.
-	/// </summary>
-	/// <returns>The data list.</returns>
-	public static List<Skill> GetDataList(){
-		instance.InitXMLLoader();
-
-		return instance.GetDataList<Skill>();
+	// Null if nothing
+	public static ImmutableDataSkill NewFlameOnLevelUp(int level) {
+		foreach(ImmutableDataSkill skillData in GetDataList()) {
+			if(skillData.UnlockLevel == level) {
+				return skillData;
+			}
+		}
+		return null;
 	}
 
-	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, 
-	                               string errorMessage){
-		Skill data = new Skill(id, xmlNode, errorMessage);
+	public static ImmutableDataSkill GetFlameAtLevel(int level) {
+		ImmutableDataSkill highestSkillUnlockedSoFar = null;
+		foreach(ImmutableDataSkill skillData in GetDataList()) {
+			if(skillData.UnlockLevel <= level) {
+				if(highestSkillUnlockedSoFar != null) {
+					if(highestSkillUnlockedSoFar.UnlockLevel <= skillData.UnlockLevel) {
+						highestSkillUnlockedSoFar = skillData;	// Overwrite highest so far
+					}
+				}
+				else {
+					highestSkillUnlockedSoFar = skillData;	// Assign initial case
+				}
+			}
+		}
+		return highestSkillUnlockedSoFar;
+	}
+
+	protected override void XMLNodeHandler(string id, IXMLNode xmlNode, Hashtable hashData, string errorMessage){
+		ImmutableDataSkill data = new ImmutableDataSkill(id, xmlNode, errorMessage);
 
 		// store the data
-		if(hashData.ContainsKey(id))
+		if(hashData.ContainsKey(id)) {
 			Debug.LogError(errorMessage + "Duplicate keys!");
-		else
-			hashData.Add(id, data); 
+		}
+		else {
+			hashData.Add(id, data);
+		}
 	}
 
 	protected override void InitXMLLoader(){

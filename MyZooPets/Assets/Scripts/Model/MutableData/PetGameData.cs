@@ -15,7 +15,6 @@ public class PetGameData{
     public MutableDataInhaler Inhaler {get; set;}
     public MutableDataTutorial Tutorial {get; set;}
     public MutableDataInventory Inventory {get; set;}
-    public MutableDataSkill Flame {get; set;}
     public MutableDataBadge Badge {get; set;}
     public MutableDataGatingProgress GatingProgress {get; set;}
     public MutableDataRunnerGame RunnerGame {get; set;}
@@ -47,7 +46,6 @@ public class PetGameData{
         Inhaler = new MutableDataInhaler();
         Tutorial = new MutableDataTutorial();
         Inventory = new MutableDataInventory();
-        Flame = new MutableDataSkill(); 
         Badge = new MutableDataBadge();
         GatingProgress = new MutableDataGatingProgress();
         RunnerGame = new MutableDataRunnerGame();
@@ -65,8 +63,5 @@ public class PetGameData{
 	/// </summary>
 	public void VersionCheck(Version currentDataVersion) {
 		Tutorial.VersionCheck(currentDataVersion);
-//		GatingProgress.VersionCheck(currentDataVersion);
-//		Calendar.VersionCheck(currentDataVersion);
-//		PetInfo.VersionCheck(currentDataVersion);
 	}
 }

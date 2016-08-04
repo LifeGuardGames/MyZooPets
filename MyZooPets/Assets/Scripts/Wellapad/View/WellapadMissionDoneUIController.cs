@@ -55,7 +55,7 @@ public class WellapadMissionDoneUIController : MonoBehaviour {
 			sprite.sprite = SpriteCacheManager.GetBadgeSprite(badge.TextureName);
 		}
 
-		Skill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
+		ImmutableDataSkill skill = FlameLevelLogic.Instance.GetSkillUnlockAtNextLevel();
 		if(skill != null){
 			GameObject go = GameObjectUtils.AddChildWithPositionAndScale(gridUnlockPredictions, unlockPredictionEntryPrefab);
 			Image sprite = go.GetComponent<Image>();

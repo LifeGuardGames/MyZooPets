@@ -1,9 +1,6 @@
 using System.Collections;
 
-/// <summary>
-/// Skill. Constains a mix of mutable and immutable data
-/// </summary>
-public class Skill {
+public class ImmutableDataSkill {
 	private string id;
 	private string name;
 	private string textureName;
@@ -35,13 +32,7 @@ public class Skill {
 		get { return unlockLevel; }
 	}
 
-	public bool IsUnlocked {
-		get {
-			return DataManager.Instance.GameData.Flame.GetIsUnlocked(id);
-		}
-	}
-
-	public Skill(string id, IXMLNode xmlNode, string error) {
+	public ImmutableDataSkill(string id, IXMLNode xmlNode, string error) {
 		Hashtable hashElements = XMLUtils.GetChildren(xmlNode);
 		this.id = id;
 		name = XMLUtils.GetString(hashElements["Name"] as IXMLNode, null, error);

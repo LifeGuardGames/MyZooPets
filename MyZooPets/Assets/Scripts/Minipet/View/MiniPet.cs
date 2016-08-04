@@ -30,7 +30,6 @@ public abstract class MiniPet : MonoBehaviour {
 	public Vector3 zoomRotation = new Vector3(12, 0, 0);
 	private bool isVisible;
 	private bool isHatchedAux;
-	public Camera nguiCamera;
 
 	public ParticleSystem getAccessoryParticle;
 	public GameObject accessory1;
@@ -53,9 +52,7 @@ public abstract class MiniPet : MonoBehaviour {
 		this.name = data.Name;
 	}
 
-	protected virtual void Start(){
-		nguiCamera = GameObject.Find("Camera").GetComponent<Camera>();
-		
+	protected virtual void Start(){		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
 		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
@@ -100,7 +97,8 @@ public abstract class MiniPet : MonoBehaviour {
 	}
 
 	private void OnTap(TapGesture gesture){
-		if(!IsTouchingNGUI(gesture.Position)){
+		Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+		//if(!IsTouchingNGUI(gesture.Position)){
 			if(ClickManager.Instance.stackPeek != "MiniPet"){
 				Analytics.Instance.MiniPetVisited(minipetId);
 				if(!isFinishEating){
@@ -110,7 +108,7 @@ public abstract class MiniPet : MonoBehaviour {
 				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 				if(!isMiniPetColliderLocked){
-					if(LoadLevelManager.Instance.GetCurrentSceneName() == "ZoneBedroom"){
+					if(LoadLevelManager.Instance.GetCurrentSceneName() == SceneUtils.BEDROOM){
 						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()){
 							if(OnTutorialMinipetClicked != null){
 								OnTutorialMinipetClicked(this, EventArgs.Empty);
@@ -127,7 +125,7 @@ public abstract class MiniPet : MonoBehaviour {
 					}
 				}
 			}
-		}
+		//}
 	}
 
 	private void OnMouseDown() {
@@ -143,7 +141,7 @@ public abstract class MiniPet : MonoBehaviour {
 				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 				if(!isMiniPetColliderLocked) {
-					if(SceneManager.GetActiveScene().name == "ZoneBedroom") {
+					if(LoadLevelManager.Instance.GetCurrentSceneName() == SceneUtils.BEDROOM) {
 						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()) {
 							if(OnTutorialMinipetClicked != null) {
 								OnTutorialMinipetClicked(this, EventArgs.Empty);
@@ -271,6 +269,7 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 	}
 
+	/*
 	//True: if finger touches NGUI 
 	/// <summary>
 	/// Determines whether if the touch is touching NGUI element
@@ -289,6 +288,7 @@ public abstract class MiniPet : MonoBehaviour {
 		}
 		return isOnNGUILayer;
 	}
+	*/
 
 	// Called from minipet manager, handle animations and ui effects here
 	public void GainedExperience(){

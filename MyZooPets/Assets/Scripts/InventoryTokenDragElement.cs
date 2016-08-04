@@ -9,13 +9,15 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 
 	public Image tokenImage;
 	public Animator dragAnimator;
+	public Transform originalParent;        // TODO Set this to private
 
-	public Transform originalParent;		// TODO Set this to private
+	private ItemType itemType;		// Get item information from here
 
-	public void Init(string itemID, Transform _originalParent) {
-		tokenImage.sprite = SpriteCacheManager.GetItemSprite(itemID);
+	public void Init(InventoryItem itemData, Transform _originalParent) {
+		tokenImage.sprite = SpriteCacheManager.GetItemSprite(itemData.ItemID);
 		originalParent = _originalParent;
-	}
+		itemType = itemData.ItemType;
+    }
 
 	//TODO Handle StatHintController
 
@@ -26,6 +28,12 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		dragAnimator.SetTrigger("PickedUp");
 		itemBeingDragged = gameObject;
 		// ...
+
+		if(itemType == ItemType.Foods) {
+			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {
+				PetAnimationManager.Instance.WaitingToBeFed();
+			}
+		}
 	}
 
 	public void OnDrag(PointerEventData eventData) {

@@ -127,7 +127,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22429366}
-  - 114: {fileID: 11484742}
+  - 114: {fileID: 11435246}
   - 114: {fileID: 11446784}
   - 111: {fileID: 11106790}
   m_Layer: 5
@@ -276,6 +276,31 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11435246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67af0087caebd84bb99a2cde219dbf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decoInventoryTween: {fileID: 11446784}
+  slotParent: {fileID: 22427046}
+  decoInventoryTokenPrefab: {fileID: 148420, guid: 0fb63fedeedf71647ba70696a4689bbe,
+    type: 2}
+  decoInventorySlotList:
+  - {fileID: 22411630}
+  - {fileID: 22437644}
+  - {fileID: 22422164}
+  - {fileID: 22467688}
+  - {fileID: 22456348}
+  itemFlyToTransform: {fileID: 22427046}
+  addItemPulseAnim: {fileID: 11106790}
+  leftButton: {fileID: 182238}
+  rightButton: {fileID: 122542}
 --- !u!114 &11446784
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -427,7 +452,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11484742}
+      - m_Target: {fileID: 0}
         m_MethodName: OnPageButtonClicked
         m_Mode: 6
         m_Arguments:
@@ -560,7 +585,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11484742}
+      - m_Target: {fileID: 0}
         m_MethodName: OnPageButtonClicked
         m_Mode: 6
         m_Arguments:
@@ -573,30 +598,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11484742
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 172008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e745fe6221e6e4da7b8fcf573260e49c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryTween: {fileID: 11446784}
-  slotParent: {fileID: 22427046}
-  inventoryTokenPrefab: {fileID: 148420, guid: 0fb63fedeedf71647ba70696a4689bbe, type: 2}
-  inventorySlotList:
-  - {fileID: 22411630}
-  - {fileID: 22437644}
-  - {fileID: 22422164}
-  - {fileID: 22467688}
-  - {fileID: 22456348}
-  itemFlyToTransform: {fileID: 22427046}
-  addItemPulseAnim: {fileID: 11106790}
-  leftButton: {fileID: 182238}
-  rightButton: {fileID: 122542}
 --- !u!222 &22201076
 CanvasRenderer:
   m_ObjectHideFlags: 1

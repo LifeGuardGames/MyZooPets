@@ -58,7 +58,8 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		}
 
 		if(blockGUI){
-			ClickManager.SetActiveGUIModeLock(true);
+			Debug.LogWarning("ACTIVE MODE LOCK BYPASS");
+			//ClickManager.SetActiveGUIModeLock(true);
 		}
 
 		// fire callback
@@ -102,7 +103,8 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		}
 		
 		if(blockGUI){
-			ClickManager.SetActiveGUIModeLock(false);
+			Debug.LogWarning("ACTIVE MODE LOCK BYPASS");
+			//ClickManager.SetActiveGUIModeLock(false);
 		}
 		
 		// fire callback

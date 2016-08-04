@@ -8,16 +8,16 @@ public class InventoryTokenController : MonoBehaviour{
 	public Text amountLabel;
 	public InventoryTokenDragElement dragElement;		// Child gameobject for actual dragging
 
-	private string itemID;
+	private InventoryItem itemData;
 	private bool pointerDownAux = false;
 
 	public void Init(InventoryItem invItem) {
-		itemID = invItem.ItemID;
+		itemData = invItem;
 		gameObject.name = invItem.ItemID;
 		SetAmount(invItem.Amount);
 
 		// Initialize the child dragging element
-		dragElement.Init(itemID, transform);
+		dragElement.Init(itemData, transform);
 	}
 
 	public void SetAmount(int amount) {

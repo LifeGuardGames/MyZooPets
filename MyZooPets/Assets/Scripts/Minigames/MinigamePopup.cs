@@ -32,7 +32,8 @@ public class MinigamePopup : MonoBehaviour{
 
 			// lock clicks
 			ClickManager.Instance.Lock();
-			ClickManager.SetActiveGUIModeLock(true);
+			Debug.LogWarning("ACTIVE MODE LOCK BYPASS");
+			//ClickManager.SetActiveGUIModeLock(true);
 		}
 		else{
 			tween.Hide();
@@ -46,7 +47,8 @@ public class MinigamePopup : MonoBehaviour{
 
 			// clicks are ok
 			ClickManager.Instance.ReleaseLock();
-			ClickManager.SetActiveGUIModeLock(false);
+			Debug.LogWarning("ACTIVE MODE LOCK BYPASS");
+			//ClickManager.SetActiveGUIModeLock(false);
 		}		
 	}
 	

@@ -188,14 +188,10 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		}
 	}
 
-	public void OnMiniPetShopButton() {
-		OpenShop();
-	}
-
 	/// <summary>
 	/// Opens the shop. Store button calls this function
 	/// </summary>
-	private void OpenShop(){
+	public void OnMiniPetShopButton(){
 		this.GetComponent<TweenToggleDemux>().Hide();
 		storeTweenParent.Hide();
 

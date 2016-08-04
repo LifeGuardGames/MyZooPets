@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PetAnimationManager : Singleton<PetAnimationManager> {
 	public static EventHandler<EventArgs> OnBreathEnded; //event sent out when fire blow animation ended
@@ -29,7 +29,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	private bool isIdleAnimationActive = true; //F: temporary suspend any idle animations. 
 											//animations can still be played but need to be called explicitly
 
-
 	public bool IsBusy{
 		get{
 			return (currentAnimationState != PetAnimStates.Idling && 
@@ -52,30 +51,6 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 			RunHighFiveTimer();
 		}
 	}
-	
-//	void OnGUI(){
-
-//		if(GUI.Button(new Rect(0, 0, 100, 200), "Healthy")){
-////			animator.SetInteger("Health", 80);
-//			StartHighFive();
-//		}
-
-//		if(GUI.Button(new Rect(100, 0, 100, 50), "Sick1")){
-//			animator.SetInteger("Health", 50);
-//		}
-//
-//		if(GUI.Button(new Rect(200, 0, 100, 50), "Sick2")){
-//			animator.SetInteger("Health", 20);
-//		}
-//
-//		if(GUI.Button(new Rect(0, 50, 100, 50), "Happy")){
-//			animator.SetInteger("Mood", 80);
-//		}
-//
-//		if(GUI.Button(new Rect(100, 50, 100, 50), "Sad")){
-//			animator.SetInteger("Mood", 30);
-//		}
-//	}
 
 	public void DisableIdleAnimation(){
 		isIdleAnimationActive = false;

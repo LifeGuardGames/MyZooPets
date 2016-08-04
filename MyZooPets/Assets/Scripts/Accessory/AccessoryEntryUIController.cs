@@ -46,7 +46,7 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	/// <param name="item">Item.</param>
 	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, Item item){
 
-		GameObject itemUIObject = NGUITools.AddChild(goGrid, goPrefab);
+		GameObject itemUIObject = GameObjectUtils.AddChild(goGrid, goPrefab);
 		AccessoryEntryUIController entryController = itemUIObject.GetComponent<AccessoryEntryUIController>();
 		entryController.Init(item);	// Assigning unequip button
 		

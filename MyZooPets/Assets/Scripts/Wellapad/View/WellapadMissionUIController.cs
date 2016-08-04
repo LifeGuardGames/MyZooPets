@@ -1,8 +1,6 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 //---------------------------------------------------
 // Wellapad_MissionList
@@ -58,12 +56,12 @@ public class WellapadMissionUIController : MonoBehaviour {
 	private void CreateMission(string missionType){	
 		// find the available tasks for the mission and add them
 		MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(missionType);
+	
+		GameObject goTask = GameObjectUtils.AddChild(goGrid, prefabTask);
+		SetNameForGrid( goTask );
 			
-			GameObject goTask = NGUITools.AddChild(goGrid, prefabTask);
-			SetNameForGrid( goTask );
-			
-			// init this task UI with the task itself
-			goTask.GetComponent<WellapadTaskUI>().Init(task);
+		// init this task UI with the task itself
+		goTask.GetComponent<WellapadTaskUI>().Init(task);
 	}
 	
 	//---------------------------------------------------

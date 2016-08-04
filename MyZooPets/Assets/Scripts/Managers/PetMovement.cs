@@ -49,10 +49,7 @@ public class PetMovement : Singleton<PetMovement>{
 		// set up camera variables
 		scriptPan = CameraManager.Instance.PanScript;
 		mainCamera = CameraManager.Instance.CameraMain;
-		
-		int layerNGUI = LayerMask.NameToLayer("NGUI");
-		nguiCamera = NGUITools.FindCameraForLayer(layerNGUI);
-		
+
 		// get speed from constants
 		normalSpeed = Constants.GetConstant<float>("NormalMoveSpeed");
 		sickSpeed = Constants.GetConstant<float>("SickMoveSpeed");
@@ -187,7 +184,7 @@ public class PetMovement : Singleton<PetMovement>{
 		// if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
 		bool isPetAnimatorBusy = PetAnimationManager.Instance.IsBusy;
 		if(!ClickManager.Instance.CanRespondToTap(this.gameObject, ClickLockExceptions.Moving) || 
-			IsTouchingNGUI(gesture.Position) || isPetAnimatorBusy)
+			isPetAnimatorBusy)
 			return;
 		
 		// bit of a hack...remove if this causes any issues -- prevent pet movement if the edit decos UI is open
@@ -332,24 +329,5 @@ public class PetMovement : Singleton<PetMovement>{
 		else{
 			PetAnimationManager.Instance.Flip(false);
 		}
-	}
-
-	//True: if finger touches NGUI 
-	/// <summary>
-	/// Determines whether if the touch is touching NGUI element
-	/// </summary>
-	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
-	/// <param name="screenPos">Screen position.</param>
-	private bool IsTouchingNGUI(Vector2 screenPos){
-		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
-		RaycastHit hit;
-		int layerMask = 1 << 10; 
-		bool isOnNGUILayer = false;
-
-		// Raycast
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
-			isOnNGUILayer = true;
-		}
-		return isOnNGUILayer;
 	}
 }

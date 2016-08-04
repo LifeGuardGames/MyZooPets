@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Ninja trigger. The actual object that the player can cut.

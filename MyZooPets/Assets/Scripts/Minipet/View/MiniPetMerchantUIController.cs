@@ -86,11 +86,12 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		path[3] = itemPosition;
 		
 		Hashtable optional = new Hashtable();
-		GameObject animationSprite = NGUITools.AddChild(sprite.transform.parent.gameObject, itemSpritePrefab);
+		GameObject animationSprite = GameObjectUtils.AddChild(sprite.transform.parent.gameObject, itemSpritePrefab);
 		
 		animationSprite.transform.position = origin;
 		animationSprite.transform.localScale = new Vector3(90, 90, 1);
-		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
+		Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+		//animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
 
 		Debug.LogWarning("Tween sprite test start");
 		LeanTween.move(animationSprite, path, speed)

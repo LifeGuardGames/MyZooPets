@@ -70,7 +70,9 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 
 				// get the position of the actual reward object because we want to stream the XP from it
 				if(rewardObject != null){
-					Vector3 screenPos = LgNGUITools.GetScreenPosition(rewardObject);
+					Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+					Vector3 screenPos = Vector3.zero; // TEMP CODE - remove me once fixed
+                    //Vector3 screenPos = LgNGUITools.GetScreenPosition(rewardObject);
 					screenPos = CameraManager.Instance.TransformAnchorPosition(screenPos, InterfaceAnchors.TopLeft, InterfaceAnchors.Top);
 					StatsManager.Instance.ChangeStats(coinsDelta: 50, coinsPos: screenPos);
 				}

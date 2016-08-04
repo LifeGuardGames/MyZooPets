@@ -1,25 +1,20 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 
 //---------------------------------------------------
 // ButtonWellapad
 // Button that opens the Wellapad.
 //---------------------------------------------------
-
 public class ButtonWellapad : LgButton {
-
-//	public GameObject sunBeam;
 	private bool tutDone = false;
 
-	//---------------------------------------------------
-	// _Start()
-	//---------------------------------------------------		
 	protected override void _Start(){
 		// for debug/testing -- we may have the wellapad disabled
 		bool isWellapadOn = Constants.GetConstant<bool>("WellapadOn");
-		if(!isWellapadOn)
-			NGUITools.SetActive( gameObject, false );
+		if(!isWellapadOn) {
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			//NGUITools.SetActive(gameObject, false);
+		}
 
 		tutDone = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
 		if(tutDone){
@@ -32,10 +27,7 @@ public class ButtonWellapad : LgButton {
 				EnableButtonBounce(this, EventArgs.Empty);
 		}
 	}
-	
-	//---------------------------------------------------
-	// ProcessClick()
-	//---------------------------------------------------	
+
 	protected override void ProcessClick() {
 		// Call from fire crystal ui manager > opens wellapad uimanager > opens fire crystal ui
 		if(FireCrystalUIManager.Instance.IsOpen())

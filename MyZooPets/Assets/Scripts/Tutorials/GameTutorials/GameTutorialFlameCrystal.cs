@@ -35,8 +35,12 @@ public class GameTutorialFlameCrystal : GameTutorial {
 			FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
 			fireOrbItemReference = InventoryUIManager.Instance.GetFireOrbReference();
 			fireButtonReference = FireButtonUIManager.Instance.FireButtonObject;
-			Vector3 fireOrbItemPosition = LgNGUITools.GetScreenPosition(fireOrbItemReference);
-			Vector3 fireButtonPosition = LgNGUITools.GetScreenPosition(fireButtonReference);
+
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			Vector3 fireOrbItemPosition = Vector3.zero; // TEMP CODE - remove me once fixed
+			Vector3 fireButtonPosition = Vector3.zero; // TEMP CODE - remove me once fixed
+			//Vector3 fireOrbItemPosition = LgNGUITools.GetScreenPosition(fireOrbItemReference);
+			//Vector3 fireButtonPosition = LgNGUITools.GetScreenPosition(fireButtonReference);
 			
 			AddToProcessList(fireOrbItemReference);
 			

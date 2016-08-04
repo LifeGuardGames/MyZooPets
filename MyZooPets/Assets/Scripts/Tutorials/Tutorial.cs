@@ -157,7 +157,9 @@ public abstract class Tutorial{
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
 		if(isGUI){
-			focusPos = LgNGUITools.GetScreenPosition(goTarget);
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			focusPos = Vector3.zero; // TEMP CODE - remove me once fixed
+			//focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		}
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
@@ -184,7 +186,8 @@ public abstract class Tutorial{
 		
 		// Set the delay if defined
 		if(delay > 0){
-			goSpotlight.GetComponent<TweenAlpha>().delay = delay;
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			//goSpotlight.GetComponent<TweenAlpha>().delay = delay;
 		}
 		
 		// move the spotlight into position
@@ -219,7 +222,9 @@ public abstract class Tutorial{
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
 		if(isGUI){
-			focusPos = LgNGUITools.GetScreenPosition(goTarget);
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			focusPos = Vector3.zero; // TEMP CODE - remove me once fixed
+			//focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		}
 		else{
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
@@ -309,10 +314,11 @@ public abstract class Tutorial{
 		goPopup = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), goResource);
 //		newPos.z = goPopup.transform.position.z; // keep the default z-value
 		goPopup.transform.localPosition = newPos;
-		
+
 		//feed the script the option hashtable		
-		TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
-		script.Init(option);
+		Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+		//TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
+		//script.Init(option);
 	}
 
 	public void ShowRetentionPet(bool isFlipped, Vector3 position,
@@ -326,15 +332,17 @@ public abstract class Tutorial{
 
 		if(isButton){
 			goRetentionPet.GetComponent<Collider>().enabled = true;
-			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
-			message.enabled = true;
-			message.target = buttonTarget;
-			message.functionName = buttonFunctionName;
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			//UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
+			//message.enabled = true;
+			//message.target = buttonTarget;
+			//message.functionName = buttonFunctionName;
 		}
 		else{
 			goRetentionPet.GetComponent<Collider>().enabled = false;
-			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
-			message.enabled = false;
+			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
+			//UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
+			//message.enabled = false;
 		}
 	}
 

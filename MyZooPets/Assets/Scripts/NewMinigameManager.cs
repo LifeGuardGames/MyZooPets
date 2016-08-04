@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// event arguments for game state callback
 public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehaviour{
+
 	protected abstract void _Start();
 
 	protected abstract void _StartTutorial();

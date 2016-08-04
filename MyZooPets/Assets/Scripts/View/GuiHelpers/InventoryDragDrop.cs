@@ -6,12 +6,14 @@ using System;
 /// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 /// </summary>
 public class InventoryDragDrop : MonoBehaviour{
+
 	public class InvDragDropArgs : EventArgs{
 		public bool IsValidTarget{get; set;}
 		public Transform ItemTransform{get; set;}
 		public Transform ParentTransform{get; set;}
 		public Collider TargetCollider{get; set;}
 	}
+	/*
 
 	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
 	public event EventHandler<InvDragDropArgs> OnItemPress; //Event will be fired when item is pressed
@@ -118,7 +120,7 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Start the drag event and perform the dragging.
 	/// </summary>
 	void OnDrag(Vector2 delta){
-		/*
+
 		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
@@ -208,7 +210,7 @@ public class InventoryDragDrop : MonoBehaviour{
 				isScrolling = true;
 			}
 		}
-		*/
+
 	}
 
 	/// <summary>
@@ -257,4 +259,5 @@ public class InventoryDragDrop : MonoBehaviour{
 			if (!isPressed) Drop();
 		}
 	}
+*/
 }

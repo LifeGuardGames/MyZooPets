@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class MiniPetRetentionPet : MiniPet {
 
 	string missionID;
+	public GameObject notifier;
 
 	void Awake(){
 		minipetType = MiniPetTypes.Retention;
@@ -25,6 +26,7 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	protected override void OpenChildUI(){
+		notifier.SetActive(false);
 		if(!TutorialManager.Instance.IsTutorialActive()){
 			miniPetSpeechAI.ShowTipMsg();
 			Hashtable hash = new Hashtable();
@@ -71,5 +73,18 @@ public class MiniPetRetentionPet : MiniPet {
 		WellapadMissionController.Instance.AddTask("DailyInhaler");
 		WellapadMissionController.Instance.AddTask("FightMonster");
 
+	}
+
+	void OnBecameVisible() {
+		List<MutableDataWellapadTask> mission;
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")) {
+			mission = WellapadMissionController.Instance.GetTaskGroup("TutorialPart1");
+		}
+		else {
+			mission = WellapadMissionController.Instance.GetTaskGroup("Critical");
+		}
+		if(mission != null && WellapadMissionController.Instance.CheckGroupReward() == RewardStatuses.Unclaimed) {
+			notifier.SetActive(true);
+		}
 	}
 }

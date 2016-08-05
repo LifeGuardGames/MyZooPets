@@ -6,6 +6,7 @@ public class MiniPetGameMaster : MiniPet{
 
 	public MinigameTypes minigameType;
 	public string minigameTaskId;
+	public GameObject notifier;
 
 	void Awake(){
 		minipetType = MiniPetTypes.GameMaster;
@@ -116,6 +117,11 @@ public class MiniPetGameMaster : MiniPet{
 			}
 		}
 	}
-
+	void OnBecameVisible() {
+		MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(minigameTaskId);
+		if(task != null && task.isReward == RewardStatuses.Unclaimed) {
+			notifier.SetActive(true);
+		}
+	}
 
 }

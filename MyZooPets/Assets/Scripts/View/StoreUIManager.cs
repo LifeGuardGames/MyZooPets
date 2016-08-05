@@ -277,7 +277,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					tab.name = decorationEnums[counter];
 					
 					Image imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<Image>();
-					imageSprite.sprite = SpriteCacheManager.GetSprite("iconDeco" + tab.name + "2");
+					imageSprite.sprite = SpriteCacheManager.GetDecoIconSprite((DecorationTypes)Enum.Parse(typeof(DecorationTypes), tab.name));
 
 					//Debug.Log(tabParent.name);
 					// If the gate xml has the deco type allowed, enable button
@@ -302,14 +302,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		ShowStoreSubPanel();
 	}
 
-	
-	//----------------------------------------------------
-	// CreateSubCategoryItemsTab()
-	// Create items for sub category.
-	// public method to be called by button
-	//----------------------------------------------------
+	// Create items for sub category, public method to be called by button
 	public void CreateSubCategoryItemsTab(GameObject tab){
-		CreateSubCategoryItemsTab(tab.GetParent().name);
+		CreateSubCategoryItemsTab(tab.name);
 	}
 	
 	//----------------------------------------------------
@@ -317,8 +312,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	// Create items for sub category 
 	//----------------------------------------------------
 	public void CreateSubCategoryItemsTab(string tabName, StoreShortcutType shortcutType = StoreShortcutType.None){
-//		Debug.Log("OPENING STORE MODE " + shortcutType.ToString());
-		
+		//		Debug.Log("OPENING STORE MODE " + shortcutType.ToString());
+
 		//Destroy existing items first
 		DestroyGrid();
 		

@@ -34,6 +34,9 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 				PetAnimationManager.Instance.WaitingToBeFed();
 			}
 		}
+		if(itemType == ItemType.Decorations) {
+
+		}
 	}
 
 	public void OnDrag(PointerEventData eventData) {
@@ -50,6 +53,28 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 	public void OnEndDrag(PointerEventData eventData) {
 		dragAnimator.SetTrigger("Dropped");
 		itemBeingDragged = null;
+
+		// Shoot ray and determine what object it hit in 3D space
+		Ray touchRay = Camera.main.ScreenPointToRay(eventData.position);
+		RaycastHit hit;
+		Physics.Raycast(touchRay, out hit);
+		if(hit.collider != null) {
+			if(itemType == ItemType.Foods) {
+				if(hit.collider.gameObject.tag == "ItemTarget") {
+					Debug.Log("YESSS");
+				}
+			}
+		}
+		else {  // Hit nothing
+			if(itemType == ItemType.Foods) {
+				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {
+					PetAnimationManager.Instance.AbortFeeding();
+				}
+			}
+			if(itemType == ItemType.Decorations) {
+
+			}
+		}
 	}
 
 	// Called from animator

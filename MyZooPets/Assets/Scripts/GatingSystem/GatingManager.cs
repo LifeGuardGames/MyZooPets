@@ -493,9 +493,7 @@ public class GatingManager : Singleton<GatingManager>{
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
 		GameObject petLocation = GameObject.Find("Pet");
-		Vector3 fireButtonLoc = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, petLocation.transform.position);
-		fireButtonLoc = CameraManager.Instance.TransformAnchorPosition(fireButtonLoc, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
-		FireButtonUIManager.Instance.transform.localPosition = new Vector3(fireButtonLoc.x, fireButtonLoc.y, 1f);
+
 
 		// get the gate in this room
 		Gate gate = activeGates[scriptPan.currentLocalPartition];

@@ -79,7 +79,7 @@ public class DecoModeUIManager : SingletonUI<DecoModeUIManager> {
 
 		// push the shop mode type onto the click manager stack
 		ClickManager.Instance.Lock(UIModeTypes.Store);
-
+		CloseUI();
 		// open the shop
 		StoreUIManager.OnShortcutModeEnd += ReopenChooseMenu;
 		StoreUIManager.Instance.OpenToSubCategory("Decorations", true, StoreShortcutType.DecorationUIStoreButton);
@@ -96,7 +96,7 @@ public class DecoModeUIManager : SingletonUI<DecoModeUIManager> {
 
 		// pop the mode we pushed earlier from the click manager
 		ClickManager.Instance.ReleaseLock();
-
+		OpenUI();
 		StoreUIManager.OnShortcutModeEnd -= ReopenChooseMenu;
 	}
 

@@ -336,24 +336,30 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		Level currentLevel = GetCurrentLevel(miniPetID);
 		string foodID;
 		int rand;
-        switch(currentLevel) {
-			case Level.Level1:
-				rand = UnityEngine.Random.Range(0, 4);
-				foodID = "Food" + rand.ToString();
-				break;
-			case Level.Level2:
-				rand = UnityEngine.Random.Range(4, 9);
-				foodID = "Food" + rand;
-				break;
-			case Level.Level3:
-				rand = UnityEngine.Random.Range(9, 14);
-				foodID = "Food" + rand;
-				break;
-			default:
-				rand = UnityEngine.Random.Range(0, 4);
-				foodID = "Food" + rand;
-				break;
-		}
+		if(DataManager.Instance.GameData.MiniPets.GetMiniPetFoodChoice(miniPetID) == null) {
+			switch(currentLevel) {
+				case Level.Level1:
+					rand = UnityEngine.Random.Range(0, 4);
+					foodID = "Food" + rand.ToString();
+					break;
+				case Level.Level2:
+					rand = UnityEngine.Random.Range(4, 9);
+					foodID = "Food" + rand;
+					break;
+				case Level.Level3:
+					rand = UnityEngine.Random.Range(9, 14);
+					foodID = "Food" + rand;
+					break;
+				default:
+					rand = UnityEngine.Random.Range(0, 4);
+					foodID = "Food" + rand;
+					break;
+			}
+			DataManager.Instance.GameData.MiniPets.SetMiniPetFoodChoice(miniPetID, rand);
+        }
+		else {
+			foodID = "Food" + DataManager.Instance.GameData.MiniPets.GetMiniPetFoodChoice(miniPetID);
+        }
 		return foodID;
 	}
 

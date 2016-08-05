@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Script to control Minipet and contains the basic properties of a minipet.
 /// Should attach this script to the highest parent in the minipet prefab
 /// </summary>
-public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
+public abstract class MiniPet : MonoBehaviour {
+
 	protected string minipetId;
 	public string MinipetId{
 		get{ return minipetId; }
@@ -36,31 +39,28 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 
 	private bool isMiniPetColliderLocked = false; //use this to disable click on minipet when zooming in
 	public bool isFinishEating = false; //F: Need to finish the eating logic after camera zooms in
+	private string invItemID; //local reference to the item that is dropped on the minipet
 
-	public EventHandler<EventArgs> OnTutorialMinipetClicked;	// event that fires when the user clicks on pet during tutorial
+	public EventHandler<EventArgs> OnTutorialMinipetClicked;    // event that fires when the user clicks on pet during tutorial
+	public bool isAdded;
 
 	/// <summary>
 	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated with the proper information.
 	/// </summary>
 	/// <param name="data">ImmutableDataMiniPet.</param>
 	public void Init(ImmutableDataMiniPet data){
-		minipetId = data.ID;
-		name = data.Name;
+		this.minipetId = data.ID;
+		this.name = data.Name;
 	}
 
 	protected virtual void Start(){		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
+		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
 		isFinishEating = MiniPetManager.Instance.IsPetFinishedEating(minipetId);
 
 		AccessoriesCheck(false);
 		RefreshUnlockState();
-	}
-
-	void OnDestroy() {
-		if(MiniPetHUDUIManager.Instance) {
-			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
-		}
 	}
 
 	// Check to see if you want to display pet or egg
@@ -90,6 +90,13 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 		}
 	}
 	
+	void OnDestroy(){
+		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
+		if(MiniPetHUDUIManager.Instance){
+			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
+		}
+	}
+
 	private void OnTap(TapGesture gesture){
 		Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
 		//if(!IsTouchingNGUI(gesture.Position)){
@@ -110,9 +117,10 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 							return;
 						}
 					}
-					if(!isUIOpened && isModeLockEmpty){
+					if(!isUIOpened && isModeLockEmpty && !isAdded) {
 						AudioManager.Instance.PlayClip("talkMinipet");
 						PetMovement.Instance.MovePet(petPosition.position);
+						isAdded = true;
 						PetMovement.Instance.OnReachedDest += ZoomInToMiniPet;
 						//ZoomInToMiniPet();
 						//OpenChildUI();	// Further child UI calls
@@ -135,7 +143,7 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 				bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
 
 				if(!isMiniPetColliderLocked) {
-					if(LoadLevelManager.Instance.GetCurrentSceneName() == SceneUtils.BEDROOM) {
+                    if(LoadLevelManager.Instance.GetCurrentSceneName() == SceneUtils.BEDROOM) {
 						if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()) {
 							if(OnTutorialMinipetClicked != null) {
 								OnTutorialMinipetClicked(this, EventArgs.Empty);
@@ -156,6 +164,7 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 
 
 	private void ZoomInToMiniPet(System.Object sender,EventArgs args){
+		isAdded = false;
 		OpenChildUI();  // Further child UI calls
 						//if pet not finish eating yet. finish eating logic
 		Vector3 position = this.transform.position + zoomPositionOffset;
@@ -210,19 +219,35 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 		else{
 			isFinishEating = true;
 			DataManager.Instance.GameData.MiniPets.SaveHunger(minipetId, isFinishEating);
-		}
+			DataManager.Instance.GameData.MiniPets.SetMiniPetFoodChoice(minipetId, null);
+        }
 	}
 
-	// Implementation for IDropInventoryTarget
-	public void OnItemDropped(InventoryItem itemData) {
-		if(MiniPetHUDUIManager.Instance.IsOpen()) {
-			// check if minipet wants this food
-			if(MiniPetManager.Instance.GetFoodPreference(minipetId) == itemData.ItemID) {
-				InventoryManager.Instance.UseMiniPetItem(itemData.ItemID);    // Tell inventory logic item is used -> remove
+	/// <summary>
+	/// When item is dropped on MP do the necessary check and carry out the action.
+	/// </summary>
+	/// <param name="sender">Sender.</param>
+	/// <param name="args">Arguments.</param>
+	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
+		bool isUIOpen = MiniPetHUDUIManager.Instance.IsOpen();
+
+		if(args.TargetCollider.name == this.gameObject.name && isUIOpen){
+			invItemID = args.ItemTransform.name; //get id from listener args
+			InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
+			string preferredFoodID = "";
+
+			preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
+
+			//check if minipet wants this food
+			if(preferredFoodID == invItem.ItemID){
+				//use item if so
+				args.IsValidTarget = true;
+				InventoryManager.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();
 			}
-			else {  // show notification that the mp wants a specific food
+			// show notification that the mp wants a specific food
+			else{
 				ShowFoodPreferenceMessage();
 			}
 		}

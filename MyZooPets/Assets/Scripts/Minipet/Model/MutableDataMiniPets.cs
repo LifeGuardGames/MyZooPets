@@ -13,6 +13,7 @@ public class MutableDataMiniPets{
 		public bool CanGiveMission {get; set;}
 		public bool IsHatched {get; set;}
 		public bool IsFinishEating {get; set;}
+		public int? FoodChoice;
 
 		public int CurrItem {get; set;}
 		public bool IsMerchanItemBoughtInPP {get; set;}
@@ -27,6 +28,7 @@ public class MutableDataMiniPets{
 			IsFinishEating =  false;
 			CurrItem =  -1;
 			IsMerchanItemBoughtInPP = false;
+			FoodChoice = null;
 		}
 	}
 
@@ -241,5 +243,15 @@ public class MutableDataMiniPets{
 		else{
 			Debug.LogError("Can not find minipet in progress dictionary " + miniPetID);
 		}
+	}
+
+	public int? GetMiniPetFoodChoice(string minipetID) {
+		Status stats = MiniPetProgress[minipetID];
+		return stats.FoodChoice;
+	}
+
+	public void SetMiniPetFoodChoice(string minipetID, int? foodChoice) {
+		Status stats = MiniPetProgress[minipetID];
+		stats.FoodChoice = foodChoice;
 	}
 }

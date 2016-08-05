@@ -18,7 +18,6 @@ public class GatingManager : Singleton<GatingManager>{
 	public static EventHandler<EventArgs> OnDamageGate; 	// When player damages the gate
 	public static EventHandler<EventArgs> OnDestroyedGate;	// When a specific gate has been destroyed
 	//=====================================================
-	private GameObject body;
 	public Vector3 startingLocation;	 // starting location for the gates -- might differ from area to area
 
 	private string currentZone; // area that this manager is in
@@ -39,7 +38,6 @@ public class GatingManager : Singleton<GatingManager>{
 	/// before converting them to world point
 	/// </summary>
 	public Vector3 startingScreenPosition;
-
 
 	private PanToMoveCamera scriptPan; // the pan to movement script; it's got constants we need...
 	public Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
@@ -65,9 +63,6 @@ public class GatingManager : Singleton<GatingManager>{
 		
 		// now spawn the gates
 		SpawnGates();
-
-		// Search and assign bodycollider
-		body = GameObject.Find("BodyCollider");
 	}
 
 	/// <summary>
@@ -406,8 +401,7 @@ public class GatingManager : Singleton<GatingManager>{
 
 
 	public void CanNowBlowFire(){
-		
-		body.GetComponent<PetInteractionManager>().isInteractable = false;
+		PetInteractionManager.Instance.isInteractable = false;
 		
 		//once pet is in position for fire breathing. Idle animations need to be turn off
 		//otherwise it might break the breathe fire animation
@@ -438,7 +432,7 @@ public class GatingManager : Singleton<GatingManager>{
 		if(OnReachedGate != null)
 			OnReachedGate(this, EventArgs.Empty);
 
-		body.GetComponent<PetInteractionManager>().isInteractable = false;
+		PetInteractionManager.Instance.isInteractable = false;
 
 		//once pet is in position for fire breathing. Idle animations need to be turn off
 		//otherwise it might break the breathe fire animation
@@ -520,8 +514,8 @@ public class GatingManager : Singleton<GatingManager>{
 	private void EnableUI(){
 		ClickManager.Instance.ReleaseLock();
 		NavigationUIManager.Instance.ShowPanel();
-		
-		body.GetComponent<PetInteractionManager>().isInteractable = true;
+
+		PetInteractionManager.Instance.isInteractable = true;
 
 		//turn pet idle animation back on before leaving the gated room
 		PetAnimationManager.Instance.EnableIdleAnimation();

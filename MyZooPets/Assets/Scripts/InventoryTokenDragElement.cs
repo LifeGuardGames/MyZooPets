@@ -11,12 +11,14 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 	public Animator dragAnimator;
 	public Transform originalParent;        // TODO Set this to private
 
-	private ItemType itemType;		// Get item information from here
+	private ItemType itemType;      // Get item information from here
+	private InventoryItem itemData;
 
-	public void Init(InventoryItem itemData, Transform _originalParent) {
-		tokenImage.sprite = SpriteCacheManager.GetItemSprite(itemData.ItemID);
+	public void Init(InventoryItem _itemData, Transform _originalParent) {
+		itemData = _itemData;
+		tokenImage.sprite = SpriteCacheManager.GetItemSprite(_itemData.ItemID);
 		originalParent = _originalParent;
-		itemType = itemData.ItemType;
+		itemType = _itemData.ItemType;
     }
 
 	//TODO Handle StatHintController
@@ -61,7 +63,14 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		if(hit.collider != null) {
 			if(itemType == ItemType.Foods) {
 				if(hit.collider.gameObject.tag == "ItemTarget") {
-					Debug.Log("YESSS");
+					// Get the object's interface that handles item processing
+					IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();
+					if(dropTarget != null) {
+						dropTarget.OnItemDropped(itemData);		// Call the interface, which handles the rest
+					}
+					else {
+						Debug.LogError("Item target does not implement IDropInventoryTarget:" + hit.collider.gameObject.name);
+					}
 				}
 			}
 		}

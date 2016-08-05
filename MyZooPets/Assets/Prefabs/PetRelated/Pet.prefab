@@ -32,6 +32,8 @@ GameObject:
   - 114: {fileID: 11400022}
   - 114: {fileID: 11400030}
   - 114: {fileID: 11404732}
+  - 65: {fileID: 6543190}
+  - 114: {fileID: 11407822}
   m_Layer: 0
   m_Name: Pet
   m_TagString: ItemTarget
@@ -47,7 +49,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400004}
-  - 114: {fileID: 11400014}
   m_Layer: 0
   m_Name: FloatyPosition
   m_TagString: Untagged
@@ -81,7 +82,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400008}
   - 114: {fileID: 11400008}
-  - 114: {fileID: 11400016}
   m_Layer: 0
   m_Name: Speech
   m_TagString: Untagged
@@ -1896,27 +1896,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400234}
   - 65: {fileID: 6500002}
-  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: HighFiveCollider
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &100236
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400236}
-  - 65: {fileID: 6500004}
-  - 114: {fileID: 11400026}
-  m_Layer: 0
-  m_Name: BodyCollider
-  m_TagString: ItemTarget
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1956,13 +1938,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -7.59052e-17, z: 26.395676}
+  m_LocalPosition: {x: 0, y: 0.15, z: 27.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400024}
   - {fileID: 400004}
   - {fileID: 400008}
-  - {fileID: 400236}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400004
@@ -3472,18 +3453,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400024}
   m_RootOrder: 4
---- !u!4 &400236
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100236}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.392746, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400002}
-  m_RootOrder: 3
 --- !u!4 &400240
 Transform:
   m_ObjectHideFlags: 1
@@ -3570,22 +3539,22 @@ BoxCollider:
   m_GameObject: {fileID: 100234}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 1}
+  m_Size: {x: 2, y: 2, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &6500004
+--- !u!65 &6543190
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100236}
+  m_GameObject: {fileID: 100002}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9.6, y: 11.57, z: 0}
-  m_Center: {x: 0, y: 2.61, z: 0}
+  m_Size: {x: 9, y: 11, z: 0.1}
+  m_Center: {x: 0, y: 4.9, z: 0}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 3
@@ -3637,18 +3606,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e9ab435575fca1479bfa19d3afdb24a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11400006
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f65772b8ac9c4473bb0574626ee1edc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInteractable: 1
 --- !u!114 &11400008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3677,82 +3634,6 @@ MonoBehaviour:
   overrideY: 0
   lockZ: 1
   overrideZ: 0
---- !u!114 &11400014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 0
-  cullWhileDragging: 0
-  worldToLocal:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: -0.9
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: -10.18
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: -26.295675
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
---- !u!114 &11400016
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showInPanelTool: 1
-  generateNormals: 0
-  depthPass: 0
-  widgetsAreStatic: 0
-  cullWhileDragging: 0
-  worldToLocal:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: -8.778371
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: -26.395676
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  mAlpha: 1
-  mDebugInfo: 1
-  mClipping: 0
-  mClipRange: {x: 0, y: 0, z: 0, w: 0}
-  mClipSoftness: {x: 40, y: 40}
 --- !u!114 &11400018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3792,8 +3673,8 @@ MonoBehaviour:
   petShadow: {fileID: 100010}
   flippableComponents: {fileID: 100024}
   fireBlowPosition: {fileID: 100018}
-  bodyCollider: {fileID: 100236}
-  highFiveCollider: {fileID: 100234}
+  bodyCollider: {fileID: 6543190}
+  highFiveCollider: {fileID: 6500002}
   sadIdleAnimations:
   - SadHunger
   - SadFidget
@@ -3971,18 +3852,6 @@ MonoBehaviour:
     - {fileID: 100038}
     - {fileID: 100202}
     - {fileID: 100228}
---- !u!114 &11400026
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f65772b8ac9c4473bb0574626ee1edc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInteractable: 1
 --- !u!114 &11400030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4773,6 +4642,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad7dff36e6e34899b0b865d2c22444e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11407822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f65772b8ac9c4473bb0574626ee1edc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInteractable: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

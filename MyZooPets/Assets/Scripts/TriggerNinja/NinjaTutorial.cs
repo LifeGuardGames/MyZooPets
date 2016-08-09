@@ -33,6 +33,7 @@ public class NinjaTutorial : MinigameTutorial {
 				GameObject.Destroy(trigger1Object);
 			}
 		}
+		NinjaManager.Instance.LifeCount = 3;
 		NinjaManager.Instance.isTutorialRunning = false;
 
 		if(swipeTutObject != null)

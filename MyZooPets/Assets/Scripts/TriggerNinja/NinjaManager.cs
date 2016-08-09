@@ -32,6 +32,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 
 	private int lifeCount;
 	public int LifeCount {
+		set { lifeCount = value; }
 		get { return lifeCount; }
 	}
 

@@ -1,20 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 /// <summary>
 /// Accessory user interface manager.
 /// 
 /// ARCHITECTURE:
-/// 
 /// Controlling "store" buttons and entries:
 /// 	AccessoryUIManager -> AccessoryEntryUIController
 /// 
 /// Controlling equipping accessory on pet:
 /// 	AccessoryUIManager -> AccessoryNodeController -> AccessoryNode
-/// 
 /// </summary>
 public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public GridLayoutGroup grid;
@@ -22,9 +20,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public GameObject accessoryEntryPrefab;
 	public GameObject backButton;
 	public GameObject zoomItem;
-	public PositionTweenToggle hatButton;
-	public PositionTweenToggle glassesButton;
-	public bool isShowing = false;
+	public TweenToggle baseTween;
+	public TweenToggle gridTween;
 
 	// related to zooming into the badge board
 	private float zoomTime  = 0.5f;
@@ -66,7 +63,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			};
 			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, zoomTime, cameraDoneFunction);
 
-
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
@@ -82,40 +78,37 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		}
 	}
 
-	public void ShowHats() {
-		hatButton.Hide();
-		glassesButton.Hide();
-		isShowing = true;
+	public void OnHatsButton(){
+		ShowCategory(AccessoryTypes.Hat);
+	}
+
+	public void OnGlassesButton(){
+		ShowCategory(AccessoryTypes.Glasses);
+	}
+
+	public void ShowCategory(AccessoryTypes type){
+		baseTween.Hide();
+		gridTween.Show();
 		int itemCount = 0;
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
-		AccessoryTypes lastCategory = AccessoryTypes.Hat;
-		bool isFirstTitle = true;
 		foreach(AccessoryItem accessory in accessoryList) {
-			if(accessory.AccessoryType == AccessoryTypes.Hat) {
-				// Create a new accessory type label if lastCategory has changed
-				if(lastCategory != accessory.AccessoryType || isFirstTitle) {
-					isFirstTitle = false;
-					GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
-					UILocalize localize = itemUIObject.GetComponent<UILocalize>();
+			if(accessory.AccessoryType == type) {
+				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
+				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
 
-					switch((AccessoryTypes)accessory.AccessoryType) {
-						case AccessoryTypes.Hat:
-							localize.key = "ACCESSORIES_TYPE_HAT";
-							break;
-						case AccessoryTypes.Glasses:
-							localize.key = "ACCESSORIES_TYPE_GLASSES";
-							break;
-						case AccessoryTypes.Color:
-							localize.key = "ACCESSORIES_TYPE_COLOR";
-							break;
-						default:
-							Debug.LogError("Invalid accessory type");
-							break;
-					}
-					localize.Localize();    // Force relocalize
-					lastCategory = accessory.AccessoryType;
+				switch((AccessoryTypes)accessory.AccessoryType) {
+					case AccessoryTypes.Hat:
+						localize.key = "ACCESSORIES_TYPE_HAT";
+						break;
+					case AccessoryTypes.Glasses:
+						localize.key = "ACCESSORIES_TYPE_GLASSES";
+						break;
+					default:
+						Debug.LogError("Invalid accessory type");
+						break;
 				}
+				localize.Localize();    // Force relocalize
 
 				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
 				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
@@ -125,51 +118,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		// Adjust the grid height based on the height of the cell and spacing
 		float gridHeight = itemCount * (grid.cellSize.y + grid.spacing.y);
 		grid.GetComponent<RectTransform>().sizeDelta = new Vector2(grid.cellSize.x, gridHeight);
-	}
-
-	public void ShowGlasses() {
-		hatButton.Hide();
-		glassesButton.Hide();
-		isShowing = true;
-		int itemCount = 0;
-		// Populate the entries with loaded data
-		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
-		AccessoryTypes lastCategory = AccessoryTypes.Hat;
-		bool isFirstTitle = true;
-		foreach(AccessoryItem accessory in accessoryList) {
-			if(accessory.AccessoryType == AccessoryTypes.Glasses) {
-				// Create a new accessory type label if lastCategory has changed
-				if(lastCategory != accessory.AccessoryType || isFirstTitle) {
-					isFirstTitle = false;
-					GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
-					UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-
-					switch((AccessoryTypes)accessory.AccessoryType) {
-						case AccessoryTypes.Hat:
-							localize.key = "ACCESSORIES_TYPE_HAT";
-							break;
-						case AccessoryTypes.Glasses:
-							localize.key = "ACCESSORIES_TYPE_GLASSES";
-							break;
-						case AccessoryTypes.Color:
-							localize.key = "ACCESSORIES_TYPE_COLOR";
-							break;
-						default:
-							Debug.LogError("Invalid accessory type");
-							break;
-					}
-					localize.Localize();    // Force relocalize
-					lastCategory = accessory.AccessoryType;
-				}
-
-				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
-				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
-				itemCount++;
-			}
-			// Adjust the grid height based on the height of the cell and spacing
-			float gridHeight = itemCount * (grid.cellSize.y + grid.spacing.y);
-			grid.GetComponent<RectTransform>().sizeDelta = new Vector2(grid.cellSize.x, gridHeight);
-		}
 	}
 
 	/// <summary>
@@ -182,19 +130,12 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		toggleDemux.ShowFunctionName = "MovePet";
 	}
 
-	public void OnBackButton() {
-		if(!isShowing) {
-			_CloseUI();
-		}
-		else {
-			int tempChildCount = grid.transform.childCount;
-			for(int i = 0; i < tempChildCount; i++) {
-				Destroy(grid.transform.GetChild(i).gameObject);
-            }
-			hatButton.Show();
-			glassesButton.Show();
-			isShowing = false;
-		}
+	public void OnBaseBackButton() {
+		CloseUI();
+	}
+
+	public void OnGridBackButton(){
+		gridTween.Hide();
 	}
 
 	// The back button on the left top corner is clicked to zoom out of the zoom item
@@ -229,40 +170,26 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 	}
 
-	/// <summary>
-	/// Raises the buy button event.
-	/// </summary>
-	/// <param name="button">Button.</param>
-	public void OnBuyButton(GameObject button){
-		Transform buttonParent = button.transform.parent;
-		string itemID = buttonParent.name;
-		Item itemData = DataLoaderItems.GetItem(itemID);
-		
+	// Called from AccessoryEntryUIController, returns success state for button toggling
+	public void BuyAccessory(Item itemData){
+		bool isSuccess = false;
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(StatsManager.Instance.GetStat(StatType.Coin) >= itemData.Cost){
-				//Disable the buy button so user can't buy the same accessory anymore 
-				Button buyButton = button.GetComponent<Button>();		// TODO change check - sean
-				buyButton.gameObject.SetActive(false);                  // TODO change check - sean
-
-				InventoryManager.Instance.AddItemToInventory(itemID);
+				
+				InventoryManager.Instance.AddItemToInventory(itemData.ID);
 				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
+				EquipAccessory(itemData.ID);
 
-				// Change the state of the button
-				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
-
-				// Equip item
-				Equip(itemID);
-
-				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 
 				//Check for badge unlock
 				int totalNumOfAccessories = DataManager.Instance.GameData.Inventory.AccessoryItems.Count;
 				BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
 
-				// play a sound since an item was bought
 				AudioManager.Instance.PlayClip(soundBuy);
+
+				RefreshAccessoryItems();
 			}
 			else{
 				HUDUIManager.Instance.PlayNeedCoinAnimation();
@@ -272,46 +199,23 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		}
 	}
 
-	public void OnEquipButton(GameObject button){
-		Transform buttonParent = button.transform.parent;
-		string itemID = buttonParent.name;
-
-		Equip(itemID);
+	// Called from AccessoryEntryUIController
+	public void EquipAccessory(string itemID){
+		UnequipAccessory(itemID);									// Unequip anything first
+		AccessoryManager.Instance.SetAccessoryAtNode(itemID);		// Set the mutable data
+		AccessoryNodeController.Instance.SetAccessory(itemID);		// Equip the node
+		RefreshAccessoryItems();
 
 		AudioManager.Instance.PlayClip(soundEquip);
 	}
 
-	public void OnUnequipButton(GameObject button){
-		Transform buttonParent = button.transform.parent;
-		string itemID = buttonParent.name;
-
-		Unequip(itemID);
+	// Called from AccessoryEntryUIController
+	public void UnequipAccessory(string itemID){
+		AccessoryManager.Instance.RemoveAccessoryAtNode(itemID);	// Set the mutable data
+		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
+		RefreshAccessoryItems();
 
 		AudioManager.Instance.PlayClip(soundUnequip);
-	}
-
-	public void Equip(string itemID){
-
-		// Unequip anything first
-		Unequip(itemID);
-
-		// Set the mutable data
-		AccessoryManager.Instance.SetAccessoryAtNode(itemID);
-
-		// Equip the node
-		AccessoryNodeController.Instance.SetAccessory(itemID);
-
-		RefreshAccessoryItems();
-	}
-
-	public void Unequip(string itemID){
-		// Set the mutable data
-		AccessoryManager.Instance.RemoveAccessoryAtNode(itemID);
-
-		// Unequip the node
-		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
-
-		RefreshAccessoryItems();
 	}
 
 	//Check for any UI updateds
@@ -321,6 +225,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		}
 	}
 
+	// Used for unlocking new decos
 	private void RefreshAccessoryItems(object sender, EventArgs args){
 		RefreshAccessoryItems();
 	}

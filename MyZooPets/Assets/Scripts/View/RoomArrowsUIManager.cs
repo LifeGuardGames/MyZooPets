@@ -91,7 +91,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		if(rightArrowTween.gameObject.transform.childCount > 0) {
 			rightArrowTween.gameObject.transform.GetChild(0).GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("navArrowRight");
 		}
-		//rightArrowTween.Show();
+		rightArrowTween.Show();
 	}
 
 	// Shows left arrow

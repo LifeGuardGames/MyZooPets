@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
 
 public enum AccessoryButtonType{
 	UnboughtLocked,		// Not yet bought, use BuyButton but locked
@@ -13,17 +13,6 @@ public enum AccessoryButtonType{
 /// Store item entry.
 /// </summary>
 public class AccessoryEntryUIController : MonoBehaviour{
-
-	private string itemID;
-	public string ItemID{
-		get{
-			return itemID;
-		}
-		set{
-			itemID = value;
-		}
-	}
-
 	private AccessoryItem itemData;
 
 	// various elements on the entry
@@ -32,34 +21,23 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	public Image spriteIcon;
 
 	public Image buyButtonIcon;
-	public Button buyButtonMessage;
-	public Button equipButtonMessage;
-	public Button unequipButtonMessage;
+	public Button buyButton;
+	public Button equipButton;
+	public Button unequipButton;
 
 	private bool islockExists = false;
-	
-	/// <summary>
-	/// Creates the entry.
-	/// </summary>
-	/// <param name="goGrid">grid to add game object to.</param>
-	/// <param name="goPrefab">prefab to instantiate.</param>
-	/// <param name="item">Item.</param>
-	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, Item item){
 
+	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, Item item){
 		GameObject itemUIObject = GameObjectUtils.AddChild(goGrid, goPrefab);
 		AccessoryEntryUIController entryController = itemUIObject.GetComponent<AccessoryEntryUIController>();
 		entryController.Init(item);	// Assigning unequip button
-		
 		return itemUIObject;
 	}
 	
 	/// <summary>
-	/// Init the specified itemData.
-	/// This function does the work and actually sets the
-	/// UI labels, sprites, etc for this entry based on
+	/// This function does the work and actually sets the UI labels, sprites, etc for this entry based on
 	/// the incoming item data.
 	/// </summary>
-	/// <param name="itemData">Item data.</param>
 	public void Init(Item newItemData){
 		// set the proper values on the entry
 		gameObject.name = newItemData.ID;
@@ -72,10 +50,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 		labelName.text = newItemData.Name;
 		spriteIcon.sprite = SpriteCacheManager.GetSprite(newItemData.TextureName);
 
-		// Assign buttons
-		buyButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnBuyButton(buyButtonMessage.gameObject));
-		equipButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnEquipButton(equipButtonMessage.gameObject));
-		unequipButtonMessage.onClick.AddListener(() => AccessoryUIManager.Instance.OnUnequipButton(unequipButtonMessage.gameObject));
 		CheckState();
 	}
 
@@ -110,7 +84,6 @@ public class AccessoryEntryUIController : MonoBehaviour{
 	public void SetState(AccessoryButtonType buttonType){
 		switch(buttonType){
 		case AccessoryButtonType.UnboughtLocked:
-
 			// Only want to spawn one lock
 			if(!islockExists){
 				islockExists = true;
@@ -120,32 +93,41 @@ public class AccessoryEntryUIController : MonoBehaviour{
 				goLock.transform.localPosition = new Vector3(196f, 0f, -2f);
 				goLock.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
 			}
-			buyButtonMessage.gameObject.SetActive(false);
-			unequipButtonMessage.gameObject.SetActive(false);
-			equipButtonMessage.gameObject.SetActive(false);
-			break;
 
+			buyButton.gameObject.SetActive(false);
+			unequipButton.gameObject.SetActive(false);
+			equipButton.gameObject.SetActive(false);
+			break;
 		case AccessoryButtonType.Unbought:
-			buyButtonMessage.gameObject.SetActive(true);
-			unequipButtonMessage.gameObject.SetActive(false);
-			equipButtonMessage.gameObject.SetActive(false);
+			buyButton.gameObject.SetActive(true);
+			unequipButton.gameObject.SetActive(false);
+			equipButton.gameObject.SetActive(false);
 			break;
-
 		case AccessoryButtonType.BoughtEquipped:
-			buyButtonMessage.gameObject.SetActive(false);
-			unequipButtonMessage.gameObject.SetActive(true);
-			equipButtonMessage.gameObject.SetActive(false);
+			buyButton.gameObject.SetActive(false);
+			unequipButton.gameObject.SetActive(true);
+			equipButton.gameObject.SetActive(false);
 			break;
-
 		case AccessoryButtonType.BoughtUnequipped:
-			buyButtonMessage.gameObject.SetActive(false);
-			unequipButtonMessage.gameObject.SetActive(false);
-			equipButtonMessage.gameObject.SetActive(true);
+			buyButton.gameObject.SetActive(false);
+			unequipButton.gameObject.SetActive(false);
+			equipButton.gameObject.SetActive(true);
 			break;
-
 		default:
 			Debug.LogError("Invalid state for button type");
 			break;
 		}
+	}
+
+	public void OnBuyButton(){
+		AccessoryUIManager.Instance.BuyAccessory(itemData);
+	}
+
+	public void OnEquipButton(){
+		AccessoryUIManager.Instance.EquipAccessory(itemData.ID);
+	}
+
+	public void OnUnequipButton(){
+		AccessoryUIManager.Instance.UnequipAccessory(itemData.ID);
 	}
 }

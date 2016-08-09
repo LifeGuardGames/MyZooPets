@@ -20,7 +20,7 @@ public class NinjaUIManager : MonoBehaviour {
 		// get the number of lives there are
 		int lifeCount = NinjaManager.Instance.LifeCount;
 		int nChange = deltaLife;
-		if(nChange < 0 && lifeCount - nChange >= 0) {
+		if(nChange < 0 && lifeCount + nChange >= -1) {
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
 			ToggleLifeIndicator(false, InhalerLifeList[lifeCount]);
 

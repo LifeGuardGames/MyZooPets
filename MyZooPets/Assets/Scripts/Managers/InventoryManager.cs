@@ -137,6 +137,24 @@ public class InventoryManager : Singleton<InventoryManager> {
 		}
 	}
 
+	public void UseDecoItem(string itemID) {
+		Dictionary<string, InventoryItem> invItems = GetInventoryTypeForItem(itemID);
+		InventoryItem invItem = null;
+
+		if(invItems.ContainsKey(itemID)) {
+			invItem = invItems[itemID];
+			invItem.Amount--;
+			//remove inv item if there is none left
+			if(invItem.Amount == 0) {
+				invItems.Remove(itemID);
+			}
+
+			if(invItem.ItemType == ItemType.Decorations && DecoInventoryUIManager.Instance != null) {
+				DecoInventoryUIManager.Instance.RefreshPage();
+			}
+		}
+	}
+
 	// Item used on minipet
 	public void UseMiniPetItem(string itemID) {
 		Dictionary<string, InventoryItem> invItems = GetInventoryTypeForItem(itemID);
@@ -154,9 +172,6 @@ public class InventoryManager : Singleton<InventoryManager> {
 			// Update UI to reflect changes based on their type
 			if(invItem.ItemType == ItemType.Foods || invItem.ItemType == ItemType.Usables) {
 				InventoryUIManager.Instance.RefreshPage();
-			}
-			if(invItem.ItemType == ItemType.Decorations && DecoInventoryUIManager.Instance != null) {
-				DecoInventoryUIManager.Instance.RefreshPage();
 			}
 		}
 	}

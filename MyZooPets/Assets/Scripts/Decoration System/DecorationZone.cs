@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// This is the replacement for decoration nodes in V1.3.4 update
 /// This is the zone that the inventory will be dragged and dropped on.
 /// </summary>
-public abstract class DecorationZone : MonoBehaviour {
+public abstract class DecorationZone : MonoBehaviour  {
 
 	// what type of decorations can go on this node?
 	public DecorationTypes nodeType;

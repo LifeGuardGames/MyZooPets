@@ -61,10 +61,10 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		RaycastHit hit;
 		Physics.Raycast(touchRay, out hit);
 		if(hit.collider != null) {
-			if(itemType == ItemType.Foods) {
-				if(hit.collider.gameObject.tag == "ItemTarget") {
+			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget" || itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget") {
 					// Get the object's interface that handles item processing
 					IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();
+					Debug.Log(dropTarget.ToString());
 					if(dropTarget != null) {
 						dropTarget.OnItemDropped(itemData);		// Call the interface, which handles the rest
 					}
@@ -73,7 +73,6 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 					}
 				}
 			}
-		}
 		else {  // Hit nothing
 			if(itemType == ItemType.Foods) {
 				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {

@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
 // Toony Colors Pro+Mobile Shaders
 // (c) 2013, Jean Moreno
 
@@ -65,7 +63,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 				//Camera-independent size
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					pos = pos + float4(normalize(normal),0) * _Outline * dist;
 				#else
 					pos = pos + float4(normalize(normal),0) * _Outline;
@@ -73,7 +71,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 			#else
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline * dist);
 				#else
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline);
@@ -136,7 +134,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 				//Camera-independent size
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					pos = pos + float4(normalize(normal),0) * _Outline * dist;
 				#else
 					pos = pos + float4(normalize(normal),0) * _Outline;
@@ -144,7 +142,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 			#else
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline * dist);
 				#else
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline);
@@ -211,7 +209,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 				//Camera-independent size
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					pos = pos + float4(normalize(normal),0) * _Outline * dist;
 				#else
 					pos = pos + float4(normalize(normal),0) * _Outline;
@@ -219,7 +217,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 			#else
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline * dist);
 				#else
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline);
@@ -287,7 +285,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 				//Camera-independent size
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					pos = pos + float4(normalize(normal),0) * _Outline * dist;
 				#else
 					pos = pos + float4(normalize(normal),0) * _Outline;
@@ -295,7 +293,7 @@ Shader "Hidden/ToonyColors-Outline"
 				
 			#else
 				#ifdef OUTLINE_CONST_SIZE
-					float dist = distance(_WorldSpaceCameraPos, mul(unity_ObjectToWorld, v.vertex));
+					float dist = distance(_WorldSpaceCameraPos, mul(_Object2World, v.vertex));
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline * dist);
 				#else
 					float4 pos = mul( UNITY_MATRIX_MV, v.vertex + float4(v.normal,0) * _Outline);

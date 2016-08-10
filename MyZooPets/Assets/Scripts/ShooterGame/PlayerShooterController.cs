@@ -41,7 +41,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 	public void Reset(){
 		playerHealth = 5;
 		ChangeState(PlayerStateTypes.Neutral);
-		this.collider2D.enabled = true;
+		this.GetComponent<Collider2D>().enabled = true;
 	}
 
 	// change states
@@ -140,7 +140,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController>{
 			}
 
 			if(playerHealth <= 0){
-				this.collider2D.enabled = false;
+				this.GetComponent<Collider2D>().enabled = false;
 				characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Dead);
 				// Trigger game over
 				ShooterGameManager.Instance.TriggerGameover();

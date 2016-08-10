@@ -222,7 +222,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			isActive = true;
 
 			if(badgeBoard != null){
-				badgeBoard.collider.enabled = false;
+				badgeBoard.GetComponent<Collider>().enabled = false;
 			}
 		}
 	}
@@ -235,7 +235,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			isActive = false;
 
 			if(badgeBoard != null){
-				badgeBoard.collider.enabled = true;
+				badgeBoard.GetComponent<Collider>().enabled = true;
 			}
 
 			CloseUIOpenNext(UIModeTypes.None);

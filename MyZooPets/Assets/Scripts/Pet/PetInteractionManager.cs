@@ -17,7 +17,7 @@ public class PetInteractionManager : MonoBehaviour{
 	void OnTap(TapGesture gesture){
 		if(isInteractable){
 		try{
-			string colliderName = gesture.Selection.collider.name;
+			string colliderName = gesture.Selection.GetComponent<Collider>().name;
 			
 			if(colliderName == this.gameObject.name){
 				if(colliderName == "HeadCollider"){
@@ -56,7 +56,7 @@ public class PetInteractionManager : MonoBehaviour{
 					return;
 				}
 
-				string colliderName = gesture.Selection.collider.name;
+				string colliderName = gesture.Selection.GetComponent<Collider>().name;
 				
 				if(colliderName == this.gameObject.name){
 					switch(gesture.Phase){

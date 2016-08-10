@@ -243,7 +243,7 @@ public class PetMovement : Singleton<PetMovement>{
 		
 		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't
 		// take so long for the pet to move to its new destination.
-		if(!petSprite.renderer.isVisible){
+		if(!petSprite.GetComponent<Renderer>().isVisible){
 			if(offScreen){
 				// get the point right off screen
 				float startingLocationX = Constants.GetConstant<float>("FromX");
@@ -278,7 +278,7 @@ public class PetMovement : Singleton<PetMovement>{
 		
 		// if the pet is not visible on the screen, we want to cheat and transport the pet *just* off screen so that it doesn't
 		// take so long for the pet to move to its new destination.
-		if(!petSprite.renderer.isVisible){
+		if(!petSprite.GetComponent<Renderer>().isVisible){
 			if(offScreen){
 				// Get the point right off screen in viewport coordinates
 				float viewportOffsetX = Constants.GetConstant<float>("ViewportOffsetX");

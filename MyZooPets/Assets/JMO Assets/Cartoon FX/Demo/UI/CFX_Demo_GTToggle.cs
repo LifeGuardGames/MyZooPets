@@ -22,7 +22,7 @@ public class CFX_Demo_GTToggle : MonoBehaviour
 	
 	void Awake()
 	{
-		CollisionRect = this.guiTexture.GetScreenRect(Camera.main);
+		CollisionRect = this.GetComponent<GUITexture>().GetScreenRect(Camera.main);
 		Label = this.GetComponentInChildren<GUIText>();
 		
 		UpdateTexture();
@@ -41,7 +41,7 @@ public class CFX_Demo_GTToggle : MonoBehaviour
 		else
 		{
 			Over = false;
-			this.guiTexture.color = NormalColor;
+			this.GetComponent<GUITexture>().color = NormalColor;
 		}
 		
 		UpdateTexture();
@@ -61,12 +61,12 @@ public class CFX_Demo_GTToggle : MonoBehaviour
 		Color col = State ? NormalColor : DisabledColor;
 		if(Over)
 		{
-			this.guiTexture.texture = Hover;
+			this.GetComponent<GUITexture>().texture = Hover;
 		}
 		else
-			this.guiTexture.texture = Normal;
+			this.GetComponent<GUITexture>().texture = Normal;
 		
-		this.guiTexture.color = col;
+		this.GetComponent<GUITexture>().color = col;
 		
 		if(Label != null)
 			Label.color = col * 1.75f;

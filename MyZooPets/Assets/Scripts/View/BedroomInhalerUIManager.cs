@@ -42,7 +42,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		rechargeParticle.SetActive(true);
 
 		coolDownLabel.enabled = true;
-		progressBar3D.animation.Stop();
+		progressBar3D.GetComponent<Animation>().Stop();
 		progressBar3D.transform.localScale = Vector3.one;
 		
 		isInitialCalculatedOffsetCached = false;	// Force recalculate the cache
@@ -59,7 +59,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 		coolDownLabel.enabled = false;
 		coolDownSprite.fillAmount = 1f;
-		progressBar3D.animation.Play();
+		progressBar3D.GetComponent<Animation>().Play();
 	}
 
 	private void OnNextPlayPeriod(object sender, EventArgs args){

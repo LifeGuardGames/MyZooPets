@@ -53,7 +53,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			RoomArrowsUIManager.Instance.HidePanel();
 			
 			isActive = true;
-			highscoreBoard.collider.enabled = false;
+			highscoreBoard.GetComponent<Collider>().enabled = false;
 			
 			backButton.SetActive(true);
 		}
@@ -70,7 +70,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 	protected override void _CloseUI(){
 		if(isActive){
 			isActive = false;
-			highscoreBoard.collider.enabled = true;
+			highscoreBoard.GetComponent<Collider>().enabled = true;
 			
 			CameraManager.Instance.ZoomOutMove();
 			

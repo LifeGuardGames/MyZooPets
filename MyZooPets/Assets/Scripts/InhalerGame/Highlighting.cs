@@ -68,15 +68,15 @@ public class Highlighting : MonoBehaviour {
 
 	void UnGlow(){
 		// normal
-		renderer.material.shader = Shader.Find("Unlit/Transparent Cutout");
+		GetComponent<Renderer>().material.shader = Shader.Find("Unlit/Transparent Cutout");
 	}
 
 	void UnGlow(GameObject g){
 		// normal
-		g.renderer.material.shader = Shader.Find("Unlit/Transparent Cutout");
+		g.GetComponent<Renderer>().material.shader = Shader.Find("Unlit/Transparent Cutout");
 	}
 
 	void OnDestroy(){
-		DestroyImmediate(renderer.material);
+		DestroyImmediate(GetComponent<Renderer>().material);
 	}
 }

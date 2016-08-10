@@ -119,13 +119,13 @@ public abstract class SpawnGroup{
 		GameObject go = GameObject.Instantiate(resource, vPos, resource.transform.rotation) as GameObject;
 		
 		// add force to the object
-		go.rigidbody.AddForce(vForce);	
+		go.GetComponent<Rigidbody>().AddForce(vForce);	
 		
 		// add some torque to the object as well
 		float fTorqueRange = Constants.GetConstant<float>("TorqueRange");
 		float fTorqueX = UnityEngine.Random.Range(-fTorqueRange, fTorqueRange);
 		float fTorqueY = UnityEngine.Random.Range(-fTorqueRange, fTorqueRange);
 		float fTorqueZ = UnityEngine.Random.Range(-fTorqueRange, fTorqueRange);
-		go.rigidbody.AddTorque(new Vector3(fTorqueX, fTorqueY, fTorqueZ));
+		go.GetComponent<Rigidbody>().AddTorque(new Vector3(fTorqueX, fTorqueY, fTorqueZ));
 	}
 }

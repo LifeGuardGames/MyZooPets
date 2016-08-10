@@ -111,7 +111,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 		// Adjust the grid height based on the height of the cell and spacing
 		float gridHeight = itemCount * (gridParent.cellSize.y + gridParent.spacing.y);
-		Debug.Log(gridParent.cellSize.x + " " + gridHeight);
 		gridParent.GetComponent<RectTransform>().sizeDelta = new Vector2(gridParent.cellSize.x, gridHeight);
 	}
 

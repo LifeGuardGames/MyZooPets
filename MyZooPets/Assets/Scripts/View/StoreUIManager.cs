@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 // Shortcut mode types into store sub panel
 public enum StoreShortcutType{
@@ -322,20 +322,18 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		AudioManager.Instance.PlayClip("shopChangeTab");
 
+		int itemCount = 0;
+
 		//base on the tab name and the page name, create proper set of item in the store
 		if(currentPage == "Food"){
 			//No sub category so retrieve a list of all food
 			List<Item> foodList = ItemManager.Instance.FoodList;
-			int itemCount = 0;
 			foreach(Item itemData in foodList){
 				if(!itemData.IsSecretItem){
 					CreateStoreItem(grid.gameObject, itemStorePrefabStats, itemData);
 					itemCount++;
 				}
 			}
-			// Adjust the grid height based on the height of the cell and spacing
-			float gridWidth = itemCount * .5f * (grid.cellSize.x + grid.spacing.x);
-			grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.cellSize.y);
 		}
 
 		else if(currentPage == "Items"){
@@ -344,7 +342,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			
 			foreach(Item itemData in usableList){
 				if(!itemData.IsSecretItem){
-					int itemCount = 0;
 					// Need emergency inhaler shortcut, only show emergency inhaler
 					if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
 						if(itemData.ID == "Usable0"){
@@ -359,9 +356,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 						CreateStoreItem(grid.gameObject, itemStorePrefabStats, itemData);
 						itemCount++;
 					}
-					// Adjust the grid height based on the height of the cell and spacing
-					float gridWidth = itemCount * .5f * (grid.cellSize.x + grid.spacing.x);
-					grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.cellSize.y);
 				}
 			}
 		}
@@ -373,19 +367,19 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 			if(decoDict.ContainsKey(decoType)){
 				List<DecorationItem> decoList = decoDict[decoType];
-
-				int itemCount = 0;
 				foreach(DecorationItem decoItemData in decoList){
 					if(!decoItemData.IsSecretItem){
 						CreateStoreItem(grid.gameObject, itemStorePrefab, (Item)decoItemData);
 						itemCount++;
 					}
 				}
-				// Adjust the grid height based on the height of the cell and spacing
-				float gridWidth = itemCount *.5f* (grid.cellSize.x + grid.spacing.x);
-				grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.GetComponent<RectTransform>().sizeDelta.y);
 			}
 		}
+
+		// Adjust the grid width based on the width of the cell and spacing
+		itemCount = (itemCount % 2 == 1) ? itemCount + 1 : itemCount;	// Dividing by 2 later, so make sure even
+		float gridWidth = itemCount * 0.5f * (grid.cellSize.x + grid.spacing.x);
+		grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.GetComponent<RectTransform>().sizeDelta.y);
 	}
 
 	//------------------------------------------

@@ -7,7 +7,9 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	private float lastSpawn;
 	public float spawnTime;
 
-	public List<GameObject> posList;	//list of positions to spawn enemy from
+	public List<GameObject> posList;    //list of positions to spawn enemy from
+	public Transform SeekerTopPosition;
+	public Transform SeekerBottomPosition;
 	private List<ImmutableDataShooterArmy> spawningList;
 			
 
@@ -73,9 +75,11 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 					go.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 					if(randomPositionIndex == 3) {
 						go.transform.Rotate(new Vector3(0, 0, -45));
+						go.GetComponent<ShooterEnemySeeker>().InitBottom();
 					}
 					else {
 						go.transform.Rotate(new Vector3(0, 0, 45));
+						go.GetComponent<ShooterEnemySeeker>().InitTop();
 					}
 				}
 				StartCoroutine("SpawnEnemies");

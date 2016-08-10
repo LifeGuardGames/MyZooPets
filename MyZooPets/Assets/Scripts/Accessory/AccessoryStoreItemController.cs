@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public enum AccessoryButtonType{
 	UnboughtLocked,		// Not yet bought, use BuyButton but locked
@@ -9,30 +8,17 @@ public enum AccessoryButtonType{
 	BoughtUnequipped	// Bought and not equipped, use EquipButton
 }
 
-/// <summary>
-/// Store item entry.
-/// </summary>
-public class AccessoryEntryUIController : MonoBehaviour{
-	private AccessoryItem itemData;
-
-	// various elements on the entry
+public class AccessoryStoreItemController : MonoBehaviour{
 	public Text labelName;
 	public Text labelCost;
 	public Image spriteIcon;
-
-	public Image buyButtonIcon;
+	
 	public Button buyButton;
 	public Button equipButton;
 	public Button unequipButton;
 
+	private AccessoryItem itemData;
 	private bool islockExists = false;
-
-	public static GameObject CreateEntry(GameObject goGrid, GameObject goPrefab, Item item){
-		GameObject itemUIObject = GameObjectUtils.AddChild(goGrid, goPrefab);
-		AccessoryEntryUIController entryController = itemUIObject.GetComponent<AccessoryEntryUIController>();
-		entryController.Init(item);	// Assigning unequip button
-		return itemUIObject;
-	}
 	
 	/// <summary>
 	/// This function does the work and actually sets the UI labels, sprites, etc for this entry based on
@@ -89,9 +75,8 @@ public class AccessoryEntryUIController : MonoBehaviour{
 				islockExists = true;
 
 				// Show the lock
-				GameObject goLock = LevelLockObject.CreateLock(spriteIcon.gameObject.transform.parent.gameObject, itemData.UnlockAtLevel);
-				goLock.transform.localPosition = new Vector3(196f, 0f, -2f);
-				goLock.transform.localScale = new Vector3(0.8f, 0.8f, 1f);
+				GameObject goLock = LevelLockObject.CreateLock(transform.gameObject, itemData.UnlockAtLevel);
+				GameObjectUtils.ResetLocalTransform(goLock);
 			}
 
 			buyButton.gameObject.SetActive(false);

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -15,25 +14,21 @@ using System.Collections.Generic;
 /// 	AccessoryUIManager -> AccessoryNodeController -> AccessoryNode
 /// </summary>
 public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
-	public GridLayoutGroup grid;
-	public GameObject accessoryTitlePrefab;
 	public GameObject accessoryEntryPrefab;
-	public GameObject backButton;
-	public GameObject zoomItem;
+	public GridLayoutGroup gridParent;
+	public GameObject zoomItemEntrance;
 	public TweenToggle baseTween;
 	public TweenToggle gridTween;
+	public UILocalize categoryBanner;
 
 	// related to zooming into the badge board
-	private float zoomTime  = 0.5f;
+	private float zoomTime = 0.5f;
 	public Vector3 zoomOffset;
 	public Vector3 zoomRotation;
-	public string soundBuy;
-	public string soundUnequip;
-	public string soundEquip;
-	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
+
 	private bool isActive = false;
-	//temp variable for pet scale
-	private Vector3 petScale;
+	private List<AccessoryStoreItemController> accessoryEntryList = new List<AccessoryStoreItemController>();
+	private Vector3 petScale;       //temp variable for pet scale
 
 	protected override void Awake(){
 		base.Awake();
@@ -56,7 +51,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			AudioManager.Instance.PlayClip("subMenu");
 
 			// Zoom into the item
-			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
+			Vector3 targetPosition = zoomItemEntrance.transform.position + zoomOffset;
 
 			CameraManager.Callback cameraDoneFunction = delegate(){
 				CameraMoveDone();
@@ -72,10 +67,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			PetAnimationManager.Instance.DisableIdleAnimation();
 			PetMovement.Instance.canMove = false;
 			isActive = true;
-			zoomItem.GetComponent<Collider>().enabled = false;
-			
-			backButton.SetActive(true);
-		}
+			zoomItemEntrance.GetComponent<Collider>().enabled = false;
+			}
 	}
 
 	public void OnHatsButton(){
@@ -92,32 +85,34 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		int itemCount = 0;
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
-		foreach(AccessoryItem accessory in accessoryList) {
-			if(accessory.AccessoryType == type) {
-				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
-				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-
-				switch((AccessoryTypes)accessory.AccessoryType) {
+		foreach(AccessoryItem accessoryData in accessoryList) {
+			if(accessoryData.AccessoryType == type) {
+				// Change the title of the category
+				switch(accessoryData.AccessoryType) {
 					case AccessoryTypes.Hat:
-						localize.key = "ACCESSORIES_TYPE_HAT";
+						categoryBanner.key = "ACCESSORIES_TYPE_HAT";
 						break;
 					case AccessoryTypes.Glasses:
-						localize.key = "ACCESSORIES_TYPE_GLASSES";
+						categoryBanner.key = "ACCESSORIES_TYPE_GLASSES";
 						break;
 					default:
 						Debug.LogError("Invalid accessory type");
 						break;
 				}
-				localize.Localize();    // Force relocalize
+				categoryBanner.Localize();    // Force relocalize
 
-				GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
-				accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
+				GameObject accessoryEntry = GameObjectUtils.AddChild(gridParent.gameObject, accessoryEntryPrefab);
+				AccessoryStoreItemController entryController = accessoryEntry.GetComponent<AccessoryStoreItemController>();
+				entryController.Init(accessoryData);
+				accessoryEntryList.Add(entryController);
 				itemCount++;
 			}
 		}
+
 		// Adjust the grid height based on the height of the cell and spacing
-		float gridHeight = itemCount * (grid.cellSize.y + grid.spacing.y);
-		grid.GetComponent<RectTransform>().sizeDelta = new Vector2(grid.cellSize.x, gridHeight);
+		float gridHeight = itemCount * (gridParent.cellSize.y + gridParent.spacing.y);
+		Debug.Log(gridParent.cellSize.x + " " + gridHeight);
+		gridParent.GetComponent<RectTransform>().sizeDelta = new Vector2(gridParent.cellSize.x, gridHeight);
 	}
 
 	/// <summary>
@@ -136,7 +131,8 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 	public void OnGridBackButton(){
 		gridTween.Hide();
-	}
+		baseTween.Show();
+    }
 
 	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){
@@ -144,7 +140,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			this.GetComponent<TweenToggleDemux>().Hide();
 			PetMovement.Instance.canMove = true;
 			isActive = false;
-			zoomItem.GetComponent<Collider>().enabled = true;
+			zoomItemEntrance.GetComponent<Collider>().enabled = true;
 
 			CameraManager.Instance.ZoomOutMove();
 			PetAnimationManager.Instance.EnableIdleAnimation();
@@ -154,7 +150,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
 			ClickManager.Instance.ReleaseLock();
-			backButton.SetActive(false);
 		}
 	}
 
@@ -167,12 +162,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		if(!pet.GetComponent<Renderer>().isVisible)
 		PetMovement.Instance.petSprite.transform.position = new Vector3(-4f, 0, 26.65529f);
 		PetMovement.Instance.MovePetFromAccessory(new Vector3(-8f, 0, 26.65529f));
-
 	}
 
 	// Called from AccessoryEntryUIController, returns success state for button toggling
 	public void BuyAccessory(Item itemData){
-		bool isSuccess = false;
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(StatsManager.Instance.GetStat(StatType.Coin) >= itemData.Cost){
@@ -187,7 +180,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 				int totalNumOfAccessories = DataManager.Instance.GameData.Inventory.AccessoryItems.Count;
 				BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
 
-				AudioManager.Instance.PlayClip(soundBuy);
+				AudioManager.Instance.PlayClip("shopBuy");
 
 				RefreshAccessoryItems();
 			}
@@ -206,7 +199,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		AccessoryNodeController.Instance.SetAccessory(itemID);		// Equip the node
 		RefreshAccessoryItems();
 
-		AudioManager.Instance.PlayClip(soundEquip);
+		AudioManager.Instance.PlayClip("buttonGeneric2");
 	}
 
 	// Called from AccessoryEntryUIController
@@ -215,12 +208,12 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
 		RefreshAccessoryItems();
 
-		AudioManager.Instance.PlayClip(soundUnequip);
+		AudioManager.Instance.PlayClip("buttonGeneric2");
 	}
 
 	//Check for any UI updateds
 	private void RefreshAccessoryItems(){
-		foreach(AccessoryEntryUIController entryController in accessoryEntryList){
+		foreach(AccessoryStoreItemController entryController in accessoryEntryList){
 			entryController.CheckState();
 		}
 	}

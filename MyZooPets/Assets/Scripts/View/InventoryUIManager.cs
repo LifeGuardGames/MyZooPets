@@ -8,8 +8,6 @@ using System.Collections.Generic;
 /// 					\ InventoryUIManager
 /// </summary>
 public class InventoryUIManager : Singleton<InventoryUIManager>{
-	public static EventHandler<InventoryDragDrop.InvDragDropArgs> ItemDroppedOnTargetEvent;
-
 	public TweenToggle inventoryTween;
 	public RectTransform slotParent;
 	public GameObject inventoryTokenPrefab;
@@ -72,17 +70,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		inventoryTween.Hide();
 	}
 
-	private void OnItemDropHandler(object sender, InventoryDragDrop.InvDragDropArgs e){
-		if(e.TargetCollider && e.TargetCollider.tag == "ItemTarget"){
-			currentDragDropItem = e.ParentTransform;
-
-			if(ItemDroppedOnTargetEvent != null){
-				ItemDroppedOnTargetEvent(this, e);
-			}
-		}
-	}
-
-	public void PulseItem() {
+	public void PulseInventory() {
 		addItemPulseAnim.Play();
 	}
 

@@ -9,8 +9,6 @@ using System.Collections.Generic;
 /// 					\ InventoryUIManager
 /// </summary>
 public class DecoInventoryUIManager : Singleton<DecoInventoryUIManager> {
-	public static EventHandler<InventoryDragDrop.InvDragDropArgs> OnDecoDroppedOnTarget;
-
 	public TweenToggle decoInventoryTween;
 	public RectTransform slotParent;
 	public GameObject decoInventoryTokenPrefab;
@@ -44,17 +42,7 @@ public class DecoInventoryUIManager : Singleton<DecoInventoryUIManager> {
 		decoInventoryTween.Hide();
 	}
 
-	private void OnItemDropHandler(object sender, InventoryDragDrop.InvDragDropArgs e) {
-		if(e.TargetCollider && e.TargetCollider.tag == "DecoItemTarget") {
-			currentDragDropItem = e.ParentTransform;
-
-			if(OnDecoDroppedOnTarget != null) {
-				OnDecoDroppedOnTarget(this, e);
-			}
-		}
-	}
-
-	public void PulseItem() {
+	public void PulseInventory() {
 		addItemPulseAnim.Play();
 	}
 

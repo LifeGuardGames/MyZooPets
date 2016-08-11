@@ -172,11 +172,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		string itemID = ((GameObject)obj).name;
 		ItemType type = DataLoaderItems.GetItem(itemID).Type;
         if(type == ItemType.Foods || type == ItemType.Usables) {
-			InventoryUIManager.Instance.PulseItem();
+			InventoryUIManager.Instance.PulseInventory();
 			InventoryUIManager.Instance.RefreshPage();
 		}
 		else if(type == ItemType.Decorations) {
-			DecoInventoryUIManager.Instance.PulseItem();
+			DecoInventoryUIManager.Instance.PulseInventory();
 			DecoInventoryUIManager.Instance.RefreshPage();
 		}
 

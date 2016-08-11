@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class DecorationZoneObject : DecorationZone, IDropInventoryTarget {
-
+public class DecorationZoneObject : DecorationZone {
 	public Transform placementNode;
 	private GameObject decoGameObject;  // Instantiated game object decoration
 	private string oldDecoId;
 	private string currDecoId;
-	/// <summary>
-	/// Child override to set decoration
-	/// </summary>
-	/// <param name="strID">decoID</param>
+
+	// Child override to set decoration
 	protected override void _SetDecoration(string decoID, bool isPlacedFromDecoMode){
 		currDecoId = decoID;
 		// Build the prefab from the id of the decoration
@@ -38,16 +34,9 @@ public class DecorationZoneObject : DecorationZone, IDropInventoryTarget {
 			Debug.LogError("No such prefab for " + strResource);
 	}
 
-	/// <summary>
-	/// Child override to remove the decoration
-	/// </summary>
+	// Child override to remove the decoration
 	protected override void _RemoveDecoration(){
 		// Destroy the game object
 		Destroy(decoGameObject);
-	}
-
-	public virtual void OnItemDropped(InventoryItem item) {
-		Debug.Log("setting");
-		_SetDecoration(item.ItemID, true);
 	}
 }

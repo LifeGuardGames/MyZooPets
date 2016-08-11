@@ -47,7 +47,6 @@ public class DecorationZoneObject : DecorationZone, IDropInventoryTarget {
 	}
 
 	public virtual void OnItemDropped(InventoryItem item) {
-		Debug.Log("setting");
 		_SetDecoration(item.ItemID, true);
 	}
 }

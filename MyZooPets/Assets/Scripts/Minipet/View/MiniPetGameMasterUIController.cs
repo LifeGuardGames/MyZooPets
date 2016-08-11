@@ -24,8 +24,7 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 			desc = String.Format(desc, task.Amount);
 		}
 		label.text = desc;
-		//TODO fix this - dylan
-		//spriteIcon.sprite = SpriteCacheManager.Instance.mapIcons" + type.ToString();
+		spriteIcon.sprite = SpriteCacheManager.GetSprite("mapIcons" + type.ToString());
 		rewardButton.SetActive(false);
 		SetCheckboxSprite(true);
 	}

@@ -50,7 +50,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 
 	void Awake() {
 		Application.targetFrameRate = 60;
-		minigameKey = "NINJA";
+		minigameKey = "Ninja";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardMoneyMultiplier = 2;
 		rewardShardMultiplier = 4;
@@ -171,6 +171,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		spawning = false;
 
 		// send out combo task
+		WellapadMissionController.Instance.TaskCompleted("Score" + MinigameKey, score);
 		WellapadMissionController.Instance.TaskCompleted("Combo" + MinigameKey, bestCombo);
 		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey], bonusRoundCounter);
 #if UNITY_IOS

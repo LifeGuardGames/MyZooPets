@@ -74,7 +74,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 
 	void Awake(){
 		// Parent settings
-		minigameKey = "DOCTOR";
+		minigameKey = "Clinic";
 		quitGameScene = SceneUtils.BEDROOM;
 		comboController.Setup();
 		ResetScore();

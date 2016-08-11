@@ -30,7 +30,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	}
 
 	void Awake() {
-		minigameKey = "MEMORY";
+		minigameKey = "Memory";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardXPMultiplier = 0.01f;
 		rewardMoneyMultiplier = 24;

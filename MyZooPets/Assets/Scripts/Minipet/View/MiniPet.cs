@@ -292,21 +292,6 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 		animationManager.Cheer();
 	}
 
-	public virtual void OnItemDropped(InventoryItem item) {
-		 string preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
-
-		//check if minipet wants this food
-		if(preferredFoodID == item.ItemID) {
-			//use item if so
-			InventoryManager.Instance.UseMiniPetItem(item.ItemID);    // Tell inventory logic item is used -> remove
-			FinishEating();
-			animationManager.Eat();
-		}
-		// show notification that the mp wants a specific food
-		else {
-			ShowFoodPreferenceMessage();
-		}
-	}
 
 	/// <summary>
 	/// Check enable the correct accessories according to the pet level

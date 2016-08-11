@@ -48,7 +48,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public void Activate(){
 		isActive = true;
 		toggleParent.SetActive(true);
-		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
+//		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
 		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		if(!canBreatheFire)
@@ -61,7 +61,7 @@ public class FireButtonUIManager : Singleton<FireButtonUIManager> {
 	public void Deactivate(){
 		isActive = false;
 		toggleParent.SetActive(false);
-		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
+//		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 	}
 
 	public void FireEffectOff(){

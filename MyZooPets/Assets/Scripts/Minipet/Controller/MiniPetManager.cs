@@ -334,7 +334,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// </summary>
 	public string GetFoodPreference(string miniPetID){
 		Level currentLevel = GetCurrentLevel(miniPetID);
-		string foodID;
+		string foodID = "";
 		int rand;
 		if(DataManager.Instance.GameData.MiniPets.GetMiniPetFoodChoice(miniPetID) == null) {
 			switch(currentLevel) {

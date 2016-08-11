@@ -47,15 +47,14 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	/// <summary>
 	/// Pass in the immutable data so this specific MiniPet instantiate can be instantiated with the proper information.
 	/// </summary>
-	/// <param name="data">ImmutableDataMiniPet.</param>
-	public void Init(ImmutableDataMiniPet data){
-		this.minipetId = data.ID;
-		this.name = data.Name;
+	/// <param name="minipetData">ImmutableDataMiniPet.</param>
+	public void Init(ImmutableDataMiniPet minipetData){
+		minipetId = minipetData.ID;
+		name = minipetData.Name;
 	}
 
 	protected virtual void Start(){		
 		MiniPetHUDUIManager.Instance.OnManagerOpen += ShouldPauseIdleAnimations;
-		InventoryUIManager.ItemDroppedOnTargetEvent += ItemDroppedOnTargetEventHandler;
 		
 		isFinishEating = MiniPetManager.Instance.IsPetFinishedEating(minipetId);
 
@@ -91,7 +90,6 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	}
 	
 	void OnDestroy(){
-		InventoryUIManager.ItemDroppedOnTargetEvent -= ItemDroppedOnTargetEventHandler;
 		if(MiniPetHUDUIManager.Instance){
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= ShouldPauseIdleAnimations;
 		}
@@ -223,26 +221,11 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
         }
 	}
 
-	/// <summary>
-	/// When item is dropped on MP do the necessary check and carry out the action.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void ItemDroppedOnTargetEventHandler(object sender, InventoryDragDrop.InvDragDropArgs args){
-		bool isUIOpen = MiniPetHUDUIManager.Instance.IsOpen();
-
-		if(args.TargetCollider.name == this.gameObject.name && isUIOpen){
-			invItemID = args.ItemTransform.name; //get id from listener args
-			InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
-			string preferredFoodID = "";
-
-			preferredFoodID = MiniPetManager.Instance.GetFoodPreference(minipetId);
-
+	public void OnItemDropped(InventoryItem itemData) {
+		if(MiniPetHUDUIManager.Instance.IsOpen()) {
 			//check if minipet wants this food
-			if(preferredFoodID == invItem.ItemID){
-				//use item if so
-				args.IsValidTarget = true;
-				InventoryManager.Instance.UseMiniPetItem(invItemID);	// Tell inventory logic item is used -> remove
+			if(MiniPetManager.Instance.GetFoodPreference(minipetId) == itemData.ItemID) {
+				InventoryManager.Instance.UseMiniPetItem(itemData.ItemID);    // Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();
 			}

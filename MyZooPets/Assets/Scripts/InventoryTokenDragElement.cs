@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 // Child component of InventoryTokenController gameobject that does the actual dragging
 // When dragged, this child will unparent and move to a new ItemDragParent gameobject
 public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+	public static EventHandler<EventArgs> OnDecoItemPickedUp;   // Use for deco zone broadcasts for color change
+	public static EventHandler<EventArgs> OnDecoItemDropped;    // Use for deco zone broadcasts for color change
+
 	public static GameObject itemBeingDragged;
 
 	public Image tokenImage;
@@ -12,10 +16,14 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 	public Transform originalParent;        // TODO Set this to private
 
 	private ItemType itemType;      // Get item information from here
-	private InventoryItem itemData;
+
+	private InventoryItem inventoryData;
+	public InventoryItem InventoryData {
+		get { return inventoryData; }
+	}
 
 	public void Init(InventoryItem _itemData, Transform _originalParent) {
-		itemData = _itemData;
+		inventoryData = _itemData;
 		tokenImage.sprite = SpriteCacheManager.GetItemSprite(_itemData.ItemID);
 		originalParent = _originalParent;
 		itemType = _itemData.ItemType;
@@ -29,7 +37,6 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		transform.SetParent(DragItemParentMeta.Instance.DragItemParent);
 		dragAnimator.SetTrigger("PickedUp");
 		itemBeingDragged = gameObject;
-		// ...
 
 		if(itemType == ItemType.Foods) {
 			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {
@@ -37,7 +44,9 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 			}
 		}
 		if(itemType == ItemType.Decorations) {
-
+			if(OnDecoItemPickedUp != null) {		// Event call for deco zones
+				OnDecoItemPickedUp(this, null);
+			}
 		}
 	}
 
@@ -62,25 +71,29 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		Physics.Raycast(touchRay, out hit);
 		if(hit.collider != null) {
 			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget" || itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget") {
-					// Get the object's interface that handles item processing
-					IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();
-					Debug.Log(dropTarget.ToString());
-					if(dropTarget != null) {
-						dropTarget.OnItemDropped(itemData);		// Call the interface, which handles the rest
-					}
-					else {
-						Debug.LogError("Item target does not implement IDropInventoryTarget:" + hit.collider.gameObject.name);
-					}
+				// Get the object's interface that handles item processing
+				IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();
+				Debug.Log(dropTarget.ToString());
+				if(dropTarget != null) {
+					dropTarget.OnItemDropped(inventoryData);		// Call the interface, which handles the rest
+				}
+				else {
+					Debug.LogError("Item target does not implement IDropInventoryTarget:" + hit.collider.gameObject.name);
 				}
 			}
+		}
 		else {  // Hit nothing
 			if(itemType == ItemType.Foods) {
 				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {
 					PetAnimationManager.Instance.AbortFeeding();
 				}
 			}
-			if(itemType == ItemType.Decorations) {
+		}
 
+		// Cancel all deco drops
+		if(itemType == ItemType.Decorations) {
+			if(OnDecoItemDropped != null) {     // Event call for deco zones
+				OnDecoItemDropped(this, null);
 			}
 		}
 	}

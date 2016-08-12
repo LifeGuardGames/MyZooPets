@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class InhalerHintEventArgs : EventArgs{
 	public bool IsDisplayingHint { get; set; }
@@ -30,9 +29,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 
 	public bool ShowHint{
-		get{
-			return showHint;
-		}
+		get{ return showHint; }
 	}
 
 	public void StopShowHintTimer(){
@@ -69,7 +66,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	void Update(){
 		//if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
 		if(runShowHintTimer){
-		ShowHintTimer(); // This checks and shows hints if necessary.
+			ShowHintTimer(); // This checks and shows hints if necessary.
 		}
 	}
  

@@ -150,11 +150,9 @@ public class BadgeManager : Singleton<BadgeManager>{
                     BadgeEventArgs arg = new BadgeEventArgs(badge);
                     OnNewBadgeUnlocked(this, arg);
                 }
-
                 unlockNewBadge = true;
             }
         }
-
         return unlockNewBadge;
     }
 }

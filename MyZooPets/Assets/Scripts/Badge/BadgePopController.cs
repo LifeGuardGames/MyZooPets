@@ -14,8 +14,9 @@ public class BadgePopController : MonoBehaviour {
 		imageAux.enabled = false;	// Animation will turn this on
 	}
 
-	public void InitializeAndPlay(GameObject poppedBadge) {
+	public void InitializeAndPlay(GameObject poppedBadge, ImmutableDataBadge badgeData) {
 		poppedBadgeController = poppedBadge.GetComponent<BadgeController>();
+		imageAux.sprite = SpriteCacheManager.GetBadgeSprite(badgeData.ID);
 		transform.position = poppedBadge.transform.position;
 		popAnimation.Play();
     }

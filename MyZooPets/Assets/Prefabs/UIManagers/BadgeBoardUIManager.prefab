@@ -63,6 +63,7 @@ GameObject:
   - 114: {fileID: 11493586}
   - 225: {fileID: 22576242}
   - 114: {fileID: 11448584}
+  - 114: {fileID: 11484052}
   m_Layer: 5
   m_Name: ImageFade
   m_TagString: Untagged
@@ -79,9 +80,9 @@ GameObject:
   m_Component:
   - 224: {fileID: 22408106}
   - 114: {fileID: 11489028}
-  - 111: {fileID: 11189464}
-  - 222: {fileID: 22280602}
-  - 114: {fileID: 11464536}
+  - 222: {fileID: 22243886}
+  - 114: {fileID: 11415288}
+  - 111: {fileID: 11164698}
   m_Layer: 5
   m_Name: BadgePopController
   m_TagString: Untagged
@@ -339,8 +340,9 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 132334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.000030517578, y: 0, z: 0}
+  m_LocalPosition: {x: 0.000042724612, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 479802}
   - {fileID: 456154}
@@ -355,6 +357,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 418874}
   m_RootOrder: 1
@@ -367,6 +370,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 418874}
   m_RootOrder: 0
@@ -387,7 +391,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!111 &11189464
+--- !u!111 &11164698
 Animation:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -415,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -512,6 +516,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43148787fe56455c9773804fca33c43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11415288
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: b87f6f8303c9dcb4398273dd63dd0b0b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!114 &11424570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -527,7 +558,7 @@ MonoBehaviour:
   isIgnoreTweenLockOnClose: 0
   blockGUI: 0
   badgePopController: {fileID: 11489028}
-  bedroomBadgeBoard: {fileID: 0}
+  bedroomBadgeBoardCollider: {fileID: 0}
   badgePrefab: {fileID: 147896, guid: 7a11ef6b1d050284abff7809c90e2ebf, type: 2}
   badgeGrid: {fileID: 11464956}
   badgeExitButton: {fileID: 148968}
@@ -607,15 +638,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUsingDemultiplexer: 0
   startsHidden: 0
-  hideDeltaX: -900
-  hideDeltaY: 0
+  hideDeltaX: 0
+  hideDeltaY: -800
   hideDeltaZ: 0
-  showDuration: 0.5
-  hideDuration: 0.5
+  showDuration: 0.4
+  hideDuration: 0.3
   showDelay: 0
   hideDelay: 0
   easeHide: 4
-  easeShow: 4
+  easeShow: 27
   isUseEstimatedTime: 0
   ShowTarget: {fileID: 0}
   ShowFunctionName: 
@@ -755,33 +786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26053976b1670484f873324b0b73717a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11464536
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 113168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: b87f6f8303c9dcb4398273dd63dd0b0b, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
 --- !u!114 &11464956
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -865,6 +869,58 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Badge Title
+--- !u!114 &11484052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 107740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 11493586}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11424570}
+        m_MethodName: BadgeInfoClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &11484078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -928,8 +984,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb38997c25f552f4aae0ff4dbfa415bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageAux: {fileID: 11464536}
-  popAnimation: {fileID: 11189464}
+  imageAux: {fileID: 11415288}
+  popAnimation: {fileID: 11164698}
   slamParticle: {fileID: 19887536}
 --- !u!114 &11490744
 MonoBehaviour:
@@ -1280,7 +1336,7 @@ ParticleSystem:
         rgba: 2155143423
       minMaxState: 0
     startSize:
-      scalar: 14.336
+      scalar: 3.0064774
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1407,12 +1463,12 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     type: 0
-    radius: 1.024
+    radius: 0.21474841
     angle: 25
     length: 5
-    boxX: 71.68
-    boxY: 71.68
-    boxZ: 71.68
+    boxX: 15.032387
+    boxY: 15.032387
+    boxZ: 15.032387
     arc: 360
     placementMode: 0
     m_Mesh: {fileID: 0}
@@ -2759,7 +2815,7 @@ ParticleSystem:
         rgba: 3023229695
       minMaxState: 2
     startSize:
-      scalar: 107.52
+      scalar: 22.54858
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4109,7 +4165,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 3
     startSpeed:
-      scalar: 286.72
+      scalar: 60.129547
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4228,7 +4284,7 @@ ParticleSystem:
         rgba: 2151472383
       minMaxState: 0
     startSize:
-      scalar: 14.336
+      scalar: 3.0064774
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4355,12 +4411,12 @@ ParticleSystem:
     serializedVersion: 2
     enabled: 1
     type: 0
-    radius: 1.024
+    radius: 0.21474841
     angle: 65
     length: 5
-    boxX: 71.68
-    boxY: 71.68
-    boxZ: 71.68
+    boxX: 15.032387
+    boxY: 15.032387
+    boxZ: 15.032387
     arc: 360
     placementMode: 0
     m_Mesh: {fileID: 0}
@@ -5590,6 +5646,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 107740}
+--- !u!222 &22243886
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113168}
 --- !u!222 &22257598
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -5620,12 +5682,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 138866}
---- !u!222 &22280602
-CanvasRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 113168}
 --- !u!222 &22280656
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -5653,6 +5709,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22454596}
   m_RootOrder: 0
@@ -5670,6 +5727,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 355}
   m_Children:
   - {fileID: 418874}
   m_Father: {fileID: 22431858}
@@ -5688,6 +5746,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22431858}
   m_RootOrder: 1
@@ -5705,6 +5764,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22431530}
   m_RootOrder: 0
@@ -5722,6 +5782,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22435786}
   - {fileID: 22431858}
@@ -5730,8 +5791,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
-  m_SizeDelta: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0.000030517578, y: 0}
+  m_SizeDelta: {x: -0.000061035156, y: -0.000061035156}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22423914
 RectTransform:
@@ -5742,6 +5803,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22457524}
   m_RootOrder: 0
@@ -5759,6 +5821,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22412030}
   - {fileID: 22479686}
@@ -5779,6 +5842,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22457524}
   - {fileID: 22410702}
@@ -5800,6 +5864,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22415064}
   m_RootOrder: 0
@@ -5817,6 +5882,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22493150}
   m_RootOrder: 0
@@ -5834,6 +5900,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22400954}
   m_Father: {fileID: 22484878}
@@ -5852,6 +5919,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22423914}
   m_Father: {fileID: 22431858}
@@ -5870,6 +5938,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22431530}
   m_RootOrder: 1
@@ -5887,6 +5956,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22454596}
   m_Father: {fileID: 22431858}
@@ -5905,6 +5975,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22437224}
   - {fileID: 22431530}
@@ -5924,6 +5995,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22431530}
   m_RootOrder: 2
@@ -5951,7 +6023,7 @@ CanvasGroup:
   m_GameObject: {fileID: 107740}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 0
+  m_Interactable: 1
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1001 &100100000

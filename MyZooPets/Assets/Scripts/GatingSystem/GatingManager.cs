@@ -482,7 +482,7 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	private void ArrivedShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
-		FireButtonUIManager.Instance.Activate();
+		FireButtonManager.Instance.Activate();
 		
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
@@ -493,7 +493,7 @@ public class GatingManager : Singleton<GatingManager>{
 		Gate gate = activeGates[scriptPan.currentLocalPartition];
 
 		if(gate){
-			FireButtonUIManager.Instance.SetGate(gate);
+			FireButtonManager.Instance.SetGate(gate);
 		}
 		else{
 			Debug.LogError("Destination callback being called for non gated room");

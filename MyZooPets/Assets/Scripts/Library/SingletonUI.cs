@@ -150,7 +150,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 					HUDUIManager.Instance.ShowPanel();
 				}
 				// Fireblowing room check
-				else if(FireButtonUIManager.Instance.IsActive){
+				else if(FireButtonManager.Instance.IsActive){
 					if(RoomArrowsUIManager.Instance != null){
 						RoomArrowsUIManager.Instance.ShowPanel();
 						HUDUIManager.Instance.ShowPanel();

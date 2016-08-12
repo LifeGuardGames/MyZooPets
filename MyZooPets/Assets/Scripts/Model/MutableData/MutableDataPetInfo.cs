@@ -42,7 +42,7 @@ public class MutableDataPetInfo : MutableData{
 		FireBreaths = amount;
 	
 		// for now, we are capping the max breaths at 1
-		bool isInfiniteMode = IsInfiniteFire();
+		bool isInfiniteMode = Constants.GetConstant<bool>("InfiniteFireMode");
 		if(FireBreaths > 1)
 			FireBreaths = 1;
 		else if(FireBreaths < 0 && !isInfiniteMode){
@@ -52,15 +52,7 @@ public class MutableDataPetInfo : MutableData{
 	}
 
 	public bool CanBreathFire(){
-		int breaths = FireBreaths;
-		bool isInfiniteFire = IsInfiniteFire();
-		bool canBreathFire = breaths > 0 || isInfiniteFire;
-		return canBreathFire;
-	}
-
-	public bool IsInfiniteFire(){
-		bool isInfinite = Constants.GetConstant<bool>("InfiniteFireMode");
-		return isInfinite;
+		return FireBreaths > 0 || Constants.GetConstant<bool>("InfiniteFireMode");
 	}
 
 	#region Initialization and override functions

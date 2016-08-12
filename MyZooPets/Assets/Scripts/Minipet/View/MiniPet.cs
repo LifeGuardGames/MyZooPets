@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Script to control Minipet and contains the basic properties of a minipet.

@@ -32,9 +32,9 @@ public class GameTutorialFlameCrystal : GameTutorial {
 
 		try{
 			//add fire orb to the clickable list
-			FireButtonUIManager.FireButtonActive += FireButtonActiveEventHandler;
+			FireButtonManager.FireButtonActive += FireButtonActiveEventHandler;
 			fireOrbItemReference = InventoryUIManager.Instance.GetFireOrbReference();
-			fireButtonReference = FireButtonUIManager.Instance.FireButtonObject;
+			fireButtonReference = FireButtonManager.Instance.FireButtonObject;
 
 			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
 			Vector3 fireOrbItemPosition = Vector3.zero; // TEMP CODE - remove me once fixed
@@ -72,7 +72,7 @@ public class GameTutorialFlameCrystal : GameTutorial {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void FireButtonActiveEventHandler(object sender, EventArgs args){
-		FireButtonUIManager.FireButtonActive -= FireButtonActiveEventHandler;
+		FireButtonManager.FireButtonActive -= FireButtonActiveEventHandler;
 		
 		// clean up tween from last step
 		LeanTween.cancel(fireOrbFingerHint);

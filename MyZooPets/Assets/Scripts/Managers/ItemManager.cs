@@ -216,7 +216,7 @@ public class ItemManager : Singleton<ItemManager>{
 		if(statDict.ContainsKey(StatType.Fire)){
 			//add one more fire blow here
 			int fireBreath = statDict[StatType.Fire];
-			StatsManager.Instance.ChangeFireBreaths(fireBreath);
+			StatsManager.Instance.UpdateFireBreaths(fireBreath);
 		}
 		StatsManager.Instance.ChangeStats(healthDelta: healthAmount, hungerDelta: moodAmount, isFloaty: true);
 	}

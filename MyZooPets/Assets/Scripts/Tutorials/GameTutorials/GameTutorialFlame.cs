@@ -80,7 +80,7 @@ public class GameTutorialFlame : GameTutorial{
 		// wait one frame so that the flame button can appear
 		yield return 0;
 
-		GameObject fireButton = FireButtonUIManager.Instance.FireButtonObject;
+		GameObject fireButton = FireButtonManager.Instance.FireButtonObject;
 
 		SpotlightObject(fireButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton", fingerHint: true,
 		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 0f, fingerHintOffsetY: -40f,

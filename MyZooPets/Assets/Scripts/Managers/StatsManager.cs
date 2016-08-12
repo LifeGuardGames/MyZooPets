@@ -255,42 +255,33 @@ public class StatsManager : Singleton<StatsManager>{
 		}	
 	}
 
-	//---------------------------------------------------	
-	// CheckForZeroHealth()
-	// Check to see if pet's health reaches zero. fire event
-	// if so 
-	//---------------------------------------------------	
+	// Check to see if pet's health reaches zero. fire event if so 
 	private void CheckForZeroHealth(){
-		int health = DataManager.Instance.GameData.Stats.Health;
-
-		if(health <= 0)
-		if(OnZeroHealth != null)
-			OnZeroHealth(this, EventArgs.Empty);
+		if(DataManager.Instance.GameData.Stats.Health <= 0) {
+			if(OnZeroHealth != null) {
+				OnZeroHealth(this, EventArgs.Empty);
+			}
+		}
 	}
 
-	/// <summary>
-	/// Changes the fire breaths the pet has.
-	/// </summary>
-	/// <param name="amount">Amount.</param>
-	public void ChangeFireBreaths(int amount){
-		int breaths = DataManager.Instance.GameData.PetInfo.FireBreaths;
-		int newBreaths = breaths + amount;
-		SetFireBreaths(newBreaths);
+	#region Fire breathing logic
+	public void UpdateFireBreaths(int deltaAmount){
+		SetFireBreaths(DataManager.Instance.GameData.PetInfo.FireBreaths + deltaAmount);
 	}
 
 	private void SetFireBreaths(int amount){
 		DataManager.Instance.GameData.PetInfo.SetFireBreaths(amount);	
 	}
-	//-----------------------------------------------------------------
-	// OnMissionsRefreshed()
-	// When the user's current missions expire and must be refreshed.
-	//-----------------------------------------------------------------
-	private void OnMissionsRefreshed(object sender, EventArgs args){
-		// if the missions are refreshing, make sure the player can no longer breath fire
-		SetFireBreaths(0);
-	}
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+	/// <summary>
+	/// When the user's current missions expire and must be refreshed.
+	/// </summary>
+	private void OnMissionsRefreshed(object sender, EventArgs args){
+		SetFireBreaths(0);      // if the missions are refreshing, make sure the player can no longer breath fire
+	}
+	#endregion
+
+	#if UNITY_EDITOR || DEVELOPMENT_BUILD
 	//void OnGUI() {
 	//	if(GUI.Button(new Rect(0, 0, 100, 50), "+health")) {
 	//		ChangeStats(healthDelta: 10);
@@ -314,5 +305,5 @@ public class StatsManager : Singleton<StatsManager>{
 	//		ChangeStats(coinsDelta: -40);
 	//	}
 	//}
-#endif
+	#endif
 }

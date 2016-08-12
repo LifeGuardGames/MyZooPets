@@ -1,19 +1,22 @@
 fileFormatVersion: 2
 guid: 0c957da43610e634a956f3cd6cf677f1
-timeCreated: 1466450847
-licenseType: Pro
+timeCreated: 1471033182
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: InhalerAtlas_0
-    21300002: InhalerAtlas_1
-    21300004: InhalerAtlas_2
-    21300006: InhalerAtlas_3
-    21300008: InhalerAtlas_4
-    21300010: InhalerAtlas_5
+    21300000: InhalerGameSpacer
+    21300002: InhalerGameSpacerOutline
+    21300004: InhalerGameProgressStep
+    21300006: InhalerGameTop
+    21300008: InhalerGameProgressBar
+    21300010: InhalerGameBodyOutline
+    21300012: InhalerGameBody
+    21300014: InhalerGameCap
+    21300016: InhalerGameCapOutline
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -32,8 +35,8 @@ TextureImporter:
   cubemapConvolutionSteps: 7
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
-  textureFormat: -3
-  maxTextureSize: 512
+  textureFormat: -1
+  maxTextureSize: 1024
   textureSettings:
     filterMode: -1
     aniso: 16
@@ -50,140 +53,121 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 30
+  spritePixelsToUnits: 25
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: InhalerAtlas_0
-      rect:
-        serializedVersion: 2
-        x: 606
-        y: 181
-        width: 391
-        height: 842
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 89, y: 206.5}
-        - {x: 85, y: 210.5}
-        - {x: 82, y: 211.5}
-        - {x: -82, y: 211.5}
-        - {x: -85, y: 210.5}
-        - {x: -89, y: 206.5}
-        - {x: -91, y: 201.5}
-        - {x: -91, y: -197.5}
-        - {x: -89, y: -202.5}
-        - {x: -85, y: -206.5}
-        - {x: -80, y: -208.5}
-        - {x: 80, y: -208.5}
-        - {x: 85, y: -207.5}
-        - {x: 91, y: -199.5}
-        - {x: 91, y: 201.5}
-    - name: InhalerAtlas_1
-      rect:
-        serializedVersion: 2
-        x: 247
-        y: 354
-        width: 333
-        height: 546
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -3, y: 136.5}
-        - {x: -32, y: 136.5}
-        - {x: -43, y: 81.5}
-        - {x: -36, y: -5.5}
-        - {x: -79, y: -51.5}
-        - {x: -81, y: -55.5}
-        - {x: -81, y: -72.5}
-        - {x: -64, y: -121.5}
-        - {x: -3, y: -121.5}
-        - {x: 67, y: -94.5}
-        - {x: 76, y: -85.5}
-        - {x: 76, y: 111.5}
-    - name: InhalerAtlas_2
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 237
-        width: 247
-        height: 780
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 61.5, y: 151}
-        - {x: 26.5, y: 161}
-        - {x: 20.5, y: 194}
-        - {x: -18.5, y: 194}
-        - {x: -61.5, y: 146}
-        - {x: -61.5, y: 96}
-        - {x: -57.5, y: 92}
-        - {x: -61.5, y: -143}
-        - {x: -61.5, y: -195}
-        - {x: 61.5, y: -195}
-        - {x: 61.5, y: -146}
-        - {x: 57.5, y: -142}
-        - {x: 61.5, y: 93}
-    - name: InhalerAtlas_3
-      rect:
-        serializedVersion: 2
-        x: 316
-        y: 0
-        width: 166
-        height: 204
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 3.5, y: 40}
-        - {x: -35.5, y: 30}
-        - {x: -35.5, y: 5}
-        - {x: -24.5, y: -51}
-        - {x: 25.5, y: -51}
-        - {x: 39.5, y: -39}
-        - {x: 39.5, y: -30}
-        - {x: 20.5, y: 40}
-    - name: InhalerAtlas_4
+    - serializedVersion: 2
+      name: InhalerGameSpacer
       rect:
         serializedVersion: 2
         x: 0
-        y: 6
-        width: 267
-        height: 172
+        y: 27
+        width: 147
+        height: 480
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -67, y: 35}
-        - {x: -67, y: -41}
-        - {x: 53, y: -41}
-        - {x: 56, y: -33}
-        - {x: 56, y: 30}
-        - {x: 48, y: 35}
-    - name: InhalerAtlas_5
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameSpacerOutline
       rect:
         serializedVersion: 2
-        x: 675
-        y: 25
-        width: 255
-        height: 135
+        x: 153
+        y: 27
+        width: 150
+        height: 480
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -31.5, y: 30.5}
-        - {x: -56.5, y: 4.5}
-        - {x: -56.5, y: -5.5}
-        - {x: -28.5, y: -31.5}
-        - {x: 33.5, y: -31.5}
-        - {x: 58.5, y: -10.5}
-        - {x: 58.5, y: 0.5}
-        - {x: 34.5, y: 30.5}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameProgressStep
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 417
+        width: 140
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameTop
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 355
+        width: 93
+        height: 152
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameProgressBar
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 0
+        width: 221
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameBodyOutline
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 21
+        width: 192
+        height: 362
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameBody
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 21
+        width: 192
+        height: 316
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameCap
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 23
+        width: 92
+        height: 112
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - serializedVersion: 2
+      name: InhalerGameCapOutline
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 145
+        width: 91
+        height: 117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
     outline: []
   spritePackingTag: 
   userData: 

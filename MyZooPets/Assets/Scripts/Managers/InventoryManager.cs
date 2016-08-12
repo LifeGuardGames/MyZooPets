@@ -69,7 +69,7 @@ public class InventoryManager : Singleton<InventoryManager> {
 		Item itemData = DataLoaderItems.GetItem(itemID);
 
 		InventoryItem invItem = null;
-
+		
 		// If item already in dictionary increment amount
 		if(specificTypeInventory.ContainsKey(itemID)) {
 			// Only one allowed for wallpaper/accessory

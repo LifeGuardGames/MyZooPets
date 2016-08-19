@@ -126,6 +126,6 @@ public class PerfumeMicro : Micro{
 			x = Random.Range(0, Screen.width);
 
 		}
-		return CameraUtils.ScreenToWorldPointZero(Camera.main, new Vector2(x, y), 50);
+		return CameraUtils.ScreenToWorldPointZ(Camera.main, new Vector2(x, y), 50);
 	}
 }

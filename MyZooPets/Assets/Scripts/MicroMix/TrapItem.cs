@@ -55,7 +55,7 @@ public class TrapItem : MicroItem{
 	private IEnumerator CheckPlace(TapGesture gesture){
 		yield return 0; //Before we place, wait a single frame to check if we clicked on the pause and are now paused after the click
 		if(!falling && !MicroMixManager.Instance.IsPaused){
-			Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position, 50);
+			Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
 			falling = true;
 			transform.position = currentPos;
 			StartCoroutine(Fall());

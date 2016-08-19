@@ -20,10 +20,10 @@ public class ScarfItem : MicroItem{
 			return;
 		}
 		if(posOffset == Vector3.zero){
-			Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition, 50);
+			Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 50);
 			posOffset = transform.position - startPos;
 		}
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
 		transform.position = currentPos + posOffset;
 		Vector3 neckPos = neckObject.transform.position;
 		if(Vector3.Distance(transform.position, neckPos) < .75f){

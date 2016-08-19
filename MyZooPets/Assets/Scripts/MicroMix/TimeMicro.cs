@@ -2,19 +2,19 @@
 using System.Collections;
 
 public class TimeMicro : Micro{
-	public GameObject inhalerButton;
-	public GameObject petPrefab;
-	public GameObject solarSystem;
+	public GameObject sunParent;
 	public GameObject sun;
 	public GameObject moon;
-	public GameObject dayBackground;
-	public GameObject nightBackground;
-	private GameObject petInstance;
-	private float currentDegree;
-	private bool isPaused = false;
-	//How far off 180 and 360 we can be
-	private float range = 30;
-	private bool isDay = false;
+	public GameObject background;
+	private Vector3 moonHigh = new Vector3(0, 1.5f);
+	private Vector3 moonLow = new Vector3(0, -4f);
+	private float time;
+	private float transitionLength = .6f;
+	//Must be set according to Glinda's anim
+	private bool isDay;
+	private bool paused = false;
+	private float angle;
+	//Used for tutorial
 
 	public override string Title{
 		get{
@@ -24,135 +24,105 @@ public class TimeMicro : Micro{
 
 	public override int Background{
 		get{
-			return 0;
+			return -1;
 		}
 	}
 
 	void Update(){
-		if(MicroMixManager.Instance.IsPaused || isPaused){
+		if(MicroMixManager.Instance.IsPaused || paused){
 			return;
 		}
-		currentDegree -= 45 * Time.deltaTime;
-		if(currentDegree <= 0){
-			currentDegree += 360;
-			if(isDay){
-				isDay = false;
-				LeanTween.alpha(dayBackground, 0, .5f);
-				LeanTween.alpha(nightBackground, 1, .5f);
-				LeanTween.color(inhalerButton, Color.white, .75f).setEase(LeanTweenType.easeOutQuad).setOnComplete(ColorTweenBack);
-				if(MicroMixManager.Instance.IsTutorial){
-					isPaused = true;
-					StartCoroutine(ShowFinger());
-				}
-				//If we are in the tutorial, we want to pause;
-			}
-		}
-		if(currentDegree <= 180 && !isDay){
+		time += Time.deltaTime;
+		if(time > 1 && time < 3 && !isDay){ 
 			isDay = true;
-			LeanTween.alpha(dayBackground, 1, .5f);
-			LeanTween.alpha(nightBackground, 0, .5f);
-			LeanTween.color(inhalerButton, Color.white, .75f).setEase(LeanTweenType.easeOutQuad).setOnComplete(ColorTweenBack);
-			if(MicroMixManager.Instance.IsTutorial){
-				isPaused = true;
-				StartCoroutine(ShowFinger());
-			}
-			//If we are in the tutorial, we want to pause;
+			NightToDay();
 		}
-		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
-	}
-
-	public bool IsValid(){
-		return (currentDegree <= range || currentDegree >= 360 - range//From 330 to 30 (or is used because x cannot be less than 0 or greater than 360, but these situations are separate
-		|| currentDegree <= 180 + range && currentDegree >= 180 - range); //From 150 to 210
+		if(time > 3 && isDay){
+			isDay = false;
+			DayToNight();
+		}
+		angle -= 270 / 4f * Time.deltaTime;
+		sunParent.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
-		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-		petInstance.transform.SetParent(transform);	
-		inhalerButton.GetComponent<TimeItem>().petInstance = petInstance;
-		if(!randomize){
-			inhalerButton.SetActive(true);
-		}
-		inhalerButton.GetComponent<SpriteRenderer>().color = new Color(.7f, .7f, .7f);
+		time = 0;
+		sunParent.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+		sun.transform.localPosition = Vector3.down * 5;
+		isDay = false;
 		Setup();
 	}
 
-	protected override void _EndMicro(){
-		Close();
+	protected override void _EndMicro(){ //Not necessary to set clocks or background inactive, because we are their parent and will set them inactive regardless
+		LeanTween.cancel(moon);
 	}
 
 	protected override void _Pause(){
-		if(petInstance){
-			petInstance.GetComponentInChildren<Animator>().enabled = false;
-		}
-		LeanTween.pause(inhalerButton);
-		LeanTween.pause(dayBackground);
-		LeanTween.pause(nightBackground);
+		LeanTween.pause(moon);
+		background.GetComponent<Animator>().enabled = false;
 	}
 
 	protected override void _Resume(){
-		if(petInstance){
-			petInstance.GetComponentInChildren<Animator>().enabled = true;
-		}
-		LeanTween.resume(inhalerButton);
-		LeanTween.resume(dayBackground);
-		LeanTween.resume(nightBackground);
+		LeanTween.pause(moon);
+		background.GetComponent<Animator>().enabled = true;
+
+		//Resume all tweens
+		//Resume all animations
 	}
 
 	protected override IEnumerator _Tutorial(){
 		Setup();
-		inhalerButton.SetActive(false);
-		inhalerButton.GetComponent<SpriteRenderer>().color = new Color(.7f, .7f, .7f);
-		yield return WaitSecondsPause(3.5f);
+		MicroMixFinger finger = MicroMixManager.Instance.finger;
+		TimeItem time = GetComponentInChildren<TimeItem>();
+		Vector3 offset = Vector3.up * .5f;
+		finger.transform.position = time.transform.position + offset; //Set up the finger and the sky...
+
+		while(angle > 255){ //Position ourselves in the first clock
+			yield return 0;
+		}
+
+		paused = true;
+		finger.gameObject.SetActive(true);
+		yield return WaitSecondsPause(.3f); //Position finger on button and wait
+		time.ShrinkDown();
+		yield return finger.MoveTo(time.transform.position + offset, time.transform.position, delay: 0f, time: .15f); //Now press it
+		yield return finger.MoveTo(time.transform.position, time.transform.position + offset, delay: 0f, time: .15f);
+		paused = false;
+		finger.gameObject.SetActive(false);
+		time.clock1.SetActive(false); //Remove the clock and us
+
+		while(angle > 106){ //Position ourselves in the first clock
+			yield return 0;
+		}
+
+		paused = true;
+		finger.gameObject.SetActive(true);
+		yield return WaitSecondsPause(.3f); //Give a visual cue we will press
+		time.ShrinkDown();
+		yield return finger.MoveTo(time.transform.position + offset, time.transform.position, delay: 0f, time: .15f); //Now press it again
+		yield return finger.MoveTo(time.transform.position, time.transform.position + offset, delay: 0f, time: .15f);
+		paused = false;
+		finger.gameObject.SetActive(false); // Remove the clocks etc.
+		time.clock2.SetActive(false);
+
+		yield return WaitSecondsPause(.4f); //Let the sun go beyond horizon
+	}
+
+	private void NightToDay(){
+		//LeanTween.move(moon, moonLow, transitionLength).setEase(LeanTweenType.easeInOutQuad);
+		LeanTween.alpha(moon, 0, transitionLength).setEase(LeanTweenType.easeOutQuint);
+	}
+
+	private void DayToNight(){
+		//LeanTween.move(moon, moonHigh, transitionLength).setEase(LeanTweenType.easeInOutQuad);
+		LeanTween.alpha(moon, 1, transitionLength).setEase(LeanTweenType.easeInQuint);
 	}
 
 	private void Setup(){
-		dayBackground.SetActive(true);
-		nightBackground.SetActive(true);
-		solarSystem.transform.rotation = Quaternion.Euler(Vector3.zero);
-		sun.transform.localPosition = new Vector3(5, 0);
-		moon.transform.localPosition = new Vector3(-5, 0);
-		if(Random.value > .5f){
-			currentDegree = 90f;
-			isDay = true;
-			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
-			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
-		}
-		else{
-			currentDegree = 270f;
-			isDay = false;
-			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
-			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
-		}
-		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
-	}
-
-	private void Close(){
-		Destroy(petInstance);
-
-		dayBackground.GetComponent<SpriteRenderer>().color = Color.white;
-		nightBackground.GetComponent<SpriteRenderer>().color = Color.white;
-		dayBackground.SetActive(false);
-		nightBackground.SetActive(false);
-		LeanTween.cancel(dayBackground);
-		LeanTween.cancel(nightBackground);
-	}
-
-	private IEnumerator ShowFinger(){
-		MicroMixFinger finger = MicroMixManager.Instance.finger;
-		finger.gameObject.SetActive(true);
-		Vector3 offset = new Vector3(0, .75f);
-		inhalerButton.SetActive(true);
-		finger.EnableBlur(false);
-		yield return finger.ShakeToBack(inhalerButton.transform.position, inhalerButton.transform.position + offset, delay: .5f, time: .5f);
-		inhalerButton.SetActive(false);
-		finger.EnableBlur(true);
-		isPaused = false;
-		finger.gameObject.SetActive(false);
-		Destroy(petInstance);
-	}
-
-	private void ColorTweenBack(){
-		LeanTween.color(inhalerButton, new Color(.7f, .7f, .7f), .75f).setEase(LeanTweenType.easeOutQuad);
+		moon.transform.position = moonHigh;
+		moon.GetComponent<SpriteRenderer>().color = Color.white;
+		background.GetComponent<Animator>().Play("MicroMixBackgroundSky", 0, .54f);
+		background.GetComponent<Animator>().speed = 3 / 4f;
+		angle = 345;
 	}
 }

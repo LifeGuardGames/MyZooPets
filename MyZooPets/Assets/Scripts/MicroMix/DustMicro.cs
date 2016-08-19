@@ -2,9 +2,12 @@
 using System.Collections;
 
 public class DustMicro : Micro{
+	public GameObject vacuum;
 	private DustItem[] dustItems;
 	private int count;
-
+	private float lastDragTime;
+	private float intervalDragTime = .2f;
+	//How long in seconds between each dust we make dissappear
 	public override string Title{
 		get{
 			return "Vacuum";
@@ -34,7 +37,9 @@ public class DustMicro : Micro{
 		Setup(true);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-
+		for(int i = 0; i < dustItems.Length; i++){
+			dustItems[i].Randomize();
+		}
 		for(int i = 0; i < dustItems.Length; i++){ //Now point them all towards the trash
 			yield return finger.ShakeToBack(dustItems[i].transform.position + Vector3.down, dustItems[i].transform.position + Vector3.up, .1f, .3f);
 		}
@@ -49,10 +54,32 @@ public class DustMicro : Micro{
 	}
 
 	void OnDrag(DragGesture gesture){
-		if(gesture.Selection == null || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
+		if (MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
-		gesture.Selection.GetComponent<DustItem>().Drag();
+		vacuum.transform.position = CameraUtils.ScreenToWorldPointZ(Camera.main,gesture.Position,0);
+		if(gesture.Selection == null){
+			return;
+		}
+		if(lastDragTime < gesture.StartTime){
+			lastDragTime = gesture.StartTime;
+		}
+		if(Time.time - lastDragTime > intervalDragTime){
+			lastDragTime = Time.time;
+			gesture.Selection.GetComponent<DustItem>().Drag();
+		}
+	}
+
+
+	void OnTap(TapGesture gesture){
+		if (MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
+			return;
+		}
+		vacuum.transform.position = CameraUtils.ScreenToWorldPointZ(Camera.main,gesture.Position,0);
+		if(gesture.Selection == null){
+			return;
+		}
+		gesture.StartSelection.GetComponent<DustItem>().Tap();
 	}
 
 	private void Setup(bool randomize){
@@ -61,15 +88,10 @@ public class DustMicro : Micro{
 			for(int i = 0; i < dustItems.Length; i++){
 				dustItems[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 50);
 				dustItems[i].gameObject.SetActive(true);
+				dustItems[i].Randomize();
 			}
 		}
 		count = dustItems.Length;
 	}
 
-	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
-			return;
-		}
-		gesture.StartSelection.GetComponent<DustItem>().Tap();
-	}
 }

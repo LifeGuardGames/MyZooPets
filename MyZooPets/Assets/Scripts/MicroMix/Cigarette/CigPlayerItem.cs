@@ -29,15 +29,7 @@ public class CigPlayerItem : MicroItem{
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		Debug.Log("OK");
 		if(!complete && other.CompareTag("MicroMixPerfume")){
-			complete = true;
-		}
-	}
-
-	void OnCollisionEnter2D(Collision2D coll){
-		Debug.Log("GREAWTTT");
-		if(coll.gameObject.CompareTag("MicroMixPerfume")){
 			complete = true;
 		}
 	}

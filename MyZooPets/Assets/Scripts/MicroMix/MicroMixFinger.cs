@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class MicroMixFinger : MonoBehaviour{
-	public GameObject blur;
 
 	public IEnumerator MoveTo(Vector3 startPos, Vector3 endPos, float delay, float time){
 		transform.position = new Vector3(startPos.x, startPos.y, 49);
@@ -21,10 +20,6 @@ public class MicroMixFinger : MonoBehaviour{
 
 		LeanTween.move(gameObject, new Vector3(startPos.x, startPos.y, 49), time / 2).setEase(LeanTweenType.easeInOutQuad);
 		yield return WaitSecondsPause(time / 2);
-	}
-
-	public void EnableBlur(bool enabled){
-		blur.SetActive(enabled);
 	}
 
 	private IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager. Also pauses our tween

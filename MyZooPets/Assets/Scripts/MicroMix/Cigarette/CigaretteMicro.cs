@@ -31,6 +31,7 @@ public class CigaretteMicro : Micro{
 			return;
 		}
 		finger.transform.position = Vector3.MoveTowards(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset, Time.deltaTime * speed);
+		player.transform.position = finger.transform.position;
 		if(Vector3.Distance(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset) < .1f){
 			tutorialIndex++;
 			if(tutorialIndex == 2){
@@ -50,7 +51,6 @@ public class CigaretteMicro : Micro{
 		}
 		mazes[mazeIndex].gameObject.SetActive(true);
 		player.transform.position = mazes[mazeIndex].startPosition.transform.position;
-		Debug.Log("Starting maze: " + mazes[mazeIndex].name);
 		player.finishPos = mazes[mazeIndex].finishPosition.transform.position;
 	}
 
@@ -69,7 +69,6 @@ public class CigaretteMicro : Micro{
 	protected override IEnumerator _Tutorial(){
 		finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-		finger.blur.SetActive(false);
 		zOffset = new Vector3(0, 0, finger.transform.position.z - tutorialPositions[0].position.z);
 		finger.transform.position = tutorialPositions[0].position + zOffset;
 		waiting = false;

@@ -7,7 +7,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Micro debugMicro;
 	public GameObject[] backgrounds;
 	public MicroMixFinger finger;
-	public GameObject transitionMonster;
+	public GameObject monsterParent;
+	public GameObject monsterBackground;
+	public GameObject monsterBody;
+
 	private Micro currentMicro;
 	private Micro[] microList;
 	private float maxTimeScale = 1.3f;
@@ -38,7 +41,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
 		//AudioManager.Instance.PlayClip("microWin");	
-		StartCoroutine(TransitionIEnum());
+		StartCoroutine(TransitionIEnum(true));
 	}
 
 	public void LoseMicro(){
@@ -53,7 +56,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			GameOver();
 		}
 		else{
-			StartCoroutine(TransitionIEnum());
+			StartCoroutine(TransitionIEnum(false));
 		}
 		//AudioManager.Instance.PlayClip("microLose");	
 	}
@@ -73,7 +76,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	protected override void _NewGame(){
-		StartMicro();
+		StartCoroutine(TransitionIEnum(null));
 		Time.timeScale = 1f;
 		won = 0;
 		lost = 0;
@@ -114,40 +117,93 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		Time.timeScale = 1f;
 	}
 
-	private IEnumerator TransitionIEnum(){
-		transitionMonster.SetActive(true);
-		yield return new WaitForSeconds(4f);
-		transitionMonster.SetActive(false);
-		StartMicro();
-	}
-
-	private void StartMicro(){
-		if(currentMicro != null){
+	private IEnumerator TransitionIEnum(bool? success){
+		monsterParent.SetActive(true); //Set up transition in
+		float tweenTime = 1f;
+		float animTime = 2f;
+		if(currentMicro != null){ //Transition in
 			currentMicro.gameObject.SetActive(false);
-			if(currentMicro.Background != -1){
-				backgrounds[currentMicro.Background].SetActive(false);
-			}
-
 		}
-		if(debugMicro == null){
+
+		yield return InTransitionHelper(tweenTime);
+	
+		if(success.HasValue){ //Animate
+			if(success.Value){
+				Debug.Log("WON ANIMATION");
+			}
+			else{
+				Debug.Log("LOST ANIMATION");
+			}
+		}
+		yield return new WaitForSeconds(animTime);
+
+		if(debugMicro == null){ //Set up transition out
 			int index = Random.Range(0, microList.Length);
 			currentMicro = microList[index];
 		}
 		else{
 			currentMicro = debugMicro;
 		}
+
+		yield return OutTransitionHelper(tweenTime);
+
+		monsterParent.SetActive(false);
+		StartMicro();
+	}
+
+	private IEnumerator InTransitionHelper(float tweenTime){
+		float radius = 15f; //Tween body
+		float angle = Random.value * Mathf.PI * 2;
+		monsterBody.transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+		LeanTween.move(monsterBody, Vector3.zero, tweenTime).setEase(LeanTweenType.easeInOutBack);
+
+		bool hasBackground = currentMicro != null && currentMicro.Background != -1; //Tween old background
+		GameObject currentBackground;
+		if(hasBackground){
+			currentBackground = backgrounds[currentMicro.Background];
+			LeanTween.alpha(currentBackground, 0, 1f).setEase(LeanTweenType.easeInOutQuad);
+		}
+
+		monsterBackground.GetComponent<SpriteRenderer>().color = new Color(.239f, .333f, .454f, 0); //Tween monster background
+		LeanTween.alpha(monsterBackground, 1, tweenTime).setEase(LeanTweenType.easeInOutQuad);
+
+		yield return new WaitForSeconds(tweenTime); //Yield
+
+		if(hasBackground){
+			currentBackground.GetComponent<SpriteRenderer>().color = Color.white; //Reset old background
+			currentBackground.SetActive(false);
+		}
+	}
+
+	private IEnumerator OutTransitionHelper(float tweenTime){
+		float radius = 15f; //Tween body
+		float angle = Random.value * Mathf.PI * 2;
+
+		bool hasBackground = currentMicro != null && currentMicro.Background != -1;
+		GameObject currentBackground;
+		if(hasBackground){
+			currentBackground = backgrounds[currentMicro.Background];
+			currentBackground.SetActive(true);
+			currentBackground.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);//Reset old background
+			LeanTween.alpha(currentBackground, 1, 1f).setEase(LeanTweenType.easeInOutQuad);
+		}
+
+		monsterBackground.GetComponent<SpriteRenderer>().color = new Color(.239f, .333f, .454f, 0); //Tween monster background
+		LeanTween.alpha(monsterBackground, 1, tweenTime).setEase(LeanTweenType.easeInOutQuad);
+
+		yield return new WaitForSeconds(tweenTime); //Yield
+
+
+	}
+
+	private void StartMicro(){
 		currentMicro.gameObject.SetActive(true);
 		currentMicro.StartMicro(difficulty);
 		titleText.text = currentMicro.Title;
 		titleText.color = Color.white;
 		titleText.rectTransform.localScale = Vector3.one * 1.5f;
 		LeanTween.scale(titleText.rectTransform, Vector3.one, .5f * Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
-		if(currentMicro.Background == -1){
-			//Do nothing, they will handle this themselves
-		}
-		else{
-			backgrounds[currentMicro.Background].SetActive(true);
-		}
+	
 	}
 
 	private void tweenFinished(){

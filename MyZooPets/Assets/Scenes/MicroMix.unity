@@ -13177,6 +13177,7 @@ MonoBehaviour:
   monsterParent: {fileID: 993890618}
   monsterBackground: {fileID: 754181637}
   monsterBody: {fileID: 1514358253}
+  monsterParticle: {fileID: 1915969314}
 --- !u!1 &450471806
 GameObject:
   m_ObjectHideFlags: 0
@@ -39003,6 +39004,14 @@ Prefab:
     - target: {fileID: 108258, guid: fe2d6445bf84842a487e60c6c9eb9083, type: 2}
       propertyPath: m_Name
       value: TransitionSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 19895404, guid: fe2d6445bf84842a487e60c6c9eb9083, type: 2}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19895404, guid: fe2d6445bf84842a487e60c6c9eb9083, type: 2}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fe2d6445bf84842a487e60c6c9eb9083, type: 2}
@@ -65109,6 +65118,11 @@ SpriteRenderer:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
+--- !u!198 &1915969314 stripped
+ParticleSystem:
+  m_PrefabParentObject: {fileID: 19895404, guid: fe2d6445bf84842a487e60c6c9eb9083,
+    type: 2}
+  m_PrefabInternal: {fileID: 1273776816}
 --- !u!1 &1916226182
 GameObject:
   m_ObjectHideFlags: 0

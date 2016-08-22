@@ -119,7 +119,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	private IEnumerator TransitionIEnum(bool? success){
-		monsterParent.SetActive(true); //Set up transition in
 		float tweenTime = 1f;
 		float animTime = 2f;
 		if(currentMicro != null){ //Transition in
@@ -147,7 +146,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		}
 		yield return OutTransitionHelper(tweenTime);
 
-		monsterParent.SetActive(false);
 		StartMicro();
 	}
 
@@ -180,6 +178,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	private IEnumerator OutTransitionHelper(float tweenTime){
 		float radius = 15f; //Tween body
 		float angle = Random.value * Mathf.PI * 2;
+		LeanTween.move(monsterBody, new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius, tweenTime).setEase(LeanTweenType.easeInOutBack);
 
 		bool hasBackground = currentMicro.Background != -1;
 		GameObject currentBackground = null;
@@ -187,17 +186,16 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			currentBackground = backgrounds[currentMicro.Background];
 			currentBackground.SetActive(true);
 			currentBackground.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);//Reset old background
-			LeanTween.alpha(currentBackground, 1, 1f).setEase(LeanTweenType.easeInOutQuad);
+			LeanTween.alpha(currentBackground, 1, tweenTime).setEase(LeanTweenType.easeInOutQuad);
 		}
-		LeanTween.alpha(monsterBackground, 0, tweenTime).setEase(LeanTweenType.easeInOutQuad);
+		LeanTween.alpha(monsterBackground, 0,tweenTime).setEase(LeanTweenType.easeInOutQuad);
 
 		monsterParticle.Stop();
-
-		yield return new WaitForSeconds(tweenTime); //Yield
+		currentMicro.gameObject.SetActive(true);
+		yield return new WaitForSeconds(monsterParticle.startLifetime); //Yield
 	}
 
 	private void StartMicro(){
-		currentMicro.gameObject.SetActive(true);
 		currentMicro.StartMicro(difficulty);
 		titleText.text = currentMicro.Title;
 		titleText.color = Color.white;

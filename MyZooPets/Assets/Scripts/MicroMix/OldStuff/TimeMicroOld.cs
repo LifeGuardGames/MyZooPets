@@ -143,10 +143,8 @@ public class TimeMicroOld : Micro{
 		finger.gameObject.SetActive(true);
 		Vector3 offset = new Vector3(0, .75f);
 		inhalerButton.SetActive(true);
-		finger.EnableBlur(false);
 		yield return finger.ShakeToBack(inhalerButton.transform.position, inhalerButton.transform.position + offset, delay: .5f, time: .5f);
 		inhalerButton.SetActive(false);
-		finger.EnableBlur(true);
 		isPaused = false;
 		finger.gameObject.SetActive(false);
 		Destroy(petInstance);

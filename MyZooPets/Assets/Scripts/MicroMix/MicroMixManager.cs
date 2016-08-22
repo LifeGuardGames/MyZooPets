@@ -7,6 +7,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Micro debugMicro;
 	public GameObject[] backgrounds;
 	public MicroMixFinger finger;
+	public GameObject transitionMonster;
 	private Micro currentMicro;
 	private Micro[] microList;
 	private float maxTimeScale = 1.3f;
@@ -21,7 +22,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	void Awake(){
-		// Parent settings
 		minigameKey = "MICRO"; //
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
@@ -38,8 +38,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
 		//AudioManager.Instance.PlayClip("microWin");	
-		StartMicro();
-
+		StartCoroutine(TransitionIEnum());
 	}
 
 	public void LoseMicro(){
@@ -54,7 +53,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			GameOver();
 		}
 		else{
-			StartMicro();
+			StartCoroutine(TransitionIEnum());
 		}
 		//AudioManager.Instance.PlayClip("microLose");	
 	}
@@ -112,8 +111,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	protected override void _QuitGame(){
-		//Nothing for now
 		Time.timeScale = 1f;
+	}
+
+	private IEnumerator TransitionIEnum(){
+		transitionMonster.SetActive(true);
+		yield return new WaitForSeconds(4f);
+		transitionMonster.SetActive(false);
+		StartMicro();
 	}
 
 	private void StartMicro(){

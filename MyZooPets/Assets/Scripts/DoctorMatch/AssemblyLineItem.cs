@@ -77,7 +77,6 @@ public class AssemblyLineItem : MonoBehaviour{
 	}
 
 	private void DestroySelf(){
-		Debug.Log("Desctruct");
 		Destroy(gameObject);
 	}
 }

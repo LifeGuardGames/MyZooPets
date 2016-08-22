@@ -5,9 +5,7 @@ using System.Collections;
 public class EmergencyMicro : Micro{
 	public GameObject canvasParent;
 	public AssemblyLineItem assemblyItem;
-	public Transform button1;
-	public Transform button2;
-	public Transform button3;
+	public DoctorMatchZone[] buttons;
 	private bool complete;
 
 	public override int Background{
@@ -33,8 +31,9 @@ public class EmergencyMicro : Micro{
 		}
 		complete = true;
 		assemblyItem.Activate(false);
-		foreach(DoctorMatchZone buttonZone in FindObjectsOfType<DoctorMatchZone>()){
-			buttonZone.GetComponent<Image>().color = Color.grey;
+		for(int i = 0; i < buttons.Length; i++){
+			buttons[i].GetComponent<Image>().color = Color.grey;
+			buttons[i].ToggleButtonInteractable(false);
 		}
 	}
 
@@ -45,8 +44,9 @@ public class EmergencyMicro : Micro{
 	}
 
 	protected override void _EndMicro(){
-		foreach(DoctorMatchZone buttonZone in FindObjectsOfType<DoctorMatchZone>()){
-			buttonZone.GetComponent<Image>().color = Color.white;
+		for(int i = 0; i < buttons.Length; i++){
+			buttons[i].GetComponent<Image>().color = Color.white;
+			buttons[i].ToggleButtonInteractable(true);
 		}
 		canvasParent.SetActive(false);
 	}
@@ -63,50 +63,22 @@ public class EmergencyMicro : Micro{
 		canvasParent.SetActive(true);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
-		finger.blur.SetActive(false);
-		Vector3 offset = Vector3.left;
+		Vector3 offset = Vector3.left * 1.5f;
 
-		assemblyItem.Init(0, 0);
-		yield return finger.ShakeToBack(button1.transform.position + offset, button1.transform.position, delay: .2f, time: .4f);
-		assemblyItem.Activate(false);
-		yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME*2);
+		for(int i = 0; i < buttons.Length; i++){
+			assemblyItem.Init(0, i);
+			StartCoroutine(DelayParticlePlay(.4f,buttons[i].particle));
+			yield return finger.ShakeToBack(buttons[i].transform.position + offset, buttons[i].transform.position, delay: .2f, time: .4f);
+			assemblyItem.Activate(false);
+			yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME * 2);
+		}
 
-		assemblyItem.Init(0, 1);
-		yield return finger.ShakeToBack(button2.transform.position + offset, button2.transform.position, delay: .2f, time: .4f);
-		assemblyItem.Activate(false);
-		yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME*2);
-
-		assemblyItem.Init(0, 2);
-		yield return finger.ShakeToBack(button3.transform.position + offset, button3.transform.position, delay: .2f, time: .4f);
-		assemblyItem.Activate(false);
-		yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME*2);
-		/*
-		finger.gameObject.SetActive(true);
-
-		waiting = true;
-		assemblyItem.Init(0, 0);
-		yield return finger.ShakeToBack(button1.transform.position + offset, button1.transform.position, delay: .2f, time: .4f);
-		assemblyItem.Activate();
-		yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME * 2);
-
-		waiting = true;
-		assemblyItem.Init(0, 1);
-		assemblyItem.Activate();
-		yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME * 2);
-
-		waiting = true;
-		assemblyItem.Init(0, 2);
-		yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME * 2);*/
-		finger.blur.SetActive(true);
+		yield return 0;
 		finger.gameObject.SetActive(false);
 	}
 
-	protected IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager
-		for(float i = 0; i <= time; i += .1f){
-			yield return new WaitForSeconds(.1f);
-			while(MicroMixManager.Instance.IsPaused){
-				yield return 0;
-			}
-		}
+	private IEnumerator DelayParticlePlay(float delay, ParticleSystem toPlay){
+		yield return WaitSecondsPause(delay);
+		toPlay.Play();
 	}
 }

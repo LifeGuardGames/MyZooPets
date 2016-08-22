@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class DoctorMatchZone : MonoBehaviour{
 	public Button button;
+	public EmergencyMicro parent;
+	//Used to determine if we are in DoctorMatch or MicroMix
 	public DoctorMatchManager.DoctorMatchButtonTypes buttonType;
 	public ParticleSystem particle;
 
@@ -16,7 +18,12 @@ public class DoctorMatchZone : MonoBehaviour{
 	public void OnZoneClicked(){
 		if(!isLocked){
 			TempLock(lockTime);// Lock to prevent accidental double tapping
-			DoctorMatchManager.Instance.OnZoneClicked(buttonType);
+			if(parent == null){
+				DoctorMatchManager.Instance.OnZoneClicked(buttonType);
+			}
+			else{
+				parent.OnZoneClicked(buttonType);
+			}
 			particle.Play();
 		}
 	}

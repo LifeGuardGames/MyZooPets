@@ -3,8 +3,16 @@ using System.Collections;
 
 public class CigaretteMicro : Micro{
 	public CigPlayerItem player;
+	public Transform[] tutorialPositions;
 	private MazeItem[] mazes;
 	private int mazeIndex;
+	private MicroMixFinger finger;
+	private float speed = 4f;
+	private int tutorialIndex;
+	private bool tutorialComplete;
+	private bool waiting;
+	private Vector3 zOffset;
+	//Used to offset the zPosition of the finger
 
 	public override string Title{
 		get{
@@ -15,6 +23,22 @@ public class CigaretteMicro : Micro{
 	public override int Background{
 		get{
 			return 2;
+		}
+	}
+
+	void Update(){
+		if(MicroMixManager.Instance.IsPaused || !MicroMixManager.Instance.IsTutorial || tutorialComplete || waiting){
+			return;
+		}
+		finger.transform.position = Vector3.MoveTowards(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset, Time.deltaTime * speed);
+		if(Vector3.Distance(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset) < .1f){
+			tutorialIndex++;
+			if(tutorialIndex == 2){
+				waiting = true;
+			}
+			else if(tutorialIndex == tutorialPositions.Length){
+				tutorialComplete = true;
+			}
 		}
 	}
 
@@ -43,6 +67,25 @@ public class CigaretteMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		finger = MicroMixManager.Instance.finger;
+		finger.gameObject.SetActive(true);
+		finger.blur.SetActive(false);
+		zOffset = new Vector3(0, 0, finger.transform.position.z - tutorialPositions[0].position.z);
+		finger.transform.position = tutorialPositions[0].position + zOffset;
+		waiting = false;
+		mazes = GetComponentsInChildren<MazeItem>(true);
+		mazes[0].gameObject.SetActive(true);
+
+		tutorialComplete = false;
+		tutorialIndex = 0;
+		while(!tutorialComplete){
+			if(waiting){
+				yield return WaitSecondsPause(.5f);
+				waiting = false;
+			}
+			yield return 0;
+		}
+
+		finger.gameObject.SetActive(false);
 	}
 }

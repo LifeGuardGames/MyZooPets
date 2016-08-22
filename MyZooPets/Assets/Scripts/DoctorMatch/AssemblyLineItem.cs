@@ -3,8 +3,8 @@ using System.Collections;
 
 public class AssemblyLineItem : MonoBehaviour{
 	public static int SPRITE_COUNT = 6;
+	public static float FADE_TIME = .3f;
 	public SpriteRenderer itemSprite;
-	public ParticleSystem pSystem;
 	private DoctorMatchManager.DoctorMatchButtonTypes itemType;
 
 	public DoctorMatchManager.DoctorMatchButtonTypes ItemType{
@@ -17,6 +17,7 @@ public class AssemblyLineItem : MonoBehaviour{
 
 	public void Init(int currentIndex, int typeIndex = -1, int spriteIndex = -1){
 		// Generate random type and populate everything
+		LeanTween.alpha(gameObject, 1, 0); //Reset our visuals
 		if(typeIndex == -1)
 			typeIndex = UnityEngine.Random.Range(0, 3);
 		index = currentIndex;
@@ -33,8 +34,11 @@ public class AssemblyLineItem : MonoBehaviour{
 		itemSprite.sprite = LoadSpriteZoneType(itemType, spriteIndex);
 	}
 
-	public void Activate(){
-		LeanTween.alpha(gameObject, 0, .3f).setOnComplete(DestroySelf);
+	public void Activate(bool destroySelf = true){
+		LTDescr fadeAlpha = LeanTween.alpha(gameObject, 0, FADE_TIME);
+		if(destroySelf){
+			fadeAlpha.setOnComplete(DestroySelf);
+		}
 	}
 
 	public int GetIncrementIndex(){
@@ -64,7 +68,7 @@ public class AssemblyLineItem : MonoBehaviour{
 	}
 
 	public void CompareVisible(int toCompare, bool compare){
-		if((index >= toCompare && compare) || index>=4){
+		if((index >= toCompare && compare) || index >= 4){
 			itemSprite.enabled = false;
 		}
 		else{
@@ -73,6 +77,7 @@ public class AssemblyLineItem : MonoBehaviour{
 	}
 
 	private void DestroySelf(){
+		Debug.Log("Desctruct");
 		Destroy(gameObject);
 	}
 }

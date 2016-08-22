@@ -127,14 +127,15 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 		yield return InTransitionHelper(tweenTime);
 	
-		if(success.HasValue){ //Animate
+		/*if(success.HasValue){ //Animate
 			if(success.Value){
 				Debug.Log("WON ANIMATION");
 			}
 			else{
 				Debug.Log("LOST ANIMATION");
 			}
-		}
+		}*/
+
 		yield return new WaitForSeconds(animTime);
 
 		if(debugMicro == null){ //Set up transition out

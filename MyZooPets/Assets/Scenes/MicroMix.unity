@@ -13176,7 +13176,7 @@ MonoBehaviour:
   finger: {fileID: 662304629}
   monsterParent: {fileID: 993890618}
   monsterBackground: {fileID: 754181637}
-  monsterBody: {fileID: 1514358253}
+  monsterBody: {fileID: 504334602}
   monsterParticle: {fileID: 1915969314}
 --- !u!1 &450471806
 GameObject:
@@ -13924,6 +13924,35 @@ MonoBehaviour:
   trap: {fileID: 1263832466}
   dashedLine: {fileID: 1086514442}
   circle: {fileID: 1376656932}
+--- !u!1 &504334602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 504334603}
+  m_Layer: 2
+  m_Name: SmokeMonster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &504334603
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 504334602}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 1514358254}
+  m_Father: {fileID: 993890619}
+  m_RootOrder: 0
 --- !u!1 &509879039
 GameObject:
   m_ObjectHideFlags: 0
@@ -28565,7 +28594,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1514358254}
+  - {fileID: 504334603}
   - {fileID: 754181638}
   - {fileID: 941344094}
   m_Father: {fileID: 0}
@@ -36129,7 +36158,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: -0.6182016, w: 0.7860196}
   m_LocalPosition: {x: -1.14, y: -0.06999996, z: 0}
   m_LocalScale: {x: 0.57714665, y: 0.57714653, z: 0.57714635}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 89.5404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -76.3698}
   m_Children:
   - {fileID: 258820449}
   m_Father: {fileID: 541732556}
@@ -38995,7 +39024,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 455440, guid: fe2d6445bf84842a487e60c6c9eb9083, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 108258, guid: fe2d6445bf84842a487e60c6c9eb9083, type: 2}
       propertyPath: m_IsActive
@@ -50195,7 +50224,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 541732556}
-  m_Father: {fileID: 993890619}
+  m_Father: {fileID: 504334603}
   m_RootOrder: 0
 --- !u!95 &1514358255
 Animator:

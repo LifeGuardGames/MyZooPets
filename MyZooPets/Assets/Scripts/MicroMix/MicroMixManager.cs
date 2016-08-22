@@ -127,14 +127,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 		yield return InTransitionHelper(tweenTime);
 	
-		/*if(success.HasValue){ //Animate
+		if(success.HasValue){ //Animate
 			if(success.Value){
-				Debug.Log("WON ANIMATION");
+				monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin",0,0);
 			}
 			else{
-				Debug.Log("LOST ANIMATION");
+				monsterBody.GetComponentInChildren<Animator>().Play("PlayerLose",0,0);
 			}
-		}*/
+		}
 
 		yield return new WaitForSeconds(animTime);
 
@@ -192,17 +192,16 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		LeanTween.alpha(monsterBackground, 0,tweenTime).setEase(LeanTweenType.easeInOutQuad);
 
 		monsterParticle.Stop();
-		currentMicro.gameObject.SetActive(true);
 		yield return new WaitForSeconds(monsterParticle.startLifetime); //Yield
 	}
 
 	private void StartMicro(){
+		currentMicro.gameObject.SetActive(true);
 		currentMicro.StartMicro(difficulty);
 		titleText.text = currentMicro.Title;
 		titleText.color = Color.white;
 		titleText.rectTransform.localScale = Vector3.one * 1.5f;
 		LeanTween.scale(titleText.rectTransform, Vector3.one, .5f * Time.timeScale).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
-	
 	}
 
 	private void tweenFinished(){

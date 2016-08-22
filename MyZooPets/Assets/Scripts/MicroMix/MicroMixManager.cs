@@ -10,6 +10,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public GameObject monsterParent;
 	public GameObject monsterBackground;
 	public GameObject monsterBody;
+	public ParticleSystem monsterParticle;
 
 	private Micro currentMicro;
 	private Micro[] microList;
@@ -144,7 +145,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		else{
 			currentMicro = debugMicro;
 		}
-
 		yield return OutTransitionHelper(tweenTime);
 
 		monsterParent.SetActive(false);
@@ -157,8 +157,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		monsterBody.transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
 		LeanTween.move(monsterBody, Vector3.zero, tweenTime).setEase(LeanTweenType.easeInOutBack);
 
+		monsterParticle.Play();
+
 		bool hasBackground = currentMicro != null && currentMicro.Background != -1; //Tween old background
-		GameObject currentBackground;
+		GameObject currentBackground = null;
 		if(hasBackground){
 			currentBackground = backgrounds[currentMicro.Background];
 			LeanTween.alpha(currentBackground, 0, 1f).setEase(LeanTweenType.easeInOutQuad);
@@ -179,21 +181,19 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		float radius = 15f; //Tween body
 		float angle = Random.value * Mathf.PI * 2;
 
-		bool hasBackground = currentMicro != null && currentMicro.Background != -1;
-		GameObject currentBackground;
+		bool hasBackground = currentMicro.Background != -1;
+		GameObject currentBackground = null;
 		if(hasBackground){
 			currentBackground = backgrounds[currentMicro.Background];
 			currentBackground.SetActive(true);
 			currentBackground.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);//Reset old background
 			LeanTween.alpha(currentBackground, 1, 1f).setEase(LeanTweenType.easeInOutQuad);
 		}
+		LeanTween.alpha(monsterBackground, 0, tweenTime).setEase(LeanTweenType.easeInOutQuad);
 
-		monsterBackground.GetComponent<SpriteRenderer>().color = new Color(.239f, .333f, .454f, 0); //Tween monster background
-		LeanTween.alpha(monsterBackground, 1, tweenTime).setEase(LeanTweenType.easeInOutQuad);
+		monsterParticle.Stop();
 
 		yield return new WaitForSeconds(tweenTime); //Yield
-
-
 	}
 
 	private void StartMicro(){

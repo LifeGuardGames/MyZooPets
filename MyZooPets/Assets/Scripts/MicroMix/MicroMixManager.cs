@@ -119,6 +119,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	private IEnumerator TransitionIEnum(bool? success){
+		monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
+		monsterBody.GetComponentInChildren<Animator>().speed = 0;
 		float tweenTime = 1f;
 		float animTime = 2f;
 		if(currentMicro != null){ //Transition in
@@ -128,6 +130,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		yield return InTransitionHelper(tweenTime);
 	
 		if(success.HasValue){ //Animate
+			monsterBody.GetComponentInChildren<Animator>().speed = 1;
 			if(success.Value){
 				monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
 			}

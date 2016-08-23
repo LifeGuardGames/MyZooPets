@@ -25,6 +25,13 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		set;
 	}
 
+	private enum MonsterAnimation{ //Win and lose are for the human playing
+		INTRO,
+		WIN,
+		LOSE,
+		WIN_FINAL
+	}
+
 	void Awake(){
 		minigameKey = "MICRO"; //
 		quitGameScene = SceneUtils.BEDROOM;

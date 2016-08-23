@@ -275,7 +275,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			foreach(Transform tab in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
 					tab.name = decorationEnums[counter];
-					
+					if(tab.name == defaultTabName) {
+						tab.GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("buttonCategoryActive");
+					}
 					Image imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<Image>();
 					imageSprite.sprite = SpriteCacheManager.GetDecoIconSprite((DecorationTypes)Enum.Parse(typeof(DecorationTypes), tab.name));
 

@@ -21,6 +21,15 @@ public class FireMicro : Micro{
 		}
 	}
 
+	void OnEnable(){
+		barUI.SetActive(true);
+	}
+
+	void OnDisable(){
+		if(barUI){
+			barUI.SetActive(false);
+		}
+	}
 	public void StartBar(){
 		TweenUp();
 	}

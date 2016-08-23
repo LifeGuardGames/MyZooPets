@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PerfumeMicro : Micro{
 	public GameObject dashedLine;
+	public GameObject perfumeBottle;
 	private int count;
 	private PerfumeItem[] perfumes;
 
@@ -51,56 +52,61 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
 		Vector3	startPos = GetRandomPositionOnEdge();
 		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
 		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
 		perfume.Setup(startPos, aim);
-		/*
-		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
-		perfume.transform.position = GetRandomPositionOnEdge();
-		dashedLine.transform.position = perfume.transform.position;
-		dashedLine.GetComponent<Renderer>().enabled = true;
-		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
-		Vector3 delta = aim - dashedLine.transform.position;
-		float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg - 90;
 
-		perfume.GetComponent<ParticleSystem>().Play();
+		perfumeBottle.transform.position = perfume.transform.position;
+
+		dashedLine.gameObject.SetActive(true);
+		Vector3 deltaPos = aim - startPos;
+		float angle = Mathf.Atan2(deltaPos.y, deltaPos.x) * Mathf.Rad2Deg;
+		angle -= 90;
+		dashedLine.transform.position = perfume.transform.position;
 		dashedLine.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-		MicroMixFinger finger = MicroMixManager.Instance.finger;
-		finger.gameObject.SetActive(true);
-		Vector3 playerAim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
+		yield return new WaitForSeconds(2f);
 
-		GameObject dodgeObject = GetComponentInChildren<DodgeItem>().gameObject;
-		dodgeObject.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f);
-		yield return finger.MoveTo(dodgeObject.transform.position, playerAim, .5f, 1f);
-
-		dashedLine.GetComponent<Renderer>().enabled = false;
-		finger.gameObject.SetActive(false);
-		*/
+		dashedLine.gameObject.SetActive(false);
 	}
 
 	private IEnumerator SpawnPerfume(bool randomize){ //Not called during tutorial
-		yield return WaitSecondsPause(.3f);
-		foreach(PerfumeItem perf in perfumes){
-			Vector3 startPos;
-			Vector3 aim;
-			if(randomize){
-				startPos = GetRandomPositionOnEdge();
-				aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
-			}
-			else{
-				startPos = perf.transform.position;
-				aim = perf.aim;
-				randomize = true;
-			}
+		Vector3 startPos;
+		Vector3 nextPos;
+		Vector3 aim;
+
+		if(randomize){
+			nextPos = GetRandomPositionOnEdge();
+			aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
+		}
+		else{
+			nextPos = perfumes[0].transform.position;
+			aim = perfumes[0].aim;
+			randomize = true;
+		}
+
+		perfumeBottle.transform.position = nextPos;
+
+		for(int i = 0; i < perfumes.Length; i++){
+			PerfumeItem perf = perfumes[i];
+			startPos = nextPos;
 			perf.GetComponent<ParticleSystem>().Play();
 			perf.GetComponent<Collider>().enabled = true;
 			perf.transform.position = startPos;
+
 			yield return WaitSecondsPause(.3f);
+
 			perf.Setup(startPos, aim);
+			if(i < perfumes.Length - 1){
+				nextPos = GetRandomPositionOnEdge();
+				aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
+				perfumeBottle.transform.position = nextPos;
+			}
+
 			yield return WaitSecondsPause(.6f);
+
+
 		}
 	}
 

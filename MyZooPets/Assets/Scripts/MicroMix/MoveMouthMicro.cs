@@ -20,12 +20,7 @@ public class MoveMouthMicro : Micro{
 
 	protected override void _StartMicro(int difficulty, bool randomize){
 		if(randomize){
-			petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-			petInstance.transform.SetParent(transform);	
-			do{
-				inhalerItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 50);
-				petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
-			} while (Vector3.Distance(inhalerItem.transform.position, petInstance.transform.position) < 2f);
+			Setup();
 		}
 		inhalerItem.GetComponent<MoveMouthItem>().pet = petInstance;
 	}
@@ -35,26 +30,30 @@ public class MoveMouthMicro : Micro{
 	}
 
 	protected override void _Pause(){
-		petInstance.GetComponentInChildren<Animator>().enabled=false;
+		petInstance.GetComponentInChildren<Animator>().enabled = false;
 	}
 
 	protected override void _Resume(){
-		petInstance.GetComponentInChildren<Animator>().enabled=true;
+		petInstance.GetComponentInChildren<Animator>().enabled = true;
 	}
 
 	protected override IEnumerator _Tutorial(){
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 
-		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-		petInstance.transform.SetParent(transform);	
-		do{
-			inhalerItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 50);
-			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
-		} while (Vector3.Distance(inhalerItem.transform.position, petInstance.transform.position) < 2f);
+		Setup();
 
 		yield return finger.MoveTo(inhalerItem.transform.position, petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position, delay: .5f, time: 1f);
 
 		finger.gameObject.SetActive(false);
+	}
+
+	private void Setup(){
+		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+		petInstance.transform.SetParent(transform);	
+		do{
+			inhalerItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
+			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .33f, .33f, 50);
+		} while (Vector3.Distance(inhalerItem.transform.position, petInstance.transform.position) < 1f);
 	}
 }

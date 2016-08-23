@@ -22,7 +22,6 @@ public abstract class Micro : MonoBehaviour{
 	private bool won = false;
 	private bool playing = false;
 	private int seconds = 0;
-	//private Dictionary<Transform, LgTuple<Vector3, bool>> positions = new Dictionary<Transform, LgTuple<Vector3, bool>>();
 	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
 
 	public abstract string Title{
@@ -40,13 +39,14 @@ public abstract class Micro : MonoBehaviour{
 	public void StartMicro(int difficulty, bool randomize = true){
 		won = false;
 		MicroMixManager.Instance.IsTutorial = false;
+		MicroMixManager.Instance.bossTimer.gameObject.SetActive(true);
+
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
 			StartCoroutine(Tutorial(difficulty));
 			return; //Do not continue on
 		}
-		else{
-			_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
-		}
+		_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
+		MicroMixManager.Instance.bossTimer.StartTimer();
 		playing = true; //Now we set up our own stuff
 		positions.Clear();
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems
@@ -90,6 +90,7 @@ public abstract class Micro : MonoBehaviour{
 			child.transform.position = positions[child];
 		}
 		playing = false;
+		MicroMixManager.Instance.bossTimer.gameObject.SetActive(false);
 
 		_EndMicro(); //We have cleaned everything up for them, let them handle the rest
 	}
@@ -97,8 +98,10 @@ public abstract class Micro : MonoBehaviour{
 	private IEnumerator WaitTimer(){
 		//Used for deactivating and closing off the micro, and alerting the manager
 		for(seconds = 4; seconds > 0; seconds--){
+			MicroMixManager.Instance.bossTimer.UpdateTimer(seconds);
 			yield return WaitSecondsPause(1f);
 		}
+		MicroMixManager.Instance.bossTimer.UpdateTimer(seconds);
 		EndMicro();
 		yield return 0; //Give everything that needs to be destroyed a second...
 		if(won){ //This should always be called last

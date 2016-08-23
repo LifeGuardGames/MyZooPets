@@ -18,6 +18,7 @@ public class SpacerItem : MicroItem{
 		}
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
 		transform.position = currentPos;
+		Debug.Log(Vector3.Distance(transform.position, inhaler.transform.position));
 		if(Vector3.Distance(transform.position, inhaler.transform.position) < .25f){
 			complete = true;
 			parent.SetWon(true);

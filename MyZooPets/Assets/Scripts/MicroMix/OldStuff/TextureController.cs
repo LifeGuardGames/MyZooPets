@@ -21,7 +21,7 @@ public class TextureController : MonoBehaviour{
 		Vector3[] vertices = mesh.vertices;
 		Vector3[] normals = mesh.normals;
 		Vector3 mousePosition = Input.mousePosition;
-		Vector3 realPos = CameraUtils.ScreenToWorldPointZero(Camera.main, mousePosition, 50f);
+		Vector3 realPos = CameraUtils.ScreenToWorldPointZ(Camera.main, mousePosition, 50f);
 		float distance = Mathf.Infinity;
 		Vector3 closest = Vector3.zero;
 		int vertIndex = -1; //We have found the index of the vertex we want to remove

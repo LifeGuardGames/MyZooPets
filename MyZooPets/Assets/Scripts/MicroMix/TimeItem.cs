@@ -1,36 +1,55 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 public class TimeItem : MicroItem{
-	public GameObject petInstance;
-	private bool complete = false;
-	private float timeStart;
-
+	public GameObject sun;
+	public GameObject clock1;
+	public GameObject clock2;
+	private float validDist = 1f;
+	private bool hitOne = false;
+	private bool pressing = false;
+	private float size = 2f;
+	private float shrinkTime = .15f;
+	//If we got the first correct
 	public override void StartItem(){
-		complete = false;
-		timeStart = Time.time;
+		clock1.SetActive(true);
+		clock2.SetActive(true);
+		hitOne = false;
+		pressing = false;
+		gameObject.transform.localScale = new Vector3(size, size, 1f);
 	}
 
 	public override void OnComplete(){
+		LeanTween.cancel(gameObject);
+	}
+
+	public void ShrinkDown(){
+		LeanTween.scale(gameObject, new Vector3(size - .2f, size - .2f), shrinkTime).setEase(LeanTweenType.easeInOutQuad).setOnComplete(GrowBack);
 	}
 
 	void OnTap(TapGesture gesture){
-		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || (Time.time - timeStart) < .3f){
+		if(gesture.Selection != gameObject || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || pressing){
 			return;
 		}
-		else if(gesture.StartSelection.Equals(gameObject)){
-			complete = true;
-			TimeMicro tm = (TimeMicro)parent;
-			if(tm.IsValid()){
+		ShrinkDown();
+		pressing = true;
+		if(Vector3.SqrMagnitude(clock1.transform.position - sun.transform.position) < validDist){
+			clock1.SetActive(false);
+			hitOne = true;
+		}
+		if(Vector3.SqrMagnitude(clock2.transform.position - sun.transform.position) < validDist){
+			clock2.SetActive(false);
+			if(hitOne){
 				parent.SetWon(true);
-				petInstance.GetComponentInChildren<Animator>().SetTrigger("InhalerHappy1");
 			}
-			LeanTween.scale(gameObject, Vector3.one * 3.5f, .2f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(ScaleBack);
 		}
 	}
 
-	private void ScaleBack(){
-		LeanTween.scale(gameObject, Vector3.one * 4, .2f).setEase(LeanTweenType.easeInOutQuad);
+	private void GrowBack(){
+		LeanTween.scale(gameObject, new Vector3(size, size), shrinkTime).setEase(LeanTweenType.easeInOutQuad).setOnComplete(FinishPress);
+	}
+
+	private void FinishPress(){
+		pressing = false;
 	}
 }

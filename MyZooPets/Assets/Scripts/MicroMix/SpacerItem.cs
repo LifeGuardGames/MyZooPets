@@ -16,7 +16,7 @@ public class SpacerItem : MicroItem{
 		if(MicroMixManager.Instance.IsTutorial || gesture.StartSelection != gameObject || complete || MicroMixManager.Instance.IsPaused){
 			return;
 		}
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
 		transform.position = currentPos;
 		if(Vector3.Distance(transform.position, inhaler.transform.position) < .25f){
 			complete = true;

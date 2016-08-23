@@ -19,8 +19,8 @@ public class CapItem : MicroItem{
 		if(MicroMixManager.Instance.IsTutorial || gesture.StartSelection != gameObject || complete || MicroMixManager.Instance.IsPaused){
 			return;
 		}
-		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition, 50);
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position, 50);
+		Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
 		Vector3 deltaPos = currentPos - startPos;
 		if(Vector3.Angle(deltaPos, animDelta) < angleDeviation){
 			complete = true;

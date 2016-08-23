@@ -59,8 +59,8 @@ public class ExhaleMicro : Micro{
 		if(gesture.StartSelection != neckObject || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || complete){
 			return;
 		}
-		Vector3 startPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.StartPosition, 50);
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZero(Camera.main, gesture.Position, 50);
+		Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
 		Vector3 deltaPos = currentPos - startPos;
 		if(deltaPos.x > 2){
 			petInstance.GetComponentInChildren<Animator>().SetTrigger("BreatheOut");

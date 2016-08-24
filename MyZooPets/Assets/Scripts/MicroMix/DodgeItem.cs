@@ -28,7 +28,7 @@ public class DodgeItem : MicroItem{
 		if(complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, Input.mousePosition, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, Input.mousePosition, 0);
 		transform.position = Vector3.MoveTowards(transform.position, currentPos, speed);
 	}
 

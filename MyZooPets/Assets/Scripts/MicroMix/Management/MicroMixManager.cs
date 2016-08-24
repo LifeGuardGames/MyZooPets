@@ -237,7 +237,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		GameObject currentBackground = null;
 		if(hasBackground){
 			currentBackground = backgrounds[currentMicro.Background];
-			LeanTween.alpha(currentBackground, 0, 1f).setEase(LeanTweenType.easeInOutQuad);
+			foreach(SpriteRenderer spriteRenderer in currentBackground.GetComponentsInChildren<SpriteRenderer>()){
+				LeanTween.alpha(spriteRenderer.gameObject, 0, 1f).setEase(LeanTweenType.easeInOutQuad);
+			}
 		}
 
 		monsterBackground.GetComponent<SpriteRenderer>().color = new Color(.239f, .333f, .454f, 0); //Tween monster background
@@ -269,7 +271,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		currentBackground.SetActive(true);
 		foreach(SpriteRenderer spriteRenderer in currentBackground.GetComponentsInChildren<SpriteRenderer>()){
 			spriteRenderer.color = new Color(1, 1, 1, 0);//Reset old background
-			LeanTween.alpha(spriteRenderer.gameObject, 1, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeInOutQuad);
+			LeanTween.alpha(spriteRenderer.gameObject, 1, 1f).setEase(LeanTweenType.easeInOutQuad);
 		}
 		LeanTween.alpha(monsterBackground, 0, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeInOutQuad); 
 

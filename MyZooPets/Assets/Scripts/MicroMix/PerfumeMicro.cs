@@ -53,7 +53,7 @@ public class PerfumeMicro : Micro{
 
 	protected override IEnumerator _Tutorial(){
 		Vector3	startPos = GetRandomPositionOnEdge();
-		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
+		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
 		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
 		perfume.Setup(startPos, aim);
 
@@ -78,7 +78,7 @@ public class PerfumeMicro : Micro{
 
 		if(randomize){
 			nextPos = GetRandomPositionOnEdge();
-			aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
+			aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
 		}
 		else{
 			nextPos = perfumes[0].transform.position;
@@ -100,7 +100,7 @@ public class PerfumeMicro : Micro{
 			perf.Setup(startPos, aim);
 			if(i < perfumes.Length - 1){
 				nextPos = GetRandomPositionOnEdge();
-				aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 50);
+				aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
 				perfumeBottle.transform.position = nextPos;
 			}
 
@@ -132,6 +132,6 @@ public class PerfumeMicro : Micro{
 			x = Random.Range(0, Screen.width);
 
 		}
-		return CameraUtils.ScreenToWorldPointZ(Camera.main, new Vector2(x, y), 50);
+		return CameraUtils.ScreenToWorldPointZ(Camera.main, new Vector2(x, y), 0);
 	}
 }

@@ -17,7 +17,7 @@ public class ShakeItem : MicroItem{
 		if(gesture.StartSelection == null || complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 0);
 		transform.position = currentPos;
 		moved += gesture.DeltaMove.magnitude;
 		if(moved > 1000){

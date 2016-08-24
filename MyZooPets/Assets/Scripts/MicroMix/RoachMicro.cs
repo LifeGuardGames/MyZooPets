@@ -22,7 +22,7 @@ public class RoachMicro : Micro{
 
 	protected override void _StartMicro(int difficulty, bool randomize){
 		if(randomize){
-			cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
+			cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 10);
 			cockroach.GetComponent<RoachItem>().Setup(Random.insideUnitCircle);
 			cockroach.SetActive(true);
 		}
@@ -42,9 +42,10 @@ public class RoachMicro : Micro{
 
 	protected override IEnumerator _Tutorial(){
 		circle.gameObject.SetActive(true);
-		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .4f, .4f, 50);
+		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .4f, .4f, 0);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
-		trap.transform.position = new Vector3(100, 100);
+		Debug.Log("Called");
+		trap.GetComponent<TrapItem>().SetVisible(false);
 		finger.gameObject.SetActive(true);
 		dashedLine.GetComponentInChildren<SpriteRenderer>().enabled = true;
 

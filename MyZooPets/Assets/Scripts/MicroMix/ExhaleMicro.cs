@@ -24,7 +24,7 @@ public class ExhaleMicro : Micro{
 		if(randomize){
 			petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 			petInstance.transform.SetParent(transform);
-			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
+			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 		}
 		neckObject = petInstance.GetComponent<MicroMixAnatomy>().neck;
 	}
@@ -59,8 +59,8 @@ public class ExhaleMicro : Micro{
 		if(gesture.StartSelection != neckObject || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || complete){
 			return;
 		}
-		Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 50);
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
+		Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 0);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 0);
 		Vector3 deltaPos = currentPos - startPos;
 		if(deltaPos.x > 2){
 			petInstance.GetComponentInChildren<Animator>().SetTrigger("BreatheOut");

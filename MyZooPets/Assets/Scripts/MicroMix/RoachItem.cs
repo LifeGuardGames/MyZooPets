@@ -7,18 +7,6 @@ public class RoachItem : MicroItem{
 	private float speed = 5f;
 	private bool setup = false;
 
-	public override void StartItem(){
-	}
-
-	public override void OnComplete(){
-		setup = false;
-	}
-
-	public void Setup(Vector3 velocity){
-		this.velocity = velocity.normalized * speed;
-		setup = true;
-	}
-
 	void Update(){
 		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || !setup){
 			return;
@@ -35,5 +23,17 @@ public class RoachItem : MicroItem{
 			transform.position = lastPos;
 		}
 		transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(velocity.y, velocity.x) - 90));
+	}
+
+	public void Setup(Vector3 velocity){
+		this.velocity = velocity.normalized * speed;
+		setup = true;
+	}
+
+	public override void StartItem(){
+	}
+
+	public override void OnComplete(){
+		setup = false;
 	}
 }

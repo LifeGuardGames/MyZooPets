@@ -21,8 +21,8 @@ public class SpacerMicro : Micro{
 		spacer.GetComponent<SpacerItem>().inhaler = inhaler;
 		if(randomize){
 			do{
-				inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 50);
-				spacer.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
+				inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 0);
+				spacer.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 			} while (Vector3.Distance(inhaler.transform.position, spacer.transform.position) < 2f);
 		}
 	}

@@ -13,7 +13,7 @@ public class MoldItem : MicroItem{
 	}
 
 	void Update(){
-		if(Vector3.Distance(transform.position, trashItem.transform.position) < 1f && !MicroMixManager.Instance.IsPaused && !MicroMixManager.Instance.IsTutorial){
+		if(Vector2.Distance(transform.position, trashItem.transform.position) < 1f && !MicroMixManager.Instance.IsPaused && !MicroMixManager.Instance.IsTutorial){
 			MoldMicro dm = (MoldMicro)parent;
 			dm.Cleaned();
 			gameObject.SetActive(false);

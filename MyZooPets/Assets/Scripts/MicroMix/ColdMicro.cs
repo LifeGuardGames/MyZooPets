@@ -24,8 +24,8 @@ public class ColdMicro : Micro{
 		petInstance.transform.SetParent(transform);	
 		if(randomize){
 			do{
-				scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 50);
-				petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
+				scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 0);
+				petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 			} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 2f);
 		}
 		else{
@@ -50,8 +50,8 @@ public class ColdMicro : Micro{
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	
 		do{
-			scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 50);
-			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 50);
+			scarfItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 0);
+			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 		} while (Vector3.Distance(scarfItem.transform.position, petInstance.transform.position) < 4f);
 		lastPos = petInstance.transform.position;
 		MicroMixFinger finger = MicroMixManager.Instance.finger;

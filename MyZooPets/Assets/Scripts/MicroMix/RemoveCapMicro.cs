@@ -18,7 +18,7 @@ public class RemoveCapMicro : Micro{
 
 	protected override void _StartMicro(int difficulty, bool randomize){
 		if(randomize){
-			inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f, 50);
+			inhaler.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .25f, 0);
 		}
 	}
 

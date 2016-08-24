@@ -20,10 +20,10 @@ public class MoveMouthItem : MicroItem{
 			return;
 		}
 		if(posOffset == Vector3.zero){
-			Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 50);
+			Vector3 startPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.StartPosition, 0);
 			posOffset = transform.position - startPos;
 		}
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 50);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 0);
 		transform.position = currentPos + posOffset;
 		if(Vector3.Distance(transform.position, mouthObject.transform.position) < 1){
 			complete = true;

@@ -328,7 +328,7 @@ public class PlayerController : Singleton<PlayerController>{
 		for(float i = 0; i <= time; i += .1f){
 			yield return new WaitForSeconds(.1f);
 			while(RunnerGameManager.Instance.IsPaused){
-				yield return new WaitForEndOfFrame();
+				yield return 0;
 			}
 		}
 	}

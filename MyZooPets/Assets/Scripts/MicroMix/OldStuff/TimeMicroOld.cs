@@ -103,7 +103,7 @@ public class TimeMicroOld : Micro{
 		Setup();
 		inhalerButton.SetActive(false);
 		inhalerButton.GetComponent<SpriteRenderer>().color = new Color(.7f, .7f, .7f);
-		yield return WaitSecondsPause(3.5f);
+		yield return MicroMixManager.Instance.WaitSecondsPause(3.5f);
 	}
 
 	private void Setup(){

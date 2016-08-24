@@ -27,14 +27,14 @@ public class CigaretteMicro : Micro{
 	}
 
 	void Update(){
-		if(MicroMixManager.Instance.IsPaused || !MicroMixManager.Instance.IsTutorial || tutorialComplete || waiting){
+		if(MicroMixManager.Instance.IsPaused || !MicroMixManager.Instance.IsTutorial || tutorialComplete || waiting){ //We use this to guide the finger along the maze for the tutorial
 			return;
 		}
 		finger.transform.position = Vector3.MoveTowards(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset, Time.deltaTime * speed);
 		player.transform.position = finger.transform.position;
-		if(Vector3.Distance(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset) < .1f){
+		if(Vector3.Distance(finger.transform.position, tutorialPositions[tutorialIndex].position + zOffset) < .1f){ //Keep going to the next position in the array until we are done
 			tutorialIndex++;
-			if(tutorialIndex == 2){
+			if(tutorialIndex == 2){ //Yield for the cigarette
 				waiting = true;
 			}
 			else if(tutorialIndex == tutorialPositions.Length){
@@ -79,7 +79,7 @@ public class CigaretteMicro : Micro{
 		tutorialIndex = 0;
 		while(!tutorialComplete){
 			if(waiting){
-				yield return WaitSecondsPause(.5f);
+				yield return MicroMixManager.Instance.WaitSecondsPause(.5f);
 				waiting = false;
 			}
 			yield return 0;

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 /* MicroMixManager calls StartMicro on this, which calls _StartMicro and then afterward sets up the MicroItems and finally calls Timer
- * TimeMicro waits for four seconds, then call EndMicro, which closes up all the items, and then calls _EndMicro
+ * WaitTimer waits for four seconds, then call EndMicro, which closes up all the items, and then calls _EndMicro
  * Individual micros that override this must hanlde _StartMicro and _EndMicro, as well as instantiating any objects they need
  * This class will handle resetting positions, setting MicroItem.parent and calling StartItem and EndItem
- * Though the individual MicroItem.parent is public and can be set manually in the inspector, this overwrites that setting
+ * Though the individual MicroItem's parent field is public and can be set manually in the inspector, this overwrites that setting
  */
 public abstract class Micro : MonoBehaviour{
 	protected abstract void _Pause();
@@ -99,7 +99,7 @@ public abstract class Micro : MonoBehaviour{
 		//Used for deactivating and closing off the micro, and alerting the manager
 		for(seconds = 4; seconds > 0; seconds--){
 			MicroMixManager.Instance.bossTimer.UpdateTimer(seconds);
-			yield return WaitSecondsPause(1f);
+			yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 		}
 		MicroMixManager.Instance.bossTimer.UpdateTimer(seconds);
 		EndMicro();
@@ -110,27 +110,5 @@ public abstract class Micro : MonoBehaviour{
 		else{
 			MicroMixManager.Instance.LoseMicro();
 		}
-
-	}
-
-	private IEnumerator WaitThenHide(){
-		yield return new WaitForSeconds(.1f);
-
-	}
-
-	protected IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager
-		for(float i = 0; i <= time; i += .1f){
-			yield return new WaitForSeconds(.1f);
-			while(MicroMixManager.Instance.IsPaused){
-				yield return new WaitForEndOfFrame();
-			}
-		}
-	}
-
-	void OnGUI(){
-		if(!playing){
-			return;
-		}
-		GUI.Box(new Rect(0, 0, 100, 100), seconds.ToString());
 	}
 }

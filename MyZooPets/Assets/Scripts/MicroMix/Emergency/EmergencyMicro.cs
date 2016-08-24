@@ -10,7 +10,7 @@ public class EmergencyMicro : Micro{
 
 	public override int Background{
 		get{
-			return 3;
+			return 7;
 		}
 	}
 
@@ -81,7 +81,7 @@ public class EmergencyMicro : Micro{
 			StartCoroutine(DelayParticlePlay(.4f, i));
 			yield return finger.ShakeToBack(buttons[i].transform.position + offset, buttons[i].transform.position, delay: .2f, time: .4f);
 			assemblyItem.Activate(false);
-			yield return WaitSecondsPause(AssemblyLineItem.FADE_TIME * 2);
+			yield return MicroMixManager.Instance.WaitSecondsPause(AssemblyLineItem.FADE_TIME * 2);
 		}
 
 		for(int i = 0; i < buttons.Length; i++){
@@ -93,7 +93,7 @@ public class EmergencyMicro : Micro{
 	}
 
 	private IEnumerator DelayParticlePlay(float delay, int index){
-		yield return WaitSecondsPause(delay);
+		yield return MicroMixManager.Instance.WaitSecondsPause(delay);
 		buttons[index].particle.Play();
 		buttons[index].GetComponent<Animator>().SetTrigger("Pressed");
 		buttons[index].GetComponent<Animator>().SetTrigger("Normal");

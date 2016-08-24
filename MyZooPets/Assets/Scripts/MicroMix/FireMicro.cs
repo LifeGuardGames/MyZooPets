@@ -63,7 +63,7 @@ public class FireMicro : Micro{
 		yield return finger.MoveTo(button + offset, button, delay: .3f, time: .3f);
 
 		fireItem.Engage();
-		yield return WaitSecondsPause(.72f);
+		yield return MicroMixManager.Instance.WaitSecondsPause(.72f);
 		fireItem.Disengage();
 
 		yield return finger.MoveTo(button, button + offset, delay: 0, time: .3f);

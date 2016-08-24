@@ -24,7 +24,7 @@ public class TimeMicro : Micro{
 
 	public override int Background{
 		get{
-			return -1;
+			return 6;
 		}
 	}
 
@@ -83,7 +83,7 @@ public class TimeMicro : Micro{
 
 		paused = true;
 		finger.gameObject.SetActive(true);
-		yield return WaitSecondsPause(.3f); //Position finger on button and wait
+		yield return MicroMixManager.Instance.WaitSecondsPause(.3f); //Position finger on button and wait
 		time.ShrinkDown();
 		yield return finger.MoveTo(time.transform.position + offset, time.transform.position, delay: 0f, time: .15f); //Now press it
 		yield return finger.MoveTo(time.transform.position, time.transform.position + offset, delay: 0f, time: .15f);
@@ -97,7 +97,7 @@ public class TimeMicro : Micro{
 
 		paused = true;
 		finger.gameObject.SetActive(true);
-		yield return WaitSecondsPause(.3f); //Give a visual cue we will press
+		yield return MicroMixManager.Instance.WaitSecondsPause(.3f); //Give a visual cue we will press
 		time.ShrinkDown();
 		yield return finger.MoveTo(time.transform.position + offset, time.transform.position, delay: 0f, time: .15f); //Now press it again
 		yield return finger.MoveTo(time.transform.position, time.transform.position + offset, delay: 0f, time: .15f);
@@ -105,7 +105,7 @@ public class TimeMicro : Micro{
 		finger.gameObject.SetActive(false); // Remove the clocks etc.
 		time.clock2.SetActive(false);
 
-		yield return WaitSecondsPause(.4f); //Let the sun go beyond horizon
+		yield return MicroMixManager.Instance.WaitSecondsPause(.4f); //Let the sun go beyond horizon
 	}
 
 	private void NightToDay(){

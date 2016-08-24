@@ -6,11 +6,12 @@ public class MazeItem : MicroItem{
 	public GameObject startPosition;
 	public GameObject finishPosition;
 	public Sprite[] smokeSprites;
+	private IEnumerator smokeIEnum;
 	private float lastRandomize;
 	private float intervalRandomize = 1f;
-	private bool hasSmoked = false;
 	private float startTime;
 	private float currentTime;
+	private bool hasSmoked = false;
 
 	public override void StartItem(){
 		lastRandomize = Time.time;
@@ -27,6 +28,9 @@ public class MazeItem : MicroItem{
 		cigarette.GetComponent<SpriteRenderer>().color = Color.clear;
 		cigarette.GetComponent<Collider2D>().enabled = false;
 		cigarette.GetComponentInChildren<ParticleSystem>().Stop();
+		if(smokeIEnum != null){
+			StopCoroutine(smokeIEnum);
+		}
 	}
 
 	public override void OnComplete(){
@@ -39,7 +43,8 @@ public class MazeItem : MicroItem{
 		}
 		currentTime += Time.deltaTime; //So that we can control our own timing
 		if(currentTime - startTime > .5f && !hasSmoked){ //0 to .5
-			StartCoroutine(SmokeCigarette());
+			smokeIEnum = SmokeCigarette();
+			StartCoroutine(smokeIEnum);
 		}
 	}
 
@@ -48,7 +53,7 @@ public class MazeItem : MicroItem{
 		int waitCount = 5;
 		for(int i = 1; i <= waitCount; i++){ //.5 to 1
 			cigarette.GetComponent<SpriteRenderer>().color = Color.white * i / waitCount;
-			yield return WaitSecondsPause(.1f);
+			yield return MicroMixManager.Instance.WaitSecondsPause(.1f);
 		}
 		cigarette.GetComponent<Collider2D>().enabled = true;
 		cigarette.GetComponentInChildren<ParticleSystem>().Play();
@@ -58,14 +63,6 @@ public class MazeItem : MicroItem{
 		cigarette.GetComponent<Collider2D>().enabled = false;
 		cigarette.GetComponentInChildren<ParticleSystem>().Stop();
 		startTime = currentTime;
-	}
-
-	private IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ RunnerGameManager
-		for(float i = 0; i <= time; i += .1f){
-			yield return new WaitForSeconds(.1f);
-			while(MicroMixManager.Instance.IsPaused){
-				yield return new WaitForEndOfFrame();
-			}
-		}
+		smokeIEnum = null;
 	}
 }

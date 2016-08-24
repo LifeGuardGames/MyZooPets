@@ -95,7 +95,7 @@ public class PerfumeMicro : Micro{
 			perf.GetComponent<Collider>().enabled = true;
 			perf.transform.position = startPos;
 
-			yield return WaitSecondsPause(.3f);
+			yield return MicroMixManager.Instance.WaitSecondsPause(.3f);
 
 			perf.Setup(startPos, aim);
 			if(i < perfumes.Length - 1){
@@ -104,7 +104,7 @@ public class PerfumeMicro : Micro{
 				perfumeBottle.transform.position = nextPos;
 			}
 
-			yield return WaitSecondsPause(.6f);
+			yield return MicroMixManager.Instance.WaitSecondsPause(.6f);
 
 
 		}

@@ -34,6 +34,9 @@ public abstract class Micro : MonoBehaviour{
 
 	public void SetWon(bool won){
 		this.won = won;
+		if (won){
+			MicroMixManager.Instance.fireworksController.StartFireworks();
+		}
 	}
 
 	public void StartMicro(int difficulty, bool randomize = true){
@@ -60,7 +63,6 @@ public abstract class Micro : MonoBehaviour{
 				mi.SetParent(this);
 			}
 		}
-		StartCoroutine(WaitTimer());
 
 	}
 
@@ -81,7 +83,7 @@ public abstract class Micro : MonoBehaviour{
 		//and then go back. Or maybe yield?
 	}
 
-	private void EndMicro(){
+	public void EndMicro(){
 		foreach(Transform child in positions.Keys){ //Here is where we need the transforms
 			MicroItem mi = child.GetComponent<MicroItem>();
 			if(mi != null){
@@ -91,17 +93,23 @@ public abstract class Micro : MonoBehaviour{
 		}
 		playing = false;
 		MicroMixManager.Instance.bossTimer.gameObject.SetActive(false);
+		MicroMixManager.Instance.fireworksController.StopFireworks();
 
 		_EndMicro(); //We have cleaned everything up for them, let them handle the rest
+
+		if(won){ //This should always be called last
+			MicroMixManager.Instance.WinMicro();
+		}
+		else{
+			MicroMixManager.Instance.LoseMicro();
+		}
 	}
 
-	private IEnumerator WaitTimer(){
+	/*private IEnumerator WaitTimer(){
 		//Used for deactivating and closing off the micro, and alerting the manager
 		for(seconds = 4; seconds > 0; seconds--){
-			MicroMixManager.Instance.bossTimer.UpdateTimer(seconds);
 			yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 		}
-		MicroMixManager.Instance.bossTimer.UpdateTimer(seconds);
 		EndMicro();
 		yield return 0; //Give everything that needs to be destroyed a second...
 		if(won){ //This should always be called last
@@ -110,5 +118,5 @@ public abstract class Micro : MonoBehaviour{
 		else{
 			MicroMixManager.Instance.LoseMicro();
 		}
-	}
+	}*/
 }

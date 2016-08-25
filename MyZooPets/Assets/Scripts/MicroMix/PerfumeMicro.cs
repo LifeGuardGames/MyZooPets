@@ -21,7 +21,6 @@ public class PerfumeMicro : Micro{
 
 	protected override void _StartMicro(int difficulty, bool randomize){
 		perfumes = GetComponentsInChildren<PerfumeItem>(true);
-		SetWon(true);
 		foreach(PerfumeItem perf in perfumes){
 			perf.GetComponent<ParticleSystem>().Stop();
 			perf.GetComponent<Collider>().enabled = false;
@@ -31,6 +30,7 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override void _EndMicro(){
+		SetWon(GetComponentInChildren<DodgeItem>().complete);
 	}
 
 	protected override void _Pause(){

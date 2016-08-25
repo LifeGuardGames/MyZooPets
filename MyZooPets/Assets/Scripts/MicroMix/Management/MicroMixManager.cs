@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Text titleText;
+	public Text speedUpText;
 	public Micro debugMicro;
 	public GameObject[] backgrounds;
 	public MicroMixFinger finger;
@@ -13,13 +14,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public ParticleSystem monsterParticle;
 	public MicroMixBossTimer bossTimer;
 	public MicroMixLives lifeController;
+	public MicroMixFireworks fireworksController;
 
 	private Micro currentMicro;
 	private Micro[] microList;
 	private float maxTimeScale = 1.3f;
 	private float timeScaleIncrement = .1f;
-	private int won;
-	private int lost;
 	private int difficulty = 1;
 	private bool isTransitioning;
 	//True during transition
@@ -45,17 +45,25 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		ResetScore();
 	}
 
+	public void EndMicro(){
+		currentMicro.EndMicro();
+	}
+
 	public void WinMicro(){
-		won++;
-		UpdateScore(won);
-		if(won % 2 == 0){ //We have completed another 2 minigames, SPEEDUP
+		int currentScore = lifeController.AddScore();
+		UpdateScore(currentScore);
+		//AudioManager.Instance.PlayClip("microWin");	
+		if(currentScore % 2 == 0){ //We have completed another 2 minigames, SPEEDUP
 			difficulty++;
 			if(Time.timeScale < maxTimeScale){
 				Time.timeScale += timeScaleIncrement;
 			}
+			speedUpText.color = Color.white;
+			speedUpText.transform.localScale = Vector3.one*.75f;
+			LeanTween.scale(speedUpText.rectTransform,Vector3.one,.75f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(OnTweenSpeedUp);
+
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
-		//AudioManager.Instance.PlayClip("microWin");	
 		StartCoroutine(TransitionIEnum(MonsterAnimation.WIN));
 	}
 
@@ -101,8 +109,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	protected override void _NewGame(){
 		StartCoroutine(TransitionIEnum(MonsterAnimation.INTRO));
 		Time.timeScale = 1f;
-		won = 0;
-		lost = 0;
+		lifeController.Reset(true);
 		difficulty = 1;
 	}
 
@@ -149,7 +156,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	protected override void _ContinueGame(){
-		lost = 0;
+		lifeController.Reset(false);
 		StartMicro();
 	}
 
@@ -177,7 +184,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		float tweenTime = 1f;
 		float animTime = 2f;
 		isTransitioning = true;
-		monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
 		monsterBody.GetComponentInChildren<Animator>().speed = 0;
 		lifeController.Show();
 
@@ -212,7 +218,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 		yield return WaitSecondsPause(animTime);
 
-		monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
 		monsterBody.GetComponentInChildren<Animator>().speed = 0;
 
 		ChangeMicro();
@@ -280,7 +285,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		titleText.text = currentMicro.Title; //Bring up next title
 		titleText.color = Color.white;
 		titleText.rectTransform.localScale = Vector3.one * 1.5f;
-		LeanTween.scale(titleText.rectTransform, Vector3.one, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeOutQuad).setOnComplete(tweenFinished);
+		LeanTween.scale(titleText.rectTransform, Vector3.one, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeOutQuad).setOnComplete(OnTweenTitle);
 
 		yield return WaitSecondsPause(totalTweenTime * 1 / 3); // (2...3)
 	}
@@ -300,13 +305,17 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		currentMicro.StartMicro(difficulty);
 	}
 
-	private void tweenFinished(){
-		StartCoroutine(HideText());
+	private void OnTweenSpeedUp(){
+		StartCoroutine(HideText(speedUpText));
 	}
 
-	private IEnumerator HideText(){
-		yield return WaitSecondsPause(.2f * Time.timeScale); //This will be constant, regardless of how fast game is
-		titleText.color = Color.clear;
+	private void OnTweenTitle(){
+		StartCoroutine(HideText(titleText));
+	}
+
+	private IEnumerator HideText(Text text){
+		yield return WaitSecondsPause(.2f);
+		text.color = Color.clear;
 	}
 
 	private void ResetScore(){
@@ -314,9 +323,5 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		rewardMoneyMultiplier = 1f;
 		rewardShardMultiplier = 1f;
 		score = 0;
-	}
-
-	void OnGUI(){
-		GUI.Box(new Rect(100, 0, 100, 100), won.ToString() + ":" + lost.ToString() + ":" + Time.timeScale);
 	}
 }

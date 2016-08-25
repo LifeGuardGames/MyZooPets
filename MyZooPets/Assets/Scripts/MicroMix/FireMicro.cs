@@ -58,6 +58,7 @@ public class FireMicro : Micro{
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 		FireItem fireItem = GetComponentInChildren<FireItem>();
+		fireItem.GetComponent<Animation>().Play();
 		Vector3 button = fireItem.gameObject.transform.position;
 		Vector3 offset = new Vector3(0, 1);
 		yield return finger.MoveTo(button + offset, button, delay: .3f, time: .3f);

@@ -7,7 +7,7 @@ public class DustItem : MicroItem{
 	private bool complete = false;
 	private float size = 1;
 	private int tapCount = 3;
-
+	private float maxDist = .5f;
 	// Use this for initialization
 	public override void StartItem(){
 		complete = false;
@@ -15,13 +15,16 @@ public class DustItem : MicroItem{
 	}
 
 	public override void OnComplete(){
-		GetComponent<Renderer>().enabled = true;
+		SpriteRenderer[] spriteRends = GetComponentsInChildren<SpriteRenderer>(true);
+		foreach(SpriteRenderer spriteRenderer in spriteRends){
+			spriteRenderer.gameObject.SetActive(true);
+		}
 	}
 
 	public void Randomize(){
 		foreach(SpriteRenderer spriteRend in GetComponentsInChildren<SpriteRenderer>(true)){
 			spriteRend.gameObject.SetActive(true);
-			spriteRend.transform.localPosition = new Vector3(Random.Range(-1,1),Random.Range(-1,1));
+			spriteRend.transform.localPosition = new Vector3(Random.Range(-maxDist,maxDist),Random.Range(-maxDist,maxDist));
 			if (rotate){
 				spriteRend.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,0,Random.value*360));
 			}

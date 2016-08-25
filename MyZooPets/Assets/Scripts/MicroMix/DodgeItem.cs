@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DodgeItem : MicroItem{
-	private bool complete = false;
+	public bool complete = false;
 	private float speed = .3f;
 	private float startTime;
 

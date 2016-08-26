@@ -5,6 +5,7 @@ public class MicroMixFireworks : MonoBehaviour{
 	public ParticleSystem[] pSystems;
 	private bool[] particlesPaused;
 	private IEnumerator fireIEnum;
+
 	void Start(){
 		particlesPaused = new bool[pSystems.Length];
 	}
@@ -16,7 +17,11 @@ public class MicroMixFireworks : MonoBehaviour{
 	}
 
 	public void StopFireworks(){
+		if(fireIEnum == null){
+			return;
+		}
 		StopCoroutine(fireIEnum);
+		fireIEnum = null;
 		for(int i = 0; i < pSystems.Length; i++){
 			pSystems[i].Stop();
 		}
@@ -36,13 +41,14 @@ public class MicroMixFireworks : MonoBehaviour{
 			}
 		}
 	}
+
 	private IEnumerator FireworksHelper(){
-		while (true){
+		while(true){
 			int index;
-			do {
-				index = Random.Range(0,pSystems.Length);
+			do{
+				index = Random.Range(0, pSystems.Length);
 			} while (pSystems[index].isPlaying);
-			pSystems[index].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main,.2f,.2f,0);
+			pSystems[index].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 			pSystems[index].Play();
 			yield return MicroMixManager.Instance.WaitSecondsPause(.25f);
 		}

@@ -2,15 +2,14 @@
 using System.Collections;
 
 public class DodgeItem : MicroItem{
-	public bool complete = false;
+	public bool hit = false;
 	private float speed = .3f;
 	private float startTime;
 
 	public override void StartItem(){
-		complete = false;
+		hit = false;
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-		transform.position = Vector3.zero + Vector3.forward * 50;
 		startTime = Time.time;
 	}
 
@@ -18,14 +17,14 @@ public class DodgeItem : MicroItem{
 	}
 
 	void OnTriggerEnter(Collider other){
-		if(!complete && other.CompareTag("MicroMixPerfume")){
-			complete = true;
+		if(!hit && other.CompareTag("MicroMixPerfume")){
+			hit = true;
 			parent.SetWon(false);
 		}
 	}
 
 	void Update(){
-		if(complete || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
+		if(hit || MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, Input.mousePosition, 0);

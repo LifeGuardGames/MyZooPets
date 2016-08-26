@@ -20,10 +20,7 @@ public class InhaleMicro : Micro{
 
 	protected override void _StartMicro(int difficulty, bool randomize){
 		if(randomize){
-			petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-			petInstance.transform.SetParent(transform);
-			petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
-			inhaler.transform.position = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
+			Setup();
 		}
 		InhaleItem item = inhaler.GetComponent<InhaleItem>();
 		item.petInstance = petInstance;
@@ -42,15 +39,18 @@ public class InhaleMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-		petInstance.transform.SetParent(transform);
-		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
-
-		inhaler.transform.position = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
+		Setup();
 
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 		yield return finger.MoveTo(inhaler.transform.position + new Vector3(3f, .5f), inhaler.transform.position + new Vector3(.3f, -.3f), delay: .5f, time: 1f);
 		finger.gameObject.SetActive(false);
+	}
+
+	private void Setup(){
+		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1); //Already played during tutorial
+		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+		petInstance.transform.SetParent(transform);
+		inhaler.transform.position = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
 	}
 }

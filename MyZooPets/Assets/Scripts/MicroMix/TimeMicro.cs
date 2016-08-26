@@ -28,6 +28,12 @@ public class TimeMicro : Micro{
 		}
 	}
 
+	protected override bool ResetPositions{
+		get{
+			return false;
+		}
+	}
+
 	void Update(){
 		if(MicroMixManager.Instance.IsPaused || paused){
 			return;
@@ -65,9 +71,6 @@ public class TimeMicro : Micro{
 	protected override void _Resume(){
 		LeanTween.pause(moon);
 		background.GetComponent<Animator>().enabled = true;
-
-		//Resume all tweens
-		//Resume all animations
 	}
 
 	protected override IEnumerator _Tutorial(){
@@ -109,12 +112,10 @@ public class TimeMicro : Micro{
 	}
 
 	private void NightToDay(){
-		//LeanTween.move(moon, moonLow, transitionLength).setEase(LeanTweenType.easeInOutQuad);
 		LeanTween.alpha(moon, 0, transitionLength).setEase(LeanTweenType.easeOutQuint);
 	}
 
 	private void DayToNight(){
-		//LeanTween.move(moon, moonHigh, transitionLength).setEase(LeanTweenType.easeInOutQuad);
 		LeanTween.alpha(moon, 1, transitionLength).setEase(LeanTweenType.easeInQuint);
 	}
 

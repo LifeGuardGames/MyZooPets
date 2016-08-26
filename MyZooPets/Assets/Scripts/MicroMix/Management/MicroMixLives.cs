@@ -7,7 +7,7 @@ public class MicroMixLives : MonoBehaviour{
 	public Image[] lives;
 	public Text scoreText;
 	private float tweenTime = 1f;
-	private int currentLives;
+	private int currentLives = 3;
 	private int fadeOffset;
 	private int currentScore;
 
@@ -17,8 +17,9 @@ public class MicroMixLives : MonoBehaviour{
 			currentScore = 0;
 			scoreText.text=currentScore.ToString();
 		}
+		Debug.Log("Resettging");
 		for(int i = 0; i < lives.Length; i++){
-			LeanTween.alpha(lives[i].rectTransform, 1, tweenTime / 2f);
+		//	LeanTween.alpha(lives[i].rectTransform, 1, tweenTime / 2f);
 		}
 		LeanTween.alpha(banner.rectTransform, 1, tweenTime / 2f);
 		LeanTween.alpha(scoreText.rectTransform, 1, tweenTime / 2f);
@@ -41,7 +42,7 @@ public class MicroMixLives : MonoBehaviour{
 		for(int i = 0; i < currentLives; i++){
 			LeanTween.alpha(lives[i].rectTransform, 0, tweenTime / 2f);
 		}
-		LeanTween.alpha(banner.rectTransform, 0, tweenTime / 2f);
+		LeanTween.alpha(banner.rectTransform, 0, tweenTime / 2f).setRecursive(false);
 		LeanTween.alpha(scoreText.rectTransform, 0, tweenTime / 2f);
 	}
 
@@ -49,7 +50,7 @@ public class MicroMixLives : MonoBehaviour{
 		for(int i = 0; i < currentLives + fadeOffset; i++){
 			LeanTween.alpha(lives[i].rectTransform, 1, tweenTime / 2f);
 		}
-		LeanTween.alpha(banner.rectTransform, 1, tweenTime / 2f);
+		LeanTween.alpha(banner.rectTransform, 1, tweenTime / 2f).setRecursive(false);
 		LeanTween.alpha(scoreText.rectTransform, 1, tweenTime / 2f);
 		fadeOffset = 0;
 	}

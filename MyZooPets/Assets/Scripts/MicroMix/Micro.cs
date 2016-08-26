@@ -32,9 +32,15 @@ public abstract class Micro : MonoBehaviour{
 		get;
 	}
 
+	protected virtual bool ResetPositions{
+		get{
+			return true;
+		}
+	}
+
 	public void SetWon(bool won){
 		this.won = won;
-		if (won){
+		if(won){
 			MicroMixManager.Instance.fireworksController.StartFireworks();
 		}
 	}
@@ -89,13 +95,17 @@ public abstract class Micro : MonoBehaviour{
 			if(mi != null){
 				mi.OnComplete();
 			}
-			child.transform.position = positions[child];
+			if(ResetPositions){
+				child.transform.position = positions[child];
+			}
 		}
 		playing = false;
-		MicroMixManager.Instance.bossTimer.gameObject.SetActive(false);
-		MicroMixManager.Instance.fireworksController.StopFireworks();
+
 
 		_EndMicro(); //We have cleaned everything up for them, let them handle the rest
+
+		MicroMixManager.Instance.bossTimer.gameObject.SetActive(false);
+		MicroMixManager.Instance.fireworksController.StopFireworks();
 
 		if(won){ //This should always be called last
 			MicroMixManager.Instance.WinMicro();

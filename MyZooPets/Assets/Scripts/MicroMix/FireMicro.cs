@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class FireMicro : Micro{
-	public GameObject barUI;
 	public RectTransform innerBar;
 	private float moveTime = .8f;
 	private float minSize = -345f;
@@ -21,15 +20,6 @@ public class FireMicro : Micro{
 		}
 	}
 
-	void OnEnable(){
-		barUI.SetActive(true);
-	}
-
-	void OnDisable(){
-		if(barUI){
-			barUI.SetActive(false);
-		}
-	}
 	public void StartBar(){
 		TweenUp();
 	}
@@ -50,7 +40,6 @@ public class FireMicro : Micro{
 
 	protected override void _EndMicro(){
 		StopBar();
-		barUI.SetActive(false);
 	}
 
 	protected override IEnumerator _Tutorial(){
@@ -84,7 +73,6 @@ public class FireMicro : Micro{
 	private void Setup(){
 		type = LeanTweenType.linear;
 		UpdateSize(minSize);
-		barUI.SetActive(true);
 	}
 
 	private void TweenUp(){

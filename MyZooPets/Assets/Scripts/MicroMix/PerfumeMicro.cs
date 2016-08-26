@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PerfumeMicro : Micro{
+	public DodgeItem player;
 	public GameObject dashedLine;
 	public GameObject perfumeBottle;
 	private int count;
@@ -30,7 +31,9 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override void _EndMicro(){
-		SetWon(GetComponentInChildren<DodgeItem>().complete);
+		if (!player.hit){
+			SetWon(true);
+		}
 	}
 
 	protected override void _Pause(){

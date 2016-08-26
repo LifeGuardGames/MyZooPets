@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class EmergencyMicro : Micro{
-	public GameObject canvasParent;
 	public AssemblyLineItem assemblyItem;
 	public DoctorMatchZone[] buttons;
 	private bool complete;
@@ -17,16 +16,6 @@ public class EmergencyMicro : Micro{
 	public override string Title{
 		get{
 			return "Give Treatment";
-		}
-	}
-
-	void OnEnable(){
-		canvasParent.SetActive(true);
-	}
-
-	void OnDisable(){
-		if(canvasParent){
-			canvasParent.SetActive(false);
 		}
 	}
 

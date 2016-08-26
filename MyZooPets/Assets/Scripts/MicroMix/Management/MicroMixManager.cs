@@ -8,10 +8,13 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public Micro debugMicro;
 	public GameObject[] backgrounds;
 	public MicroMixFinger finger;
+
 	public GameObject monsterParent;
 	public GameObject monsterBackground;
 	public GameObject monsterBody;
 	public ParticleSystem monsterParticle;
+	public PetAnimationManager petAnim;
+
 	public MicroMixBossTimer bossTimer;
 	public MicroMixLives lifeController;
 	public MicroMixFireworks fireworksController;
@@ -43,6 +46,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		minigameKey = "MICRO"; //
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
+		petAnim.DisableIdleAnimation();
 	}
 
 	public void EndMicro(){
@@ -59,8 +63,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 				Time.timeScale += timeScaleIncrement;
 			}
 			speedUpText.color = Color.white;
-			speedUpText.transform.localScale = Vector3.one*.75f;
-			LeanTween.scale(speedUpText.rectTransform,Vector3.one,.75f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(OnTweenSpeedUp);
+			speedUpText.transform.localScale = Vector3.one * .75f;
+			LeanTween.scale(speedUpText.rectTransform, Vector3.one, .75f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(OnTweenSpeedUp);
 
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
@@ -125,7 +129,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 					LeanTween.pause(sprRenderer.gameObject);
 				}
 			}
-				
 			LeanTween.pause(monsterBackground);
 			LeanTween.pause(monsterBody);
 			monsterBody.GetComponentInChildren<Animator>().enabled = false;
@@ -180,9 +183,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		Time.timeScale = 1f;
 	}
 
-	private IEnumerator TransitionIEnum(MonsterAnimation monsterAnim){
+	private IEnumerator TransitionIEnum(MonsterAnimation animState){
 		float tweenTime = 1f;
-		float animTime = 2f;
 		isTransitioning = true;
 		monsterBody.GetComponentInChildren<Animator>().speed = 0;
 		lifeController.Show();
@@ -193,33 +195,31 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			
 		yield return InTransitionHelper(tweenTime);
 	
-		switch(monsterAnim){
+		monsterBody.GetComponentInChildren<Animator>().speed = 1;
+		switch(animState){
 		case MonsterAnimation.INTRO:
+			int index = Random.Range(0, petAnim.happyIdleAnimations.Count)-1;
+			Debug.Log(index + "INDEX");
+			petAnim.animator.Play(petAnim.happyIdleAnimations[index], 0, 0);
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerIntro", 0, 0);
-			animTime = 129f / 60f;
 			break;
 		case MonsterAnimation.WIN:
+			Debug.LogWarning("To be implemented");
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerLose", 0, 0);
-			animTime = 112f / 60f;
 			break;
 		case MonsterAnimation.LOSE:
+			petAnim.animator.Play(petAnim.sadIdleAnimations[Random.Range(0, petAnim.sadIdleAnimations.Count)], 0, 0);
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
-			animTime = 112f / 60f;
 			break;
 		case MonsterAnimation.WIN_FINAL:
+			petAnim.Flipping();
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerWinFinal", 0, 0);
-			animTime = 105f / 60f;
 			break;
 		default:
 			Debug.LogWarning("Invalid anim state");
 			break;
 		}
-		monsterBody.GetComponentInChildren<Animator>().speed = 1;
-
-		yield return WaitSecondsPause(animTime);
-
-		monsterBody.GetComponentInChildren<Animator>().speed = 0;
-
+		yield return WaitSecondsPause(2f);
 		ChangeMicro();
 
 		yield return OutTransitionHelper();
@@ -233,7 +233,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		float radius = 15f; //Tween body
 		float angle = Random.value * Mathf.PI * 2;
 		monsterBody.transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-		LeanTween.move(monsterBody, new Vector3(3, -1), tweenTime).setEase(LeanTweenType.easeInOutBack);
+		LeanTween.move(monsterBody, new Vector3(3, -.5f), tweenTime).setEase(LeanTweenType.easeInOutBack);
+
+		float angle2 = Random.value * Mathf.PI * 2;
+		petAnim.transform.position = new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2)) * radius;
+		LeanTween.move(petAnim.gameObject, new Vector3(-3, -1f), tweenTime).setEase(LeanTweenType.easeInOutBack);
+
 
 		isParticlePaused = true;
 		monsterParticle.Play();
@@ -262,10 +267,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 	private IEnumerator OutTransitionHelper(){
 		float radius = 15f; //Tween body
-		float angle = Random.value * Mathf.PI * 2;
 		float totalTweenTime = monsterParticle.startLifetime;
 
+		float angle = Random.value * Mathf.PI * 2;
 		LeanTween.move(monsterBody, new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeInOutBack); //Move out monster
+
+		float angle2 = Random.value * Mathf.PI * 2;
+		LeanTween.move(petAnim.gameObject, new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2)) * radius, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeInOutBack); //Move out monster
+
 
 		monsterParticle.Stop(); //Stop particles
 		isParticlePaused = false;
@@ -315,7 +324,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 	private IEnumerator HideText(Text text){
 		yield return WaitSecondsPause(.2f);
-		text.color = Color.clear;
+		LeanTween.textColor(text.rectTransform, Color.clear, .15f);
 	}
 
 	private void ResetScore(){

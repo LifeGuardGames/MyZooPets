@@ -58,7 +58,7 @@ public class MoldMicro : Micro{
 			return;
 		}
 
-		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 10);
+		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, gesture.Position, 0);
 		gesture.StartSelection.transform.position = Vector3.MoveTowards(gesture.StartSelection.transform.position, currentPos, moldSpeed);
 	}
 
@@ -68,7 +68,7 @@ public class MoldMicro : Micro{
 			for(int i = 0; i < moldItems.Length; i++){
 				Vector3 spawnPos;
 				do{
-					spawnPos = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 10);
+					spawnPos = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 				} while (Vector3.Distance(spawnPos, trashItem.transform.position) < 3f); //Don't let them spawn right at the center;
 				moldItems[i].transform.position = spawnPos;
 				moldItems[i].gameObject.SetActive(true); //They are set inactive by our script, so this will bring them back

@@ -51,6 +51,7 @@ public class MoveMouthMicro : Micro{
 	private void Setup(){
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
 		petInstance.transform.SetParent(transform);	
+		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1);
 		do{
 			inhalerItem.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 			petInstance.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .33f, .33f, 0);

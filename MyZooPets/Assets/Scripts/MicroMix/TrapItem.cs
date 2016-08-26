@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class TrapItem : MicroItem{
-	public GameObject roach;
+	public RoachItem roach;
 	private bool landed = false;
 	private bool complete = false;
 	private bool falling;
@@ -40,7 +40,7 @@ public class TrapItem : MicroItem{
 		if(!complete && landed && Vector2.Distance(roach.transform.position, transform.position) < 1f){
 			parent.SetWon(true);
 			complete = true;
-			roach.SetActive(false);
+			roach.Freeze(transform.position);
 		}
 	}
 

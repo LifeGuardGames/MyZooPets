@@ -196,6 +196,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		yield return InTransitionHelper(tweenTime);
 	
 		monsterBody.GetComponentInChildren<Animator>().speed = 1;
+		petAnim.animator.speed=1;
 		switch(animState){
 		case MonsterAnimation.INTRO:
 			int index = Random.Range(0, petAnim.happyIdleAnimations.Count-1);
@@ -203,7 +204,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerIntro", 0, 0);
 			break;
 		case MonsterAnimation.WIN:
-			Debug.LogWarning("To be implemented");
+			petAnim.animator.speed=2;
+			petAnim.StartFireBlow();
+			yield return 0;
+			petAnim.FinishFireBlow();
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerLose", 0, 0);
 			break;
 		case MonsterAnimation.LOSE:

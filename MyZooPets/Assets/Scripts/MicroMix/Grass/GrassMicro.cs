@@ -6,6 +6,7 @@ public class GrassMicro : Micro{
 	public GameObject[] grasses;
 	public GameObject phone;
 	private int grassCount;
+	private float grassSize = 1.5f;
 
 	public override string Title{
 		get{
@@ -30,9 +31,10 @@ public class GrassMicro : Micro{
 	protected override void _StartMicro(int difficulty, bool randomize){
 		grassCount = grasses.Length;
 		for(int i = 0; i < grasses.Length; i++){
-			do {
-			grasses[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main,.2f,.2f,0);
-			} while (Vector2.Distance(grasses[i].transform.position,mower.transform.position)<2f);
+			do{
+				grasses[i].transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .1f, .1f, 0);
+				SetupGrass(grasses[i]);
+			} while (Vector2.Distance(grasses[i].transform.position, mower.transform.position) < 4f);
 		}
 	}
 
@@ -57,15 +59,16 @@ public class GrassMicro : Micro{
 		for(int i = 1; i < grasses.Length; i++){
 			grasses[i].SetActive(false);
 		}
-		grasses[0].transform.position = mower.transform.position + new Vector3(3,3);
+		grasses[0].transform.position = mower.transform.position + new Vector3(3, 3);
+		SetupGrass(grasses[0]);
 
 		yield return MicroMixManager.Instance.WaitSecondsPause(.15f);
 
-		LeanTween.rotateZ(phone,45,1f);
-		LeanTween.rotateZ(mower.gameObject,270-45,1f);
+		LeanTween.rotateZ(phone, 45, 1f);
+		LeanTween.rotateZ(mower.gameObject, 270 - 45, 1f);
 		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 
-		LeanTween.move(mower,grasses[0].transform.position,.5f);
+		LeanTween.move(mower, grasses[0].transform.position, .5f);
 		yield return MicroMixManager.Instance.WaitSecondsPause(.3f);
 
 		grasses[0].SetActive(false);
@@ -76,5 +79,11 @@ public class GrassMicro : Micro{
 			grasses[i].SetActive(true);
 		}
 		phone.SetActive(false);
+	}
+
+	private void SetupGrass(GameObject grass){
+		int flip = (Random.value > .5f) ? 1 : -1;
+		grass.transform.localScale = new Vector3(flip * grassSize, grassSize);
+		grass.transform.rotation = Quaternion.Euler(new Vector3(0, 0, Random.Range(-20, 20)));
 	}
 }

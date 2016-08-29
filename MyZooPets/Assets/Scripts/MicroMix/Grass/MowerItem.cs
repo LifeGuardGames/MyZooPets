@@ -13,7 +13,6 @@ public class MowerItem : MicroItem{
 		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
-		Debug.Log(Mathf.Clamp(Input.acceleration.x,-maxTilt,maxTilt));
 		angle -= Mathf.Clamp(Input.acceleration.x,-maxTilt,maxTilt) * angularSpeed * Time.deltaTime; 
 		transform.position -= new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * speed * Time.deltaTime;
 		transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle * Mathf.Rad2Deg));

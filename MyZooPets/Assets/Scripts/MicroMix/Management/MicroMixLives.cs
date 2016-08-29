@@ -17,7 +17,6 @@ public class MicroMixLives : MonoBehaviour{
 			currentScore = 0;
 			scoreText.text=currentScore.ToString();
 		}
-		Debug.Log("Resettging");
 		for(int i = 0; i < lives.Length; i++){
 		//	LeanTween.alpha(lives[i].rectTransform, 1, tweenTime / 2f);
 		}

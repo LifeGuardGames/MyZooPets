@@ -198,8 +198,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		monsterBody.GetComponentInChildren<Animator>().speed = 1;
 		switch(animState){
 		case MonsterAnimation.INTRO:
-			int index = Random.Range(0, petAnim.happyIdleAnimations.Count)-1;
-			Debug.Log(index + "INDEX");
+			int index = Random.Range(0, petAnim.happyIdleAnimations.Count-1);
 			petAnim.animator.Play(petAnim.happyIdleAnimations[index], 0, 0);
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerIntro", 0, 0);
 			break;

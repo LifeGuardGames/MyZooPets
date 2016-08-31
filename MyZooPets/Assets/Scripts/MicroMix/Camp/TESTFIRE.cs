@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CampFireItem : MicroItem{
+public class TESTFIRE : MicroItem{
 	public GameObject[] logs;
 	public ParticleSystem smokeSystem;
 	private bool stopped;

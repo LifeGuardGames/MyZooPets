@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CampMicro : Micro{
@@ -7,6 +8,7 @@ public class CampMicro : Micro{
 	public CampPlayerItem player;
 	public CampCollectItem[] mallows;
 	public GameObject phone;
+	public Text tutorialText;
 	private int toCollect;
 
 	public override string Title{
@@ -71,6 +73,8 @@ public class CampMicro : Micro{
 			mallows[i].Randomize();
 		}
 
+		LeanTween.textAlpha(tutorialText.rectTransform, 1f, .25f).setEase(LeanTweenType.easeInOutQuad);
+		tutorialText.text = "Tilt your device";
 		campfire.RotateTowards(Mathf.PI, 2f);
 		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 
@@ -80,6 +84,7 @@ public class CampMicro : Micro{
 
 		LeanTween.rotateZ(phone, 90 - 45, .5f);
 		player.RotateTowards(1.5f * Mathf.PI, 1f);
+		LeanTween.textAlpha(tutorialText.rectTransform, 0f, .25f).setEase(LeanTweenType.easeInOutQuad);
 		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 
 		for(int i = 0; i < mallows.Length; i++){

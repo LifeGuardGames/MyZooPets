@@ -2,11 +2,12 @@
 using System.Collections;
 
 public class CampMicro : Micro{
-	public CampfireItem campfire;
-	public CampSmokeItem[] smokeItems;
-	private int currentItem;
-	private float smokeTime = 2f;
-	private float currentTime;
+	public static readonly float distance = 3.5f;
+	public CampFireItem campfire;
+	public CampPlayerItem player;
+	public CampCollectItem[] mallows;
+	public GameObject phone;
+	private int toCollect;
 
 	public override string Title{
 		get{
@@ -20,32 +21,26 @@ public class CampMicro : Micro{
 		}
 	}
 
-	void Update(){
-		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
-			return;
-		}
-		currentTime += Time.deltaTime;
-		if(currentTime > smokeTime && currentItem < smokeItems.Length){
-			smokeItems[currentItem].Setup(Random.value * 2 * Mathf.PI);
-			currentItem++;
-			currentTime = 0;
-		}
-		foreach(CampSmokeItem item in smokeItems){
-			if(!item.Active){
-				return;
-			}
-			if(Mathf.DeltaAngle(item.GetCurrentRadians() * Mathf.Rad2Deg, item.GetCurrentRadians() * Mathf.Rad2Deg) < Mathf.PI / 4){
-				//item.Cancel();
-			}
+	public void Collect(GameObject mallow){
+		mallow.SetActive(false);
+		toCollect--;
+		if(toCollect == 0){
+			SetWon(true);
+			campfire.Stop();
 		}
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
-		currentTime = 0;
+		float fireAngle = Random.value * Mathf.PI * 2;
+		campfire.SetAngle(fireAngle);
+		player.SetAngle(fireAngle - Mathf.PI);
+		toCollect = mallows.Length;
 	}
 
 	protected override void _EndMicro(){
-		
+		for(int i = 0; i < mallows.Length; i++){
+			mallows[i].gameObject.SetActive(true);
+		}
 	}
 
 	protected override void _Pause(){
@@ -57,6 +52,30 @@ public class CampMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
-		yield return 0;
+		phone.SetActive(true);
+		player.SetAngle(Mathf.PI);
+		campfire.SetAngle(0);
+		campfire.Stop();
+		float mallowAngle = Mathf.PI;
+		for(int i = 0; i < mallows.Length; i++){
+			mallowAngle += Mathf.PI / 4;
+			mallows[i].transform.position = new Vector3(Mathf.Cos(mallowAngle), Mathf.Sin(mallowAngle)) * distance;
+		}
+
+		campfire.RotateTowards(Mathf.PI, 2f);
+		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
+
+		LeanTween.rotateZ(phone, 90 + 45, 1f);
+		player.RotateTowards(2.5f * Mathf.PI, 1.5f);
+		yield return MicroMixManager.Instance.WaitSecondsPause(2f);
+
+		//campfire.RotateTowards(Mathf.PI*2, 1f);
+
+		LeanTween.rotateZ(phone, 90 - 45, 1f);
+		player.RotateTowards(1.5f * Mathf.PI, 1f);
+		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
+
+
+		phone.SetActive(false);
 	}
 }

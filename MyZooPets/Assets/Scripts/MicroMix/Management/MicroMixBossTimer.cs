@@ -31,7 +31,7 @@ public class MicroMixBossTimer : MonoBehaviour{
 
 	public void StartTimer(){
 		timerBoss.transform.position = position1.position;
-		LeanTween.move(timerBoss, position2.position, 4000f).setOnComplete(OnComplete);
+		LeanTween.move(timerBoss, position2.position, 40000f).setOnComplete(OnComplete);
 		nextIndex = images.Length - 1;
 		isMoving = true;
 		foreach(Image toShow in images){

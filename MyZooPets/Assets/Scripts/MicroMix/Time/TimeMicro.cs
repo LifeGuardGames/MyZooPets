@@ -48,12 +48,12 @@ public class TimeMicro : Micro{
 			DayToNight();
 		}
 		angle -= 270 / 4f * Time.deltaTime;
-		sunParent.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+		sunParent.transform.rotation = Quaternion.Euler(0, 0, angle);
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
 		time = 0;
-		sunParent.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+		sunParent.transform.rotation = Quaternion.Euler(0, 0, angle);
 		sun.transform.localPosition = Vector3.down * 5;
 		isDay = false;
 		Setup();

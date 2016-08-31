@@ -127,7 +127,7 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 	}
 
 	public void BarFinger(){
-		finger.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 50));
+		finger.transform.rotation = Quaternion.Euler(0,180,50);
 		finger.transform.position = lifeBarController.transform.position + new Vector3(120, -30);
 		multipleFinger = finger.RepeatShake(2, new Vector3(20, 0), true);
 		StartCoroutine(multipleFinger);

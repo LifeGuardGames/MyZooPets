@@ -22,7 +22,7 @@ public class RoachItem : MicroItem{
 			velocity = new Vector3(velocity.x, -1 * velocity.y);
 			transform.position = lastPos;
 		}
-		transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(velocity.y, velocity.x) - 90));
+		transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(velocity.y, velocity.x) - 90);
 	}
 
 	public void Setup(Vector3 velocity){
@@ -34,7 +34,7 @@ public class RoachItem : MicroItem{
 	public void Freeze(Vector3 aimPosition){
 		canMove=false;
 		Vector3 delta = aimPosition - transform.position;
-		transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Atan2(delta.y, delta.x) - 90));
+		transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(delta.y, delta.x) - 90);
 		LeanTween.move(gameObject,aimPosition,.22f);
 	}
 

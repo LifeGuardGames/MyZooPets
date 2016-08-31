@@ -26,7 +26,7 @@ public class DustItem : MicroItem{
 			spriteRend.gameObject.SetActive(true);
 			spriteRend.transform.localPosition = new Vector3(Random.Range(-maxDist,maxDist),Random.Range(-maxDist,maxDist));
 			if (rotate){
-				spriteRend.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,0,Random.value*360));
+				spriteRend.gameObject.transform.rotation = Quaternion.Euler(0,0,Random.value*360);
 			}
 		}
 	}

@@ -56,8 +56,8 @@ public class RoachMicro : Micro{
 
 		float angle = Random.Range(0, 360);
 		cockroach.GetComponent<Animator>().enabled = false;
-		cockroach.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-		dashedLine.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+		cockroach.transform.rotation = Quaternion.Euler(0, 0, angle);
+		dashedLine.transform.rotation = Quaternion.Euler(0, 0, angle);
 		dashedLine.transform.position = cockroach.transform.position;
 
 		Vector3 direction = new Vector3(Mathf.Cos((angle + 90) * Mathf.Deg2Rad), Mathf.Sin((angle + 90) * Mathf.Deg2Rad));

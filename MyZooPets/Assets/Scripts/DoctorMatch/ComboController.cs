@@ -84,7 +84,7 @@ public class ComboController : MonoBehaviour{
 			slotObject = Instantiate(UISlotPrefab);
 			slotObject.transform.SetParent(comboTable);
 			slotObject.transform.localScale = new Vector3(1, 1, 1);
-			slotObject.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
+			slotObject.transform.rotation = Quaternion.Euler(0,0,90);
 			slotImages[i] = slotObject.GetComponent<RawImage>();
 			slotImages[i].rectTransform.localPosition = new Vector3(0, slotImages[i].rectTransform.sizeDelta.x * i);
 		}

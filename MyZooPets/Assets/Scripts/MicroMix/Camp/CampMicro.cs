@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CampMicro : Micro{
-	public static readonly float distance = 3.5f;
+	public static readonly float distance = 3f;
 	public CampFireItem campfire;
 	public CampPlayerItem player;
 	public CampCollectItem[] mallows;
@@ -35,6 +35,12 @@ public class CampMicro : Micro{
 		campfire.SetAngle(fireAngle);
 		player.SetAngle(fireAngle - Mathf.PI);
 		toCollect = mallows.Length;
+		if(randomize){
+			campfire.SetupLogs();
+			for(int i = 0; i < mallows.Length; i++){
+				mallows[i].Randomize();
+			}
+		}
 	}
 
 	protected override void _EndMicro(){
@@ -56,26 +62,29 @@ public class CampMicro : Micro{
 		player.SetAngle(Mathf.PI);
 		campfire.SetAngle(0);
 		campfire.Stop();
+		campfire.SetupLogs();
+
 		float mallowAngle = Mathf.PI;
 		for(int i = 0; i < mallows.Length; i++){
 			mallowAngle += Mathf.PI / 4;
 			mallows[i].transform.position = new Vector3(Mathf.Cos(mallowAngle), Mathf.Sin(mallowAngle)) * distance;
+			mallows[i].Randomize();
 		}
 
 		campfire.RotateTowards(Mathf.PI, 2f);
 		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 
-		LeanTween.rotateZ(phone, 90 + 45, 1f);
+		LeanTween.rotateZ(phone, 90 + 45, .5f);
 		player.RotateTowards(2.5f * Mathf.PI, 1.5f);
 		yield return MicroMixManager.Instance.WaitSecondsPause(2f);
 
-		//campfire.RotateTowards(Mathf.PI*2, 1f);
-
-		LeanTween.rotateZ(phone, 90 - 45, 1f);
+		LeanTween.rotateZ(phone, 90 - 45, .5f);
 		player.RotateTowards(1.5f * Mathf.PI, 1f);
 		yield return MicroMixManager.Instance.WaitSecondsPause(1f);
 
-
+		for(int i = 0; i < mallows.Length; i++){
+			mallows[i].gameObject.SetActive(true);
+		}
 		phone.SetActive(false);
 	}
 }

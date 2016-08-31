@@ -17,7 +17,7 @@ public class MowerItem : MicroItem{
 		}
 		angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
 		transform.position -= new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * speed * Time.deltaTime;
-		transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle * Mathf.Rad2Deg));
+		transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
 		if(canFlip){
 			CheckBounds();
 		}

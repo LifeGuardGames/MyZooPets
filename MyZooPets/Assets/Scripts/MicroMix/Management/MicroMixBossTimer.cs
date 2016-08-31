@@ -10,7 +10,6 @@ public class MicroMixBossTimer : MonoBehaviour{
 	private int nextIndex;
 	// Use this for initialization
 	void Start(){
-		GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
 		GetComponentInChildren<Animator>().speed = 0;
 		timerBoss.transform.position = position1.position;
 	}
@@ -31,12 +30,12 @@ public class MicroMixBossTimer : MonoBehaviour{
 
 	public void StartTimer(){
 		timerBoss.transform.position = position1.position;
-		LeanTween.move(timerBoss, position2.position, 40000f).setOnComplete(OnComplete);
+		LeanTween.move(timerBoss, position2.position, 4f).setOnComplete(OnComplete);
 		nextIndex = images.Length - 1;
 		isMoving = true;
-		foreach(Image toShow in images){
+		/*foreach(Image toShow in images){
 			toShow.gameObject.SetActive(true);
-		}
+		}*/
 	}
 
 	public void Pause(){

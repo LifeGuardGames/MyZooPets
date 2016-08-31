@@ -67,7 +67,7 @@ public class PerfumeMicro : Micro{
 		float angle = Mathf.Atan2(deltaPos.y, deltaPos.x) * Mathf.Rad2Deg;
 		angle -= 90;
 		dashedLine.transform.position = perfume.transform.position;
-		dashedLine.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+		dashedLine.transform.rotation = Quaternion.Euler(0, 0, angle);
 
 		yield return new WaitForSeconds(2f);
 

@@ -58,7 +58,7 @@ public class TimeMicroOld : Micro{
 			}
 			//If we are in the tutorial, we want to pause;
 		}
-		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
+		solarSystem.transform.rotation = Quaternion.Euler(0f, 0f, currentDegree);
 	}
 
 	public bool IsValid(){
@@ -124,7 +124,7 @@ public class TimeMicroOld : Micro{
 			dayBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f, 0);
 			nightBackground.GetComponent<SpriteRenderer>().color = new Color(3f / 4f, 3f / 4f, 3f / 4f);
 		}
-		solarSystem.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, currentDegree));
+		solarSystem.transform.rotation = Quaternion.Euler(0f, 0f, currentDegree);
 	}
 
 	private void Close(){

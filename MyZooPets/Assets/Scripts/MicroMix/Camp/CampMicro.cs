@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CampMicro : Micro{
 	public static readonly float distance = 3.5f;
-	public TESTFIRE campfire;
+	public CampFireItem campfire;
 	public CampPlayerItem player;
 	public CampCollectItem[] mallows;
 	public GameObject phone;

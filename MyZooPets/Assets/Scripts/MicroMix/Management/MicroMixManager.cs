@@ -15,7 +15,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public ParticleSystem monsterParticle;
 	public PetAnimationManager petAnim;
 
-	public MicroMixBossTimer bossTimer;
 	public MicroMixLives lifeController;
 	public MicroMixFireworks fireworksController;
 
@@ -49,10 +48,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 		petAnim.DisableIdleAnimation();
-	}
-
-	public void EndMicro(){
-		currentMicro.EndMicro();
 	}
 
 	public void WinMicro(){
@@ -127,7 +122,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		if(currentMicro != null){
 			currentMicro.Pause();
 		}
-		bossTimer.Pause();
 		LeanTween.pause(finger.gameObject);
 		if(isTransitioning){
 			if(currentMicro != null){
@@ -146,7 +140,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		if(currentMicro != null){
 			currentMicro.Resume();
 		}
-		bossTimer.Resume();
 		LeanTween.resume(finger.gameObject);
 		if(isTransitioning){
 			if(currentMicro != null){
@@ -332,8 +325,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	private void StartMicro(){
-		MicroMixManager.Instance.bossTimer.gameObject.SetActive(true);
-		bossTimer.StartTimer();
 		currentMicro.gameObject.SetActive(true);
 		currentMicro.StartMicro(difficulty);
 	}

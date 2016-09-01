@@ -23,6 +23,7 @@ public abstract class Micro : MonoBehaviour{
 	private bool playing = false;
 	private int seconds = 0;
 	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
+	private MicroMixBossTimer timer;
 
 	public abstract string Title{
 		get;
@@ -55,6 +56,11 @@ public abstract class Micro : MonoBehaviour{
 		}
 		_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
 		playing = true; //Now we set up our own stuff
+		if (!timer){
+			timer=FindObjectOfType<MicroMixBossTimer>();
+		}
+		timer.gameObject.SetActive(true);
+		timer.StartTimer(this);
 		positions.Clear();
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems
 			if(child == transform){
@@ -72,10 +78,12 @@ public abstract class Micro : MonoBehaviour{
 
 	public void Pause(){
 		_Pause();
+		timer.Pause();
 	}
 
 	public void Resume(){
 		_Resume();
+		timer.Resume();
 	}
 
 	private IEnumerator Tutorial(int difficulty){
@@ -102,7 +110,7 @@ public abstract class Micro : MonoBehaviour{
 
 		_EndMicro(); //We have cleaned everything up for them, let them handle the rest
 
-		MicroMixManager.Instance.bossTimer.gameObject.SetActive(false);
+		timer.gameObject.SetActive(false);
 		MicroMixManager.Instance.fireworksController.StopFireworks();
 
 		if(won){ //This should always be called last

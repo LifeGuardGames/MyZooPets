@@ -46,18 +46,17 @@ public abstract class Micro : MonoBehaviour{
 		}
 	}
 
-	public void StartMicro(int difficulty, bool randomize = true){
-		won = false;
-		MicroMixManager.Instance.IsTutorial = false;
+	public void StartTutorial(){
+		StartCoroutine(Tutorial());
 
-		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
-			StartCoroutine(Tutorial(difficulty));
-			return; //Do not continue on
-		}
-		_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
+	}
+
+	public void StartMicro(int difficulty, bool randomize){
+		won = false;
+
 		playing = true; //Now we set up our own stuff
-		if (!timer){
-			timer=FindObjectOfType<MicroMixBossTimer>();
+		if(!timer){
+			timer = FindObjectOfType<MicroMixBossTimer>();
 		}
 		timer.gameObject.SetActive(true);
 		timer.StartTimer(this);
@@ -86,13 +85,11 @@ public abstract class Micro : MonoBehaviour{
 		timer.Resume();
 	}
 
-	private IEnumerator Tutorial(int difficulty){
-		MicroMixManager.Instance.IsTutorial = true;
+	private IEnumerator Tutorial(){
 		yield return StartCoroutine(_Tutorial());
-		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(Title);
+		//They just completed the tutorial
 		yield return 0; //Wait for them to destroy their objects
-		StartMicro(difficulty, false); //This is only called after we have told everyone who our parent is. We should return after this is called ABOVE
-		//and then go back. Or maybe yield?
+		MicroMixManager.Instance.CompleteTutorial();
 	}
 
 	public void EndMicro(){

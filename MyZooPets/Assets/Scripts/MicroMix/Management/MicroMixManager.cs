@@ -24,14 +24,16 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	private float timeScaleIncrement = .1f;
 	private int difficulty = 1;
 	private int winScore = 10;
-	private bool isTransitioning;
 	//True during transition
-	private bool isParticlePaused;
+	private bool isTransitioning;
 	//True if we pause the particle while it is playing
+	private bool isParticlePaused;
+	private bool isTutorial;
 
 	public bool IsTutorial{
-		get;
-		set;
+		get{
+			return isTutorial;
+		}
 	}
 
 	private enum MonsterAnimation{
@@ -88,6 +90,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		//AudioManager.Instance.PlayClip("microLose");	
 	}
 
+	public void CompleteTutorial(){
+		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(currentMicro.Title);
+		isTutorial = false;
+		currentMicro.StartMicro(difficulty, true);
+	}
+
 	public IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager
 		for(float i = 0; i <= time; i += .1f){
 			yield return new WaitForSeconds(.1f);
@@ -112,7 +120,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	protected override void _NewGame(){
-		StartCoroutine(TransitionIEnum(MonsterAnimation.WIN));
+		StartCoroutine(TransitionIEnum(MonsterAnimation.INTRO));
 		Time.timeScale = 1f;
 		lifeController.Reset(true);
 		difficulty = 1;
@@ -207,8 +215,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		case MonsterAnimation.WIN:
 			petAnim.animator.speed = 2;
 			petAnim.StartFireBlow();
-			yield return 0;
-			petAnim.FinishFireBlow();
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
 			break;
 		case MonsterAnimation.LOSE_FINAL: //Just fall through cause we don't have anything special
@@ -224,8 +230,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			Debug.LogWarning("Invalid anim state");
 			break;
 		}
-		yield return WaitSecondsPause(2f);
-
+		if(animState == MonsterAnimation.WIN){
+			yield return WaitSecondsPause(.7f);
+			petAnim.FinishFireBlow();
+			yield return WaitSecondsPause(1.3f);
+		}
+		else{
+			yield return WaitSecondsPause(2f);
+		}
 		if(animState == MonsterAnimation.WIN_FINAL){
 			GameOver(); //We have finally won
 		}
@@ -326,7 +338,13 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 	private void StartMicro(){
 		currentMicro.gameObject.SetActive(true);
-		currentMicro.StartMicro(difficulty);
+		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(currentMicro.Title)){
+			isTutorial = true;
+			currentMicro.StartTutorial();
+		}
+		else{
+			currentMicro.StartMicro(difficulty, false);
+		}
 	}
 
 	private void OnTweenSpeedUp(){

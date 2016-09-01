@@ -17,7 +17,6 @@ public class DoctorMatchTutorial : MinigameTutorial{
 		}
 		else{
 			tutorialText.StartCoroutine(tutorialText.HideAll());
-			DoctorMatchManager.Instance.FadeArrow();
 		}
 	}
 

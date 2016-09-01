@@ -8,8 +8,8 @@ public class ParticleFXController : MonoBehaviour{
 	public GameObject fireworkPrefab;
 	public GameObject floatyPrefab;
 	public RectTransform scoreTransform;
-	public RectTransform counterTransform;
-	public RectTransform barTransform;
+	public RectTransform comboTransform;
+	public Transform selectorTransform;
 
 	private Vector3 particleAim;
 	private float particleRunTime;
@@ -26,7 +26,7 @@ public class ParticleFXController : MonoBehaviour{
 		if(DoctorMatchManager.Instance.comboController.ComboLevel == 2){ //Big combo bonus
 			pSystem.startColor = Color.blue;
 			comboBonusScalar = 1.1f;
-			toAim = counterTransform.position;
+			toAim = comboTransform.position;
 			yieldTime = .6f;
 		}
 		else if(DoctorMatchManager.Instance.comboController.ComboLevel == 1){ //Small combo bonus
@@ -36,7 +36,7 @@ public class ParticleFXController : MonoBehaviour{
 			yieldTime = .4f;
 		}
 		else{
-			toAim = DoctorMatchManager.Instance.comboController.comboText.transform.position;//GetComboPosition(DoctorMatchManager.Instance.comboController.Combo);
+			toAim = selectorTransform.position;
 		}
 		ParticleSystem.LimitVelocityOverLifetimeModule emissionModule = pSystem.limitVelocityOverLifetime; //HACK: Currently, you cannot modify particle system module curves directly, so we save it here and modify it later
 		AnimationCurve ourCurve = new AnimationCurve();

@@ -21,7 +21,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 	public DoctorMatchZone zoneRed;
 	public GameObject pointerPrefab;
 	public GameObject floatyPrefab;
-	public GameObject arrowObject;
+	public GameObject redBar;
+	public GameObject toClearText;
 
 	private int numOfCorrectDiagnose;
 	private bool paused = true;
@@ -78,7 +79,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 		comboController.Setup();
 		ResetScore();
-		arrowObject.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	protected override void _StartTutorial(){
@@ -103,6 +103,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 	public void OnTimerBarEmpty(){
 		int toClear = assemblyLineController.Count + bonusStack;
 		lifeBarController.UpdateCount(toClear);
+		redBar.SetActive(false);
+		toClearText.SetActive(true);
 	}
 
 	public void SpawnFinger(int zone){
@@ -110,11 +112,9 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		tutorialZone = zone;
 		if(finger == null){
 			finger = Instantiate(pointerPrefab).GetComponent<FingerController>();
-			arrowObject.GetComponent<SpriteRenderer>().enabled = true;
 		}
 		else{
 			LeanTween.cancel(finger.gameObject);
-			FadeArrow();
 		}
 		if(tutorialZone == 3){
 			finger.transform.position = GetCorrectTransform().position;//GetButtonTransform((int)assemblyLineController.PeekFirstItem().ItemType).transform.position;
@@ -127,20 +127,17 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 	}
 
 	public void BarFinger(){
-		finger.transform.rotation = Quaternion.Euler(0,180,50);
+		finger.transform.rotation = Quaternion.Euler(0, 180, 50);
 		finger.transform.position = lifeBarController.transform.position + new Vector3(120, -30);
 		multipleFinger = finger.RepeatShake(2, new Vector3(20, 0), true);
 		StartCoroutine(multipleFinger);
 	}
-	public void FadeArrow() {
-		LeanTween.alpha(arrowObject, 0, .5f);
 
-	}
 	public override void UpdateScore(int deltaScore){
 		base.UpdateScore(deltaScore);
 		comboController.UpdateScore(score);
 	}
-		
+
 
 	public void TempLockZones(){
 		zoneGreen.TempLock(.15f);
@@ -217,6 +214,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		zoneYellow.ToggleButtonInteractable(true);
 		zoneRed.ToggleButtonInteractable(true);
 		bonusStack = 0;
+		redBar.SetActive(true);
+		toClearText.SetActive(false);
 	}
 
 	protected override void _PauseGame(){
@@ -264,6 +263,8 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 		lifeBarController.PlusBar(33);
 		assemblyLineController.PopulateQueue(compare: true);
 		lifeBarController.UpdateCount(-1);
+		redBar.SetActive(true);
+		toClearText.SetActive(false);
 	}
 
 	private void HandleNormal(AssemblyLineItem poppedItem){

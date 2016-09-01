@@ -25,9 +25,6 @@ public class EmergencyMicro : Micro{
 		}
 		bool correct = buttonType == assemblyItem.ItemType;
 		SetWon(correct);
-		if(correct){
-			Debug.Log("Insert fireworks here");
-		}
 		complete = true;
 		assemblyItem.Activate(false);
 		for(int i = 0; i < buttons.Length; i++){

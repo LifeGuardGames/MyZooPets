@@ -4,8 +4,6 @@ using UnityEngine.UI;
 public class DoctorMatchLifeBarController : MonoBehaviour{
 	public RectTransform barTransform;
 	public AssemblyLineController lineController;
-	public Text numberLabel;
-	//Label for time
 	public Text barCount;
 	//X Left to clear
 	private Vector2 barSize;
@@ -55,8 +53,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour{
 		if(isDraining){
 			barPercentage -= Time.deltaTime * currentDrainSpeed;
 			barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
-			numberLabel.text = (barPercentage >= .03f) ? (barPercentage * 30f).ToString("N0") : "";
-			numberLabel.fontSize = 40 - (int)((1 - barPercentage) * 12); //Does this look good?
 			if(barPercentage <= 0f){
 				NotifyEmpty();
 			}
@@ -71,7 +67,7 @@ public class DoctorMatchLifeBarController : MonoBehaviour{
 		if(isDraining || count == -1)
 			barCount.text = "";
 		else
-			barCount.text = count + " LEFT TO CLEAR";
+			barCount.text = count + " Left";
 	}
 
 	public void KillBar(){

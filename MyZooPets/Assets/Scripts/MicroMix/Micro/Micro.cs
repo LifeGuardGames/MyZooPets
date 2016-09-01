@@ -48,14 +48,12 @@ public abstract class Micro : MonoBehaviour{
 	public void StartMicro(int difficulty, bool randomize = true){
 		won = false;
 		MicroMixManager.Instance.IsTutorial = false;
-		MicroMixManager.Instance.bossTimer.gameObject.SetActive(true);
 
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(Title)){
 			StartCoroutine(Tutorial(difficulty));
 			return; //Do not continue on
 		}
 		_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
-		MicroMixManager.Instance.bossTimer.StartTimer();
 		playing = true; //Now we set up our own stuff
 		positions.Clear();
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems

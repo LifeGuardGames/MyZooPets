@@ -24,6 +24,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	private float maxTimeScale = 1.3f;
 	private float timeScaleIncrement = .1f;
 	private int difficulty = 1;
+	private int winScore = 10;
 	private bool isTransitioning;
 	//True during transition
 	private bool isParticlePaused;
@@ -37,9 +38,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	private enum MonsterAnimation{
 		//Win and lose are for the human playing
 		INTRO,
+		WIN_FINAL,
 		WIN,
 		LOSE,
-		WIN_FINAL
+		LOSE_FINAL
 	}
 
 	void Awake(){
@@ -65,10 +67,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			speedUpText.color = Color.white;
 			speedUpText.transform.localScale = Vector3.one * .75f;
 			LeanTween.scale(speedUpText.rectTransform, Vector3.one, .75f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(OnTweenSpeedUp);
-
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
-		StartCoroutine(TransitionIEnum(MonsterAnimation.WIN));
+		if(currentScore >= winScore){
+			StartCoroutine(TransitionIEnum(MonsterAnimation.WIN_FINAL));
+		}
+		else{
+			StartCoroutine(TransitionIEnum(MonsterAnimation.WIN));
+		}
 	}
 
 	public void LoseMicro(){
@@ -79,7 +85,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			Time.timeScale -= timeScaleIncrement;
 		}
 		if(lifeController.LoseLife()){
-			GameOver();
+			StartCoroutine(TransitionIEnum(MonsterAnimation.LOSE_FINAL));
 		}
 		else{
 			StartCoroutine(TransitionIEnum(MonsterAnimation.LOSE));
@@ -183,6 +189,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		Time.timeScale = 1f;
 	}
 
+	#region Transition
+
 	private IEnumerator TransitionIEnum(MonsterAnimation animState){
 		float tweenTime = 1f;
 		isTransitioning = true;
@@ -196,20 +204,21 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		yield return InTransitionHelper(tweenTime);
 	
 		monsterBody.GetComponentInChildren<Animator>().speed = 1;
-		petAnim.animator.speed=1;
+		petAnim.animator.speed = 1;
 		switch(animState){
 		case MonsterAnimation.INTRO:
-			int index = Random.Range(0, petAnim.happyIdleAnimations.Count-1);
+			int index = Random.Range(0, petAnim.happyIdleAnimations.Count - 1);
 			petAnim.animator.Play(petAnim.happyIdleAnimations[index], 0, 0);
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerIntro", 0, 0);
 			break;
 		case MonsterAnimation.WIN:
-			petAnim.animator.speed=2;
+			petAnim.animator.speed = 2;
 			petAnim.StartFireBlow();
 			yield return 0;
 			petAnim.FinishFireBlow();
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerLose", 0, 0);
 			break;
+		case MonsterAnimation.LOSE_FINAL: //Just fall through cause we don't have anything special
 		case MonsterAnimation.LOSE:
 			petAnim.animator.Play(petAnim.sadIdleAnimations[Random.Range(0, petAnim.sadIdleAnimations.Count)], 0, 0);
 			monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
@@ -223,13 +232,21 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			break;
 		}
 		yield return WaitSecondsPause(2f);
-		ChangeMicro();
 
-		yield return OutTransitionHelper();
+		if(animState == MonsterAnimation.WIN_FINAL){
+			GameOver(); //We have finally won
+		}
+		else if(animState == MonsterAnimation.LOSE_FINAL){
+			GameOver(); //We have finally lost
+		}
+		else{
+			ChangeMicro();
+			yield return OutTransitionHelper();
 
-		isTransitioning = false;
-		lifeController.Hide();
-		StartMicro();
+			isTransitioning = false;
+			lifeController.Hide();
+			StartMicro();
+		}
 	}
 
 	private IEnumerator InTransitionHelper(float tweenTime){
@@ -302,6 +319,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		yield return WaitSecondsPause(totalTweenTime * 1 / 3); // (2...3)
 	}
 
+	#endregion
+
 	private void ChangeMicro(){
 		if(debugMicro == null){ //Set up transition out
 			int index = Random.Range(0, microList.Length);
@@ -313,6 +332,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	private void StartMicro(){
+		MicroMixManager.Instance.bossTimer.gameObject.SetActive(true);
+		bossTimer.StartTimer();
 		currentMicro.gameObject.SetActive(true);
 		currentMicro.StartMicro(difficulty);
 	}

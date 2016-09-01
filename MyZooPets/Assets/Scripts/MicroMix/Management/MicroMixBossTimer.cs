@@ -8,6 +8,8 @@ public class MicroMixBossTimer : MonoBehaviour{
 	public Image[] images;
 	public bool isMoving;
 	private int nextIndex;
+	private float totalTime = 4f;
+	private float currentTime;
 	// Use this for initialization
 	void Start(){
 		GetComponentInChildren<Animator>().speed = 0;
@@ -15,27 +17,32 @@ public class MicroMixBossTimer : MonoBehaviour{
 	}
 
 	void Update(){
-		if(!isMoving){
+		if(MicroMixManager.Instance.IsPaused){
 			return;
 		}
-		if(Vector2.Distance(timerBoss.transform.position, images[nextIndex].transform.position) < .5f){
-			if(nextIndex > 0){ //Do not set 0 invisible (that is the Pet)
-				images[nextIndex].gameObject.SetActive(false);
-			} else {
-				isMoving = false;
-			}
+		if(currentTime > 0){
+			currentTime -= Time.deltaTime;
+		}
+
+		if(currentTime <= 0){
+			MicroMixManager.Instance.EndMicro();
+		}
+
+		if(Vector2.Distance(timerBoss.transform.position, images[nextIndex].transform.position) < .5f && nextIndex > 0){
+			images[nextIndex].gameObject.SetActive(false);
 			nextIndex--;
 		}
 	}
 
 	public void StartTimer(){
 		timerBoss.transform.position = position1.position;
-		LeanTween.move(timerBoss, position2.position, 4f).setOnComplete(OnComplete);
+		LeanTween.move(timerBoss, position2.position, 4f);
 		nextIndex = images.Length - 1;
+		currentTime = totalTime;
 		isMoving = true;
-		/*foreach(Image toShow in images){
+		foreach(Image toShow in images){
 			toShow.gameObject.SetActive(true);
-		}*/
+		}
 	}
 
 	public void Pause(){
@@ -44,8 +51,5 @@ public class MicroMixBossTimer : MonoBehaviour{
 
 	public void Resume(){
 		LeanTween.resume(timerBoss);
-	}
-	private void OnComplete(){
-		MicroMixManager.Instance.EndMicro();
 	}
 }

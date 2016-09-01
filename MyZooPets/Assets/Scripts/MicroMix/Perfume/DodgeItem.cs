@@ -17,7 +17,7 @@ public class DodgeItem : MicroItem{
 	}
 
 	void OnTriggerEnter(Collider other){
-		if(!hit && other.CompareTag("MicroMixPerfume")||MicroMixManager.Instance.IsPaused||!parent){
+		if(!hit && other.CompareTag("MicroMixPerfume") && !MicroMixManager.Instance.IsPaused && parent){
 			hit = true;
 			parent.SetWon(false);
 		}

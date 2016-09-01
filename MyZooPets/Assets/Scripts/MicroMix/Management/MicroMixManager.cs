@@ -112,7 +112,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	protected override void _NewGame(){
-		StartCoroutine(TransitionIEnum(MonsterAnimation.INTRO));
+		StartCoroutine(TransitionIEnum(MonsterAnimation.WIN));
 		Time.timeScale = 1f;
 		lifeController.Reset(true);
 		difficulty = 1;
@@ -209,12 +209,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			petAnim.StartFireBlow();
 			yield return 0;
 			petAnim.FinishFireBlow();
-			monsterBody.GetComponentInChildren<Animator>().Play("PlayerLose", 0, 0);
+			monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
 			break;
 		case MonsterAnimation.LOSE_FINAL: //Just fall through cause we don't have anything special
 		case MonsterAnimation.LOSE:
 			petAnim.animator.Play(petAnim.sadIdleAnimations[Random.Range(0, petAnim.sadIdleAnimations.Count)], 0, 0);
-			monsterBody.GetComponentInChildren<Animator>().Play("PlayerWin", 0, 0);
+			monsterBody.GetComponentInChildren<Animator>().Play("PlayerLose", 0, 0);
 			break;
 		case MonsterAnimation.WIN_FINAL:
 			petAnim.Flipping();

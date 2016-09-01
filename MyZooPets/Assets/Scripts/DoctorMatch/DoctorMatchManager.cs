@@ -180,7 +180,6 @@ public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
 			UpdateScore(-1);
 			AudioManager.Instance.PlayClip("minigameError");
 		}
-		//particleController.SpawnFloatyText(comboMod, correct, buttonTransform);
 
 		if(tutorial){ //But line movement and populating is different in each mode
 			HandleTutorial(peakedItem, correct);

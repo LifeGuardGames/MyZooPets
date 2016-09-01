@@ -959,7 +959,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 20
   m_Sprite: {fileID: 21300010, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -7414,7 +7414,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c94f53d98cf8b0d499a6c7d1769b3354, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 37c83719e004643c98548ab95294d9e9, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -22286,7 +22286,6 @@ MonoBehaviour:
   monsterBody: {fileID: 71503401}
   monsterParticle: {fileID: 1915969314}
   petAnim: {fileID: 1132106116}
-  bossTimer: {fileID: 1130250257}
   lifeController: {fileID: 2024790490}
   fireworksController: {fileID: 948449965}
 --- !u!1 &448601683
@@ -25232,7 +25231,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 00e8fb4bfaa8b8840a71e6d15d3827db, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cd2c51d912a5c4bec8bf255f152ac1b2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -34257,7 +34256,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -43480,7 +43479,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 11
   m_Sprite: {fileID: 21300018, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -47962,7 +47961,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 36
   m_Sprite: {fileID: 21300014, guid: 57e331ee26132fd489fac4ec002259b8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -48022,7 +48021,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 28
   m_Sprite: {fileID: 21300006, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -48126,6 +48125,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 1130250256}
   - 114: {fileID: 1130250257}
+  - 223: {fileID: 1130250258}
   m_Layer: 5
   m_Name: TimerSystem
   m_TagString: Untagged
@@ -48175,7 +48175,25 @@ MonoBehaviour:
   - {fileID: 45327633}
   - {fileID: 617059548}
   - {fileID: 882725544}
-  isMoving: 0
+--- !u!223 &1130250258
+Canvas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1130250255}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_SortingLayerID: -438287577
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1132106115
 GameObject:
   m_ObjectHideFlags: 0
@@ -54351,7 +54369,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 30
   m_Sprite: {fileID: 21300008, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -55537,7 +55555,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 28
   m_Sprite: {fileID: 21300002, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -74275,7 +74293,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 35
   m_Sprite: {fileID: 21300020, guid: 57e331ee26132fd489fac4ec002259b8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -86081,7 +86099,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 28
   m_Sprite: {fileID: 21300004, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -92636,7 +92654,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: e4afab71ac7c52448907eaececf2eb1d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4ecfeceff96544ac090566b0d5844881, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -93984,7 +94002,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 19
   m_Sprite: {fileID: 21300004, guid: 5bd88008ea50141b38dffe68fdc71256, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -94121,7 +94139,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 935867421
+  m_SortingLayerID: -438287577
   m_SortingOrder: 30
   m_Sprite: {fileID: 21300008, guid: 95fa0ed686d9949398347df0e1610dd6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

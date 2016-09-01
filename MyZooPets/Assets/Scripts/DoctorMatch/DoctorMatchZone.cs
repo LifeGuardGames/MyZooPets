@@ -16,7 +16,6 @@ public class DoctorMatchZone : MonoBehaviour{
 	}
 
 	public void OnZoneClicked(){
-		Debug.Log("Clicked");
 		if(!isLocked){
 			TempLock(lockTime);// Lock to prevent accidental double tapping
 			if(parent == null){

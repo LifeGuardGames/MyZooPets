@@ -4,7 +4,7 @@ using System.Collections;
 public class CigaretteMicro : Micro{
 	public CigPlayerItem player;
 	public Transform[] tutorialPositions;
-	private MazeItem[] mazes;
+	private CigMazeItem[] mazes;
 	private int mazeIndex;
 	private MicroMixFinger finger;
 	private float speed = 4f;
@@ -44,7 +44,7 @@ public class CigaretteMicro : Micro{
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
-		mazes = GetComponentsInChildren<MazeItem>(true);
+		mazes = GetComponentsInChildren<CigMazeItem>(true);
 		mazeIndex = 0;
 		if(randomize){
 			mazeIndex = Random.Range(0, mazes.Length);
@@ -72,7 +72,7 @@ public class CigaretteMicro : Micro{
 		zOffset = new Vector3(0, 0, finger.transform.position.z - tutorialPositions[0].position.z);
 		finger.transform.position = tutorialPositions[0].position + zOffset;
 		waiting = false;
-		mazes = GetComponentsInChildren<MazeItem>(true);
+		mazes = GetComponentsInChildren<CigMazeItem>(true);
 		mazes[0].gameObject.SetActive(true);
 
 		tutorialComplete = false;

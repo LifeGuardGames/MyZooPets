@@ -30,7 +30,6 @@ public class RoachMicro : Micro{
 		if(randomize){
 			cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .2f, .2f, 0);
 			cockroach.GetComponent<RoachItem>().Setup(Random.insideUnitCircle);
-			cockroach.SetActive(true);
 		}
 		else{
 			cockroach.GetComponent<RoachItem>().Setup(lastVelocity);
@@ -50,7 +49,7 @@ public class RoachMicro : Micro{
 		circle.gameObject.SetActive(true);
 		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .4f, .4f, 0);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
-		trap.GetComponent<TrapItem>().SetVisible(false);
+		trap.GetComponent<RoachTrapItem>().SetVisible(false);
 		finger.gameObject.SetActive(true);
 		dashedLine.GetComponentInChildren<SpriteRenderer>().enabled = true;
 

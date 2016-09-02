@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DodgeItem : MicroItem{
+public class PerfDodgeItem : MicroItem{
 	public bool hit = false;
 	private float speed = .3f;
 	private float startTime;

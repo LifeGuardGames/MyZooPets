@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScarfItem : MicroItem{
+public class ColdScarfItem : MicroItem{
 	public GameObject pet;
 	private bool complete;
 	private Vector3 posOffset = Vector3.zero;

@@ -31,7 +31,7 @@ public class ColdMicro : Micro{
 		else{
 			petInstance.transform.position = lastPos;
 		}
-		scarfItem.GetComponent<ScarfItem>().pet = petInstance;
+		scarfItem.GetComponent<ColdScarfItem>().pet = petInstance;
 	}
 
 	protected override void _EndMicro(){

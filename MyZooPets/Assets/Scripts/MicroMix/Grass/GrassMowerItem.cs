@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MowerItem : MicroItem{
+public class GrassMowerItem : MicroItem{
 	private float screenOrientationMultiplier = 1;
 	private float angle;
 	//In radians

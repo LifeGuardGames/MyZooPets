@@ -35,7 +35,7 @@ public class AssemblyLineItem : MonoBehaviour{
 	}
 
 	public void Activate(bool destroySelf = true){
-		LTDescr fadeAlpha = LeanTween.alpha(itemSprite.gameObject, 0, FADE_TIME);
+		LTDescr fadeAlpha = LeanTween.alpha(gameObject, 0, FADE_TIME);
 		if(destroySelf){
 			fadeAlpha.setOnComplete(DestroySelf);
 		}

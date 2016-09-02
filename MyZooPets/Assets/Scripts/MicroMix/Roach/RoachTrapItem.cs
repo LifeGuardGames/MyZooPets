@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TrapItem : MicroItem{
+public class RoachTrapItem : MicroItem{
 	public RoachItem roach;
 	private bool landed = false;
 	private bool complete = false;

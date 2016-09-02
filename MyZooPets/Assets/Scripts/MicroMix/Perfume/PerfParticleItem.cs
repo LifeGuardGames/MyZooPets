@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PerfumeItem : MicroItem{
+public class PerfParticleItem : MicroItem{
 	public Vector3 aim;
 	private Vector3 velocity;
 	private float speed = .12f;

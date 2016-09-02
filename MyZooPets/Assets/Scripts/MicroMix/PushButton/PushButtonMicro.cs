@@ -42,7 +42,7 @@ public class PushButtonMicro : Micro{
 		finger.gameObject.SetActive(true);
 
 		Setup();
-		ButtonItem button = inhaler.GetComponentInChildren<ButtonItem>();
+		PushButtonItem button = inhaler.GetComponentInChildren<PushButtonItem>();
 
 		Vector3 offset = new Vector3(0, .5f);
 		yield return finger.ShakeToBack(button.transform.position + offset, button.transform.position + button.animDelta + offset, delay: .5f, time: 1f);

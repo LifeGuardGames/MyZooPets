@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MazeItem : MicroItem{
+public class CigMazeItem : MicroItem{
 	public GameObject cigarette;
 	public GameObject startPosition;
 	public GameObject finishPosition;

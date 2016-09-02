@@ -93,7 +93,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public void CompleteTutorial(){
 		DataManager.Instance.GameData.MicroMix.MicrosCompleted.Add(currentMicro.Title);
 		isTutorial = false;
-		currentMicro.StartMicro(difficulty, true);
+		currentMicro.StartMicro(difficulty, false);
 	}
 
 	public IEnumerator WaitSecondsPause(float time){ //Like wait for seconds, but pauses w/ MicroMixManager
@@ -343,7 +343,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 			currentMicro.StartTutorial();
 		}
 		else{
-			currentMicro.StartMicro(difficulty, false);
+			currentMicro.StartMicro(difficulty, true);
 		}
 	}
 

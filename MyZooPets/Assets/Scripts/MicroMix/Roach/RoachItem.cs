@@ -27,15 +27,15 @@ public class RoachItem : MicroItem{
 
 	public void Setup(Vector3 velocity){
 		this.velocity = velocity.normalized * speed;
-		GetComponent<Animator>().enabled=true;
+		GetComponent<Animator>().enabled = true;
 		canMove = true;
 	}
 
 	public void Freeze(Vector3 aimPosition){
-		canMove=false;
+		canMove = false;
 		Vector3 delta = aimPosition - transform.position;
 		transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * Mathf.Atan2(delta.y, delta.x) - 90);
-		LeanTween.move(gameObject,aimPosition,.22f);
+		LeanTween.move(gameObject, aimPosition, .22f);
 	}
 
 	public override void StartItem(){
@@ -43,7 +43,7 @@ public class RoachItem : MicroItem{
 
 	public override void OnComplete(){
 		canMove = false;
-		GetComponent<Animator>().enabled=false;
+		GetComponent<Animator>().enabled = false;
 		LeanTween.cancel(gameObject);
 	}
 }

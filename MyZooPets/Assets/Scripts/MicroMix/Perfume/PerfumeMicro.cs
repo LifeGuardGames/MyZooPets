@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class PerfumeMicro : Micro{
-	public DodgeItem player;
+	public PerfDodgeItem player;
 	public GameObject dashedLine;
 	public GameObject perfumeBottle;
 	private int count;
-	private PerfumeItem[] perfumes;
+	private PerfParticleItem[] perfumes;
 
 	public override string Title{
 		get{
@@ -21,8 +21,8 @@ public class PerfumeMicro : Micro{
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
-		perfumes = GetComponentsInChildren<PerfumeItem>(true);
-		foreach(PerfumeItem perf in perfumes){
+		perfumes = GetComponentsInChildren<PerfParticleItem>(true);
+		foreach(PerfParticleItem perf in perfumes){
 			perf.GetComponent<ParticleSystem>().Stop();
 			perf.GetComponent<Collider>().enabled = false;
 		}
@@ -57,7 +57,7 @@ public class PerfumeMicro : Micro{
 	protected override IEnumerator _Tutorial(){
 		Vector3	startPos = GetRandomPositionOnEdge();
 		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
-		PerfumeItem perfume = GetComponentInChildren<PerfumeItem>();
+		PerfParticleItem perfume = GetComponentInChildren<PerfParticleItem>();
 		perfume.Setup(startPos, aim);
 
 		perfumeBottle.transform.position = perfume.transform.position;
@@ -92,7 +92,7 @@ public class PerfumeMicro : Micro{
 		perfumeBottle.transform.position = nextPos;
 
 		for(int i = 0; i < perfumes.Length; i++){
-			PerfumeItem perf = perfumes[i];
+			PerfParticleItem perf = perfumes[i];
 			startPos = nextPos;
 			perf.GetComponent<ParticleSystem>().Play();
 			perf.GetComponent<Collider>().enabled = true;

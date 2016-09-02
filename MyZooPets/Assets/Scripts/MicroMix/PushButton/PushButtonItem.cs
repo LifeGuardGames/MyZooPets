@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ButtonItem : MicroItem{
+public class PushButtonItem : MicroItem{
 	public Vector3 animDelta = new Vector3(0, -.5f);
 	private bool complete = false;
 

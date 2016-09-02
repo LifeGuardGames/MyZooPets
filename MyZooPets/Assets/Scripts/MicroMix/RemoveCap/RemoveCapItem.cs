@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CapItem : MicroItem{
+public class RemoveCapItem : MicroItem{
 	//The Vector3 we want to animate along once we are pulled up close
 	public Vector3 animDelta;
 	private float angleDeviation = 25f;

@@ -48,12 +48,11 @@ public abstract class Micro : MonoBehaviour{
 
 	public void StartTutorial(){
 		StartCoroutine(Tutorial());
-
 	}
 
 	public void StartMicro(int difficulty, bool randomize){
+		_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
 		won = false;
-
 		playing = true; //Now we set up our own stuff
 		if(!timer){
 			timer = FindObjectOfType<MicroMixBossTimer>();
@@ -61,6 +60,7 @@ public abstract class Micro : MonoBehaviour{
 		timer.gameObject.SetActive(true);
 		timer.StartTimer(this);
 		positions.Clear();
+
 		foreach(Transform child in GetComponentsInChildren<Transform>(true)){ //And set up all the MicroItems
 			if(child == transform){
 				continue;
@@ -117,19 +117,4 @@ public abstract class Micro : MonoBehaviour{
 			MicroMixManager.Instance.LoseMicro();
 		}
 	}
-
-	/*private IEnumerator WaitTimer(){
-		//Used for deactivating and closing off the micro, and alerting the manager
-		for(seconds = 4; seconds > 0; seconds--){
-			yield return MicroMixManager.Instance.WaitSecondsPause(1f);
-		}
-		EndMicro();
-		yield return 0; //Give everything that needs to be destroyed a second...
-		if(won){ //This should always be called last
-			MicroMixManager.Instance.WinMicro();
-		}
-		else{
-			MicroMixManager.Instance.LoseMicro();
-		}
-	}*/
 }

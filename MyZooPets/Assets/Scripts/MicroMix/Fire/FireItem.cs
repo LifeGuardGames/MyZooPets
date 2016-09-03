@@ -51,6 +51,7 @@ public class FireItem : MicroItem{
 			Disengage();
 			FireMicro fm = (FireMicro)parent;
 			started = false;
+
 			parent.SetWon(fm.IsCorrect());
 		}
 	}

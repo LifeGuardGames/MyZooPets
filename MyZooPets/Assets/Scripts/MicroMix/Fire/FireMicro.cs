@@ -3,10 +3,13 @@ using System.Collections;
 
 public class FireMicro : Micro{
 	public RectTransform innerBar;
+	public Canvas canvasParent;
 	private float moveTime = .8f;
 	private float minSize = -345f;
 	private float maxSize = -4.3f;
 	private LeanTweenType type;
+	private string lastLayer;
+
 	// Use this for initialization
 	public override int Background{
 		get{
@@ -29,10 +32,12 @@ public class FireMicro : Micro{
 	}
 
 	public bool IsCorrect(){ //If you want to change the range, then make sure to change the UI elements too.
+		canvasParent.sortingLayerName = "Default";
 		return innerBar.offsetMax.x > -85f;
 	}
 
 	protected override void _StartMicro(int difficulty, bool randomize){
+		canvasParent.sortingLayerName = "uGUI";
 		if(randomize){
 			Setup();
 		}
@@ -43,6 +48,7 @@ public class FireMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
+		canvasParent.sortingLayerName = "Default";
 		Setup();
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
@@ -60,14 +66,18 @@ public class FireMicro : Micro{
 		finger.gameObject.SetActive(false);
 
 		UpdateSize(minSize);
+		canvasParent.sortingLayerName = "uGUI";
 	}
 
 	protected override void _Pause(){
 		LeanTween.pause(innerBar.gameObject);
+		lastLayer = canvasParent.sortingLayerName;
+		canvasParent.sortingLayerName = "Default";
 	}
 
 	protected override void _Resume(){
 		LeanTween.resume(innerBar.gameObject);
+		canvasParent.sortingLayerName = lastLayer;
 	}
 
 	private void Setup(){

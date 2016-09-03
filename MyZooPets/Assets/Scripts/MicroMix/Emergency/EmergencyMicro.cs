@@ -5,7 +5,9 @@ using System.Collections;
 public class EmergencyMicro : Micro{
 	public AssemblyLineItem assemblyItem;
 	public DoctorMatchZone[] buttons;
+	public Canvas canvasParent;
 	private bool complete;
+	private string lastLayer;
 
 	public override int Background{
 		get{
@@ -25,6 +27,7 @@ public class EmergencyMicro : Micro{
 		}
 		bool correct = buttonType == assemblyItem.ItemType;
 		SetWon(correct);
+		canvasParent.sortingLayerName = "Default";
 		complete = true;
 		assemblyItem.Activate(false);
 		for(int i = 0; i < buttons.Length; i++){
@@ -36,6 +39,7 @@ public class EmergencyMicro : Micro{
 	protected override void _StartMicro(int difficulty, bool randomize){
 		assemblyItem.Init(0);
 		complete = false;
+		canvasParent.sortingLayerName = "uGUI";
 	}
 
 	protected override void _EndMicro(){
@@ -46,14 +50,16 @@ public class EmergencyMicro : Micro{
 	}
 
 	protected override void _Pause(){
-		
+		lastLayer = canvasParent.sortingLayerName;
+		canvasParent.sortingLayerName = "Default";
 	}
 
 	protected override void _Resume(){
-		
+		canvasParent.sortingLayerName = lastLayer;
 	}
 
 	protected override IEnumerator _Tutorial(){
+		canvasParent.sortingLayerName = "Default";
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
 		finger.gameObject.SetActive(true);
 		Vector3 offset = Vector3.left * 1.5f;
@@ -76,6 +82,7 @@ public class EmergencyMicro : Micro{
 
 		yield return 0;
 		finger.gameObject.SetActive(false);
+		canvasParent.sortingLayerName = "uGUI";
 	}
 
 	private IEnumerator DelayParticlePlay(float delay, int index){

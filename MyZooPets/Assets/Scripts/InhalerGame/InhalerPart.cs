@@ -30,8 +30,9 @@ public class InhalerPart : MonoBehaviour {
 
     //Check to see if inhaler part can be activated
     private void CheckAndEnable(object sender, EventArgs args){
-        if(InhalerLogic.Instance.CurrentStep == gameStepID)
-            Enable();
+		if(InhalerLogic.Instance.CurrentStep == gameStepID) {
+			Enable();
+		}
     }
 
     //Hide Inhaler Part. don't override this function if you don't want the inhaler part

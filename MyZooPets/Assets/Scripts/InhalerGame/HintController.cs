@@ -32,8 +32,7 @@ public class HintController : MonoBehaviour {
 		InhalerGameUIManager.HintEvent -= CheckAndEnableHint;
 	}
 
-	//Event Listener. Check if hint for the next step is necessary and disable hint for
-	//current step 
+	//Event Listener. Check if hint for the next step is necessary and disable hint for current step 
 	private void CheckAndEnableHint(object sender, InhalerHintEventArgs args) {
 		if(!args.IsDisplayingHint && !InhalerGameUIManager.Instance.tutOn) {
 			DisableHint(false);
@@ -51,7 +50,7 @@ public class HintController : MonoBehaviour {
 			DisableHint(isSkipAnimation);
 
 			if(InhalerGameUIManager.Instance.ShowHint &&
-			   showOnStep == InhalerLogic.Instance.CurrentStep) {
+				showOnStep == InhalerLogic.Instance.CurrentStep) {
 				EnableHint();
 			}
 		}

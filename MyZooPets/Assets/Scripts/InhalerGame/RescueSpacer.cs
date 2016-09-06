@@ -12,7 +12,7 @@ public class RescueSpacer : InhalerPart{
     public GameObject rescueBody; //Attach spacer to body
 
     private Vector3 startDragPos; //Original position of the spacer
-	public Vector3 targetDragPos = new Vector3(8, -3, 13);
+	public Vector3 targetDragPos;
 
     protected override void Awake(){
         base.Awake();

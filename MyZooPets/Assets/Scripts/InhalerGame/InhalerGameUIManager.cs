@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InhalerHintEventArgs : EventArgs{
 	public bool IsDisplayingHint { get; set; }
@@ -26,7 +27,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	private int starIncrement = 0;
 	public GameObject[] lightsToTurnOff;
 	public ParticleSystemController[] particlesToTurnOff;
-
+	public List<GameObject> sliderNodes; //list of UI nodes to show game steps
 
 	public bool ShowHint{
 		get{ return showHint; }
@@ -41,9 +42,13 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	}
 
 	void Start(){
-		Input.multiTouchEnabled = true;
+		Input.multiTouchEnabled = false;
 		InhalerLogic.OnGameOver += OnGameEnd;
-		InhalerLogic.OnNextStep += OnNextStep;
+
+		// Reset the progress UI
+		foreach(GameObject go in sliderNodes) {
+			go.SetActive(false);
+		}
 
 		StartCoroutine(StartGame());
 
@@ -52,7 +57,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	void OnDestroy(){
 		InhalerLogic.OnGameOver -= OnGameEnd;
-		InhalerLogic.OnNextStep -= OnNextStep;
 		RewardManager.OnAllRewardsDone -= QuitInhalerGame;
 	}
 
@@ -65,22 +69,20 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	//----------------------------------------------
 	void Update(){
 		//if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
-		if(runShowHintTimer){
-			ShowHintTimer(); // This checks and shows hints if necessary.
+		if(runShowHintTimer) {
+			timer += Time.deltaTime;
+			if(timer > timeBeforeHints) {
+				showHint = true;
+
+				Analytics.Instance.InhalerHintRequired(InhalerLogic.Instance.CurrentStep);
+
+				if(HintEvent != null) {
+					HintEvent(this, new InhalerHintEventArgs(isDisplayingHint: true));
+				}
+
+				runShowHintTimer = false;
+			}
 		}
-	}
- 
-	private void HideProgressBar(){
-		progressBarObject.SetActive(false);
-	}
-
-	private void ShowHUD(){
-		HUDUIManager.Instance.ShowPanel();
-	}
-
-	private void HideHUD(){
-		HUDUIManager.Instance.HidePanel();
-		InventoryUIManager.Instance.HidePanel();
 	}
 
 	public void HideInhaler(){
@@ -93,75 +95,47 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	private IEnumerator StartGame(){
 		yield return 0;
+		HUDUIManager.Instance.HidePanel();
+		InventoryUIManager.Instance.HidePanel();
 
-		HideHUD();
-		SetUpHintTimer();
-
-		//Start the first hint
-		if(HintEvent != null)
-			HintEvent(this, new InhalerHintEventArgs(isDisplayingHint: true));
-	}
-
-	//----------------------------------------------------------
-	// SetUpHintTimer()
-	// Decides whether hints should be display right away or wait
-	// for the hint count down timer
-	//----------------------------------------------------------
-	private void SetUpHintTimer(){
 		//Show hint right away if it's users' first time
-		if((InhalerLogic.Instance.IsFirstTimeRescue && tutOn)){ 
+		if((InhalerLogic.Instance.IsFirstTimeRescue && tutOn)) {
 			runShowHintTimer = false;
 			showHint = true;
 		}
-		else{
+		else {
 			runShowHintTimer = true;
 			showHint = false;
 			timer = 0;
 		}
-	}
 
-	//----------------------------------------------------------
-	// ShowHintTimer()
-	//  Hints will be hidden at first, and shown only when the user 
-	// has not made the correct move after a specified period of time (timeBeforeHints).
-	//----------------------------------------------------------
-	private void ShowHintTimer(){ // to be called in Update()
-		timer += Time.deltaTime;
-		if(timer > timeBeforeHints){
-			showHint = true;
-
-			Analytics.Instance.InhalerHintRequired(InhalerLogic.Instance.CurrentStep);
-
-			if(HintEvent != null)
-				HintEvent(this, new InhalerHintEventArgs(isDisplayingHint: true));
-
-			runShowHintTimer = false;
+		//Start the first hint
+		if(HintEvent != null) {
+			HintEvent(this, new InhalerHintEventArgs(isDisplayingHint: true));
 		}
 	}
 
-	//----------------------------------------------------------
-	// ResetHintTimer()
-	//Timer is reset every time the current step changes
-	//----------------------------------------------------------
-	private void ResetHintTimer(){
-		timer = 0;
-		showHint = false; 
-		runShowHintTimer = true;
-	}
+	// Called from gameManager to see when next step
+	public void NextStepUI(int step){
+		//Timer is reset every time the current step changes
+		if(!InhalerLogic.Instance.IsFirstTimeRescue || !tutOn) {
+			timer = 0;
+			showHint = false;
+			runShowHintTimer = true;
+		}
 
-	//Event listener. Listens to when user moves on to the next step
-	private void OnNextStep(object sender, EventArgs args){
-		if(!InhalerLogic.Instance.IsFirstTimeRescue || !tutOn)
-			ResetHintTimer();
-
-		if(HintEvent != null)
+		if(HintEvent != null) {
 			HintEvent(this, new InhalerHintEventArgs(isDisplayingHint: false));
+		}
+
+		// Actually show the number of steps completed in UI
+		sliderNodes[step - 1].SetActive(true);
 	}
 
 	//Event listener. Listens to game over message. Play fire animation 
 	private void OnGameEnd(object sender, EventArgs args){
-		ShowHUD();
-		HideProgressBar();
+		HUDUIManager.Instance.ShowPanel();
+		progressBarObject.SetActive(false);
 
 		Invoke("GiveReward", 1.0f);
 	}

@@ -1,12 +1,11 @@
 using UnityEngine;
-using System.Collections;
 using System;
 
 //InhalerLogic stores and manipulate any inhaler game related data
 public class InhalerLogic : Singleton<InhalerLogic>{
 	public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
 	public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
-	public const int RESCUE_NUM_STEPS = 8;
+	public const int RESCUE_NUM_STEPS = 7;
 	private int currentStep = 1; //current step that user is on
 
 	/*
@@ -35,18 +34,17 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		return retVal; 
 	}
 
-	public bool IsDoneWithGame(){
-		return currentStep == RESCUE_NUM_STEPS-1;
-	}
-
-	//Use this function to move on to the next step
+	// Use this function to move on to the next step
 	public void NextStep(){
-		if(IsDoneWithGame()){
+		// Detect if game is done
+		if(currentStep == RESCUE_NUM_STEPS){
 			GameDone();
 		}
 		else{
 			currentStep++;
 
+			InhalerGameUIManager.Instance.NextStepUI(currentStep);
+			
 			if(OnNextStep != null){
 				OnNextStep(this, EventArgs.Empty);
 			}

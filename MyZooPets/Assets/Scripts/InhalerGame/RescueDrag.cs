@@ -1,80 +1,82 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
-/*
-    Dragging the whole inhaler (step 5)
-    Listens to drag. gameobject will be snapback if it doesn't land on the target collider
-*/
-public class RescueDrag : InhalerPart{
-    public List<GameObject> targetColliders = new List<GameObject>();
+/// <summary>
+/// Dragging the whole inhaler (step 5)
+/// Listens to drag. gameobject will be snapback if it doesn't land on the target collider
+/// </summary>
+public class RescueDrag : InhalerPart {
+	public List<GameObject> targetColliders = new List<GameObject>();
 
-    private Vector3 startDragPos; //Original position of the inhaler
-    private Vector3 targetDragPos; //Final position of the inhaler after drag
-    private bool doneWithDrag = true;
+	private Vector3 startDragPos; //Original position of the inhaler
+	private Vector3 targetDragPos; //Final position of the inhaler after drag
+	private bool doneWithDrag = true;
 
-    protected override void Awake(){
-        base.Awake();
-        gameStepID = 5;
-        startDragPos = transform.position;
-        targetDragPos = new Vector3(8.4f, 2.4f, 16.8f);
-    }
+	protected override void Awake() {
+		base.Awake();
+		gameStepID = 5;
+		startDragPos = transform.position;
+		targetDragPos = new Vector3(8.4f, 2.4f, 16.8f);
+	}
 
-    void OnDrag(DragGesture gesture){
-       // current gesture phase (Started/Updated/Ended)
-        ContinuousGesturePhase phase = gesture.Phase; 
+	void OnDrag(DragGesture gesture) {
+		// current gesture phase (Started/Updated/Ended)
+		ContinuousGesturePhase phase = gesture.Phase;
 
-        if(phase == ContinuousGesturePhase.Ended){ //Check where spacer has been dropped
-            Ray ray = Camera.main.ScreenPointToRay(gesture.Position);
-            RaycastHit hit ;
-            bool snapBack = true;
-            int maskLayer = 1 << 9;
+		if(phase == ContinuousGesturePhase.Ended) { //Check where spacer has been dropped
+			Ray ray = Camera.main.ScreenPointToRay(gesture.Position);
+			RaycastHit hit;
+			bool snapBack = true;
+			int maskLayer = 1 << 9;
 
-            //Snap to position if spacer is at target position or revert to start pos
-            if(Physics.Raycast(ray, out hit, 100, maskLayer)){
-                foreach(GameObject targetCollider in targetColliders){
-                    if(hit.collider.gameObject == targetCollider){ 
-                        transform.position = targetDragPos;
+			//Snap to position if spacer is at target position or revert to start pos
+			if(Physics.Raycast(ray, out hit, 100, maskLayer)) {
+				foreach(GameObject targetCollider in targetColliders) {
+					if(hit.collider.gameObject == targetCollider) {
+						transform.position = targetDragPos;
 
-                        if(!doneWithDrag && !isGestureRecognized){
+						if(!doneWithDrag && !isGestureRecognized) {
 							isGestureRecognized = true;
-                            NextStep();
-                            snapBack = false;
-                        }
-                    }
-                }
-            }
+							NextStep();
+							snapBack = false;
+						}
+					}
+				}
+			}
 
-            if(snapBack){
-                transform.position = startDragPos;
-            }
-        }
-    }
+			if(snapBack) {
+				transform.position = startDragPos;
+			}
+		}
+	}
 
-    protected override void Disable(){
-        foreach(GameObject targetCollider in targetColliders)
-            targetCollider.SetActive(false);
-    }
+	protected override void Disable() {
+		foreach(GameObject targetCollider in targetColliders) {
+			targetCollider.SetActive(false);
+		}
+	}
 
-    protected override void Enable(){
-        transform.GetComponent<Collider>().enabled = true;
+	protected override void Enable() {
+		transform.GetComponent<Collider>().enabled = true;
 
-        foreach(GameObject targetCollider in targetColliders)
-            targetCollider.SetActive(true);
+		foreach(GameObject targetCollider in targetColliders) {
+			targetCollider.SetActive(true);
+		}
 
-        doneWithDrag = false;
-    }
+		doneWithDrag = false;
+	}
 
-    protected override void NextStep(){
+	protected override void NextStep() {
 		// play sound here
-		AudioManager.Instance.PlayClip( "inhalerToMouth" );
-		
-        base.NextStep();
-        transform.GetComponent<Collider>().enabled = false;
+		AudioManager.Instance.PlayClip("inhalerToMouth");
 
-        foreach(GameObject targetCollider in targetColliders)
-            targetCollider.SetActive(false);
+		base.NextStep();
+		transform.GetComponent<Collider>().enabled = false;
 
-        doneWithDrag = true;
-    }
+		foreach(GameObject targetCollider in targetColliders) {
+			targetCollider.SetActive(false);
+		}
+
+		doneWithDrag = true;
+	}
 }

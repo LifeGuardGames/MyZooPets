@@ -43,7 +43,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 	void Start(){
 		Input.multiTouchEnabled = false;
-		InhalerLogic.OnGameOver += OnGameEnd;
 
 		// Reset the progress UI
 		foreach(GameObject go in sliderNodes) {
@@ -56,7 +55,6 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	}
 
 	void OnDestroy(){
-		InhalerLogic.OnGameOver -= OnGameEnd;
 		RewardManager.OnAllRewardsDone -= QuitInhalerGame;
 	}
 
@@ -132,19 +130,17 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		sliderNodes[step - 1].SetActive(true);
 	}
 
-	//Event listener. Listens to game over message. Play fire animation 
-	private void OnGameEnd(object sender, EventArgs args){
+	public void GameEndUI(){
 		HUDUIManager.Instance.ShowPanel();
 		progressBarObject.SetActive(false);
-
 		Invoke("GiveReward", 1.0f);
 	}
 	
 	//Reward player after the animation is done
 	private void GiveReward(){
-		//Reward xp
-		int nXP = DataLoaderXpRewards.GetXP("DailyInhaler", new Hashtable());
-		StatsManager.Instance.ChangeStats(xpDelta: nXP, coinsDelta: starIncrement);
+		// Reward XP
+		int xp = DataLoaderXpRewards.GetXP("DailyInhaler", new Hashtable());
+		StatsManager.Instance.ChangeStats(xpDelta: xp, coinsDelta: starIncrement);
 		
 		// Reward shards
 		int fireShardReward = 50;	

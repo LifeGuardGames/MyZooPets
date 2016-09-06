@@ -58,11 +58,7 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		currentStep = 1;
 	}
 
-	//---------------------------------------------------
-	// GameDone()
-	// Put anything in here that should happen as a result
-	// of the pet using the daily inhaler.
-	//---------------------------------------------------		
+	// Put anything in here that should happen as a result of the pet using the daily inhaler.
 	private void GameDone(){
 		InhalerGameUIManager.Instance.StopShowHintTimer();
 		StatsManager.Instance.ChangeStats(healthDelta: 5, hungerDelta: 100, isInternal: true);
@@ -73,24 +69,24 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 			DataManager.Instance.GameData.Inhaler.timesUsedInARow = 0;
 		}
 		DataManager.Instance.GameData.Inhaler.timesUsedInARow++;
-		// Save settings into data manager
+
+		// Save settings into DataManager
 		IsFirstTimeRescue = false;
 		DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed = PlayPeriodLogic.GetCurrentPlayPeriod();
 		DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime = LgDateTime.GetTimeNow();
 
-		if(OnGameOver != null){
-			OnGameOver(this, EventArgs.Empty);
-		}
-
-		//finish inhaler tutorial 
+		// Finish inhaler tutorial 
 		if(!IsTutorialCompleted){
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
 		}
 		
-		// send out a task completion event for the wellapad
+		// Send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted("DailyInhaler");
 
-		// calculate the next play period for the inhaler
-	PlayPeriodLogic.Instance.InhalerGameDonePostLogic();
+		// Calculate the next play period for the inhaler
+		PlayPeriodLogic.Instance.InhalerGameDonePostLogic();
+
+		// Show ending UI
+		InhalerGameUIManager.Instance.GameEndUI();
 	}
 }

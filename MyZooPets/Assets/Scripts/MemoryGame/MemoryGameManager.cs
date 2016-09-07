@@ -67,9 +67,10 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		//memoryUI.FinishBoard();
 	}
 
+	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward() {
 		WellapadMissionController.Instance.TaskCompleted("Score" + MinigameKey, Score);
-
+		
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
 			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),

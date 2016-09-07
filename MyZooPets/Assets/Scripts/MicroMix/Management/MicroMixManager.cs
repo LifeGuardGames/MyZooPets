@@ -174,6 +174,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		//AudioManager.Instance.PlayClip("microOver");	
 	}
 
+	// Award the actual xp and money, called when tween is complete
 	protected override void _GameOverReward(){
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,

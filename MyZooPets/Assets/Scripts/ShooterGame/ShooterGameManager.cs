@@ -166,7 +166,9 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		// IsPaused tracked by parent
 	}
 
+	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward() {
+		
 	}
 
 	protected override void _QuitGame() {

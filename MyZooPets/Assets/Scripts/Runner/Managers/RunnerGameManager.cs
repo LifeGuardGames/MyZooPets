@@ -119,6 +119,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		RunnerLevelManager.Instance.mCurrentLevelGroup.ReportDeath();
 	}
 
+	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward(){
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,

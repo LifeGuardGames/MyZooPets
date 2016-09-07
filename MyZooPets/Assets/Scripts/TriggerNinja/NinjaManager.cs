@@ -170,17 +170,18 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 		bonusRound = false;
 		spawning = false;
 
+	}
+
+	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
+	protected override void _GameOverReward() {
 		// send out combo task
 		WellapadMissionController.Instance.TaskCompleted("Score" + MinigameKey, score);
 		WellapadMissionController.Instance.TaskCompleted("Combo" + MinigameKey, bestCombo);
+
 		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey], bonusRoundCounter);
-#if UNITY_IOS
+	#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "NinjaLeaderBoard");
-#endif
-	}
-
-	protected override void _GameOverReward() {
-
+	#endif
 	}
 
 	protected override void _PauseGame() {

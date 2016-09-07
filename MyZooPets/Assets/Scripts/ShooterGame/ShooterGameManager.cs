@@ -22,7 +22,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	private ShooterUIManager shooterUI;
 
 	void Awake() {
-		minigameKey = "Shooter";
+		minigameKey = "SHOOTER";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardXPMultiplier = 0.1f;
 		rewardShardMultiplier = 12;

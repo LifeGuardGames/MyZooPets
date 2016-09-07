@@ -25,4 +25,6 @@ public class PetSleepController : MonoBehaviour {
 	private void WakeUP(){
 		isNight = false;
 	}
+
+
 }

@@ -50,7 +50,7 @@ public class NinjaManager : NewMinigameManager<NinjaManager> {
 
 	void Awake() {
 		Application.targetFrameRate = 60;
-		minigameKey = "Ninja";
+		minigameKey = "NINJA";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardMoneyMultiplier = 2;
 		rewardShardMultiplier = 4;

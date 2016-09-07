@@ -11,37 +11,18 @@ public class PetSleepController : MonoBehaviour {
 		if(!isNight){
 				PetSpeechAI.Instance.ShowSleepingMessageMsg();
 				blackScreen.SetActive(true);
-				StartCoroutine(NightTimer());
+			LeanTween.alpha(blackScreen.GetComponent<RectTransform>(),1.0f,2.0f).setOnComplete(NightTime);
 		}
 		else{
-			StartCoroutine(WakeUP());
+			LeanTween.alpha(blackScreen.GetComponent<RectTransform>(), 0.0f, 2.0f).setOnComplete(NightTime);
 		}
 	}
 
-	IEnumerator NightTimer(){
-		yield return new WaitForSeconds(0.1f);
-		c = blackScreen.GetComponent<Image>().color;
-		c.a += 0.1f;
-		blackScreen.GetComponent<Image>().color = c;
-        if(blackScreen.GetComponent<Image>().color.a <= 1){
-			StartCoroutine(NightTimer());
-		}
-		else{
-			isNight = true;
-		}
+	private void NightTime(){
+		isNight = true;	
 	}
 
-	IEnumerator WakeUP(){
-		yield return new WaitForSeconds(0.1f);
-		c = blackScreen.GetComponent<Image>().color;
-		c.a -= 0.1f;
-		blackScreen.GetComponent<Image>().color = c;
-		if(blackScreen.GetComponent<Image>().color.a > 0){
-			StartCoroutine(WakeUP());
-		}
-		else if (blackScreen.GetComponent<Image>().color.a <= 1){
-			blackScreen.SetActive(false);
-			isNight = false;
-		}
+	private void WakeUP(){
+		isNight = false;
 	}
 }

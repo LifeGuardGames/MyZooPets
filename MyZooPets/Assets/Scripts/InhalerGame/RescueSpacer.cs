@@ -1,17 +1,15 @@
 using UnityEngine;
-using System;
-using System.Collections;
 
-/*
-    Rescue Space (Rescue Step 2)
-    Listens to Drag gesture. If drag doesn't end on the target collider the spacer
-    will be snapped back to its starting position
-*/
+/// <summary>
+/// Rescue Space (Rescue Step 2)
+/// Listens to Drag gesture.If drag doesn't end on the target collider the spacer
+/// will be snapped back to its starting position
+/// </summary>
 public class RescueSpacer : InhalerPart{
-    public GameObject rescueSpacerTarget; //Target position of the spacer
-    public GameObject rescueBody; //Attach spacer to body
+    public GameObject rescueSpacerTarget;	//Target position of the spacer
+    public GameObject rescueBody;			//Attach spacer to body
 
-    private Vector3 startDragPos; //Original position of the spacer
+    private Vector3 startDragPos;			//Original position of the spacer
 	public Vector3 targetDragPos;
 
     protected override void Awake(){

@@ -1,9 +1,7 @@
-using System;
 using UnityEngine;
 using System.Collections;
-using Random = UnityEngine.Random;
 
-public class DoctorMatchManager : NewMinigameManager<DoctorMatchManager>{
+public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>{
 	public enum DoctorMatchButtonTypes{
 		None,
 		Green,

@@ -87,6 +87,6 @@ public class DoctorMatchLifeBarController : MonoBehaviour{
 
 	private void NotifyEmpty(){
 		StopDraining();
-		DoctorMatchManager.Instance.OnTimerBarEmpty();
+		DoctorMatchGameManager.Instance.OnTimerBarEmpty();
 	}
 }

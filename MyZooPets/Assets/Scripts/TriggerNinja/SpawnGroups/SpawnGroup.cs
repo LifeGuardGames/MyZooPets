@@ -96,7 +96,7 @@ public abstract class SpawnGroup {
 		// spawn the object at the proper location
 		GameObject prefab = Resources.Load(strObjectResource) as GameObject;
 		Vector3 vPos = Camera.main.ViewportToWorldPoint(new Vector3(fX, SPAWN_Y, SPAWN_Z));
-		GameObject go = GameObjectUtils.AddChild(NinjaManager.Instance.spawnParent, prefab);
+		GameObject go = GameObjectUtils.AddChild(NinjaGameManager.Instance.spawnParent, prefab);
 		go.transform.position = new Vector3(vPos.x, vPos.y, 0f);
 		go.transform.localEulerAngles = prefab.transform.localEulerAngles;
 

@@ -13,7 +13,7 @@ public class DoctorMatchTutorial : MinigameTutorial{
 
 	protected override void _End(bool isFinished){
 		if(isFinished){
-			DoctorMatchManager.Instance.NewGame();
+			DoctorMatchGameManager.Instance.NewGame();
 		}
 		else{
 			tutorialText.StartCoroutine(tutorialText.HideAll());
@@ -25,18 +25,18 @@ public class DoctorMatchTutorial : MinigameTutorial{
 		case 0: 
 			tutorialText = GameObject.FindObjectOfType<DoctorMatchTutorialText>();
 			tutorialText.ShowIntro();
-			DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(0);
+			DoctorMatchGameManager.Instance.assemblyLineController.SpawnTutorialSet(0);
 			break;
 		case 1:
-			DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(1);
+			DoctorMatchGameManager.Instance.assemblyLineController.SpawnTutorialSet(1);
 			tutorialText.ShowStage(1f);
 			break;
 		case 2:
-			DoctorMatchManager.Instance.assemblyLineController.SpawnTutorialSet(2);
+			DoctorMatchGameManager.Instance.assemblyLineController.SpawnTutorialSet(2);
 			tutorialText.ShowStage(1f);
 			break;
 		case 3:
-			DoctorMatchManager.Instance.assemblyLineController.PopulateQueue(compare: false, count: 7);
+			DoctorMatchGameManager.Instance.assemblyLineController.PopulateQueue(compare: false, count: 7);
 			tutorialText.ShowStage(1f);
 			break;
 		default:

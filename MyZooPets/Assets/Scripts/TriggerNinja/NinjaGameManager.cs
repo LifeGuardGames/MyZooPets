@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NinjaManager : NewMinigameManager<NinjaManager> {
+public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 	public GestureTrail trail;              // the gesture trail that follows the user's finger around
 	public float timeBetweenSpawnGroups;    // time between spawn groups
 	public bool bonusRound = false;         // triggers Bonus round

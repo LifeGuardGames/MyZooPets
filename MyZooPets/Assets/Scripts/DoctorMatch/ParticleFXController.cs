@@ -23,13 +23,13 @@ public class ParticleFXController : MonoBehaviour{
 		float comboBonusScalar = 1; //Applied to the size during these special ones
 		Vector3 toAim;
 		float yieldTime = .2f;
-		if(DoctorMatchManager.Instance.comboController.ComboLevel == 2){ //Big combo bonus
+		if(DoctorMatchGameManager.Instance.comboController.ComboLevel == 2){ //Big combo bonus
 			pSystem.startColor = Color.blue;
 			comboBonusScalar = 1.1f;
 			toAim = comboTransform.position;
 			yieldTime = .6f;
 		}
-		else if(DoctorMatchManager.Instance.comboController.ComboLevel == 1){ //Small combo bonus
+		else if(DoctorMatchGameManager.Instance.comboController.ComboLevel == 1){ //Small combo bonus
 			pSystem.startColor = Color.green;
 			comboBonusScalar = 1.1f;
 			toAim = scoreTransform.position;

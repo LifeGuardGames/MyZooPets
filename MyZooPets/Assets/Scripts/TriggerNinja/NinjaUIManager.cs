@@ -18,7 +18,7 @@ public class NinjaUIManager : MonoBehaviour {
 	#region Minigame Life UI
 	public void OnLivesChanged(int deltaLife) {
 		// get the number of lives there are
-		int lifeCount = NinjaManager.Instance.LifeCount;
+		int lifeCount = NinjaGameManager.Instance.LifeCount;
 		int nChange = deltaLife;
 		if(nChange < 0 && lifeCount + nChange >= -1) {
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
@@ -28,7 +28,7 @@ public class NinjaUIManager : MonoBehaviour {
 			if(Camera.main.GetComponent<Animation>() != null) {
 				Camera.main.GetComponent<Animation>().Play();
 				if(lifeCount == 0) {
-					NinjaManager.Instance.GameOver();
+					NinjaGameManager.Instance.GameOver();
 				}
 			}
 		}

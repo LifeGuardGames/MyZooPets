@@ -4,7 +4,7 @@ using System.Collections;
 public class BouncyPowerUp : NinjaTrigger {
 
 	protected override void _OnCut(){
-		NinjaManager.Instance.BeginBoucePowerUp();
+		NinjaGameManager.Instance.BeginBoucePowerUp();
 		Destroy(this.gameObject);
 	}
 

@@ -75,7 +75,7 @@ public class NinjaTrigger : MonoBehaviour{
 		// Directional particle spawn
 		if(goHitDirectionFX != null){
 			GameObject dirParticle = ParticleUtils.CreateParticle(goHitDirectionFX, vPosWorld);
-			Vector2 trailMoveDelta = NinjaManager.Instance.GetTrailDeltaMove();
+			Vector2 trailMoveDelta = NinjaGameManager.Instance.GetTrailDeltaMove();
 			dirParticle.GetComponent<XYComponentRotateObject>().x = trailMoveDelta.x;
 			dirParticle.GetComponent<XYComponentRotateObject>().y = trailMoveDelta.y;	
 		}
@@ -184,20 +184,20 @@ public class NinjaTrigger : MonoBehaviour{
 	private void TriggerOffScreen(){
 		// check to make sure the proper managers exist.  This check is necessary because this function will be triggered when the editor
 		// quits the game, and also when the user quits the game into another scene.
-		if(!AudioManager.Instance || !NinjaManager.Instance)
+		if(!AudioManager.Instance || !NinjaGameManager.Instance)
 			return;
 
 		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
 		// despite the game being over (because the object was becoming invisible).
 
-		if(NinjaManager.Instance.isGameOver)
+		if(NinjaGameManager.Instance.isGameOver)
 			return;	
 		
 		// if the object is going invisible and was cut, just destroy it
 		if(isCut)
 			Destroy(gameObject);
 		else{
-			if(transform.position.y <= yVal+5 && !NinjaManager.Instance.isBouncyTime){
+			if(transform.position.y <= yVal+5 && !NinjaGameManager.Instance.isBouncyTime){
 				//if(this.GetComponent<NinjaTriggerBomb>() ==null){
 				// otherwise, it means the object was missed
 					OnMissed();

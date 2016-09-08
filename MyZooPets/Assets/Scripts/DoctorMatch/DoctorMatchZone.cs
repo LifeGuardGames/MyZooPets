@@ -5,7 +5,7 @@ public class DoctorMatchZone : MonoBehaviour{
 	public Button button;
 	public EmergencyMicro parent;
 	//Used to determine if we are in DoctorMatch or MicroMix
-	public DoctorMatchManager.DoctorMatchButtonTypes buttonType;
+	public DoctorMatchGameManager.DoctorMatchButtonTypes buttonType;
 	public ParticleSystem particle;
 
 	private float lockTime = 0.05f;
@@ -19,7 +19,7 @@ public class DoctorMatchZone : MonoBehaviour{
 		if(!isLocked){
 			TempLock(lockTime);// Lock to prevent accidental double tapping
 			if(parent == null){
-				DoctorMatchManager.Instance.OnZoneClicked(buttonType);
+				DoctorMatchGameManager.Instance.OnZoneClicked(buttonType);
 			}
 			else{
 				parent.OnZoneClicked(buttonType);

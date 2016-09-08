@@ -108,8 +108,8 @@ public class AssemblyLineController : MonoBehaviour{
 	}
 
 	private void UpdateVisibleCount(){
-		float percentage = DoctorMatchManager.Instance.lifeBarController.Percentage; //Connection w/o manager
-		if(constantCount || itemQueue == null || DoctorMatchManager.Instance.Paused)
+		float percentage = DoctorMatchGameManager.Instance.lifeBarController.Percentage; //Connection w/o manager
+		if(constantCount || itemQueue == null || DoctorMatchGameManager.Instance.Paused)
 			return;
 		if(percentage < .2f){
 			visibleCount = (growsLowHealth) ? 5 : 1;

@@ -26,7 +26,7 @@ public class MinigameLife : MonoBehaviour{
 	
 	public void OnLivesChanged(int deltaLife){
 		// get the number of lives there are
-		int lifeCount = NinjaManager.Instance.LifeCount;
+		int lifeCount = NinjaGameManager.Instance.LifeCount;
 		int nChange = deltaLife;
 		//Debug.Log("Preparing life..." + nLives + " " + nChange);
 		if(nChange < 0 && lifeCount - nChange >= 0){
@@ -38,7 +38,7 @@ public class MinigameLife : MonoBehaviour{
 			if(Camera.main.GetComponent<Animation>() != null){
 				Camera.main.GetComponent<Animation>().Play();
 				if(lifeCount == 0) {
-					NinjaManager.Instance.GameOver();
+					NinjaGameManager.Instance.GameOver();
 				}
 			}
 		}

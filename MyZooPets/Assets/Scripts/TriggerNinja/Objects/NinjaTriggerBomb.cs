@@ -11,8 +11,8 @@ public class NinjaTriggerBomb : NinjaTrigger {
 		//if(!NinjaManager.Instance.isTutorialRunning){
 			// take lives from the player
 			int nLives = GetDamageValue();
-			NinjaManager.Instance.UpdateLife( -nLives );
-			NinjaManager.Instance.ResetChain();
+			NinjaGameManager.Instance.UpdateLife( -nLives );
+			NinjaGameManager.Instance.ResetChain();
 		//}
 		// then destroy the object
 		Destroy(gameObject);		

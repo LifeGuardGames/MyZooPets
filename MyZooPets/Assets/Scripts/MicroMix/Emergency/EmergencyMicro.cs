@@ -21,7 +21,7 @@ public class EmergencyMicro : Micro{
 		}
 	}
 
-	public void OnZoneClicked(DoctorMatchManager.DoctorMatchButtonTypes buttonType){
+	public void OnZoneClicked(DoctorMatchGameManager.DoctorMatchButtonTypes buttonType){
 		if(complete || MicroMixManager.Instance.IsTutorial){
 			return;
 		}

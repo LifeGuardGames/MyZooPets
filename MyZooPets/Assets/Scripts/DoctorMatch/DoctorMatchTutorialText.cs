@@ -20,7 +20,7 @@ public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText>{
 	}
 
 	public void ShowIntro(){
-		DoctorMatchManager.Instance.DisableZones();
+		DoctorMatchGameManager.Instance.DisableZones();
 		introTextObject.GetComponent<TweenToggleDemux>().Show();
 		introTextObject.GetComponentInChildren<Text>().text = Localization.Localize("DOCTOR_TUT_INTRO");
 		showTime = Time.time;
@@ -46,12 +46,12 @@ public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText>{
 			return;
 		}
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
-		DoctorMatchManager.Instance.EnableZones();
-		DoctorMatchManager.Instance.SpawnFinger(toShow - 1);
+		DoctorMatchGameManager.Instance.EnableZones();
+		DoctorMatchGameManager.Instance.SpawnFinger(toShow - 1);
 	}
 
 	private IEnumerator StageIEnum(){
-		DoctorMatchManager.Instance.DisableZones();
+		DoctorMatchGameManager.Instance.DisableZones();
 		yield return new WaitForSeconds(.5f);
 		stageTextObject.GetComponent<TweenToggleDemux>().Show();
 		stageTextObject.GetComponentInChildren<Text>().text = Localization.Localize("DOCTOR_TUT_" + toShow);

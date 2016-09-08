@@ -15,7 +15,7 @@ public class ComboController : MonoBehaviour{
 	private bool countingDown = true;
 
 	void Update(){
-		if(DoctorMatchManager.Instance.Paused || !countingDown)
+		if(DoctorMatchGameManager.Instance.Paused || !countingDown)
 			return;
 		if(currentComboTime > 0){
 			currentComboTime -= Time.deltaTime;

@@ -33,8 +33,8 @@ public class NinjaTutorial : MinigameTutorial {
 				GameObject.Destroy(trigger1Object);
 			}
 		}
-		NinjaManager.Instance.LifeCount = 3;
-		NinjaManager.Instance.isTutorialRunning = false;
+		NinjaGameManager.Instance.LifeCount = 3;
+		NinjaGameManager.Instance.isTutorialRunning = false;
 
 		if(swipeTutObject != null)
 			GameObject.Destroy(swipeTutObject);
@@ -44,12 +44,12 @@ public class NinjaTutorial : MinigameTutorial {
         switch(step){
             case 0:
 				// spawn each trigger
-				trigger1Object = NinjaManager.Instance.SpawnTriggersTutorial(1);
-				trigger2Object = NinjaManager.Instance.SpawnTriggersTutorial(2);
-				trigger3Object = NinjaManager.Instance.SpawnTriggersTutorial(3);
-				trigger4Object = NinjaManager.Instance.SpawnTriggersTutorial(4);
-				trigger5Object = NinjaManager.Instance.SpawnTriggersTutorial(5);
-				trigger6Object = NinjaManager.Instance.SpawnTriggersTutorial(6);
+				trigger1Object = NinjaGameManager.Instance.SpawnTriggersTutorial(1);
+				trigger2Object = NinjaGameManager.Instance.SpawnTriggersTutorial(2);
+				trigger3Object = NinjaGameManager.Instance.SpawnTriggersTutorial(3);
+				trigger4Object = NinjaGameManager.Instance.SpawnTriggersTutorial(4);
+				trigger5Object = NinjaGameManager.Instance.SpawnTriggersTutorial(5);
+				trigger6Object = NinjaGameManager.Instance.SpawnTriggersTutorial(6);
 				GameObject swipeTut = (GameObject) Resources.Load("NinjaSwipeTut");
 				swipeTutObject = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), swipeTut);
 

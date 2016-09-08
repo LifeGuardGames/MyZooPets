@@ -16,7 +16,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public string GetMinigameKey(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			return DoctorMatchManager.Instance.MinigameKey;
+			return DoctorMatchGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			return MemoryGameManager.Instance.MinigameKey;
@@ -28,7 +28,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			return ShooterGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA){
-			return NinjaManager.Instance.MinigameKey;
+			return NinjaGameManager.Instance.MinigameKey;
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
 			return MicroMixManager.Instance.MinigameKey;
@@ -41,7 +41,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public void OnPause(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			DoctorMatchManager.Instance.PauseGame();
+			DoctorMatchGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			Debug.LogWarning("PauseGame not set up for Memory");
@@ -53,7 +53,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			ShooterGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA){
-			NinjaManager.Instance.PauseGame();
+			NinjaGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
 			MicroMixManager.Instance.PauseGame();
@@ -65,7 +65,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public void OnResume(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			DoctorMatchManager.Instance.ResumeGame();
+			DoctorMatchGameManager.Instance.ResumeGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			Debug.LogWarning("ResumeGame not set up for Memory");
@@ -77,7 +77,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			ShooterGameManager.Instance.ResumeGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA){
-			NinjaManager.Instance.ResumeGame();
+			NinjaGameManager.Instance.ResumeGame();
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
 			MicroMixManager.Instance.ResumeGame();
@@ -89,7 +89,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public void OnTutorial(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			DoctorMatchManager.Instance.StartTutorial();
+			DoctorMatchGameManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			MemoryGameManager.Instance.StartTutorial();
@@ -101,7 +101,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			ShooterGameManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA){
-			NinjaManager.Instance.StartTutorial();
+			NinjaGameManager.Instance.StartTutorial();
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
 			MicroMixManager.Instance.StartTutorial();
@@ -113,7 +113,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public void OnContinue(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			DoctorMatchManager.Instance.ContinueGame();
+			DoctorMatchGameManager.Instance.ContinueGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			// Continues not allowed for this minigame
@@ -137,7 +137,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public void OnRestart(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			DoctorMatchManager.Instance.NewGame();
+			DoctorMatchGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			MemoryGameManager.Instance.NewGame();
@@ -149,7 +149,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			ShooterGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA){
-			NinjaManager.Instance.NewGame();
+			NinjaGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
 			MicroMixManager.Instance.NewGame();
@@ -161,7 +161,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 
 	public void QuitGame(){
 		if(sceneName == SceneUtils.DOCTORMATCH){
-			DoctorMatchManager.Instance.QuitGame();
+			DoctorMatchGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
 			MemoryGameManager.Instance.QuitGame();
@@ -173,7 +173,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			ShooterGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.TRIGGERNINJA){
-			NinjaManager.Instance.QuitGame();
+			NinjaGameManager.Instance.QuitGame();
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
 			MicroMixManager.Instance.QuitGame();

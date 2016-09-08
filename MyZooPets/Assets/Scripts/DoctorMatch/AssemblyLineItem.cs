@@ -5,9 +5,9 @@ public class AssemblyLineItem : MonoBehaviour{
 	public static int SPRITE_COUNT = 6;
 	public static float FADE_TIME = .3f;
 	public SpriteRenderer itemSprite;
-	private DoctorMatchManager.DoctorMatchButtonTypes itemType;
+	private DoctorMatchGameManager.DoctorMatchButtonTypes itemType;
 
-	public DoctorMatchManager.DoctorMatchButtonTypes ItemType{
+	public DoctorMatchGameManager.DoctorMatchButtonTypes ItemType{
 		get{
 			return itemType;
 		}
@@ -23,13 +23,13 @@ public class AssemblyLineItem : MonoBehaviour{
 		index = currentIndex;
 	
 		if(typeIndex == 0){
-			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Green;
+			itemType = DoctorMatchGameManager.DoctorMatchButtonTypes.Green;
 		}
 		else if(typeIndex == 1){
-			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Yellow;
+			itemType = DoctorMatchGameManager.DoctorMatchButtonTypes.Yellow;
 		}
 		else{
-			itemType = DoctorMatchManager.DoctorMatchButtonTypes.Red;
+			itemType = DoctorMatchGameManager.DoctorMatchButtonTypes.Red;
 		}
 		itemSprite.sprite = LoadSpriteZoneType(itemType, spriteIndex);
 	}
@@ -46,18 +46,18 @@ public class AssemblyLineItem : MonoBehaviour{
 		return index;
 	}
 
-	private Sprite LoadSpriteZoneType(DoctorMatchManager.DoctorMatchButtonTypes type, int spriteIndex){ //Sprite index is already optional as above
+	private Sprite LoadSpriteZoneType(DoctorMatchGameManager.DoctorMatchButtonTypes type, int spriteIndex){ //Sprite index is already optional as above
 		if(spriteIndex == -1)
 			spriteIndex = UnityEngine.Random.Range(1, SPRITE_COUNT);
 		Sprite spriteData = null;
 		switch(type){
-		case DoctorMatchManager.DoctorMatchButtonTypes.Green:
+		case DoctorMatchGameManager.DoctorMatchButtonTypes.Green:
 			spriteData = Resources.Load<Sprite>("happy_" + spriteIndex);
 			break;
-		case DoctorMatchManager.DoctorMatchButtonTypes.Yellow:
+		case DoctorMatchGameManager.DoctorMatchButtonTypes.Yellow:
 			spriteData = Resources.Load<Sprite>("sick1_" + spriteIndex);
 			break;
-		case DoctorMatchManager.DoctorMatchButtonTypes.Red:
+		case DoctorMatchGameManager.DoctorMatchButtonTypes.Red:
 			spriteData = Resources.Load<Sprite>("sick2_" + spriteIndex);
 			break;
 		default:

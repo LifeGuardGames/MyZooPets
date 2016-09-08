@@ -36,37 +36,37 @@ public class NinjaTriggerTarget : NinjaTrigger {
 
 	protected override void _OnCut() {
 		// award points
-		NinjaManager.Instance._UpdateScore(points);
+		NinjaGameManager.Instance._UpdateScore(points);
 
-		if(!NinjaManager.Instance.bonusRound) {
-			NinjaManager.Instance.IncreaseChain();
+		if(!NinjaGameManager.Instance.bonusRound) {
+			NinjaGameManager.Instance.IncreaseChain();
 		}
-		else if(NinjaManager.Instance.bonusRoundEnemies != 0) {
-			NinjaManager.Instance.bonusRoundEnemies--;
-			NinjaManager.Instance.CheckEndBonus();
+		else if(NinjaGameManager.Instance.bonusRoundEnemies != 0) {
+			NinjaGameManager.Instance.bonusRoundEnemies--;
+			NinjaGameManager.Instance.CheckEndBonus();
 		}
 		// increase the player's combo
-		NinjaManager.Instance.IncreaseCombo(1);
+		NinjaGameManager.Instance.IncreaseCombo(1);
 
 		Destroy(gameObject);
 	}
 	
 	protected override void _OnMissed() {
-		if(!NinjaManager.Instance.isTutorialRunning) {
+		if(!NinjaGameManager.Instance.isTutorialRunning) {
 			// the player loses a life
-			if(NinjaManager.Instance.bonusRound == false) {
-				NinjaManager.Instance.UpdateLife(-1);
-				NinjaManager.Instance.ResetChain();
+			if(NinjaGameManager.Instance.bonusRound == false) {
+				NinjaGameManager.Instance.UpdateLife(-1);
+				NinjaGameManager.Instance.ResetChain();
 			}
-			else if(NinjaManager.Instance.bonusRoundEnemies != 0) {
-				NinjaManager.Instance.bonusRoundEnemies--;
-				NinjaManager.Instance.CheckEndBonus();
+			else if(NinjaGameManager.Instance.bonusRoundEnemies != 0) {
+				NinjaGameManager.Instance.bonusRoundEnemies--;
+				NinjaGameManager.Instance.CheckEndBonus();
 			}
 		}
 	}
 
 	void OnTriggerEnter(Collider col) {
-		if(isOnScreen && !NinjaManager.Instance.bonusRound) {
+		if(isOnScreen && !NinjaGameManager.Instance.bonusRound) {
 			GetComponent<Rigidbody>().velocity = new Vector3(-GetComponent<Rigidbody>().velocity.x, GetComponent<Rigidbody>().velocity.y, GetComponent<Rigidbody>().velocity.z);
 		}
 	}

@@ -461,7 +461,7 @@ public class PlayerController : Singleton<PlayerController>{
 	//---------------------------------------------------
 	private void CheckAndActOnDeath(){
 		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver){
-			RunnerGameManager.Instance.EndGame();
+			RunnerGameManager.Instance.GameOver();
 		} 
 	}
 

@@ -92,7 +92,7 @@ public class MegaHazard : Singleton<MegaHazard>{
 			lost = true;
 		}
 		else if(currentOffset < 1 && lost){
-			RunnerGameManager.Instance.EndGame();
+			RunnerGameManager.Instance.GameOver();
 		}
 		if(PlayerController.Instance.StarMode){
 			health += healthTick * .75f * Time.deltaTime;

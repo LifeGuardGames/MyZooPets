@@ -41,13 +41,11 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	}
 
 	protected int score;
-
 	public int Score{
 		get { return score; }
 	}
 
 	protected bool isPaused = true;
-
 	public bool IsPaused{
 		get { return isPaused; }
 	}

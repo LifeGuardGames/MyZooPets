@@ -173,14 +173,25 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward() {
-		// send out combo task
-		WellapadMissionController.Instance.TaskCompleted("Score" + MinigameKey, score);
-		WellapadMissionController.Instance.TaskCompleted("Combo" + MinigameKey, bestCombo);
+		WellapadMissionController.Instance.TaskCompleted("ScoreNinja", score);
+		WellapadMissionController.Instance.TaskCompleted("ComboNinja", bestCombo);
+
+		StatsManager.Instance.ChangeStats(
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Ninja, Score, true);
 
 		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey], bonusRoundCounter);
-	#if UNITY_IOS
+		
+		#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "NinjaLeaderBoard");
-	#endif
+		#endif
 	}
 
 	protected override void _PauseGame() {

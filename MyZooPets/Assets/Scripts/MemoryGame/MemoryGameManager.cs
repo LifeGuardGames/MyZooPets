@@ -69,7 +69,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward() {
-		WellapadMissionController.Instance.TaskCompleted("Score" + MinigameKey, Score);
+		WellapadMissionController.Instance.TaskCompleted("ScoreMemory", Score);
 		
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
@@ -77,13 +77,16 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 			coinsDelta: rewardMoneyAux,
 			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
+
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Memory, Score, true);
 
 		Analytics.Instance.MemoryGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey]);
-#if UNITY_IOS
+
+		#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "MemoryLeaderBoard");
-#endif
+		#endif
 	}
 
 	protected override void _QuitGame() {

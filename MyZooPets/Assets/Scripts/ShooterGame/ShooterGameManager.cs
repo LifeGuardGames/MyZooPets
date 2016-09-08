@@ -60,16 +60,12 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		RemoveInhalerFingerTutorial();
 	}
 
-	public void MoveTut() {
-		if(inTutorial) {
-			if(OnTutorialStepDone != null) {
-				OnTutorialStepDone(this, EventArgs.Empty);
-			}
-		}
+	protected override void _PauseGame() {
+		// IsPaused tracked by parent
 	}
 
-	public void TriggerGameover() {
-		GameOver();
+	protected override void _ResumeGame() {
+		// IsPaused tracked by parent
 	}
 
 	protected override void _ContinueGame() {
@@ -81,12 +77,44 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 
 	protected override void _GameOver() {
 		isGameOver = true;
-		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
-		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
+	}
 
-#if UNITY_IOS
+	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
+	protected override void _GameOverReward() {
+		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
+		WellapadMissionController.Instance.TaskCompleted("ScoreShooter", Score);
+
+		StatsManager.Instance.ChangeStats(
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Shooter, Score, true);
+
+		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
+		
+		#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "ShooterLeaderBoard");
-#endif
+		#endif
+	}
+
+	protected override void _QuitGame() {
+	}
+
+	public void MoveTut() {
+		if(inTutorial) {
+			if(OnTutorialStepDone != null) {
+				OnTutorialStepDone(this, EventArgs.Empty);
+			}
+		}
+	}
+
+	public void TriggerGameover() {
+		GameOver();
 	}
 
 	public void OnTapped(TapGesture e) {
@@ -156,22 +184,5 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		if(shooterUI.fingerPos != null) {
 			Destroy(shooterUI.fingerPos.gameObject);
 		}
-	}
-
-	protected override void _PauseGame() {
-		// IsPaused tracked by parent
-	}
-
-	protected override void _ResumeGame() {
-		// IsPaused tracked by parent
-	}
-
-	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
-	protected override void _GameOverReward() {
-		
-	}
-
-	protected override void _QuitGame() {
-		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
 	}
 }

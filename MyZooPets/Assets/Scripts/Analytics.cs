@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
 public class Analytics : MonoBehaviour {
@@ -26,7 +24,6 @@ public class Analytics : MonoBehaviour {
     private static bool isCreated = false;
     private static Analytics instance;
     private bool isAnalyticsEnabled = false;
-
 
     //This instance creates itself if it's not in the scene.
     //Mainly for debugging purpose
@@ -67,7 +64,6 @@ public class Analytics : MonoBehaviour {
 			});
 		}
 	}
-
 	#endregion
 
 	#region Shooter Game
@@ -81,7 +77,6 @@ public class Analytics : MonoBehaviour {
 			});
 		}
 	}
-
 	#endregion
 
 	#region Memory Game
@@ -92,11 +87,9 @@ public class Analytics : MonoBehaviour {
 			});
 		}
 	}
-
 	#endregion
 
 	#region Runner Game
-
 	public void RunnerGameData(int score, string level, int distanceRan) {
 		if(isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Runner HighScore", new Dictionary<string, object>{
@@ -106,8 +99,16 @@ public class Analytics : MonoBehaviour {
 			});
 		}
 	}
+	#endregion
 
-
+	#region Doctor Match
+	public void DoctorHighScore(int score){
+		if(isAnalyticsEnabled){
+			Amplitude.Instance.logEvent("Doctor HighScore", new Dictionary<string, object>{
+				{ "Doctor High Score: ", score}
+			});
+		}
+	}
 	#endregion
 
 	#region Inhaler Game
@@ -119,18 +120,6 @@ public class Analytics : MonoBehaviour {
 			});
 		}
     }
-	#endregion
-
-	#region Doctor Match
-	public void DoctorHighScore (int score){
-		if(isAnalyticsEnabled){
-			Amplitude.Instance.logEvent("Doctor HighScore", new Dictionary<string, object>{
-				{ "Doctor High Score: ", score}
-			});
-		}
-	}
-
-
 	#endregion
 
 	#region MiniPet

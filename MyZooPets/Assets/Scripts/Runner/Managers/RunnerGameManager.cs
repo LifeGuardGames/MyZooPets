@@ -45,10 +45,6 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
-
-	public void EndGame(){
-		GameOver();
-	}
 	
 	// Use this for initialization
 	protected override void _Start(){
@@ -110,6 +106,16 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		PlayerController.Instance.PlayAnimation();
 	}
 
+	protected override void _ContinueGame() {
+		PlayerController.Instance.MakePlayerVisible(true);
+		MegaHazard.Instance.Reset();
+		PlayerController.Instance.ResetSpeed();
+		Vector3 spawnPos = FindObjectOfType<PlayerPhysics>().FindGroundedPosition(MegaHazard.Instance.bottomPosition.position);
+		PlayerController.Instance.transform.position = spawnPos;
+		acceptInput = false; //Prevent us from input anything until we have waited 3 seconds
+		StartCoroutine(WarmUp());
+	}
+
 	protected override void _GameOver(){
 		AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
@@ -121,29 +127,30 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward(){
+		WellapadMissionController.Instance.TaskCompleted("ScoreRunner", Score);
+		WellapadMissionController.Instance.TaskCompleted("DistanceRunner", ScoreManager.Instance.Distance);
+		WellapadMissionController.Instance.TaskCompleted("CoinsRunner", ScoreManager.Instance.Coins);
+
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
 			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
 			coinsDelta: rewardMoneyAux,
 			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
+
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
-		//BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
-		//TODO: Implement badges under RunnerGame
+
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, Score, true);
+
+		Analytics.Instance.RunnerGameData(Score, "", ScoreManager.Instance.Distance);	// TODO level missing!!!
+
+		#if UNITY_IOS
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
+		#endif
 	}
 
 	protected override void _QuitGame(){
 		Application.targetFrameRate = 30;
-	}
-
-	protected override void _ContinueGame(){
-		PlayerController.Instance.MakePlayerVisible(true);
-		MegaHazard.Instance.Reset();
-		PlayerController.Instance.ResetSpeed();
-		Vector3 spawnPos = FindObjectOfType<PlayerPhysics>().FindGroundedPosition(MegaHazard.Instance.bottomPosition.position);
-		PlayerController.Instance.transform.position = spawnPos;
-		acceptInput = false; //Prevent us from input anything until we have waited 3 seconds
-		StartCoroutine(WarmUp());
 	}
 
 	private IEnumerator WarmUp(){

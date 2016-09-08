@@ -9,14 +9,13 @@ public class RescueDrag : InhalerPart {
 	public List<GameObject> targetColliders = new List<GameObject>();
 
 	private Vector3 startDragPos; //Original position of the inhaler
-	private Vector3 targetDragPos; //Final position of the inhaler after drag
+	public Vector3 targetDragPos; //Final position of the inhaler after drag
 	private bool doneWithDrag = true;
 
 	protected override void Awake() {
 		base.Awake();
 		gameStepID = 5;
 		startDragPos = transform.position;
-		targetDragPos = new Vector3(8.4f, 2.4f, 16.8f);
 	}
 
 	void OnDrag(DragGesture gesture) {
@@ -76,7 +75,6 @@ public class RescueDrag : InhalerPart {
 		foreach(GameObject targetCollider in targetColliders) {
 			targetCollider.SetActive(false);
 		}
-
 		doneWithDrag = true;
 	}
 }

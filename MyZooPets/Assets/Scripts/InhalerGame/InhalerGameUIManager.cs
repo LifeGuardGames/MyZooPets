@@ -127,7 +127,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		}
 
 		// Actually show the number of steps completed in UI
-		sliderNodes[step - 1].SetActive(true);
+		sliderNodes[step - 2].SetActive(true);
 	}
 
 	public void GameEndUI(){

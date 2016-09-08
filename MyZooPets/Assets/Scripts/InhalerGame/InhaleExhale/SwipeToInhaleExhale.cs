@@ -15,12 +15,12 @@ public class SwipeToInhaleExhale : MonoBehaviour {
 
     // Use this for initialization
     protected virtual void Start () {
-        InhalerLogic.OnNextStep += CheckAndEnable;
+        InhalerGameManager.OnNextStep += CheckAndEnable;
         Disable();
     }
 
     protected virtual void OnDestroy(){
-        InhalerLogic.OnNextStep -= CheckAndEnable;
+        InhalerGameManager.OnNextStep -= CheckAndEnable;
     }
     
     // Update is called once per frame
@@ -42,9 +42,9 @@ public class SwipeToInhaleExhale : MonoBehaviour {
 
                     if(IsDragging(touch)){
                         //If swipe down and correct step. Move on to the next step
-                        if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
+                        if(InhalerGameManager.Instance.IsCurrentStepCorrect(gameStepID)){
                             // exhale.Play();
-                            InhalerLogic.Instance.NextStep();
+                            InhalerGameManager.Instance.NextStep();
                             Disable();
                         }
                     }
@@ -60,7 +60,7 @@ public class SwipeToInhaleExhale : MonoBehaviour {
 
     //Event Listener
     private void CheckAndEnable(object sender, EventArgs args){
-        if(gameStepID == InhalerLogic.Instance.CurrentStep){
+        if(gameStepID == InhalerGameManager.Instance.CurrentStep){
             GetComponent<Collider>().enabled = true;  
         }
     }

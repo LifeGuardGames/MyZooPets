@@ -7,9 +7,10 @@ using System.Collections.Generic;
 /// </summary>
 public class RescueDrag : InhalerPart {
 	public List<GameObject> targetColliders = new List<GameObject>();
+	public Vector3 targetDragPos; //Final position of the inhaler after drag
+	public Animation scaleAnim;
 
 	private Vector3 startDragPos; //Original position of the inhaler
-	public Vector3 targetDragPos; //Final position of the inhaler after drag
 	private bool doneWithDrag = true;
 
 	protected override void Awake() {
@@ -36,13 +37,13 @@ public class RescueDrag : InhalerPart {
 
 						if(!doneWithDrag && !isGestureRecognized) {
 							isGestureRecognized = true;
+							scaleAnim.Play("InhalerObjectPulse");
 							NextStep();
 							snapBack = false;
 						}
 					}
 				}
 			}
-
 			if(snapBack) {
 				transform.position = startDragPos;
 			}

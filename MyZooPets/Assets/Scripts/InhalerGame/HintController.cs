@@ -40,9 +40,9 @@ public class HintController : MonoBehaviour {
 		else {
 			bool isSkipAnimation = true;
 			// Reset the animation if there current animation is not valid
-			if(currentStepAux != InhalerLogic.Instance.CurrentStep) {
+			if(currentStepAux != InhalerGameManager.Instance.CurrentStep) {
 				isSkipAnimation = false;
-				currentStepAux = InhalerLogic.Instance.CurrentStep;
+				currentStepAux = InhalerGameManager.Instance.CurrentStep;
 			}
 
 			// NOTE: Since the animator is shared thru all objects, we want to take care not to overwrite with separate scripts
@@ -50,7 +50,7 @@ public class HintController : MonoBehaviour {
 			DisableHint(isSkipAnimation);
 
 			if(InhalerGameUIManager.Instance.ShowHint &&
-				showOnStep == InhalerLogic.Instance.CurrentStep) {
+				showOnStep == InhalerGameManager.Instance.CurrentStep) {
 				EnableHint();
 			}
 		}

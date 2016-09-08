@@ -2,14 +2,14 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-/*
-    This class sets up the basic structure of all the inhaler steps
-    It listens to OnNextStep from InhalerLogic. Inhaler steps will be activated
-    or deactivated at the appropriate steps
-*/
+/// <summary>
+/// This class sets up the basic structure of all the inhaler steps
+/// It listens to OnNextStep from InhalerLogic.Inhaler steps will be activated
+/// or deactivated at the appropriate steps
+/// </summary>
 public class InhalerPart : MonoBehaviour {
 	public Animator petAnimator;
-    protected int gameStepID; //The step in which the part will be activated
+    protected int gameStepID;					//The step in which the part will be activated
     protected Hashtable floatyOptions;
 	protected bool isGestureRecognized = false;
 
@@ -20,17 +20,17 @@ public class InhalerPart : MonoBehaviour {
 
     //Set up basic event handler. and disable inhaler part
     protected virtual void Start(){
-        InhalerLogic.OnNextStep += CheckAndEnable;
+        InhalerGameManager.OnNextStep += CheckAndEnable;
         Disable();
     }
 
     void OnDestroy(){
-        InhalerLogic.OnNextStep -= CheckAndEnable; 
+        InhalerGameManager.OnNextStep -= CheckAndEnable; 
     }
 
     //Check to see if inhaler part can be activated
     private void CheckAndEnable(object sender, EventArgs args){
-		if(InhalerLogic.Instance.CurrentStep == gameStepID) {
+		if(InhalerGameManager.Instance.CurrentStep == gameStepID) {
 			Enable();
 		}
     }
@@ -53,7 +53,6 @@ public class InhalerPart : MonoBehaviour {
 //            floatyOptions.Add("textSize", 128f);
 //        FloatyUtil.SpawnFloatyText(floatyOptions);
 
-		InhalerLogic.Instance.NextStep();
+		InhalerGameManager.Instance.NextStep();
     }
-
 }

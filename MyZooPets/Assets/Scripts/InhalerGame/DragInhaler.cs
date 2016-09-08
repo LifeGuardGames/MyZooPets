@@ -25,7 +25,7 @@ public class DragInhaler : MonoBehaviour {
     }
 
     void Update(){
-        if(InhalerLogic.Instance.CurrentStep != advairStepID) return;
+        if(InhalerGameManager.Instance.CurrentStep != advairStepID) return;
         if(!GetComponent<Collider>().enabled) GetComponent<Collider>().enabled = true;
         if(Input.touchCount > 0){
             Touch touch = Input.touches[0];
@@ -51,8 +51,8 @@ public class DragInhaler : MonoBehaviour {
 
                     firstTouchOnObject = false;
                     if(InhalerUtility.IsTouchingObject(touch, petSprite)){ //Check if advair drop on pet
-                        if(InhalerLogic.Instance.IsCurrentStepCorrect(advairStepID)){
-                            InhalerLogic.Instance.NextStep();
+                        if(InhalerGameManager.Instance.IsCurrentStepCorrect(advairStepID)){
+                            InhalerGameManager.Instance.NextStep();
                             HideSmallInhaler();
                         }
                     }else{

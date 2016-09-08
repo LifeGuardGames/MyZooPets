@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 
 //InhalerLogic stores and manipulate any inhaler game related data
-public class InhalerLogic : Singleton<InhalerLogic>{
+public class InhalerGameManager : Singleton<InhalerGameManager> {
 	public static EventHandler<EventArgs> OnGameOver; //Game over show game over message
 	public static EventHandler<EventArgs> OnNextStep; //Completed one step, so move on
 	public const int RESCUE_NUM_STEPS = 7;
@@ -15,57 +15,57 @@ public class InhalerLogic : Singleton<InhalerLogic>{
     */
 
 	//return the current step of a sequence
-	public int CurrentStep{
-		get{ return currentStep;}
+	public int CurrentStep {
+		get { return currentStep; }
 	}
 
-	public bool IsFirstTimeRescue{
-		get{ return DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue; }
-		set{ DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue = value; }
+	public bool IsFirstTimeRescue {
+		get { return DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue; }
+		set { DataManager.Instance.GameData.Inhaler.IsFirstTimeRescue = value; }
 	}
 
-	public bool IsTutorialCompleted{
-		get{ return DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER);}
+	public bool IsTutorialCompleted {
+		get { return DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_INHALER); }
 	}
 
 	//True: the step that the user is currently on is correct, False: wrong step
-	public bool IsCurrentStepCorrect(int step){
+	public bool IsCurrentStepCorrect(int step) {
 		bool retVal = step == currentStep;
-		return retVal; 
+		return retVal;
 	}
 
 	// Use this function to move on to the next step
-	public void NextStep(){
-		// Detect if game is done
-		if(currentStep == RESCUE_NUM_STEPS){
+	public void NextStep() {
+		Debug.Log("NECT STEP CALLE");
+		if(currentStep == RESCUE_NUM_STEPS) {       // Detect if game is done
+			currentStep++;
 			GameDone();
 		}
-		else{
+		else {
 			currentStep++;
-
-			InhalerGameUIManager.Instance.NextStepUI(currentStep);
-			
-			if(OnNextStep != null){
+			if(OnNextStep != null) {
 				OnNextStep(this, EventArgs.Empty);
 			}
-			else{
+			else {
 				Debug.LogError("OnNextStep has no listeners");
 			}
 		}
+		Debug.Log("NECT " + currentStep);
+		InhalerGameUIManager.Instance.NextStepUI(currentStep);
 	}
 
-	public void ResetGame(){
+	public void ResetGame() {
 		currentStep = 1;
 	}
 
 	// Put anything in here that should happen as a result of the pet using the daily inhaler.
-	private void GameDone(){
+	private void GameDone() {
 		InhalerGameUIManager.Instance.StopShowHintTimer();
 		StatsManager.Instance.ChangeStats(healthDelta: 5, hungerDelta: 100, isInternal: true);
 		DateTime now = LgDateTime.GetTimeNow();
 		DateTime then = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed;
 		TimeSpan lastTimeSinceInhaler = now - then;
-		if(lastTimeSinceInhaler.TotalHours > 24){
+		if(lastTimeSinceInhaler.TotalHours > 24) {
 			DataManager.Instance.GameData.Inhaler.timesUsedInARow = 0;
 		}
 		DataManager.Instance.GameData.Inhaler.timesUsedInARow++;
@@ -76,10 +76,10 @@ public class InhalerLogic : Singleton<InhalerLogic>{
 		DataManager.Instance.GameData.Inhaler.LastInhalerPlayTime = LgDateTime.GetTimeNow();
 
 		// Finish inhaler tutorial 
-		if(!IsTutorialCompleted){
+		if(!IsTutorialCompleted) {
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TutorialManagerBedroom.TUT_INHALER);
 		}
-		
+
 		// Send out a task completion event for the wellapad
 		WellapadMissionController.Instance.TaskCompleted("DailyInhaler");
 

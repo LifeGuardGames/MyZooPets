@@ -3,15 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class InhalerHintEventArgs : EventArgs{
+public class InhalerHintEventArgs : EventArgs {
 	public bool IsDisplayingHint { get; set; }
 
-	public InhalerHintEventArgs(bool isDisplayingHint = true){
+	public InhalerHintEventArgs(bool isDisplayingHint = true) {
 		IsDisplayingHint = isDisplayingHint;
 	}
 }
 
-public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
+public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 	public static EventHandler<InhalerHintEventArgs> HintEvent; //Fire this event when hints need to display 
 
 	public GameObject progressBarObject;
@@ -29,19 +29,19 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	public ParticleSystemController[] particlesToTurnOff;
 	public List<GameObject> sliderNodes; //list of UI nodes to show game steps
 
-	public bool ShowHint{
-		get{ return showHint; }
+	public bool ShowHint {
+		get { return showHint; }
 	}
 
-	public void StopShowHintTimer(){
+	public void StopShowHintTimer() {
 		runShowHintTimer = false;
 	}
 
-	void Awake(){
+	void Awake() {
 		RewardManager.OnAllRewardsDone += QuitInhalerGame;
 	}
 
-	void Start(){
+	void Start() {
 		Input.multiTouchEnabled = false;
 
 		// Reset the progress UI
@@ -51,10 +51,10 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 
 		StartCoroutine(StartGame());
 
-		isFirstTimeAux = InhalerLogic.Instance.IsFirstTimeRescue;
+		isFirstTimeAux = InhalerGameManager.Instance.IsFirstTimeRescue;
 	}
 
-	void OnDestroy(){
+	void OnDestroy() {
 		RewardManager.OnAllRewardsDone -= QuitInhalerGame;
 	}
 
@@ -65,14 +65,14 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	// If it is false, that means the hints should be shown 
 	// throughout the game (for someone's first time playing this).
 	//----------------------------------------------
-	void Update(){
+	void Update() {
 		//if(runShowHintTimer && !InhalerLogic.Instance.IsDoneWithGame()){
 		if(runShowHintTimer) {
 			timer += Time.deltaTime;
 			if(timer > timeBeforeHints) {
 				showHint = true;
 
-				Analytics.Instance.InhalerHintRequired(InhalerLogic.Instance.CurrentStep);
+				Analytics.Instance.InhalerHintRequired(InhalerGameManager.Instance.CurrentStep);
 
 				if(HintEvent != null) {
 					HintEvent(this, new InhalerHintEventArgs(isDisplayingHint: true));
@@ -83,21 +83,21 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		}
 	}
 
-	public void HideInhaler(){
+	public void HideInhaler() {
 		inhalerWholeObject.Play("InhalerFade");
 	}
 
-	private void ShowInhaler(){
+	private void ShowInhaler() {
 		inhalerBody.SetActive(true);
 	}
 
-	private IEnumerator StartGame(){
+	private IEnumerator StartGame() {
 		yield return 0;
 		HUDUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 
 		//Show hint right away if it's users' first time
-		if((InhalerLogic.Instance.IsFirstTimeRescue && tutOn)) {
+		if((InhalerGameManager.Instance.IsFirstTimeRescue && tutOn)) {
 			runShowHintTimer = false;
 			showHint = true;
 		}
@@ -114,9 +114,9 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 	}
 
 	// Called from gameManager to see when next step
-	public void NextStepUI(int step){
+	public void NextStepUI(int step) {
 		//Timer is reset every time the current step changes
-		if(!InhalerLogic.Instance.IsFirstTimeRescue || !tutOn) {
+		if(!InhalerGameManager.Instance.IsFirstTimeRescue || !tutOn) {
 			timer = 0;
 			showHint = false;
 			runShowHintTimer = true;
@@ -130,31 +130,31 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager>{
 		sliderNodes[step - 2].SetActive(true);
 	}
 
-	public void GameEndUI(){
+	public void GameEndUI() {
 		HUDUIManager.Instance.ShowPanel();
 		progressBarObject.SetActive(false);
 		Invoke("GiveReward", 1.0f);
 	}
-	
+
 	//Reward player after the animation is done
-	private void GiveReward(){
+	private void GiveReward() {
 		// Reward XP
 		int xp = DataLoaderXpRewards.GetXP("DailyInhaler", new Hashtable());
 		StatsManager.Instance.ChangeStats(xpDelta: xp, coinsDelta: starIncrement);
-		
+
 		// Reward shards
-		int fireShardReward = 50;	
-		if(isFirstTimeAux){	// First time tutorial gives you full crystal
+		int fireShardReward = 50;
+		if(isFirstTimeAux) {    // First time tutorial gives you full crystal
 			fireShardReward = 100;
 		}
 		FireCrystalManager.Instance.RewardShards(fireShardReward);
 
 		// Check for badge reward
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Inhaler, 1, false);
-		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Retention, DataManager.Instance.GameData.Inhaler.timesUsedInARow,true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Retention, DataManager.Instance.GameData.Inhaler.timesUsedInARow, true);
 	}
 
-	private void QuitInhalerGame(object sender, EventArgs args){
+	private void QuitInhalerGame(object sender, EventArgs args) {
 		LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 	}
 }

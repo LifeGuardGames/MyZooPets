@@ -19,7 +19,7 @@ public class RescuePrescription : InhalerPart {
 	#if UNITY_EDITOR
 	void Update() {
 		if(Input.GetKeyDown(KeyCode.P)) {
-			if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)) {
+			if(InhalerGameManager.Instance.IsCurrentStepCorrect(gameStepID)) {
 				OnTap(null);
             }
 		}

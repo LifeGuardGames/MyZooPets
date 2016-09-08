@@ -18,7 +18,7 @@ public class RescueCap : InhalerPart{
             direction == FingerGestures.SwipeDirection.LowerLeftDiagonal){
 
             //If current step is the right sequence
-            if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
+            if(InhalerGameManager.Instance.IsCurrentStepCorrect(gameStepID)){
 
 				if(!isGestureRecognized){
 					isGestureRecognized = true;

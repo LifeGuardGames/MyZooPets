@@ -222,7 +222,8 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 		}
 	}
 
-	private void CloseFinishHelper() {
+	// Called from finish tween callback
+	public void CloseFinishHelper() {
 		if(isOpenedAsReward) {
 			//Notify anything that is listening to animation done
 			if(OnBadgeUIAnimationDone != null) {

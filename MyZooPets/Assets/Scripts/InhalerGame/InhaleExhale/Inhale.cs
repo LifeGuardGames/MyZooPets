@@ -16,74 +16,58 @@ public class Inhale : InhalerPart {
 
 	void OnSwipe(SwipeGesture gesture) {
 		FingerGestures.SwipeDirection direction = gesture.Direction;
-
 		if(direction == FingerGestures.SwipeDirection.Left) {
 			if(!isGestureRecognized) {
-				isGestureRecognized = true;
-
-				//Disable hint when swipe gesture is registered. 
-				GetComponent<HintController>().DisableHint(false);
-
-				LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
-				AudioManager.Instance.PlayClip("inhalerInhale");
-				petAnimator.SetTrigger("BreatheIn");
-
-				Debug.LogWarning("FLOATY SPAWN HERE");
-				/*
-				Hashtable option = new Hashtable();
-				option.Add("parent", GameObject.Find("Canvas"));
-				option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-				option.Add("prefab", "FloatyTextInhalerGame");
-				option.Add("textSize", 84f);
-				option.Add("color", Color.white);
-				
-				FloatyUtil.SpawnFloatyText(option);
-				*/
-
-				if(finish != null) {
-					finish(this, EventArgs.Empty);
-				}
-				InhalerBodyMoveAnimation.Play();
+				GesturePassAction();
 			}
 		}
 	}
+
 	void OnDrag(DragGesture gesture) {
 		if(!isGestureRecognized) {
 			Vector3 begin = new Vector3(0, 0, 0);
 			Vector3 ended;
-
 			if(gesture.Phase == ContinuousGesturePhase.Ended) {
 				ended = gesture.Position;
 				begin = gesture.StartPosition;
 				if(begin.x > ended.x) {
-					isGestureRecognized = true;
-
-					//Disable hint when swipe gesture is registered. 
-					GetComponent<HintController>().DisableHint(false);
-
-					LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
-					AudioManager.Instance.PlayClip("inhalerInhale");
-					petAnimator.SetTrigger("BreatheIn");
-
-					Debug.LogWarning("FLOATY SPAWN HERE");
-					/*
-					Hashtable option = new Hashtable();
-					option.Add("parent", GameObject.Find("Canvas"));
-					option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-					option.Add("prefab", "FloatyTextInhalerGame");
-					option.Add("textSize", 84f);
-					option.Add("color", Color.white);
-
-					FloatyUtil.SpawnFloatyText(option);
-					*/
-
-					if(finish != null) {
-						finish(this, EventArgs.Empty);
-					}
-					InhalerBodyMoveAnimation.Play();
-				}
+					GesturePassAction();
+                }
 			}
 		}
+	}
+
+	// Actual implementation of the result of two gestures
+	public void GesturePassAction() {
+		isGestureRecognized = true;
+
+		//Disable hint when swipe gesture is registered. 
+		GetComponent<HintController>().DisableHint(false);
+
+		LgInhalerAnimationEventHandler.BreatheInEndEvent += BreatheInEndEventHandler;
+		AudioManager.Instance.PlayClip("inhalerInhale");
+		petAnimator.SetTrigger("BreatheIn");
+
+		Debug.LogWarning("FLOATY SPAWN HERE");
+		/*
+		Hashtable option = new Hashtable();
+		option.Add("parent", GameObject.Find("Canvas"));
+		option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
+		option.Add("prefab", "FloatyTextInhalerGame");
+		option.Add("textSize", 84f);
+		option.Add("color", Color.white);
+
+		FloatyUtil.SpawnFloatyText(option);
+		*/
+
+		if(finish != null) {
+			finish(this, EventArgs.Empty);
+		}
+		InhalerBodyMoveAnimation.Play();
+
+		// Custom override to show the last step
+		Debug.Log("STEP 8======");
+		InhalerGameUIManager.Instance.NextStepUI(8);
 	}
 
 	protected override void Disable() {

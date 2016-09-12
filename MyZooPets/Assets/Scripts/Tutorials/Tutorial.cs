@@ -181,25 +181,23 @@ public abstract class Tutorial{
 		
 		// create the spotlight
 		GameObject goResource = Resources.Load(spotlightPrefab) as GameObject;
-		string anchorName = "Anchor-" + anchor.ToString();
-		goSpotlight = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), goResource);
+		goSpotlight = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
 		
 		// Set the delay if defined
 		if(delay > 0){
 			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			//goSpotlight.GetComponent<TweenAlpha>().delay = delay;
+//			goSpotlight.GetComponent<AlphaTweenToggle>().showDelay = delay;
 		}
 		
 		// move the spotlight into position
-		focusPos.z = goSpotlight.transform.localPosition.z; // keep the default z-value of the spotlight
 		goSpotlight.transform.localPosition = focusPos;
 
 		// spawn finger hint
 		if(fingerHint){
 			GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-			goFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
+			goFingerHint = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, fingerHintResource);
 			focusPos.z = goFingerHint.transform.localPosition.z;
-			focusPos.y = focusPos.y + fingerHintOffsetY; //offset in Y so the finger hint doesn't overlap the image
+			focusPos.y = focusPos.y + fingerHintOffsetY;		//offset in Y so the finger hint doesn't overlap the image
 			focusPos.x = focusPos.x + fingerHintOffsetX;
 			goFingerHint.transform.localPosition = focusPos;
 

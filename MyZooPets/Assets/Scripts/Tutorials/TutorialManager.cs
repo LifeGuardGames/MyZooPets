@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using System.Collections.Generic;
-
 /// <summary>
 /// Tutorial manager.
 /// Used in scenes like the yard and bedroom to keep
 /// track of game tutorials.
 /// </summary>
 public class TutorialManager : Singleton<TutorialManager>{
+	public GameObject UICanvasParent;         // Used for spawning things
 	
 	// public on/off switch for testing while in development
 	protected bool isTutorialEnabled;

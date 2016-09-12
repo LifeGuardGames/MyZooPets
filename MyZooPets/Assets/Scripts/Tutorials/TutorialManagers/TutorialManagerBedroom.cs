@@ -1,7 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Tutorial manager bedroom.
@@ -21,7 +19,7 @@ public class TutorialManagerBedroom : TutorialManager{
 	public const string TUT_DECOS = "TUT_DECOS";
 	public const string TUT_MOOD_DEGRADE = "TUT_TIME_DECAY";
 	public bool spawnedTutorial;
-
+	
 	// tutorial that's is not related to the intro tutorial 
 	public const string TUT_FEED_PET = "TUT_FEED_PET";
 	

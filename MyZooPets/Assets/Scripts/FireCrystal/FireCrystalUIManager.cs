@@ -19,7 +19,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	public GameObject shardSpritePrefab;
 	public GameObject shardParent;
 	public float totalTimeTween = 1.5f;
-	public Animation crystalAnimation;
+	public Animator crystalAnimator;
 	public ParticleSystem getGemParticle;
 	public GameObject clickableFireCrystalPrefab;
 
@@ -116,11 +116,13 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 		}
 	}
 
+	// Callback from tween
 	public void CloseFinishedHelper(){
 		isFireCrystalUIAnimating = false;
 
 		// Notify anything that is listening to this done
 		if(OnFireCrystalUIAnimationDone != null){
+			Debug.Log("FIRE FINISHED");
 			OnFireCrystalUIAnimationDone(this, EventArgs.Empty);
 		}
 	}
@@ -189,7 +191,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager>{
 	}
 
 	private void RewardFireCrystal(){
-		crystalAnimation.Play();
+		crystalAnimator.SetTrigger("GetFire");
 	}
 
 	// Event callback from the crystal animation CrystalPop

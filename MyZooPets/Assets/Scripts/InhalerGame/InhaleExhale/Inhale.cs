@@ -66,8 +66,8 @@ public class Inhale : InhalerPart {
 		InhalerBodyMoveAnimation.Play();
 
 		// Custom override to show the last step
-		Debug.Log("STEP 8======");
 		InhalerGameUIManager.Instance.NextStepUI(8);
+		GetComponent<HintController>().DisableHint(false);
 	}
 
 	protected override void Disable() {

@@ -167,7 +167,6 @@ public class HUDAnimator : MonoBehaviour{
 	/// </summary>
 	private void TweenMoveToPoint(StatType statType, int amount, Vector3 originPoint, string sound){
 		float duration = 1f;
-		Sprite imageSprite;
 		Vector3 endPosition = Vector3.zero;
 		float modifier = 3f;	// How many to spawn for each change
 		bool isPlusAnimation = false;	// Used for "adding" animation otherwise "substracting" animation

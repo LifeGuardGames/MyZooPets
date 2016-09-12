@@ -36,7 +36,6 @@ public class InhalerGameManager : Singleton<InhalerGameManager> {
 
 	// Use this function to move on to the next step
 	public void NextStep() {
-		Debug.Log("NECT STEP CALLE");
 		if(currentStep == RESCUE_NUM_STEPS) {       // Detect if game is done
 			currentStep++;
 			GameDone();
@@ -50,7 +49,6 @@ public class InhalerGameManager : Singleton<InhalerGameManager> {
 				Debug.LogError("OnNextStep has no listeners");
 			}
 		}
-		Debug.Log("NECT " + currentStep);
 		InhalerGameUIManager.Instance.NextStepUI(currentStep);
 	}
 

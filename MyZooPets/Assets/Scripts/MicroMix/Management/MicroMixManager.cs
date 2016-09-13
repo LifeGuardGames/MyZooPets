@@ -17,6 +17,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 
 	public MicroMixLives lifeController;
 	public MicroMixFireworks fireworksController;
+	public MicroMixBossTimer timer;
 
 	private Micro currentMicro;
 	private Micro[] microList;
@@ -338,6 +339,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	}
 
 	private void StartMicro(){
+		Debug.Log(currentMicro);
 		currentMicro.gameObject.SetActive(true);
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(currentMicro.Title)){
 			isTutorial = true;

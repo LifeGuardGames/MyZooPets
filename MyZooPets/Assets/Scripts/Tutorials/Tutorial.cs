@@ -1,81 +1,78 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
 /// Parent class for all tutorials
 /// </summary>
-public abstract class Tutorial{
+public abstract class Tutorial {
 	//---------------------Events--------------------------
 	public EventHandler<TutorialEndEventArgs> OnTutorialEnd; // when the tutorial ends
 
 	// ----------- Abstract functions -------------------
-	protected abstract void SetKey();						// the tutorial key is used to mark a lot of lists
-	protected abstract void SetMaxSteps();					// set the max steps of the tutorial
-	protected abstract void ProcessStep(int nStep);		// the meat of a tutorial is processing its steps and doing things
-	protected abstract void _End(bool isFinished);			// when the tutorial is finishd
-	
+	protected abstract void SetKey();                       // the tutorial key is used to mark a lot of lists
+	protected abstract void SetMaxSteps();                  // set the max steps of the tutorial
+	protected abstract void ProcessStep(int nStep);			// the meat of a tutorial is processing its steps and doing things
+	protected abstract void _End(bool isFinished);          // when the tutorial is finishd
+
 	// ----------- Tutorial Popup types -------------------
-	protected const string POPUP_STD = "TutorialPopup_Standard";
-	protected const string POPUP_STD_WITH_IMAGE = "TutorialPopup_StandardWithImage";
-	protected const string POPUP_LONG = "TutorialPopup_Long";
-	protected const string POPUP_LONG_WITH_BUTTON = "TutorialPopup_LongWithButton";
-	protected const string POPUP_LONG_WITH_BUTTON_AND_IMAGE = "TutorialPopup_LongWithButtonAndImage";
+	protected const string TUTPOPUPTEXT = "TutorialPopupText";
+
 	protected int maxSteps; // max steps in the tutorial
 	protected string tutorialKey; // key for this tutorial
 	protected Vector3 POS_TOP = new Vector3(0, 201, -10); //top position to spawn the popup (NGUI)
 	protected Vector3 POS_BOT = new Vector3(0, -275, -10); //bottom position to spawn the popup (NGUI)
 
 	private List<GameObject> listCanProcess = new List<GameObject>(); // list of objects that can be processed as input
-	private GameObject goSpotlight;	// current (and only) spotlight object this tutorial is highlighting
+	private GameObject goSpotlight; // current (and only) spotlight object this tutorial is highlighting
 	protected GameObject goPopup; // current (and only) tutorial popup
 	private GameObject goFingerHint; //current finger hint
-	private GameObject goRetentionPet;	// Current retention pet sprite
+	private GameObject goRetentionPet;  // Current retention pet sprite
 	private int currentStep; // step the tutorial is currently on
 
-	public bool CanProcess(GameObject go){
+	public bool CanProcess(GameObject go) {
 		bool canProcess = listCanProcess.Contains(go);
 		return canProcess;
 	}
 
 	//Return the current step that the tutorial is on
-	public int GetStep(){
-		return currentStep;	
+	public int GetStep() {
+		return currentStep;
 	}
 
-	protected void AddToProcessList(GameObject go, bool isDebugLog = false){
+	protected void AddToProcessList(GameObject go, bool isDebugLog = false) {
 		listCanProcess.Add(go);
-		if(isDebugLog){
+		if(isDebugLog) {
 			// Debug tag here
 		}
 	}
-	
-	protected void RemoveFromProcessList(GameObject go){
-		listCanProcess.Remove(go);	
+
+	protected void RemoveFromProcessList(GameObject go) {
+		listCanProcess.Remove(go);
 	}
 
 	//Set the tutorial to a specific step
-	protected void SetStep(int num){
+	protected void SetStep(int num) {
 		currentStep = num;
 		// if we have exceeded max steps in this tutorial, end it
-		if(currentStep >= maxSteps){
+		if(currentStep >= maxSteps) {
 			End(true);
 		}
-		else{
+		else {
 			ProcessStep(currentStep);
 		}
 	}
 
 	//Return the key of this tutorial
-	protected string GetKey(){
+	protected string GetKey() {
 		if(string.IsNullOrEmpty(tutorialKey))
 			SetKey();
-		
-		return tutorialKey;	
+
+		return tutorialKey;
 	}
-	
-	public Tutorial(){
+
+	public Tutorial() {
 		// Debug.Log("Starting tutorial " + GetKey());
 		SetMaxSteps();
 		SetStep(0);
@@ -84,32 +81,32 @@ public abstract class Tutorial{
 	/// <summary>
 	/// Go to the next part of this tutorial
 	/// </summary>
-	public void Advance(){
+	public void Advance() {
 		// increment the current step of the tutorial
 		int step = GetStep();
 		step++;
 		SetStep(step);
-	}	
+	}
 
 	/// <summary>
 	/// Ends the tutorial early
 	/// </summary>
-	public void Abort(){
-		End(false);	
+	public void Abort() {
+		End(false);
 	}
 
 	/// <summary>
 	/// When this tutorial is finished.
 	/// </summary>
 	/// <param name="isFinished">If set to <c>true</c> is finished.</param>
-	protected virtual void End(bool isFinished){
+	protected virtual void End(bool isFinished) {
 		// Debug.Log("Tutorial Ending: " + GetKey());
-		
+
 		// let children know the tutorial is over
 		_End(isFinished);
-		
+
 		// save the fact that the user completed this tutorial
-		if(isFinished){
+		if(isFinished) {
 			if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(GetKey())) {
 				DataManager.Instance.GameData.Tutorial.ListPlayed.Add(GetKey());
 			}
@@ -117,16 +114,16 @@ public abstract class Tutorial{
 			//DataManager.Instance.SaveGameData();
 		}
 
-		if(goPopup != null){
+		if(goPopup != null) {
 			GameObject.Destroy(goPopup);
 		}
-		
+
 		// activate tutorial end callback
-		if(OnTutorialEnd != null){
+		if(OnTutorialEnd != null) {
 			OnTutorialEnd(this, new TutorialEndEventArgs(isFinished));
 		}
 	}
-	
+
 	/// <summary>
 	/// <para>Puts a spotlight around the incoming object to
 	/// draw attention to it.
@@ -147,21 +144,21 @@ public abstract class Tutorial{
 	///  	fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
 	///  	delay (float): how long does it take the spot light to fade in
 	/// </summary>
-	protected void SpotlightObject(GameObject goTarget, bool isGUI = false, 
-		InterfaceAnchors anchor = InterfaceAnchors.Center, string spotlightPrefab = "TutorialSpotlight",
-		bool fingerHint = false, string fingerHintPrefab = "PressTut",
-	    float focusOffsetX = 0f, float focusOffsetY = 0f, 
-		float fingerHintOffsetX = 0f, float fingerHintOffsetY = 60f, 
-		bool fingerHintFlip = false, float delay = -1f){
+	protected void SpotlightObject(GameObject goTarget, bool isGUI = false,
+		string spotlightPrefab = "TutorialSpotlight",
+		bool fingerHint = false, string fingerHintPrefab = "BedroomTutFingerPress",
+		float focusOffsetX = 0f, float focusOffsetY = 0f,
+		float fingerHintOffsetX = 0f, float fingerHintOffsetY = 60f,
+		bool fingerHintFlip = false, float delay = -1f) {
 
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
-		if(isGUI){
+		if(isGUI) {
 			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
 			focusPos = Vector3.zero; // TEMP CODE - remove me once fixed
-			//focusPos = LgNGUITools.GetScreenPosition(goTarget);
+									 //focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		}
-		else{
+		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
@@ -169,183 +166,146 @@ public abstract class Tutorial{
 
 		// Adjust for custom offset
 		focusPos = new Vector3(focusPos.x + focusOffsetX, focusPos.y + focusOffsetY, focusPos.z);
-		
+
 		// destroy the old object if it existed
-		if(goSpotlight != null){
+		if(goSpotlight != null) {
 			GameObject.Destroy(goSpotlight);
 		}
 
-		if(goFingerHint != null){
+		if(goFingerHint != null) {
 			GameObject.Destroy(goFingerHint);
 		}
-		
+
 		// create the spotlight
 		GameObject goResource = Resources.Load(spotlightPrefab) as GameObject;
 		goSpotlight = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
-		
+
 		// Set the delay if defined
-		if(delay > 0){
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-//			goSpotlight.GetComponent<AlphaTweenToggle>().showDelay = delay;
+		if(delay > 0) {
+			goSpotlight.GetComponent<AlphaTweenToggle>().showDelay = delay;
 		}
-		
+
 		// move the spotlight into position
 		goSpotlight.transform.localPosition = focusPos;
 
 		// spawn finger hint
-		if(fingerHint){
+		if(fingerHint) {
 			GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
 			goFingerHint = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, fingerHintResource);
 			focusPos.z = goFingerHint.transform.localPosition.z;
-			focusPos.y = focusPos.y + fingerHintOffsetY;		//offset in Y so the finger hint doesn't overlap the image
+			focusPos.y = focusPos.y + fingerHintOffsetY;        //offset in Y so the finger hint doesn't overlap the image
 			focusPos.x = focusPos.x + fingerHintOffsetX;
 			goFingerHint.transform.localPosition = focusPos;
 
-			if(fingerHintFlip){
+			if(fingerHintFlip) {
 				goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
 			}
 		}
+
+		// Show the backdrop
+		goSpotlight.GetComponent<AlphaTweenToggle>().ShowAfterInit();
 	}
 
 	//--------------------------------------------------------------
 	// ShowFingerHint()
 	// Use this function if you only want to spawn finger hint
 	//--------------------------------------------------------------
-	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false, 
-		InterfaceAnchors anchor = InterfaceAnchors.Center, string fingerHintPrefab = "PressTut",
-		float offsetFromCenter = 60.0f, float offsetFromCenterX = 0.0f, bool flipX = false){
-
-		string anchorName = "Anchor-" + anchor.ToString();
+	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false, string fingerHintPrefab = "BedroomTutFingerPress",
+		float offsetFromCenter = 60.0f, float offsetFromCenterX = 0.0f, bool flipX = false) {
 
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
-		if(isGUI){
+		if(isGUI) {
 			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
 			focusPos = Vector3.zero; // TEMP CODE - remove me once fixed
-			//focusPos = LgNGUITools.GetScreenPosition(goTarget);
+									 //focusPos = LgNGUITools.GetScreenPosition(goTarget);
 		}
-		else{
+		else {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
 
-			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, 
+			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos,
 				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 		}
 
-		if(goFingerHint != null){
+		if(goFingerHint != null) {
 			GameObject.Destroy(goFingerHint);
 		}
 
 		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-		goFingerHint = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find(anchorName), fingerHintResource);
+		goFingerHint = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, fingerHintResource);
 		focusPos.x = focusPos.x + offsetFromCenterX;
 		focusPos.y = focusPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
 		focusPos.z = goFingerHint.transform.localPosition.z;
 		goFingerHint.transform.localPosition = focusPos;
 
-		if(flipX){
+		if(flipX) {
 			goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
 		}
 
 	}
 
-	protected void RemoveFingerHint(){
-		if(goFingerHint != null){
+	protected void RemoveFingerHint() {
+		if(goFingerHint != null) {
 			GameObject.Destroy(goFingerHint);
 		}
 	}
-	
+
 	//---------------------------------------------------
 	// RemoveSpotlight()
 	// Removes the current spotlight object.
 	//---------------------------------------------------		
-	protected void RemoveSpotlight(){
-		if(goSpotlight != null){
+	protected void RemoveSpotlight() {
+		if(goSpotlight != null) {
 			GameObject.Destroy(goSpotlight);
 		}
-	}	
-	
+	}
+
 	//---------------------------------------------------
 	// RemovePopup()
 	// Removes the current popup object.
 	//---------------------------------------------------		
-	protected void RemovePopup(){
-		if(goPopup != null){
+	protected void RemovePopup() {
+		if(goPopup != null) {
 			GameObject.Destroy(goPopup);
 		}
-	}	
-
-	//---------------------------------------------------
-	// ShowPopup()
-	// Display the tutorial popup
-	// Option Params:
-	//	Message(string): the text you want to display
-	//	SpriteAtlas(string): name of the atlas that the sprite is from. Required if loading an image
-	//	SpriteName(string): name of the image
-	//	Button1Callback(function): action to do when button is clicked
-	//	Button1Label(string): what does the button say
-	//	ShrinkBgToFitText(bool): default to T. background size is automatically adjusted to fit label
-	//---------------------------------------------------
-	protected void ShowPopup(string popupKey, Vector3 location, Hashtable option=null){
-		if(goPopup){
-			GameObject.Destroy(goPopup);
-		}
-
-		if(option == null){
-			option = new Hashtable();
-		}
-
-		Vector3 newPos = location;
-
-		if(!option.ContainsKey(TutorialPopupFields.Message)){
-			// get text to display from tutorial key + step
-			string strText = Localization.Localize(GetKey() + "_" + GetStep());
-			option.Add(TutorialPopupFields.Message, strText);
-		}
-
-		if(!option.ContainsKey(TutorialPopupFields.ShrinkBgToFitText))
-			option.Add(TutorialPopupFields.ShrinkBgToFitText, false);
-
-		// create the popup
-		GameObject goResource = Resources.Load(popupKey) as GameObject;
-		goPopup = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), goResource);
-//		newPos.z = goPopup.transform.position.z; // keep the default z-value
-		goPopup.transform.localPosition = newPos;
-
-		//feed the script the option hashtable		
-		Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-		//TutorialPopup script = goPopup.GetComponent<TutorialPopup>();
-		//script.Init(option);
 	}
 
-	public void ShowRetentionPet(bool isFlipped, Vector3 position,
-	                             bool isButton = false, GameObject buttonTarget = null, string buttonFunctionName = null){
+	/// <summary>
+	/// Display the tutorial popup, messages are loaded automatically unless overridden
+	/// </summary>
+	protected void ShowPopup(string popupPrefabKey, Vector3 localPosition, string customMessage = null) {
+		if(goPopup) {
+			GameObject.Destroy(goPopup);
+		}
+		
+		// Create the popup
+		GameObject goResource = Resources.Load(popupPrefabKey) as GameObject;
+		goPopup = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
+		goPopup.transform.localPosition = localPosition;
+
+		// Populate popup text
+		Text popupText = goPopup.GetComponentInChildren<Text>();
+		if(!string.IsNullOrEmpty(customMessage)) {  // Check if message needs to be overridden
+			popupText.text = customMessage;
+		}
+		else {										// Get text to display from tutorial key + step
+			popupText.text = Localization.Localize(GetKey() + "_" + GetStep());
+		}
+    }
+
+	public void ShowRetentionPet(bool isFlipped, Vector3 position) {
 		GameObject goResource = Resources.Load("TutorialRetentionPet") as GameObject;
-		goRetentionPet = GameObjectUtils.AddChild(GameObject.Find("Anchor-Center"), goResource);
+		goRetentionPet = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
 		goRetentionPet.transform.localPosition = position;
-		if(isFlipped){
+		if(isFlipped) {
 			goRetentionPet.transform.localScale = new Vector3(-1f, 1f, 1f);
 		}
-
-		if(isButton){
-			goRetentionPet.GetComponent<Collider>().enabled = true;
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			//UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
-			//message.enabled = true;
-			//message.target = buttonTarget;
-			//message.functionName = buttonFunctionName;
-		}
-		else{
-			goRetentionPet.GetComponent<Collider>().enabled = false;
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			//UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
-			//message.enabled = false;
-		}
 	}
 
-	public void RemoveRetentionPet(){
-		if(goRetentionPet != null){
+	public void RemoveRetentionPet() {
+		if(goRetentionPet != null) {
 			GameObject.Destroy(goRetentionPet);
 		}
 	}

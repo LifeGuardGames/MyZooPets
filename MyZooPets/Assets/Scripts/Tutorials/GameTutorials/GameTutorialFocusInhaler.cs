@@ -60,18 +60,14 @@ public class GameTutorialFocusInhaler : GameTutorial{
 	private IEnumerator CreateFocusInhalerTutMessage(){
 		yield return new WaitForSeconds(0.5f);
 
+		// Create a custom message with the pet's name
 		string tutKey = GetKey() + "_" + GetStep();
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string message = String.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
+		string message = string.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
 		
-		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("InhalerPopupLoc");
 		
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, message);
-		
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
+		ShowPopup(TUTPOPUPTEXT, popupLoc, customMessage: message);
 	}
 
 	/// <summary>

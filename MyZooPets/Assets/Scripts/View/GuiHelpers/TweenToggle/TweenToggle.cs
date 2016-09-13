@@ -104,6 +104,16 @@ public class TweenToggle : MonoBehaviour{
 	public virtual void Show(float time){
 		// Implement in child
 	}
+
+	// Wait one frame and then show
+	public void ShowAfterInit() {
+		StartCoroutine(ShowAfterInitHelper());
+	}
+
+	private IEnumerator ShowAfterInitHelper() {
+		yield return 0;
+		Show();
+	}
 	
 	// Since Hide() only saves its show/hide position in the beginning,
 	// 	if something has a dynamically changing position (inventory),
@@ -121,6 +131,16 @@ public class TweenToggle : MonoBehaviour{
 
 	public virtual void Hide(float time){
 		// Implement in child
+	}
+
+	// Wait one frame and then show
+	public void HideAfterInit() {
+		StartCoroutine(HideAfterInitHelper());
+	}
+
+	private IEnumerator HideAfterInitHelper() {
+		yield return 0;
+		Hide();
 	}
 
 	///////////////////////// CALLBACKS ///////////////////////////////

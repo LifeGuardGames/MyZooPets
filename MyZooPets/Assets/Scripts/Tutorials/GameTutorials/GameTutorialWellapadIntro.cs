@@ -1,16 +1,19 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Tutorial for showing the player what the wellapad is and how to access it
 /// </summary>
 public class GameTutorialWellapadIntro : GameTutorial{
 	// wellapad button
-	private GameObject goWellapadButton = GameObject.Find("WellapadButton");
+	private GameObject missionButton = GameObject.Find("ButtonMissions");
 	private GameObject retentionMinipet;
 	private Vector3 minipetOldColliderSize;
+	private Button button;
+    private UnityAction buttonAction;
 
 	public GameTutorialWellapadIntro() : base(){	
 	}
@@ -53,8 +56,8 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		minipetOldColliderSize = retentionMinipet.GetComponent<BoxCollider>().size;
 
 		// spotlight the minipet
-		SpotlightObject(retentionMinipet, false, InterfaceAnchors.Center,
-		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", focusOffsetY: 60f, fingerHintFlip: true, delay: 2f);
+		SpotlightObject(retentionMinipet, false,
+		                fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", focusOffsetY: 50f, fingerHintFlip: true, delay: 2f);
 
 		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked1;
 	}
@@ -66,15 +69,9 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		// Keep the spotlight from last step so only show finger
 		ShowFingerHint(retentionMinipet, flipX: true);
 
-		string tutKey = GetKey() + "_" + GetStep();
-		string tutMessage = Localization.Localize(tutKey);
-		
 		// Show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("MinipetPopupLoc");
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
+		ShowPopup(TUTPOPUPTEXT, popupLoc);
 		
 		ShowRetentionPet(false, new Vector3(208, -177, -160));
 		retentionMinipet.GetComponent<BoxCollider>().size = new Vector3(18, 14, 1);	// increase the collider size
@@ -102,12 +99,14 @@ public class GameTutorialWellapadIntro : GameTutorial{
 
 	private void FocusWellapadButton(){
 		// begin listening for when the button is clicked
-		LgButton button = goWellapadButton.GetComponent<LgButton>();
-		button.OnProcessed += ButtonClicked;
-		
+		button = missionButton.GetComponent<Button>();
+		buttonAction = new UnityAction(ButtonClicked);
+		button.onClick.AddListener(buttonAction);
+		Debug.Log("Added listener");
+
 		// spotlight the wellapad
-		SpotlightObject(goWellapadButton, true, InterfaceAnchors.BottomLeft, 
-			fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: true, delay: 0.5f);
+		SpotlightObject(missionButton, true, 
+			fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", fingerHintFlip: true, delay: 0.5f);
 
 		TutorialManager.Instance.StartCoroutine(CreateWellapadButtonTutMessage());
 		ShowRetentionPet(false, new Vector3(208, -177, -160));
@@ -120,18 +119,11 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		// the wellapad is the only object that can be clicked
 		// only allow the button to be clicked after all the tutorial components
 		// fade in
-		AddToProcessList(goWellapadButton);
-
-		string tutKey = GetKey() + "_" + GetStep();
-		string tutMessage = Localization.Localize(tutKey);
+		AddToProcessList(missionButton);
 
 		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("WellapadPopupLoc");
-
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
+		ShowPopup(TUTPOPUPTEXT, popupLoc);
 	}
 
 	/////////
@@ -155,11 +147,10 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	// Callback for when the wellapad object is clicked;
 	// this means we need to advance the tutorial.
 	//---------------------------------------------------	
-	private void ButtonClicked(object sender, EventArgs args){
-		// stop listening for this event
-		LgButton button = (LgButton)sender;
-		button.OnProcessed -= ButtonClicked;
-		
+	private void ButtonClicked(){
+		button.onClick.RemoveListener(buttonAction);
+		Debug.Log("Removed listener");
+
 		// we have to allow the wellapad back button to be clicked
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
 		AddToProcessList(goBack);

@@ -29,29 +29,23 @@ public class GameTutorialFlame : GameTutorial{
 	protected override void ProcessStep(int step){
 		// location of flame popups
 		Vector3 flamePopupLoc = Constants.GetConstant<Vector3>("FlamePopup");
-		Hashtable option = new Hashtable();
-
-		//Tutorial popup options 
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-
 		switch(step){
 		case 0:
 			TutorialManager.Instance.StartCoroutine(FocusOnFlameButton());
-
 			// show a little popup message telling the user to hold down the flame button
-			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
+			ShowPopup(TUTPOPUPTEXT, flamePopupLoc);
 			ShowRetentionPet(false, new Vector3(270, -186, -160));
 			break;
 		case 1:
 			RemoveRetentionPet();
+
+			// Create a custom message with the pet's name
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
-			string stringKey = GetKey() + "_" + GetStep();
-			string tutMessage = String.Format(Localization.Localize(stringKey), petName);
-			
-			option.Add(TutorialPopupFields.Message, tutMessage);
+			string message = GetKey() + "_" + GetStep();
+			string tutMessage = string.Format(Localization.Localize(message), petName);
 			
 			// show a little popup message telling the user to let go to breath fire
-			ShowPopup(Tutorial.POPUP_STD, flamePopupLoc, option: option);
+			ShowPopup(TUTPOPUPTEXT, flamePopupLoc, customMessage: tutMessage);
 			GatingManager.Instance.StartCoroutine(RemovePopupDelay());
 
 			// Check off the time that tutorial1 is done for next play period
@@ -82,7 +76,7 @@ public class GameTutorialFlame : GameTutorial{
 
 		GameObject fireButton = FireButtonManager.Instance.FireButtonObject;
 
-		SpotlightObject(fireButton, true, InterfaceAnchors.Center, "TutorialSpotlightFlameButton", fingerHint: true,
+		SpotlightObject(fireButton, true, "TutorialSpotlightFlameButton", fingerHint: true,
 		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 0f, fingerHintOffsetY: -40f,
 		                fingerHintFlip: true, delay: 0.5f);
 

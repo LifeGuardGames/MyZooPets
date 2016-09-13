@@ -52,14 +52,7 @@ public class GameTutorialTriggersNew : GameTutorial{
 	private void TeachCleanup(){
 		// show a message
 		Vector3 triggerPopupLoc = Constants.GetConstant<Vector3>("TriggerPopupLoc");
-		string stringKey = GetKey() + "_" + GetStep();
-		string tutMessage = Localization.Localize(stringKey);
-		
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-		
-		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, option: option);
+		ShowPopup(TUTPOPUPTEXT, triggerPopupLoc);
 		
 		// spotlight the dust
 		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);

@@ -113,8 +113,6 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 
 	private void FocusOnRightArrow(){
-		string tutKey = GetKey() + "_" + GetStep();
-
 		//Start showing the right arrow
 		RoomArrowsUIManager.Instance.ShowRightArrow();
 
@@ -127,17 +125,12 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		rightArrowButton.onClick.AddListener(() => { RightArrowClicked(); });
 
 		// spotlight the arrow
-		SpotlightObject(rightArrowButton.gameObject, true, InterfaceAnchors.Right, 
-		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: false, delay: 0f);
+		SpotlightObject(rightArrowButton.gameObject, true, 
+		                fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", fingerHintFlip: false, delay: 0f);
 
-		// show message
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
-		string tutMessage = Localization.Localize(tutKey);
 
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-		ShowPopup(Tutorial.POPUP_STD, location, option: option);
+		ShowPopup(TUTPOPUPTEXT, location);
 
 		ShowRetentionPet(true, new Vector3(-281, -86, -160));
 	}

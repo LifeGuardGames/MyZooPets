@@ -2,16 +2,15 @@
 using System.Collections;
 
 public class EnableAfterDelay : MonoBehaviour {
-	
 	public GameObject obj;
 	public float delay = 0f;
-	
-	// Use this for initialization
-	void Start () {
-		 StartCoroutine("StartAfterDelay");
+
+	void Start() {
+		StartCoroutine("StartAfterDelay");
 	}
-	
-	public IEnumerator StartAfterDelay(){
+
+	public IEnumerator StartAfterDelay() {
+		obj.SetActive(false);
 		yield return new WaitForSeconds(delay);
 		obj.SetActive(true);
 	}

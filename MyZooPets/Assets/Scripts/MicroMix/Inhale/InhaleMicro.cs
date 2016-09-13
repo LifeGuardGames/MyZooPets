@@ -48,8 +48,8 @@ public class InhaleMicro : Micro{
 	}
 
 	private void Setup(){
-		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1); //Already played during tutorial
 		petInstance = (GameObject)Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+		petInstance.GetComponentInChildren<Animator>().Play("Breathe Out", 0, 1); //Already played during tutorial
 		petInstance.transform.SetParent(transform);
 		inhaler.transform.position = petInstance.GetComponent<MicroMixAnatomy>().mouth.transform.position;
 	}

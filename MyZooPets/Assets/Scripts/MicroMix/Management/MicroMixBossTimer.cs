@@ -21,6 +21,7 @@ public class MicroMixBossTimer : MonoBehaviour{
 		if(MicroMixManager.Instance.IsPaused || !isMoving){
 			return;
 		}
+
 		if(currentTime > 0){
 			currentTime -= Time.deltaTime;
 		}

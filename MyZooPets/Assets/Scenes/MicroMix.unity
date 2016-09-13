@@ -19363,7 +19363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleText: {fileID: 1031455880}
   speedUpText: {fileID: 459259902}
-  debugMicro: {fileID: 996669193}
+  debugMicro: {fileID: 0}
   backgrounds:
   - {fileID: 1785871968}
   - {fileID: 1206881400}
@@ -36205,9 +36205,9 @@ GameObject:
   - 4: {fileID: 894748230}
   - 212: {fileID: 894748231}
   - 65: {fileID: 894748232}
-  - 114: {fileID: 894748233}
   - 114: {fileID: 894748234}
   - 114: {fileID: 894748235}
+  - 114: {fileID: 894748233}
   m_Layer: 0
   m_Name: ScarfItem
   m_TagString: Untagged
@@ -36278,11 +36278,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 894748229}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e11c9a67517d644dca99f302755fa8a4, type: 3}
+  m_Script: {fileID: 11500000, guid: 2da79f6b30b034c9a8891056d5cf1872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petPrefab: {fileID: 0}
-  scarfItem: {fileID: 0}
+  pet: {fileID: 1132106115}
 --- !u!114 &894748234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68551,7 +68550,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: isDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 1097f5f374f124e8eb4ddc215ba4b250, type: 2}
       propertyPath: m_IsActive

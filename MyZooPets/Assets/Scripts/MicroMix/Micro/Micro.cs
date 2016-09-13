@@ -55,7 +55,7 @@ public abstract class Micro : MonoBehaviour{
 		won = false;
 		playing = true; //Now we set up our own stuff
 		if(!timer){
-			timer = FindObjectOfType<MicroMixBossTimer>();
+			timer = MicroMixManager.Instance.timer;
 		}
 		timer.gameObject.SetActive(true);
 		timer.StartTimer(this);
@@ -72,7 +72,6 @@ public abstract class Micro : MonoBehaviour{
 				mi.SetParent(this);
 			}
 		}
-
 	}
 
 	public void Pause(){

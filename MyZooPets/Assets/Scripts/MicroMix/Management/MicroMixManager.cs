@@ -120,6 +120,16 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		NewGame();
 	}
 
+	public void Restart() {
+		timer.Reset();
+		if(currentMicro != null) {
+			currentMicro.CancelMicro();
+		}
+		StopAllCoroutines();
+		isPaused = false;
+		_NewGame();
+	}
+
 	protected override void _NewGame(){
 		StartCoroutine(TransitionIEnum(MonsterAnimation.INTRO));
 		Time.timeScale = 1f;

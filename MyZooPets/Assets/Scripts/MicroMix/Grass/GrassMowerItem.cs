@@ -15,8 +15,21 @@ public class GrassMowerItem : MicroItem{
 		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial){
 			return;
 		}
-		angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
-		transform.position -= new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * speed * Time.deltaTime;
+
+		if(Input.GetKey("left")) {
+			Debug.Log("hi");
+			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
+			angle += 1f * angularSpeed * Time.deltaTime;
+		}
+			if(Input.GetKey("right")) {
+				Debug.Log("hi");
+				//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
+				angle += -1f * angularSpeed * Time.deltaTime;
+			}
+			else {
+			angle += 0 * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime;
+		}
+        transform.position -= new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * speed * Time.deltaTime;
 		transform.rotation = Quaternion.Euler(0, 0, angle * Mathf.Rad2Deg);
 		if(canFlip){
 			CheckBounds();

@@ -56,4 +56,11 @@ public class MicroMixBossTimer : MonoBehaviour{
 	public void Resume(){
 		LeanTween.resume(timerBoss);
 	}
+
+	public void Reset() {
+		LeanTween.cancel(this.gameObject);
+		foreach(Image toShow in images) {
+			toShow.gameObject.SetActive(false);
+		}
+	}
 }

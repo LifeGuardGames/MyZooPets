@@ -23,7 +23,7 @@ public abstract class Micro : MonoBehaviour{
 	private bool playing = false;
 	private int seconds = 0;
 	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
-	private MicroMixBossTimer timer;
+	public MicroMixBossTimer timer;
 
 	public abstract string Title{
 		get;
@@ -46,6 +46,12 @@ public abstract class Micro : MonoBehaviour{
 		}
 	}
 
+	void Awake() {
+		if(timer == null) {
+			timer = MicroMixManager.Instance.timer;
+		}
+	}
+
 	public void StartTutorial(){
 		StartCoroutine(Tutorial());
 	}
@@ -54,9 +60,7 @@ public abstract class Micro : MonoBehaviour{
 		_StartMicro(difficulty, randomize); //Have them instantiate everything they need, and then we handle setup for them
 		won = false;
 		playing = true; //Now we set up our own stuff
-		if(!timer){
-			timer = MicroMixManager.Instance.timer;
-		}
+	
 		timer.gameObject.SetActive(true);
 		timer.StartTimer(this);
 		positions.Clear();
@@ -89,6 +93,22 @@ public abstract class Micro : MonoBehaviour{
 		//They just completed the tutorial
 		yield return 0; //Wait for them to destroy their objects
 		MicroMixManager.Instance.CompleteTutorial();
+	}
+	//end micro for reset
+	public void CancelMicro() {
+		foreach(Transform child in positions.Keys) { //Here is where we need the transforms
+			MicroItem mi = child.GetComponent<MicroItem>();
+			if(mi != null) {
+				mi.OnComplete();
+			}
+			if(ResetPositions) {
+				child.transform.position = positions[child];
+			}
+		}
+		playing = false;
+
+		timer.gameObject.SetActive(false);
+		MicroMixManager.Instance.fireworksController.StopFireworks();
 	}
 
 	public void EndMicro(){

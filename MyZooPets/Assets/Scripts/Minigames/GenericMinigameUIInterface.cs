@@ -152,7 +152,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			NinjaGameManager.Instance.NewGame();
 		}
 		else if(sceneName == SceneUtils.MICROMIX){
-			MicroMixManager.Instance.NewGame();
+			MicroMixManager.Instance.Restart();
 		}
 		else{ //TODO: Add SceneUtils.MEMORY to OnResume, OnRestart, and QuitGame
 			Debug.LogError("Invalid scene detected" + SceneManager.GetActiveScene().name);

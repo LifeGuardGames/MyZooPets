@@ -125,7 +125,7 @@ public class Analytics : MonoBehaviour {
 	#region MiniPet
 	public void MiniPetLevelUp(string miniPetID, int currentLevel){
 		string levelString = currentLevel.ToString();
-		if(!String.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
+		if(!string.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Minipet Level Up", new Dictionary<string, object>{
 				{ miniPetID + "Level up: ", currentLevel}
 			});
@@ -145,7 +145,7 @@ public class Analytics : MonoBehaviour {
     //=======================General Analytics==================================
     //Will be use in different mini games
     public void PetColorChosen(string petColor){
-        if(!String.IsNullOrEmpty(petColor) && isAnalyticsEnabled){
+        if(!string.IsNullOrEmpty(petColor) && isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Pet Color", new Dictionary<string, object>{
 				{ "Color chosen: ", petColor}
 			});
@@ -169,7 +169,7 @@ public class Analytics : MonoBehaviour {
 
     //Badges unlock
     public void BadgeUnlocked(string badgeID){
-        if(!String.IsNullOrEmpty(badgeID) && isAnalyticsEnabled)
+        if(!string.IsNullOrEmpty(badgeID) && isAnalyticsEnabled)
 			Amplitude.Instance.logEvent("Badge Unlocked", new Dictionary<string, object>{
 				{ "Badge: ", badgeID}
 			});
@@ -177,7 +177,7 @@ public class Analytics : MonoBehaviour {
 
     //Items used or purchased
     public void ItemEvent(string itemStatus, ItemType itemType, string itemID){
-		if(!String.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled) {
+		if(!string.IsNullOrEmpty(itemStatus) && !String.IsNullOrEmpty(itemID) && isAnalyticsEnabled) {
 			if(itemStatus == "Bought") {
 				Amplitude.Instance.logEvent("Item Bought", new Dictionary<string, object>{
 					{ itemType.ToString()+": ", itemID}
@@ -193,7 +193,7 @@ public class Analytics : MonoBehaviour {
 
     //What is the pet's health or mood when an item is used
     public void ConsumableEventWithPetStats(string itemID, string statsType, int statsValue){
-        if(!String.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType) && isAnalyticsEnabled){
+        if(!string.IsNullOrEmpty(itemID) && !String.IsNullOrEmpty(statsType) && isAnalyticsEnabled){
 			Amplitude.Instance.logEvent(statsType + "Increased", new Dictionary<string, object>{
 					{ itemID+": ", statsValue}
 				});
@@ -202,8 +202,8 @@ public class Analytics : MonoBehaviour {
 
     //Wellapad
     public void WellapadTaskEvent(string taskStatus, string missionID, string taskID){
-        if(!String.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && 
-            !String.IsNullOrEmpty(taskID) && isAnalyticsEnabled)
+        if(!string.IsNullOrEmpty(taskStatus) && !String.IsNullOrEmpty(missionID) && 
+            !string.IsNullOrEmpty(taskID) && isAnalyticsEnabled)
 			Amplitude.Instance.logEvent("Task Status", new Dictionary<string, object>{
 					{ taskID +": ", taskStatus}
 				});
@@ -217,7 +217,7 @@ public class Analytics : MonoBehaviour {
 
     //Gating
     public void GateUnlocked(string gateID){
-        if(!String.IsNullOrEmpty(gateID) && isAnalyticsEnabled)
+        if(!string.IsNullOrEmpty(gateID) && isAnalyticsEnabled)
 			Amplitude.Instance.logEvent("Gate Unlocked", new Dictionary<string, object>{
 					{ "Gate Unlocked: ", gateID}
 				});
@@ -225,7 +225,7 @@ public class Analytics : MonoBehaviour {
 
     //Tutorial completed
     public void TutorialCompleted(string tutorialID){
-        if(!String.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
+        if(!string.IsNullOrEmpty(tutorialID) && isAnalyticsEnabled)
 			Amplitude.Instance.logEvent("Tutorial Completed", new Dictionary<string, object>{
 					{ "Tutorial Completed: ", tutorialID}
 				});

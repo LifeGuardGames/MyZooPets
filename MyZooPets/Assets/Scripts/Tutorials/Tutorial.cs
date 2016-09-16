@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class Tutorial {
 	//---------------------Events--------------------------
-	public EventHandler<TutorialEndEventArgs> OnTutorialEnd; // when the tutorial ends
+	public EventHandler<TutorialEndEventArgs> OnTutorialEnd;// when the tutorial ends
 
 	// ----------- Abstract functions -------------------
 	protected abstract void SetKey();                       // the tutorial key is used to mark a lot of lists
@@ -19,17 +19,17 @@ public abstract class Tutorial {
 	// ----------- Tutorial Popup types -------------------
 	protected const string TUTPOPUPTEXT = "TutorialPopupText";
 
-	protected int maxSteps; // max steps in the tutorial
-	protected string tutorialKey; // key for this tutorial
-	protected Vector3 POS_TOP = new Vector3(0, 201, -10); //top position to spawn the popup (NGUI)
-	protected Vector3 POS_BOT = new Vector3(0, -275, -10); //bottom position to spawn the popup (NGUI)
+	protected int maxSteps;									// max steps in the tutorial
+	protected string tutorialKey;							// key for this tutorial
+	protected Vector3 POS_TOP = new Vector3(0, 201, -10);	// top position to spawn the popup (NGUI)
+	protected Vector3 POS_BOT = new Vector3(0, -275, -10);	// bottom position to spawn the popup (NGUI)
 
 	private List<GameObject> listCanProcess = new List<GameObject>(); // list of objects that can be processed as input
-	private GameObject goSpotlight; // current (and only) spotlight object this tutorial is highlighting
-	protected GameObject goPopup; // current (and only) tutorial popup
-	private GameObject goFingerHint; //current finger hint
-	private GameObject goRetentionPet;  // Current retention pet sprite
-	private int currentStep; // step the tutorial is currently on
+	private GameObject goSpotlight;							// current (and only) spotlight object this tutorial is highlighting
+	protected GameObject goPopup;							// current (and only) tutorial popup
+	private GameObject goFingerHint;						// current finger hint
+	private GameObject goRetentionPet;						// Current retention pet sprite
+	private int currentStep;								// step the tutorial is currently on
 
 	public bool CanProcess(GameObject go) {
 		bool canProcess = listCanProcess.Contains(go);

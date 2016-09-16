@@ -39,7 +39,7 @@ public class GameTutorialWellapadIntro : GameTutorial{
 			break;
 		case 2:
 			// start by focusing on the wellapad button
-			FocusWellapadButton();
+			TutorialManager.Instance.StartCoroutine(FocusWellapadButton());
 			break;
 			
 		case 3:
@@ -97,33 +97,25 @@ public class GameTutorialWellapadIntro : GameTutorial{
 
 	/////////
 
-	private void FocusWellapadButton(){
+	private IEnumerator FocusWellapadButton(){
 		// begin listening for when the button is clicked
 		button = missionButton.GetComponent<Button>();
 		buttonAction = new UnityAction(ButtonClicked);
 		button.onClick.AddListener(buttonAction);
 		Debug.Log("Added listener");
 
-		// spotlight the wellapad
-		SpotlightObject(missionButton, true, 
-			fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", fingerHintFlip: true, delay: 0.5f);
-
-		TutorialManager.Instance.StartCoroutine(CreateWellapadButtonTutMessage());
-		ShowRetentionPet(false, new Vector3(208, -177, -160));
-	}
-
-	//using this to deplay ShowPopup call for 0.5 seconds
-	private IEnumerator CreateWellapadButtonTutMessage(){
 		yield return new WaitForSeconds(0.5f);
 
 		// the wellapad is the only object that can be clicked
-		// only allow the button to be clicked after all the tutorial components
-		// fade in
 		AddToProcessList(missionButton);
+
+		// spotlight the wellapad
+		SpotlightObject(missionButton, true, fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", fingerHintFlip: true);
 
 		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("WellapadPopupLoc");
 		ShowPopup(TUTPOPUPTEXT, popupLoc);
+		ShowRetentionPet(false, new Vector3(208, -177, -160));
 	}
 
 	/////////

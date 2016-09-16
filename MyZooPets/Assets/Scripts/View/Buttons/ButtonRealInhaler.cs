@@ -25,28 +25,25 @@ public class ButtonRealInhaler : ButtonChangeScene{
 			OpenRealInhaler();
 		}
 		else{
-			string soundToPlay;
 			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());
 			string popupMessage;
 
 			if(currentTimeFrame == TimeFrames.Morning){
 				popupMessage = "POPUP_INHALER_TONIGHT";
-				soundToPlay = "superWellaInhalerTonight";
+				AudioManager.Instance.PlayClip("superWellaInhalerTonight");
 			}
 			else{
 				popupMessage = "POPUP_INHALER_MORNING";
-				soundToPlay = "superWellaInhalerMorning";
+				AudioManager.Instance.PlayClip("superWellaInhalerMorning");
 			}
 			
-			//Display tutorial notification
+			// Display tutorial notification
 			Hashtable notificationEntry = new Hashtable();
 			notificationEntry.Add(NotificationPopupData.PrefabName, "PopupInhalerRecharging");
 			notificationEntry.Add(NotificationPopupData.Title, null);
 			notificationEntry.Add(NotificationPopupData.Message, Localization.Localize(popupMessage));
 			notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, null);
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-
-			AudioManager.Instance.PlayClip(soundToPlay);
 		}
 	}
 

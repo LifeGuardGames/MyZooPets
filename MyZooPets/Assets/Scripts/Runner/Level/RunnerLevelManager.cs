@@ -80,7 +80,8 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 				removedLevelComponent.ParentGroup.DestroyAndCache(removedLevelComponent.gameObject);
 
 				// Push a new one if not in tutorial mode
-				if(!RunnerGameManager.Instance.IsTutorialRunning){
+				if(RunnerGameManager.Instance.IsTutorialRunning){
+					Debug.Log("hitting");
 					LevelComponent nextLevel = PushAndInstantiateRandomComponent();
 					PopulateLevelComponent(nextLevel);
 				}

@@ -8,7 +8,7 @@ using System.Collections;
 // then changes the scene.  Note that the zoom 
 // function in CameraMove does the actual loading.
 //---------------------------------------------------
-public class ButtonChangeScene : LgButton{
+public class ButtonChangeScene : LgWorldButton{
 	public static EventHandler<EventArgs> OnChangeScene; //Event when changing scene on user input
 
 	// name of the scene to be loaded

@@ -101,58 +101,86 @@ public class ClickManager : Singleton<ClickManager>{
 	public bool CanRespondToTap(GameObject goCaller = null, ClickLockExceptions eException = ClickLockExceptions.None){
 
 		// hard stop (for now): If the partition is transitioning, don't allow anything
-		if(CameraManager.Instance && CameraManager.Instance.IsCameraMoving())
+		if(CameraManager.Instance && CameraManager.Instance.IsCameraMoving()) {
 			return false;
+		}
 
 		// if pet is currently attacking gate. can't do anything else
-		if(AttackGate.Instance)
+		if(AttackGate.Instance) {
 			return false;
+		}
 
 		// if a tutorial is playing, check with that tutorial
-		if(TutorialManager.Instance && !TutorialManager.Instance.CanProcess(goCaller))
+		if(TutorialManager.Instance && !TutorialManager.Instance.CanProcess(goCaller)) {
 			return false;
+		}
 
 		// if there is an exception in effect for the incoming action, then it can bypass the mode check
 		// this check should appear BEFORE the tweening checks because exceptions should be an auto-accept
-		if(listExceptions.Contains(eException) || listTempExceptions.Contains(eException))
-			return true;		
-		
+		if(listExceptions.Contains(eException) || listTempExceptions.Contains(eException)) {
+			return true;
+		}
+
 		// if the UI is tweening, no soup for you
-		bool isTweening = IsTweeningUI();
-		if(isTweening)
+		if(IsTweeningUI()) {
 			return false;
+		}
 
 		// get the current mode
 		UIModeTypes currentUIMode = UIModeTypes.None;
-		if(stackModes.Count > 0)
+		if(stackModes.Count > 0) {
 			currentUIMode = stackModes.Peek();
+		}
 
 		// get the mode key from the incoming object, if it is an LgButton.
 		// it's possible goCaller is not an LgButton, which should be fine.
 		UIModeTypes callingMode = UIModeTypes.None;
 		if(goCaller != null){
-			LgButton button = goCaller.GetComponent<LgButton>();
-			if(button){
-				List<UIModeTypes> modeTypes = button.GetModes();
-				foreach(UIModeTypes mode in modeTypes){
-					if(currentUIMode == UIModeTypes.None || mode == currentUIMode || 
-					  (mode == UIModeTypes.None && currentUIMode == UIModeTypes.None))
-						return true;
-				}
+			LgWorldButton worldButtonScript = goCaller.GetComponent<LgWorldButton>();
+			if(worldButtonScript != null && CheckLgWorldButton(worldButtonScript, currentUIMode)) {
+				return true;
+            }
+			LgUIButton uiButtonScript = goCaller.GetComponent<LgUIButton>();
+			if(uiButtonScript != null && CheckLgUIButton(uiButtonScript, currentUIMode)) {
+				return true;
 			}
 		}
-		
+
 		// we are at the end of our checks now, so if we have made it this far, if the click manager is not actually locked
 		// (current mode is None), the current mode is equal to the incoming button's mode, or the incoming button's mode is none,
 		// then the click can be processed.
-		if(currentUIMode == UIModeTypes.None || callingMode == currentUIMode || 
-		   (callingMode == UIModeTypes.None && currentUIMode == UIModeTypes.None))
+		if(currentUIMode == UIModeTypes.None || callingMode == currentUIMode ||
+		   (callingMode == UIModeTypes.None && currentUIMode == UIModeTypes.None)) {
 			return true;
+		}
 		
 		// otherwise some condition(s) above was not met, so return false
 		return false;
 	}
-	
+
+	// Helper to check UIMode for world object buttons
+	private bool CheckLgWorldButton(LgWorldButton worldButtonScript, UIModeTypes currentUIMode) {
+		List<UIModeTypes> modeTypes = worldButtonScript.ModeTypes;
+		foreach(UIModeTypes mode in modeTypes) {
+			if(currentUIMode == UIModeTypes.None || mode == currentUIMode ||
+			  (mode == UIModeTypes.None && currentUIMode == UIModeTypes.None)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// Helper to check UIMode for UI object buttons
+	private bool CheckLgUIButton(LgUIButton uiButtonScript, UIModeTypes currentUIMode) {
+		if(uiButtonScript.modeType1 == UIModeTypes.None) {
+			return true;
+		}
+		if(uiButtonScript.modeType1 == currentUIMode || uiButtonScript.modeType2 == currentUIMode || uiButtonScript.modeType3 == currentUIMode) {
+			return true;
+		}
+		return false;
+	}
+
 	///////////////////////////////////////////
 	// AddTemporaryException()
 	// Adds an exception temporarily.

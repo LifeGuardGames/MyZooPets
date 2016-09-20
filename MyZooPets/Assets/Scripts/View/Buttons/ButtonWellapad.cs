@@ -5,10 +5,10 @@ using UnityEngine;
 // ButtonWellapad
 // Button that opens the Wellapad.
 //---------------------------------------------------
-public class ButtonWellapad : LgButton {
+public class ButtonWellapad : LgWorldButton {
 	private bool tutDone = false;
 
-	protected override void _Start(){
+	void Start(){
 		// for debug/testing -- we may have the wellapad disabled
 		bool isWellapadOn = Constants.GetConstant<bool>("WellapadOn");
 		if(!isWellapadOn) {

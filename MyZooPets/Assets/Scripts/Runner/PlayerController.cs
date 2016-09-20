@@ -24,7 +24,7 @@ public class PlayerController : Singleton<PlayerController>{
 		//The speed you want the character to reach to
 		public float acceleration = 5f;
 		//How fast does the character change speed? higher is faster
-		public float jumpHeight = 9;
+		public float jumpHeight = 150;
 		[System.NonSerialized]
 		public float verticalSpeed = 0f;
 		public float maxFallSpeed = 100f;

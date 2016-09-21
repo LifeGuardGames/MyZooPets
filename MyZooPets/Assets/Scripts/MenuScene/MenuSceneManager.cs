@@ -46,8 +46,8 @@ public class MenuSceneManager : Singleton<MenuSceneManager> {
 			TextMesh petNameLabel = menuScenePetGO.transform.Find("Label_PetName").GetComponent<TextMesh>();
 			petNameLabel.text = PetMenuInfo.PetName;
 
-			menuScenePetGO.GetComponent<LgButtonMessage>().target = this.gameObject;
-			menuScenePetGO.GetComponent<LgButtonMessage>().functionName = "PetSelected";
+			menuScenePetGO.GetComponent<LgWorldButtonMessage>().target = this.gameObject;
+			menuScenePetGO.GetComponent<LgWorldButtonMessage>().functionName = "PetSelected";
 		}
 	}
 

@@ -37,7 +37,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed
 			   		&& WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed){
 					rewardButton.SetActive(true);
-					rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					rewardButton.GetComponent<LgWorldButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
 				}
 			}
 			else {
@@ -49,7 +49,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 					task = listTasks[0];
 					SetCheckboxSprite(true, slash1);
 					ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
-					rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					rewardButton.GetComponent<LgWorldButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
 					task = listTasks[1];
 					SetCheckboxSprite(true, slash2);
 					ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);

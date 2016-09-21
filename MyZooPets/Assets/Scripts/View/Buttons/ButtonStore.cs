@@ -6,7 +6,7 @@ using System.Collections;
 // Button that opens the store UI.
 //---------------------------------------------------
 
-public class ButtonStore : LgButton {
+public class ButtonStore : LgWorldButton {
 	
 	//---------------------------------------------------
 	// ProcessClick()

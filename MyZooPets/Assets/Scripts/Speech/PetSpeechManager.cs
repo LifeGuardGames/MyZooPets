@@ -71,7 +71,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager> {
 		
 		//also check if the image should be make clickable. 
 		if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
-			LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+			LgWorldButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgWorldButtonMessage>();
 
 			if(message.ContainsKey(Keys.ImageButtonModeType))
 				buttonMessage.modeTypes.Add((UIModeTypes) message[Keys.ImageButtonModeType]);
@@ -125,7 +125,7 @@ public class PetSpeechManager : SpeechController<PetSpeechManager> {
 		
 		//also check if the image should be make clickable. 
 		if(message.ContainsKey(Keys.ImageClickTarget) && message.ContainsKey(Keys.ImageClickFunctionName)){
-			LgButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgButtonMessage>();
+			LgWorldButtonMessage buttonMessage = sprite.gameObject.AddComponent<LgWorldButtonMessage>();
 			buttonMessage.target = (GameObject) message[Keys.ImageClickTarget];
 			buttonMessage.functionName = (string) message[Keys.ImageClickFunctionName];
 			sprite.gameObject.AddComponent<BoxCollider>();

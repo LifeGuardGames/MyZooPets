@@ -45,7 +45,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 
 	private void FocusInhaler(){
 		// begin listening for when the inhaler is clicked
-		LgButton button = goInhaler.GetComponent<LgButton>();
+		LgWorldButton button = goInhaler.GetComponent<LgWorldButton>();
 		button.OnProcessed += InhalerClicked;
 		
 		// the inhaler is the only object that can be clicked
@@ -78,7 +78,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void InhalerClicked(object sender, EventArgs args){
 		// stop listening for this event
-		LgButton button = (LgButton)sender;
+		LgWorldButton button = (LgWorldButton)sender;
 		button.OnProcessed -= InhalerClicked;
 		
 		// go to the next step

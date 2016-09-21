@@ -7,7 +7,7 @@ using System.Collections;
 // choose what language they would like used.
 //---------------------------------------------------
 
-public class ButtonOpenSettings : LgButton {
+public class ButtonOpenSettings : LgWorldButton {
 	
 	//---------------------------------------------------
 	// ProcessClick()

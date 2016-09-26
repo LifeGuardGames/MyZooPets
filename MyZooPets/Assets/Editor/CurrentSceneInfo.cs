@@ -13,7 +13,7 @@ public class CurrentSceneInfo : EditorWindow {
 			if(SceneManager.GetActiveScene().name != SceneUtils.BEDROOM || SceneManager.GetActiveScene().name != SceneUtils.YARD) {
 				GUILayout.Label("ClickManager properties", EditorStyles.boldLabel);
 				EditorGUILayout.TextField("Stack Size", ClickManager.Instance.StackModes.Count.ToString());
-				EditorGUILayout.TextField("Stack Peek", ClickManager.Instance.StackPeek);
+				EditorGUILayout.TextField("Current Mode", ClickManager.Instance.CurrentMode.ToString());
 
 				GUILayout.Label("Notification properties", EditorStyles.boldLabel);
 				EditorGUILayout.TextField("Queue Size", NotificationQueueData.QueueCount().ToString());

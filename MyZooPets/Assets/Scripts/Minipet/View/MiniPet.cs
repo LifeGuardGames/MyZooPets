@@ -111,14 +111,11 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	}
 
 	private void ProcessTapOrClick() {
-		if(ClickManager.Instance.StackPeek != "MiniPet") {
+		if(ClickManager.Instance.CurrentMode != UIModeTypes.MiniPet) {
 			Analytics.Instance.MiniPetVisited(minipetId);
 			if(!isFinishEating) {
 				ShowFoodPreferenceMessage();
 			}
-			bool isUIOpened = MiniPetHUDUIManager.Instance.IsOpen();
-			bool isModeLockEmpty = ClickManager.Instance.IsModeLockEmpty;
-
 			if(!isMiniPetColliderLocked) {
 				if(LoadLevelManager.Instance.GetCurrentSceneName() == SceneUtils.BEDROOM) {
 					if(TutorialManagerBedroom.Instance == null || TutorialManagerBedroom.Instance.IsTutorialActive()) {
@@ -128,7 +125,7 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 						return;
 					}
 				}
-				if(!isUIOpened && isModeLockEmpty && !isAdded) {
+				if(!MiniPetHUDUIManager.Instance.IsOpen && ClickManager.Instance.IsModeStackEmpty && !isAdded) {
 					AudioManager.Instance.PlayClip("talkMinipet");
 					PetMovement.Instance.MovePet(petPosition.position);
 					isAdded = true;
@@ -202,7 +199,7 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	}
 
 	public void OnItemDropped(InventoryItem itemData) {
-		if(MiniPetHUDUIManager.Instance.IsOpen()) {
+		if(MiniPetHUDUIManager.Instance.IsOpen) {
 			//check if minipet wants this food
 			if(MiniPetManager.Instance.GetFoodPreference(minipetId) == itemData.ItemID) {
 				InventoryManager.Instance.UseMiniPetItem(itemData.ItemID);    // Tell inventory logic item is used -> remove

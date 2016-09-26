@@ -13,7 +13,7 @@ public class MinipetEggClickController : MonoBehaviour {
 	private bool clickAuxToggle = true;
 
 	void OnTap(TapGesture gesture){
-		if(ClickManager.Instance.StackPeek != "MiniPet"){
+		if(ClickManager.Instance.CurrentMode != UIModeTypes.MiniPet){
 			eggAnimation.Play(clickAuxToggle ? click1Animation : click2Animation);
 			clickAuxToggle = !clickAuxToggle;
 			eggParticle.Play();

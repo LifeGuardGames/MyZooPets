@@ -39,7 +39,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		itemBeingDragged = gameObject;
 
 		if(itemType == ItemType.Foods) {
-			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {
+			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen) {
 				PetAnimationManager.Instance.WaitingToBeFed();
 			}
 		}
@@ -84,7 +84,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		}
 		else {  // Hit nothing
 			if(itemType == ItemType.Foods) {
-				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()) {
+				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen) {
 					PetAnimationManager.Instance.AbortFeeding();
 				}
 			}

@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System;
 using System.Collections.Generic;
 
@@ -29,11 +28,20 @@ public class ClickManager : Singleton<ClickManager>{
 	
 	// stack of modes that have locked the click manager
 	private Stack<UIModeTypes> stackModes = new Stack<UIModeTypes>();
+	public Stack<UIModeTypes> StackModes {
+		get { return stackModes; }
+	}
 
-	#region debug variable dont use
-	public string stackPeek;
-	public int count;
-	#endregion
+	public string StackPeek {
+		get {
+			if(stackModes.Count == 0) {
+				return null;
+			}
+			else {
+				return stackModes.Peek().ToString();
+			}
+		}
+	}
 	
 	/// <summary>
 	/// Gets the current mode. The mode that the click manager is locked at
@@ -55,22 +63,6 @@ public class ClickManager : Singleton<ClickManager>{
 	public bool IsModeLockEmpty{
 		get{ return stackModes.Count == 0;}
 	}
-
-	void Update(){
-		count = stackModes.Count;
-		if(count != 0){
-			UIModeTypes eCurrentMode = stackModes.Peek();
-			stackPeek = eCurrentMode.ToString();
-		}
-		else{
-			stackPeek = null;
-		}
-	}
-	
-	//Clean all event listeners and static references
-	void OnDestroy(){
-		UIRoot = null;
-	}
 	
 	/// <summary>
 	/// Sets the active GUI mode lock.
@@ -89,7 +81,7 @@ public class ClickManager : Singleton<ClickManager>{
 		col.enabled = GUIActive;
 	}
 
-	//TODO: Refactor this spageti code
+	//TODO: Refactor this spagetti code
 	/// <summary>
 	/// UI buttons call this to make sure that they can process their clicks.
 	/// Note: the order of these checks is actually important, so don't go changing

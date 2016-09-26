@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System;
 using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 
 #if UNITY_EDITOR
@@ -9,7 +7,7 @@ using UnityEditor;
 using System.Xml.Serialization;
 
 // Test time format: 2014-09-20 3:00:00
-public class LgDebugTool : EditorWindow{
+public class DebugInputTool : EditorWindow{
 	#region constant values
     private const string CRITICAL_PATH = "/XML/Resources/Constants/_Critical.xml";
     private const string BUILDSETTING_PATH = "/XML/Resources/Constants/_BuildSetting.xml";
@@ -33,10 +31,10 @@ public class LgDebugTool : EditorWindow{
 	#endregion
 
     // Add menu item named "My Window" to the Window menu
-    [MenuItem("Window/LgDebugTool")]
+    [MenuItem("LGG/DebugInputTool")]
     public static void ShowWindow(){
         //Show existing window instance. If one doesn't exist, make one.
-        EditorWindow.GetWindow(typeof(LgDebugTool));
+        EditorWindow.GetWindow(typeof(DebugInputTool));
     }
 
     void OnFocus(){
@@ -82,14 +80,14 @@ public class LgDebugTool : EditorWindow{
         if(buildSettingList != null){
             foreach(Constant constant in buildSettingList){
                 switch(constant.Name){
-				case "BuildVersion":
-					constant.ConstantValue = EditorGUILayout.TextField("Build Version", constant.ConstantValue);
-					PlayerSettings.bundleVersion = constant.ConstantValue;
-					break;
-				case "BuildVersionCode":
-					constant.ConstantValue = EditorGUILayout.TextField("Android Build Version Code", constant.ConstantValue);
-					PlayerSettings.Android.bundleVersionCode = int.Parse(constant.ConstantValue);
-					break;
+				//case "BuildVersion":
+				//	constant.ConstantValue = EditorGUILayout.TextField("Build Version", constant.ConstantValue);
+				//	PlayerSettings.bundleVersion = constant.ConstantValue;
+				//	break;
+				//case "BuildVersionCode":
+				//	constant.ConstantValue = EditorGUILayout.TextField("Android Build Version Code", constant.ConstantValue);
+				//	PlayerSettings.Android.bundleVersionCode = int.Parse(constant.ConstantValue);
+				//	break;
 				case "AnalyticsEnabled":
 					bool toggleState = EditorGUILayout.Toggle(
 						new GUIContent("Is Game Analytics Enabled", "checking this box will also fill in the keys in GA_Setting"),
@@ -134,22 +132,6 @@ public class LgDebugTool : EditorWindow{
         }
 		EditorGUILayout.EndScrollView();
     }
-
-//    private void LoadAppIcon(string iconPrefix){
-//        string filePath = "Assets/Textures/MobileIcons/";
-//        int[] textureSizes = PlayerSettings.GetIconSizesForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
-//        Texture2D[] icons = new Texture2D[textureSizes.Length];
-//
-//        for(int i=0; i<textureSizes.Length; i++){
-//            string assetFilePath = filePath + iconPrefix + textureSizes[i] + ".png";
-//            Debug.Log(assetFilePath);
-//            Texture2D appIcon = AssetDatabase.LoadAssetAtPath(assetFilePath, typeof(Texture2D)) as Texture2D;
-//            Debug.Log(appIcon);
-//            icons[i] = appIcon;
-//        }
-//
-//        PlayerSettings.SetIconsForTargetGroup(EditorUserBuildSettings.selectedBuildTargetGroup, icons);
-//    }
 
     private void Serialize<T>(string filePath, object xmlData){
         XmlSerializer serializer = new XmlSerializer(typeof(T));

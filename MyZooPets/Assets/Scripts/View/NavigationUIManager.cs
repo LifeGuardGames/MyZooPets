@@ -23,8 +23,9 @@ public class NavigationUIManager : Singleton<NavigationUIManager> {
 	// Modetype generic, check CM
 	public void OnMissionsButton() {
 		// Call from fire crystal ui manager > opens wellapad uimanager > opens fire crystal ui
-		if(FireCrystalUIManager.Instance.IsOpen())
+		if(FireCrystalUIManager.Instance.IsOpen) {
 			FireCrystalUIManager.Instance.CloseUIBasedOnScene();
+		}
 		else {
 			FireCrystalUIManager.Instance.OpenUIBasedOnScene();
 		}

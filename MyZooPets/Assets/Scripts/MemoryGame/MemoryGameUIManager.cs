@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using UnityEngine.UI;
 
 public class MemoryGameUIManager : MonoBehaviour{
-
 	public Text labelComboScore;
 	public Text score;
-	public Image backboard;
+	public Image backBoard;
 	public TweenToggleDemux memoryHudDemux;
 
 	public void SetComboText(int comboScore){
@@ -19,12 +16,12 @@ public class MemoryGameUIManager : MonoBehaviour{
 	}
 
 	public void StartBoard(){
-		backboard.gameObject.SetActive(true);
+		backBoard.gameObject.SetActive(true);
 		memoryHudDemux.Show();
 	}
 
 	public void FinishBoard(){
-		backboard.gameObject.SetActive(false);
+		backBoard.gameObject.SetActive(false);
 		memoryHudDemux.Hide();
 	}
 }

@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DecorationZoneObject : DecorationZone, IDropInventoryTarget {
-
 	public Transform placementNode;
 	private GameObject decoGameObject;  // Instantiated game object decoration
 	private string oldDecoId;
@@ -40,9 +38,5 @@ public class DecorationZoneObject : DecorationZone, IDropInventoryTarget {
 	protected override void _RemoveDecoration(){
 		// Destroy the game object
 		Destroy(decoGameObject);
-	}
-
-	public virtual void OnItemDropped(InventoryItem item) {
-		_SetDecoration(item.ItemID, true);
 	}
 }

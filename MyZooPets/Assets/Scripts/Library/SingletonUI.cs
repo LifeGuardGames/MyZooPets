@@ -14,6 +14,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 
 	// is this ui open?
 	private bool isOpen = false;
+	public bool IsOpen {
+		get { return isOpen; }
+	}
 
 	// the mode type of this manager
 	protected UIModeTypes eModeType = UIModeTypes.Generic;
@@ -27,14 +30,6 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
 	public bool blockGUI;
 
-	/// <summary>
-	/// Determines whether this UI is opened.
-	/// </summary>
-	/// <returns><c>true</c> if this instance is open; otherwise, <c>false</c>.</returns>
-	public bool IsOpen(){
-		return isOpen;	
-	}
-
 	protected virtual void Awake(){
 	}
 
@@ -45,10 +40,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 	}
 
 	/// <summary>
-	/// When a button wants to open a given UI, this is
-	/// what should be called.  From a high level, the UI
-	/// manager locks clicks/modes, and then the child
-	/// class does its unique thing via _OpenUI.
+	/// When a button wants to open a given UI, this is what should be called.
+	/// From a high level, the UIManager locks clicks/modes,
+	/// the child class implements its own _OpenUI logic
 	/// </summary>
 	public void OpenUI(){
 		if(isLockModeInClickmanager){
@@ -83,8 +77,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		// send callback
 		UIManagerEventArgs args = new UIManagerEventArgs();
 		args.Opening = true;
-		if(OnTweenDone != null)
-			OnTweenDone(this, args);			
+		if(OnTweenDone != null) {
+			OnTweenDone(this, args);
+		}		
 	}
 
 	/// <summary>

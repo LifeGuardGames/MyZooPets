@@ -64,7 +64,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 
 	protected override void _GameOver() {
 		isGameActive = false;
-		//memoryUI.FinishBoard();
+		memoryUI.FinishBoard();
 	}
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
@@ -101,6 +101,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		// Reset the combo
 		combo = 0;
 		memoryUI.SetComboText(combo);
+		memoryUI.UpdateScoreText(startScoreValue);
 
 		CancelInvoke("StartScoreCountdown");
 		score = startScoreValue;
@@ -110,7 +111,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 
 	private void ResetBoard() {
 		boardController.ResetBoard(DataLoaderMemoryTrigger.GetDataList());
-		//memoryUI.StartBoard();
+		memoryUI.StartBoard();
 	}
 
 	#region Game Specific Functions

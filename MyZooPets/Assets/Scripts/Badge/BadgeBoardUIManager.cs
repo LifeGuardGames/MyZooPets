@@ -104,7 +104,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	private IEnumerator TryPopBadgeQueue() {
 		if(badgeUnlockQueue.Count != 0) {
 			// If the badge board is not opened already, open the UI and wait a while
-			if(!IsOpen()) {
+			if(!IsOpen) {
 				float sceneSpecificDelay = Constants.GetConstant<float>("BadgeBoardDelay_" + SceneUtils.CurrentScene);
 				yield return new WaitForSeconds(sceneSpecificDelay);
 

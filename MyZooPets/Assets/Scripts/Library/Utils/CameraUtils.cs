@@ -1,29 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-//---------------------------------------------------
-// CameraUtils
-// Utility functions for the camera.
-//---------------------------------------------------
-
+/// <summary>
+/// Utility functions for the camera.
+/// </summary>
 public static class CameraUtils{
-	
-	//---------------------------------------------------
-	// IsTouchingNGUI()
-	// Returns true if the user is touching an NGUI element.
-	//---------------------------------------------------
-	public static bool IsTouchingNGUI(Camera camera, Vector2 screenPos){
-		Ray ray = camera.ScreenPointToRay(screenPos);
-		RaycastHit hit;
-		int layerMask = 1 << 10;
-		bool isOnNGUILayer = false;
-		// Raycast
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
-			isOnNGUILayer = true;
-		}
-		return isOnNGUILayer;
-	}
-
 	//---------------------------------------------------
 	// IsTouchingNGUI()
 	// Returns true if the user is touching the pet.

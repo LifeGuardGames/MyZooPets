@@ -1,7 +1,5 @@
 using UnityEngine;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Button class that loads up the real inhaler game

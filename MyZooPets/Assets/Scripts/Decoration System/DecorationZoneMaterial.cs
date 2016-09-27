@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DecorationZoneMaterial : DecorationZone{
-
 	public GameObject[] arrayObjects;	// The game objects for which the material should be changed
 
 	/// <summary>

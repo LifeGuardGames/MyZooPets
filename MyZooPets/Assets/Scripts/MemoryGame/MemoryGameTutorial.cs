@@ -31,7 +31,7 @@ public class MemoryGameTutorial : MinigameTutorial {
 		GameObject.Destroy(tutBoards);
 		MemoryGameManager.Instance.inTutorial = false;
 		if(!isFinished){
-			MemoryGameManager.Instance.Reset();
+			MemoryGameManager.Instance.NewGame();
 		}
 	}
 

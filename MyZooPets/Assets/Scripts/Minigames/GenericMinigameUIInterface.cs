@@ -44,7 +44,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			DoctorMatchGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
-			Debug.LogWarning("PauseGame not set up for Memory");
+			MemoryGameManager.Instance.PauseGame();
 		}
 		else if(sceneName == SceneUtils.RUNNER){
 			RunnerGameManager.Instance.PauseGame();
@@ -68,7 +68,7 @@ public class GenericMinigameUIInterface : MonoBehaviour{
 			DoctorMatchGameManager.Instance.ResumeGame();
 		}
 		else if(sceneName == SceneUtils.MEMORY){
-			Debug.LogWarning("ResumeGame not set up for Memory");
+			MemoryGameManager.Instance.ResumeGame();
 		}
 		else if(sceneName == SceneUtils.RUNNER){
 			RunnerGameManager.Instance.ResumeGame();

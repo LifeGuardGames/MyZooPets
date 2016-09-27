@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System;
 
 /// <summary>
@@ -94,10 +95,10 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	}
 
 	private void OnTap(TapGesture gesture) {
-		Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-		//if(!IsTouchingNGUI(gesture.Position)){
-		ProcessTapOrClick();
-		//}
+		// Check to see if object is 
+		if(!EventSystem.current.IsPointerOverGameObject()) {
+			ProcessTapOrClick();
+		}
 	}
 
 	private void OnMouseDown() {
@@ -232,27 +233,6 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 			gameObject.GetComponent<Collider>().enabled = false;
 		}
 	}
-
-	/*
-	//True: if finger touches NGUI 
-	/// <summary>
-	/// Determines whether if the touch is touching NGUI element
-	/// </summary>
-	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
-	/// <param name="screenPos">Screen position.</param>
-	protected bool IsTouchingNGUI(Vector2 screenPos){
-		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
-		RaycastHit hit;
-		int layerMask = 1 << 10; 
-		bool isOnNGUILayer = false;
-		
-		// Raycast
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
-			isOnNGUILayer = true;
-		}
-		return isOnNGUILayer;
-	}
-	*/
 
 	// Called from minipet manager, handle animations and ui effects here
 	public void GainedExperience() {

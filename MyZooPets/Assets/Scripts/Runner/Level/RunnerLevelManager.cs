@@ -206,7 +206,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 	/// <param name="useStartingComponent">True will load the first component of the level group</param>
 	private LevelComponent PushAndInstantiateRandomComponent(bool useStartingComponent = false, bool tutMode = false){
 		LevelComponent newComponent = null;
-
+		
 		if(useStartingComponent)
 			newComponent = mCurrentLevelGroup.GetStartLevelComponent();
 		else if(tutMode)
@@ -322,7 +322,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 						// Find our new spawn point
 						Vector3 newCoinPosition = Vector3.Lerp(currentLineBegin, currentLineEnd, (currentInterpolation / currentLineDistance));
 						// But wait, that's on the prefab. Add in our real world clones position.
-						newCoinPosition += inLevelComponent.transform.position;
+						newCoinPosition += inLevelComponent.transform.localPosition;
 						CoinItem newCoin = (CoinItem)runnerItemManager.GetRandomItemOfType(typeof(CoinItem), mCurrentLevelGroup.LevelGroupID);
 						newCoin.transform.position = newCoinPosition;
 						newCoin.CoinValue = coinNum;
@@ -393,22 +393,24 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 	}
 
 	private void SpawnitemtAtRandomPointInGroup(LevelComponent inLevelComponent, PointGroup inSpawnGroup, RunnerItem inItemToSpawn){
-		Vector3 newPosition = inLevelComponent.transform.position;
+		Vector3 newPosition = inSpawnGroup.mPoints[0].mLocalPosition;
 		switch(inSpawnGroup.mCurveType){
 		case eCurveType.Point:
 			{
-				if(inSpawnGroup.mPoints.Count > 0)
-					newPosition += inSpawnGroup.mPoints[0].mPosition;
-				else
-					Debug.LogError("No point for the line type point?");
+					if(inSpawnGroup.mPoints.Count > 0) {
+						//newPosition -= inLevelComponent.gameObject.transform.localPosition;
+					}
+					else
+						Debug.LogError("No point for the line type point?");
 			}
 			break;
 
 		case eCurveType.Linear:
 			{
 				if(inSpawnGroup.mPoints.Count > 0){
-					//Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
-					newPosition += inSpawnGroup.mPoints[0].mPosition;
+						//Vector3 randomPoint = inSpawnGroup.mPoints[Random.Range(0, inSpawnGroup.mPoints.Count)].mPosition;
+						Debug.Log(inSpawnGroup.mPoints[0].mPosition.y);
+						newPosition += inSpawnGroup.mPoints[0].mPosition ;
 				}
 				else
 					Debug.LogError("No points for the line type linear");
@@ -446,7 +448,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 			}
 			break;
 		}
-		inItemToSpawn.transform.position = newPosition;
+		inItemToSpawn.transform.position = newPosition + inLevelComponent.transform.localPosition;
 
 		// Spawn it at that point
 		//(CoinItem)inItemToSpawn.

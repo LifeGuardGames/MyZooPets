@@ -47,8 +47,8 @@ GameObject:
   - 222: {fileID: 22232992}
   - 114: {fileID: 11417242}
   - 95: {fileID: 9559210}
-  - 65: {fileID: 6572904}
   - 114: {fileID: 11454612}
+  - 65: {fileID: 6574712}
   m_Layer: 0
   m_Name: FireButton
   m_TagString: ItemTarget
@@ -397,7 +397,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 411218}
   m_RootOrder: 1
---- !u!65 &6572904
+--- !u!65 &6574712
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -407,7 +407,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 6, z: 0.1}
+  m_Size: {x: 6, y: 6, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &9559210
 Animator:
@@ -449,9 +449,10 @@ Animation:
   m_GameObject: {fileID: 167458}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 24413a5877d0e2e43b6367f617455326, type: 2}
+  m_Animation: {fileID: 7400000, guid: b3fa65abb2361d84e97c448ebc8cd555, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 24413a5877d0e2e43b6367f617455326, type: 2}
+  - {fileID: 7400000, guid: b3fa65abb2361d84e97c448ebc8cd555, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -679,7 +680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
+  m_BlockingObjects: 3
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -6972,7 +6973,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 263120987
   m_SortingOrder: -50
   m_TargetDisplay: 0
 --- !u!224 &22410962
@@ -7018,7 +7019,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 167458}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 27.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -7163,7 +7164,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 4.41}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22457264
@@ -7237,9 +7238,9 @@ RectTransform:
   - {fileID: 407628}
   m_Father: {fileID: 22462222}
   m_RootOrder: 1
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 4.41}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 6.3, y: 6.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &100100000

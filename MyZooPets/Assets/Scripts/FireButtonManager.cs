@@ -4,7 +4,7 @@ using System;
 public class FireButtonManager : Singleton<FireButtonManager> {
 	public enum FireButtonState {
 		Empty,
-		AnimatingFill,
+		ActivatingButton,
 		ReadyForPress,
 		HoldingButton,
 		BlowingFire
@@ -47,13 +47,21 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	// Called when the pet reaches a smoke monster room
 	public void Activate() {
+		// The fire button will always be spawned at the pet's location
+		GameObject pet = GameObject.Find("Pet");
+		transform.position = pet.transform.position;
+		Debug.Log(pet.transform.position);
+
 		isActive = true;
 		toggleParent.SetActive(true);
+
 		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		if(!canBreatheFire) {
+			Debug.Log("Fire effect off");
 			TurnFireEffectOff();
 		}
 		else {
+			Debug.Log("Fire effect on");
 			TurnFireEffectOn();
 		}
 	}
@@ -71,13 +79,13 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	// This is called from start, and from FireButtonAnimHelper (looped back in)
 	public void TurnFireEffectOn() {
 		animHelper.FireEffectOn();
-
+		Debug.Log("FIRE BUTTON CALL");
 		if(FireButtonActive != null) {  // Used for tutorials
 			FireButtonActive(this, EventArgs.Empty);
 		}
 	}
 
-	// Called from FireButtonHelper
+	// Called from FireButtonHelper - Fire orb is dropped onto button
 	public void Step1_SetButtonActiveWithItem(InventoryItem itemData) {
 		if(buttonState == FireButtonState.Empty) {
 			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
@@ -90,7 +98,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 					InventoryManager.Instance.UsePetItem(itemData.ItemID);
 
 					// Pass, move on
-					buttonState = FireButtonState.AnimatingFill;
+					buttonState = FireButtonState.ActivatingButton;
 					animHelper.StartFireButtonAnimation();
 				}
 			}
@@ -102,7 +110,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	// Called from FireButtonAnimHelper
 	public void Step2_AnimationComplete() {
-		if(buttonState == FireButtonState.AnimatingFill) {
+		if(buttonState == FireButtonState.ActivatingButton) {
 			buttonState = FireButtonState.ReadyForPress;
 		}
 		else {

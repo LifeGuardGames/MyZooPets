@@ -6,10 +6,11 @@ public class BedroomTutFingerController : MonoBehaviour {
 	public enum FingerState {
 		Press,
 		Hold,
-		DelayPress
+		DelayPress,
+		FireCrystalDrag
 	}
 
-	Animator fingerAnimator;
+	public Animator fingerAnimator;
 
 	public void PlayState(FingerState state) {
 		switch(state) {
@@ -22,6 +23,9 @@ public class BedroomTutFingerController : MonoBehaviour {
 				break;
 			case FingerState.Hold:
 				fingerAnimator.Play("BedroomTutFingerHold");
+				break;
+			case FingerState.FireCrystalDrag:
+				fingerAnimator.Play("BedroomTutFingerFireCrystal");
 				break;
 		}
 	}

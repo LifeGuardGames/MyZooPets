@@ -490,10 +490,6 @@ public class GatingManager : Singleton<GatingManager>{
 	private void ArrivedShowFireButton(){
 		// the pet has reached its destination (in front of the monster) so show the fire UI
 		FireButtonManager.Instance.Activate();
-		
-		// Find the position of the pet and transform that position into NGUI screen space.
-		// The fire button will always be spawned at the pet's location
-		GameObject petLocation = GameObject.Find("Pet");
 
 		// get the gate in this room
 		Gate gate = activeGates[scriptPan.currentLocalPartition];

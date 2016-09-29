@@ -70,7 +70,17 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		RaycastHit hit;
 		Physics.Raycast(touchRay, out hit);
 		if(hit.collider != null) {
-			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget" || itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget") {
+
+			// Special cases for checking
+			bool isDraggingFireCrystalToButton = false;
+			if(inventoryData.ItemID == "Usable1" && hit.collider.gameObject.name == "FireButton") {
+				isDraggingFireCrystalToButton = true;
+            }
+
+			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget"
+				|| itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget"
+				|| isDraggingFireCrystalToButton) {
+
 				// Get the object's interface that handles item processing
 				IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();
 				Debug.Log(dropTarget.ToString());

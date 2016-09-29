@@ -8,7 +8,6 @@ using System.Collections.Generic;
 /// </summary>
 public class InventoryUIManager : Singleton<InventoryUIManager>{
 	public TweenToggle inventoryTween;
-	public RectTransform slotParent;
 	public GameObject inventoryTokenPrefab;
 	public List<Transform> inventorySlotList;
 	public Transform itemFlyToTransform;
@@ -31,35 +30,6 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		ShowPage(0);
 		RefreshButtonShowStatus();
     }
-
-	/// <summary>
-	/// Gets the fire orb reference.
-	/// Use for the tutorial to get the fire orb gameobject.
-	/// </summary>
-	/// <returns>The fire orb reference.</returns>
-	public GameObject GetFireOrbReference(){
-		GameObject retVal = null;
-		foreach(Transform item in slotParent) {
-			if(item.name == "Usable1"){
-				Transform trans = item.Find("Usable1");
-				if(trans != null){
-					retVal = trans.gameObject;
-				}
-			}
-		}
-
-		// Check if user is dragging it as well...
-		if(retVal == null){
-			GameObject dragPanel = GameObject.Find("ItemDragPanel");
-			if(dragPanel != null){
-				Transform trans = dragPanel.transform.Find("Usable1");
-				if(trans != null){
-					retVal = trans.gameObject;
-				}
-			}
-		}
-		return retVal;
-	}
 	
 	public void ShowPanel(){
 		inventoryTween.Show();

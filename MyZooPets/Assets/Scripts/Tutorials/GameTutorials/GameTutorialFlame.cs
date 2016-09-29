@@ -27,6 +27,7 @@ public class GameTutorialFlame : GameTutorial{
 	}
 			
 	protected override void ProcessStep(int step){
+		Debug.Log("TUTORIAL FLAME " + step);
 		// location of flame popups
 		Vector3 flamePopupLoc = Constants.GetConstant<Vector3>("FlamePopup");
 		switch(step){

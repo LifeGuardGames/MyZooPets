@@ -11,12 +11,15 @@ public class CurrentSceneInfo : EditorWindow {
 	void OnGUI() {
 		if(Application.isPlaying) {
 			if(SceneManager.GetActiveScene().name != SceneUtils.BEDROOM || SceneManager.GetActiveScene().name != SceneUtils.YARD) {
-				GUILayout.Label("ClickManager properties", EditorStyles.boldLabel);
+				GUILayout.Label("ClickManager Properties", EditorStyles.boldLabel);
 				EditorGUILayout.TextField("Stack Size", ClickManager.Instance.StackModes.Count.ToString());
 				EditorGUILayout.TextField("Current Mode", ClickManager.Instance.CurrentMode.ToString());
 
-				GUILayout.Label("Notification properties", EditorStyles.boldLabel);
+				GUILayout.Label("Notification Properties", EditorStyles.boldLabel);
 				EditorGUILayout.TextField("Queue Size", NotificationQueueData.QueueCount().ToString());
+
+				GUILayout.Label("Pet Information", EditorStyles.boldLabel);
+				EditorGUILayout.Toggle("Can blow fire", DataManager.Instance.GameData.PetInfo.CanBreathFire());
 			}
 			// Add any other things that you want to see here
 		}

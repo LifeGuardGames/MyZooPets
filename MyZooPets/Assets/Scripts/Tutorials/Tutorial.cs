@@ -219,6 +219,8 @@ public abstract class Tutorial {
 		if(flipX) {
 			goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
 		}
+
+		goFingerHint.GetComponent<BedroomTutFingerController>().PlayState(fingerState);
 	}
 	
 	/// <summary>

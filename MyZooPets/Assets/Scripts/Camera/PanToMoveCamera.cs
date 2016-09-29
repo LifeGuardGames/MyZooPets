@@ -53,8 +53,6 @@ public class PanToMoveCamera : MonoBehaviour {
 			return;
 		}
 
-		Debug.LogWarning("On camera snapped try");
-
 		LeanTween.moveX(gameObject, moveTo, 0.5f)
 			.setEase(LeanTweenType.easeInOutQuad)
 			.setOnComplete(OnCameraSnapped)
@@ -64,11 +62,9 @@ public class PanToMoveCamera : MonoBehaviour {
 	/// <summary>
 	/// Callback for when the camera is done snapping
 	/// </summary>
-	private void OnCameraSnapped(System.Object param) {
+	private void OnCameraSnapped(object param) {
 		Hashtable hash = (Hashtable)param;
 		int oldLocalPartition = (int)hash["Old"];
-
-		Debug.LogWarning("On camera snapped done");
 
 		// if we were snapping back, don't send anything
 		if(oldLocalPartition == currentLocalPartition) {

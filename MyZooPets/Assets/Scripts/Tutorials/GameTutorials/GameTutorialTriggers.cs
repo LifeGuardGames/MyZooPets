@@ -136,7 +136,7 @@ public class GameTutorialTriggers : GameTutorial{
 	private void TeachCleanup(){
 		// show a message
 		Vector3 triggerPopupLoc = Constants.GetConstant<Vector3>("TriggerPopupLoc");
-		string stringKey = GetKey() + "_" + GetStep();
+		string stringKey = GetKey() + "_" + CurrentStep;
 		string tutMessage = Localization.Localize(stringKey);
 		
 		Hashtable option = new Hashtable();
@@ -146,7 +146,7 @@ public class GameTutorialTriggers : GameTutorial{
 		ShowPopup(Tutorial.POPUP_STD, triggerPopupLoc, option: option);
 	
 		// spotlight the dust
-		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);
+		SpotlightObject(scriptTrigger.gameObject, hasFingerHint: true, fingerHintFlip: true);
 	
 		// add the dust to clickable objects
 		AddToProcessList(scriptTrigger.gameObject);

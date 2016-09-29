@@ -150,8 +150,9 @@ public class PetMovement : Singleton<PetMovement> {
 			//when the sprite reaches destination. stop transform and animation
 			if(petSprite.transform.position == destinationPoint) {
 				// send out an event because the pet has reached their destination
-				if(OnReachedDest != null)
+				if(OnReachedDest != null) {
 					OnReachedDest(this, EventArgs.Empty);
+				}
 				if(movingToAccessory) {
 					movingToAccessory = false;
 				}

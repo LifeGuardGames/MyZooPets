@@ -8,7 +8,6 @@ using System.Collections;
 /// Tutorial for showing the player what the wellapad is and how to access it
 /// </summary>
 public class GameTutorialWellapadIntro : GameTutorial{
-	// wellapad button
 	private GameObject missionButton = GameObject.Find("ButtonMissions");
 	private GameObject retentionMinipet;
 	private Vector3 minipetOldColliderSize;
@@ -41,7 +40,6 @@ public class GameTutorialWellapadIntro : GameTutorial{
 			// start by focusing on the wellapad button
 			TutorialManager.Instance.StartCoroutine(FocusWellapadButton());
 			break;
-			
 		case 3:
 			TutorialManager.Instance.StartCoroutine(OpeningWellapad());
 			break;
@@ -57,18 +55,16 @@ public class GameTutorialWellapadIntro : GameTutorial{
 
 		// spotlight the minipet
 		SpotlightObject(retentionMinipet, false,
-		                fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", focusOffsetY: 50f, fingerHintFlip: true, delay: 2f);
+		                hasFingerHint: true, fingerState: BedroomTutFingerController.FingerState.DelayPress,
+						spotlightOffsetY: 50f, fingerHintFlip: true, delay: 2f);
 
 		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked1;
 	}
 
-	// Minipet introduction	TODO finish
+	// Minipet introduction
 	private IEnumerator FocusOnRetentionMinipet2(){
 		yield return new WaitForSeconds(1f);
-
-		// Keep the spotlight from last step so only show finger
-		ShowFingerHint(retentionMinipet, flipX: true);
-
+		
 		// Show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("MinipetPopupLoc");
 		ShowPopup(TUTPOPUPTEXT, popupLoc);
@@ -76,11 +72,14 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		ShowRetentionPet(false, new Vector3(208, -177, -160));
 		retentionMinipet.GetComponent<BoxCollider>().size = new Vector3(18, 14, 1);	// increase the collider size
 		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked += RetentionPetClicked2;
+
+		// Keep the spotlight from last step so only show finger
+		ShowFingerHint(retentionMinipet, flipX: true);
 	}
 
 	private void RetentionPetClicked1(object sender, EventArgs args){
 		retentionMinipet.GetComponent<MiniPet>().OnTutorialMinipetClicked -= RetentionPetClicked1;
-		//		RemoveSpotlight();
+		// Don't remove spotlight here
 		RemoveFingerHint();
 		Advance();
 	}
@@ -110,7 +109,8 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		AddToProcessList(missionButton);
 
 		// spotlight the wellapad
-		SpotlightObject(missionButton, true, fingerHint: true, fingerHintPrefab: "BedroomTutFingerPressDelay", fingerHintFlip: true);
+		SpotlightObject(missionButton, true, hasFingerHint: true,
+			fingerState: BedroomTutFingerController.FingerState.DelayPress, fingerHintFlip: true);
 
 		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("WellapadPopupLoc");
@@ -141,7 +141,6 @@ public class GameTutorialWellapadIntro : GameTutorial{
 	//---------------------------------------------------	
 	private void ButtonClicked(){
 		button.onClick.RemoveListener(buttonAction);
-		Debug.Log("Removed listener");
 
 		// we have to allow the wellapad back button to be clicked
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();

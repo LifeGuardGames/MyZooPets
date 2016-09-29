@@ -242,8 +242,9 @@ public class GatingManager : Singleton<GatingManager>{
 	public bool HasActiveGate(string zone, int localParition){
 		bool isActive = false;
 		ImmutableDataGate data = DataLoaderGate.GetData(zone, localParition);
-		if(data != null) 
+		if(data != null) {
 			isActive = DataManager.Instance.GameData.GatingProgress.IsGateActive(data.GateID);
+		}
 		
 		return isActive;
 	}
@@ -340,8 +341,9 @@ public class GatingManager : Singleton<GatingManager>{
 		bool isDestroyed = hp <= 0;
 
 		// Fire event to notify any UI that GatinProgress data may have been changed
-		if(OnDamageGate != null)
+		if(OnDamageGate != null) {
 			OnDamageGate(this, EventArgs.Empty);
+		}
 
 		if(isDestroyed){
 			// Fire event to notify gate with gateID has been destroyed
@@ -393,10 +395,12 @@ public class GatingManager : Singleton<GatingManager>{
 	/// </summary>
 	/// <param name="isFinished">If set to <c>true</c> is finished.</param>
 	private void ListenForMovementFinished(bool isFinished){
-		if(isFinished)
+		if(isFinished) {
 			PetMovement.Instance.OnReachedDest += PetReachedDest;
-		else
-			PetMovement.Instance.OnReachedDest -= PetReachedDest;			
+		}
+		else {
+			PetMovement.Instance.OnReachedDest -= PetReachedDest;
+		}			
 	}
 
 
@@ -410,17 +414,19 @@ public class GatingManager : Singleton<GatingManager>{
 		// if the pet is happy and healthy, add the fire button
 		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
 		PetMoods moodState = DataManager.Instance.GameData.Stats.GetMoodState();
-		
-		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy){ 
+
+		if(healthState == PetHealthStates.Healthy && moodState == PetMoods.Happy) {
 			ArrivedShowFireButton();
-			
+
 			//if can't breathe fire show message
 			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
-			if(!canBreatheFire)
+			if(!canBreatheFire) {
 				IndicateNoFire();
+			}
 		}
-		else
+		else {
 			ShowUnhealthyNoFireSpeech();
+		}
 	}
 	/// <summary>
 	/// Pets the reached destination. It is critical this function is only
@@ -429,8 +435,9 @@ public class GatingManager : Singleton<GatingManager>{
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void PetReachedDest(object inhasender, EventArgs args){
-		if(OnReachedGate != null)
+		if(OnReachedGate != null) {
 			OnReachedGate(this, EventArgs.Empty);
+		}
 
 		PetInteractionManager.Instance.isInteractable = false;
 
@@ -487,7 +494,6 @@ public class GatingManager : Singleton<GatingManager>{
 		// Find the position of the pet and transform that position into NGUI screen space.
 		// The fire button will always be spawned at the pet's location
 		GameObject petLocation = GameObject.Find("Pet");
-
 
 		// get the gate in this room
 		Gate gate = activeGates[scriptPan.currentLocalPartition];

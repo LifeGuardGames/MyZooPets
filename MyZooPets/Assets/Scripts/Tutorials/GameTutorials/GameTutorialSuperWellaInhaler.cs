@@ -45,7 +45,7 @@ public class GameTutorialSuperWellaInhaler : GameTutorial {
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupInhalerReminder");
 		notificationEntry.Add(NotificationPopupData.Title, null);
-		notificationEntry.Add(NotificationPopupData.Message, Localization.Localize("POPUP_INHALER_TUTORIAL"));
+		notificationEntry.Add(NotificationPopupData.Message, Localization.Localize("POPUP_INHALER_REMINDER"));
 		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, okButtonCallback);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 

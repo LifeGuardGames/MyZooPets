@@ -7,9 +7,9 @@ public class PlayerController : Singleton<PlayerController> {
 	public static EventHandler<EventArgs> OnJump;
 	public static EventHandler<EventArgs> OnDrop;
 
-	[System.Serializable]
+	[Serializable]
 	public class PlatformerControllerMovement {
-		[System.NonSerialized]
+		[NonSerialized]
 		public float maxHeight = 18;
 		public float minHeight = 9;
 		public float maxSpeed = 45;
@@ -20,7 +20,7 @@ public class PlayerController : Singleton<PlayerController> {
 		public float targetSpeed;                   //The speed you want the character to reach to
 		public float acceleration = 5f;             //How fast does the character change speed? higher is faster
 		public float jumpHeight = 150;
-		[System.NonSerialized]
+		[NonSerialized]
 		public float verticalSpeed = 0f;
 		public float maxFallSpeed = 100f;           //maximum speed the player is allowed to fall
 

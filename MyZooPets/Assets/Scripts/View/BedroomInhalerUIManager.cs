@@ -16,25 +16,25 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	private TimeSpan initialCalculatedOffset;
 
 	// Start the correct animations based on its state
-	void Start(){
+	void Start() {
 		PlayPeriodLogic.OnNextPlayPeriod += OnNextPlayPeriod;
 
-		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()){
+		if(PlayPeriodLogic.Instance.CanUseEverydayInhaler()) {
 			ReadyToUseMode();
 		}
-		else{
+		else {
 			CoolDownMode();
 		}
 	}
 
-	void OnDestroy(){
+	void OnDestroy() {
 		PlayPeriodLogic.OnNextPlayPeriod -= OnNextPlayPeriod;
 	}
 
 	/// <summary>
 	/// Cools down mode.
 	/// </summary>
-	private void CoolDownMode(){
+	private void CoolDownMode() {
 		isCoolDownMode = true;
 		inhalerAnimationController.Stop();
 		starParticle.SetActive(false);
@@ -42,15 +42,16 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 
 		coolDownLabel.enabled = true;
 		canvas.GetComponent<Animation>().Stop();
-		canvas.transform.localScale = Vector3.one;
-		
-		isInitialCalculatedOffsetCached = false;	// Force recalculate the cache
+		canvas.transform.localScale = new Vector3(0.04f, 0.04f, 1f);
+		;
+
+		isInitialCalculatedOffsetCached = false;    // Force recalculate the cache
 	}
 
 	/// <summary>
 	/// Readies to use mode.
 	/// </summary>
-	private void ReadyToUseMode(){
+	private void ReadyToUseMode() {
 		isCoolDownMode = false;
 		inhalerAnimationController.Play("roomEntrance");
 		starParticle.SetActive(true);
@@ -61,12 +62,12 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 		canvas.GetComponent<Animation>().Play();
 	}
 
-	private void OnNextPlayPeriod(object sender, EventArgs args){
+	private void OnNextPlayPeriod(object sender, EventArgs args) {
 		ReadyToUseMode();
 	}
 
-	void Update(){
-		if(isCoolDownMode){
+	void Update() {
+		if(isCoolDownMode) {
 			// Update the cool down timer
 			TimeSpan timeLeft = PlayPeriodLogic.Instance.CalculateTimeLeftTillNextPlayPeriod();
 			coolDownLabel.text = StringUtils.FormatTimeLeft(timeLeft);
@@ -75,7 +76,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 			TimeSpan timeOffset = LgDateTime.GetTimeNow() - initialSavedTime;
 
 			// Calculate the denomicator once and cache it
-			if(!isInitialCalculatedOffsetCached){
+			if(!isInitialCalculatedOffsetCached) {
 				initialCalculatedOffset = PlayPeriodLogic.Instance.NextPlayPeriod - initialSavedTime;
 				isInitialCalculatedOffsetCached = true;
 			}

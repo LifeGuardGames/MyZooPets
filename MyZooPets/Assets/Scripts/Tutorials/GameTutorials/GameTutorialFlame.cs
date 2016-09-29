@@ -41,7 +41,7 @@ public class GameTutorialFlame : GameTutorial{
 
 			// Create a custom message with the pet's name
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
-			string message = GetKey() + "_" + GetStep();
+			string message = GetKey() + "_" + CurrentStep;
 			string tutMessage = string.Format(Localization.Localize(message), petName);
 			
 			// show a little popup message telling the user to let go to breath fire
@@ -76,8 +76,9 @@ public class GameTutorialFlame : GameTutorial{
 
 		GameObject fireButton = FireButtonManager.Instance.FireButtonObject;
 
-		SpotlightObject(fireButton, true, "TutorialSpotlightFlameButton", fingerHint: true,
-		                fingerHintPrefab: "PressHoldTut", focusOffsetY: 100f, fingerHintOffsetX: 0f, fingerHintOffsetY: -40f,
+		SpotlightObject(fireButton, isGUI: true, hasFingerHint: true,
+		                fingerState: BedroomTutFingerController.FingerState.Hold,
+						spotlightOffsetY: 100f, fingerOffsetX: 0f, fingerOffsetY: -40f,
 		                fingerHintFlip: true, delay: 0.5f);
 
 		AddToProcessList(fireButton);

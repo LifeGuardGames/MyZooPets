@@ -58,6 +58,7 @@ GameObject:
   - 4: {fileID: 400012}
   - 114: {fileID: 11400008}
   - 114: {fileID: 11400004}
+  - 65: {fileID: 6513108}
   m_Layer: 2
   m_Name: Entrance_Inhaler
   m_TagString: Untagged
@@ -194,6 +195,7 @@ Transform:
   m_LocalRotation: {x: 0.41882685, y: 0.56972283, z: 0.56972283, w: -0.41882685}
   m_LocalPosition: {x: 0, y: -1.9443941, z: -0.73752594}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 400004}
   m_RootOrder: 2
@@ -206,6 +208,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3079877, y: 0, z: 0}
   m_LocalScale: {x: 25.89912, y: 26.092867, z: 26.093124}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 400022}
   m_Father: {fileID: 400004}
@@ -219,6 +222,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 400020}
   - {fileID: 400002}
@@ -234,6 +238,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 17.24, y: 8.63, z: 41.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 400004}
   - {fileID: 22477110}
@@ -248,6 +253,7 @@ Transform:
   m_LocalRotation: {x: 0.41882694, y: 0.5697228, z: 0.5697228, w: -0.41882694}
   m_LocalPosition: {x: 0, y: -1.9443941, z: 0.21932602}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 400004}
   m_RootOrder: 0
@@ -260,9 +266,22 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.011538374, z: 0.0064798226}
   m_LocalScale: {x: 0.041524395, y: 0.041524414, z: 0.041524403}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 400002}
   m_RootOrder: 0
+--- !u!65 &6513108
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.98, y: 5.32, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!111 &11100000
 Animation:
   m_ObjectHideFlags: 1
@@ -322,12 +341,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modeTypes: 00000000
-  buttonName: 
   buttonSound: buttonGeneric2
   isCheckingClickManager: 1
   isSprite: 0
   strScene: InhalerGame
-  loadingText: InhalerGame
+  loadingText: INHALER_TITLE
   finalPosition: {x: 15.94, y: 10.3, z: 28.4}
   finalRotation: {x: 4.8985, y: 3.562836, z: 0.2358398}
   shouldSaveSceneData: 1
@@ -3587,6 +3605,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22477110}
   m_RootOrder: 3
@@ -3604,6 +3623,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22477110}
   m_RootOrder: 0
@@ -3621,6 +3641,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22477110}
   m_RootOrder: 1
@@ -3638,6 +3659,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.04, y: 0.04, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22444252}
   - {fileID: 22450274}
@@ -3659,6 +3681,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22477110}
   m_RootOrder: 2

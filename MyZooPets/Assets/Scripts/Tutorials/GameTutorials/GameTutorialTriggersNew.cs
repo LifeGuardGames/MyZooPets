@@ -55,7 +55,7 @@ public class GameTutorialTriggersNew : GameTutorial{
 		ShowPopup(TUTPOPUPTEXT, triggerPopupLoc);
 		
 		// spotlight the dust
-		SpotlightObject(scriptTrigger.gameObject, fingerHint: true, fingerHintFlip: true);
+		SpotlightObject(scriptTrigger.gameObject, hasFingerHint: true, fingerHintFlip: true);
 		
 		// add the dust to clickable objects
 		AddToProcessList(scriptTrigger.gameObject);

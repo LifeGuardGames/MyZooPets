@@ -556,8 +556,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 104780}
-          m_MethodName: 
+        - m_Target: {fileID: 11454612}
+          m_MethodName: OnPointerDown
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -573,8 +573,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: FireButtonReleased
+        - m_Target: {fileID: 11454612}
+          m_MethodName: OnPointerUp
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -711,6 +711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8560fca3b079eb8478156a8951263deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldCollider: {fileID: 6574712}
 --- !u!114 &11472196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -951,6 +952,7 @@ MonoBehaviour:
   buttonChargeParticle: {fileID: 19807604}
   buttonBurstParticle: {fileID: 19843374}
   imageButton: {fileID: 11427822}
+  fireButtonHelper: {fileID: 11454612}
   activeFireButtonSprite: {fileID: 21300000, guid: d815f7f1ff7f2b64d9acf4b7cd052a56,
     type: 3}
   inactiveFireButtonSprite: {fileID: 21300000, guid: 96417b35f6cb73b45811f8c68b865d54,

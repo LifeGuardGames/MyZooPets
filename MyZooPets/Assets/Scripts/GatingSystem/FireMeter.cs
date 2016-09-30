@@ -7,8 +7,9 @@ public class FireMeter : MonoBehaviour{
 	// Listeners will probably have to unregister themselves when they receive the event;
 	// otherwise, the listeners will keep getting the event
 	public static EventHandler<EventArgs> OnMeterFilled;   		// when the meter is 100% full
-	public static EventHandler<EventArgs> OnMeterStartFilling;	// when meter is filling up 
+	public static EventHandler<EventArgs> OnMeterStartFilling;  // when meter is filling up 
 
+	public float fillSliderLength = 250f;
 	public Image slider;										// the slider that the meter fills up
 	public float fillTime = 2f;
 	public string fillSound;
@@ -19,7 +20,7 @@ public class FireMeter : MonoBehaviour{
 	
 	// Call this function when the meter should start filling.	
 	public void StartFilling(){
-		LeanTween.value(gameObject, UpdateSliderValueCallback, 0f, 1f, fillTime)
+		LeanTween.value(gameObject, UpdateSliderValueCallback, 0f, fillSliderLength, fillTime)
 			.setEase(LeanTweenType.easeInQuad)
 			.setOnComplete(OnFillComplete);
 

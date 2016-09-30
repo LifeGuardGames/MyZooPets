@@ -63,7 +63,8 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 		else {
 			Debug.Log("Fire effect on");
 			TurnFireEffectOn();
-		}
+			buttonState = FireButtonState.ReadyForPress;
+        }
 	}
 
 	// Called when the pet leaves a smoke monster room
@@ -175,6 +176,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 			else {
 				// if the meter was not full, cancel the attack
 				attackScript.Cancel();
+				buttonState = FireButtonState.ReadyForPress;
 			}
 			// regardless we want to empty the meter
 			fireMeterScript.Reset();

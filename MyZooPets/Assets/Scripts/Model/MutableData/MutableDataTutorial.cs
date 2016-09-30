@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-//---------------------------------------------------
-// Tutotrial Data
-// Save data for tutorial
-// Mutable data
-//---------------------------------------------------
 public class MutableDataTutorial{
-    public List<string> ListPlayed {get; set;}	// list of tutorials that have been played	
-	public DateTime Tutorial1DonePlayPeriod {get; set;}
-	public bool RunnerTutorialVersionCheckDone {get; set;}
+    public List<string> ListPlayed {get; set;}	// list of tutorials that have been played
+
+	public DateTime Tutorial1DonePlayPeriod {get; set;}		// TODO Deprecated
+	public bool RunnerTutorialVersionCheckDone {get; set; } // TODO Deprecated
 
 	public bool IsFlameTutorialDone(){
 		return IsTutorialFinished(TutorialManagerBedroom.TUT_FLAME);

@@ -28,43 +28,16 @@ public class GameTutorialFlameCrystal : GameTutorial {
 
 	private IEnumerator DragFireOrbHint(){
 		yield return new WaitForSeconds(0.5f);
-		GameObject fireButtonReference = null;
-		GameObject fireOrbItemReference = null;
+		FireButtonManager.FireButtonActive += FireButtonActiveEventHandler;
 
-		try{
-			//add fire orb to the clickable list
-			FireButtonManager.FireButtonActive += FireButtonActiveEventHandler;
-			//fireOrbItemReference = InventoryUIManager.Instance.GetFireOrbReference();	// TODO ------------------
-			fireButtonReference = FireButtonManager.Instance.FireButtonObject;
+		// Add fire orb to clickable list
+		Debug.LogWarning("Check process list for fire orb");
+		GameObject fireOrbItemReference = InventoryUIManager.Instance.SearchCurrentPageObject("Usable1");
+		AddToProcessList(fireOrbItemReference);
 
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			Vector3 fireOrbItemPosition = Vector3.zero; // TEMP CODE - remove me once fixed
-			Vector3 fireButtonPosition = Vector3.zero; // TEMP CODE - remove me once fixed
-													   //Vector3 fireOrbItemPosition = LgNGUITools.GetScreenPosition(fireOrbItemReference);
-													   //Vector3 fireButtonPosition = LgNGUITools.GetScreenPosition(fireButtonReference);
-
-			//AddToProcessList(fireOrbItemReference);	// TODO ------------------------------------
-
-			ShowFingerHint(fireButtonReference, fingerState: BedroomTutFingerController.FingerState.FireCrystalDrag);
-
-			// set the hint to the right spawn location
-			/*
-			Vector3 hintPosition = fireOrbItemPosition;
-			hintPosition.z = fireOrbFingerHint.transform.localPosition.z;
-			fireOrbFingerHint.transform.localPosition = hintPosition;
-
-			fireButtonPosition = CameraManager.Instance.TransformAnchorPosition(fireButtonPosition, 
-			                                                                    InterfaceAnchors.Center, 
-			                                                                    InterfaceAnchors.BottomRight);
-			fireButtonPosition.z = fireOrbFingerHint.transform.localPosition.z;
-
-			LeanTween.moveLocal(fireOrbFingerHint, fireButtonPosition, 2f)
-				.setLoopClamp().setRepeat(-1).setEase(LeanTweenType.easeInOutQuad);
-				*/
-		}
-		catch(NullReferenceException e){
-			Debug.LogError(e.Message);
-		}
+		// Show the spotlight and finger
+		GameObject fireButtonReference = FireButtonManager.Instance.FireButtonObject;
+		ShowFingerHint(fireButtonReference, fingerState: BedroomTutFingerController.FingerState.FireCrystalDrag);
 	}
 
 	/// <summary>
@@ -75,5 +48,4 @@ public class GameTutorialFlameCrystal : GameTutorial {
 		RemoveFingerHint();
 		Advance();
 	}
-
 }

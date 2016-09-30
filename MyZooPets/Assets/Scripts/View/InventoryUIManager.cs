@@ -43,6 +43,20 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		addItemPulseAnim.Play();
 	}
 
+	/// <summary>
+	/// Seach the current slot page for a specific item (used for tut)
+	/// </summary>
+	public GameObject SearchCurrentPageObject(string objectName) {
+		foreach(Transform slot in inventorySlotList) {
+			foreach(Transform child in slot) {
+				if(child.name == objectName) {
+					return child.gameObject;
+				}
+			}
+		}
+		return null;
+	}
+
 	#region Page sorting functions
 	// Checks to see if the buttons need to appear
 	public void RefreshButtonShowStatus() {

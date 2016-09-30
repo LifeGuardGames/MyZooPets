@@ -8,6 +8,7 @@ public class FireButtonAnimHelper : MonoBehaviour {
 	public ParticleSystem buttonBurstParticle;
 
 	public Image imageButton;
+	public FireButtonHelper fireButtonHelper;
 	public Sprite activeFireButtonSprite;
 	public Sprite inactiveFireButtonSprite;
 
@@ -38,16 +39,17 @@ public class FireButtonAnimHelper : MonoBehaviour {
 	// This is called from FireButtonUIManager
 	public void FireEffectOn(){
 		enableFireButtonAnimation.Stop();
-		Debug.Log("Fire effect on");
 		buttonAnimation.Play();
 		imageButton.sprite = activeFireButtonSprite;    //change button image 
-		sunBeam.SetActive(true);
+		fireButtonHelper.Toggle3DCollider(false);
+        sunBeam.SetActive(true);
 	}
 
 	public void FireEffectOff() {
 		buttonAnimation.Stop();
 		Debug.Log("Fire effect off");
 		imageButton.sprite = inactiveFireButtonSprite;
+		fireButtonHelper.Toggle3DCollider(true);
 		sunBeam.SetActive(false);
 	}
 

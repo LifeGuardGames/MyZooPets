@@ -11,12 +11,10 @@ public class FireButtonHelper : MonoBehaviour, IDropInventoryTarget {
 	}
 
 	public void OnPointerDown() {
-		Debug.Log("Pointer down");
 		FireButtonManager.Instance.Step3_ChargeFire();
 	}
 
 	public void OnPointerUp() {
-		Debug.Log("Pointer up");
 		FireButtonManager.Instance.Step4_ReleaseCharge();
 	}
 

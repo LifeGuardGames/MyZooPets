@@ -19,7 +19,6 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	public Text descBadgeTitle;
 	public Text descBadgeInfo;
 
-	private string blankBadgeTextureName = "badgeBlank";
 	private GameObject lastClickedBadge;
 	private bool isActive = false;
 

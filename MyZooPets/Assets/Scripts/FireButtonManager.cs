@@ -23,10 +23,17 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	public FireButtonAnimHelper animHelper;
 	public FireMeter fireMeterScript;
-
+	private AttackGate attackScript;        // attack gate script
+	
 	private bool isActive = false;
 	public bool IsActive {
 		get { return isActive; }
+	}
+
+	private Gate currentGate;               // the gate that this button is for
+	public Gate CurrentGate {
+		get { return currentGate; }
+		set { currentGate = value; }
 	}
 
 	void Start() {
@@ -50,18 +57,15 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 		// The fire button will always be spawned at the pet's location
 		GameObject pet = GameObject.Find("Pet");
 		transform.position = pet.transform.position;
-		Debug.Log(pet.transform.position);
 
 		isActive = true;
 		toggleParent.SetActive(true);
 
 		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		if(!canBreatheFire) {
-			Debug.Log("Fire effect off");
 			TurnFireEffectOff();
 		}
 		else {
-			Debug.Log("Fire effect on");
 			TurnFireEffectOn();
 			buttonState = FireButtonState.ReadyForPress;
         }
@@ -80,7 +84,6 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	// This is called from start, and from FireButtonAnimHelper (looped back in)
 	public void TurnFireEffectOn() {
 		animHelper.FireEffectOn();
-		Debug.Log("FIRE BUTTON CALL");
 		if(FireButtonActive != null) {  // Used for tutorials
 			FireButtonActive(this, EventArgs.Empty);
 		}
@@ -131,7 +134,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 					// kick off the attack script
 					attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
-					attackScript.Init(gate);
+					attackScript.Init(currentGate);
 
 					PetAnimationManager.Instance.StartFireBlow();
 
@@ -165,7 +168,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 				// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 				// fire mode cheat is active and the gate is still alive
-				if(gate.GetGateHP() <= 1) {
+				if(currentGate.GetGateHP() <= 1) {
 					Deactivate();
 				}
 				else {
@@ -188,17 +191,5 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	public void Step5_FinishBlowingFire() {
 
-	}
-
-
-
-
-
-
-	private AttackGate attackScript;        // attack gate script
-	private Gate gate;                      // the gate that this button is for
-
-	public void SetGate(Gate gate) {
-		this.gate = gate;
 	}
 }

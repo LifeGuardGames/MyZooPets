@@ -36,7 +36,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	private float timeToShake = 2f;
 	private int bonusStack = 0;
 	//If they do nothing for 5 seconds. Shake the finger
-	
+
 	void Update() {
 		if(IsPaused) {
 			return;
@@ -98,10 +98,10 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		tutorial = doctorMatchTutorial;
 	}
 
-	protected override void _NewGame() { //Reset everything then start again
+	protected override void _NewGame() {	//Reset everything then start again
 		ResetScore();
 
-		if(finger) { //Called if we complete the tutorial or restart early
+		if(finger) {						//Called if we complete the tutorial or restart early
 			BarFinger();
 		}
 
@@ -161,7 +161,6 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 		// TODO FILL ME IN!!!
 		//Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
 #endif
@@ -208,7 +207,6 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		comboController.UpdateScore(score);
 	}
 
-
 	public void TempLockZones() {
 		zoneGreen.TempLock(.15f);
 		zoneYellow.TempLock(.15f);
@@ -228,6 +226,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		zoneRed.button.interactable = true;
 		zoneYellow.button.interactable = true;
 	}
+
 	// Input coming from button scripts
 	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
 		AssemblyLineItem peakedItem = assemblyLineController.PeekFirstItem();
@@ -263,8 +262,9 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		lifeBarController.UpdateCount(toClear);
 		if(!lifeBarController.IsEmpty || bonusStack > 0) {
 			assemblyLineController.ShiftAndAddNewItem();
-			if(lifeBarController.IsEmpty && bonusStack > 0)
+			if(lifeBarController.IsEmpty && bonusStack > 0) {
 				bonusStack--;
+			}
 		}
 		else if(!assemblyLineController.LineComplete) {
 			assemblyLineController.MoveUpLine();
@@ -323,10 +323,12 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 	private void ComboBonus() {
 		if(comboController.ComboLevel == 2 && !isTutorial) { //Big combo bonus (does not apply during tutorial)
-			if(assemblyLineController.Count != 1)
+			if(assemblyLineController.Count != 1) {
 				bonusStack += 3;
-			else
+			}
+			else {
 				assemblyLineController.PopulateQueue(compare: true, count: 3, indexOffset: 1);
+			}
 		}
 		else if(comboController.ComboLevel == 1) { //Small combo bonus
 			UpdateScore(comboController.Combo);
@@ -344,7 +346,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 	private void PlaySoundCorrect() {
 		Hashtable hashOverride = new Hashtable();
-		hashOverride["Pitch"] = .9f + ((float)comboController.ComboMod) / 30f;//Mathf.Clamp(.9f + ((float)comboController.Combo / 30), 0, 1.25f); //Goes from .9 to 1.25 by increments of .0333 and then caps
+		hashOverride["Pitch"] = .9f + (comboController.ComboMod) / 30f;
 		AudioManager.Instance.PlayClip("clinicCorrect", option: hashOverride);
 	}
 }

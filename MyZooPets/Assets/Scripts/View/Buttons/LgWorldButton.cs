@@ -11,7 +11,7 @@ public abstract class LgWorldButton : MonoBehaviour {
 
 	public List<UIModeTypes> modeTypes = new List<UIModeTypes>();
 	public List<UIModeTypes> ModeTypes {
-		get { return ModeTypes; }
+		get { return modeTypes; }
 	}
 
 	public string buttonSound;

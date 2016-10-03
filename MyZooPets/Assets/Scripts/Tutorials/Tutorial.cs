@@ -29,16 +29,13 @@ public abstract class Tutorial {
 	protected GameObject goPopup;							// current (and only) tutorial popup
 	private GameObject goFingerHint;						// current finger hint
 	private GameObject goRetentionPet;						// Current retention pet sprite
-	private int currentStep;								// step the tutorial is currently on
-
-	public bool CanProcess(GameObject go) {
-		bool canProcess = listCanProcess.Contains(go);
-		return canProcess;
+	private int currentStep;								// Step the tutorial is currently on
+	public int CurrentStep {
+		get { return currentStep; }
 	}
 
-	//Return the current step that the tutorial is on
-	public int GetStep() {
-		return currentStep;
+	public bool CanProcess(GameObject go) {
+		return listCanProcess.Contains(go);
 	}
 
 	protected void AddToProcessList(GameObject go, bool isDebugLog = false) {
@@ -66,9 +63,9 @@ public abstract class Tutorial {
 
 	//Return the key of this tutorial
 	protected string GetKey() {
-		if(string.IsNullOrEmpty(tutorialKey))
+		if(string.IsNullOrEmpty(tutorialKey)) {
 			SetKey();
-
+		}
 		return tutorialKey;
 	}
 
@@ -83,7 +80,7 @@ public abstract class Tutorial {
 	/// </summary>
 	public void Advance() {
 		// increment the current step of the tutorial
-		int step = GetStep();
+		int step = CurrentStep;
 		step++;
 		SetStep(step);
 	}
@@ -114,9 +111,7 @@ public abstract class Tutorial {
 			//DataManager.Instance.SaveGameData();
 		}
 
-		if(goPopup != null) {
-			GameObject.Destroy(goPopup);
-		}
+		RemovePopup();
 
 		// activate tutorial end callback
 		if(OnTutorialEnd != null) {
@@ -145,11 +140,13 @@ public abstract class Tutorial {
 	///  	delay (float): how long does it take the spot light to fade in
 	/// </summary>
 	protected void SpotlightObject(GameObject goTarget, bool isGUI = false,
-		string spotlightPrefab = "TutorialSpotlight",
-		bool fingerHint = false, string fingerHintPrefab = "BedroomTutFingerPress",
-		float focusOffsetX = 0f, float focusOffsetY = 0f,
-		float fingerHintOffsetX = 0f, float fingerHintOffsetY = 60f,
+		bool hasFingerHint = false, BedroomTutFingerController.FingerState fingerState = BedroomTutFingerController.FingerState.Press,
+		float spotlightOffsetX = 0f, float spotlightOffsetY = 0f,
+		float fingerOffsetX = 0f, float fingerOffsetY = 60f,
 		bool fingerHintFlip = false, float delay = -1f) {
+
+		RemoveSpotlight();
+		RemoveFingerHint();
 
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
@@ -165,19 +162,10 @@ public abstract class Tutorial {
 		}
 
 		// Adjust for custom offset
-		focusPos = new Vector3(focusPos.x + focusOffsetX, focusPos.y + focusOffsetY, focusPos.z);
+		focusPos = new Vector3(focusPos.x + spotlightOffsetX, focusPos.y + spotlightOffsetY, focusPos.z);
 
-		// destroy the old object if it existed
-		if(goSpotlight != null) {
-			GameObject.Destroy(goSpotlight);
-		}
-
-		if(goFingerHint != null) {
-			GameObject.Destroy(goFingerHint);
-		}
-
-		// create the spotlight
-		GameObject goResource = Resources.Load(spotlightPrefab) as GameObject;
+		// Create the spotlight
+		GameObject goResource = Resources.Load("TutorialSpotlight") as GameObject;
 		goSpotlight = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
 
 		// Set the delay if defined
@@ -185,33 +173,25 @@ public abstract class Tutorial {
 			goSpotlight.GetComponent<AlphaTweenToggle>().showDelay = delay;
 		}
 
-		// move the spotlight into position
+		// Move the spotlight into position
 		goSpotlight.transform.localPosition = focusPos;
 
-		// spawn finger hint
-		if(fingerHint) {
-			GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
-			goFingerHint = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, fingerHintResource);
-			focusPos.z = goFingerHint.transform.localPosition.z;
-			focusPos.y = focusPos.y + fingerHintOffsetY;        //offset in Y so the finger hint doesn't overlap the image
-			focusPos.x = focusPos.x + fingerHintOffsetX;
-			goFingerHint.transform.localPosition = focusPos;
-
-			if(fingerHintFlip) {
-				goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
-			}
-		}
+		// Spawn finger hint
+		if(hasFingerHint) {
+			ShowFingerHint(goTarget, isGUI: isGUI, fingerState: fingerState,
+				offsetX: fingerOffsetX, offsetY: fingerOffsetY,
+				flipX: fingerHintFlip);
+        }
 
 		// Show the backdrop
 		goSpotlight.GetComponent<AlphaTweenToggle>().ShowAfterInit();
 	}
 
-	//--------------------------------------------------------------
-	// ShowFingerHint()
-	// Use this function if you only want to spawn finger hint
-	//--------------------------------------------------------------
-	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false, string fingerHintPrefab = "BedroomTutFingerPress",
-		float offsetFromCenter = 60.0f, float offsetFromCenterX = 0.0f, bool flipX = false) {
+	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false,
+		BedroomTutFingerController.FingerState fingerState = BedroomTutFingerController.FingerState.Press,
+		float offsetX = 0.0f, float offsetY = 60.0f, bool flipX = false) {
+
+		RemoveFingerHint();
 
 		// get the proper location of the object we are going to focus on
 		Vector3 focusPos;
@@ -229,57 +209,26 @@ public abstract class Tutorial {
 				InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
 		}
 
-		if(goFingerHint != null) {
-			GameObject.Destroy(goFingerHint);
-		}
-
-		GameObject fingerHintResource = (GameObject)Resources.Load(fingerHintPrefab);
+		GameObject fingerHintResource = (GameObject)Resources.Load("BedroomTutFinger");
 		goFingerHint = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, fingerHintResource);
-		focusPos.x = focusPos.x + offsetFromCenterX;
-		focusPos.y = focusPos.y + offsetFromCenter; //offset in Y so the finger hint doesn't overlap the image
-		focusPos.z = goFingerHint.transform.localPosition.z;
+		focusPos.x = focusPos.x + offsetX;
+		focusPos.y = focusPos.y + offsetY; //offset in Y so the finger hint doesn't overlap the image
+		focusPos.z = 0f;
 		goFingerHint.transform.localPosition = focusPos;
 
 		if(flipX) {
 			goFingerHint.transform.localScale = new Vector3(-1, 1, 1);
 		}
 
+		goFingerHint.GetComponent<BedroomTutFingerController>().PlayState(fingerState);
 	}
-
-	protected void RemoveFingerHint() {
-		if(goFingerHint != null) {
-			GameObject.Destroy(goFingerHint);
-		}
-	}
-
-	//---------------------------------------------------
-	// RemoveSpotlight()
-	// Removes the current spotlight object.
-	//---------------------------------------------------		
-	protected void RemoveSpotlight() {
-		if(goSpotlight != null) {
-			GameObject.Destroy(goSpotlight);
-		}
-	}
-
-	//---------------------------------------------------
-	// RemovePopup()
-	// Removes the current popup object.
-	//---------------------------------------------------		
-	protected void RemovePopup() {
-		if(goPopup != null) {
-			GameObject.Destroy(goPopup);
-		}
-	}
-
+	
 	/// <summary>
 	/// Display the tutorial popup, messages are loaded automatically unless overridden
 	/// </summary>
 	protected void ShowPopup(string popupPrefabKey, Vector3 localPosition, string customMessage = null) {
-		if(goPopup) {
-			GameObject.Destroy(goPopup);
-		}
-		
+		RemovePopup();
+
 		// Create the popup
 		GameObject goResource = Resources.Load(popupPrefabKey) as GameObject;
 		goPopup = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
@@ -291,11 +240,13 @@ public abstract class Tutorial {
 			popupText.text = customMessage;
 		}
 		else {										// Get text to display from tutorial key + step
-			popupText.text = Localization.Localize(GetKey() + "_" + GetStep());
+			popupText.text = Localization.Localize(GetKey() + "_" + CurrentStep);
 		}
     }
 
 	public void ShowRetentionPet(bool isFlipped, Vector3 position) {
+		RemoveRetentionPet();
+
 		GameObject goResource = Resources.Load("TutorialRetentionPet") as GameObject;
 		goRetentionPet = GameObjectUtils.AddChildGUI(TutorialManager.Instance.UICanvasParent, goResource);
 		goRetentionPet.transform.localPosition = position;
@@ -304,9 +255,28 @@ public abstract class Tutorial {
 		}
 	}
 
+
+	protected void RemoveFingerHint() {
+		if(goFingerHint != null) {
+			UnityEngine.Object.Destroy(goFingerHint);
+		}
+	}
+
+	protected void RemoveSpotlight() {
+		if(goSpotlight != null) {
+			UnityEngine.Object.Destroy(goSpotlight);
+		}
+	}
+
+	protected void RemovePopup() {
+		if(goPopup != null) {
+			UnityEngine.Object.Destroy(goPopup);
+		}
+	}
+
 	public void RemoveRetentionPet() {
 		if(goRetentionPet != null) {
-			GameObject.Destroy(goRetentionPet);
+			UnityEngine.Object.Destroy(goRetentionPet);
 		}
 	}
 }

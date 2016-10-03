@@ -4,10 +4,9 @@
 /// Utility functions for the camera.
 /// </summary>
 public static class CameraUtils{
-	//---------------------------------------------------
-	// IsTouchingNGUI()
-	// Returns true if the user is touching the pet.
-	//---------------------------------------------------
+	/// <summary>
+	/// Returns true if the user is touching the pet.
+	/// </summary>
 	public static bool IsTouchingPet(Camera camera, Vector2 screenPos){
 		Ray ray = camera.ScreenPointToRay(screenPos);
 		RaycastHit hit;

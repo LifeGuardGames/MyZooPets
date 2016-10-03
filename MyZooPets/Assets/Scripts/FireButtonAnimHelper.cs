@@ -8,6 +8,7 @@ public class FireButtonAnimHelper : MonoBehaviour {
 	public ParticleSystem buttonBurstParticle;
 
 	public Image imageButton;
+	public FireButtonHelper fireButtonHelper;
 	public Sprite activeFireButtonSprite;
 	public Sprite inactiveFireButtonSprite;
 
@@ -15,8 +16,8 @@ public class FireButtonAnimHelper : MonoBehaviour {
 
 	// Start the animation for the fire button enabling process, this will call the below 4 functions
 	public void StartFireButtonAnimation(){
-		enableFireButtonAnimation.Play();
-	}
+		enableFireButtonAnimation.Play("FireButtonEnableAnimation");
+    }
 	
 	// This is called from the animation event
 	public void StartChargeParticle(){
@@ -35,17 +36,20 @@ public class FireButtonAnimHelper : MonoBehaviour {
 		FireButtonManager.Instance.TurnFireEffectOn();	// Need to use event handler
     }
 
-	// This is called from the animation event AND FireButtonUIManager
+	// This is called from FireButtonUIManager
 	public void FireEffectOn(){
 		enableFireButtonAnimation.Stop();
 		buttonAnimation.Play();
 		imageButton.sprite = activeFireButtonSprite;    //change button image 
-		sunBeam.SetActive(true);
+		fireButtonHelper.Toggle3DCollider(false);
+        sunBeam.SetActive(true);
 	}
 
 	public void FireEffectOff() {
 		buttonAnimation.Stop();
+		Debug.Log("Fire effect off");
 		imageButton.sprite = inactiveFireButtonSprite;
+		fireButtonHelper.Toggle3DCollider(true);
 		sunBeam.SetActive(false);
 	}
 

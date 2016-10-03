@@ -4,7 +4,7 @@ using System;
 public class FireButtonManager : Singleton<FireButtonManager> {
 	public enum FireButtonState {
 		Empty,
-		AnimatingFill,
+		ActivatingButton,
 		ReadyForPress,
 		HoldingButton,
 		BlowingFire
@@ -23,10 +23,17 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	public FireButtonAnimHelper animHelper;
 	public FireMeter fireMeterScript;
-
+	private AttackGate attackScript;        // attack gate script
+	
 	private bool isActive = false;
 	public bool IsActive {
 		get { return isActive; }
+	}
+
+	private Gate currentGate;               // the gate that this button is for
+	public Gate CurrentGate {
+		get { return currentGate; }
+		set { currentGate = value; }
 	}
 
 	void Start() {
@@ -47,15 +54,21 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	// Called when the pet reaches a smoke monster room
 	public void Activate() {
+		// The fire button will always be spawned at the pet's location
+		GameObject pet = GameObject.Find("Pet");
+		transform.position = pet.transform.position;
+
 		isActive = true;
 		toggleParent.SetActive(true);
+
 		bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
 		if(!canBreatheFire) {
 			TurnFireEffectOff();
 		}
 		else {
 			TurnFireEffectOn();
-		}
+			buttonState = FireButtonState.ReadyForPress;
+        }
 	}
 
 	// Called when the pet leaves a smoke monster room
@@ -71,13 +84,12 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	// This is called from start, and from FireButtonAnimHelper (looped back in)
 	public void TurnFireEffectOn() {
 		animHelper.FireEffectOn();
-
 		if(FireButtonActive != null) {  // Used for tutorials
 			FireButtonActive(this, EventArgs.Empty);
 		}
 	}
 
-	// Called from FireButtonHelper
+	// Called from FireButtonHelper - Fire orb is dropped onto button
 	public void Step1_SetButtonActiveWithItem(InventoryItem itemData) {
 		if(buttonState == FireButtonState.Empty) {
 			bool canBreatheFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
@@ -90,7 +102,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 					InventoryManager.Instance.UsePetItem(itemData.ItemID);
 
 					// Pass, move on
-					buttonState = FireButtonState.AnimatingFill;
+					buttonState = FireButtonState.ActivatingButton;
 					animHelper.StartFireButtonAnimation();
 				}
 			}
@@ -102,7 +114,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	// Called from FireButtonAnimHelper
 	public void Step2_AnimationComplete() {
-		if(buttonState == FireButtonState.AnimatingFill) {
+		if(buttonState == FireButtonState.ActivatingButton) {
 			buttonState = FireButtonState.ReadyForPress;
 		}
 		else {
@@ -122,7 +134,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 					// kick off the attack script
 					attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
-					attackScript.Init(gate);
+					attackScript.Init(currentGate);
 
 					PetAnimationManager.Instance.StartFireBlow();
 
@@ -156,7 +168,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 				// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
 				// fire mode cheat is active and the gate is still alive
-				if(gate.GetGateHP() <= 1) {
+				if(currentGate.GetGateHP() <= 1) {
 					Deactivate();
 				}
 				else {
@@ -167,6 +179,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 			else {
 				// if the meter was not full, cancel the attack
 				attackScript.Cancel();
+				buttonState = FireButtonState.ReadyForPress;
 			}
 			// regardless we want to empty the meter
 			fireMeterScript.Reset();
@@ -178,17 +191,5 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 
 	public void Step5_FinishBlowingFire() {
 
-	}
-
-
-
-
-
-
-	private AttackGate attackScript;        // attack gate script
-	private Gate gate;                      // the gate that this button is for
-
-	public void SetGate(Gate gate) {
-		this.gate = gate;
 	}
 }

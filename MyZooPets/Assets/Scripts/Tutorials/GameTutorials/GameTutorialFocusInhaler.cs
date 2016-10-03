@@ -52,7 +52,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		AddToProcessList(goInhaler);
 	
 		// spotlight the inhaler
-		SpotlightObject(goInhaler, fingerHint: true, fingerHintFlip: true);
+		SpotlightObject(goInhaler, hasFingerHint: true, fingerHintFlip: true);
 
 		TutorialManager.Instance.StartCoroutine(CreateFocusInhalerTutMessage());
 	}
@@ -61,7 +61,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 		yield return new WaitForSeconds(0.5f);
 
 		// Create a custom message with the pet's name
-		string tutKey = GetKey() + "_" + GetStep();
+		string tutKey = GetKey() + "_" + CurrentStep;
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
 		string message = string.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
 		

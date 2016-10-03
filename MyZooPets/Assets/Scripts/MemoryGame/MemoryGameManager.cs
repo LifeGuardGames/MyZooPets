@@ -42,7 +42,7 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	}
 
 	protected override void _StartTutorial() {
-		MemoryGameTutorial tut = new MemoryGameTutorial();
+		new MemoryGameTutorial();	// Just spawn this, will do its own thing
 	}
 
 	protected override void _NewGame() {

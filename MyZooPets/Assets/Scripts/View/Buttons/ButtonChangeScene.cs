@@ -88,7 +88,6 @@ public class ButtonChangeScene : LgWorldButton{
 	//---------------------------------------------------
 	private void CameraMoveDone(){
 		// the camera move is complete, so now let's start the transition (if it exists)
-		Debug.Log(loadingText);
 		if(loadingText != "") {
 			LoadLevelManager.Instance.StartLoadTransition(strScene, loadingText);
 		}

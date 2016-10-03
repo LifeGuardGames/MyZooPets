@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
+
 /// <summary>
 /// Tutorial manager.
 /// Used in scenes like the yard and bedroom to keep
@@ -46,13 +45,15 @@ public class TutorialManager : Singleton<TutorialManager>{
 	/// </summary>
 	public bool CanProcess(GameObject processGameObject){
 		// if the gameobject is null, then tutorial doesn't care (at the moment)
-		if(processGameObject == null)
+		if(processGameObject == null) {
 			return true;
+		}
 		
 		// if there is no tutorial currently going on right now, the tutorial doesn't care (obviously)
 		bool isActive = IsTutorialActive();
-		if(!isActive)
+		if(!isActive) {
 			return true;
+		}
 		
 		// otherwise we have a valid object and a valid tutorial, so let's get to checkin'
 		bool canProcess = tutorial.CanProcess(processGameObject);

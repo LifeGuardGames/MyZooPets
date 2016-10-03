@@ -95,7 +95,7 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	}
 
 	private void OnTap(TapGesture gesture) {
-		// Check to see if object is 
+		// Check to see if object is over UI
 		if(!EventSystem.current.IsPointerOverGameObject()) {
 			ProcessTapOrClick();
 		}

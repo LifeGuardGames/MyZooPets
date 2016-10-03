@@ -1,4 +1,4 @@
-﻿/// <summary>
+/// <summary>
 // The sort of 'center' of the game.
 // However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
 // This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
@@ -41,7 +41,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 	void Awake(){
 		// Parent settings
-		minigameKey = "Runner";
+		minigameKey = "RUNNER";
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
@@ -75,7 +75,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		base.tutorial = runnerTutorial;
 	}
 
-	//Called by RunnerGameTutorialText b/c we are the only ones w/access to our tutorial
+	//Called by RUNNERGameTutorialText b/c we are the only ones w/access to our tutorial
 	public void AdvanceTutorial(){
 		runnerTutorial.Advance();
 	}
@@ -88,9 +88,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		RunnerLevelManager.Instance.Reset();
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
-		RunnerItemManager.Instance.Reset();
+		Runner.Instance.Reset();
 		FindObjectOfType<CameraFollow>().Reset();
-
+		ResetScore();
 		//RunnerGameTutorialText.Instance.HideAll();
 	}
 
@@ -127,9 +127,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward(){
-		WellapadMissionController.Instance.TaskCompleted("ScoreRunner", Score);
-		WellapadMissionController.Instance.TaskCompleted("DistanceRunner", ScoreManager.Instance.Distance);
-		WellapadMissionController.Instance.TaskCompleted("CoinsRunner", ScoreManager.Instance.Coins);
+		WellapadMissionController.Instance.TaskCompleted("ScoreRUNNER", Score);
+		WellapadMissionController.Instance.TaskCompleted("DistanceRUNNER", ScoreManager.Instance.Distance);
+		WellapadMissionController.Instance.TaskCompleted("CoinsRUNNER", ScoreManager.Instance.Coins);
 
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
@@ -140,12 +140,12 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
 
-		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, Score, true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.RUNNER, Score, true);
 
-		Analytics.Instance.RunnerGameData(Score, "", ScoreManager.Instance.Distance);	// TODO level missing!!!
+		Analytics.Instance.RUNNERGameData(Score, "", ScoreManager.Instance.Distance);	// TODO level missing!!!
 
 		#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RUNNERLeaderBoard");
 		#endif
 	}
 

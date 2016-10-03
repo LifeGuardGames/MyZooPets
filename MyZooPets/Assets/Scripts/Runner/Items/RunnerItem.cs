@@ -1,5 +1,5 @@
 ﻿/* Sean Duane
- * RunnerItem.cs
+ * RUNNERItem.cs
  * 8:26:2013   14:24
  * Description:
  * The basis for all player items.

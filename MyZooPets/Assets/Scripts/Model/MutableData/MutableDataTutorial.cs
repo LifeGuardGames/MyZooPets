@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class MutableDataTutorial{
     public List<string> ListPlayed {get; set;}	// list of tutorials that have been played	
 	public DateTime Tutorial1DonePlayPeriod {get; set;}
-	public bool RunnerTutorialVersionCheckDone {get; set;}
+	public bool RUNNERTutorialVersionCheckDone {get; set;}
 
 	public bool IsFlameTutorialDone(){
 		return IsTutorialFinished(TutorialManagerBedroom.TUT_FLAME);
@@ -30,8 +30,9 @@ public class MutableDataTutorial{
 
     private void Init(){
 		ListPlayed = new List<string>();
+		ListPlayed.Add("RUNNER");
 		Tutorial1DonePlayPeriod = DateTime.MinValue;
-		RunnerTutorialVersionCheckDone = false;
+		RUNNERTutorialVersionCheckDone = false;
     }
 
 	public void VersionCheck(Version currentDataVersion){

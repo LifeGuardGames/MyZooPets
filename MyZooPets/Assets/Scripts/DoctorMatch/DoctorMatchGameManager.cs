@@ -23,9 +23,12 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	public GameObject toClearText;
 
 	private int numOfCorrectDiagnose;
-	private bool paused = true;
+	public int NumOfCorrectDiagnose {
+		get { return numOfCorrectDiagnose; }
+	}
+
 	private DoctorMatchTutorial doctorMatchTutorial;
-	private bool tutorial = false;
+	private bool isTutorial = false;
 	private int tutorialZone = 0;
 	private FingerController finger = null;
 	private IEnumerator multipleFinger = null;
@@ -33,20 +36,12 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	private float timeToShake = 2f;
 	private int bonusStack = 0;
 	//If they do nothing for 5 seconds. Shake the finger
-
-	public bool Paused { //TODO: Merge with base.isPaused
-		get { return paused; }
-	}
-
-	public int NumOfCorrectDiagnose {
-		get { return numOfCorrectDiagnose; }
-	}
-
+	
 	void Update() {
-		if(paused)
+		if(IsPaused) {
 			return;
+		}
 #if UNITY_EDITOR
-
 		if(Input.GetKeyDown(KeyCode.LeftArrow)) {
 			OnZoneClicked(DoctorMatchButtonTypes.Green);
 		}
@@ -60,7 +55,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 			lifeBarController.KillBar();
 		}
 #endif
-		if(tutorial && finger != null && zoneGreen.button.interactable) {
+		if(isTutorial && finger != null && zoneGreen.button.interactable) {
 			lastPress += Time.deltaTime;
 			if(lastPress > timeToShake) {
 				StartCoroutine(finger.Shake(new Vector3(0, 20)));
@@ -70,9 +65,12 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	}
 
 	void Awake() {
-		// Parent settings
-		minigameKey = "Clinic";
+		minigameKey = "CLINIC";
 		quitGameScene = SceneUtils.BEDROOM;
+		rewardMoneyMultiplier = 2;
+		rewardShardMultiplier = 4;
+		rewardXPMultiplier = 0.01f;
+
 		ResetScore();
 	}
 
@@ -88,7 +86,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 	public IEnumerator StartTutorialHelper() {
 		ResetScore();
-		tutorial = true;
+		isTutorial = true;
 		yield return assemblyLineController.Initialize(true); //If a tutorial is called after a game is played, we need to wait a frame for objects to be cleared
 		lifeBarController.ResetBar(); //Thus this needs to be a coroutine
 
@@ -97,7 +95,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		zoneRed.ToggleButtonInteractable(true);
 
 		doctorMatchTutorial = new DoctorMatchTutorial();
-		base.tutorial = doctorMatchTutorial;
+		tutorial = doctorMatchTutorial;
 	}
 
 	protected override void _NewGame() { //Reset everything then start again
@@ -107,8 +105,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 			BarFinger();
 		}
 
-		paused = false;
-		tutorial = false;
+		isTutorial = false;
 		StartCoroutine(assemblyLineController.Initialize(false));
 		lifeBarController.ResetBar();
 		lifeBarController.StartDraining();
@@ -126,7 +123,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	}
 
 	protected override void _ResumeGame() {
-		if(!tutorial) {
+		if(!isTutorial) {
 			lifeBarController.StartDraining();
 		}
 	}
@@ -251,7 +248,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 			AudioManager.Instance.PlayClip("minigameError");
 		}
 
-		if(tutorial) { //But line movement and populating is different in each mode
+		if(isTutorial) { //But line movement and populating is different in each mode
 			HandleTutorial(peakedItem, correct);
 		}
 		else {
@@ -325,7 +322,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	}
 
 	private void ComboBonus() {
-		if(comboController.ComboLevel == 2 && !tutorial) { //Big combo bonus (does not apply during tutorial)
+		if(comboController.ComboLevel == 2 && !isTutorial) { //Big combo bonus (does not apply during tutorial)
 			if(assemblyLineController.Count != 1)
 				bonusStack += 3;
 			else

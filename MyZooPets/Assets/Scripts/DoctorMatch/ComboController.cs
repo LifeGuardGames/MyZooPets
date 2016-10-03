@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-public class ComboController : MonoBehaviour{
+public class ComboController : MonoBehaviour {
 	public Text scoreText;
 	public Text comboText;
 	//Scrolling table
@@ -14,68 +13,64 @@ public class ComboController : MonoBehaviour{
 	private int comboBonus = 5;
 	private bool countingDown = true;
 
-	void Update(){
+	void Update() {
 		if(DoctorMatchGameManager.Instance.Paused || !countingDown)
 			return;
-		if(currentComboTime > 0){
+		if(currentComboTime > 0) {
 			currentComboTime -= Time.deltaTime;
 		}
-		else if(combo != 0){
+		else if(combo != 0) {
 			ResetCombo();
 		}
 	}
 
-	public int Combo{
-		get{ return combo; }
+	public int Combo {
+		get { return combo; }
 	}
 
-	public int ComboMod{
+	public int ComboMod {
 		get { return Mathf.Clamp(combo, 0, (comboBonus * 2) - 1); }
 	}
 
-	public int ComboLevel{
-		get{
-			if((combo + 1) % (comboBonus * 2) == 0 && combo != 0){ //Big combo bonus
+	public int ComboLevel {
+		get {
+			if((combo + 1) % (comboBonus * 2) == 0 && combo != 0) { //Big combo bonus
 				return 2;
 			}
-			else if((combo + 1) % comboBonus == 0 && combo != 0){ //Small combo bonus
+			else if((combo + 1) % comboBonus == 0 && combo != 0) { //Small combo bonus
 				return 1;
 			}
-			else{
+			else {
 				return 0;
 			}
 		}
 	}
 
-	public void StartCounting(){
+	public void StartCounting() {
 		countingDown = true;
 	}
 
-	public void StopCounting(){
+	public void StopCounting() {
 		countingDown = false;
 	}
 
-	public void ResetCombo(){
+	public void ResetCombo() {
 		combo = 0;
 		currentComboTime = 0;
 		UpdateCombo();
 	}
 
-	public void Setup(){
-		GameObject slotObject;
-	}
-
-	public void UpdateScore(int newScore){
+	public void UpdateScore(int newScore) {
 		scoreText.text = "Score: " + newScore.ToString();
 	}
 
-	public void IncrementCombo(){
+	public void IncrementCombo() {
 		combo++;
 		UpdateCombo();
 		currentComboTime = timeToCombo;
 	}
 
-	private void UpdateCombo(){
+	private void UpdateCombo() {
 		comboText.text = "x" + combo.ToString();
 		lastCombo = ComboMod;
 	}

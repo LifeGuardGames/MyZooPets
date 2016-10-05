@@ -22,6 +22,8 @@ public class MegaHazard : Singleton<MegaHazard>{
 	// Use this for initialization
 	void Start(){
 		Reset();
+		hazardParticle.Play();
+		hazardParticle2.Play();
 	}
 	
 	// Update is called once per frame

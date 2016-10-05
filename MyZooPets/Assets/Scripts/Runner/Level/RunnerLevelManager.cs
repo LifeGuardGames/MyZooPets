@@ -106,13 +106,10 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 		CleanUp();
 		LevelComponent nextLevel;
 		nextLevel = PushAndInstantiateRandomComponent(useStartingComponent: true);
-		PopulateLevelComponent(nextLevel);
 		nextLevel = PushAndInstantiateRandomComponent();
-		PopulateLevelComponent(nextLevel);
 		nextLevel = PushAndInstantiateRandomComponent();
-		PopulateLevelComponent(nextLevel);
 		nextLevel = PushAndInstantiateRandomComponent();
-		PopulateLevelComponent(nextLevel);
+		
 	}
 
 	/// <summary>
@@ -233,7 +230,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 		mLastCenterPosition = maxAnchor.position;
 			
 		mLevelComponentQueue.Enqueue(newComponent);
-
+		PopulateLevelComponent(newComponent);
 		return newComponent;
 	}
 

@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 // The sort of 'center' of the game.
 // However, all it really does is track the games running, handles the timescale, and acts as a cheap way to grab popular variables.
 // This singleton design, and caching out of certain game component, makes anything using this "glued" to the runner game.
@@ -18,6 +18,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	public Transform floatyParent;
 	private bool tutorial = false;
 	private bool acceptInput = true;
+	public bool isGameOver;
 
 	//Used for the start of the tutorial, we are not allowed to jump or drop
 	private bool specialInput = false;
@@ -88,9 +89,10 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		RunnerLevelManager.Instance.Reset();
 		MegaHazard.Instance.Reset();
 		ParallaxingBackgroundManager.Instance.Reset();
-		Runner.Instance.Reset();
+		RunnerItemManager.Instance.Reset();
 		FindObjectOfType<CameraFollow>().Reset();
 		ResetScore();
+		isGameOver = false;
 		//RunnerGameTutorialText.Instance.HideAll();
 	}
 
@@ -117,7 +119,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	}
 
 	protected override void _GameOver(){
-		AudioManager.Instance.PlayClip("runnerDie");
+		isGameOver = true;
+        AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
 		isPaused = false; //HACK: This pause should really be called by our parent but that could break other games, so it will be used here
 		// play game over sound

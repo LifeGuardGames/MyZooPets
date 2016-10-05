@@ -107,10 +107,14 @@ public class GameTutorialWellapadIntro : GameTutorial{
 
 		// the wellapad is the only object that can be clicked
 		AddToProcessList(missionButton);
+		Debug.Log(missionButton.GetComponent<RectTransform>().anchoredPosition);
+		Debug.Log(missionButton.GetComponent<RectTransform>().anchoredPosition3D);
+		Debug.Log(missionButton.GetComponent<RectTransform>().sizeDelta);
+		Debug.Log(missionButton.transform.position);
 
 		// spotlight the wellapad
-		SpotlightObject(missionButton, true, hasFingerHint: true,
-			fingerState: BedroomTutFingerController.FingerState.DelayPress, fingerHintFlip: true);
+		SpotlightObject(isGUI: true, GUIanchor: InterfaceAnchors.BottomLeft, hasFingerHint: true,
+			fingerState: BedroomTutFingerController.FingerState.DelayPress, spotlightOffsetX: 310, spotlightOffsetY: 50, fingerHintFlip: true);
 
 		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("WellapadPopupLoc");

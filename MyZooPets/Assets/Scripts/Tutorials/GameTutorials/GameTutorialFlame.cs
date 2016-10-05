@@ -36,7 +36,7 @@ public class GameTutorialFlame : GameTutorial{
 			break;
 		case 1:
 			RemoveRetentionPet();
-
+			
 			// Create a custom message with the pet's name
 			string petName = DataManager.Instance.GameData.PetInfo.PetName;
 			string message = GetKey() + "_" + CurrentStep;
@@ -60,13 +60,10 @@ public class GameTutorialFlame : GameTutorial{
 	/// </summary>
 	private IEnumerator FocusOnFlameButton(){
 		yield return 0;     // wait one frame so that the flame button can appear
-
 		GameObject fireButton = FireButtonManager.Instance.FireButtonObject;
-		SpotlightObject(fireButton, isGUI: true, hasFingerHint: true,
+		SpotlightObject(goTarget: fireButton, hasFingerHint: true,
 		                fingerState: BedroomTutFingerController.FingerState.Hold,
-						spotlightOffsetY: 100f, fingerOffsetX: 0f, fingerOffsetY: -40f,
-		                fingerHintFlip: true, delay: 0.5f);
-
+						fingerOffsetY: 40f, fingerHintFlip: true, delay: 0.5f);
 		AddToProcessList(fireButton);
 	}
 

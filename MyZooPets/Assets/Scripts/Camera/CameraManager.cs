@@ -161,24 +161,10 @@ public class CameraManager : Singleton<CameraManager>{
 	/// Only use this to transform world position for use with NGUI! 
 	/// </summary>
 	/// <returns>screen position.</returns>
-	/// <param name="cam">Cam.</param>
-	/// <param name="vPos">position.</param>
 	public Vector3 WorldToScreen(Camera cam, Vector3 position){
 		// Accomodate for screen ratio scale
 		Vector3 trueRatioScreenPos = cam.WorldToScreenPoint(position);
 		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
-		return scaledRatioScreenPos;
-	}
-
-	public Vector3 ViewportToScreen(Camera cam, Vector3 vPos){
-		// Accomodate for screen ratio scale
-		Vector3 trueRatioScreenPos = cam.ViewportToScreenPoint(vPos);
-		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
-		return scaledRatioScreenPos;
-	}
-
-	private Vector3 ScalePositionForNGUI(Vector3 vPos){
-		Vector3 scaledRatioScreenPos = new Vector3(vPos.x * ratioX, vPos.y * ratioY, 0);
 		return scaledRatioScreenPos;
 	}
 
@@ -196,8 +182,9 @@ public class CameraManager : Singleton<CameraManager>{
 	/// <param name="targetAnchor">Target anchor.</param>
 	public Vector3 TransformAnchorPosition(Vector3 position, InterfaceAnchors baseAnchor, InterfaceAnchors targetAnchor){
 		// no need to do any transforming if the two anchors are the same
-		if(baseAnchor == targetAnchor)
+		if(baseAnchor == targetAnchor) {
 			return position;
+		}
 		
 		Vector3 transformedPosition = position;
 		

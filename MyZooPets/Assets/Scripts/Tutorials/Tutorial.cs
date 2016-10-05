@@ -131,15 +131,10 @@ public abstract class Tutorial {
 	/// Params:
 	///		goTarget (GameObject): the target that you want the spotlight to spawn on
 	/// 
-	/// Optional Params:
-	/// 	isGUI (bool): is it a UI element.
-	///  	eAnchor (InteraceAnchors): the anchor to spawn the spot light under
-	///  	strSpotlightPrefab (string): the string name of the spotlight prefab
-	///  	fingerHint (bool): show finger hint or not
-	///  	fingerHintOffsetFromSpotlightCenter (Vector2): offset of the finger hint
-	///  	delay (float): how long does it take the spot light to fade in
+	/// 
+	/// NOTE: If it is 3D object goTarget needs to != null
 	/// </summary>
-	protected void SpotlightObject(GameObject goTarget, bool isGUI = false,
+	protected void SpotlightObject(GameObject goTarget = null, bool isGUI = false, InterfaceAnchors GUIanchor = InterfaceAnchors.Center,
 		bool hasFingerHint = false, BedroomTutFingerController.FingerState fingerState = BedroomTutFingerController.FingerState.Press,
 		float spotlightOffsetX = 0f, float spotlightOffsetY = 0f,
 		float fingerOffsetX = 0f, float fingerOffsetY = 60f,
@@ -149,13 +144,8 @@ public abstract class Tutorial {
 		RemoveFingerHint();
 
 		// get the proper location of the object we are going to focus on
-		Vector3 focusPos;
-		if(isGUI) {
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			focusPos = Vector3.zero; // TEMP CODE - remove me once fixed
-									 //focusPos = LgNGUITools.GetScreenPosition(goTarget);
-		}
-		else {
+		Vector3 focusPos = Vector3.zero;
+		if(!isGUI) {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			focusPos = CameraManager.Instance.TransformAnchorPosition(focusPos, InterfaceAnchors.BottomLeft, InterfaceAnchors.Center);
@@ -176,31 +166,39 @@ public abstract class Tutorial {
 		// Move the spotlight into position
 		goSpotlight.transform.localPosition = focusPos;
 
+		if(isGUI) {
+			RectTransform rect = goSpotlight.GetComponent<RectTransform>();
+			GameObjectUtils.SetAnchor(ref rect, GUIanchor);
+			rect.anchoredPosition = new Vector2(spotlightOffsetX, spotlightOffsetY);
+		}
+
 		// Spawn finger hint
 		if(hasFingerHint) {
-			ShowFingerHint(goTarget, isGUI: isGUI, fingerState: fingerState,
-				offsetX: fingerOffsetX, offsetY: fingerOffsetY,
-				flipX: fingerHintFlip);
+			if(isGUI) {
+				ShowFingerHint(goTarget, isGUI: isGUI, GUIanchor: GUIanchor, fingerState: fingerState,
+					offsetX: fingerOffsetX + spotlightOffsetX, offsetY: fingerOffsetY + spotlightOffsetY,
+					flipX: fingerHintFlip);
+			}
+			else {
+				ShowFingerHint(goTarget, isGUI: isGUI, GUIanchor: GUIanchor, fingerState: fingerState,
+					offsetX: fingerOffsetX, offsetY: fingerOffsetY,
+					flipX: fingerHintFlip);
+			}
         }
 
 		// Show the backdrop
 		goSpotlight.GetComponent<AlphaTweenToggle>().ShowAfterInit();
 	}
 
-	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false,
+	protected void ShowFingerHint(GameObject goTarget, bool isGUI = false, InterfaceAnchors GUIanchor = InterfaceAnchors.Center,
 		BedroomTutFingerController.FingerState fingerState = BedroomTutFingerController.FingerState.Press,
 		float offsetX = 0.0f, float offsetY = 60.0f, bool flipX = false) {
 
 		RemoveFingerHint();
 
 		// get the proper location of the object we are going to focus on
-		Vector3 focusPos;
-		if(isGUI) {
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			focusPos = Vector3.zero; // TEMP CODE - remove me once fixed
-									 //focusPos = LgNGUITools.GetScreenPosition(goTarget);
-		}
-		else {
+		Vector3 focusPos = Vector3.zero;
+		if(!isGUI) {
 			// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into NGUI center
 			focusPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, goTarget.transform.position);
 			// Camera.main.WorldToScreenPoint( goTarget.transform.position );
@@ -215,6 +213,12 @@ public abstract class Tutorial {
 		focusPos.y = focusPos.y + offsetY; //offset in Y so the finger hint doesn't overlap the image
 		focusPos.z = 0f;
 		goFingerHint.transform.localPosition = focusPos;
+
+		if(isGUI) {
+			RectTransform rect = goFingerHint.GetComponent<RectTransform>();
+			GameObjectUtils.SetAnchor(ref rect, GUIanchor);
+			rect.anchoredPosition = new Vector2(offsetX, offsetY);
+		}
 
 		if(flipX) {
 			goFingerHint.transform.localScale = new Vector3(-1, 1, 1);

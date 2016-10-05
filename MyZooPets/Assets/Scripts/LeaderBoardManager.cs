@@ -42,7 +42,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 		shooter.id = "ShooterLeaderBoard";
 		shooter.LoadScores(result => DidLoadLeaderboard(result,shooter));
 		runner = Social.CreateLeaderboard();
-		runner.id = "RunnerLeaderBoard";
+		runner.id = "RUNNERLeaderBoard";
 		runner.LoadScores(result => DidLoadLeaderboard(result,runner));
 		#endif
 	}

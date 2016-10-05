@@ -20,7 +20,6 @@ public class CameraFollow : MonoBehaviour {
 	void Start() {
 		maxSpeed = PlayerController.Instance.MaxSpeed;
 		minSpeed = PlayerController.Instance.MinSpeed;
-
 	}
 
 	void Update() {
@@ -41,6 +40,6 @@ public class CameraFollow : MonoBehaviour {
 
 	public void Reset() {
 		following = false;
-		transform.position = playerTransform.position + new Vector3(42f, 15f, -14f);
+		transform.position = new Vector3(playerTransform.position.x + currentOffset, height, this.transform.position.z); //playerTransform.position.x+offset
 	}
 }

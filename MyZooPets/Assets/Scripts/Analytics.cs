@@ -15,7 +15,7 @@ public class Analytics : MonoBehaviour {
     public const string TASK_STATUS_FAIL = "Fail";
 
     public const string INHALER_CATEGORY = "MiniGame:Inhaler:";
-    public const string RUNNER_CATEGORY = "MiniGame:Runner:";
+    public const string RUNNER_CATEGORY = "MiniGame:RUNNER:";
     public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
     public const string NINJA_CATEGORY = "MiniGame:Ninja:";
 	public const string MEMORY_CATEGORY = "MiniGame:Memory:";
@@ -89,11 +89,11 @@ public class Analytics : MonoBehaviour {
 	}
 	#endregion
 
-	#region Runner Game
-	public void RunnerGameData(int score, string level, int distanceRan) {
+	#region RUNNER Game
+	public void RUNNERGameData(int score, string level, int distanceRan) {
 		if(isAnalyticsEnabled){
-			Amplitude.Instance.logEvent("Runner HighScore", new Dictionary<string, object>{
-				{ "Runner HighScore: ", score},
+			Amplitude.Instance.logEvent("RUNNER HighScore", new Dictionary<string, object>{
+				{ "RUNNER HighScore: ", score},
 				{ "Died at: ", level},
 				{ "Distance Ran: ", distanceRan}
 			});

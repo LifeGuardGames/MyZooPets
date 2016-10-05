@@ -18,6 +18,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	public Transform floatyParent;
 	private bool tutorial = false;
 	private bool acceptInput = true;
+	public bool isGameOver;
 
 	//Used for the start of the tutorial, we are not allowed to jump or drop
 	private bool specialInput = false;
@@ -41,7 +42,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 	void Awake(){
 		// Parent settings
-		minigameKey = "Runner";
+		minigameKey = "RUNNER";
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
 	}
@@ -75,7 +76,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		base.tutorial = runnerTutorial;
 	}
 
-	//Called by RunnerGameTutorialText b/c we are the only ones w/access to our tutorial
+	//Called by RUNNERGameTutorialText b/c we are the only ones w/access to our tutorial
 	public void AdvanceTutorial(){
 		runnerTutorial.Advance();
 	}
@@ -90,7 +91,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 		ParallaxingBackgroundManager.Instance.Reset();
 		RunnerItemManager.Instance.Reset();
 		FindObjectOfType<CameraFollow>().Reset();
-
+		ResetScore();
+		isGameOver = false;
 		//RunnerGameTutorialText.Instance.HideAll();
 	}
 
@@ -117,7 +119,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	}
 
 	protected override void _GameOver(){
-		AudioManager.Instance.PlayClip("runnerDie");
+		isGameOver = true;
+        AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
 		isPaused = false; //HACK: This pause should really be called by our parent but that could break other games, so it will be used here
 		// play game over sound
@@ -127,9 +130,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward(){
-		WellapadMissionController.Instance.TaskCompleted("ScoreRunner", Score);
-		WellapadMissionController.Instance.TaskCompleted("DistanceRunner", ScoreManager.Instance.Distance);
-		WellapadMissionController.Instance.TaskCompleted("CoinsRunner", ScoreManager.Instance.Coins);
+		WellapadMissionController.Instance.TaskCompleted("ScoreRUNNER", Score);
+		WellapadMissionController.Instance.TaskCompleted("DistanceRUNNER", ScoreManager.Instance.Distance);
+		WellapadMissionController.Instance.TaskCompleted("CoinsRUNNER", ScoreManager.Instance.Coins);
 
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
@@ -140,12 +143,12 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
 
-		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, Score, true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.RUNNER, Score, true);
 
-		Analytics.Instance.RunnerGameData(Score, "", ScoreManager.Instance.Distance);	// TODO level missing!!!
+		Analytics.Instance.RUNNERGameData(Score, "", ScoreManager.Instance.Distance);	// TODO level missing!!!
 
 		#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RUNNERLeaderBoard");
 		#endif
 	}
 

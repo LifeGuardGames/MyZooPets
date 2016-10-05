@@ -84,28 +84,29 @@ public class ScoreManager : Singleton<ScoreManager>{
 	}
 
 	void Update(){
-		if(RunnerGameManager.Instance.IsPaused) {
+		if(RunnerGameManager.Instance.IsPaused || RunnerGameManager.Instance.isGameOver) {
 			return;
 		}
+		else {
+			PlayerController playerController = PlayerController.Instance;
+			distanceTraveled = (int)playerController.transform.position.x;
 
-		PlayerController playerController = PlayerController.Instance;
-		distanceTraveled = (int)playerController.transform.position.x;
+			//calculate the new points from the distance traveled
+			int newDistancePoints = (int)(distanceTraveled / scoreDistance) * scorePerIncrement;
+			SetDistancePoints(newDistancePoints);
 
-		//calculate the new points from the distance traveled
-		int newDistancePoints = (int)(distanceTraveled / scoreDistance) * scorePerIncrement;
-		SetDistancePoints(newDistancePoints);
+			// update coin streak countdown (if it's not 0)
+			if(coinStreakCountdown > 0) {
+				ChangeCoinStreakCountdown(-Time.deltaTime);
 
-		// update coin streak countdown (if it's not 0)
-		if(coinStreakCountdown > 0){
-			ChangeCoinStreakCountdown(-Time.deltaTime);
-        
-			// if the countdown ran out, our streak is reset
-			if(coinStreakCountdown <= 0)
-				SetCoinStreak(0);
+				// if the countdown ran out, our streak is reset
+				if(coinStreakCountdown <= 0)
+					SetCoinStreak(0);
+			}
+			distanceText.text = Distance.ToString() + " M";
+			coinsText.text = Coins.ToString();
+			comboText.text = "x" + Combo.ToString("F1");
 		}
-		distanceText.text = Distance.ToString() + " M";
-		coinsText.text = Coins.ToString();
-		comboText.text = "x" + Combo.ToString("F1");
 	}
 
 	/// <summary>

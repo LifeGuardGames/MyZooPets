@@ -82,17 +82,17 @@ public class MiniPetGameMaster : MiniPet {
 					return "ScoreShooter";
 			}
 		}
-		else if(type == MinigameTypes.Runner) {
+		else if(type == MinigameTypes.RUNNER) {
 			int rand = UnityEngine.Random.Range(0, 3);
 			switch(rand) {
 				case 0:
-					return "ScoreRunner";
+					return "ScoreRUNNER";
 				case 1:
-					return "CoinsRunner";
+					return "CoinsRUNNER";
 				case 2:
-					return "DistanceRunner";
+					return "DistanceRUNNER";
 				default:
-					return "CoinsRunner";
+					return "CoinsRUNNER";
 			}
 		}
 		else {

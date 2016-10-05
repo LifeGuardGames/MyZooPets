@@ -96,7 +96,7 @@ public enum BadgeType{
 	Ninja,
 	Memory,
 	DoctorMatch,
-    Runner,
+    RUNNER,
 	Shooter,
 	Retention,
 }
@@ -311,7 +311,7 @@ public enum MinigameTypes{
 	Shooter,
 	Memory,
 	Clinic,
-	Runner
+	RUNNER
 }
 
 public enum ZoneTypes{

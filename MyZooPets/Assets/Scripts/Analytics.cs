@@ -102,10 +102,11 @@ public class Analytics : MonoBehaviour {
 	#endregion
 
 	#region Doctor Match
-	public void DoctorHighScore(int score){
+	public void DoctorMatchGameData(int score, int combo){
 		if(isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Doctor HighScore", new Dictionary<string, object>{
-				{ "Doctor High Score: ", score}
+				{ "Doctor High Score: ", score},
+                {"Combo", combo }
 			});
 		}
 	}

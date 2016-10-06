@@ -145,7 +145,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.RUNNER, Score, true);
 
-		Analytics.Instance.RUNNERGameData(Score, "", ScoreManager.Instance.Distance);	// TODO level missing!!!
+		Analytics.Instance.RUNNERGameData(Score, RunnerLevelManager.Instance.mCurrentLevelGroup.ToString(), ScoreManager.Instance.Distance);	// TODO level missing!!!
 
 		#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RUNNERLeaderBoard");

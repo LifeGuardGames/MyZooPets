@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class LgParticleEmitterDegradation : LgParticleEmitter{
 
-	public GameObject targetDestination;
+	private Transform targetDestination;
 	private List<GameObject> listSpawned = new List<GameObject>(); // list of objects this emitter has spawned
 	private bool isSubscribed = false; // is this trigger subscribed to the partition changing event?
 
@@ -48,7 +48,7 @@ public class LgParticleEmitterDegradation : LgParticleEmitter{
 		// set the proper move script
 		MoveTowards moveScript = emittedObject.GetComponent<MoveTowards>();
 		if(moveScript != null){
-			moveScript.Target = targetDestination.transform;
+			moveScript.Target = targetDestination;
 			moveScript.touchCallbackTarget = gameObject;
 		}
 		else{
@@ -104,9 +104,10 @@ public class LgParticleEmitterDegradation : LgParticleEmitter{
 	// Sets some basic values for the emitter
 	// and what kind of damage it causes.
 	///////////////////////////////////////////		
-	public void InitDegradEmitter(float fTime, int nDamage){
+	public void InitDegradEmitter(float fTime, int nDamage, Transform targetDest){
 		minInterval = fTime;
 		maxInterval = fTime;
 		this.damage = nDamage;
+		targetDestination = targetDest;
 	}
 }

@@ -2,24 +2,25 @@
 using System.Collections.Generic;
 using System.Collections;
 
-public class MutableDataFirstTimeEntrance{
-	public List<string> EntranceClicked {get; set;}
+public class MutableDataFirstTimeEntrance {
+	public List<string> EntranceClicked { get; set; }
 
-	public MutableDataFirstTimeEntrance(){
+	public MutableDataFirstTimeEntrance() {
 		EntranceClicked = new List<string>();
 	}
 
-	public bool IsFirstTimeEntrance(string entranceID){
-		bool retVal = true;
-
-		if(EntranceClicked.Contains(entranceID))
-			retVal = false;
-
-		return retVal;
+	public bool IsFirstTimeEntrance(string entranceID) {
+		if(EntranceClicked.Contains(entranceID)) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
-	public void EntranceUsed(string entranceID){
-		if(!EntranceClicked.Contains(entranceID))
+	public void EntranceUsed(string entranceID) {
+		if(!EntranceClicked.Contains(entranceID)) {
 			EntranceClicked.Add(entranceID);
+		}
 	}
 }

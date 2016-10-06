@@ -9,7 +9,7 @@ public enum PartitionLocationTypes{
 	Shooter,
 	Memory,
 	Clinic,
-	Runner,
+	RUNNER,
 }
 
 // A partition location in the specific scene

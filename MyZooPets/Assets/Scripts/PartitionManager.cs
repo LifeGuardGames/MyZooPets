@@ -136,7 +136,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 			locationType = PartitionLocationTypes.Memory;
 			break;
 		case MinigameTypes.RUNNER:
-			locationType = PartitionLocationTypes.Runner;
+			locationType = PartitionLocationTypes.RUNNER;
 			break;
 		case MinigameTypes.Shooter:
 			locationType = PartitionLocationTypes.Shooter;

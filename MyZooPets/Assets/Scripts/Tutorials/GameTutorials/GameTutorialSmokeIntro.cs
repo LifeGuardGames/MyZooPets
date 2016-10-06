@@ -125,9 +125,9 @@ public class GameTutorialSmokeIntro : GameTutorial{
 		rightArrowButton.onClick.AddListener(() => { RightArrowClicked(); });
 
 		// spotlight the arrow
-		SpotlightObject(rightArrowButton.gameObject, true,
+		SpotlightObject(isGUI: true, GUIanchor: InterfaceAnchors.Right,
 						hasFingerHint: true, fingerState: BedroomTutFingerController.FingerState.DelayPress,
-						fingerHintFlip: false, delay: 0f);
+						spotlightOffsetX: -40, spotlightOffsetY: 70, fingerHintFlip: false, delay: 0f);
 
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
 

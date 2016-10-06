@@ -13,7 +13,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 	public GameObject monsterBackground;
 	public GameObject monsterBody;
 	public ParticleSystem monsterParticle;
-	public PetAnimationManager petAnim;
+	public MicroMixPetAnimationManager petAnim;
 
 	public MicroMixLives lifeController;
 	public MicroMixFireworks fireworksController;

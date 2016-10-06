@@ -145,8 +145,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
 	protected override void _GameOverReward() {
-		// TODO FILL ME IN!!!
-		//WellapadMissionController.Instance.TaskCompleted("ScoreRunner", Score); 
+		WellapadMissionController.Instance.TaskCompleted("ScoreClinic", Score); 
 
 		StatsManager.Instance.ChangeStats(
 			xpDelta: rewardXPAux,
@@ -159,8 +158,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 
-		// TODO FILL ME IN!!!
-		//Analytics.Instance.DoctorHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
+		Analytics.Instance.DoctorMatchGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], comboController.Combo);
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
 #endif

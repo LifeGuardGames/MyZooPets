@@ -133,23 +133,27 @@ public class StatsManager : Singleton<StatsManager>{
 				if(xpPos != default(Vector3)){
 					// WorldToScreen returns screen coordinates based on 0,0 being bottom left, so we need to transform those into respective NGUI Anchors
 					xpPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, xpPos);
-					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
-					xpPos = CameraManager.Instance.TransformAnchorPosition(xpPos, InterfaceAnchors.BottomLeft, endAnchor);
+					Debug.LogWarning("COMMENTED OUT THINGS HERE, fix");
+					//InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Points_Anchor"));
+					//xpPos = CameraManager.Instance.TransformAnchorPosition(xpPos, InterfaceAnchors.BottomLeft, endAnchor);
 				}
 				if(coinsPos != default(Vector3)){
 					coinsPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, coinsPos);
-					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
-					coinsPos = CameraManager.Instance.TransformAnchorPosition(coinsPos, InterfaceAnchors.BottomLeft, endAnchor);
+					Debug.LogWarning("COMMENTED OUT THINGS HERE, fix");
+					//InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Stars_Anchor"));
+					//coinsPos = CameraManager.Instance.TransformAnchorPosition(coinsPos, InterfaceAnchors.BottomLeft, endAnchor);
 				}
 				if(healthPos != default(Vector3)){
 					healthPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, healthPos);
-					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Health_Anchor"));
-					healthPos = CameraManager.Instance.TransformAnchorPosition(healthPos, InterfaceAnchors.BottomLeft, endAnchor);
+					Debug.LogWarning("COMMENTED OUT THINGS HERE, fix");
+					//InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Health_Anchor"));
+					//healthPos = CameraManager.Instance.TransformAnchorPosition(healthPos, InterfaceAnchors.BottomLeft, endAnchor);
 				}
 				if(hungerPos != default(Vector3)){
 					hungerPos = CameraManager.Instance.WorldToScreen(CameraManager.Instance.CameraMain, hungerPos);
-					InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Mood_Anchor"));
-					hungerPos = CameraManager.Instance.TransformAnchorPosition(hungerPos, InterfaceAnchors.BottomLeft, endAnchor);
+					Debug.LogWarning("COMMENTED OUT THINGS HERE, fix");
+					//InterfaceAnchors endAnchor = (InterfaceAnchors)Enum.Parse(typeof(InterfaceAnchors), Constants.GetConstant<String>("Mood_Anchor"));
+					//hungerPos = CameraManager.Instance.TransformAnchorPosition(hungerPos, InterfaceAnchors.BottomLeft, endAnchor);
 				}
 			}
 			// Adjust for custom position using screen position for NGUI objects

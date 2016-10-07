@@ -8,6 +8,7 @@ public class DegradTrigger : MonoBehaviour{
 	public string ID { get; set; }						//the id of this specific degradation trigger
 	public LgParticleEmitterDegradation emitter;
 	public ParticleSystem hitParticle;
+	public GameObject fingerHint;
 	private int clicksToKill = 3;
 
 	// has this trigger been cleaned yet?
@@ -22,6 +23,14 @@ public class DegradTrigger : MonoBehaviour{
 		if(areTutorialsFinished || DegradationLogic.Instance.IsTesting()) {
 			ActivateParticles();		
 		}
+
+		StartCoroutine(FingerHintTimer());
+	}
+
+	private IEnumerator FingerHintTimer() {
+		fingerHint.SetActive(false);
+		yield return new WaitForSeconds(15f);
+		fingerHint.SetActive(true);
 	}
 
 	void OnDestroy(){

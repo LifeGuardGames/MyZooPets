@@ -47,8 +47,9 @@ public class DataLoaderTriggerLocations : XMLLoaderGeneric<DataLoaderTriggerLoca
 			
 			// check to make sure the partition of this trigger is unlocked; if it is, it's okay to add to the list
 			int partition = location.Partition;
-			if(GatingManager.Instance.HasActiveGate(partition) == false)
+			if(GatingManager.Instance.HasActiveGate(partition) == false) {
 				list.Add(location);
+			}
 		}
 		
 		return list;		

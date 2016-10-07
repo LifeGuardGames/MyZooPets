@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class DegradTrigger : MonoBehaviour{
 	public EventHandler<EventArgs> OnTriggerCleaned;	// when this trigger gets cleaned
@@ -20,7 +19,7 @@ public class DegradTrigger : MonoBehaviour{
 
 		// if the trigger tutorial has been played, activate the trigger
 		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
-		if(areTutorialsFinished || DegradationUIManager.Instance.IsTesting()){
+		if(areTutorialsFinished || DegradationLogic.Instance.IsTesting()) {
 			ActivateParticles();		
 		}
 	}

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 //Instantiate all the degradation asthma triggers if there are any
@@ -16,11 +15,6 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	public bool bTesting; // turn this on so that triggers spawn no matter what...used for testing
 
 	private List<GameObject> currentSpawnTriggers; //keep a reference of all the triggers spawned
-
-	public bool IsTesting(){
-		bool bTesting = Constants.GetConstant<bool>("TestingDegrad");
-		return bTesting;
-	}
 
 	void Awake(){
 		currentSpawnTriggers = new List<GameObject>();
@@ -83,7 +77,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	private void PlaceTriggers(object sender, EventArgs args){
 		// if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
 		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
-		if(!areTutorialsFinished && !IsTesting()){
+		if(!areTutorialsFinished && !DegradationLogic.Instance.IsTesting()){
 			return;
 		}
 
@@ -107,7 +101,7 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 		int partition = degradData.Partition;
 		Vector3 position = degradData.Position;
 
-		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
+		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTriggerData(triggerID);
 
 		//instantiate all the triggers saved in DataManager
 		Transform parent = PartitionManager.Instance.GetInteractableParent(partition);

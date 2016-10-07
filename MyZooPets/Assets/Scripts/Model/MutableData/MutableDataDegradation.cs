@@ -1,13 +1,4 @@
-using UnityEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-
-//---------------------------------------------------
-// DegradationData 
-// Save data for degradation. 
-// Mutable data 
-//---------------------------------------------------
 
 public class MutableDataDegradation{
     public DateTime LastPlayPeriodTriggerSpawned {get; set;}

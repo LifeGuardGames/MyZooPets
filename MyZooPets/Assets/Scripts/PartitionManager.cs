@@ -228,7 +228,6 @@ public class PartitionManager : Singleton<PartitionManager> {
 		int rand = UnityEngine.Random.Range(0,4);
 		while (rand == lastKnownWanderPoint) {
 			rand = UnityEngine.Random.Range(0, 4);
-			Debug.Log("hit" + rand);
 		}
 		lastKnownWanderPoint = rand;
 		wanderPoint = petWanderPoints[currentPartition].GetChild(rand).position;

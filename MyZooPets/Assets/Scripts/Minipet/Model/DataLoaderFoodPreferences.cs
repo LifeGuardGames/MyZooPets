@@ -11,7 +11,6 @@ public class DataLoaderFoodPreferences : XMLLoaderGeneric<DataLoaderFoodPreferen
 	/// <param name="id">Identifier.</param>
 	public static ImmutableDataFoodPreferences GetData(string id){
 		instance.InitXMLLoader();
-		
 		return instance.GetData<ImmutableDataFoodPreferences>(id);
 	}
 
@@ -19,10 +18,12 @@ public class DataLoaderFoodPreferences : XMLLoaderGeneric<DataLoaderFoodPreferen
 		ImmutableDataFoodPreferences data = new ImmutableDataFoodPreferences(id, xmlNode, errorMessage);
 
 		// store the data
-		if(hashData.ContainsKey(id))
+		if(hashData.ContainsKey(id)) {
 			Debug.LogError(errorMessage + "Duplicate keys!");
-		else
-			hashData.Add(id, data); 
+		}
+		else {
+			hashData.Add(id, data);
+		}
 	}
 
 	protected override void InitXMLLoader(){

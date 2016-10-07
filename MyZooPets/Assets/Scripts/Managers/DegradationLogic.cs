@@ -24,6 +24,10 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
 	private bool isAwakeCheck = true;
 
+	public bool IsTesting() {
+		return Constants.GetConstant<bool>("TestingDegrad");
+	}
+
 	void Awake() {
 		RefreshCheck();
 	}
@@ -53,7 +57,11 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	}
 
 	private void RefreshCheck() {
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished()) {
+		Debug.Log("REFRESH CHECKING");
+		if((!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished())
+			|| IsTesting()) {
+
+			Debug.Log("REFRESH CHECKING PASS");
 			degradationTriggers = new List<DegradData>();
 
 			StatsDegradationCheck();
@@ -123,6 +131,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	/// spawned from the DegradationUIManager.
 	/// </summary>
 	private void SetUpTriggers() {
+		Debug.Log("SETTING UP TRIGGERS");
 		// get list of available locations to spawn triggers
 		List<ImmutableDataTriggerLocation> listAvailable = DataLoaderTriggerLocations.GetAvailableTriggerLocations("Bedroom");
 
@@ -130,7 +139,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		int numToSpawn = GetNumTriggersToSpawn();
 
 		DataManager.Instance.GameData.Degradation.UncleanedTriggers = numToSpawn;
-		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements<ImmutableDataTriggerLocation>(listAvailable, numToSpawn);
+		List<ImmutableDataTriggerLocation> listChosen = ListUtils.GetRandomElements(listAvailable, numToSpawn);
 
 		//create trigger data to be spawned
 		for(int i = 0; i < listChosen.Count; i++) {

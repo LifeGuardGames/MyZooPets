@@ -5,7 +5,7 @@ using System.Collections;
 public class DegradTrigger : MonoBehaviour{
 	public EventHandler<EventArgs> OnTriggerCleaned;	// when this trigger gets cleaned
 
-	public string ID{ get; set; }						//the id of this specific degradation trigger
+	public string ID { get; set; }						//the id of this specific degradation trigger
 	public LgParticleEmitterDegradation emitter;
 	public ParticleSystem hitParticle;
 	private int clicksToKill = 3;
@@ -62,7 +62,7 @@ public class DegradTrigger : MonoBehaviour{
 		// play an FX
 		ParticleUtils.CreateParticle("DegradationPoof", gameObject.transform.position);
 		
-		Destroy(this.gameObject);
+		Destroy(gameObject);
 	}
 
 	private void ActivateParticleEffects(object senders, EventArgs args){

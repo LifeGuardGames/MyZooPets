@@ -7,7 +7,7 @@ public class RunnerGameUIManager : MonoBehaviour {
 	public Text comboLabel;
 
 	public void UpdateUI(int distanceTraveled, int coins, float combo) {
-		distanceLabel.text = distanceTraveled.ToString() + " M";
+		distanceLabel.text = distanceTraveled.ToString() + "m";
 		coinsLabel.text = coins.ToString();
 		comboLabel.text = "x" + combo.ToString("F1");
 	}

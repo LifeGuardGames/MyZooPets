@@ -16,7 +16,7 @@ public class HazardItem : RunnerItem{
 		// Player, sloooooowwww downnnnnnnn
 		if(!PlayerController.Instance.Invincible){
 			PlayerController.Instance.TriggerSlowdown(SlowdownDivisor, ID);
-			ScoreManager.Instance.ResetCombo();
+			RunnerGameManager.Instance.ResetCombo();
 		}
 		GameObject.Destroy(gameObject);
 	}

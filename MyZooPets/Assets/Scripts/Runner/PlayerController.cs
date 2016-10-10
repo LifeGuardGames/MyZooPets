@@ -79,9 +79,7 @@ public class PlayerController : Singleton<PlayerController> {
 	private float magnetTime = 0;                   //How long until magnet is disabled
 	private float magnetTimeIncrease = 5f;          //How much extra time a magnet gives
 
-#if UNITY_EDITOR
-	private bool bDelay = false;                    // used just for testing keyboard input in unity editor
-#endif
+	private bool isPlayerAlive = false;         // Check if physics needs to update
 
 	public float Speed {
 		get { return movement.currentSpeed; }
@@ -111,40 +109,39 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	void Update() {
-		if(RunnerGameManager.Instance.IsPaused) {
+		if(RunnerGameManager.Instance.IsPaused || !isPlayerAlive) {
 			return;
 		}
 
-#if UNITY_EDITOR
+		#if UNITY_EDITOR
 		CheckKeyMovement();
-#endif
+		#endif
 		UpdateSpeed();
-		CheckAndActOnDeath();
 		UpdateMagnet();
+
+		// Death condition
+		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver) {
+			isPlayerAlive = false;
+			RunnerGameManager.Instance.GameOver();
+		}
 	}
 
 	void FixedUpdate() {
-		if(RunnerGameManager.Instance.IsPaused) {
+		if(RunnerGameManager.Instance.IsPaused || !isPlayerAlive) {
 			return;
 		}
 
-		//update runner horizontal movement
 		UpdateHorizontalMovement();
-
-		//apply game gravity
 		ApplyGravity();
 
 		amountToMove = new Vector2(movement.currentSpeed, movement.verticalSpeed);
-
-		//always want movement to be framerate independent
-		amountToMove *= Time.deltaTime;
+		amountToMove *= Time.deltaTime;     //always want movement to be framerate independent
 
 		playerPhysics.Move(amountToMove);
 	}
 
 	// Listen to finger down gesture
 	void OnTap(TapGesture e) {
-
 		if(e.Position.y > Screen.height / 2) {
 			Jump(movement.jumpHeight);//Jump(Mathf.Clamp(touchLocationDifference,movement.minHeight,movement.maxHeight)); //In world coordinates
 		}
@@ -154,7 +151,7 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	/// <summary>
-	/// Reset player position and physics
+	/// Reset player position, physics, and isAlive condition
 	/// </summary>
 	public void Reset() {
 		transform.position = initialPosition;
@@ -163,16 +160,15 @@ public class PlayerController : Singleton<PlayerController> {
 		magnetSystem.Stop();
 		movement.verticalSpeed = 0f;
 		movement.currentSpeed = 0f;
-		anim.speed = minAnimSpeed;
-		movement.ResetTargetSpeed();
-		movement.Gravity = movement.targetSpeed;
+		ResetSpeedAndAlive();
 		PlayAnimation();
 	}
 
 	/// <summary>
 	/// Reset player speed and physics
 	/// </summary>
-	public void ResetSpeed() {
+	public void ResetSpeedAndAlive() {
+		isPlayerAlive = true;
 		anim.speed = minAnimSpeed;
 		movement.ResetTargetSpeed();
 		movement.Gravity = movement.targetSpeed;
@@ -201,10 +197,12 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	public void StartMagnet() { //TODO: Add some visual effect when magnet is enabled
-		if(magnetTime <= 0)
+		if(magnetTime <= 0) {
 			magnetTime = magnetTimeIncrease;
-		else
+		}
+		else {
 			magnetTime += magnetTimeIncrease;
+		}
 		MagneticField.Instance.EnableMagnet(true);
 		magnetSystem.Play();
 	}
@@ -317,8 +315,9 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 		else {
 			movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.targetSpeed, movement.acceleration * Time.deltaTime);
-			if(!movement.starMode && movement.publicStarMode && Mathf.Abs(movement.currentSpeed / movement.targetSpeed - 1) < .1) //If we are waiting to turn of publicStarMode
+			if(!movement.starMode && movement.publicStarMode && Mathf.Abs(movement.currentSpeed / movement.targetSpeed - 1) < .1) { //If we are waiting to turn of publicStarMode
 				movement.publicStarMode = false;
+			}
 		}
 		float speedPercentage = (movement.currentSpeed - MinSpeed) / (MaxSpeed - MinSpeed);
 		speedPercentage = (speedPercentage < 0) ? 0 : speedPercentage; //Make sure we are greater than 0.
@@ -421,15 +420,6 @@ public class PlayerController : Singleton<PlayerController> {
 			MakePlayerVisible(true);
 		}
 	}
-	//---------------------------------------------------
-	// CheckAndActOnDeath()
-	// If player falls below the "Dead line" than the player dies
-	//---------------------------------------------------
-	private void CheckAndActOnDeath() {
-		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver) {
-			RunnerGameManager.Instance.GameOver();
-		}
-	}
 
 	private void UpdateMagnet() {
 		if(magnetTime >= 0) {
@@ -440,8 +430,7 @@ public class PlayerController : Singleton<PlayerController> {
 			magnetSystem.Stop();
 		}
 	}
-
-
+	
 #if UNITY_EDITOR
 	//---------------------------------------------------
 	// UpdateMovement()
@@ -449,15 +438,12 @@ public class PlayerController : Singleton<PlayerController> {
 	// Check for jumping and falling physics as well.
 	//---------------------------------------------------
 	private void CheckKeyMovement() {
-
-		if(Input.GetKey("up"))
+		if(Input.GetKey("up")) {
 			Jump(movement.jumpHeight);
-		if(Input.GetKey("down") && !playerPhysics.Falling && !bDelay) {
-			bDelay = true;
+		}
+		if(Input.GetKey("down") && !playerPhysics.Falling) {
 			Drop();
 		}
-		else
-			bDelay = false;
 	}
 #endif
 }

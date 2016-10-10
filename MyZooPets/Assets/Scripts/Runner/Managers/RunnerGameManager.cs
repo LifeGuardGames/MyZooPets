@@ -10,7 +10,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System;
 
 public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	public GameObject pausePanel;
@@ -63,6 +62,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	public IEnumerator StartTutorialHelper(){
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
+
 		acceptInput = false;
 		ScoreManager.Instance.Reset();
 
@@ -84,6 +84,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 	protected override void _NewGame(){    //Reset everything and start again, not called during tutorial
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
+
 		ScoreManager.Instance.Reset();
 
 		RunnerLevelManager.Instance.Reset();
@@ -110,8 +111,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager>{
 
 	protected override void _ContinueGame() {
 		PlayerController.Instance.MakePlayerVisible(true);
+		PlayerController.Instance.ResetSpeedAndAlive();
 		MegaHazard.Instance.Reset();
-		PlayerController.Instance.ResetSpeed();
 		Vector3 spawnPos = FindObjectOfType<PlayerPhysics>().FindGroundedPosition(MegaHazard.Instance.bottomPosition.position);
 		PlayerController.Instance.transform.position = spawnPos;
 		acceptInput = false; //Prevent us from input anything until we have waited 3 seconds

@@ -109,7 +109,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 		nextLevel = PushAndInstantiateRandomComponent();
 		nextLevel = PushAndInstantiateRandomComponent();
 		nextLevel = PushAndInstantiateRandomComponent();
-		
 	}
 
 	/// <summary>
@@ -188,7 +187,6 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 					PushAndInstantiateRandomComponent(currentTransition);
 				}
 			}
-
 		}
 		else{
 			Debug.LogError("No other levels to switch to. Perhaps there are no other level groups, or we havent reached a new "
@@ -203,13 +201,16 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 	/// <param name="useStartingComponent">True will load the first component of the level group</param>
 	private LevelComponent PushAndInstantiateRandomComponent(bool useStartingComponent = false, bool tutMode = false){
 		LevelComponent newComponent = null;
-		
-		if(useStartingComponent)
+
+		if(useStartingComponent) {
 			newComponent = mCurrentLevelGroup.GetStartLevelComponent();
-		else if(tutMode)
+		}
+		else if(tutMode) {
 			newComponent = mCurrentLevelGroup.GetTutorialLevelComponent();
-		else
+		}
+		else {
 			newComponent = mCurrentLevelGroup.GetRandomComponent();
+		}
 
 		newComponent.ParentGroup = mCurrentLevelGroup;
 		

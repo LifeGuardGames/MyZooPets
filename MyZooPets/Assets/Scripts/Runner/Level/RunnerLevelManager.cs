@@ -328,7 +328,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 							newCoin.NextToCollect = true;
 						}
 						else{
-							lastCoin.nextCoin = newCoin; //The coin after the one before us, is us
+							lastCoin.NextCoin = newCoin; //The coin after the one before us, is us
 						}
 						
 						coinNum++;
@@ -376,7 +376,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 							newCoin.NextToCollect = true;
 						}
 						else{
-							lastCoin.nextCoin = newCoin; //The coin after the one before us, is us
+							lastCoin.NextCoin = newCoin; //The coin after the one before us, is us
 						}
 						
 						coinNum++;

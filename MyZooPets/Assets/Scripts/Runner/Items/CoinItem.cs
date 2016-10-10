@@ -7,9 +7,15 @@ public class CoinItem : RunnerItem {
 		get { return coinValue; }
 		set { coinValue = value; }
 	}
-	
+
+	public Color activeColor;
 	public float fPitchPerCoin;     // pitch change per coin streak
+
 	public CoinItem nextCoin;
+	public CoinItem NextCoin {
+		set { nextCoin = value; }
+	}
+
 	private bool magnetized;
 	private bool collectedInLine = false;
 	private float coinSpeed = .15f;
@@ -27,7 +33,7 @@ public class CoinItem : RunnerItem {
 		set {
 			collectedInLine = value;
 			if(value) {
-				GetComponentInChildren<tk2dSprite>().color = Color.red;
+				GetComponent<SpriteRenderer>().color = activeColor;
 			}
 		}
 	}

@@ -14,6 +14,7 @@ public class ShooterEnemy : MonoBehaviour {
 	protected GameObject player;
 	public bool isDead = false;
 	private bool isMarkedForDestroy = true;
+	
 
 	void Awake() {
 		player = GameObject.FindWithTag("Player");
@@ -65,10 +66,6 @@ public class ShooterEnemy : MonoBehaviour {
 		else if(collider.gameObject.tag == "ShooterMiniPetFireball") {
 			health -= 2;
 		}
-
-		else if(collider.gameObject.tag == "ShooterWall") {
-			StartCoroutine(DestroyEnemy());
-		}
 	}
 
 	// this is a coroutine to make sure enemies are destroyed at the end of frame otherwise an error is thrown by NGUI
@@ -95,5 +92,8 @@ public class ShooterEnemy : MonoBehaviour {
 			// Wait until the particles has finished clearing before you destroy
 			Destroy(this.gameObject, 2f);
 		}
+	}
+	public void OnOffScreen() {
+		StartCoroutine("DestroyEnemy");
 	}
 }

@@ -19,6 +19,6 @@ public class ShooterEnemyMedium : ShooterEnemy{
 
 	// moves once movement is complete makes a zigzag
 	void MoveAgain(){
-		LeanTween.move(this.gameObject, player.transform.position, moveDuration);
+		LeanTween.move(this.gameObject, player.transform.position + new Vector3 (-5,0,0), moveDuration).setOnComplete(OnOffScreen);
 	}
 }

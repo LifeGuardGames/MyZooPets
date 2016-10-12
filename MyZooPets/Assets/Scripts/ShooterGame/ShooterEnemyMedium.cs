@@ -7,7 +7,6 @@ public class ShooterEnemyMedium : ShooterEnemy{
 	
 	// Use this for initialization
 	void Start(){
-		animator.SetBool("IsSpitMode", false);
 		skyPos = GameObject.Find("Upper");
 		bottom = GameObject.Find("Lower");
 		if(Random.Range(0, 2) == 0){

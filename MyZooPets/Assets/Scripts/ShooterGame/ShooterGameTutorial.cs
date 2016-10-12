@@ -34,17 +34,17 @@ public class ShooterGameTutorial {
 			GameObject DestroyPrefabsClone = tutBoards;
 			GameObject.Destroy(DestroyPrefabsClone);
 			tutEnemy = (GameObject)Resources.Load("ShooterTutEnemy");
-			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("MidPoint"), tutEnemy);
+			GameObjectUtils.AddChild(GameObject.Find("MidPoint"), tutEnemy);
 			break;
 		case 3:
 			//prompt user to shoot
 			tutEnemy = (GameObject)Resources.Load("ShooterTutEnemy");
-			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Upper"), tutEnemy);
+			GameObjectUtils.AddChild(GameObject.Find("Upper"), tutEnemy);
 			break;
 		case 4:
 			//prompt user to shoot
 			tutEnemy = (GameObject)Resources.Load("ShooterTutEnemy");
-			GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Lower"), tutEnemy);
+			GameObjectUtils.AddChild(GameObject.Find("Lower"), tutEnemy);
 			break;
 		// the user must defeat the first wave which is simply a wave of 5 basic enemies
 		case 5:

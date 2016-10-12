@@ -140,10 +140,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
 			if(Camera.main.ScreenToWorldPoint(mousePos).x <= PlayerShooterController.Instance.gameObject.transform.position.x + 1.0f) {
 				PlayerShooterController.Instance.Move(mousePos);
-				Debug.Log("Move");
 			}
 			else {
-				Debug.Log("shoot");
 				PlayerShooterController.Instance.Shoot(mousePos);
 				startTime = Time.time;
 			}

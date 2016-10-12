@@ -1,34 +1,27 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
 
 public class ShooterUIManager : Singleton<ShooterUIManager>{
 
-	public GameObject sun;
-	public GameObject moon;
+	public MovingSky sun;
+	public MovingSky moon;
 	public Transform posSky;
 	public Transform posBottom;
 	public TextureListAlphaTween dayTween;
 	public TextureListAlphaTween nightTween;
+
 	public GameObject fingerPos;
 	public GameObject FingerPos{
 		get{ return fingerPos; }
 	}
 
-
 	public void Quit(){
-		LeanTween.cancel(sun);
-		LeanTween.cancel(moon);
+		LeanTween.cancel(sun.gameObject);
+		LeanTween.cancel(moon.gameObject);
 	}
 
-
-
 	public void Reset(){
-		sun = GameObject.Find("SpriteSun");
-		moon = GameObject.Find("SpriteMoon");
-		sun.GetComponent<MovingSky>().inSky = true;
-		moon.GetComponent<MovingSky>().inSky = false;
+		sun.inSky = true;
+		moon.inSky = false;
 		sun.transform.position = posSky.position;
 		moon.transform.position = posBottom.position;
 		dayTween.InstantShow();
@@ -44,19 +37,19 @@ public class ShooterUIManager : Singleton<ShooterUIManager>{
 					fingerPos = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find ("Anchor-BottomRight"),tutorialFinger);
 				}
 				if(sun.GetComponent<MovingSky>().inSky == true){
-					LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(EndTimeTransition).setEase(LeanTweenType.easeInQuad);
+					LeanTween.move(sun.gameObject, posBottom.position, 2.0f).setOnComplete(EndTimeTransition).setEase(LeanTweenType.easeInQuad);
 					nightTween.Show();
 					dayTween.Hide();
 				}
 				else{
-					LeanTween.move(moon, posBottom.position, 2.0f).setOnComplete(EndTimeTransition).setEase(LeanTweenType.easeInQuad);
+					LeanTween.move(moon.gameObject, posBottom.position, 2.0f).setOnComplete(EndTimeTransition).setEase(LeanTweenType.easeInQuad);
 					dayTween.Show();
 					nightTween.Hide();
 				}
 			}
 		}
 		else{
-			LeanTween.move(sun, posBottom.position, 2.0f).setOnComplete(TutChange).setEase(LeanTweenType.easeInQuad);
+			LeanTween.move(sun.gameObject, posBottom.position, 2.0f).setOnComplete(TutChange).setEase(LeanTweenType.easeInQuad);
 			nightTween.Show();
 			dayTween.Hide();
 		}
@@ -65,7 +58,7 @@ public class ShooterUIManager : Singleton<ShooterUIManager>{
 	public void TutChange(){
 		// if its the tutorial go to next step
 		if(ShooterGameManager.Instance.inTutorial) {
-			LeanTween.move(moon, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(moon.gameObject, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
 		}
 	}
 
@@ -75,12 +68,12 @@ public class ShooterUIManager : Singleton<ShooterUIManager>{
 		MovingSky moonScript = moon.GetComponent<MovingSky>();
 
 		if(sunScript.inSky == true){
-			LeanTween.move(moon, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(moon.gameObject, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
 			moonScript.inSky = true;
 			sunScript.inSky = false;
 		}
 		else{
-			LeanTween.move(sun, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(sun.gameObject, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
 			sunScript.inSky = true;
 			moonScript.inSky = false;
 		}

@@ -11,14 +11,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public Transform SeekerTopPosition;
 	public Transform SeekerBottomPosition;
 	private List<ImmutableDataShooterArmy> spawningList;
-			
 
 	// prevents finishing the last wave
 	public void Reset(){
 		StopAllCoroutines();
 		spawningList = null;
 	}
-
 
 	public void Quit(){
 		StopCoroutine("SpawnEnemies");
@@ -28,6 +26,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		spawningList = listToSpawn;
 		StartCoroutine("SpawnEnemies");
 	}
+
 	public void SpawnBoss(){
 		int rand = Random.Range(0,2);
 		if(rand == 0){
@@ -45,7 +44,6 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_" + randPowerUp.ToString()).PrefabName) as GameObject;
 		int randomPositionIndex = Random.Range(0, 3);
 		GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
-		go.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
@@ -61,18 +59,11 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 				if(spawningList[randomSpawnIndex].Id != "Mober_4") {
 					GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
 					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
-					if(spawningList[randomSpawnIndex].Id == "Mober_1") {
-						go.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-					}
-					else if(spawningList[randomSpawnIndex].Id == "Mober_0") {
-						go.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-					}
 				}
 				else {
 					randomPositionIndex = Random.Range(3, 5);
 					GameObject spawnPrefab = Resources.Load("ShooterEnemySeeker") as GameObject;
 					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
-					go.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 					if(randomPositionIndex == 3) {
 						go.transform.Rotate(new Vector3(0, 0, -45));
 						go.GetComponent<ShooterEnemySeeker>().InitBottom();

@@ -10,7 +10,6 @@ public class ShooterEnemyHard : ShooterEnemy{
 
 	// Use this for initialization
 	void Start(){
-		animator.SetBool("IsSpitMode", true);
 		// movement positions
 		upper = GameObject.Find("Upper");
 		lower = GameObject.Find("Lower");

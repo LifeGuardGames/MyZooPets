@@ -12,7 +12,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public int powerUpScore;
 	public int highestCombo = 0;
 	public GameObject BouncyWalls;
-	public GameObject tutFinger;
+	public Animator tutAnimator;			// 3D object tutorial
 	public bool isGameOver = false;
 	public Text scoreText;
 	public delegate void OnRestart();

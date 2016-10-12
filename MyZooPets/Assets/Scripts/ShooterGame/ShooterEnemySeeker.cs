@@ -24,7 +24,7 @@ public class ShooterEnemySeeker : ShooterEnemy {
 
 	IEnumerator Seeking() {
 		yield return new WaitForSeconds(3.0f);
-		LeanTween.move(this.gameObject, player.transform.position, moveDuration);
+		LeanTween.move(this.gameObject, player.transform.position + new Vector3(-5, 0, 0), moveDuration).setOnComplete(OnOffScreen);
     }
 
 }

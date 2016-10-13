@@ -34,6 +34,7 @@ public class ShooterUIManager : Singleton<ShooterUIManager> {
 				if(ShooterGameManager.Instance.waveNum == 0) {
 					GameObject tutorialFinger = (GameObject)Resources.Load("ShooterPressTut");
 					GameObject fingerUI = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), tutorialFinger);
+					fingerPos = fingerUI;
 					RectTransform rect = fingerUI.GetComponent<RectTransform>();
 					rect.anchorMax = new Vector2(1f, 0);
 					rect.anchorMin = new Vector2(1f, 0);

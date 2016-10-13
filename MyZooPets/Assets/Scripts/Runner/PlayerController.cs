@@ -29,6 +29,7 @@ public class PlayerController : Singleton<PlayerController> {
 
 		public bool invincible = false;
 
+
 		private float gravity;                      //gravity is calculated based on the target speed
 		public float Gravity {                      //Set when you jump
 			get { return gravity; }
@@ -64,7 +65,7 @@ public class PlayerController : Singleton<PlayerController> {
 	private Vector2 amountToMove;                   //How much you want the player to move
 	private PlayerPhysics playerPhysics;            //Reference to physics
 	private Vector2 initialPosition;                //Where the player start
-
+	private bool poolJump = false;
 	private GameObject floatyLocation;
 	public GameObject FloatyLocation {
 		get { return floatyLocation; }
@@ -109,13 +110,10 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	void Update() {
-		if(RunnerGameManager.Instance.IsPaused || !isPlayerAlive) {
+		if(RunnerGameManager.Instance.IsPaused && !RunnerGameManager.Instance.AcceptInput || !isPlayerAlive) {
 			return;
 		}
-
-		#if UNITY_EDITOR
 		CheckKeyMovement();
-		#endif
 		UpdateSpeed();
 		UpdateMagnet();
 
@@ -133,6 +131,9 @@ public class PlayerController : Singleton<PlayerController> {
 
 		UpdateHorizontalMovement();
 		ApplyGravity();
+		if(poolJump) {
+			Jump(movement.jumpHeight);
+		}
 
 		amountToMove = new Vector2(movement.currentSpeed, movement.verticalSpeed);
 		amountToMove *= Time.deltaTime;     //always want movement to be framerate independent
@@ -140,15 +141,6 @@ public class PlayerController : Singleton<PlayerController> {
 		playerPhysics.Move(amountToMove);
 	}
 
-	// Listen to finger down gesture
-	void OnTap(TapGesture e) {
-		if(e.Position.y > Screen.height / 2) {
-			Jump(movement.jumpHeight);//Jump(Mathf.Clamp(touchLocationDifference,movement.minHeight,movement.maxHeight)); //In world coordinates
-		}
-		else {
-			Drop();
-		}
-	}
 
 	/// <summary>
 	/// Reset player position, physics, and isAlive condition
@@ -366,6 +358,10 @@ public class PlayerController : Singleton<PlayerController> {
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(height);
 			playerPhysics.Jumping = true;
 		}
+		else {
+			poolJump = true;
+			StartCoroutine("PoolJump");
+		}
 	}
 
 	private void Drop() {
@@ -431,19 +427,31 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 	}
 	
-#if UNITY_EDITOR
+
 	//---------------------------------------------------
 	// UpdateMovement()
 	// Moves the player along the x axis with default speed.
 	// Check for jumping and falling physics as well.
 	//---------------------------------------------------
 	private void CheckKeyMovement() {
-		if(Input.GetKey("up")) {
+		if(Input.GetKeyDown("up")) {
 			Jump(movement.jumpHeight);
 		}
-		if(Input.GetKey("down") && !playerPhysics.Falling) {
+		if(Input.GetKeyDown("down") && !playerPhysics.Falling) {
 			Drop();
 		}
+		if(Input.GetMouseButtonDown(0)) {
+			Debug.Log("hit");
+			if(Input.mousePosition.y > Screen.height / 2) {
+				Jump(movement.jumpHeight);
+			}
+			else {
+				Drop();
+			}
+		}
 	}
-#endif
+IEnumerator PoolJump() {
+		yield return new WaitForSeconds(0.3f);
+		poolJump = false;
+	}
 }

@@ -85,7 +85,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	void Awake() {
 		// Parent settings
 		minigameKey = "RUNNER";
-		quitGameScene = SceneUtils.BEDROOM;
+		quitGameScene = "DemoScene";
 		ResetScore();
 	}
 

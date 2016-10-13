@@ -11,9 +11,8 @@ public class MicroMixBossTimer : MonoBehaviour{
 	private int nextIndex;
 	private float totalTime = 4f;
 	private float currentTime;
-	// Use this for initialization
+
 	void Start(){
-		GetComponentInChildren<Animator>().speed = 0;
 		timerBoss.transform.position = position1.position;
 	}
 

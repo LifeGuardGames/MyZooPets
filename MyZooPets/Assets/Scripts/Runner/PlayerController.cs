@@ -154,6 +154,11 @@ public class PlayerController : Singleton<PlayerController> {
 		movement.currentSpeed = 0f;
 		ResetSpeedAndAlive();
 		PlayAnimation();
+		magnetSystem.Stop();
+		movement.publicStarMode = false;
+		movement.invincible = false;
+		movement.starMode = false;
+		RevertColor();
 	}
 
 	/// <summary>

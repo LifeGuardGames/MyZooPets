@@ -50,7 +50,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager>{
 		minigameKey = "MICRO"; //
 		quitGameScene = SceneUtils.BEDROOM;
 		ResetScore();
-		petAnim.DisableIdleAnimation();
 	}
 
 	public void WinMicro(){

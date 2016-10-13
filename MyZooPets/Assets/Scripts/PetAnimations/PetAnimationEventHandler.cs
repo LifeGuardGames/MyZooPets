@@ -9,7 +9,12 @@ public class PetAnimationEventHandler : MonoBehaviour {
 	public void PetAnimationEvent(string eventName){
 		switch(eventName){
 		case "FinishBlowingFire":
-			PetAnimationManager.Instance.DoneWithFireBlowAnimation();
+			if(PetAnimationManager.Instance != null) {
+				PetAnimationManager.Instance.DoneWithFireBlowAnimation();
+			}
+			else {
+				MicroMixPetAnimationManager.Instance.DoneWithFireBlowAnimation();
+			}
 			break;
 		}
 	}

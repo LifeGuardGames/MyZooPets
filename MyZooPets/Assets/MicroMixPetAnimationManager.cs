@@ -3,17 +3,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MicroMixPetAnimationManager : MonoBehaviour {
+public class MicroMixPetAnimationManager : Singleton<MicroMixPetAnimationManager> {
 
 	public static EventHandler<EventArgs> OnBreathEnded; //event sent out when fire blow animation ended
 
 	public Animator animator;
 	public GameObject animatorObject;
-	public GameObject petShadow;
 	public GameObject flippableComponents;
 	public GameObject fireBlowPosition;
-	public BoxCollider bodyCollider;
-	public BoxCollider highFiveCollider;
 
 	public List<string> sadIdleAnimations;
 	public List<string> happyIdleAnimations;
@@ -21,98 +18,10 @@ public class MicroMixPetAnimationManager : MonoBehaviour {
 	public List<string> sick2IdleAnimations;
 	public List<string> booleanParameters; //these parameters could be interrupted by isIdle so all of them need to be turned to false when isIdle is false
 
-	private float idleStateTimer = 0;
-	private float timeBeforeNextRandomIdleAnimation = 10f;
-	private float highFiveWaitTimer = 0;
-	private float timeBeforeHighFiveEnds = 5f;
 	private PetAnimStates currentAnimationState;
 	private FireBlowParticleController fireScript;
-	private bool isIdleAnimationActive = true; //F: temporary suspend any idle animations. 
-											   //animations can still be played but need to be called explicitly
-
-	public bool IsBusy {
-		get {
-			return (currentAnimationState != PetAnimStates.Idling &&
-					currentAnimationState != PetAnimStates.Walking);
-		}
-	}
 
 	void Start() {
-		//		int mood = StatsManager.Instance.GetStat(StatType.Hunger);
-		//		int health = StatsManager.Instance.GetStat(StatType.Health);
-		currentAnimationState = PetAnimStates.Idling;
-
-		Debug.LogWarning("PetStats commented out. Also look @ NewMinigameManager NewGame()");
-		//		PetStatsModified(health, mood);
-	}
-
-	// Update is called once per frame
-	void Update() {
-		if(isIdleAnimationActive) {
-			RunIdleStateTimer();
-			RunHighFiveTimer();
-		}
-	}
-
-	public void DisableIdleAnimation() {
-		isIdleAnimationActive = false;
-	}
-
-	public void EnableIdleAnimation() {
-		isIdleAnimationActive = true;
-	}
-
-	/// <summary>
-	/// Disables the animation. by hiding the colliders and the body parts
-	/// </summary>
-	public void DisableVisibility() {
-		animatorObject.SetActive(false);
-		bodyCollider.enabled = false;
-		petShadow.GetComponent<MeshRenderer>().enabled = false;
-		DisableIdleAnimation();
-		PetAudioManager.Instance.EnableSound = false;
-	}
-
-	public void EnableVisibility() {
-		animatorObject.SetActive(true);
-		bodyCollider.enabled = true;
-		petShadow.GetComponent<MeshRenderer>().enabled = true;
-		EnableIdleAnimation();
-		PetAudioManager.Instance.EnableSound = true;
-	}
-
-	/// <summary>
-	/// Pet stats have been modified so make sure idle state animation reflects
-	/// the current health and mood
-	/// </summary>
-	/// <param name="health">Health.</param>
-	/// <param name="mood">Mood.</param>
-	public void PetStatsModified(int health, int mood) {
-		animator.SetInteger("Mood", mood);
-		animator.SetInteger("Health", health);
-	}
-
-	/// <summary>
-	/// Starts walking animation. 
-	/// Any state animation
-	/// </summary>
-	public void StartWalking() {
-		CheckConditionBeforeAnyStateAnimation();
-
-		//turn all boolean parameter off before pet start walking animation
-		foreach(string animationParameter in booleanParameters) {
-			animator.SetBool(animationParameter, false);
-		}
-		//AudioManager.Instance.PlayClip("petMove", variations: 6);
-		currentAnimationState = PetAnimStates.Walking;
-		animator.SetBool("IsIdle", false);
-	}
-
-	/// <summary>
-	/// Stop walking animation
-	/// </summary>
-	public void StopWalking() {
-		animator.SetBool("IsIdle", true);
 		currentAnimationState = PetAnimStates.Idling;
 	}
 
@@ -164,184 +73,12 @@ public class MicroMixPetAnimationManager : MonoBehaviour {
 
 		fireScript.Stop();
 
-		if(OnBreathEnded != null)
+		if(OnBreathEnded != null) {
 			OnBreathEnded(this, EventArgs.Empty);
-	}
-
-	public void StartRubbing() {
-		animator.SetBool("IsRubbing", true);
-	}
-
-	public void StopRubbing() {
-		animator.SetBool("IsRubbing", false);
-	}
-
-	/// <summary>
-	/// Waitings to be fed.
-	/// Any state animation
-	/// </summary>
-	public void WaitingToBeFed() {
-		CheckConditionBeforeAnyStateAnimation();
-		animator.SetBool("IsWaitingToEat", true);
-	}
-
-	/// <summary>
-	/// Aborts the feeding.
-	/// </summary>
-	public void AbortFeeding() {
-		animator.SetBool("IsWaitingToEat", false);
-		PetAudioManager.Instance.StopRecurringClip();
-	}
-
-	/// <summary>
-	/// Feed the pet. Play the chew animation then return to the appropriate idle state
-	/// </summary>
-	public void FinishFeeding() {
-		PetAudioManager.Instance.StopRecurringClip();
-		animator.SetTrigger("EatChew");
-		animator.SetBool("IsWaitingToEat", false);
+		}
 	}
 
 	public void Flipping() {
 		animator.SetTrigger("Backflip");
-	}
-
-	/// <summary>
-	/// Starts the tickling. Tickle will be played until StopTickling() is called
-	/// </summary>
-	public void StartTickling() {
-		animator.SetBool("IsTickling", true);
-		StartCoroutine("GenerateCoins");
-	}
-
-	/// <summary>
-	/// Stops the tickling.
-	/// </summary>
-	public void StopTickling() {
-		animator.SetBool("IsTickling", false);
-		PetAudioManager.Instance.StopAnimationSound();
-		StopCoroutine("GenerateCoins");
-	}
-
-	/// <summary>
-	/// Starts high five animation.
-	/// </summary>
-	public void StartHighFive() {
-		highFiveCollider.enabled = true;
-		bodyCollider.enabled = false;
-		animator.SetBool("IsHighFiving", true);
-	}
-
-	public void FinishHighFive() {
-		highFiveCollider.enabled = false;
-		bodyCollider.enabled = true;
-		animator.SetBool("IsHighFiving", false);
-		animator.SetTrigger("YesHighFive");
-	}
-
-	/// <summary>
-	/// Flip the animation to the right if true
-	/// </summary>
-	/// <param name="isFlipped">If set to <c>true</c> is flipped.</param>
-	public void Flip(bool isFlipped) {
-		if(isFlipped)
-			flippableComponents.transform.localScale = new Vector3(-1, 1, 1);
-		else {
-			flippableComponents.transform.localScale = new Vector3(1, 1, 1);
-		}
-	}
-
-	/// <summary>
-	/// Any state animation
-	/// </summary>
-	public void Swat() {
-		CheckConditionBeforeAnyStateAnimation();
-
-		animator.SetTrigger("Swat");
-	}
-
-	/// <summary>
-	/// Call this function before an any state animation is executed to do a
-	/// check to see if there's anything that needs to be turned on or off before
-	/// interrupting the current animation
-	/// </summary>
-	private void CheckConditionBeforeAnyStateAnimation() {
-		bool isHighFiving = animator.GetBool("IsHighFiving");
-		if(isHighFiving) {
-			animator.SetBool("IsHighFiving", false);
-			highFiveCollider.enabled = false;
-			bodyCollider.enabled = true;
-		}
-	}
-
-	private void RunHighFiveTimer() {
-		AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-		//only run the timer if high 5 loop animation is currenlty playing
-		if(stateInfo.IsName("Base.High5Loop")) {
-			highFiveWaitTimer += Time.deltaTime;
-			if(highFiveWaitTimer > timeBeforeHighFiveEnds) {
-				highFiveWaitTimer = 0;
-
-				//user didn't high five pet so end the high five animation
-				highFiveCollider.enabled = false;
-				bodyCollider.enabled = true;
-				animator.SetBool("IsHighFiving", false);
-				animator.SetTrigger("NoHighFive");
-			}
-		}
-	}
-
-	/// <summary>
-	/// Runs the idle state timer. Play a random idle animation after counting down
-	/// </summary>
-	private void RunIdleStateTimer() {
-		if(animator.IsInTransition(0)) { // reset timer if in transition
-			idleStateTimer = 0;
-		}
-
-		idleStateTimer += Time.deltaTime;
-		if(idleStateTimer > timeBeforeNextRandomIdleAnimation) {
-			idleStateTimer = 0;
-
-			AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-			List<string> animations = new List<string>();
-			bool isIdle = animator.GetBool("IsIdle");
-
-			//if idle figure out which idle state is the animator in
-			if(isIdle) {
-				if(stateInfo.IsName("Base.SadIdle")) {
-					animations = sadIdleAnimations;
-				}
-				else if(stateInfo.IsName("Base.HappyIdle")) {
-					animations = happyIdleAnimations;
-				}
-				else if(stateInfo.IsName("Base.Sick1Idle")) {
-					animations = sick1IdleAnimations;
-				}
-				else if(stateInfo.IsName("Base.Sick2Idle")) {
-					animations = sick2IdleAnimations;
-				}
-			}
-
-			//pick the appropriate random idle animation
-			if(animations.Count != 0) {
-				int randomIndex = UnityEngine.Random.Range(0, animations.Count);
-				string animationName = animations[randomIndex];
-
-				if(animationName == "HighFive") {
-					StartHighFive();
-				}
-				else {
-					animator.SetTrigger(animationName);
-				}
-			}
-		}
-	}
-
-	IEnumerator GenerateCoins() {
-		yield return new WaitForSeconds(5.0f);
-		StatsManager.Instance.ChangeStats(coinsDelta: 1, coinsPos: transform.position, is3DObject: true);
-		StartCoroutine("GenerateCoins");
 	}
 }

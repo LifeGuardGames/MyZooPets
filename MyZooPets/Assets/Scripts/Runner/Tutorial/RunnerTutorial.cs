@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 public class RunnerTutorial : MinigameTutorial{
-	public static string TUT_KEY = "DOCTORMATCH_TUT";
+	public static string TUT_KEY = "RUNNER_TUT";
 	private RunnerGameTutorialText tutorialText;
 	private IEnumerator waitAdvance;
 

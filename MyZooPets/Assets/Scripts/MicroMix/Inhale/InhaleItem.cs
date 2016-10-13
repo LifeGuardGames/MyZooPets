@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
+
 
 public class InhaleItem : MicroItem{
 	public GameObject petInstance;

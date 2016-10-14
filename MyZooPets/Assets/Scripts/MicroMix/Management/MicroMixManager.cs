@@ -37,6 +37,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		}
 	}
 
+	public TweenToggle transitionMonsterTweenToggle;
+	public TweenToggle transitionPetTweenToggle;
+
 	private enum MonsterAnimation {
 		//Win and lose are for the human playing
 		INTRO,
@@ -265,14 +268,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	}
 
 	private IEnumerator InTransitionHelper(float tweenTime) {
-		float radius = 15f; //Tween body
-		float angle = Random.value * Mathf.PI * 2;
-		monsterBody.transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
-		LeanTween.move(monsterBody, new Vector3(3, -.5f), tweenTime).setEase(LeanTweenType.easeInOutQuad);
-
-		float angle2 = Random.value * Mathf.PI * 2;
-		petAnim.transform.position = new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2)) * radius;
-		LeanTween.move(petAnim.gameObject, new Vector3(-3, -1f), tweenTime).setEase(LeanTweenType.easeInOutQuad);
+		transitionMonsterTweenToggle.Show();
+		transitionPetTweenToggle.Show();
 
 		isParticlePaused = true;
 		monsterParticle.Play();
@@ -300,22 +297,14 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	}
 
 	private IEnumerator OutTransitionHelper() {
-		float radius = 15f; //Tween body
-		float totalTweenTime = monsterParticle.startLifetime;
-
-		float angle = Random.value * Mathf.PI * 2;
-		LeanTween.move(monsterBody, new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * radius, totalTweenTime * 1 / 3)
-			.setEase(LeanTweenType.easeInOutQuad); //Move out monster
-
-		float angle2 = Random.value * Mathf.PI * 2;
-		LeanTween.move(petAnim.gameObject, new Vector3(Mathf.Cos(angle2), Mathf.Sin(angle2)) * radius, totalTweenTime * 1 / 3)
-			.setEase(LeanTweenType.easeInOutQuad); //Move out monster
-
+		float tweenOutTime = 0.3f;
+		transitionMonsterTweenToggle.Hide();
+		transitionPetTweenToggle.Hide();
 
 		monsterParticle.Stop(); //Stop particles
 		isParticlePaused = false;
 
-		yield return WaitSecondsPause(totalTweenTime * 1 / 3); //( (0..1)
+		yield return WaitSecondsPause(tweenOutTime);
 
 		GameObject currentBackground = backgrounds[currentMicro.Background];
 		currentBackground.SetActive(true);
@@ -323,18 +312,17 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			spriteRenderer.color = new Color(1, 1, 1, 0);//Reset old background
 			LeanTween.alpha(spriteRenderer.gameObject, 1, 1f).setEase(LeanTweenType.easeInOutQuad);
 		}
-		LeanTween.alpha(monsterBackground, 0, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeInOutQuad);
+		LeanTween.alpha(monsterBackground, 0, tweenOutTime).setEase(LeanTweenType.easeInOutQuad);
 
-		yield return WaitSecondsPause(totalTweenTime * 1 / 3); // (1...2)
+		yield return WaitSecondsPause(tweenOutTime); // (1...2)
 
 		titleText.text = currentMicro.Title; //Bring up next title
 		titleText.color = Color.white;
 		titleText.rectTransform.localScale = Vector3.one * 1.5f;
-		LeanTween.scale(titleText.rectTransform, Vector3.one, totalTweenTime * 1 / 3).setEase(LeanTweenType.easeOutQuad).setOnComplete(OnTweenTitle);
+		LeanTween.scale(titleText.rectTransform, Vector3.one, tweenOutTime).setEase(LeanTweenType.easeOutQuad).setOnComplete(OnTweenTitle);
 
-		yield return WaitSecondsPause(totalTweenTime * 1 / 3); // (2...3)
+		yield return WaitSecondsPause(tweenOutTime); // (2...3)
 	}
-
 	#endregion
 
 	private void ChangeMicro() {

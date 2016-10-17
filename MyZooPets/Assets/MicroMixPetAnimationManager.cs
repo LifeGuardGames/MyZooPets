@@ -18,8 +18,9 @@ public class MicroMixPetAnimationManager : Singleton<MicroMixPetAnimationManager
 	public List<string> sick2IdleAnimations;
 	public List<string> booleanParameters; //these parameters could be interrupted by isIdle so all of them need to be turned to false when isIdle is false
 
+	public FireBlowParticleController fireScript;
+
 	private PetAnimStates currentAnimationState;
-	private FireBlowParticleController fireScript;
 
 	void Start() {
 		currentAnimationState = PetAnimStates.Idling;
@@ -49,18 +50,6 @@ public class MicroMixPetAnimationManager : Singleton<MicroMixPetAnimationManager
 		animator.SetTrigger("FireBlowOut");
 		animator.SetBool("IsFireBlowIn", false);
 
-		// spawn the particle effect
-		ImmutableDataSkill curSkill = DataLoaderSkills.GetFlameAtLevel((int)LevelLogic.Instance.CurrentLevel);
-		string flameResourceString = curSkill.FlameResource;
-		GameObject flamePrefab = Resources.Load(flameResourceString) as GameObject;
-		GameObject flameObject = Instantiate(flamePrefab, new Vector3(0, 0, 0), flamePrefab.transform.rotation) as GameObject;
-
-		// parent it to the right position
-		flameObject.transform.parent = fireBlowPosition.transform;
-		flameObject.transform.localPosition = new Vector3(0, 0, 0);
-
-		// actually kick off the effect
-		fireScript = flameObject.GetComponent<FireBlowParticleController>();
 		fireScript.Play();
 	}
 

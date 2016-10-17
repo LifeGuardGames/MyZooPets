@@ -41,7 +41,9 @@ public class FireBlowParticleController : ParticleSystemController {
 		yield return new WaitForSeconds(delay);
 		if(pSystem2 != null){
 			pSystem2.Play();
-			hitEffect.Play();
+			if(hitEffect != null) {
+				hitEffect.Play();
+			}
 		}
 	}
 	

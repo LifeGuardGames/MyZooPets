@@ -132,7 +132,7 @@ public class PlayerController : Singleton<PlayerController> {
 		UpdateHorizontalMovement();
 		ApplyGravity();
 		if(poolJump) {
-			Jump(movement.jumpHeight);
+			Jump();
 		}
 
 		amountToMove = new Vector2(movement.currentSpeed, movement.verticalSpeed);
@@ -354,7 +354,7 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	//heightMultiplier multiplies movement.jumpHeight to increase speed and max heiht achieved.
-	private void Jump(float height) {
+	public void Jump() {
 		bool validInput = (RunnerGameManager.Instance.AcceptInput && (!RunnerGameManager.Instance.IsPaused || (RunnerGameManager.Instance.SpecialInput && OnJump != null)));
 		if(playerPhysics.Grounded && validInput) {
 			if(OnJump != null) {
@@ -362,7 +362,7 @@ public class PlayerController : Singleton<PlayerController> {
 			}
 			AudioManager.Instance.PlayClip("runnerJumpUp");
 			movement.Gravity = movement.targetSpeed;
-			movement.verticalSpeed = CalculateJumpVerticalSpeed(height);
+			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
 			playerPhysics.Jumping = true;
 		}
 		else {
@@ -371,7 +371,15 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 	}
 
-	private void Drop() {
+	/// <summary>
+	/// Queue up a jump if youre just about to land, give more leeway for frame-precise jumping
+	/// </summary>
+	IEnumerator PoolJump() {
+		yield return new WaitForSeconds(0.3f);
+		poolJump = false;
+	}
+
+	public void Drop() {
 		bool validInput = (RunnerGameManager.Instance.AcceptInput && (!RunnerGameManager.Instance.IsPaused || (RunnerGameManager.Instance.SpecialInput && OnDrop != null)));
 		if(!validInput) {
 			return;
@@ -434,31 +442,23 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 	}
 	
-
-	//---------------------------------------------------
-	// UpdateMovement()
-	// Moves the player along the x axis with default speed.
-	// Check for jumping and falling physics as well.
-	//---------------------------------------------------
 	private void CheckKeyMovement() {
+#if UNITY_EDITOR
 		if(Input.GetKeyDown("up")) {
-			Jump(movement.jumpHeight);
+			Jump();
 		}
 		if(Input.GetKeyDown("down") && !playerPhysics.Falling) {
 			Drop();
 		}
-		if(Input.GetMouseButtonDown(0)) {
-			Debug.Log("hit");
-			if(Input.mousePosition.y > Screen.height / 2) {
-				Jump(movement.jumpHeight);
-			}
-			else {
-				Drop();
-			}
-		}
-	}
-IEnumerator PoolJump() {
-		yield return new WaitForSeconds(0.3f);
-		poolJump = false;
+#endif
+		//if(Input.GetMouseButtonDown(0)) {
+		//	Debug.Log("hit");
+		//	if(Input.mousePosition.y > Screen.height / 2) {
+		//		Jump(movement.jumpHeight);
+		//	}
+		//	else {
+		//		Drop();
+		//	}
+		//}
 	}
 }

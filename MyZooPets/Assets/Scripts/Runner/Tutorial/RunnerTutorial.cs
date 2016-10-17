@@ -32,7 +32,8 @@ public class RunnerTutorial : MinigameTutorial{
 			}
 			RunnerGameManager.Instance.AcceptInput = true;
 			RunnerGameManager.Instance.SpecialInput = false;
-			tutorialText.HideAll();
+			RunnerGameManager.Instance.IsTutorialRunning = false;
+            tutorialText.HideAll();
 		}
 	}
 

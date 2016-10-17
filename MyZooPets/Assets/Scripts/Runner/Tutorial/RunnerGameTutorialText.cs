@@ -49,7 +49,6 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText>{
 		outroTextObject.GetComponent<TweenToggleDemux>().hideImmediately=true;
 		stageTextObject.GetComponent<TweenToggleDemux>().hideImmediately=true;
 		itemTextObject.GetComponent<TweenToggleDemux>().hideImmediately=true;*/
-		Debug.Log("HIDE");
 		outroTextObject.GetComponent<TweenToggleDemux>().Hide();
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
 		itemTextObject.GetComponent<TweenToggleDemux>().Hide();
@@ -81,7 +80,6 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText>{
 	}
 
 	private IEnumerator StageIEnum(){
-		Debug.Log("SHOW");
 		stageTextObject.GetComponent<TweenToggleDemux>().Show();
 		if(toShow == 0){
 			topText.text = Localization.Localize("RUNNER_TUT_" + toShow);

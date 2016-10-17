@@ -16,7 +16,6 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	public GameObject pausePanel;
 	public GameObject starFloatyPrefab;
 	public Transform floatyParent;
-	private bool tutorial = false;
 	private bool acceptInput = true;
 	public bool isGameOver;
 
@@ -26,8 +25,10 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	//Used for tutorial when a popup shows, everything but the player should be paused and the player can only either jump or drop, but not both
 	private RunnerTutorial runnerTutorial;
 
+	private bool isTutorialRunning = false;
 	public bool IsTutorialRunning {
-		get { return tutorial; }
+		get { return isTutorialRunning; }
+		set { isTutorialRunning = value; }
 	}
 
 	public bool AcceptInput {
@@ -75,9 +76,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	public float Combo {
 		get { return combo; }
 	}
-
-
-
+	
 	public void IncrementCombo(float increment) {
 		combo += increment;
 	}
@@ -102,7 +101,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	}
 
 	public IEnumerator StartTutorialHelper() {
-		PlayerController.Instance.MakePlayerVisible(true);
+		isTutorialRunning = true;
+        PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.Reset();
 
 		acceptInput = false;
@@ -134,7 +134,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		FindObjectOfType<CameraFollow>().Reset();
 		ResetScore();
 		isGameOver = false;
-		//RunnerGameTutorialText.Instance.HideAll();
+
+		uiManager.ResetControlsFade();
 	}
 
 	protected override void _PauseGame() {

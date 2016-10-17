@@ -301,8 +301,10 @@ public class PlayerController : Singleton<PlayerController> {
 	}
 
 	private void RevertColor() {
-		for(int i = 0; i < colorList.Length; i++) {
-			spriteRendererList[i].color = colorList[i];
+		if(spriteRendererList != null) {
+			for(int i = 0; i < colorList.Length; i++) {
+				spriteRendererList[i].color = colorList[i];
+			}
 		}
 	}
 

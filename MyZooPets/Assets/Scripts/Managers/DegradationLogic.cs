@@ -90,14 +90,19 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 
 		// if there are no degradation triggers left, send out a task completion message
 		// note -- this will all probably have to change a bit as we get more complex (triggers in the yard, or other locations)
-		// if ( DataManager.Instance.GameData.Degradation.DegradationTriggers.Count == 0 )
 		if(degradationTriggers.Count == 0) {
 			WellapadMissionController.Instance.TaskCompleted("CleanRoom");
 			AudioManager.Instance.LowerBackgroundVolume(0.1f);
 			AudioManager.Instance.PlayClip("inhalerCapstone");
-			AudioManager.Instance.backgroundMusic = "bgBedroom";
-			AudioManager.Instance.StartCoroutine("PlayBackground");
+			StartCoroutine(ResumeBackgroundMusic());
 		}
+	}
+
+	public IEnumerator ResumeBackgroundMusic() {
+		yield return new WaitForSeconds(2.5f);
+		AudioManager.Instance.LowerBackgroundVolume(0.5f);
+		AudioManager.Instance.backgroundMusic = "bgBedroom";
+		AudioManager.Instance.StartCoroutine("PlayBackground");
 	}
 
 	/// <summary>
@@ -150,7 +155,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 			degradationTriggers.Add(new DegradData(randomTrigger.ID, location.Partition, location.Position));
 		}
 		if(degradationTriggers.Count > 0) {
-			AudioManager.Instance.backgroundMusic = "bgClinic";     // TODO check if this actually works
+			AudioManager.Instance.backgroundMusic = "bgClinic";
 			AudioManager.Instance.StartCoroutine("PlayBackground");
 		}
 		if(OnRefreshTriggers != null) {

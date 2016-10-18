@@ -29,9 +29,6 @@ public abstract class RunnerItem : MonoBehaviour{
 	void OnTriggerEnter(Collider inOther){
 		if(inOther.gameObject.tag == "Player" && (!hazard || (hazard && !PlayerController.Instance.Invincible))){ //Make sure we are either not a hazard, or that we are a hazard and the player is vulnerable
 		
-			//Display tutorial first if needed	
-			if(hasTutorial)
-				RunnerItemManager.Instance.DisplayTutorial(ID, true);
 
 			//Each item handles their own pickup
 			OnPickup();

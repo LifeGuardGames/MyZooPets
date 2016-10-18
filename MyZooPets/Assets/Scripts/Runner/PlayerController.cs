@@ -118,7 +118,7 @@ public class PlayerController : Singleton<PlayerController> {
 		UpdateMagnet();
 
 		// Death condition
-		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver) {
+		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver && !RunnerGameManager.Instance.isGameOver) {
 			isPlayerAlive = false;
 			RunnerGameManager.Instance.GameOver();
 		}

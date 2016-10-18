@@ -19,7 +19,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public static event OnRestart onRestart;
 	public GameObject minipetPowerUp;
 
-	private ShooterUIManager shooterUI;
+	public ShooterSkyController shooterSkyController;
+	public ShooterUIManager uiManager;
 
 	void Awake() {
 		minigameKey = "SHOOTER";
@@ -30,11 +31,10 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	}
 
 	protected override void _Start() {
-		shooterUI = ShooterUIManager.Instance;
 	}
 
 	protected override void _StartTutorial() {
-		shooterUI.Reset();
+		shooterSkyController.Reset();
 		isPaused = false;
 		PlayerShooterController.Instance.Reset();
 		ShooterGameTutorial tut = new ShooterGameTutorial();
@@ -55,7 +55,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		ShooterSpawnManager.Instance.Reset();
 		ShooterGameEnemyController.Instance.Reset();
 		ShooterInhalerManager.Instance.Reset();
-		shooterUI.Reset();
+		shooterSkyController.Reset();
 		PlayerShooterController.Instance.Reset();
 		RemoveInhalerFingerTutorial();
 	}
@@ -117,7 +117,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		GameOver();
 	}
 
-	public void OnTapped(TapGesture e) {
+	public void InputReceived(bool isMove) {
 		if(inTutorial) {
 			if(OnTutorialTap != null) {
 				OnTutorialTap(this, EventArgs.Empty);
@@ -128,7 +128,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 			// spread across 3 scripts this section deals with getting the input position
 #if !UNITY_EDITOR
 			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-			if(Camera.main.ScreenToWorldPoint(touchPos).x <= PlayerShooterController.Instance.gameObject.transform.position.x){
+			if(isMove){
 				PlayerShooterController.Instance.Move(touchPos);
 			}
 			else{
@@ -138,7 +138,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 #endif
 #if UNITY_EDITOR
 			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-			if(Camera.main.ScreenToWorldPoint(mousePos).x <= PlayerShooterController.Instance.gameObject.transform.position.x + 1.0f) {
+			if(isMove) {
 				PlayerShooterController.Instance.Move(mousePos);
 			}
 			else {
@@ -160,7 +160,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	}
 
 	public void StartTimeTransition() {
-		shooterUI.StartTimeTransition();
+		shooterSkyController.StartTimeTransition();
 	}
 
 	public void BeginNewWave() {
@@ -179,8 +179,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 
 	// Soft remove finger if it exists
 	public void RemoveInhalerFingerTutorial() {
-		if(shooterUI.fingerPos != null) {
-			Destroy(shooterUI.fingerPos.gameObject);
+		if(shooterSkyController.fingerPos != null) {
+			Destroy(shooterSkyController.fingerPos.gameObject);
 		}
 	}
 }

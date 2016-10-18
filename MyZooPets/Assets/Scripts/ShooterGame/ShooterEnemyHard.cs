@@ -31,7 +31,6 @@ public class ShooterEnemyHard : ShooterEnemy{
 	void ShootSmogBall(){
 		if(!isDead){	
 			AudioManager.Instance.PlayClip("shooterEnemySpit");
-			animator.SetBool("IsAttacking", true);
 			bulletAux = GameObjectUtils.AddChild(null, bulletPrefab);
 			bulletAux.transform.position = transform.position;
 			LeanTween.move(bulletAux, player.transform.position, 2.0f);
@@ -42,7 +41,6 @@ public class ShooterEnemyHard : ShooterEnemy{
 	// gives a 2 sec breather between shots
 	IEnumerator WaitASecond(){
 		yield return new WaitForSeconds(1.0f);
-		animator.SetBool("IsAttacking", false);
 		RepeatMove();
 	}
 
@@ -62,10 +60,4 @@ public class ShooterEnemyHard : ShooterEnemy{
 			Destroy(bulletAux);
 		}
 	}
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "sdfsf")){
-//			ShootSmogBall();
-//		}
-//	}
 }

@@ -61,7 +61,6 @@ public class PlayerController : Singleton<PlayerController> {
 	public Animator anim;
 	public float minAnimSpeed = .6f;
 	public float maxAnimSpeed = 1.5f;
-	public Camera nguiCamera;
 	private Vector2 amountToMove;                   //How much you want the player to move
 	private PlayerPhysics playerPhysics;            //Reference to physics
 	private Vector2 initialPosition;                //Where the player start

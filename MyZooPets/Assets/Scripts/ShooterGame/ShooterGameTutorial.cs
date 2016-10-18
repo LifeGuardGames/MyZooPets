@@ -11,7 +11,6 @@ public class ShooterGameTutorial {
 
 	// in each case we are going to listen to events that tell us to move along
 	public void ProcessStep(int step) {
-		Debug.Log("Step");
 		switch(step) {
 			case 0:		// Prompt user to hold device with both hands
 				ShooterGameManager.Instance.OnTutorialTap += MoveAlong;

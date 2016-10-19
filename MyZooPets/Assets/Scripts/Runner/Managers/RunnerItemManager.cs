@@ -135,14 +135,6 @@ public class RunnerItemManager : Singleton<RunnerItemManager>{
 		// }
 	}
 
-	public void DisplayTutorial(string itemID, bool hazard){
-		if(!DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID) && !itemID.Equals("COIN")){
-			string hintMessage = Localization.Localize(itemID + "_HINT_MESSAGE");
-			FindObjectOfType<RunnerGameTutorialText>().ShowItem(hintMessage);
-			DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Add(itemID);
-		}
-	}
-
 	//Yield for a frame before unpausing the game. The only way to avoid OnTap being called when resume
 	//button is clicked
 	private IEnumerator ResumeGame(){

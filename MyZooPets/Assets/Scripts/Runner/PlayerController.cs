@@ -113,7 +113,6 @@ public class PlayerController : Singleton<PlayerController> {
 			return;
 		}
 		CheckKeyMovement();
-		UpdateSpeed();
 		UpdateMagnet();
 
 		// Death condition
@@ -399,23 +398,6 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 	}
 
-	//---------------------------------------------------
-	// UpdateSpeed()
-	// Increase the pace of the game
-	//---------------------------------------------------
-	private void UpdateSpeed() { //Replaced by coin increase speed
-		/*if(!RunnerGameManager.Instance.IsTutorialRunning()){
-			speedIncreaseCounter += Time.deltaTime;
-
-			if(speedIncreaseCounter >= timeUntilTargetSpeedIncrease){
-				//increase time
-				movement.IncreaseTargetSpeed(true);
-				anim.speed += 0.2f;
-				speedIncreaseCounter = 0; 
-			}
-		}*/
-	}
-
 	/// <summary>
 	/// Listen to when game state change. Disable runner animation when game is paused.
 	/// </summary>
@@ -450,14 +432,5 @@ public class PlayerController : Singleton<PlayerController> {
 			Drop();
 		}
 #endif
-		//if(Input.GetMouseButtonDown(0)) {
-		//	Debug.Log("hit");
-		//	if(Input.mousePosition.y > Screen.height / 2) {
-		//		Jump(movement.jumpHeight);
-		//	}
-		//	else {
-		//		Drop();
-		//	}
-		//}
 	}
 }

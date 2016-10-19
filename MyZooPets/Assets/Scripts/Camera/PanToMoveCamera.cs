@@ -29,7 +29,6 @@ public class PanToMoveCamera : MonoBehaviour {
 	public float partitionOffset = 80.0f;   //How big each partition is in world position
 	public int currentLocalPartition = 0;
 
-	private Camera nguiCamera;
 	private Camera mainCamera;
 
 	void Start() {

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ImmutableDataFoodPreferences{
-
 	private string id;
 	private Dictionary<Level, string> foodPreferences;
 

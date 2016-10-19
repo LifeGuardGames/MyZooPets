@@ -9,6 +9,10 @@ public class RunnerGameUIManager : MonoBehaviour {
 	public TweenToggleDemux controlsDemux;      // Soft buttons to fade out once clicked
 	public Animation jumpButtonAnim;
 	public Animation dropButtonAnim;
+
+	public GameObject jumpFinger;
+	public GameObject fallFinger;
+
 	private bool isDemuxSet = false;
 
 	public void UpdateUI(int distanceTraveled, int coins, float combo) {
@@ -38,5 +42,13 @@ public class RunnerGameUIManager : MonoBehaviour {
 			controlsDemux.Hide();
 			isDemuxSet = true;
 		}
+	}
+
+	public void ToggleJumpFinger(bool isShowing) {
+		jumpFinger.SetActive(isShowing);
+	}
+
+	public void ToggleFallFinger(bool isShowing) {
+		fallFinger.SetActive(isShowing);
 	}
 }

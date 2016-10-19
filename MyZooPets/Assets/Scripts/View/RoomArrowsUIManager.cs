@@ -1,11 +1,20 @@
 ﻿using UnityEngine.UI;
+using UnityEngine;
 using System;
 
 public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	public TweenToggleDemux roomArrowsDemux;
 	public TweenToggle leftArrowTween;
 	public TweenToggle rightArrowTween;
+	public Image rightArrowSprite;
+	public Sprite rightArrowActiveRef;
+	public Sprite rightArrowInactiveRef;
+
 	public Button rightArrowObject;
+	public Button RightArrowObject {
+		get { return rightArrowObject; }
+	}
+
 	private int endOfHouseParition = 4;
 	private int currentPartition;
 
@@ -18,19 +27,15 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		CameraManager.Instance.PanScript.OnPartitionChanged -= ShowPanel;
 	}
 
-	// For use in tutorial only
-	public Button GetRightArrowReference() {
-		return rightArrowObject;
-	}
-
 	public void ShowPanel(object sender, EventArgs args) {
 		ShowPanel();
 	}
 
 	// Shows both arrows
 	public void ShowPanel() {
-		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive())
+		if(TutorialManager.Instance && TutorialManager.Instance.IsTutorialActive()) {
 			return;
+		}
 
 		PanToMoveCamera panScript = CameraManager.Instance.PanScript;
 		int currentLocalPartition = panScript.currentLocalPartition;
@@ -44,73 +49,56 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 			//first partition
 			if(currentLocalPartition == firstPartition) {
 				if(panScript.CanDecoModeMoveToRight()) {
-					ShowRightArrow();
+					ShowRightArrowOnly();
 				}
 			}
 			//last partition
 			else if(currentLocalPartition == lastPartition) {
-				ShowLeftArrow();
+				ShowLeftArrowOnly();
 			}
 			//in between partitions
 			else {
 				if(!isEnabled || panScript.CanDecoModeMoveToRight()) {
-					ShowBothArrows();
+					ShowBothArrows(false);
 				}
 				else {
-					ShowLeftArrow();
+					ShowLeftArrowOnly();
 				}
 			}
 		}
 		//regular mode (all non deco) checks
 		else {
 			if(currentLocalPartition == firstPartition) {
-				ShowRightArrow();
+				ShowRightArrowOnly();
 			}
 			else if(currentLocalPartition == lastPartition) {
-				ShowLeftArrow();
+				ShowLeftArrowOnly();
 			}
 			else {
 				bool canEnterRightRoom = GatingManager.Instance.CanEnterRoom(currentLocalPartition, RoomDirection.Left);
-				if(!isEnabled || canEnterRightRoom) {
-					ShowBothArrows();
-				}
-				else {
-					ShowLeftArrow();
-				}
+				ShowBothArrows(!canEnterRightRoom);
 			}
 		}
 	}
 
-	// Hides both arrows
 	public void HidePanel() {
 		leftArrowTween.Hide();
 		rightArrowTween.Hide();
 	}
 
-	public void ShowBothArrows() {
+	private void ShowBothArrows(bool isGatingRoom) {
+		rightArrowSprite.sprite = isGatingRoom ? rightArrowInactiveRef : rightArrowActiveRef;
+        rightArrowTween.Show();
 		leftArrowTween.Show();
-		if(rightArrowTween.gameObject.transform.childCount > 0) {
-			rightArrowTween.gameObject.transform.GetChild(0).GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("navArrowRight");
-		}
-		rightArrowTween.Show();
 	}
 
-	// Shows left arrow
-	public void ShowLeftArrow() {
+	private void ShowLeftArrowOnly() {
+		rightArrowTween.Hide();
 		leftArrowTween.Show();
-		if(currentPartition == endOfHouseParition) {
-			rightArrowTween.Hide();
-		}
-		else {
-			if(rightArrowTween.gameObject.transform.childCount > 0) {
-				rightArrowTween.gameObject.transform.GetChild(0).GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("navArrowRightInactive");
-			}
-		}
-
 	}
 
-	// Shows right arrow
-	public void ShowRightArrow() {
+	public void ShowRightArrowOnly() {
+		rightArrowSprite.sprite = rightArrowActiveRef;
 		rightArrowTween.Show();
 		leftArrowTween.Hide();
 	}
@@ -122,19 +110,4 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 	public void OnLeftArrowClicked() {
 		CameraManager.Instance.PanScript.MoveOneRoomToLeft();
 	}
-
-	//	void OnGUI(){
-	//		if(GUI.Button(new Rect(100, 100, 100, 100), "Show all")){
-	//			ShowPanel();
-	//		}
-	//		else if(GUI.Button(new Rect(200, 100, 100, 100), "Hide all")){
-	//			HidePanel();
-	//		}
-	//		else if(GUI.Button(new Rect(300, 100, 100, 100), "Show Left")){
-	//			ShowLeftArrow();
-	//		}
-	//		else if(GUI.Button(new Rect(400, 100, 100, 100), "Show Right")){
-	//			ShowRightArrow();
-	//		}
-	//	}
 }

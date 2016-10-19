@@ -12,39 +12,47 @@ public class ShooterGameTutorial {
 	// in each case we are going to listen to events that tell us to move along
 	public void ProcessStep(int step) {
 		switch(step) {
-			case 0:     //prompt user to move around, the user simply needs to tap the screen
-				PlayerShooterController.Instance.OnTutorialMove += MoveAlong;
-				ShooterGameManager.Instance.tutAnimator.gameObject.SetActive(true);
-				ShooterGameManager.Instance.tutAnimator.Play("ShooterClickMoveTutorial");
+			case 0:		// Prompt user to hold device with both hands
+				ShooterGameManager.Instance.OnTutorialTap += MoveAlong;
+				ShooterGameManager.Instance.tutUIAnimator.Play("ShooterTutorialUIHoldDevice");
+				ShooterGameManager.Instance.tutUITextLocalize.key = "SHOOTER_TUT_DEVICE";
+				ShooterGameManager.Instance.tutUITextLocalize.Localize();
                 break;
-			case 1:     //prompt user to shoot
+			case 1:     //prompt user to move around, the user simply needs to tap the screen
+				ShooterGameManager.Instance.OnTutorialTap -= MoveAlong;
+				PlayerShooterController.Instance.OnTutorialMove += MoveAlong;
+				ShooterGameManager.Instance.tutUIAnimator.Play("ShooterTutorialUIMoveClick");
+				ShooterGameManager.Instance.tutUITextLocalize.key = "SHOOTER_TUT_MOVE";
+				ShooterGameManager.Instance.tutUITextLocalize.Localize();
+				break;
+			case 2:     //prompt user to shoot
 				PlayerShooterController.Instance.OnTutorialMove -= MoveAlong;
 				ShooterGameManager.Instance.OnTutorialTap += MoveAlong;
-				ShooterGameManager.Instance.tutAnimator.Play("ShooterClickShootTutorial");
-				GameObject shootUITutResource = (GameObject)Resources.Load("ShooterTutorialShootUI");
-				shootUITut = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), shootUITutResource);
+				ShooterGameManager.Instance.tutUIAnimator.Play("ShooterTutorialUIShootClick");
+				ShooterGameManager.Instance.tutUITextLocalize.key = "SHOOTER_TUT_SHOOT";
+				ShooterGameManager.Instance.tutUITextLocalize.Localize();
 				break;
-			case 2:
+			case 3:
 				ShooterGameManager.Instance.OnTutorialTap -= MoveAlong;
 				ShooterGameManager.Instance.OnTutorialStepDone += MoveAlong;
-				ShooterGameManager.Instance.tutAnimator.gameObject.SetActive(false);
+				ShooterGameManager.Instance.tutUIAnimator.Play("ShooterTutorialUINone");
 				UnityEngine.Object.Destroy(shootUITut);
 				GameObjectUtils.AddChild(GameObject.Find("MidPoint"), LoadTutorialEnemyRef());
 				break;
-			case 3:
+			case 4:
 				GameObjectUtils.AddChild(GameObject.Find("Upper"), LoadTutorialEnemyRef());
 				break;
-			case 4:
+			case 5:
 				GameObjectUtils.AddChild(GameObject.Find("Lower"), LoadTutorialEnemyRef());
 				break;
 			// the user must defeat the first wave which is simply a wave of 5 basic enemies
-			case 5:
+			case 6:
 				ShooterGameManager.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterGameEnemyController.Instance.OnTutorialStepDone += MoveAlong;
 				ShooterGameEnemyController.Instance.BuildEnemyList();
 				break;
 			//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
-			case 6:
+			case 7:
 				ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
 				GameObject useInhalerTut = (GameObject)Resources.Load("ShooterInhalerTutorial");
@@ -57,7 +65,7 @@ public class ShooterGameTutorial {
 				rect.anchoredPosition = new Vector2(-100f, 100f);
 				break;
 			// the user must defeat the first wave which is simply a wave of 5 basic enemies
-			case 7:
+			case 8:
 				UnityEngine.Object.Destroy(fingerUI);
 				UnityEngine.Object.Destroy(tutorialInhalerUse);
 				ShooterGameManager.Instance.OnTutorialStepDone -= MoveAlong;
@@ -66,7 +74,7 @@ public class ShooterGameTutorial {
 				ShooterGameEnemyController.Instance.BuildEnemyList();
 				break;
 			//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
-			case 8:
+			case 9:
 				ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
 				useInhalerTut = (GameObject)Resources.Load("ShooterInhalerTutorial");
@@ -78,7 +86,7 @@ public class ShooterGameTutorial {
 				rect2.anchorMin = new Vector2(1f, 0);
 				rect2.anchoredPosition = new Vector2(-100f, 100f);
 				break;
-			case 9:
+			case 10:
 				UnityEngine.Object.Destroy(tutorialInhalerUse);
 				UnityEngine.Object.Destroy(fingerUI);
 				ShooterGameManager.Instance.inTutorial = false;
@@ -95,7 +103,7 @@ public class ShooterGameTutorial {
 	}
 
 	private void MoveAlong(object sender, EventArgs args) {
-		if(currentStep < 9) {
+		if(currentStep < 10) {
 			currentStep++;
 			ProcessStep(currentStep);
 		}

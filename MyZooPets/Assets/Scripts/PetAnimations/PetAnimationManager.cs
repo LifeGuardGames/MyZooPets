@@ -37,12 +37,10 @@ public class PetAnimationManager : Singleton<PetAnimationManager> {
 	}
 
 	void Start() {
-//		int mood = StatsManager.Instance.GetStat(StatType.Hunger);
-//		int health = StatsManager.Instance.GetStat(StatType.Health);
+		int mood = StatsManager.Instance.GetStat(StatType.Hunger);
+		int health = StatsManager.Instance.GetStat(StatType.Health);
 		currentAnimationState = PetAnimStates.Idling;
-
-		Debug.LogWarning("PetStats commented out. Also look @ NewMinigameManager NewGame()");
-//		PetStatsModified(health, mood);
+		PetStatsModified(health, mood);
 	}
 
 	// Update is called once per frame

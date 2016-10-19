@@ -5,6 +5,7 @@ using System;
 public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public EventHandler<EventArgs> OnTutorialStepDone;
 	public EventHandler<EventArgs> OnTutorialTap;
+
 	public float shootTime;
 	private float startTime;
 	public int waveNum = 0;
@@ -12,7 +13,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public int powerUpScore;
 	public int highestCombo = 0;
 	public GameObject BouncyWalls;
-	public Animator tutAnimator;			// 3D object tutorial
+	public Animator tutUIAnimator;
+	public UILocalize tutUITextLocalize;
 	public bool isGameOver = false;
 	public Text scoreText;
 	public delegate void OnRestart();

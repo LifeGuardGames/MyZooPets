@@ -36,6 +36,12 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 		}
 	}
 
+	public void SpawnInhaler() {
+		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_10").PrefabName) as GameObject;
+		int randomPositionIndex = Random.Range(0, 3);
+		GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+	}
+
 	public void SpawnPowerUp(){
 		int randPowerUp = Random.Range(5,8);
 		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_" + randPowerUp.ToString()).PrefabName) as GameObject;
@@ -53,6 +59,9 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 				//they are spawned in more of a weighted list fashion 
 				//so while one of the first waves has only one hard enemy in it it can spawn more than one
 				int randomSpawnIndex = Random.Range(0, spawningList.Count);
+				while (spawningList[randomSpawnIndex].Type == "PowerUp") {
+					randomSpawnIndex = Random.Range(0, spawningList.Count);
+				}
 				if(spawningList[randomSpawnIndex].Id != "Mober_4") {
 					GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
 					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
@@ -76,6 +85,9 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 				StartCoroutine("WaitASec");
 			}
 		}
+		else {
+			StartCoroutine("RunWave");
+		}
 	}
 	
 
@@ -88,4 +100,17 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			StartCoroutine("SpawnEnemies");
 		}
     }
+	IEnumerator RunWave() {
+		yield return new WaitForSeconds(0.4f);
+		ShooterGameManager.Instance.StartTimeTransition();
+		SpawnInhaler();
+        StartCoroutine("TimeToNewWave");
+	}
+
+	IEnumerator TimeToNewWave() {
+		yield return new WaitForSeconds(2.0f);
+		if(!ShooterGameManager.Instance.isGameOver && !ShooterGameManager.Instance.inTutorial) {
+			ShooterGameManager.Instance.BeginNewWave();
+		}
+	}
 }

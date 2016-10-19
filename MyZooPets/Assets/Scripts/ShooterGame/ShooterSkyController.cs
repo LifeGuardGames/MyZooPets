@@ -72,12 +72,12 @@ public class ShooterSkyController : Singleton<ShooterSkyController> {
 		MovingSky moonScript = moon.GetComponent<MovingSky>();
 
 		if(sunScript.inSky == true) {
-			LeanTween.move(moon.gameObject, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(moon.gameObject, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
 			moonScript.inSky = true;
 			sunScript.inSky = false;
 		}
 		else {
-			LeanTween.move(sun.gameObject, posSky.position, 2.0f).setOnComplete(ShooterGameManager.Instance.BeginNewWave).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.move(sun.gameObject, posSky.position, 2.0f).setEase(LeanTweenType.easeOutQuad);
 			sunScript.inSky = true;
 			moonScript.inSky = false;
 		}

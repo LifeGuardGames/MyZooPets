@@ -82,6 +82,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 		}
 		else{
 			ShooterSpawnManager.Instance.SpawnTriggers(waveEnemies);
+			
 		}
 	}
 
@@ -94,9 +95,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 						OnTutorialStepDone(this, EventArgs.Empty);
 					}
 				}
-				ShooterInhalerManager.Instance.CanUseInhalerButton = false;
-				ShooterGameManager.Instance.StartTimeTransition();
 			}
 		}
 	}
+
+
 }

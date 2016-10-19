@@ -55,36 +55,17 @@ public class ShooterGameTutorial {
 			case 7:
 				ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
-				GameObject useInhalerTut = (GameObject)Resources.Load("ShooterInhalerTutorial");
-				tutorialInhalerUse = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), useInhalerTut);
-				GameObject tutorialFingerRef = (GameObject)Resources.Load("ShooterPressTut");
-				fingerUI = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), tutorialFingerRef);
-				RectTransform rect = fingerUI.GetComponent<RectTransform>();
-				rect.anchorMax = new Vector2(1f, 0);
-				rect.anchorMin = new Vector2(1f, 0);
-				rect.anchoredPosition = new Vector2(-100f, 100f);
 				break;
 			// the user must defeat the first wave which is simply a wave of 5 basic enemies
 			case 8:
-				UnityEngine.Object.Destroy(fingerUI);
-				UnityEngine.Object.Destroy(tutorialInhalerUse);
 				ShooterGameManager.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterGameEnemyController.Instance.OnTutorialStepDone += MoveAlong;
-				UnityEngine.Object.Destroy(shootUITut);
 				ShooterGameEnemyController.Instance.BuildEnemyList();
 				break;
 			//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
 			case 9:
 				ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
-				useInhalerTut = (GameObject)Resources.Load("ShooterInhalerTutorial");
-				tutorialInhalerUse = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), useInhalerTut);
-				GameObject tutorialFingerRef2 = (GameObject)Resources.Load("ShooterPressTut");
-				fingerUI = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), tutorialFingerRef2);
-				RectTransform rect2 = fingerUI.GetComponent<RectTransform>();
-				rect2.anchorMax = new Vector2(1f, 0);
-				rect2.anchorMin = new Vector2(1f, 0);
-				rect2.anchoredPosition = new Vector2(-100f, 100f);
 				break;
 			case 10:
 				UnityEngine.Object.Destroy(tutorialInhalerUse);

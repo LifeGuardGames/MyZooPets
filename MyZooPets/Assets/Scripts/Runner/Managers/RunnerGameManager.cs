@@ -85,6 +85,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		// Parent settings
 		minigameKey = "RUNNER";
 		quitGameScene = "DemoScene";
+		rewardXPMultiplier = 0.01f;
+		rewardMoneyMultiplier = 0.1f;
+		rewardShardMultiplier = 0.02f;
 		ResetScore();
 	}
 
@@ -216,9 +219,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	}
 
 	private void ResetScore() {
-		rewardXPMultiplier = 1f;
-		rewardMoneyMultiplier = 1f;
-		rewardShardMultiplier = 1f;
+		
 		score = 0;
 
 		mPlayerDistancePoints = 0;

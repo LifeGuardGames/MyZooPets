@@ -135,8 +135,8 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 
 		// Calculate reward
 		rewardXPAux = (int)(score * rewardXPMultiplier);
-		rewardMoneyAux = (int)(score * rewardXPMultiplier);
-		rewardShardAux = (int)(score * rewardXPMultiplier);
+		rewardMoneyAux = (int)(score * rewardMoneyMultiplier);
+		rewardShardAux = (int)(score * rewardShardMultiplier);
 
 		_GameOver();
 

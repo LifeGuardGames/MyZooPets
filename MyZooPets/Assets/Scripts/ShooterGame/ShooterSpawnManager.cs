@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
-	private float lastSpawn;
-	public float spawnTime;
 
 	public List<GameObject> posList;    //list of positions to spawn enemy from
 	public Transform SeekerTopPosition;

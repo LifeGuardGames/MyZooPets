@@ -113,10 +113,10 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 	private void FocusOnRightArrow(){
 		//Start showing the right arrow
-		RoomArrowsUIManager.Instance.ShowRightArrow();
+		RoomArrowsUIManager.Instance.ShowRightArrowOnly();
 
 		// begin listening for when the inhaler is clicked
-		rightArrowButton = RoomArrowsUIManager.Instance.GetRightArrowReference();
+		rightArrowButton = RoomArrowsUIManager.Instance.RightArrowObject;
 
 		// the inhaler is the only object that can be clicked
 		AddToProcessList(rightArrowButton.gameObject, true);

@@ -26,7 +26,7 @@ public class RunnerGameTutorialText : Singleton<RunnerGameTutorialText> {
 
 	public void ShowStage() {
 		StartCoroutine(StageIEnum());
-	}
+	} 
 
 	public void ShowOutro() {
 		RunnerGameManager.Instance.PauseGame();

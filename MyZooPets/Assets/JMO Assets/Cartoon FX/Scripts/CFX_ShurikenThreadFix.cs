@@ -17,8 +17,10 @@ public class CFX_ShurikenThreadFix : MonoBehaviour
 		systems = GetComponentsInChildren<ParticleSystem>();
 		
 		foreach(ParticleSystem ps in systems)
+#pragma warning disable 0618 // Type or member is obsolete
 			ps.enableEmission = false;
-		
+#pragma warning restore 0618 // Type or member is obsolete
+
 		StartCoroutine("WaitFrame");
 	}
 	
@@ -28,7 +30,10 @@ public class CFX_ShurikenThreadFix : MonoBehaviour
 		
 		foreach(ParticleSystem ps in systems)
 		{
+#pragma warning disable 0618 // Type or member is obsolete
 			ps.enableEmission = true;
+#pragma warning restore 0618 // Type or member is obsolete
+
 			ps.Play(true);
 		}
 	}

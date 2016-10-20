@@ -4,7 +4,6 @@ using System;
 public class ShooterGameTutorial {
 	public static string TUT_KEY = "SHOOT_TUT";
 	private GameObject tutEnemy = null;                // tutorial enemies
-	private GameObject fingerUI;
 	private int currentStep = 0;
 
 	// in each case we are going to listen to events that tell us to move along
@@ -65,7 +64,6 @@ public class ShooterGameTutorial {
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
 				break;
 			case 10:
-				UnityEngine.Object.Destroy(fingerUI);
 				ShooterGameManager.Instance.inTutorial = false;
 				ShooterGameManager.Instance.NewGame();
 				break;

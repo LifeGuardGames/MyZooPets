@@ -7,14 +7,11 @@ public class CigMazeItem : MicroItem{
 	public GameObject finishPosition;
 	public Sprite[] smokeSprites;
 	private IEnumerator smokeIEnum;
-	private float lastRandomize;
-	private float intervalRandomize = 1f;
 	private float startTime;
 	private float currentTime;
 	private bool hasSmoked = false;
 
 	public override void StartItem(){
-		lastRandomize = Time.time;
 		SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
 		for(int i = 0; i < spriteRenderers.Length; i++){
 			if(spriteRenderers[i].gameObject == cigarette || spriteRenderers[i].gameObject == finishPosition){

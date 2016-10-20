@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 public class GrassMowerItem : MicroItem {
-	private float screenOrientationMultiplier = 1;
 	private float angle;
 	//In radians
 	private float angularSpeed = Mathf.PI;

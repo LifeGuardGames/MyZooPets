@@ -13,8 +13,6 @@ public class ParticleFXController : MonoBehaviour{
 
 	private Vector3 particleAim;
 	private float particleRunTime;
-	private float horizontalRange = 80;
-	private float verticalHeight = 180;
 
 	public IEnumerator SpawnFirework(float comboMod, Vector3 startPosition){
 		GameObject firework = Instantiate(fireworkPrefab);

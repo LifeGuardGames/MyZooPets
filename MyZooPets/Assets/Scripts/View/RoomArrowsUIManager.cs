@@ -15,9 +15,6 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		get { return rightArrowObject; }
 	}
 
-	private int endOfHouseParition = 4;
-	private int currentPartition;
-
 	void Start() {
 		CameraManager.Instance.PanScript.OnPartitionChanged += ShowPanel;
 		Invoke("ShowPanel", 0.5f);
@@ -39,7 +36,6 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 
 		PanToMoveCamera panScript = CameraManager.Instance.PanScript;
 		int currentLocalPartition = panScript.currentLocalPartition;
-		currentPartition = currentLocalPartition;
 		int firstPartition = panScript.firstPartition;
 		int lastPartition = panScript.lastPartition;
 		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled"); //check for gating

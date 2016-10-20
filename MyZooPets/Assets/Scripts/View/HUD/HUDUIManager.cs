@@ -18,6 +18,11 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public Text hungerLabel;
 	public Text coinLabel;
 
+	public RectTransform levelParent;
+	public RectTransform healthParent;
+	public RectTransform hungerParent;
+	public RectTransform coinParent;
+
 	private float levelBarWidth;
 	private float healthBarWidth;
 	private float hungerBarWidth;
@@ -33,6 +38,10 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		levelBarWidth = levelBar.rectTransform.sizeDelta.x;
 		healthBarWidth = healthBar.rectTransform.sizeDelta.x;
 		hungerBarWidth = hungerBar.rectTransform.sizeDelta.x;
+
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM) {
+			Invoke("ShowPanel", 0.5f);
+		}
     }
 
 	public void ShowPanel() {
@@ -78,9 +87,19 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		hudAnimator.PlayNeedCoinAnimation();
     }
 
-	//void OnGUI() {
-	//	if(GUI.Button(new Rect(100, 100, 100, 100), "test")) {
-	//		PlayNeedMoneyAnimation();
-	//	}
-	//}
+	public Vector3 GetStatEndPositions(StatType stat) {
+		switch(stat) {
+			case StatType.Xp:
+				return levelParent.transform.position;
+			case StatType.Health:
+				return healthParent.transform.position;
+			case StatType.Hunger:
+				return hungerParent.transform.position;
+			case StatType.Coin:
+				return coinParent.transform.position;
+			default:
+				Debug.LogWarning("Invalid stat");
+				return Vector3.zero;
+		}
+	}
 }

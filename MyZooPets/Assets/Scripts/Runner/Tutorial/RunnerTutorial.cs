@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System;
 using System.Collections;
 
@@ -36,12 +35,14 @@ public class RunnerTutorial : MinigameTutorial {
 			RunnerGameManager.Instance.uiManager.ToggleJumpFinger(false);
 			RunnerGameManager.Instance.uiManager.ToggleFallFinger(false);
 			tutorialText.HideAll();
+			GenericMinigameUI.Instance.TogglePauseButton(true);
 		}
 	}
 
 	protected override void ProcessStep(int step) {
 		switch(step) {
 			case 0:
+				GenericMinigameUI.Instance.TogglePauseButton(false);    // Pause button screws with tut, disable
 				tutorialText = GameObject.FindObjectOfType<RunnerGameTutorialText>();
 				tutorialText.ShowStage();
 				PlayerController.OnJump += TutorialJump;

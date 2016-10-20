@@ -10,7 +10,7 @@ public class CurrentSceneInfo : EditorWindow {
 
 	void OnGUI() {
 		if(Application.isPlaying) {
-			if(SceneManager.GetActiveScene().name != SceneUtils.BEDROOM || SceneManager.GetActiveScene().name != SceneUtils.YARD) {
+			if(SceneManager.GetActiveScene().name == SceneUtils.BEDROOM || SceneManager.GetActiveScene().name == SceneUtils.YARD) {
 				GUILayout.Label("ClickManager Properties", EditorStyles.boldLabel);
 				EditorGUILayout.TextField("Stack Size", ClickManager.Instance.StackModes.Count.ToString());
 				EditorGUILayout.TextField("Current Mode", ClickManager.Instance.CurrentMode.ToString());

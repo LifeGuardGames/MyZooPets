@@ -568,7 +568,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &135914
 GameObject:
   m_ObjectHideFlags: 1
@@ -689,6 +689,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &147036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22409480}
+  - 114: {fileID: 11470110}
+  m_Layer: 5
+  m_Name: PauseButtonParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &147314
 GameObject:
   m_ObjectHideFlags: 1
@@ -758,7 +774,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &153366
 GameObject:
   m_ObjectHideFlags: 0
@@ -775,7 +791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &153886
 GameObject:
   m_ObjectHideFlags: 1
@@ -1046,7 +1062,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &173404
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -1056,7 +1072,6 @@ GameObject:
   - 114: {fileID: 11497650}
   - 114: {fileID: 11427932}
   - 95: {fileID: 9525904}
-  - 114: {fileID: 11461290}
   m_Layer: 5
   m_Name: PauseButton
   m_TagString: Untagged
@@ -1098,7 +1113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &179610
 GameObject:
   m_ObjectHideFlags: 1
@@ -1132,7 +1147,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &182134
 GameObject:
   m_ObjectHideFlags: 1
@@ -2598,7 +2613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce16a8512dd8c454f9c14fdc0dd38682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseButtonTween: {fileID: 11461290}
+  pauseButtonTween: {fileID: 11470110}
   startController: {fileID: 11488782}
   pauseController: {fileID: 11494034}
   continueController: {fileID: 11405084}
@@ -3879,37 +3894,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11461290
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 173404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isUsingDemultiplexer: 0
-  startsHidden: 1
-  hideDeltaX: -1
-  hideDeltaY: -1
-  hideDeltaZ: 0
-  showDuration: 0.3
-  hideDuration: 0.3
-  showDelay: 0
-  hideDelay: 0
-  easeHide: 4
-  easeShow: 27
-  isUseEstimatedTime: 0
-  ShowTarget: {fileID: 0}
-  ShowFunctionName: 
-  ShowIncludeChildren: 0
-  HideTarget: {fileID: 0}
-  HideFunctionName: 
-  HideIncludeChildren: 0
-  strSoundShow: 
-  strSoundHide: 
 --- !u!114 &11462238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4103,6 +4087,37 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11470110
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a474106f135f3c447b8bbfd353939361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUsingDemultiplexer: 0
+  startsHidden: 1
+  hideDeltaX: -1
+  hideDeltaY: -1
+  hideDeltaZ: 0
+  showDuration: 0.3
+  hideDuration: 0.3
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 4
+  easeShow: 27
+  isUseEstimatedTime: 0
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
 --- !u!114 &11471058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5610,6 +5625,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &22409480
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 22437760}
+  m_Father: {fileID: 22491736}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -64, y: -64}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22410072
 RectTransform:
   m_ObjectHideFlags: 1
@@ -6071,11 +6105,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22491294}
-  m_Father: {fileID: 22491736}
+  m_Father: {fileID: 22409480}
   m_RootOrder: 0
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -64, y: -64}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22438468
@@ -6852,7 +6886,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 22437760}
+  - {fileID: 22409480}
   - {fileID: 22412862}
   - {fileID: 22429254}
   - {fileID: 22478888}

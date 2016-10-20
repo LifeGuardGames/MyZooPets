@@ -30,7 +30,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 		TogglePauseButton(false);
 	}
 
-	private void TogglePauseButton(bool isShow) {
+	public void TogglePauseButton(bool isShow) {
 		if(isShow) {
 			pauseButtonTween.Show();
 		}

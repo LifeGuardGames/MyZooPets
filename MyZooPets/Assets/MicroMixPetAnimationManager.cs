@@ -20,17 +20,14 @@ public class MicroMixPetAnimationManager : Singleton<MicroMixPetAnimationManager
 
 	public FireBlowParticleController fireScript;
 
-	private PetAnimStates currentAnimationState;
 
-	void Start() {
-		currentAnimationState = PetAnimStates.Idling;
-	}
+
+
 
 	/// <summary>
 	/// Begins the fire blow. The breath in animation. Will be clamped forever on the last frame
 	/// </summary>
 	public void StartFireBlow() {
-		currentAnimationState = PetAnimStates.BreathingFire;
 		animator.SetBool("IsFireBlowIn", true);
 	}
 
@@ -39,7 +36,6 @@ public class MicroMixPetAnimationManager : Singleton<MicroMixPetAnimationManager
 	/// </summary>
 	public void AbortFireBlow() {
 		animator.SetBool("IsFireBlowIn", false);
-		currentAnimationState = PetAnimStates.Idling;
 		PetAudioManager.Instance.StopAnimationSound();
 	}
 
@@ -58,7 +54,6 @@ public class MicroMixPetAnimationManager : Singleton<MicroMixPetAnimationManager
 	/// complete
 	/// </summary>
 	public void DoneWithFireBlowAnimation() {
-		currentAnimationState = PetAnimStates.Idling;
 
 		fireScript.Stop();
 

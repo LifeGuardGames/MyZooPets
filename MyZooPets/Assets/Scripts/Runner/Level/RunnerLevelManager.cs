@@ -104,11 +104,10 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 
 	public void Reset(){
 		CleanUp();
-		LevelComponent nextLevel;
-		nextLevel = PushAndInstantiateRandomComponent(useStartingComponent: true);
-		nextLevel = PushAndInstantiateRandomComponent();
-		nextLevel = PushAndInstantiateRandomComponent();
-		nextLevel = PushAndInstantiateRandomComponent();
+		PushAndInstantiateRandomComponent(useStartingComponent: true);
+		PushAndInstantiateRandomComponent();
+		PushAndInstantiateRandomComponent();
+		PushAndInstantiateRandomComponent();
 	}
 
 	/// <summary>

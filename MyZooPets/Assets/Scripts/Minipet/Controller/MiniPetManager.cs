@@ -209,7 +209,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 							// Get relevant info to populate with given saved location ID
 							int partition = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 							Vector3 pos = DataLoaderPartitionLocations.GetOffsetFromLocationId(locationId);
-							MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
+							//MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
 							
 							goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partition).gameObject, prefab);
 							goMiniPet.transform.localPosition = pos;

@@ -39,14 +39,14 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	public void SpawnInhaler() {
 		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_10").PrefabName) as GameObject;
 		int randomPositionIndex = Random.Range(0, 3);
-		GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+		GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
 	}
 
 	public void SpawnPowerUp(){
 		int randPowerUp = Random.Range(5,8);
 		GameObject spawnPrefab = Resources.Load(DataLoaderShooterArmy.GetData("Mober_" + randPowerUp.ToString()).PrefabName) as GameObject;
 		int randomPositionIndex = Random.Range(0, 3);
-		GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
+		GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer:true);
 	}
 
 	//Spawns all enemies in the list waiting 1 sec inbetween 
@@ -64,7 +64,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 				}
 				if(spawningList[randomSpawnIndex].Id != "Mober_4") {
 					GameObject spawnPrefab = Resources.Load(spawningList[randomSpawnIndex].PrefabName) as GameObject;
-					GameObject go = GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
+					GameObjectUtils.AddChild(posList[randomPositionIndex], spawnPrefab, isPreserveLayer: true);
 				}
 				else {
 					randomPositionIndex = Random.Range(3, 5);

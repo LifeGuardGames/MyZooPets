@@ -17,7 +17,7 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	private ParallaxingBackgroundGroup mCurrentBackground = null;
 	private ParallaxingBackgroundGroup mNextBackground = null;
 	private Queue<ParallaxingBackgroundGroup> mNextTransition = new Queue<ParallaxingBackgroundGroup>();
-	private bool paused = false;
+	//private bool paused = false;
 
 	void Start() {
 		TransitionToBackground(startingLevelGroup.parallaxBackgroundPrefab);

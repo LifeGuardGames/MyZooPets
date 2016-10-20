@@ -229,7 +229,6 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	public void OnZoneClicked(DoctorMatchButtonTypes buttonType) {
 		AssemblyLineItem peakedItem = assemblyLineController.PeekFirstItem();
 		bool correct = peakedItem.ItemType == buttonType;
-		Transform buttonTransform = GetButtonTransform((int)buttonType - 1);
 		float comboMod = comboController.ComboMod;
 		if(correct) { //The same feedback is provided whether or not the game is in tutorial
 			StartCoroutine(particleController.SpawnFirework(comboMod, assemblyLineController.StartPosition.position));

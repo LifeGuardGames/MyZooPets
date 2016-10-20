@@ -124,7 +124,4 @@ public class MiniPetGameMaster : MiniPet {
 		}
 	}
 
-	public void OnItemDropped(InventoryItem itemData) {
-		throw new NotImplementedException();
-	}
 }

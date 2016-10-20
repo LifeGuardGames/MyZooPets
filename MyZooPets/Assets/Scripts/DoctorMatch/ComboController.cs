@@ -5,7 +5,6 @@ public class ComboController : MonoBehaviour {
 	public Text scoreText;
 	public Text comboText;
 	//Scrolling table
-	private int lastCombo = 0;
 	private int combo = 0;
 	//Maximum amount of time for a correct diagnosis
 	private float timeToCombo = 3f;
@@ -72,6 +71,5 @@ public class ComboController : MonoBehaviour {
 
 	private void UpdateCombo() {
 		comboText.text = "x" + combo.ToString();
-		lastCombo = ComboMod;
 	}
 }

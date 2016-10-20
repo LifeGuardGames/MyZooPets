@@ -362,8 +362,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			}
 		}
 		else if(currentPage == "Decorations"){
-			// our currently selected tab
-			GameObject selectedTab = GameObject.Find(tabName);
 			//Retrieve decoration items base on the tab name (sub category)
 			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemManager.Instance.DecorationSubCatList;	
 			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);

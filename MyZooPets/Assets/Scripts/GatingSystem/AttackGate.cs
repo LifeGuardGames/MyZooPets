@@ -7,7 +7,7 @@ using System.Collections;
 public class AttackGate : Singleton<AttackGate>{
 
 	private Gate gateTarget; // gate to attack
-	private int damage; // damage to deal
+	//private int damage; // damage to deal
 
 	void Start(){
 		PetAnimationManager.OnBreathEnded += ExecutePostAttackLogic;
@@ -19,7 +19,7 @@ public class AttackGate : Singleton<AttackGate>{
 
 	public void Init(Gate gateTarget){
 		this.gateTarget = gateTarget;
-		this.damage = 1;
+		//this.damage = 1;
 	}
 
 	/// <summary>

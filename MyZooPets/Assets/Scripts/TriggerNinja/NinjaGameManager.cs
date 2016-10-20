@@ -130,7 +130,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		isTutorialRunning = true;
 		isPlaying = true;
 		isGameOver = false;
-		NinjaTutorial tut = new NinjaTutorial();
+		new NinjaTutorial();
 	}
 
 	protected override void _NewGame() {

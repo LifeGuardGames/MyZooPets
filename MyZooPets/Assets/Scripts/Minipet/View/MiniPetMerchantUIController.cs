@@ -85,7 +85,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 		path[2] = origin;
 		path[3] = itemPosition;
 		
-		Hashtable optional = new Hashtable();
+		//Hashtable optional = new Hashtable();
 		GameObject animationSprite = GameObjectUtils.AddChild(sprite.transform.parent.gameObject, itemSpritePrefab);
 		
 		animationSprite.transform.position = origin;

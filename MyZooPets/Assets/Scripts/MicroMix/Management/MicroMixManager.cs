@@ -361,9 +361,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	}
 
 	private void ResetScore() {
-		rewardXPMultiplier = 1f;
-		rewardMoneyMultiplier = 1f;
-		rewardShardMultiplier = 1f;
+		rewardXPMultiplier = 3f;
+		rewardMoneyMultiplier = 10f;
+		rewardShardMultiplier = 4f;
 		score = 0;
 	}
 }

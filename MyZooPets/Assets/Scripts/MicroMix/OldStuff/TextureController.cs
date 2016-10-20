@@ -19,17 +19,17 @@ public class TextureController : MonoBehaviour{
 	void Update(){
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
-		Vector3[] normals = mesh.normals;
+		//Vector3[] normals = mesh.normals;
 		Vector3 mousePosition = Input.mousePosition;
 		Vector3 realPos = CameraUtils.ScreenToWorldPointZ(Camera.main, mousePosition, 50f);
 		float distance = Mathf.Infinity;
-		Vector3 closest = Vector3.zero;
+		//Vector3 closest = Vector3.zero;
 		int vertIndex = -1; //We have found the index of the vertex we want to remove
 		if(true){//Input.GetKeyDown(KeyCode.Space)){
 			for(int i = 0; i < mesh.vertices.Length; i++){
 				if(Vector3.SqrMagnitude(realPos - mesh.vertices[i]) < distance){
 					distance = Vector3.SqrMagnitude(realPos - mesh.vertices[i]);
-					closest = mesh.vertices[i];
+					//closest = mesh.vertices[i];
 					vertIndex = i;
 				}
 			}

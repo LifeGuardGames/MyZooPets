@@ -49,7 +49,7 @@ public class PetFloatyUIManager : Singleton<PetFloatyUIManager> {
 // Use the FloatyUtil class to spawn the floaty image text
 // on top of the pet's head, general single picture
 //-------------------------------------------------------
-private void CreateFloaty(int deltaValue, string spriteName) {
+/*private void CreateFloaty(int deltaValue, string spriteName) {
 	string strDeltaValue = "";
 
 	if(deltaValue > 0) {
@@ -60,6 +60,7 @@ private void CreateFloaty(int deltaValue, string spriteName) {
 	}
 
 	Debug.LogWarning("FLOATY SPAWN HERE");
+	*/
 	/*
 	Hashtable option = new Hashtable();
 	option.Add("parent", petFloatyPosition);
@@ -68,5 +69,6 @@ private void CreateFloaty(int deltaValue, string spriteName) {
 
 	FloatyUtil.SpawnFloatyImageText(option);
 	*/
-		}
+//		}
 	}
+

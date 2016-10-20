@@ -112,7 +112,6 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 				if(_task.Value.WillComplete(completedTaskID, completeCondition)){
 //					Debug.Log("++ valid task completed and set: " + completedTaskID);
 
-				string taskID = _task.Value.TaskID;
 				DataManager.Instance.GameData.Wellapad.CurrentTasks[_task.Key].Completed = WellapadTaskCompletionStates.RecentlyCompleted;
 
 				// because the task was completed, we may have to update our reward status...

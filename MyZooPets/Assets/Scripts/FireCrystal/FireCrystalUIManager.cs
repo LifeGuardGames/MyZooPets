@@ -61,6 +61,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 	}
 
 	public void PopupAndRewardShards(int numberOfShards) {
+		Debug.Log("Shards");
 		// Only reward stuff if you have something
 		if(numberOfShards > 0) {
 			// Get the current amount of subdivisions required

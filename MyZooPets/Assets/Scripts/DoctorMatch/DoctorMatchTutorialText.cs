@@ -11,7 +11,6 @@ public class DoctorMatchTutorialText : Singleton<DoctorMatchTutorialText>{
 
 	public IEnumerator HideAll(){
 		StopAllCoroutines();
-		Debug.Log("Called");
 		introTextObject.GetComponent<TweenToggleDemux>().Hide();
 		stageTextObject.GetComponent<TweenToggleDemux>().Hide();
 		yield return new WaitForSeconds(.5f); //If they are still in the process of showing, this must wait for them to appear

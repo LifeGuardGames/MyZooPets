@@ -16,7 +16,7 @@ public class FireButtonAnimHelper : MonoBehaviour {
 
 	// Start the animation for the fire button enabling process, this will call the below 4 functions
 	public void StartFireButtonAnimation(){
-		enableFireButtonAnimation.Play("fireButtonEnableAnimation");
+		enableFireButtonAnimation.Play("FireButtonEnableAnimation");
     }
 	
 	// This is called from the animation event
@@ -43,7 +43,7 @@ public class FireButtonAnimHelper : MonoBehaviour {
 		imageButton.sprite = activeFireButtonSprite;    //change button image 
 		fireButtonHelper.Toggle3DCollider(false);
         sunBeam.SetActive(true);
-	}
+    }
 
 	public void FireEffectOff() {
 		buttonAnimation.Stop();

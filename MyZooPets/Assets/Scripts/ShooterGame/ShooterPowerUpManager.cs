@@ -6,7 +6,7 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 		Normal,
 		Triple,
 		Bouncy,
-		HypeBeam,
+		Inhaler,
 		MiniPet
 	}
 
@@ -33,10 +33,9 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 				StopCoroutine(ResetPowerUP());
 				StartCoroutine(ResetPowerUP());
 				break;
-			case PowerUpType.HypeBeam:
+			case PowerUpType.Inhaler:
 				AudioManager.Instance.PlayClip("shooterPowerUp");
-				//change to hype fire ball
-				// destroy screen for a few seconds
+				ShooterInhalerManager.Instance.OnShooterGameInhalerButton();
 				break;
 			case PowerUpType.MiniPet:
 				AudioManager.Instance.PlayClip("shooterPowerUp");

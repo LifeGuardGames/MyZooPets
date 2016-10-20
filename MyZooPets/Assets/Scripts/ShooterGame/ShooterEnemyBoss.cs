@@ -59,6 +59,7 @@ public class ShooterEnemyBoss : ShooterEnemy {
 	}
 	
 	void OnDestroy(){
+		ShooterGameManager.Instance.StartTimeTransition();
 		LeanTween.cancel(gameObject);
 		
 		if(bulletAux != null){

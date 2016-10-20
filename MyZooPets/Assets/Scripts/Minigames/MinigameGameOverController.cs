@@ -18,6 +18,9 @@ public class MinigameGameOverController : MonoBehaviour {
 		coinText.text = coinCount.ToString();
 		shardText.text = shardCount.ToString();
 		ShowPanel();
+
+		// Actually reward the player
+		UIManager.OnReward();
 	}
 
 	#region Button calls

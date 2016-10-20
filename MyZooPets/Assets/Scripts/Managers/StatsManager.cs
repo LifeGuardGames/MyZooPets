@@ -167,7 +167,7 @@ public class StatsManager : Singleton<StatsManager>{
             listStats.Add(new StatPair(StatType.Coin, coinsDelta, coinsPos, coinsDelta > 0 ? "CoinSingleTick" : null));
             listStats.Add(new StatPair(StatType.Health, healthDelta, healthPos, healthDelta > 0 ? "HealthSingleTick" : null));
 			listStats.Add(new StatPair(StatType.Hunger, hungerDelta, hungerPos));
-			
+
 			if(hudAnimator != null && !bBeingDestroyed){
 				// Push this into the reward queue
 				RewardQueueData.GenericDelegate function1 = delegate{

@@ -89,7 +89,8 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	/// Checks if tutorial is already complete. If not, run tutorial logic instead
 	/// </summary>
 	public void NewGame() {
-		if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey) && tutorial == null) {
+		if(!DataManager.Instance.isDebug && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey) && tutorial == null ||
+			DataManager.Instance.isDebug && Constants.GetConstant<bool>("IsMinigameTutOn") && !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(minigameKey)) {
 			StartTutorial();
 		}
 		else {
@@ -109,6 +110,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 			}
 		}
 	}
+
 	//Game is now paused
 	public void PauseGame() {
 		isPaused = true;

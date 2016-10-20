@@ -3,8 +3,6 @@ using System;
 
 public class ShooterGameTutorial {
 	public static string TUT_KEY = "SHOOT_TUT";
-	private GameObject shootUITut;               // Gameobject that positions the tutorial boards	
-	private GameObject tutorialInhalerUse;      // tutorial message board		
 	private GameObject tutEnemy = null;                // tutorial enemies
 	private GameObject fingerUI;
 	private int currentStep = 0;
@@ -36,7 +34,6 @@ public class ShooterGameTutorial {
 				ShooterGameManager.Instance.OnTutorialTap -= MoveAlong;
 				ShooterGameManager.Instance.OnTutorialStepDone += MoveAlong;
 				ShooterGameManager.Instance.tutUIAnimator.Play("ShooterTutorialUINone");
-				UnityEngine.Object.Destroy(shootUITut);
 				GameObjectUtils.AddChild(GameObject.Find("MidPoint"), LoadTutorialEnemyRef());
 				break;
 			case 4:
@@ -68,7 +65,6 @@ public class ShooterGameTutorial {
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
 				break;
 			case 10:
-				UnityEngine.Object.Destroy(tutorialInhalerUse);
 				UnityEngine.Object.Destroy(fingerUI);
 				ShooterGameManager.Instance.inTutorial = false;
 				ShooterGameManager.Instance.NewGame();

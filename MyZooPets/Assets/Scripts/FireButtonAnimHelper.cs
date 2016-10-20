@@ -16,7 +16,7 @@ public class FireButtonAnimHelper : MonoBehaviour {
 
 	// Start the animation for the fire button enabling process, this will call the below 4 functions
 	public void StartFireButtonAnimation(){
-		enableFireButtonAnimation.Play("FireButtonEnableAnimation");
+		enableFireButtonAnimation.Play("fireButtonEnableAnimation");
     }
 	
 	// This is called from the animation event

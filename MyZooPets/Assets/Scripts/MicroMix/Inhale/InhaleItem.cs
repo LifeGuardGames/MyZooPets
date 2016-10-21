@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
-
 
 public class InhaleItem : MicroItem{
 	public GameObject petInstance;
 	private GameObject headObject;
 	private bool complete = false;
-	private Vector3 inhaleDelta = new Vector3(-.4f, .4f);
 	//How far we move during tween
 	private Vector3 exhaleDelta = new Vector3(.2f, -.3f);
 

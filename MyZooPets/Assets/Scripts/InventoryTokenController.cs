@@ -9,7 +9,6 @@ public class InventoryTokenController : MonoBehaviour{
 	public InventoryTokenDragElement dragElement;		// Child gameobject for actual dragging
 
 	private InventoryItem itemData;
-	private bool pointerDownAux = false;
 
 	public void Init(InventoryItem invItem) {
 		itemData = invItem;

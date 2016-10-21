@@ -43,7 +43,7 @@ public class FireButtonAnimHelper : MonoBehaviour {
 		imageButton.sprite = activeFireButtonSprite;    //change button image 
 		fireButtonHelper.Toggle3DCollider(false);
         sunBeam.SetActive(true);
-	}
+    }
 
 	public void FireEffectOff() {
 		buttonAnimation.Stop();

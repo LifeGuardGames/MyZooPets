@@ -123,7 +123,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 
 		// Notify anything that is listening to this done
 		if(OnFireCrystalUIAnimationDone != null) {
-			Debug.Log("FIRE FINISHED");
 			OnFireCrystalUIAnimationDone(this, EventArgs.Empty);
 		}
 	}

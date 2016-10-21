@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CampPlayerItem : MicroItem{
 	//In radians
 	private float angle;
 	private float maxTilt = .5f;
 	private float angularSpeed = Mathf.PI * 2;
-	private float screenOrientationMultiplier = -1;
 	private bool complete = false;
 
 	void Update(){

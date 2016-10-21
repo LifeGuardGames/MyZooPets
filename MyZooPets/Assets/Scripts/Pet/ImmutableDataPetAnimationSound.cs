@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ImmutableDataPetAnimationSound{
-
+#pragma warning disable 0414
 	private string id;
+#pragma warning restore 0414
 	private List<string> soundClipNames;
 
 	/// <summary>

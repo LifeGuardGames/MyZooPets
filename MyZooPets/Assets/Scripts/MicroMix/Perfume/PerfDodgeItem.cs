@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PerfDodgeItem : MicroItem{
 	public bool hit = false;
 	private float speed = .3f;
-	private float startTime;
 
 	public override void StartItem(){
 		hit = false;
 		GetComponent<Rigidbody>().velocity = Vector3.zero;
 		GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-		startTime = Time.time;
 	}
 
 	public override void OnComplete(){

@@ -24,7 +24,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	public FireButtonAnimHelper animHelper;
 	public FireMeter fireMeterScript;
 	private AttackGate attackScript;        // attack gate script
-	
+
 	private bool isActive = false;
 	public bool IsActive {
 		get { return isActive; }
@@ -68,7 +68,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 		else {
 			TurnFireEffectOn();
 			buttonState = FireButtonState.ReadyForPress;
-        }
+		}
 	}
 
 	// Called when the pet leaves a smoke monster room
@@ -84,6 +84,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	// This is called from start, and from FireButtonAnimHelper (looped back in)
 	public void TurnFireEffectOn() {
 		animHelper.FireEffectOn();
+		buttonState = FireButtonState.ReadyForPress;
 		if(FireButtonActive != null) {  // Used for tutorials
 			FireButtonActive(this, EventArgs.Empty);
 		}

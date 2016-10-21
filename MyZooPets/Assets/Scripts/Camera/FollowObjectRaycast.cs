@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// This script makes its gameobject follow another item via raycasting on from screen
@@ -10,8 +9,8 @@ public class FollowObjectRaycast : MonoBehaviour {
 	public GameObject target;
 	public Camera mainCamera;
 
-	private Vector3 targetAuxPosition;
-	private Vector3 mainCameraAuxPosition;
+	//private Vector3 targetAuxPosition;
+	//private Vector3 mainCameraAuxPosition;
 
 	void Start(){
 		if(mainCamera == null){
@@ -34,7 +33,7 @@ public class FollowObjectRaycast : MonoBehaviour {
 		gameObject.transform.localPosition = CameraManager.Instance.WorldToScreen(Camera.main, target.transform.position);
 
 		// Keep track to check if moved later on
-		targetAuxPosition = target.transform.position;
-		mainCameraAuxPosition = mainCamera.transform.position;
+		//targetAuxPosition = target.transform.position;
+		//mainCameraAuxPosition = mainCamera.transform.position;
 	}
 }

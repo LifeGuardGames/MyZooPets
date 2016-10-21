@@ -20,8 +20,9 @@ public abstract class Micro : MonoBehaviour{
 	protected abstract IEnumerator _Tutorial();
 
 	private bool won = false;
+#pragma warning disable 0414	// Used for now, remove me when used
 	private bool playing = false;
-	private int seconds = 0;
+#pragma warning restore 0414
 	private Dictionary<Transform, Vector3> positions = new Dictionary<Transform, Vector3>();
 	public MicroMixBossTimer timer;
 
@@ -122,8 +123,7 @@ public abstract class Micro : MonoBehaviour{
 			}
 		}
 		playing = false;
-
-
+		
 		_EndMicro(); //We have cleaned everything up for them, let them handle the rest
 
 		timer.gameObject.SetActive(false);

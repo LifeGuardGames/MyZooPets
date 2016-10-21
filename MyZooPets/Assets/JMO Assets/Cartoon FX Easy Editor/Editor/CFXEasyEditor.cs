@@ -948,7 +948,9 @@ public class CFXEasyEditor : EditorWindow
 			dest.loop = source.loop;
 			dest.playOnAwake = source.playOnAwake;
 			dest.playbackSpeed = source.playbackSpeed;
+#pragma warning disable 0618 // Type or member is obsolete
 			dest.emissionRate = source.emissionRate;
+#pragma warning restore 0618 // Type or member is obsolete
 			dest.startSpeed = source.startSpeed;
 			dest.startSize = source.startSize;
 			dest.startColor = source.startColor;

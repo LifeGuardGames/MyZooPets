@@ -6,11 +6,9 @@ public class RoachTrapItem : MicroItem{
 	private bool landed = false;
 	private bool complete = false;
 	private bool falling;
-	private float size;
 	private float lastPauseTime = -1;
 
 	public override void StartItem(){
-		size = .7f;
 		landed = false;
 		complete = false;
 		falling = false;

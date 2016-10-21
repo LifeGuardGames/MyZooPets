@@ -75,7 +75,7 @@ public class TutorialManagerBedroom : TutorialManager {
 		else if(!isSmokeIntroDone) {
 			new GameTutorialSmokeIntro();
 		}
-		else if(isFlameCrystalTutorialDone && !isFlameTutorialDone) {   // Hacky check skipping tutorial fire crystal
+		else if(isFlameCrystalTutorialDone && !isFlameTutorialDone) {
 			new GameTutorialFlame();
 		}
 	}

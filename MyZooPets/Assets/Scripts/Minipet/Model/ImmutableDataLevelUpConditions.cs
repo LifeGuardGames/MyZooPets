@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ImmutableDataMiniPetLevelUpConditions{
+#pragma warning disable 0414
 	private string id;
+#pragma warning restore 0414
 	private Dictionary<Level, int> levelUpConditions;
 
 	/// <summary>

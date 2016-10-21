@@ -21,15 +21,13 @@ public class PanToMoveCamera : MonoBehaviour {
 	//=======================Events========================
 	public EventHandler<PartitionChangedArgs> OnPartitionChanged;   // when the partition has changed (and the camera has finished moving)
 	public EventHandler<PartitionChangedArgs> OnPartitionChanging;  // when the partition is changing (i.e. camera is still moving)
-																	//========================================================
+	//========================================================
 
 	public int firstPartition = -1;         //Set this to negative numbers if you want to open a partition
 											//on the left of the starting partition(always 0)
 	public int lastPartition = 2;
 	public float partitionOffset = 80.0f;   //How big each partition is in world position
 	public int currentLocalPartition = 0;
-
-	private Camera mainCamera;
 
 	void Start() {
 		//Move camera to the last saved partition
@@ -172,23 +170,6 @@ public class PanToMoveCamera : MonoBehaviour {
 		return retVal;
 	}
 
-	private void CheckArrowKeys() {
-		// do a check here to see if the clickmanager can respond to movement, if it can't, don't move
-		if(!ClickManager.Instance.CanRespondToTap(mainCamera.gameObject, ClickLockExceptions.Moving)) {
-			return;
-		}
-		if(Input.GetKeyDown(KeyCode.RightArrow)) {
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Left), RoomDirection.Left)) {
-				ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Left));
-			}
-		}
-		else if(Input.GetKeyDown(KeyCode.LeftArrow)) {
-			if(CanMoveToPartition(GetTargetPartition(1, RoomDirection.Right), RoomDirection.Right)) {
-				ChangeLocalPartition(GetTargetPartition(1, RoomDirection.Right));
-			}
-		}
-	}
-
 	/// <summary>
 	/// Gets the target partition.
 	/// Given a direction and a distance, what partition is the target?
@@ -200,7 +181,6 @@ public class PanToMoveCamera : MonoBehaviour {
 		int change = swipeDirection == RoomDirection.Left ? step : -step;
 		return currentLocalPartition + change;
 	}
-
 
 	/// <summary>
 	/// Sets the camera to partition.

@@ -2,8 +2,10 @@
 using UnityEngine.Advertisements;
 
 public class AdManager : Singleton<AdManager> {
+#pragma warning disable 0414
 	[SerializeField] string iOSGameID = "1077661";
 	[SerializeField] string androidGameID = "1077662";
+#pragma warning restore 0414
 
 	public delegate void AdCallback<T>(T value); // Populated by callers
 	private bool isTestMode = false;

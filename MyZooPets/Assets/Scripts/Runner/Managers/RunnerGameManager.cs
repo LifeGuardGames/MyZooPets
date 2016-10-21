@@ -47,7 +47,6 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 	private int lastDistancePoints = 0;
 	private int mPlayerDistancePoints = 0;  //points calculated from distance
-	private int mPlayerPoints = 0;          //points accumulated in the game (getting item or hitting trigger)
 
 	private int coins = 0;                  //coins collected in the game
 	public int Coins {
@@ -219,13 +218,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	}
 
 	private void ResetScore() {
-		
 		score = 0;
-
 		mPlayerDistancePoints = 0;
 		lastDistancePoints = 0;
-
-		mPlayerPoints = 0;
 		coins = 0;
 		distanceTraveled = 0;
 		coinStreakCountdown = 0;

@@ -13,6 +13,8 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	public LevelGroup startingLevelGroup;
 	public float TransitionLengthSeconds = 1.0f;
 
+	public Parallax riverParallax;	//Extra river parallax for runner
+
 	private float mTransitionPulse;
 	private ParallaxingBackgroundGroup mCurrentBackground = null;
 	private ParallaxingBackgroundGroup mNextBackground = null;
@@ -64,14 +66,18 @@ public class ParallaxingBackgroundManager : Singleton<ParallaxingBackgroundManag
 	}
 
 	public void PlayParallax() {
-		if (mCurrentBackground)
+		if(mCurrentBackground) {
 			mCurrentBackground.PlayParallax();
-	}
+		}
+		riverParallax.Play();
+    }
 
 	public void PauseParallax() {
-		if (mCurrentBackground)
+		if(mCurrentBackground) {
 			mCurrentBackground.PauseParallax();
-	}
+		}
+		riverParallax.Pause();
+    }
 
 	private void SpawnAndSetNextBackground(ParallaxingBackgroundGroup nextBackground) {
 		mTransitionPulse = TransitionLengthSeconds;

@@ -100,6 +100,11 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 			StartCoroutine("SpawnEnemies");
 		}
     }
+
+	public void BossDead() {
+		StartCoroutine("RunWave");
+	}
+
 	IEnumerator RunWave() {
 		yield return new WaitForSeconds(0.4f);
 		ShooterGameManager.Instance.StartTimeTransition();
@@ -108,7 +113,7 @@ public class ShooterSpawnManager :Singleton<ShooterSpawnManager>{
 	}
 
 	IEnumerator TimeToNewWave() {
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds(0.1f);
 		if(!ShooterGameManager.Instance.isGameOver && !ShooterGameManager.Instance.inTutorial) {
 			ShooterGameManager.Instance.BeginNewWave();
 		}

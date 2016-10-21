@@ -49,21 +49,25 @@ public class ShooterGameTutorial {
 				break;
 			//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
 			case 7:
-				ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
+				ShooterGameManager.Instance.ShooterTutInhalerStep = true;
+                ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
 				break;
 			// the user must defeat the first wave which is simply a wave of 5 basic enemies
 			case 8:
+				ShooterGameManager.Instance.ShooterTutInhalerStep = false;
 				ShooterGameManager.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterGameEnemyController.Instance.OnTutorialStepDone += MoveAlong;
 				ShooterGameEnemyController.Instance.BuildEnemyList();
 				break;
 			//the user must click the inhaler button to end the tutorial the scene transition should pause after the sun is off screen
 			case 9:
+				ShooterGameManager.Instance.ShooterTutInhalerStep = true;
 				ShooterGameEnemyController.Instance.OnTutorialStepDone -= MoveAlong;
 				ShooterInhalerManager.Instance.proceed += MoveAlong;
 				break;
 			case 10:
+				ShooterGameManager.Instance.ShooterTutInhalerStep = false;
 				ShooterGameManager.Instance.inTutorial = false;
 				ShooterGameManager.Instance.NewGame();
 				break;

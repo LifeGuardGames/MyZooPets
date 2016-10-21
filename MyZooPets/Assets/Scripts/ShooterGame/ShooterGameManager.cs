@@ -20,6 +20,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public delegate void OnRestart();
 	public static event OnRestart onRestart;
 	public GameObject minipetPowerUp;
+	public bool ShooterTutInhalerStep = false;
 
 	public ShooterSkyController shooterSkyController;
 	public ShooterUIManager uiManager;

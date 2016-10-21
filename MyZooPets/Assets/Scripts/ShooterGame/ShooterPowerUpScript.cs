@@ -16,7 +16,9 @@ public class ShooterPowerUpScript : MonoBehaviour{
 	void OnBecameInvisible() {
 		if(powerUpKey == "Inhaler") {
 			if(ShooterGameManager.Instance.inTutorial) {
-				ShooterSpawnManager.Instance.SpawnInhaler();
+				if(ShooterGameManager.Instance.ShooterTutInhalerStep) {
+					ShooterSpawnManager.Instance.SpawnInhaler();
+				}
 			}
 			else {
 				ShooterInhalerManager.Instance.combo = 0;

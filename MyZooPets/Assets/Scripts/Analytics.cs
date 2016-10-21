@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-public class Analytics : MonoBehaviour {
-
+public class Analytics : Singleton<Analytics> {
     public const string ITEM_STATUS_BOUGHT = "Bought";
     public const string ITEM_STATUS_USED = "Used";
     public const string ITEM_STATUS_RECEIVED = "Received";
@@ -15,42 +13,15 @@ public class Analytics : MonoBehaviour {
     public const string TASK_STATUS_FAIL = "Fail";
 
     public const string INHALER_CATEGORY = "MiniGame:Inhaler:";
-    public const string RUNNER_CATEGORY = "MiniGame:RUNNER:";
+    public const string RUNNER_CATEGORY = "MiniGame:Runner:";
     public const string DIAGNOSE_CATEGORY = "MiniGame:Clinic:";
     public const string NINJA_CATEGORY = "MiniGame:Ninja:";
 	public const string MEMORY_CATEGORY = "MiniGame:Memory:";
 	public const string SHOOTER_CATEGORY = "MiniGame:Shooter:";
 
-    private static bool isCreated = false;
-    private static Analytics instance;
-    private bool isAnalyticsEnabled = false;
-
-    //This instance creates itself if it's not in the scene.
-    //Mainly for debugging purpose
-    public static Analytics Instance{
-        get{
-            if(instance == null){
-
-                instance = (Analytics) FindObjectOfType(typeof(Analytics));
-                
-                if(instance == null){
-                    GameObject analyticsGO = (GameObject) Instantiate((GameObject) Resources.Load("Analytics"));
-                    instance = analyticsGO.GetComponent<Analytics>();
-                }
-            }
-            return instance;
-        }
-    }
+	private bool isAnalyticsEnabled = false;
 
     void Awake(){
-        //make persistent
-        if(isCreated){
-            Destroy(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
-        isCreated = true;
-
         //Get constants and check if analytics event should be sent
         isAnalyticsEnabled = Constants.GetConstant<bool>("AnalyticsEnabled");
     }
@@ -126,7 +97,7 @@ public class Analytics : MonoBehaviour {
 	#region MiniPet
 	public void MiniPetLevelUp(string miniPetID, int currentLevel){
 		string levelString = currentLevel.ToString();
-		if(!string.IsNullOrEmpty(miniPetID) && !String.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
+		if(!string.IsNullOrEmpty(miniPetID) && !string.IsNullOrEmpty(levelString) && isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Minipet Level Up", new Dictionary<string, object>{
 				{ miniPetID + "Level up: ", currentLevel}
 			});
@@ -134,7 +105,7 @@ public class Analytics : MonoBehaviour {
 	}
 
 	public void MiniPetVisited(string miniPetID){
-		if(!String.IsNullOrEmpty(miniPetID) && isAnalyticsEnabled){
+		if(!string.IsNullOrEmpty(miniPetID) && isAnalyticsEnabled){
 			Amplitude.Instance.logEvent("Times Visited Minipet", new Dictionary<string, object>{
 				{ "Times Visited: ", miniPetID}
 			});

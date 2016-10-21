@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /* Follows camera and basically just helps the collider hit coins and magnetize them
  * disabled and enabled by PlayerController
@@ -16,7 +15,7 @@ public class MagneticField : Singleton<MagneticField>{
 		}
 	}
 
-	public void EnableMagnet(bool enabled){
+	public void ToggleMagnetize(bool enabled){
 		GetComponent<Collider>().enabled = enabled;
 	}
 }

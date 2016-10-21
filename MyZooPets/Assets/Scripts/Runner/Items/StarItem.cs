@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public class StarItem : RunnerItem{
+﻿public class StarItem : RunnerItem{
 	public override void OnPickup(){
-		GameObject.Destroy(gameObject);
+		SpawnFloatyText("Super!");
 		PlayerController.Instance.StartStarMode();
+		Destroy(gameObject);
 	}
 }

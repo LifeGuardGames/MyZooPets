@@ -1,28 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class UGUIFloaty : MonoBehaviour{
 	public Text textUI;
-	private float hangTime;
-	//public Sprite sprite; //TODO: Implement sprite rendering
+	public CanvasGroup canvasGroup;
 
-	public void StartFloaty(Vector3 startPosition, string text = "", int textSize = 14, float riseTime = .5f, Vector3? toMove = null, Color? color = null){
-		color = color ?? Color.white; //color and toMove are entered as a nullable so that there can be defaults
-		toMove = toMove ?? Vector3.zero; //?? = null-coalescing operator
-		transform.position = startPosition; //Not optional
-		textUI.text = text;
-		textUI.fontSize = textSize;
-		textUI.color = (Color)color;
-		RectTransform[] childRects = GetComponentsInChildren<RectTransform>();
-		for(int i = 1; i < childRects.Length; i++){ //Skip our own rect
-			LeanTween.alpha(childRects[i], 0, riseTime * 3).setEase(LeanTweenType.easeOutQuad);
+	public void StartFloaty(Vector3 startPosition, string text = "", float riseTime = 1f, Vector3? offset = null){
+		offset = offset ?? new Vector3(0, 0.6f);	//?? = null-coalescing operator
+		transform.position = startPosition;
+		if(textUI != null) {
+			textUI.text = text;
 		}
-		LeanTween.textAlpha(GetComponent<RectTransform>(), 0, riseTime * 3).setEase(LeanTweenType.easeOutQuad);
-		LeanTween.move(gameObject, transform.position + (Vector3)toMove, riseTime).setOnComplete(OnComplete).setEase(LeanTweenType.easeOutQuad);
+		LeanTween.value(gameObject, SetAlpha, 1, 0, riseTime).setEase(LeanTweenType.easeOutQuad);
+		LeanTween.move(gameObject, transform.position + (Vector3)offset, riseTime).setEase(LeanTweenType.easeOutQuad).setDestroyOnComplete(true);
 	}
 
-	private void OnComplete(){
-		Destroy(gameObject);
+	private void SetAlpha(float value) {
+		canvasGroup.alpha = value;
 	}
 }

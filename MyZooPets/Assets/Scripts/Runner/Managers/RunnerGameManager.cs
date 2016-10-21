@@ -14,7 +14,8 @@ using System.Collections;
 public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	public RunnerGameUIManager uiManager;
 	public GameObject pausePanel;
-	public GameObject starFloatyPrefab;
+	public GameObject floatyPrefabText;
+	public GameObject floatyPrefabCoin;
 	public Transform floatyParent;
 	private bool acceptInput = true;
 	public bool isGameOver;

@@ -146,7 +146,7 @@ public class PlayerController : Singleton<PlayerController> {
 	public void Reset() {
 		transform.position = initialPosition;
 		magnetTime = 0;
-		MagneticField.Instance.EnableMagnet(false);
+		MagneticField.Instance.ToggleMagnetize(false);
 		magnetSystem.Stop();
 		movement.verticalSpeed = 0f;
 		movement.currentSpeed = 0f;
@@ -198,7 +198,7 @@ public class PlayerController : Singleton<PlayerController> {
 		else {
 			magnetTime += magnetTimeIncrease;
 		}
-		MagneticField.Instance.EnableMagnet(true);
+		MagneticField.Instance.ToggleMagnetize(true);
 		magnetSystem.Play();
 	}
 
@@ -418,7 +418,7 @@ public class PlayerController : Singleton<PlayerController> {
 			magnetTime -= Time.deltaTime;
 		}
 		else {
-			MagneticField.Instance.EnableMagnet(false);
+			MagneticField.Instance.ToggleMagnetize(false);
 			magnetSystem.Stop();
 		}
 	}

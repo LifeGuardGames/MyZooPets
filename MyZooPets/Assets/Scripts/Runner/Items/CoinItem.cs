@@ -38,13 +38,11 @@ public class CoinItem : RunnerItem {
 		}
 	}
 
-	public override void Start() {
-		base.Start();
+	void Start() {
 		MegaHazard.Instance.SpeedUp(coinValue);
 	}
 
-	public override void Update() {
-		base.Update();
+	void Update() {
 		if(magnetized && !RunnerGameManager.Instance.IsPaused) {
 			acceleration = 2 * PlayerController.Instance.Speed;
 			//Vector3 aimPosition = PlayerController.Instance.transform.position+PlayerController.Instance.collider.
@@ -94,7 +92,7 @@ public class CoinItem : RunnerItem {
 	}
 
 	private void Bonus() {
-		SpawnFloatyText(floatingTime: 0.25f);
+		SpawnFloatyCoin();
 		RunnerGameManager.Instance.IncrementCombo(coinToCombo * Mathf.Sqrt(coinValue));
 	}
 }

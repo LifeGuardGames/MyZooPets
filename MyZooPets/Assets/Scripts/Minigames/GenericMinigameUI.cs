@@ -46,8 +46,9 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 
 	public void GameOverUI(bool allowContinue, int score, int starCount, int coinCount, int shardCount) {
 		// If continue is allowed, 40% chance to show ads granted that it is ready
-		if(allowContinue && AdManager.Instance.IsAdReady() && UnityEngine.Random.Range(0, 10) <= 3) {
-			Debug.Log("Ads playing");
+		Debug.Log("CONTINUE DEBUG CHANGE HERE");
+		if(allowContinue && AdManager.Instance.IsAdReady()) { // && UnityEngine.Random.Range(0, 10) <= 3) {
+			Debug.Log("Ads check pass");
 			continueController.ShowPanel();
 			minigameUIInterface.OnPause(); //NOTE: Pause the game when the continue button shows up. Unpaused under OnContinue
 			storedGameOverFunction = null;
@@ -90,7 +91,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 		AdManager.Instance.ShowAd(delegate (bool result) {
 			if(result) {    // Finished ads
 				minigameUIInterface.OnContinue();
-				minigameUIInterface.OnPause();
+				//minigameUIInterface.OnPause();
 			}
 			else {          // Ads failed somehow, fail gracefully
 				OnContinueRejected();

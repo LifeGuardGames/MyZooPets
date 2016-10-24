@@ -325,9 +325,9 @@ public class DataManager : Singleton<DataManager>{
 		}
 
 		// Disabling ads for all users below v2.2.0 (premium users)		//DONT TOUCH THIS
-		if(currentDataVersion < new Version ("2.2.0")) {
-			IsAdsEnabled = false;
-		}
+		//if(currentDataVersion < new Version ("2.2.0")) {
+		//	IsAdsEnabled = false;
+		//}
 	}
 
 	/// <summary>

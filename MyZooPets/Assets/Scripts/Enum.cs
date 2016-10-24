@@ -96,10 +96,11 @@ public enum BadgeType{
 	Ninja,
 	Memory,
 	DoctorMatch,
-    RUNNER,
+    Runner,
 	Shooter,
 	Retention,
-	MicroMix
+	MicroMix,
+	BeatGame
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!

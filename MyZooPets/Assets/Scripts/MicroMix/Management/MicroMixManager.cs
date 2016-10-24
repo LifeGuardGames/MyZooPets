@@ -195,8 +195,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
-		//BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
-		//TODO: Implement badges under RunnerGame
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.MicroMix, Score, true);
 	}
 
 	protected override void _QuitGame() {

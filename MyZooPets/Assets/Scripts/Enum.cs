@@ -99,6 +99,7 @@ public enum BadgeType{
     RUNNER,
 	Shooter,
 	Retention,
+	MicroMix
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!

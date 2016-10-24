@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -10,7 +9,6 @@ using System.Collections.Generic;
 /// </summary>
 public class DecoInventoryUIManager : Singleton<DecoInventoryUIManager> {
 	public TweenToggle decoInventoryTween;
-	public RectTransform slotParent;
 	public GameObject decoInventoryTokenPrefab;
 	public List<Transform> decoInventorySlotList;
 	public Transform itemFlyToTransform;

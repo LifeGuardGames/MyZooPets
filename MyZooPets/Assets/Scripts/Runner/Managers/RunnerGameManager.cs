@@ -189,7 +189,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
 
-		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.RUNNER, Score, true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Runner, Score, true);
 
 		Analytics.Instance.RUNNERGameData(Score, RunnerLevelManager.Instance.mCurrentLevelGroup.ToString(), DistanceTraveled);  // TODO level missing!!!
 

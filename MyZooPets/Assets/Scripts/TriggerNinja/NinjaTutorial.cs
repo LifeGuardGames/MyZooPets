@@ -35,10 +35,10 @@ public class NinjaTutorial : MinigameTutorial {
 		}
 		NinjaGameManager.Instance.LifeCount = 3;
 		NinjaGameManager.Instance.isTutorialRunning = false;
-
 		if(swipeTutObject != null) {
 			UnityEngine.Object.Destroy(swipeTutObject);
 		}
+		NinjaGameManager.Instance.NewGame();
 	}
 
     protected override void ProcessStep(int step){

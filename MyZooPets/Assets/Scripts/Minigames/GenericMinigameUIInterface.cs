@@ -113,7 +113,7 @@ public class GenericMinigameUIInterface : MonoBehaviour {
 
 	public void OnContinue() {
 		if(sceneName == SceneUtils.DOCTORMATCH) {
-			DoctorMatchGameManager.Instance.ContinueGame();
+			// Continues not allowed for this minigame
 		}
 		else if(sceneName == SceneUtils.MEMORY) {
 			// Continues not allowed for this minigame

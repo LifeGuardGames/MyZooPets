@@ -152,9 +152,6 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 
 		uiManager.NewGameUI();
 
-		if(!DataManager.Instance.GameData.Tutorial.IsTutorialFinished(NinjaTutorial.TUT_KEY)) {
-			StartTutorial();
-		}
 	}
 
 	protected override void _QuitGame() {
@@ -205,12 +202,13 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 	}
 
 	protected override void _ContinueGame() {
-		lifeCount = 3;
+		lifeCount = 1;
 		bonusRound = false;
 		spawning = true;
 		isPlaying = true;
 		isGameOver = false;
-	}
+		uiManager.ContinueGameUI();
+    }
 
 	void Update() {
 		if(isTutorialRunning || isGameOver) {

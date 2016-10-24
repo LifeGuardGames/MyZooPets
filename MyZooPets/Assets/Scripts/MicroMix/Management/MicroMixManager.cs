@@ -119,6 +119,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		//Complete tutorial automatically
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(minigameKey);
 		NewGame();
+
 	}
 
 	public void Restart() {
@@ -136,6 +137,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		Time.timeScale = 1f;
 		lifeController.Reset(true);
 		difficulty = 1;
+		isContinueAllowed = true;
 	}
 
 	protected override void _PauseGame() {
@@ -179,7 +181,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 
 	protected override void _ContinueGame() {
 		lifeController.Reset(false);
-		StartMicro();
+		isPaused = false;
+		StartCoroutine(TransitionIEnum(MonsterAnimation.WIN));
+		//StartMicro();
 	}
 
 	protected override void _GameOver() {

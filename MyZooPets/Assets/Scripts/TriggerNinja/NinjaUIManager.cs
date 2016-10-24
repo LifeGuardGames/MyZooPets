@@ -14,6 +14,11 @@ public class NinjaUIManager : MonoBehaviour {
 			ToggleLifeIndicator(true, inhalerSprite);
 		}
 	}
+	public void ContinueGameUI() {
+		// Set all life to true
+		ToggleLifeIndicator(true, InhalerLifeList[0]);
+		
+	}
 
 	#region Minigame Life UI
 	public void OnLivesChanged(int deltaLife) {

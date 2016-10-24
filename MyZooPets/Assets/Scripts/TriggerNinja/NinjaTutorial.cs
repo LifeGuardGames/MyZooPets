@@ -4,7 +4,7 @@ using System;
 public class NinjaTutorial : MinigameTutorial {
     public static string TUT_KEY = "NINJA_TUT";
 
-	private Animation swipeTutAnimation;
+	private Animator swipeTutAnimator;
 	private GameObject swipeTutObject;
 
 	// one game object for each type of trigger
@@ -25,19 +25,20 @@ public class NinjaTutorial : MinigameTutorial {
 	protected override void SetMaxSteps(){
         maxSteps = 1;
     }
-	
-	protected override void _End(bool isFinished){
-		if(!isFinished){
-			if(trigger1Object){
+
+	protected override void _End(bool isFinished) {
+		if(!isFinished) {
+			if(trigger1Object) {
 				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
-				GameObject.Destroy(trigger1Object);
+				UnityEngine.Object.Destroy(trigger1Object);
 			}
 		}
 		NinjaGameManager.Instance.LifeCount = 3;
 		NinjaGameManager.Instance.isTutorialRunning = false;
 
-		if(swipeTutObject != null)
-			GameObject.Destroy(swipeTutObject);
+		if(swipeTutObject != null) {
+			UnityEngine.Object.Destroy(swipeTutObject);
+		}
 	}
 
     protected override void ProcessStep(int step){
@@ -50,8 +51,6 @@ public class NinjaTutorial : MinigameTutorial {
 				trigger4Object = NinjaGameManager.Instance.SpawnTriggersTutorial(4);
 				trigger5Object = NinjaGameManager.Instance.SpawnTriggersTutorial(5);
 				trigger6Object = NinjaGameManager.Instance.SpawnTriggersTutorial(6);
-				GameObject swipeTut = (GameObject) Resources.Load("NinjaSwipeTut");
-				swipeTutObject = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), swipeTut);
 
 				//listen to when trigger gets cut
 				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
@@ -60,15 +59,12 @@ public class NinjaTutorial : MinigameTutorial {
 				trigger4Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
 				trigger5Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
 				trigger6Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
+				
 				//play swipe tutorial
-				try{
-					swipeTutAnimation = swipeTutObject.FindInChildren("AnimationParent").GetComponent<Animation>();
-					swipeTutAnimation.Play("NinjaSwipeTut1");
-				}
-				catch(NullReferenceException e){
-					Debug.LogException(e);
-				}
-
+				GameObject swipeTutPrefab = (GameObject) Resources.Load("NinjaTutorialUI");
+				swipeTutObject = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), swipeTutPrefab);
+				swipeTutAnimator = swipeTutObject.FindInChildren("AnimationParent").GetComponent<Animator>();
+				swipeTutAnimator.Play("NinjaTutorialUI");
                 break;
             default:
                 Debug.LogError("Ninja tutorial has an unhandled step: " + step);

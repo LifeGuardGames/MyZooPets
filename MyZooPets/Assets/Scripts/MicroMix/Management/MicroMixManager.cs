@@ -196,6 +196,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			animDelay: 0.5f);
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.MicroMix, Score, true);
+#if UNITY_IOS
+		LeaderBoardManager.Instance.EnterScore((long)Score, "MicroMixLeaderBoard");
+#endif
 	}
 
 	protected override void _QuitGame() {

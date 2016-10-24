@@ -154,10 +154,11 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	}
 
 	protected override void _ContinueGame() {
+		isGameOver = false;
 		PlayerController.Instance.MakePlayerVisible(true);
 		PlayerController.Instance.ResetSpeedAndAlive();
 		MegaHazard.Instance.Reset();
-		Vector3 spawnPos = FindObjectOfType<PlayerPhysics>().FindGroundedPosition(MegaHazard.Instance.bottomPosition.position);
+		Vector3 spawnPos = FindObjectOfType<PlayerPhysics>().FindGroundedPosition(MegaHazard.Instance.transform.position);
 		PlayerController.Instance.transform.position = spawnPos;
 		acceptInput = false; //Prevent us from input anything until we have waited 3 seconds
 		StartCoroutine(WarmUp());

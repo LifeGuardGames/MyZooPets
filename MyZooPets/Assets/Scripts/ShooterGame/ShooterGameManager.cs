@@ -73,6 +73,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 
 	protected override void _ContinueGame() {
 		isGameOver = false;
+		PlayerShooterController.Instance.gameObject.GetComponent<BoxCollider2D>().enabled = true;
 		PlayerShooterController.Instance.playerHealth = 5;
 		PlayerShooterController.Instance.ChangeFire();
 		ShooterGameEnemyController.Instance.BuildEnemyList();

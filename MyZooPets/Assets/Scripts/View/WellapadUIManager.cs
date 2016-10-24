@@ -59,7 +59,7 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 		//Show other UI objects
 		if(!ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){	// If in deco mode dont show these
 			NavigationUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel(false);
 		}
 		RoomArrowsUIManager.Instance.ShowPanel();
 

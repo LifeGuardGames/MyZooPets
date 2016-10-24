@@ -7,7 +7,8 @@ using System.Collections.Generic;
 /// 					\ InventoryUIManager
 /// </summary>
 public class InventoryUIManager : Singleton<InventoryUIManager>{
-	public TweenToggle inventoryTween;
+	public TweenToggle inventoryTween;		// This and inventoryIconTween work in conjunction for a 4x tween combo
+	public TweenToggle inventoryGridTween;  // This and inventoryTween work in conjunction for a 4x tween combo
 	public GameObject inventoryTokenPrefab;
 	public List<Transform> inventorySlotList;
 	public Transform itemFlyToTransform;
@@ -30,13 +31,32 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 		ShowPage(0);
 		RefreshButtonShowStatus();
     }
-	
-	public void ShowPanel(){
+
+	// Show the button and/or with grid
+	public void ShowPanel(bool isShowGrid = false){
 		inventoryTween.Show();
+		if(isShowGrid) {
+			ToggleGrid(true);
+		}
+		else {
+			ToggleGrid(false);
+		}
 	}
 	
+	// Hide the button and grid
 	public void HidePanel(){
 		inventoryTween.Hide();
+		ToggleGrid(false);
+    }
+
+	// Toggling the grid
+	public void ToggleGrid(bool isShowing) {
+		if(isShowing) {
+			inventoryGridTween.Show();
+		}
+		else {
+			inventoryGridTween.Hide();
+		}
 	}
 
 	public void PulseInventory() {

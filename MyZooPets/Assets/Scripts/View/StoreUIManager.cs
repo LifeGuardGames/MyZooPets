@@ -96,7 +96,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.ShowPanel();
-		InventoryUIManager.Instance.ShowPanel();
+		InventoryUIManager.Instance.ShowPanel(false);
 		HUDUIManager.Instance.ToggleLabels(false);
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -236,7 +236,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
-			InventoryUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel(true);
 			DecoInventoryUIManager.Instance.HidePanel();
 
 			foreach(Transform tab in tabArea.transform){
@@ -246,7 +246,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			CreateSubCategoryItemsTab("foodDefaultTab", shortcutType);
 		}
 		else if(currentPage == "Items"){
-			InventoryUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel(true);
 			DecoInventoryUIManager.Instance.HidePanel();
 
 			foreach(Transform tab in tabArea.transform){

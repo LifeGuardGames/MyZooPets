@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class PetMovement : Singleton<PetMovement> {
 	//=======================Events========================
@@ -28,13 +29,14 @@ public class PetMovement : Singleton<PetMovement> {
 	public float MovementStaticZ {
 		get { return MovementStaticZ; }
 	}
+
+	public MeshCollider meshCollider;
 	public bool gateDestroyed = false; // bool to toggle movement after a pet is 
 	public bool canMove;
 	private Vector3 destinationPoint; //destination that the pet is going to move to
 	public bool moving; //Is Pet moving now or not
 	private Camera mainCamera;
-	private Camera nguiCamera; //Use to check if user is clicking on NGUI element. Pet shouldn't
-							   //be moved when clicking on NGUI
+
 	private PanToMoveCamera scriptPan; //script that pan the camera
 
 	// how fast the pet moves
@@ -101,27 +103,24 @@ public class PetMovement : Singleton<PetMovement> {
 		MovePet(new Vector3(petSprite.transform.position.x + 15, petSprite.transform.position.y, petSprite.transform.position.z));
 	}
 
-	// Update is called once per frame
 	void Update() {
-		if(canMove) {
-			this.gameObject.GetComponentInChildren<MeshCollider>().enabled = true;
-		}
-		else {
-			this.gameObject.GetComponentInChildren<MeshCollider>().enabled = false;
-		}
+		meshCollider.enabled = canMove ? true : false;
+
 		if(moving && petSprite != null) {
 			//move the pet location if allowed
-			if(ClickManager.Instance.CanRespondToTap(this.gameObject, ClickLockExceptions.Moving)) {
+			if(ClickManager.Instance.CanRespondToTap(gameObject, ClickLockExceptions.Moving)) {
 
 				PetMoods mood = DataManager.Instance.GameData.Stats.GetMoodState();
 				PetHealthStates health = DataManager.Instance.GameData.Stats.GetHealthState();
 				float movementSpeed = normalSpeed;
 
 				//show pet movement down if pet is sick
-				if(health == PetHealthStates.Sick || mood != PetMoods.Happy)
+				if(health == PetHealthStates.Sick || mood != PetMoods.Happy) {
 					movementSpeed = sickSpeed;
-				else if(health == PetHealthStates.VerySick)
+				}
+				else if(health == PetHealthStates.VerySick) {
 					movementSpeed = verySickSpeed;
+				}
 
 				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
 					destinationPoint, movementSpeed * Time.deltaTime);
@@ -172,15 +171,21 @@ public class PetMovement : Singleton<PetMovement> {
 		}
 		isWandering = false;
 	}
+
 	//---------------------------------------------------
 	// ProcessTap()
 	// This function is called by PetMovementListener when user taps on an area
 	// that the pet can move to.
 	//---------------------------------------------------
 	public void ProcessTap(TapGesture gesture) {
-		// if the player is in a gated room, moving on tap is not allowed
-		if(GatingManager.Instance.IsInGatedRoom())
+		if(EventSystem.current.IsPointerOverGameObject()) {
 			return;
+		}
+
+		// if the player is in a gated room, moving on tap is not allowed
+		if(GatingManager.Instance.IsInGatedRoom()) {
+			return;
+		}
 
 		// if clicking is locked, ie. a GUI popup is being displayed, then don't move the pet
 		bool isPetAnimatorBusy = PetAnimationManager.Instance.IsBusy;

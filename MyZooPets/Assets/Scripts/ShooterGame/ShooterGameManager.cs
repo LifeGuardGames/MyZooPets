@@ -101,7 +101,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
 		
 		#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "ShooterLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)Score, "ShooterLeaderBoard");
 		#endif
 	}
 

@@ -193,7 +193,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		Analytics.Instance.RUNNERGameData(Score, RunnerLevelManager.Instance.mCurrentLevelGroup.ToString(), DistanceTraveled);  // TODO level missing!!!
 
 #if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RUNNERLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)Score, "RUNNERLeaderBoard");
 #endif
 	}
 

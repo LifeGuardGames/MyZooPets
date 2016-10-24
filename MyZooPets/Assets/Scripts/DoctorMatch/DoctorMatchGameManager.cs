@@ -158,7 +158,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.DoctorMatch, NumOfCorrectDiagnose, true);
 		Analytics.Instance.DoctorMatchGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], comboController.Combo);
 #if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "DoctorLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)Score, "DoctorLeaderBoard");
 #endif
 	}
 

@@ -190,7 +190,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		Analytics.Instance.NinjaGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[MinigameKey], bonusRoundCounter);
 		
 		#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "NinjaLeaderBoard");
+		LeaderBoardManager.Instance.EnterScore((long)Score, "NinjaLeaderBoard");
 		#endif
 	}
 

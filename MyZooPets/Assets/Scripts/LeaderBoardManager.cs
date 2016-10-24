@@ -9,6 +9,7 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 	ILeaderboard doctor;
 	ILeaderboard shooter;
 	ILeaderboard runner;
+	ILeaderboard micromix;
 
 	void Awake(){
 		#if UNITY_IOS && !UNITY_EDITOR
@@ -44,6 +45,9 @@ public class LeaderBoardManager : Singleton<LeaderBoardManager> {
 		runner = Social.CreateLeaderboard();
 		runner.id = "RUNNERLeaderBoard";
 		runner.LoadScores(result => DidLoadLeaderboard(result,runner));
+		micromix = Social.CreateLeaderboard();
+		micromix.id = "MicroMixLeaderBoard";
+		micromix.LoadScores(result=> DidLoadLeaderboard(result,micromix));
 		#endif
 	}
 

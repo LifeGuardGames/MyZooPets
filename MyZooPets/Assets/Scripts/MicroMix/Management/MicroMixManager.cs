@@ -69,7 +69,8 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			LeanTween.scale(speedUpText.rectTransform, Vector3.one, .75f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(OnTweenSpeedUp);
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
-		if(currentScore >= winScore) {
+		if(currentScore >= winScore && !DataManager.Instance.GameData.MicroMix.hasWon) {
+			DataManager.Instance.GameData.MicroMix.hasWon = true;
 			StartCoroutine(TransitionIEnum(MonsterAnimation.WIN_FINAL));
 		}
 		else {

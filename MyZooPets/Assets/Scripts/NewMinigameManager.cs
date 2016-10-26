@@ -95,7 +95,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		}
 		else {
 			isPaused = false;
-			isContinueAllowed = true;
+			isContinueAllowed = false;
 
 			rewardXPAux = 0;
 			rewardMoneyAux = 0;
@@ -146,7 +146,8 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	}
 
 	public void GameOverReward() {
-		_GameOverReward();
+		//diabled for playtest
+		//_GameOverReward();
 	}
 
 	public void QuitGame() {

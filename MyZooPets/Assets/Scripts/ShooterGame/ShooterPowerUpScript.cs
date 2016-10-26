@@ -8,6 +8,7 @@ public class ShooterPowerUpScript : MonoBehaviour{
 	public GameObject sprite;
 	public ParticleSystem particleSprite;
 	public ParticleSystem particleGet;
+	public bool wasUsed = false;
 
 	void Update(){
 		transform.Translate(Time.deltaTime * -2.0f, 0, 0);
@@ -15,20 +16,25 @@ public class ShooterPowerUpScript : MonoBehaviour{
 
 	void OnBecameInvisible() {
 		if(powerUpKey == "Inhaler") {
-			if(ShooterGameManager.Instance.inTutorial) {
-				if(ShooterGameManager.Instance.ShooterTutInhalerStep) {
-					ShooterSpawnManager.Instance.SpawnInhaler();
+			if(!wasUsed) {
+				if(ShooterGameManager.Instance.inTutorial) {
+					if(ShooterGameManager.Instance.ShooterTutInhalerStep) {
+						ShooterSpawnManager.Instance.SpawnInhaler();
+					}
+				}
+				else {
+					ShooterInhalerManager.Instance.combo = 0;
 				}
 			}
-			else {
-				ShooterInhalerManager.Instance.combo = 0;
-			}
+			Destroy(this.gameObject);
 		}
-		Destroy(this.gameObject);
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
 	 if(collider.gameObject.tag == "Player"){
+			if(powerUpKey == "Inhaler") {
+				wasUsed = true;
+			}
 			// Parse the powerup
 			ShooterPowerUpManager.PowerUpType powerUp = (ShooterPowerUpManager.PowerUpType)Enum.Parse(typeof(ShooterPowerUpManager.PowerUpType), powerUpKey);
 			ShooterPowerUpManager.Instance.ChangePowerUp(powerUp);

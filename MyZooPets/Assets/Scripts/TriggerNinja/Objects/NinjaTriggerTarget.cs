@@ -55,6 +55,7 @@ public class NinjaTriggerTarget : NinjaTrigger {
 		if(!NinjaGameManager.Instance.isTutorialRunning) {
 			// the player loses a life
 			if(NinjaGameManager.Instance.bonusRound == false) {
+				BloodPanelManager.Instance.PlayBlood();
 				NinjaGameManager.Instance.UpdateLife(-1);
 				NinjaGameManager.Instance.ResetChain();
 			}

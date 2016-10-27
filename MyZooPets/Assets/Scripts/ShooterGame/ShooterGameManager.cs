@@ -117,10 +117,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		}
 	}
 
-	public void TriggerGameover() {
-		GameOver();
-	}
-
 	public void InputReceived(bool isMove) {
 		if(inTutorial) {
 			if(OnTutorialTap != null) {

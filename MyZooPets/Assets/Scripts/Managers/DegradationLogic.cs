@@ -115,7 +115,7 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 		}
 		// damage the pet
 		int damage = trigger.Damage;
-
+		BloodPanelManager.Instance.PlayBlood();
 		StatsManager.Instance.ChangeStats(healthDelta: -damage, isFloaty: true);
 	}
 

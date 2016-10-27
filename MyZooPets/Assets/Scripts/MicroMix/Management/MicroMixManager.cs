@@ -70,7 +70,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
 		if(currentScore >= winScore && !DataManager.Instance.GameData.MicroMix.hasWon) {
-			DataManager.Instance.GameData.MicroMix.hasWon = true;
 			StartCoroutine(TransitionIEnum(MonsterAnimation.WIN_FINAL));
 		}
 		else {
@@ -200,6 +199,10 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+		if(!DataManager.Instance.GameData.MicroMix.hasWon && score >= winScore) {
+			DataManager.Instance.GameData.MicroMix.hasWon = true;
+			BadgeManager.Instance.CheckSingleUnlockProgress("Badge36",0,true);
+        }
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.MicroMix, Score, true);
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)Score, "MicroMixLeaderBoard");

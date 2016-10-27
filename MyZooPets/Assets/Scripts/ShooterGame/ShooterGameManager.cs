@@ -121,7 +121,30 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		GameOver();
 	}
 
-	public void InputReceived(bool isMove) {
+	public void InputReceivedMove(bool isMove) {
+		if(inTutorial) {
+			if(OnTutorialTap != null) {
+				OnTutorialTap(this, EventArgs.Empty);
+			}
+		}
+
+			// this handles mouse look the actual overall picture is
+			// spread across 3 scripts this section deals with getting the input position
+#if !UNITY_EDITOR
+			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
+			if(isMove){
+				PlayerShooterController.Instance.Move(touchPos);
+			}
+		
+#endif
+#if UNITY_EDITOR
+			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
+				PlayerShooterController.Instance.Move(mousePos);	
+#endif
+		
+	}
+
+	public void InputReceivedShoot(bool isMove, Vector3 pos) {
 		if(inTutorial) {
 			if(OnTutorialTap != null) {
 				OnTutorialTap(this, EventArgs.Empty);
@@ -131,24 +154,13 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 			// this handles mouse look the actual overall picture is
 			// spread across 3 scripts this section deals with getting the input position
 #if !UNITY_EDITOR
-			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-			if(isMove){
-				PlayerShooterController.Instance.Move(touchPos);
-			}
-			else{
-				PlayerShooterController.Instance.Shoot(touchPos);
+			
+				PlayerShooterController.Instance.Shoot(pos);
 				startTime = Time.time;
-			}
 #endif
 #if UNITY_EDITOR
-			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-			if(isMove) {
-				PlayerShooterController.Instance.Move(mousePos);
-			}
-			else {
-				PlayerShooterController.Instance.Shoot(mousePos);
+				PlayerShooterController.Instance.Shoot(pos);
 				startTime = Time.time;
-			}
 #endif
 		}
 	}

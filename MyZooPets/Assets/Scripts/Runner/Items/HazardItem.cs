@@ -7,6 +7,7 @@
 	}
 
 	public override void OnPickup(){
+		BloodPanelManager.Instance.PlayBlood();
 		// Player, sloooooowwww downnnnnnnn
 		if(!PlayerController.Instance.Invincible){
 			PlayerController.Instance.TriggerSlowdown(SlowdownDivisor, ID);

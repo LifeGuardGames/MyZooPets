@@ -4,6 +4,7 @@ using UnityEditor;
 
 namespace CreativeSpore.SuperTilemapEditor
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(TilesetBrush))]
     public class TilesetBrushEditor : Editor
     {
@@ -22,6 +23,7 @@ namespace CreativeSpore.SuperTilemapEditor
 
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
             TilesetBrush brush = (TilesetBrush)target;
             if (brush.Tileset == null)
             {

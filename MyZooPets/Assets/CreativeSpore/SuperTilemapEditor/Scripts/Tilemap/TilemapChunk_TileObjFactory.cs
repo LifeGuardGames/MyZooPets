@@ -93,7 +93,7 @@ namespace CreativeSpore.SuperTilemapEditor
 #else
                     tileObj = (GameObject)Instantiate(tilePrefabData.prefab, Vector3.zero, transform.rotation);
 #endif
-                    _SetTileObjTransform(tileObj, gx, gy, tilePrefabData);
+                    _SetTileObjTransform(tileObj, gx, gy, tilePrefabData, m_tileDataList[tileIdx]);
                     if (tileObjData != null)
                     {
                         m_tileObjToBeRemoved.Add(tileObjData.obj);
@@ -114,7 +114,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 }
                 else if (tileObjData.obj != null)
                 {
-                    _SetTileObjTransform(tileObjData.obj, gx, gy, tilePrefabData);
+                    _SetTileObjTransform(tileObjData.obj, gx, gy, tilePrefabData, m_tileDataList[tileIdx]);
                     tileObjData.obj.SendMessage(k_OnTilePrefabCreation,
                         new OnTilePrefabCreationData()
                         {
@@ -128,7 +128,7 @@ namespace CreativeSpore.SuperTilemapEditor
             return null;
         }
 
-        private void _SetTileObjTransform(GameObject tileObj, int gx, int gy, TilePrefabData tilePrefabData)
+        private void _SetTileObjTransform(GameObject tileObj, int gx, int gy, TilePrefabData tilePrefabData, uint tileData)
         {
             Vector3 chunkLocPos = new Vector3((gx + .5f) * CellSize.x, (gy + .5f) * CellSize.y);
             if (tilePrefabData.offsetMode == TilePrefabData.eOffsetMode.Pixels)
@@ -147,6 +147,16 @@ namespace CreativeSpore.SuperTilemapEditor
             tileObj.transform.parent = transform.parent;
             tileObj.transform.localRotation = tilePrefabData.prefab.transform.localRotation;
             tileObj.transform.localScale = tilePrefabData.prefab.transform.localScale;
+            //+++ Apply tile flags
+            Vector2 localScale = tileObj.transform.localScale;
+            if((tileData & Tileset.k_TileFlag_Rot90) != 0)
+                tileObj.transform.localRotation *= Quaternion.Euler(0, 0, -90);
+            if ((tileData & Tileset.k_TileFlag_FlipH) != 0)
+                localScale.x = -tileObj.transform.localScale.x;
+            if ((tileData & Tileset.k_TileFlag_FlipV) != 0)
+                localScale.y = -tileObj.transform.localScale.y;
+            tileObj.transform.localScale = localScale;
+            //---
         }
 
         private void DestroyTileObject(int locGridX, int locGridY)

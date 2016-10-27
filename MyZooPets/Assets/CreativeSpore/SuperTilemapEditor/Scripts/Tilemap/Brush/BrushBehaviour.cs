@@ -9,6 +9,7 @@ namespace CreativeSpore.SuperTilemapEditor
 {
 
     [RequireComponent(typeof(Tilemap))]
+    [ExecuteInEditMode]
     public class BrushBehaviour : MonoBehaviour
     {
         #region Singleton
@@ -44,6 +45,7 @@ namespace CreativeSpore.SuperTilemapEditor
         }
         #endregion
 
+        #region Menu Items
 #if UNITY_EDITOR
         [MenuItem("SuperTilemapEditor/Brush/Create Tilemap From Selection %t")]
         private static GameObject CreateTilemapFromBrush()
@@ -83,12 +85,32 @@ namespace CreativeSpore.SuperTilemapEditor
             }
         }
 #endif
+        #endregion
 
         public Tilemap BrushTilemap { get { return m_brushTilemap; } }
         public Vector2 Offset;
         public bool IsUndoEnabled = true;
 
+        [SerializeField]
         Tilemap m_brushTilemap;
+
+        #region MonoBehaviour Methods
+        void Start()
+        {
+            if(s_instance != this)
+            {
+                DestroyImmediate(gameObject);
+            }
+        }
+
+        void OnDestroy()
+        {
+            if (m_brushTilemap != null)
+            {
+                m_brushTilemap.ClearMap();
+            }
+        }
+        #endregion
 
         public static BrushBehaviour GetOrCreateBrush(Tilemap tilemap)
         {
@@ -117,7 +139,7 @@ namespace CreativeSpore.SuperTilemapEditor
             {
                 brush.m_brushTilemap.ClearMap();
                 brush.m_brushTilemap.SetTileData(0, 0, Tileset.k_TileData_Empty); // setting an empty tile, map bounds increase a tile, needed to draw the brush border
-                brush.m_brushTilemap.UpdateMesh();
+                brush.m_brushTilemap.UpdateMeshImmediate();
             }
 
             return brush;
@@ -161,26 +183,18 @@ namespace CreativeSpore.SuperTilemapEditor
             return null;
         }
 
-        void OnDestroy()
-        {
-            if (m_brushTilemap != null)
-            {
-                m_brushTilemap.ClearMap();
-            }
-        }
-
         #region Drawing Methods
 
         public void FlipH(bool changeFlags = true)
         {
             m_brushTilemap.FlipH(changeFlags);
-            m_brushTilemap.UpdateMesh();
+            m_brushTilemap.UpdateMeshImmediate();
         }
 
         public void FlipV(bool changeFlags = true)
         {
             m_brushTilemap.FlipV(changeFlags);
-            m_brushTilemap.UpdateMesh();
+            m_brushTilemap.UpdateMeshImmediate();
         }
 
         public void Rot90(bool changeFlags = true)
@@ -192,7 +206,7 @@ namespace CreativeSpore.SuperTilemapEditor
             Offset = -new Vector2(gridY * m_brushTilemap.CellSize.x, (m_brushTilemap.GridWidth - gridX - 1) * m_brushTilemap.CellSize.y);
 
             m_brushTilemap.Rot90(changeFlags);
-            m_brushTilemap.UpdateMesh();
+            m_brushTilemap.UpdateMeshImmediate();
         }
 
         public void Rot90Back(bool changeFlags = true)
@@ -207,7 +221,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_brushTilemap.Rot90(changeFlags);
             }
 
-            m_brushTilemap.UpdateMesh();
+            m_brushTilemap.UpdateMeshImmediate();
         }
 
         public void FloodFill(Tilemap tilemap, Vector2 localPos, uint tileData)
@@ -222,7 +236,7 @@ namespace CreativeSpore.SuperTilemapEditor
             tilemap.IsUndoEnabled = IsUndoEnabled;
 
             TilemapDrawingUtils.FloodFill(tilemap, localPos, tileData);
-            tilemap.UpdateMesh();
+            tilemap.UpdateMeshImmediate();
 
             tilemap.IsUndoEnabled = false;
         }
@@ -236,7 +250,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     BrushTilemap.SetTileData(gridX - startGridX, gridY - startGridY, tilemap.GetTileData(gridX, gridY));
                 }
             }
-            BrushTilemap.UpdateMesh();
+            BrushTilemap.UpdateMeshImmediate();
         }
 
         public void CutRect(Tilemap tilemap, int startGridX, int startGridY, int endGridX, int endGridY)
@@ -258,8 +272,8 @@ namespace CreativeSpore.SuperTilemapEditor
                     tilemap.SetTileData(gridX, gridY, Tileset.k_TileData_Empty);
                 }
             }
-            BrushTilemap.UpdateMesh();
-            tilemap.UpdateMesh();
+            BrushTilemap.UpdateMeshImmediate();
+            tilemap.UpdateMeshImmediate();
 
             tilemap.IsUndoEnabled = false;
         }
@@ -295,7 +309,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                 }
             }
-            tilemap.UpdateMesh();
+            tilemap.UpdateMeshImmediate();
             tilemap.IsUndoEnabled = false;
         }
 
@@ -323,7 +337,7 @@ namespace CreativeSpore.SuperTilemapEditor
                     tilemap.SetTileData(dstGx, dstGy, Tileset.k_TileData_Empty);
                 }
             }
-            tilemap.UpdateMesh();
+            tilemap.UpdateMeshImmediate();
             tilemap.IsUndoEnabled = false;
         }
 

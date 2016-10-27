@@ -75,7 +75,7 @@ namespace CreativeSpore.TiledImporter
             foreach (Texture2D tilesetTexture in tilemap.DicTilesetTex2D.Values)
             {
                 TmxTileset tmxTileset = tilemap.Map.Tilesets[tilesetIdx];
-                Vector2 tileSize = new Vector2(tilemap.Map.Tilesets[0].TileWidth, tilemap.Map.Tilesets[0].TileHeight);
+                Vector2 tileSize = new Vector2(tilemap.Map.Tilesets[tilesetIdx].TileWidth, tilemap.Map.Tilesets[tilesetIdx].TileHeight);
                 Rect[] tileRects = GenerateGridSpriteRectangles(tilesetTexture, new Vector2(tmxTileset.Margin, tmxTileset.Margin), tileSize, new Vector2(tmxTileset.Spacing, tmxTileset.Spacing));
                 TileSelection tilesetSelection = new TileSelection(Enumerable.Range(tileList.Count, tileRects.Length).Select(i => (uint)i).ToList(), tmxTileset.Columns);
                 foreach (Rect tileRect in tileRects)

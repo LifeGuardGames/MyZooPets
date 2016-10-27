@@ -107,6 +107,63 @@ namespace CreativeSpore.SuperTilemapEditor
             return Tileset && tileId != Tileset.k_TileId_Empty ? Tileset.Tiles[tileId].uv : default(Rect);
         }
 
+        public virtual int GetAnimFrameIdx()
+        {
+            return 0;
+        }
+
+        Vector2[] m_uvWithFlags = new Vector2[4];
+        int m_lastFrameToken;
+        public virtual Vector2[] GetAnimUVWithFlags(float innerPadding = 0f)
+        {
+            if (GetAnimFrameIdx() == m_lastFrameToken)
+                return m_uvWithFlags;
+            else
+                m_lastFrameToken = GetAnimFrameIdx();
+
+            uint tileData = GetAnimTileData();
+            Rect tileUV = GetAnimUV();
+
+            bool flipH = (tileData & Tileset.k_TileFlag_FlipH) != 0;
+            bool flipV = (tileData & Tileset.k_TileFlag_FlipV) != 0;
+            bool rot90 = (tileData & Tileset.k_TileFlag_Rot90) != 0;
+
+            //NOTE: xMinMax and yMinMax is opposite if width or height is negative
+            float u0 = tileUV.xMin + Tileset.AtlasTexture.texelSize.x * innerPadding;
+            float v0 = tileUV.yMin + Tileset.AtlasTexture.texelSize.y * innerPadding;
+            float u1 = tileUV.xMax - Tileset.AtlasTexture.texelSize.x * innerPadding;
+            float v1 = tileUV.yMax - Tileset.AtlasTexture.texelSize.y * innerPadding;
+
+            if (flipV)
+            {
+                float v = v0;
+                v0 = v1;
+                v1 = v;
+            }
+            if (flipH)
+            {
+                float u = u0;
+                u0 = u1;
+                u1 = u;
+            }
+
+            if (rot90)
+            {
+                m_uvWithFlags[0] = new Vector2(u1, v0);
+                m_uvWithFlags[1] = new Vector2(u1, v1);
+                m_uvWithFlags[2] = new Vector2(u0, v0);
+                m_uvWithFlags[3] = new Vector2(u0, v1);
+            }
+            else
+            {
+                m_uvWithFlags[0] = new Vector2(u0, v0);
+                m_uvWithFlags[1] = new Vector2(u1, v0);
+                m_uvWithFlags[2] = new Vector2(u0, v1);
+                m_uvWithFlags[3] = new Vector2(u1, v1);
+            }
+            return m_uvWithFlags;
+        }
+
         public virtual uint GetAnimTileData()
         {
             return PreviewTileData();

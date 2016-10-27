@@ -16,7 +16,7 @@ namespace CreativeSpore.SuperTilemapEditor
                 m_selectedIndex = m_tilemaps != null? m_tilemaps.IndexOf(value) : -1;
             }
         }
-        public IList<Tilemap> Tilemaps { get { return m_tilemaps.AsReadOnly(); } }
+        public List<Tilemap> Tilemaps { get { return m_tilemaps; } }
         public float UnselectedColorMultiplier { get { return m_unselectedColorMultiplier; } set { m_unselectedColorMultiplier = value; } }
 
         [SerializeField]
@@ -48,7 +48,7 @@ namespace CreativeSpore.SuperTilemapEditor
         {
             if(SelectedTilemap)
             {
-                SelectedTilemap.SendMessage("DoDrawGizmos");
+                SelectedTilemap.SendMessage("DoDrawGizmos", SendMessageOptions.DontRequireReceiver);
             }
         }
 	    

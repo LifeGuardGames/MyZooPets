@@ -7,6 +7,7 @@ using UnityEditorInternal;
 namespace CreativeSpore.SuperTilemapEditor
 {
 
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(RandomBrush))]
     public class RandomBrushEditor : TilesetBrushEditor
     {

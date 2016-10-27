@@ -444,11 +444,13 @@ namespace CreativeSpore.SuperTilemapEditor
                 {
                     saveChanges = true;
                     //remove duplicated vertex
-                    selectedTile.collData.vertices = selectedTile.collData.vertices.Distinct().ToArray();
+                    selectedTile.collData.vertices = selectedTile.collData.vertices.Distinct().ToArray();                    
                     if(selectedTile.collData.vertices.Length <= 2)
                     {
                         selectedTile.collData.vertices = m_savedVertexData;
                     }
+                    //snap vertex positions
+                    selectedTile.collData.SnapVertices(Tileset);
                 }
             }
 
@@ -462,7 +464,6 @@ namespace CreativeSpore.SuperTilemapEditor
             EditorGUILayout.Space();
 
             string helpInfo =
-                //"Using Polygon collider:" + "\n" +
                 "  - Click and drag over a vertex to move it" + "\n" +
                 "  - Hold Shift + Click for adding a new vertex" + "\n" +
                 "  - Hold "+((Application.platform == RuntimePlatform.OSXEditor)? "Command" : "Ctrl")+" + Click for removing a vertex. (should be more than 3)" + "\n" +
@@ -522,6 +523,10 @@ namespace CreativeSpore.SuperTilemapEditor
                     }
                 }
                 EditorUtility.SetDirty(Tileset);
+                //Refresh selected tilemap
+                Tilemap selectedTilemap = Selection.activeGameObject.GetComponent<Tilemap>();
+                if(selectedTilemap)
+                    selectedTilemap.Refresh(false, true);
             }
         }
 
@@ -530,19 +535,19 @@ namespace CreativeSpore.SuperTilemapEditor
         //     mouse position. And returns the segment index ( the vertex index of the segment with the closest point )
         /// </summary>
         /// <param name="vertices"></param>
-        /// <param name="closedSegmentIdx"></param>
+        /// <param name="closestSegmentIdx"></param>
         /// <returns></returns>
-        Vector3 ClosestPointToPolyLine(Vector3[] vertices, out int closedSegmentIdx)
+        Vector3 ClosestPointToPolyLine(Vector3[] vertices, out int closestSegmentIdx)
         {
             float minDist = float.MaxValue;
-            closedSegmentIdx = 0;
+            closestSegmentIdx = 0;
             for (int i = 0; i < vertices.Length - 1; ++i)
             {
                 float dist = HandleUtility.DistanceToLine(vertices[i], vertices[i + 1]);
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    closedSegmentIdx = i;
+                    closestSegmentIdx = i;
                 }
             }
             return HandleUtility.ClosestPointToPolyLine(vertices);

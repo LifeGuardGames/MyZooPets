@@ -85,10 +85,11 @@ namespace CreativeSpore.SuperTilemapEditor
                 if (FillMeshData())
                 {
                     m_invalidateBrushes = false;
+                    m_uvArray = m_uv.ToArray();
                     Mesh mesh = m_meshFilter.sharedMesh;
                     mesh.Clear();
                     mesh.vertices = m_vertices.ToArray();
-                    mesh.uv = m_uv.ToArray();
+                    mesh.uv = m_uvArray;
                     mesh.triangles = m_triangles.ToArray();
                     mesh.RecalculateNormals(); //NOTE: allow directional lights to work properly
                 }

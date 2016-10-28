@@ -229,13 +229,10 @@ public class PlayerController : Singleton<PlayerController> {
 	// Slow down the game and decrease the distance between
 	// player and megahazard
 	//---------------------------------------------------
-	public void TriggerSlowdown(float inDivisor, string itemID) {
+	public void TriggerSlowdown(float inDivisor) {
 		movement.ResetTargetSpeed();
 		MegaHazard.Instance.TriggerSlowdown();
-		if(DataManager.Instance.GameData.RunnerGame.RunnerItemCollided.Contains(itemID)) { //The tutorial pop up handles the flash call itself, so only activate on subsequent calls
-																						   //StartCoroutine(FlashColor());
-			FlashColor(Color.red);
-		}
+		FlashColor(Color.red);
 	}
 
 	public void SolidColor(Color c, float time = 3f) {

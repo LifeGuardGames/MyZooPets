@@ -17,7 +17,6 @@ public class PetGameData{
     public MutableDataInventory Inventory {get; set;}
     public MutableDataBadge Badge {get; set;}
     public MutableDataGatingProgress GatingProgress {get; set;}
-    public MutableDataRunnerGame RunnerGame {get; set;}
     public MutableDataHighScore HighScore {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	public MutableDataSickNotification SickNotification {get; set;}
@@ -48,7 +47,6 @@ public class PetGameData{
         Inventory = new MutableDataInventory();
         Badge = new MutableDataBadge();
         GatingProgress = new MutableDataGatingProgress();
-        RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
 		SickNotification = new MutableDataSickNotification();

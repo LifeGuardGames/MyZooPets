@@ -5,7 +5,6 @@
 /// It just checks when the collider hits the player, then does OnPickup.
 /// </summary>
 public abstract class RunnerItem : MonoBehaviour {
-	public string ID = "";
 	public int pointValue = 0;
 	public string strSoundPickup;   // Sound to play on pickup, if any
 	public bool hasTutorial;        // Whether this item has a tutorial or not

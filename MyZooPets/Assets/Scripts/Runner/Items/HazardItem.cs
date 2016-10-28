@@ -10,7 +10,7 @@
 		BloodPanelManager.Instance.PlayBlood();
 		// Player, sloooooowwww downnnnnnnn
 		if(!PlayerController.Instance.Invincible){
-			PlayerController.Instance.TriggerSlowdown(SlowdownDivisor, ID);
+			PlayerController.Instance.TriggerSlowdown(SlowdownDivisor);
 			RunnerGameManager.Instance.ResetCombo();
 		}
 		Destroy(gameObject);

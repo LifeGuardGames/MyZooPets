@@ -250,7 +250,7 @@ public class HUDAnimator : MonoBehaviour {
 	/// Toggle a stat bar to animate
 	/// </summary>
 	private IEnumerator StatBarAnimate(StatType statType) {
-		Debug.Log("Pinging stat " + statType.ToString());
+		//Debug.Log("Pinging stat " + statType.ToString());
 		// Calculate a step
 		int step = GetStepModifier(statType);
 		int target = StatsManager.Instance.GetStat(statType);
@@ -258,7 +258,7 @@ public class HUDAnimator : MonoBehaviour {
 			step *= -1;
 		}
 
-		Debug.Log(hashDisplays[statType] + " " + target);
+		//Debug.Log(hashDisplays[statType] + " " + target);
 		// While the display number is not where we want to be...
 		while(hashDisplays[statType] != target) {
 			// animate by altering the display amount, but don't go over/under the target

@@ -1,17 +1,9 @@
 ﻿using System;
-using UnityEngine;
 
 public class ButtonWellapad : LgWorldButton {
 	private bool tutDone = false;
 
 	void Start() {
-		// for debug/testing -- we may have the wellapad disabled
-		bool isWellapadOn = Constants.GetConstant<bool>("WellapadOn");
-		if(!isWellapadOn) {
-			Debug.LogWarning("NGUI REMOVE CHANGED - CORRECT CODE HERE");
-			//NGUITools.SetActive(gameObject, false);
-		}
-
 		tutDone = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
 		if(tutDone) {
 			//Listens to update event from wellapad mission controller

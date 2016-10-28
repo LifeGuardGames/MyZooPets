@@ -52,6 +52,7 @@ public abstract class Gate : MonoBehaviour{
 	public void GreetPlayer(){
 		// play a sound
 		AudioManager.Instance.PlayClip("EnterSmokeMonster");
+		InventoryUIManager.Instance.ShowPanel(true);
 	}
 
 	/// <summary>

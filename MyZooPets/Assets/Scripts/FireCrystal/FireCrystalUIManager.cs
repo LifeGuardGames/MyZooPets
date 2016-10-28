@@ -196,7 +196,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 
 	// Event callback from the crystal animation CrystalPop
 	public void OnCrystalPopDone() {
-		InventoryUIManager.Instance.ShowPanel();
+		InventoryUIManager.Instance.ShowPanel(true);
 
 		AudioManager.Instance.PlayClip("fireGemGet");
 		getGemParticle.Play();

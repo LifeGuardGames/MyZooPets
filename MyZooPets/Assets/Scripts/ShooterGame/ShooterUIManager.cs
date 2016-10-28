@@ -15,13 +15,19 @@ public class ShooterUIManager : MonoBehaviour {
 #if !UNITY_EDITOR
 			Touch pos;
 			if(Input.touchCount > 1){
-				 pos = Input.GetTouch(1);
+				if(Input.GetTouch(1).position.x > 187f){
+					 pos = Input.GetTouch(1);
+				}
+				else{
+					pos = Input.GetTouch(0);
+				}
 			}
 			else{
 				 pos = Input.GetTouch(0);
 			}
 			ShooterGameManager.Instance.InputReceivedShoot(false, pos.position);
 #endif
+
 			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
 			ShooterGameManager.Instance.InputReceivedShoot(false,mousePos);
 		}

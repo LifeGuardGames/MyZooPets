@@ -20,9 +20,11 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 		currentSpawnTriggers = new List<GameObject>();
 	}
 
-	void Start(){
-		DegradationLogic.OnRefreshTriggers += PlaceTriggers;
-		PlaceTriggers(this, EventArgs.Empty); //required for first initialization
+	void Start() {
+		if((!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished())) {
+			DegradationLogic.OnRefreshTriggers += PlaceTriggers;
+			PlaceTriggers(this, EventArgs.Empty); //required for first initialization
+		}
 	}
 
 	void OnDestroy(){

@@ -1,7 +1,5 @@
 using UnityEngine;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class AudioManager : LgAudioManager<AudioManager>{
 	public bool isMusicOn = true;
@@ -15,6 +13,10 @@ public class AudioManager : LgAudioManager<AudioManager>{
 	}
 	
 	protected override void Start(){
+		// Dont play anything if its in loading scene
+		if(SceneUtils.CurrentScene == SceneUtils.LOADING) {
+			return;
+		}
 		base.Start();
 		StartCoroutine(PlayBackground());
 	}

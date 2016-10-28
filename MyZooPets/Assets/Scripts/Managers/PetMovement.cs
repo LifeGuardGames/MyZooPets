@@ -143,8 +143,9 @@ public class PetMovement : Singleton<PetMovement> {
 				petSprite.transform.position = Vector3.MoveTowards(petSprite.transform.position,
 																   destinationPoint, movementSpeed * Time.deltaTime);
 			}
-			else
+			else {
 				StopMoving();
+			}
 
 			//when the sprite reaches destination. stop transform and animation
 			if(petSprite.transform.position == destinationPoint) {

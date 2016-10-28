@@ -278,7 +278,7 @@ public class WellapadMissionController : Singleton<WellapadMissionController>{
 			}
 		}
 		else {
-			if(task.isReward != RewardStatuses.Unearned) {
+			if(task.isReward != RewardStatuses.Unclaimed) {
 				Debug.LogError("Reward check revealed illegal state for reward for mission " + taskID);
 				return;
 			}

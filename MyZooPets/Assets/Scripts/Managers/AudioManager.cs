@@ -93,6 +93,7 @@ public class AudioManager : LgAudioManager<AudioManager>{
 			FadeOutPlayNewBackground(backgroundMusic);
 		}
 		else if(currentScene == SceneUtils.BEDROOM) {
+			backgroundSource.loop = true;
 			backgroundMusic = "bgBedroom";
 			FadeOutPlayNewBackground(backgroundMusic);
 		}

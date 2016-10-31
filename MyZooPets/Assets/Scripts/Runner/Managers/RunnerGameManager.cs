@@ -77,20 +77,20 @@ public class RunnerGameManager : MinigameManager<RunnerGameManager>{
 	/// </summary>
 	protected override void _GameOver(){
 
-		int score = GetScore();
-		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
-		Analytics.Instance.RunnerHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-
 		// send out distance task
 		int distance = ScoreManager.Instance.Distance;
 		WellapadMissionController.Instance.TaskCompleted("Distance" + GetMinigameKey(), distance);
-		Analytics.Instance.RunnerPlayerDistanceRan(distance);
-		
+		int score = GetScore();
+		WellapadMissionController.Instance.TaskCompleted("ScoreRunner",score);
+		Analytics.Instance.RUNNERGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()],RunnerLevelManager.Instance.mCurrentLevelGroup.name,distance);
+
+
+
 		// send out coins task
 		int coins = ScoreManager.Instance.Coins;
 		WellapadMissionController.Instance.TaskCompleted("Coins" + GetMinigameKey(), coins);
 
-		Analytics.Instance.RunnerTimesPlayedTick();
+
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "RunnerLeaderBoard");
 #endif

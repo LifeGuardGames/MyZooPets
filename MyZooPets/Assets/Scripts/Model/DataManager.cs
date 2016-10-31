@@ -127,7 +127,8 @@ public class DataManager : Singleton<DataManager>{
 				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
 				VersionCheck(new Version(currentDataVersionString));
 			}
-
+			Amplitude amplitude = Amplitude.Instance;
+			amplitude.init("a06f151d06c754bdbbff7bdbaffe12e2");
 			LoadGameData();
 		}
 	}

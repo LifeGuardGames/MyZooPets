@@ -59,9 +59,9 @@ public class GameTutorialFlame : GameTutorial{
 			tutorialManager.CheckOffTutorial1DoneTime();
 			break;
 		case 2:		// NOTE: Custom build just for BCH build
-			if (SecretUIController.Instance != null) {
-				SecretUIController.Instance.ShowPanel ();	// Panel has delay
-			}
+			//if (SecretUIController.Instance != null) {
+			//	SecretUIController.Instance.ShowPanel ();	// Panel has delay
+			//}
 			Advance();
 			break;
 		}

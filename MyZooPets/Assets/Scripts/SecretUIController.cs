@@ -8,7 +8,7 @@ public class SecretUIController : Singleton<SecretUIController> {
 	void Start(){
 		if (DataManager.Instance.MinigamePlayCount > 4) {
 			DataManager.Instance.MinigamePlayCount = 0;
-			StartCoroutine (ShowAfterOneFrame ());
+			//StartCoroutine (ShowAfterOneFrame ());
 		}
 	}
 

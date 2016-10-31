@@ -176,7 +176,8 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 					//disable button
 					TurnFireEffectOff();
 				}
-			}
+				Step5_FinishBlowingFire();
+            }
 			else {
 				// if the meter was not full, cancel the attack
 				attackScript.Cancel();
@@ -191,6 +192,6 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	}
 
 	public void Step5_FinishBlowingFire() {
-
-	}
+		buttonState = FireButtonState.Empty;
+    }
 }

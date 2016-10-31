@@ -54,6 +54,13 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 	}
 
 	protected override void Start() {
+		RefreshStartState();
+    }
+
+	// Account for getting a shard and opening UI again without scene change
+	private void RefreshStartState() {
+		crystalAnimator.Play("FireCrystalIdle");
+
 		// Initalizaing from data
 		currentPercentage = (float)DataManager.Instance.GameData.Stats.Shards / (float)totalSubdivisions;
 		currentPercentage = Mathf.Min(currentPercentage, 1.0f);
@@ -61,7 +68,6 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 	}
 
 	public void PopupAndRewardShards(int numberOfShards) {
-		Debug.Log("Shards");
 		// Only reward stuff if you have something
 		if(numberOfShards > 0) {
 			// Get the current amount of subdivisions required
@@ -119,6 +125,9 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 
 	// Callback from tween
 	public void CloseFinishedHelper() {
+
+		RefreshStartState();
+
 		isFireCrystalUIAnimating = false;
 
 		// Notify anything that is listening to this done

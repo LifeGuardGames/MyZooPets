@@ -168,7 +168,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	}
 
 	// Show the updated inventory bar with new item and destroy the tweening sprite
-	private void OnBuyAnimationDone(System.Object obj) {
+	private void OnBuyAnimationDone(object obj) {
 		string itemID = ((GameObject)obj).name;
 		ItemType type = DataLoaderItems.GetItem(itemID).Type;
         if(type == ItemType.Foods || type == ItemType.Usables) {
@@ -179,7 +179,6 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			DecoInventoryUIManager.Instance.PulseInventory();
 			DecoInventoryUIManager.Instance.RefreshPage();
 		}
-
 		Destroy((GameObject)obj);
 	}
 

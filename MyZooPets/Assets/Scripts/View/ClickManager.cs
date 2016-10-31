@@ -121,6 +121,10 @@ public class ClickManager : Singleton<ClickManager> {
 			if(uiButtonScript != null && CheckLgUIButton(uiButtonScript, CurrentMode)) {
 				return true;
 			}
+			LgUIToggle uiToggleScript = goCaller.GetComponent<LgUIToggle>();
+			if(uiToggleScript != null && CheckLgUIToggle(uiToggleScript, CurrentMode)) {
+				return true;
+			}
 		}
 
 		// Last case, if mode is None, allow all clicks
@@ -150,6 +154,17 @@ public class ClickManager : Singleton<ClickManager> {
 			return true;
 		}
 		if(uiButtonScript.modeType1 == currentUIMode || uiButtonScript.modeType2 == currentUIMode || uiButtonScript.modeType3 == currentUIMode) {
+			return true;
+		}
+		return false;
+	}
+
+	// Helper to check UIMode for UI object toggles
+	private bool CheckLgUIToggle(LgUIToggle uiToggleScript, UIModeTypes currentUIMode) {
+		if(uiToggleScript.modeType1 == UIModeTypes.None) {
+			return true;
+		}
+		if(uiToggleScript.modeType1 == currentUIMode || uiToggleScript.modeType2 == currentUIMode || uiToggleScript.modeType3 == currentUIMode) {
 			return true;
 		}
 		return false;

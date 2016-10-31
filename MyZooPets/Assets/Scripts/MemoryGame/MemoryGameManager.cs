@@ -33,8 +33,8 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		minigameKey = "MEMORY";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardXPMultiplier = 0.01f;
-		rewardMoneyMultiplier = 24;
-		rewardShardMultiplier = 84;
+		rewardMoneyMultiplier = 0.04f;
+		rewardShardMultiplier = 0.03f;
 		isContinueAllowed = false;  // Disable continue game functionality for this game
 	}
 

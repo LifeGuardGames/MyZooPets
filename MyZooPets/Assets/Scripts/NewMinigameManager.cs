@@ -147,7 +147,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 
 	public void GameOverReward() {
 		//diabled for playtest
-		//_GameOverReward();
+		_GameOverReward();
 	}
 
 	public void QuitGame() {

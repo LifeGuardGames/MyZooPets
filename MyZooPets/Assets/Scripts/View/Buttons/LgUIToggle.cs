@@ -8,7 +8,9 @@ public class LgUIToggle : Toggle {
 	public UIModeTypes modeType3 = UIModeTypes.None;
 
 	public override void OnPointerClick(PointerEventData eventData) {
+		UnityEngine.Debug.Log("BUTTON LCIK");
 		if(ClickManager.Instance.CanRespondToTap(gameObject)) {
+			UnityEngine.Debug.Log("PASS");
 			// Accept the click call
 			base.OnPointerClick(eventData);
 		}

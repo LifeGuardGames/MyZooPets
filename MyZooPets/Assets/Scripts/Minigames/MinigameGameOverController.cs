@@ -12,6 +12,17 @@ public class MinigameGameOverController : MonoBehaviour {
 	public Text coinText;
 	public Text shardText;
 
+	public TweenToggle restartButtonToggle;
+	public TweenToggle quitButtonToggle;
+
+	void Awake() {
+		RewardManager.OnAllRewardsDone += ShowButtons;
+	}
+
+	void OnDestroy() {
+		RewardManager.OnAllRewardsDone -= ShowButtons;
+	}
+
 	public void PopulateAndShow(int score, int starCount, int coinCount, int shardCount){
 		scoreText.text = score.ToString();
         starText.text = starCount.ToString();
@@ -30,11 +41,12 @@ public class MinigameGameOverController : MonoBehaviour {
 
 	public void OnExitButton(){
 		UIManager.OnExitGame(true);
-	}
+    }
 
 	public void OnRestartButton(){
-		UIManager.OnRestart();
+		HideButton();
 		HidePanel();
+		UIManager.OnRestart();
     }
 	#endregion
 
@@ -44,5 +56,15 @@ public class MinigameGameOverController : MonoBehaviour {
 
 	public void HidePanel(){
 		panelTween.Hide();
+	}
+
+	public void ShowButtons(object sender, System.EventArgs args) {
+		restartButtonToggle.Show();
+		quitButtonToggle.Show();
+    }
+
+	public void HideButton() {
+		restartButtonToggle.Hide();
+		quitButtonToggle.Hide();
 	}
 }

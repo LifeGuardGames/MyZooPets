@@ -21,20 +21,12 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 	}
 
 	void Start() {
-		if((!PlayPeriodLogic.Instance.IsFirstPlayPeriod() && DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished())) {
-			DegradationLogic.OnRefreshTriggers += PlaceTriggers;
-			PlaceTriggers(this, EventArgs.Empty); //required for first initialization
-		}
+		DegradationLogic.OnRefreshTriggers += PlaceTriggers;
+		PlaceTriggers(this, EventArgs.Empty); //required for first initialization
 	}
 
 	void OnDestroy(){
 		DegradationLogic.OnRefreshTriggers -= PlaceTriggers;
-	}
-
-	void OnApplicationPause(bool isPaused){
-		//need to remove 
-//         if(isPaused)
-//             CleanupExistingTriggers();
 	}
 	
 	//Use this to turn on all particle effects in triggers
@@ -72,32 +64,24 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 		}
 		currentSpawnTriggers = new List<GameObject>();
 	}
-
-	//---------------------------------------------------
-	// PlaceTriggers()
-	//---------------------------------------------------       
+  
 	private void PlaceTriggers(object sender, EventArgs args){
-		// if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
-		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreBedroomTutorialsFinished();
-		if(!areTutorialsFinished && !DegradationLogic.Instance.IsTesting()){
-			return;
-		}
-
 		//to make sure no left over triggers exists. clean up first
 		CleanupExistingTriggers();
         
 		// loop through and place all defined triggers
 		List<DegradData> degradTriggers = DegradationLogic.Instance.DegradationTriggers;
-		for(int i = 0; i < degradTriggers.Count; i++){
-			PlaceTrigger(degradTriggers[i]);        
+		if(degradTriggers == null || degradTriggers.Count == 0) {
+			return;
+		}
+		else {
+			for(int i = 0; i < degradTriggers.Count; i++) {
+				PlaceTrigger(degradTriggers[i]);
+			}
 		}
 	}
-	
-	//---------------------------------------------------
-	// PlaceTrigger()
-	// Note that this function assumes it is okay to be
-	// spawning triggers.
-	//---------------------------------------------------		
+
+	// Note that this function assumes it is okay to be spawning triggers.
 	private DegradTrigger PlaceTrigger(DegradData degradData){		
 		string triggerID = degradData.TriggerID;
 		int partition = degradData.Partition;

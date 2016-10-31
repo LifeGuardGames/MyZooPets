@@ -54,7 +54,7 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 					SetCheckboxSprite(true, slash2);
 					ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
 					task = listTasks[2];
-					SetCheckboxSprite(true,slash3);
+					SetCheckboxSprite(true, slash3);
 					ImmutableDataWellapadTask missionTask3 = DataLoaderWellapadTasks.GetTask(task.TaskID);
 					if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 						rewardButton.SetActive(true);

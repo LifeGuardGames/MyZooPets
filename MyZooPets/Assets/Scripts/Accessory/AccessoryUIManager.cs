@@ -148,7 +148,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
-			ClickManager.Instance.ReleaseLock();
 		}
 	}
 

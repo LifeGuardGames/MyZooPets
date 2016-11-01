@@ -5,7 +5,11 @@ using System.Collections;
 /// Button class that loads up the real inhaler game
 /// </summary>
 public class ButtonRealInhaler : ButtonChangeScene{
-	
+
+	protected override void ProcessClick() {
+		OnInhalerButtonClicked();
+	}
+
 	/// <summary>
 	/// Processes the click.
 	/// </summary>

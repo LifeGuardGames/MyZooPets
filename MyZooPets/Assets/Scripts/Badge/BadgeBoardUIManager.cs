@@ -6,14 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
-
 	public static EventHandler<EventArgs> OnBadgeUIAnimationDone;
+
 	public BadgePopController badgePopController;       // Used for unlocking badges
 	public Collider bedroomBadgeBoardCollider;
 	public GameObject badgePrefab;
 	public GridLayoutGroup badgeGrid;
 	public GameObject badgeExitButton;
 
+	public TweenToggleDemux baseDemux;
 	public TweenToggleDemux descriptionDemux;
 	public Image descBadgeSprite;
 	public Text descBadgeTitle;
@@ -164,11 +165,11 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	}
 
 	private void ShowDescriptionPanel() {
-		descriptionDemux.GetComponent<TweenToggleDemux>().Show();
+		descriptionDemux.Show();
 	}
 
 	private void HideDescriptionPanel() {
-		descriptionDemux.GetComponent<TweenToggleDemux>().Hide();
+		descriptionDemux.Hide();
 	}
 
 	protected override void _OpenUI() {
@@ -182,7 +183,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 			badgeExitButton.SetActive(isQueueAnimating ? false : true);
 			isOpenedAsReward = isQueueAnimating;
 
-			GetComponent<TweenToggleDemux>().Show();
+			baseDemux.Show();
 
 			//FirstInteraction.Instance.SetString("Badges");
 
@@ -210,7 +211,7 @@ public class BadgeBoardUIManager : SingletonUI<BadgeBoardUIManager> {
 	protected override void _CloseUI() {
 		if(isActive) {
 			HideDescriptionPanel();
-			GetComponent<TweenToggleDemux>().Hide();
+			baseDemux.Hide();
 
 			isActive = false;
 

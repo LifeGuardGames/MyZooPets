@@ -131,7 +131,7 @@ public class HUDAnimator : MonoBehaviour {
 			// If not floaty text, play tween sprite animation to HUD
 			else {
 				Vector3 vOrigin = new Vector3(pair.posOrigin.x, pair.posOrigin.y, 0);
-				Debug.Log(pair.value);
+				//Debug.Log(pair.value);
 				StartCurve(statType, pair.value, vOrigin, pair.soundKey);
 
 				float fModifier = GetSpawnCountModifier(statType);

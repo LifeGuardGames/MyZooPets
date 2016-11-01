@@ -31,7 +31,7 @@ public class BadgeController : MonoBehaviour {
 
 	// Button call
 	public void OnBadgeClicked() {
-		if(!BadgeBoardUIManager.Instance.IsBadgeBoardUIAnimating) {
+		if(!BadgeBoardUIManager.Instance.IsBadgeBoardUIAnimating && !BadgeBoardUIManager.Instance.baseDemux.IsMoving) {
 			BadgeBoardUIManager.Instance.BadgeClicked(gameObject);
 		}
 	}

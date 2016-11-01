@@ -25,8 +25,8 @@ public class LevelUpNotificationListener : MonoBehaviour {
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
 		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupLevelUp");
-		notificationEntry.Add(NotificationPopupData.Title, null);
-		notificationEntry.Add(NotificationPopupData.Message, Localization.Localize(LevelLogic.Instance.GetLevelUpMessage())); 
+		notificationEntry.Add(NotificationPopupData.Title, Localization.Localize("POPUP_LEVEL_TITLE"));
+		notificationEntry.Add(NotificationPopupData.Message, LevelLogic.Instance.GetLevelUpMessage()); // Already localized
 		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, button1Function);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
 

@@ -28,7 +28,7 @@ public class ZeroHealthNotificationListener : MonoBehaviour {
 		};
 
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string message = string.Format(Localization.Localize("ZERO_HEALTH"),
+		string message = string.Format(Localization.Localize("POPUP_ZERO_HEALTH"),
 			petName, hospitalBillCost.ToString());
 
 		Hashtable notificationEntry = new Hashtable();

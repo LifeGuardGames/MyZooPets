@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 using System.Collections;
 
 public class MiniPetGameMaster : MiniPet {
@@ -32,7 +31,7 @@ public class MiniPetGameMaster : MiniPet {
 		if(!isFinishEating) {
 			base.FinishEating();
 			isFinishEating = true;
-			PetSpeechManager.Instance.BeQuiet();
+			miniPetSpeechAI.BeQuiet();
 			miniPetSpeechAI.ShowChallengeMsg(minigameType);
 			minigameTaskId = PickMinigameMissionKey(minigameType);
 

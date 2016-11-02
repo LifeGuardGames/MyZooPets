@@ -152,7 +152,8 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 
 		storeTweenParent.Hide();
 		CheckStoreButtonPulse();
-		PetSpeechManager.Instance.BeQuiet();
+		SelectedMiniPetContentUIScript.GetComponent<SpeechController>().BeQuiet();
+
 		//Show other UI Objects
 		NavigationUIManager.Instance.ShowPanel();
 		HUDUIManager.Instance.ShowPanel();

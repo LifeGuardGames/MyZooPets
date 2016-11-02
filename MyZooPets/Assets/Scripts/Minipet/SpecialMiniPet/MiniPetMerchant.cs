@@ -32,8 +32,8 @@ public class MiniPetMerchant : MiniPet{
 	public override void FinishEating(){
 		if(!isFinishEating){
 			base.FinishEating();
-			isFinishEating = true; 
-			PetSpeechManager.Instance.BeQuiet();
+			isFinishEating = true;
+			miniPetSpeechAI.BeQuiet();
 			miniPetSpeechAI.ShowMerchantShopMessage();
 			OpenMerchantContent();
 		}

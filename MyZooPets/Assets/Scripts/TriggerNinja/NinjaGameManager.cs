@@ -135,6 +135,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 
 	protected override void _NewGame() {
 		// reset variables
+		score = 0; 
 		lifeCount = 3;
 		comboTime = 0;
 		combo = 0;
@@ -149,7 +150,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		spawning = true;
 		isPlaying = true;
 		isGameOver = false;
-
+		Time.timeScale = 1.0f;
 		uiManager.NewGameUI();
 
 	}

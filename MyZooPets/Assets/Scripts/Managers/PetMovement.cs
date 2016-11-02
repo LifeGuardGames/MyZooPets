@@ -164,6 +164,7 @@ public class PetMovement : Singleton<PetMovement> {
 			StartCoroutine("WanderAround");
 		}
 	}
+
 	IEnumerator WanderAround() {
 		yield return new WaitForSeconds(10.0f);
 		int rand = UnityEngine.Random.Range(0, 10);

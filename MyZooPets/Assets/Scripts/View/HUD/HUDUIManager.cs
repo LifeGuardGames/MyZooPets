@@ -39,7 +39,7 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		healthBarWidth = healthBar.rectTransform.sizeDelta.x;
 		hungerBarWidth = hungerBar.rectTransform.sizeDelta.x;
 
-		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM) {
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD) {
 			Invoke("ShowPanel", 0.5f);
 		}
     }

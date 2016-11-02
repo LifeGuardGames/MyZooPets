@@ -17,6 +17,7 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
 	private int inventoryPage = 0;
 	private int inventoryPageSize = 5;
 
+	public LgUIToggle toggleButton;
 	public GameObject leftButton;
 	public GameObject rightButton;
 
@@ -50,11 +51,13 @@ public class InventoryUIManager : Singleton<InventoryUIManager>{
     }
 
 	// Toggling the grid
-	public void ToggleGrid(bool isShowing) {
+	private void ToggleGrid(bool isShowing) {
 		if(isShowing) {
-			inventoryGridTween.Show();
+			toggleButton.isOn = true;
+            inventoryGridTween.Show();
 		}
 		else {
+			toggleButton.isOn = false;
 			inventoryGridTween.Hide();
 		}
 	}

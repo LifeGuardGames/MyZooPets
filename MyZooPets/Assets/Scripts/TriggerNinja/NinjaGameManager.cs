@@ -51,9 +51,9 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		Application.targetFrameRate = 60;
 		minigameKey = "NINJA";
 		quitGameScene = SceneUtils.BEDROOM;
-		rewardMoneyMultiplier = 2;
-		rewardShardMultiplier = 4;
-		rewardXPMultiplier = 0.01f;
+		rewardMoneyMultiplier = 0.22f;
+		rewardShardMultiplier = 0.1f;
+		rewardXPMultiplier = 0.2f;
 	}
 
 	protected override void _Start() {
@@ -134,6 +134,10 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 	}
 
 	protected override void _NewGame() {
+		NinjaTrigger[] toBeCleared = GameObject.FindObjectsOfType<NinjaTrigger>();
+		foreach(NinjaTrigger trig in toBeCleared) {
+			Destroy(trig.gameObject);
+		}
 		// reset variables
 		score = 0; 
 		lifeCount = 3;

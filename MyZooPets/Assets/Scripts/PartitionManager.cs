@@ -122,7 +122,6 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// NOTE: GetRandomUnlockedMinigameType() does not keep track of local, if picked already
 	/// </summary>
 	/// <returns>The unused position next to minigame.</returns>
-	/// <param name="minigameType">Minigame type.</param>
 	public LgTuple<Vector3, string> GetPositionNextToMinigame(MinigameTypes minigameType){
 		CheckInitializeOpenLocations();
 
@@ -136,7 +135,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 			locationType = PartitionLocationTypes.Memory;
 			break;
 		case MinigameTypes.RUNNER:
-			locationType = PartitionLocationTypes.RUNNER;
+			locationType = PartitionLocationTypes.Runner;
 			break;
 		case MinigameTypes.Shooter:
 			locationType = PartitionLocationTypes.Shooter;

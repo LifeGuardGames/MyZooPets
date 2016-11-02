@@ -36,7 +36,7 @@ public class BedroomInhalerUIManager : Singleton<BedroomInhalerUIManager> {
 	/// </summary>
 	private void CoolDownMode() {
 		isCoolDownMode = true;
-		inhalerAnimationController.Stop();
+		inhalerAnimationController.Play("inhalerInactive");
 		starParticle.SetActive(false);
 		rechargeParticle.SetActive(true);
 

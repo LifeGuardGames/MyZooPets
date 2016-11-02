@@ -66,10 +66,4 @@ public class NotificationUIManager : Singleton<NotificationUIManager> {
 		yield return 0;     // Wait a frame for the popup to finish
 		controller.ShowPopup();
 	}
-
-	void OnGUI() {
-		if(GUI.Button(new Rect(100, 100, 100, 100), "open")) {
-			StatsManager.Instance.ChangeStats(xpDelta: 140);
-		}
-	}
 }

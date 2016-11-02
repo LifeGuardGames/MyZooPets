@@ -22,25 +22,27 @@ public class NinjaUIManager : MonoBehaviour {
 
 	#region Minigame Life UI
 	public void OnLivesChanged(int deltaLife) {
-		// get the number of lives there are
-		int lifeCount = NinjaGameManager.Instance.LifeCount;
-		int nChange = deltaLife;
-		if(nChange < 0 && lifeCount + nChange >= -1) {
-			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
-			ToggleLifeIndicator(false, InhalerLifeList[lifeCount]);
+		if(LoadLevelManager.Instance.GetCurrentSceneName() == "TriggerNinja") {
+			// get the number of lives there are
+			int lifeCount = NinjaGameManager.Instance.LifeCount;
+			int nChange = deltaLife;
+			if(nChange < 0 && lifeCount + nChange >= -1) {
+				// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
+				ToggleLifeIndicator(false, InhalerLifeList[lifeCount]);
 
-			// Play the camera shake animation
-			if(Camera.main.GetComponent<Animation>() != null) {
-				Camera.main.GetComponent<Animation>().Play();
-				if(lifeCount == 0) {
-					NinjaGameManager.Instance.GameOver();
+				// Play the camera shake animation
+				if(Camera.main.GetComponent<Animation>() != null) {
+					Camera.main.GetComponent<Animation>().Play();
+					if(lifeCount == 0) {
+						NinjaGameManager.Instance.GameOver();
+					}
 				}
 			}
-		}
-		else if(nChange > 0 && lifeCount - nChange >= 0) {
-			//Debug.Log("---Gaining a life");
-			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
-			ToggleLifeIndicator(true, InhalerLifeList[lifeCount]);
+			else if(nChange > 0 && lifeCount - nChange >= 0) {
+				//Debug.Log("---Gaining a life");
+				// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
+				ToggleLifeIndicator(true, InhalerLifeList[lifeCount]);
+			}
 		}
 	}
 

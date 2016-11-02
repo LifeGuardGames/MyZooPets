@@ -81,6 +81,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 	public void OnExitGame(bool isExitDirectly) {
 		if(isExitDirectly) {
 			minigameUIInterface.QuitGame();
+			Time.timeScale = 1.0f;
 		}
 		else {
 			exitConfirmController.ShowPanel();

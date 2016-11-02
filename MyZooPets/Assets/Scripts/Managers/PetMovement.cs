@@ -159,7 +159,7 @@ public class PetMovement : Singleton<PetMovement> {
 				StopMoving();
 			}
 		}
-		if(!isWandering) {
+		if(!isWandering && ClickManager.Instance.IsModeStackEmpty) {
 			isWandering = true;
 			StartCoroutine("WanderAround");
 		}

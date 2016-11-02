@@ -29,7 +29,9 @@ public class SpeechBubble : MonoBehaviour {
 			button.interactable = true;
 		}
 		else {
-			button.interactable = false;
+			if(button != null) {
+				button.interactable = false;
+			}
 		}
 	}
 

@@ -83,7 +83,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				MiniPetRetentionPet retentionScript = goMiniPet.GetComponent<MiniPetRetentionPet>();
 				retentionScript.Init(data);
 				retentionScript.FigureOutMissions();
-				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")&& !DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Critical")){
+				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("DailyInhaler")){
 					retentionScript.GiveOutMission();
 				}
 

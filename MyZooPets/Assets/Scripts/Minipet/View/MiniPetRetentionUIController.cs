@@ -37,7 +37,8 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed
 			   		&& WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed){
 					rewardButton.SetActive(true);
-					rewardButton.GetComponent<LgWorldButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					GameObject peb = MiniPetManager.Instance.MiniPetTable["MiniPet0"];
+					rewardButton.GetComponent<Button>().onClick.AddListener(() => peb.GetComponent<MiniPetRetentionPet>().OnTurnInButton());
 				}
 			}
 			else {

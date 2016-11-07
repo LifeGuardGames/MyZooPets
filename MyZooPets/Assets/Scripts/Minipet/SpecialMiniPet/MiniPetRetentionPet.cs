@@ -15,14 +15,14 @@ public class MiniPetRetentionPet : MiniPet {
 			missionID = "DailyInhaler";
 		}
 		else{
-			missionID = "Critical";
+			missionID = "DailyInhaler";
 		}
 	}
 
 	protected override void ShowFoodPreferenceMessage(){
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-			base.ShowFoodPreferenceMessage();
-		}
+	//	if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+	//		base.ShowFoodPreferenceMessage();
+	//	}
 	}
 
 	protected override void OpenChildUI(){

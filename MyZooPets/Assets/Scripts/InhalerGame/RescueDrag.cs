@@ -13,8 +13,7 @@ public class RescueDrag : InhalerPart {
 	private Vector3 startDragPos; //Original position of the inhaler
 	private bool doneWithDrag = true;
 
-	protected override void Awake() {
-		base.Awake();
+	protected void Awake() {
 		gameStepID = 5;
 		startDragPos = transform.position;
 	}

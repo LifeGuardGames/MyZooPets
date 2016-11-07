@@ -12,8 +12,7 @@ public class RescueShaker : InhalerPart {
 	private bool doneWithShake = true; //disable shake after it's done
 	private float elapsed;
 
-	protected override void Awake() {
-		base.Awake();
+	protected void Awake() {
 		gameStepID = 3;
 		startDragPos = transform.position;
 	}

@@ -17,17 +17,19 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 	public GameObject progressBarObject;
 	public GameObject inhalerBody;
 	public Animator inhalerWholeObject;
-	public bool tutOn; //turn tutorial on or off. for debuggin
-	private bool isFirstTimeAux; // Keep track of this internally, need for gameover reward
+	public bool tutOn;						//turn tutorial on or off. for debuggin
+	private bool isFirstTimeAux;			// Keep track of this internally, need for gameover reward
 
-	private bool showHint = false; //display swipe hints for the inhaler
-	private bool runShowHintTimer = true; //True: start running hint timer
-	public float timer = 0; //hint timer
-	private float timeBeforeHints = 5.0f; //5 seconds before the hint is shown
+	private bool showHint = false;			//display swipe hints for the inhaler
+	private bool runShowHintTimer = true;	//True: start running hint timer
+	public float timer = 0;					//hint timer
+	private float timeBeforeHints = 5.0f;	//5 seconds before the hint is shown
 	private int starIncrement = 0;
 	public GameObject[] lightsToTurnOff;
 	public ParticleSystemController[] particlesToTurnOff;
-	public List<GameObject> sliderNodes; //list of UI nodes to show game steps
+	public List<GameObject> sliderNodes;	//list of UI nodes to show game steps
+
+	public GameObject floatyParent;		
 
 	public bool ShowHint {
 		get { return showHint; }

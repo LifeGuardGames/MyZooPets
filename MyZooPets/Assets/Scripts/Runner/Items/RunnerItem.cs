@@ -33,7 +33,7 @@ public abstract class RunnerItem : MonoBehaviour {
 		GameObject starFloaty = GameObjectUtils.AddChildGUI(RunnerGameManager.Instance.floatyParent.gameObject, RunnerGameManager.Instance.floatyPrefabText);
 
 		//Because Canvas is a Screen Space - Camera there is no need for WorldToScreenSpace
-		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, text:toDisplay, riseTime: .5f, offset: new Vector3(0, 10));
+		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, toDisplay, 0.5f, new Vector3(0, 10));
 	}
 
 	protected void SpawnFloatyCoin() {
@@ -41,6 +41,6 @@ public abstract class RunnerItem : MonoBehaviour {
 		GameObject starFloaty = GameObjectUtils.AddChildGUI(RunnerGameManager.Instance.floatyParent.gameObject, RunnerGameManager.Instance.floatyPrefabCoin);
 
 		//Because Canvas is a Screen Space - Camera there is no need for WorldToScreenSpace
-		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, riseTime: .5f, offset: new Vector3(0, 10));
+		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, "", 0.5f, new Vector3(0, 10));
 	}
 }

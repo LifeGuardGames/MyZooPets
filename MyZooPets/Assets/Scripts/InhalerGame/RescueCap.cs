@@ -8,8 +8,7 @@ using System;
 public class RescueCap : InhalerPart{
 	public Vector3 targetPositionTween;
 
-    protected override void Awake(){
-        base.Awake();
+    protected void Awake(){
         gameStepID = 1;
     }
 

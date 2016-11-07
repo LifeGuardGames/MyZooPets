@@ -5,10 +5,8 @@ using UnityEngine;
 /// Listens to press gesture
 /// </summary>
 public class RescuePrescription : InhalerPart {
-	protected override void Awake() {
-		base.Awake();
+	protected void Awake() {
 		gameStepID = 6;
-		floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_ROCKIT"));
 	}
 
 	void OnTap(TapGesture gesture) {

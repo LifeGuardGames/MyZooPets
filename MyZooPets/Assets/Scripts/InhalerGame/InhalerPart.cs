@@ -10,13 +10,7 @@ using System.Collections;
 public class InhalerPart : MonoBehaviour {
 	public Animator petAnimator;
     protected int gameStepID;					//The step in which the part will be activated
-    protected Hashtable floatyOptions;
 	protected bool isGestureRecognized = false;
-
-    //Initialize any protected variables here
-    protected virtual void Awake(){
-        floatyOptions = new Hashtable();    
-    }
 
     //Set up basic event handler. and disable inhaler part
     protected virtual void Start(){
@@ -39,20 +33,11 @@ public class InhalerPart : MonoBehaviour {
     //to be disabled on start
     protected virtual void Disable(){}
 
-    //Enable inhaler game part. 
+    //Enable inhaler game part
     protected virtual void Enable(){}
 
     //Move to the next step of the inhaler game
     protected virtual void NextStep(){
-        // spawn floaty text
-//        floatyOptions.Add("parent", GameObject.Find("Anchor-Center"));
-//		floatyOptions.Add("prefab", "FloatyTextInhalerGame");
-//        if(!floatyOptions.ContainsKey("text"))
-//            floatyOptions.Add("text", Localization.Localize("INHALER_FLOATY_NICE")); 
-//        if(!floatyOptions.ContainsKey("textSize"))
-//            floatyOptions.Add("textSize", 128f);
-//        FloatyUtil.SpawnFloatyText(floatyOptions);
-
 		InhalerGameManager.Instance.NextStep();
     }
 }

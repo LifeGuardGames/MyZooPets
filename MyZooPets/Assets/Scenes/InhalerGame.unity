@@ -267,6 +267,39 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 9.63, y: 6.28, z: 0}
   m_Center: {x: 0, y: 2.3, z: 0}
+--- !u!1 &69126835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 69126836}
+  m_Layer: 5
+  m_Name: FloatyParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &69126836
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 69126835}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 85646416}
+  m_RootOrder: 2
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &72028192
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +452,7 @@ RectTransform:
   m_Children:
   - {fileID: 1137665733}
   - {fileID: 1947923335}
+  - {fileID: 69126836}
   m_Father: {fileID: 1836409927}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
@@ -459,6 +493,7 @@ MonoBehaviour:
   - {fileID: 944116443}
   - {fileID: 1612115}
   - {fileID: 1992576936}
+  floatyParent: {fileID: 0}
 --- !u!1 &100090810
 GameObject:
   m_ObjectHideFlags: 0
@@ -3596,6 +3631,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   petAnimator: {fileID: 633623939}
   InhalerBodyMoveAnimation: {fileID: 742270404}
+  floatyParent: {fileID: 69126835}
+  floatyBreatheInPrefab: {fileID: 196762, guid: ae26ffe56160ac542867dee7a0282c38,
+    type: 2}
 --- !u!4 &1432171098 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: ad6fdd6c3751993499aef52903582a27, type: 2}

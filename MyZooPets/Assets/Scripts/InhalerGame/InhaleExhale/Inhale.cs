@@ -6,12 +6,12 @@ using System;
 /// </summary>
 public class Inhale : InhalerPart {
 	public Animation InhalerBodyMoveAnimation;
+	public GameObject floatyParent;
+	public GameObject floatyBreatheInPrefab;
 
 	public static EventHandler<EventArgs> finish;
-	protected override void Awake() {
-		base.Awake();
+	protected void Awake() {
 		gameStepID = 7;
-		//		floatyOptions.Add("text", ""); 
 	}
 
 	void OnSwipe(SwipeGesture gesture) {
@@ -48,17 +48,9 @@ public class Inhale : InhalerPart {
 		AudioManager.Instance.PlayClip("inhalerInhale");
 		petAnimator.SetTrigger("BreatheIn");
 
-		Debug.LogWarning("FLOATY SPAWN HERE");
-		/*
-		Hashtable option = new Hashtable();
-		option.Add("parent", GameObject.Find("Canvas"));
-		option.Add("text", Localization.Localize("INHALER_FLOATY_HOLD_BREATH"));
-		option.Add("prefab", "FloatyTextInhalerGame");
-		option.Add("textSize", 84f);
-		option.Add("color", Color.white);
-
-		FloatyUtil.SpawnFloatyText(option);
-		*/
+		// Spawn Hold breath floaty
+		GameObject breathFloaty = GameObjectUtils.AddChildGUI(floatyParent, floatyBreatheInPrefab);
+		breathFloaty.GetComponent<UGUIFloaty>().StartFloatyLocal(Localization.Localize("INHALER_FLOATY_HOLD_BREATH"), 3f, new Vector3(0, 100));
 
 		if(finish != null) {
 			finish(this, EventArgs.Empty);

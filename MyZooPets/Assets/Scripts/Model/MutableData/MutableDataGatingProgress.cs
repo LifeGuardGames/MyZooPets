@@ -49,10 +49,8 @@ public class MutableDataGatingProgress{
 	/// <summary>
 	/// Determines whether gating is enabled. Used for testing
 	/// </summary>
-	/// <returns><c>true</c> if gating is enabled; otherwise, <c>false</c>.</returns>
 	public bool IsEnabled(){
-		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled");
-		return isEnabled;	
+		return DataManager.Instance.isDebug ? Constants.GetConstant<bool>("GatingEnabled") : true;
 	}
 
 	/// <summary>

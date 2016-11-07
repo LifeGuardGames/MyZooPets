@@ -139,9 +139,9 @@ public class PlayPeriodLogic : Singleton<PlayPeriodLogic>{
 		return timeTillNextPlayPeriod;
 	}
 
-	public bool IsFirstPlayPeriod(){
-		if(Constants.GetConstant<bool>("OverrideFirstPlayPeriod")){
-			return false;
+	public bool IsFirstPlayPeriod() {
+		if(DataManager.Instance.isDebug) {
+			return Constants.GetConstant<bool>("OverrideFirstPlayPeriod");
 		}
 		else{
 			return DataManager.Instance.GameData.PlayPeriod.LastPlayPeriod == DateTime.MinValue ||

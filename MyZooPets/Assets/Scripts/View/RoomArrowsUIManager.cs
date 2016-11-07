@@ -38,7 +38,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 		int currentLocalPartition = panScript.currentLocalPartition;
 		int firstPartition = panScript.firstPartition;
 		int lastPartition = panScript.lastPartition;
-		bool isEnabled = Constants.GetConstant<bool>("GatingEnabled"); //check for gating
+		bool gatingEnabled = DataManager.Instance.GameData.GatingProgress.IsEnabled();
 
 		//deco mode specific checks
 		if(DecoModeUIManager.Instance && DecoModeUIManager.Instance.IsOpen) {
@@ -54,7 +54,7 @@ public class RoomArrowsUIManager : Singleton<RoomArrowsUIManager> {
 			}
 			//in between partitions
 			else {
-				if(!isEnabled || panScript.CanDecoModeMoveToRight()) {
+				if(!gatingEnabled || panScript.CanDecoModeMoveToRight()) {
 					ShowBothArrows(false);
 				}
 				else {

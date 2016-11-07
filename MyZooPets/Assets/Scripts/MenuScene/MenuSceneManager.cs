@@ -67,12 +67,7 @@ public class MenuSceneManager : Singleton<MenuSceneManager> {
 
 	#region Cutscene movie playing code
 	public void PlayMovie(string petColor) {
-		if(Constants.GetConstant<bool>("IsComicIntroOn")) {
-			StartCoroutine(ShowIntroMovie(petColor));
-		}
-		else {
-			LoadToBedroom();
-		}
+		StartCoroutine(ShowIntroMovie(petColor));
 	}
 
 	private IEnumerator ShowIntroMovie(string petColor) {

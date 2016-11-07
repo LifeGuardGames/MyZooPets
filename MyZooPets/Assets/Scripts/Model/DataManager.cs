@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using fastJSON;
 
@@ -15,21 +13,15 @@ public class DataManager : Singleton<DataManager>{
 	public event EventHandler<EventArgs> OnGameDataSaved;
 
 	public string CURRENT_VERSION{
-		get{
-			return Constants.GetConstant<string>("BuildVersion");
-		}
+		get{ return Application.version; }
 	}
 
 	public bool isDebug = false; //turn isDebug to true if working on independent scene
 
 	private static bool isCreated;
-	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 
 	#region Properties
-	/// <summary>
-	/// Gets the game data.
-	/// </summary>
-	/// <value>The game data.</value>
+	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 	public PetGameData GameData{
 		get{ return gameData; }
 	}
@@ -79,27 +71,6 @@ public class DataManager : Singleton<DataManager>{
 			PlayerPrefs.Save();
 		}
 	}
-
-	/// <summary>
-	/// Gets or sets the last play session date. Use to determine whether the game
-	/// should be force start from LoadingScene.unity
-	/// </summary>
-	/// <value>The last play session date.</value>
-//	public DateTime LastPlaySessionDate{
-//		get{
-//			string timeString = PlayerPrefs.GetString("LastPlaySessionDate", "");
-//			DateTime lastSessionTime = LgDateTime.GetTimeNow();
-//
-//			if(!string.IsNullOrEmpty(timeString))
-//				lastSessionTime = Convert.ToDateTime(timeString);
-//		
-//			return lastSessionTime;
-//		}
-//		set{
-//			string timeString = value.ToString("o");
-//			PlayerPrefs.SetString("LastPlaySessionDate", timeString);
-//		}
-//	}
 
 	/// <summary>
 	/// Use this to check if there is data loaded into gameData at anypoint
@@ -180,7 +151,7 @@ public class DataManager : Singleton<DataManager>{
 			//any thing that needs saving, so check before saving
 			if(gameData != null){
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
-				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
+				GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				// Save last play period here again..
 				if(PlayPeriodLogic.Instance != null){
@@ -241,7 +212,7 @@ public class DataManager : Singleton<DataManager>{
 			string jsonString = PlayerPrefs.GetString("GameData", "");
 			
 			//Check if json string is actually loaded and not empty
-			if(!String.IsNullOrEmpty(jsonString)){
+			if(!string.IsNullOrEmpty(jsonString)){
 				newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
 				
 				#if UNITY_EDITOR
@@ -250,7 +221,7 @@ public class DataManager : Singleton<DataManager>{
 				
 				gameData = newGameData;
 
-				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+				if(isDebug && Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
 					Debug.Log("Setting dummy data for second play period");
 					SetDummyDataForSecondPlayPeriod();
 				}
@@ -263,7 +234,7 @@ public class DataManager : Singleton<DataManager>{
 				//initiate game data here because none is found in the PlayerPrefs
 				gameData = new PetGameData();
 
-				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+				if(isDebug && Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
 					Debug.Log("Setting dummy data for second play period");
 					SetDummyDataForSecondPlayPeriod();
 				}

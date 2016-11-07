@@ -28,9 +28,7 @@ public class InhalerGameUIManager : Singleton<InhalerGameUIManager> {
 	public GameObject[] lightsToTurnOff;
 	public ParticleSystemController[] particlesToTurnOff;
 	public List<GameObject> sliderNodes;	//list of UI nodes to show game steps
-
-	public GameObject floatyParent;		
-
+	
 	public bool ShowHint {
 		get { return showHint; }
 	}

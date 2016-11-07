@@ -25,7 +25,12 @@ public class DegradationLogic : Singleton<DegradationLogic> {
 	private bool isAwakeCheck = true;
 
 	public bool IsTesting() {
-		return Constants.GetConstant<bool>("TestingDegrad");
+		if(DataManager.Instance.isDebug) {
+			return Constants.GetConstant<bool>("TestingDegrad");
+		}
+		else {
+			return false;
+		}
 	}
 
 	void Awake() {

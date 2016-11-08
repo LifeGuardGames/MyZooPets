@@ -19,12 +19,6 @@ public class GateMonster : Gate{
 		SetupHeads();
 	}
 
-	void OnApplicationPause(bool isPaused){
-		if(!isPaused){
-			SetupHeads();
-		}
-	}
-
 	public void SetupHeads(){
 		if(SceneManager.GetActiveScene().name == SceneUtils.YARD){
 			isBoss = true;

@@ -188,7 +188,7 @@ public class GatingManager : Singleton<GatingManager> {
 				Gate scriptGate = goGate.GetComponent<Gate>();
 
 				string gateID = dataGate.GateID;
-				scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
+                scriptGate.Init(gateID, dataGate.GetMonster(), maxScreenSpace);
 
 				if(dataGate.IsRecurring) {
 					DataManager.Instance.GameData.GatingProgress.LastRecurringGateSpawnedPlayPeriod =

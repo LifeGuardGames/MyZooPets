@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections.Generic;
 
 public class MutableDataMicroMix{
@@ -11,6 +10,6 @@ public class MutableDataMicroMix{
 
 	private void Init(){
 		MicrosCompleted = new List<string>();
-		hasWon = true;
+		hasWon = false;
 	}
 }

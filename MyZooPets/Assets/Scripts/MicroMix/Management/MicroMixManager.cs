@@ -51,7 +51,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 
 	void Awake() {
 		minigameKey = "MICRO"; //
-		quitGameScene = SceneUtils.BEDROOM;
+		quitGameScene = SceneUtils.YARD;
 		ResetScore();
 	}
 
@@ -119,7 +119,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		//Complete tutorial automatically
 		DataManager.Instance.GameData.Tutorial.ListPlayed.Add(minigameKey);
 		NewGame();
-
 	}
 
 	public void Restart() {
@@ -187,7 +186,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	}
 
 	protected override void _GameOver() {
-		//AudioManager.Instance.PlayClip("microOver");	
 	}
 
 	// Award the actual xp and money, called when tween is complete
@@ -201,8 +199,12 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
 		if(!DataManager.Instance.GameData.MicroMix.hasWon && score >= winScore) {
 			DataManager.Instance.GameData.MicroMix.hasWon = true;
-			BadgeManager.Instance.CheckSingleUnlockProgress("Badge36",0,true);
-        }
+			BadgeManager.Instance.CheckSingleUnlockProgress("Badge36", 0, true);
+
+			// Do the logic for destroying the final gate here
+			GatingManager.Instance.DamageGate("Gate_Yard_R");
+			Analytics.Instance.GateUnlocked("Gate_Yard_R");
+		}
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.MicroMix, Score, true);
 #if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)Score, "MicroMixLeaderBoard");
@@ -214,7 +216,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	}
 
 	#region Transition
-
 	private IEnumerator TransitionIEnum(MonsterAnimation animState) {
 		float tweenTime = 1f;
 		isTransitioning = true;

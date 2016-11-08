@@ -126,25 +126,17 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	// Called from FireButtonHelper
 	public void Step3_ChargeFire() {
 		if(buttonState == FireButtonState.ReadyForPress) {
-			bool canBreathFire = DataManager.Instance.GameData.PetInfo.CanBreathFire();
+			if(DataManager.Instance.GameData.PetInfo.CanBreathFire()) {	// if can breathe fire, attack the gate!!
+				buttonState = FireButtonState.HoldingButton;
 
-			// if can breathe fire, attack the gate!!
-			if(canBreathFire) {
-				if(SceneUtils.CurrentScene != SceneUtils.YARD) {
-					buttonState = FireButtonState.HoldingButton;
+				// kick off the attack script
+				attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
+				attackScript.Init(currentGate);
 
-					// kick off the attack script
-					attackScript = PetAnimationManager.Instance.gameObject.AddComponent<AttackGate>();
-					attackScript.Init(currentGate);
+				PetAnimationManager.Instance.StartFireBlow();
 
-					PetAnimationManager.Instance.StartFireBlow();
-
-					// turn the fire meter on
-					fireMeterScript.StartFilling();
-				}
-				else {
-					LoadLevelManager.Instance.StartLoadTransition(SceneUtils.MICROMIX);
-				}
+				// turn the fire meter on
+				fireMeterScript.StartFilling();
 			}
 			// else can't breathe fire. explain why
 			else {

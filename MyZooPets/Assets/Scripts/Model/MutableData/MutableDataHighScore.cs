@@ -1,10 +1,7 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class MutableDataHighScore{
-	public Dictionary<string, int> MinigameHighScore { get; set; } //Key: Minigame Key, Value: Minigame highscore
+	public Dictionary<string, int> MinigameHighScore { get; set; }		//Key: Minigame Key, Value: Minigame highscore
 
 	public void UpdateMinigameHighScore(string miniGameKey, int highScore){
 		//if exist a mini game high score compare them and store the highest one

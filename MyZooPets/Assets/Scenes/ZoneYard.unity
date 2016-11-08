@@ -18573,13 +18573,49 @@ Prefab:
       propertyPath: petObject
       value: 
       objectReference: {fileID: 299637103}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 11421396, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1904133078 stripped
 Transform:
   m_PrefabParentObject: {fileID: 433162, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
   m_PrefabInternal: {fileID: 1904133077}
+--- !u!114 &1904133079 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11469114, guid: 461f3c4c378c1934f8b37b0b09d12a61,
+    type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
+  m_Script: {fileID: 11500000, guid: 96734679f2d2cac43b16ff80e6112cc8, type: 3}
+--- !u!1 &1904133080 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 155994, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
+--- !u!114 &1904133081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1904133080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f65a3bd8ffa9ef4198d8db1c0390a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  modeTypes: 
+  buttonSound: entrancePoof
+  isCheckingClickManager: 1
+  isSprite: 0
+  strScene: MicroMix
+  loadingText: MICRO_TITLE
+  finalPosition: {x: 12.6, y: 2.5, z: 26.4}
+  finalRotation: {x: 0, y: 0, z: 0}
+  shouldSaveSceneData: 1
+  cameraGO: {fileID: 1991924275}
+  petObject: {fileID: 299637103}
+  analyticsEvent: 
+  entranceHelper: {fileID: 1904133079}
+  isCheckMood: 1
 --- !u!1 &1926224080
 GameObject:
   m_ObjectHideFlags: 0

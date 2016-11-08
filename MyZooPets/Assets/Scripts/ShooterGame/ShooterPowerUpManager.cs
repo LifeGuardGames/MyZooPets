@@ -22,23 +22,23 @@ public class ShooterPowerUpManager : Singleton<ShooterPowerUpManager>{
 				PlayerShooterController.Instance.ChangeFire();
 				break;
 			case PowerUpType.Triple:
-				AudioManager.Instance.PlayClip("shooterPowerUp");
+				PlayerShooterController.Instance.PlayPowerUpEffects();
 				PlayerShooterController.Instance.IsTriple = true;
 				StopCoroutine(ResetPowerUP());
 				StartCoroutine(ResetPowerUP());
 				break;
 			case PowerUpType.Bouncy:
-				AudioManager.Instance.PlayClip("shooterPowerUp");
+				PlayerShooterController.Instance.PlayPowerUpEffects();
 				ShooterGameManager.Instance.BouncyWalls.SetActive(true);
 				StopCoroutine(ResetPowerUP());
 				StartCoroutine(ResetPowerUP());
 				break;
 			case PowerUpType.Inhaler:
-				AudioManager.Instance.PlayClip("shooterPowerUp");
+				PlayerShooterController.Instance.PlayFlameUpEffects();
 				ShooterInhalerManager.Instance.OnShooterGameInhalerButton();
 				break;
 			case PowerUpType.MiniPet:
-				AudioManager.Instance.PlayClip("shooterPowerUp");
+				PlayerShooterController.Instance.PlayPowerUpEffects();
 				buddy.WakeUp();
 				break;
 			}

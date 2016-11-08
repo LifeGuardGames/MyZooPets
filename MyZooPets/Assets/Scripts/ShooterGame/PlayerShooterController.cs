@@ -1,7 +1,6 @@
-using UnityEngine;
-using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// NOTE: This script keeps the internal health of the actual pet, instead of using lives since it fluctuates a lot
@@ -27,6 +26,8 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 	public float moveSpeed = 10;
 	public Vector3 clickPos;
 	public bool moving = false;
+	public ParticleSystem flameUpParticle;
+	public ParticleSystem powerUpParticle;
 
 	public bool isTriple;                       // Triple firing upgrade
 	public bool IsTriple {
@@ -117,6 +118,16 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 		}
 	}
 
+	public void PlayPowerUpEffects() {
+		AudioManager.Instance.PlayClip("shooterPowerUp");
+		powerUpParticle.Play();
+    }
+
+	public void PlayFlameUpEffects() {
+		AudioManager.Instance.PlayClip("shooterFlameUp");
+		flameUpParticle.Play();
+	}
+
 	// removes health and then calculates state
 	public void ChangeHealth(int deltaHealth) {
 		if(!ShooterGameManager.Instance.isGameOver) {
@@ -130,6 +141,7 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 					playerHealth = deltaHealth;
 				}
 			}
+
 			if(playerHealth >= 4) {
 				ChangeState(PlayerStateTypes.Happy);
 			}
@@ -139,9 +151,11 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 			else if(playerHealth <= 1 && playerHealth > 0) {
 				ChangeState(PlayerStateTypes.Distressed);
 			}
+
 			if(deltaHealth > 14) {
 				playerHealth = 14;  // Cap health at 15
 			}
+
 			if(playerHealth <= 0) {
 				this.GetComponent<Collider2D>().enabled = false;
 				characterAnim.SetState(ShooterCharacterAnimController.ShooterCharacterStates.Dead);

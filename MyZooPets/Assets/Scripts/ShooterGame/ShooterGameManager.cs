@@ -60,7 +60,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		ShooterInhalerManager.Instance.Reset();
 		shooterSkyController.Reset();
 		PlayerShooterController.Instance.Reset();
-		RemoveInhalerFingerTutorial();
+
 	}
 
 	protected override void _PauseGame() {
@@ -176,7 +176,6 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	}
 
 	public void BeginNewWave() {
-		RemoveInhalerFingerTutorial();
 		/*if(ShooterInhalerManager.Instance.hit == false){
 			missed++;
 			if(missed >= 2){
@@ -185,12 +184,5 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		}*/
 		waveNum++;
 		gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
-	}
-
-	// Soft remove finger if it exists
-	public void RemoveInhalerFingerTutorial() {
-		if(shooterSkyController.fingerPos != null) {
-			Destroy(shooterSkyController.fingerPos.gameObject);
-		}
 	}
 }

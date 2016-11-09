@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 public class MutableDataMicroMix{
 	public List<string> MicrosCompleted { get; set; }
-	public bool hasWon;
+	private bool HasWon;
+	public bool hasWon {
+		get{ return HasWon; }
+		set { HasWon = value; }
+	}
 
 	public MutableDataMicroMix(){
 		Init();
@@ -11,6 +15,6 @@ public class MutableDataMicroMix{
 
 	private void Init(){
 		MicrosCompleted = new List<string>();
-		hasWon = true;
+		HasWon = true;
 	}
 }

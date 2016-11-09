@@ -28,7 +28,7 @@ public class MiniPetPowerUp : MonoBehaviour {
 
 	IEnumerator Move() {
 		yield return new WaitForSeconds(1.0f);
-		if(transform.position == upPos.transform.position) {
+		if(transform.position.y == upPos.transform.position.y) {
 			LeanTween.moveY(this.gameObject, downPos.transform.position.y, 1.0f);
           }
 		else {

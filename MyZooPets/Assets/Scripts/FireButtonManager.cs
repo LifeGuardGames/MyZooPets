@@ -66,7 +66,7 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 			TurnFireEffectOff();
 		}
 		else {
-			TurnFireEffectOn();
+			TurnFireEffectOn(false);
 			buttonState = FireButtonState.ReadyForPress;
 		}
 	}
@@ -82,8 +82,8 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 	}
 
 	// This is called from start, and from FireButtonAnimHelper (looped back in)
-	public void TurnFireEffectOn() {
-		animHelper.FireEffectOn();
+	public void TurnFireEffectOn(bool isAnimEvent) {
+		animHelper.FireEffectOn(isAnimEvent);
 		buttonState = FireButtonState.ReadyForPress;
 		if(FireButtonActive != null) {  // Used for tutorials
 			FireButtonActive(this, EventArgs.Empty);
@@ -159,17 +159,9 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 				// if the meter was full on release, complete the attack!
 				attackScript.FinishAttack();
 
-				// because the user can only ever breath fire once, the only time we don't want to destroy the fire button is when the infinite
-				// fire mode cheat is active and the gate is still alive
-				if(currentGate.GetGateHP() <= 1) {
-					Deactivate();
-				}
-				else {
-					//disable button
-					TurnFireEffectOff();
-				}
-				Step5_FinishBlowingFire();
-            }
+				Deactivate();
+				buttonState = FireButtonState.Empty;
+			}
 			else {
 				// if the meter was not full, cancel the attack
 				attackScript.Cancel();
@@ -183,7 +175,11 @@ public class FireButtonManager : Singleton<FireButtonManager> {
 		}
 	}
 
+	// Callback when fireblow done
 	public void Step5_FinishBlowingFire() {
-		buttonState = FireButtonState.Empty;
+		Debug.Log("Current gate hp " + currentGate.GetGateHP() + currentGate.gateID);
+		if(currentGate.GetGateHP() >= 1) {
+			Activate();		// Run activate logic again to check for status
+        }
     }
 }

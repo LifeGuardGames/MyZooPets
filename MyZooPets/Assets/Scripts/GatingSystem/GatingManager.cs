@@ -345,7 +345,6 @@ public class GatingManager : Singleton<GatingManager> {
 			// Recalculate the latest unlocked gate
 			GetLatestUnlockedGate();
 		}
-
 		return isDestroyed;
 	}
 
@@ -477,13 +476,12 @@ public class GatingManager : Singleton<GatingManager> {
 	/// Shows the fire button.
 	/// </summary>
 	private void ArrivedShowFireButton() {
-		// the pet has reached its destination (in front of the monster) so show the fire UI
-		FireButtonManager.Instance.Activate();
-
 		// get the gate in this room
 		Gate gate = activeGates[scriptPan.currentLocalPartition];
 		if(gate) {
+			// the pet has reached its destination (in front of the monster) so show the fire UI
 			FireButtonManager.Instance.CurrentGate = gate;
+			FireButtonManager.Instance.Activate();
 		}
 		else {
 			Debug.LogError("Destination callback being called for non-gated room");

@@ -33,12 +33,14 @@ public class FireButtonAnimHelper : MonoBehaviour {
 
 	// This is called from animation event, routes out and back in again to FireEffectOn
 	public void TurnFireEffectOnAnimEvent() {
-		FireButtonManager.Instance.TurnFireEffectOn();	// Need to use event handler
+		FireButtonManager.Instance.TurnFireEffectOn(true);	// Need to use event handler
     }
 
 	// This is called from FireButtonUIManager
-	public void FireEffectOn(){
-		enableFireButtonAnimation.Stop();
+	public void FireEffectOn(bool isAnimEvent){
+		if(!isAnimEvent) {
+			enableFireButtonAnimation.Stop();
+		}
 		buttonAnimation.Play();
 		imageButton.sprite = activeFireButtonSprite;    //change button image 
 		fireButtonHelper.Toggle3DCollider(false);
@@ -47,7 +49,6 @@ public class FireButtonAnimHelper : MonoBehaviour {
 
 	public void FireEffectOff() {
 		buttonAnimation.Stop();
-		Debug.Log("Fire effect off");
 		imageButton.sprite = inactiveFireButtonSprite;
 		fireButtonHelper.Toggle3DCollider(true);
 		sunBeam.SetActive(false);

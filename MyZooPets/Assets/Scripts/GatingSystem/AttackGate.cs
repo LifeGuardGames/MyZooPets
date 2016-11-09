@@ -64,6 +64,10 @@ public class AttackGate : Singleton<AttackGate>{
 
 		// damage the gate
 		gateTarget.DamageGate();
+		
+		// Tell FireButtonManager that the firebreathing is complete
+		// Note: Make sure gate damage is updated
+		FireButtonManager.Instance.Step5_FinishBlowingFire();
 
 		// also mark the player as having attack the monster (for wellapad tasks)
 		WellapadMissionController.Instance.TaskCompleted("FightMonster");

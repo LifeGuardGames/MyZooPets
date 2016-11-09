@@ -16,7 +16,7 @@ public abstract class Gate : MonoBehaviour {
 	public float playerY; // the y value the player should move to when approaching the gate
 
 	// id and resource of this gate
-	protected string gateID;
+	public string gateID;
 	protected string gateResource;
 	protected float maxScreenSpace; // the max screen space the gate covers with 100% HP
 
@@ -87,7 +87,6 @@ public abstract class Gate : MonoBehaviour {
 		DataManager.Instance.GameData.PetInfo.amountOfFireBreathsDone++;
 		Analytics.Instance.BlowFire(DataManager.Instance.GameData.PetInfo.amountOfFireBreathsDone.ToString());
 		
-
 		// because the gate was damaged, play a sound
 		AudioManager.Instance.PlayClip("DamageSmokeMonster");
 

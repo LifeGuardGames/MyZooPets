@@ -75,6 +75,10 @@ public class DebugInputTool : EditorWindow {
 						bool toggleState = EditorGUILayout.Toggle(new GUIContent("Is Analytics Enabled"), bool.Parse(constant.ConstantValue));
 						constant.ConstantValue = toggleState.ToString();
 						break;
+					case "AdsEnabled":
+						bool toggleState2 = EditorGUILayout.Toggle(new GUIContent("Is Ads Enabled"), bool.Parse(constant.ConstantValue));
+						constant.ConstantValue = toggleState2.ToString();
+						break;
 				}
 			}
 			if(GUILayout.Button("Save")) {

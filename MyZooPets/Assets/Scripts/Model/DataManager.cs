@@ -60,16 +60,19 @@ public class DataManager : Singleton<DataManager>{
 
 	public bool IsAdsEnabled{
 		get{
-			//default set to true
-			if(!PlayerPrefs.HasKey("AdsEnabled")){
-				PlayerPrefs.SetInt("AdsEnabled", 1);
-			}
-			return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
+			return Constants.GetConstant<bool>("AdsEnabled");
+			// State-wise tracking, constant for now so commenting out
+			////default set to true
+			//if(!PlayerPrefs.HasKey("AdsEnabled")){
+			//	PlayerPrefs.SetInt("AdsEnabled", 1);
+			//}
+			//return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
 		}
-		set{
-			PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
-			PlayerPrefs.Save();
-		}
+		//set {
+			// State-wise tracking, constant for now so commenting out
+			//PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
+			//PlayerPrefs.Save();
+		//}
 	}
 
 	/// <summary>

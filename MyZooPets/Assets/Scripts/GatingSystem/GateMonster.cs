@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -10,25 +9,13 @@ public class GateMonster : Gate{
 	public float tweenTime; // time it takes the monster to tween to its new position after taking damage
 	public GameObject[] smokeMonsterHeads;	// Local locations of the heads, base head needs to be first!
 	public bool isBoss = false;
-	// because we tween monsters, the position we want to get for them is sometimes the position they SHOULD be at
-	private Vector3 idealPos;
 	private int currentHealth;
 	private GameObject baseHeadToMove;	// Keep track of the first head to check
 	private GameObject nextHeadToMove;
-	private GameObject nextHeadToDestroy;	// Aux to disable the head when finished tweening
 
 	public override void Start(){
 		base.Start();
-		// the ideal position of the monster is its transform at the outset
-		idealPos = transform.position;
-
 		SetupHeads();
-	}
-
-	void OnApplicationPause(bool isPaused){
-		if(!isPaused){
-			SetupHeads();
-		}
 	}
 
 	public void SetupHeads(){
@@ -54,25 +41,25 @@ public class GateMonster : Gate{
 		}
 	}
 	
-	/// <summary>
-	/// Damages the gate.
-	/// </summary>
-	/// <param name="damage">Damage.</param>
-	protected override void GateDamaged(){
 
-		// Drop some coins when the gate monster is attacked
-		if(!isBoss){
-		//StatsManager.Instance.ChangeStats(coinsDelta: 35, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
+	protected override bool GateDamagedDestroy(){
+		if(isBoss){
+			// If we are fighting the boss at the yard, load the micromix scene and tell gate not to do anything
+			LoadLevelManager.Instance.StartLoadTransition(SceneUtils.MICROMIX, additionalTextKey: "MICRO_TITLE");
+            return false;
 		}
 		else{
-			//StatsManager.Instance.ChangeStats(coinsDelta: 150, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
-		}
-		// Move one of the heads out, ONLY applies to everything thats not the first head
-		if(baseHeadToMove != nextHeadToMove){
-			MoveSubHead();
-			// Update the pointer to the next head
-			nextHeadToDestroy = nextHeadToMove;
+			// Drop some coins when the gate monster is attacked
+			Debug.Log("Fix coin pos to default here");
+			StatsManager.Instance.ChangeStats(coinsDelta: 35, is3DObject: true);
+
+			Debug.Log("Damaging head " + (DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1));
 			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
+			// Move one of the heads out, ONLY applies to everything thats not the first head
+			if(baseHeadToMove != nextHeadToMove) {
+				MoveSubHead();
+			}
+			return true;
 		}
 	}	
 
@@ -80,22 +67,15 @@ public class GateMonster : Gate{
 		// Move all the heads that is NOT the base head
 		MoveBaseHead();
 	}
-	
-	/// <summary>
-	/// Gets the ideal position.
-	/// </summary>
-	/// <returns>The ideal position.</returns>
-	protected override Vector3 GetIdealPosition(){
-		// because monsters move via tweens, we really want to return the position the monster is moving to in some cases	
-		return idealPos;
-	}	
 
 	private void MoveSubHead(){
+		//Debug.Log("Moving sub head " + nextHeadToMove.name + " " + nextHeadToMove.transform.parent.name);
 		Vector3 newLoc = nextHeadToMove.transform.localPosition;
 		newLoc.x += 80;
 
+		LeanTween.cancel(nextHeadToMove.transform.parent.gameObject);
 		LeanTween.moveLocal(nextHeadToMove.transform.parent.gameObject, newLoc, tweenTime)
-			.setOnComplete(DisableSubHead).setEase(LeanTweenType.easeInQuad);
+			.setDestroyOnComplete(true).setEase(LeanTweenType.easeInQuad);
 
 		nextHeadToMove.GetComponent<Animator>().Play("smokeMonsterDie");
 	}
@@ -110,12 +90,8 @@ public class GateMonster : Gate{
 		// Cancel the move tweens previous to this
 		LeanTween.cancel(gameObject);
 		LeanTween.moveLocal(gameObject, targetPos, tweenTime)
-			.setOnComplete(OnDestroyAnimComplete).setEase(LeanTweenType.easeInQuad);
+			.setDestroyOnComplete(true).setEase(LeanTweenType.easeInQuad);
 
 		baseHeadToMove.GetComponent<Animator>().Play("smokeMonsterDie");
-	}
-
-	private void DisableSubHead(){
-		nextHeadToDestroy.SetActive(false);
 	}
 }

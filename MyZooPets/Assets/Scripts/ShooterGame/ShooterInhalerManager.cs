@@ -1,4 +1,3 @@
-using UnityEngine;
 using System;
 
 public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
@@ -25,6 +24,5 @@ public class ShooterInhalerManager :Singleton<ShooterInhalerManager> {
 			}
 			ShooterGameManager.Instance.AddScore(10);
 			PlayerShooterController.Instance.ChangeHealth(combo);
-			AudioManager.Instance.PlayClip("shooterButtonSuccess");
 		}
 }

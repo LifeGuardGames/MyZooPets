@@ -101,16 +101,11 @@ public class GameTutorialWellapadIntro : GameTutorial{
 		button = missionButton.GetComponent<Button>();
 		buttonAction = new UnityAction(ButtonClicked);
 		button.onClick.AddListener(buttonAction);
-		Debug.Log("Added listener");
 
 		yield return new WaitForSeconds(0.5f);
 
 		// the wellapad is the only object that can be clicked
 		AddToProcessList(missionButton);
-		Debug.Log(missionButton.GetComponent<RectTransform>().anchoredPosition);
-		Debug.Log(missionButton.GetComponent<RectTransform>().anchoredPosition3D);
-		Debug.Log(missionButton.GetComponent<RectTransform>().sizeDelta);
-		Debug.Log(missionButton.transform.position);
 
 		// spotlight the wellapad
 		SpotlightObject(isGUI: true, GUIanchor: InterfaceAnchors.BottomLeft, hasFingerHint: true,

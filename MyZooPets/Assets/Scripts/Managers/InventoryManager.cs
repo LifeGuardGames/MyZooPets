@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// Contains all items the pet owns, not to be confused with ItemManager
@@ -64,6 +65,14 @@ public class InventoryManager : Singleton<InventoryManager> {
 		}
 	}
 
+	//void OnGUI() {
+	//	if(GUI.Button(new Rect(100, 100, 100, 100), "FIRE")){
+	//		Debug.Log("Adding");
+	//		AddItemToInventory("Usable1", 1);
+	//		InventoryUIManager.Instance.RefreshPage();
+	//	}
+	//}
+	
 	public void AddItemToInventory(string itemID, int count = 1) {
 		Dictionary<string, InventoryItem> specificTypeInventory = GetInventoryTypeForItem(itemID);
 		Item itemData = DataLoaderItems.GetItem(itemID);

@@ -12,7 +12,6 @@ public class GateMonster : Gate{
 	private int currentHealth;
 	private GameObject baseHeadToMove;	// Keep track of the first head to check
 	private GameObject nextHeadToMove;
-	private GameObject nextHeadToDestroy;	// Aux to disable the head when finished tweening
 
 	public override void Start(){
 		base.Start();
@@ -51,14 +50,14 @@ public class GateMonster : Gate{
 		}
 		else{
 			// Drop some coins when the gate monster is attacked
-			StatsManager.Instance.ChangeStats(coinsDelta: 35, coinsPos: nextHeadToMove.transform.position, is3DObject: true);
+			Debug.Log("Fix coin pos to default here");
+			StatsManager.Instance.ChangeStats(coinsDelta: 35, is3DObject: true);
 
+			Debug.Log("Damaging head " + (DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1));
+			nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
 			// Move one of the heads out, ONLY applies to everything thats not the first head
 			if(baseHeadToMove != nextHeadToMove) {
 				MoveSubHead();
-				// Update the pointer to the next head
-				nextHeadToDestroy = nextHeadToMove;
-				nextHeadToMove = smokeMonsterHeads[DataManager.Instance.GameData.GatingProgress.GatingProgress[gateID] - 1];
 			}
 			return true;
 		}
@@ -70,11 +69,13 @@ public class GateMonster : Gate{
 	}
 
 	private void MoveSubHead(){
+		//Debug.Log("Moving sub head " + nextHeadToMove.name + " " + nextHeadToMove.transform.parent.name);
 		Vector3 newLoc = nextHeadToMove.transform.localPosition;
 		newLoc.x += 80;
 
+		LeanTween.cancel(nextHeadToMove.transform.parent.gameObject);
 		LeanTween.moveLocal(nextHeadToMove.transform.parent.gameObject, newLoc, tweenTime)
-			.setOnComplete(DisableSubHead).setEase(LeanTweenType.easeInQuad);
+			.setDestroyOnComplete(true).setEase(LeanTweenType.easeInQuad);
 
 		nextHeadToMove.GetComponent<Animator>().Play("smokeMonsterDie");
 	}
@@ -89,12 +90,8 @@ public class GateMonster : Gate{
 		// Cancel the move tweens previous to this
 		LeanTween.cancel(gameObject);
 		LeanTween.moveLocal(gameObject, targetPos, tweenTime)
-			.setOnComplete(OnDestroyAnimComplete).setEase(LeanTweenType.easeInQuad);
+			.setDestroyOnComplete(true).setEase(LeanTweenType.easeInQuad);
 
 		baseHeadToMove.GetComponent<Animator>().Play("smokeMonsterDie");
-	}
-
-	private void DisableSubHead(){
-		nextHeadToDestroy.SetActive(false);
 	}
 }

@@ -124,14 +124,4 @@ public abstract class Gate : MonoBehaviour {
 	private void UnlockRoomArrows() {
 		RoomArrowsUIManager.Instance.ShowPanel();
 	}
-
-	/// <summary>
-	/// It's up for child gates to properly call this function when their destroy animation is complete.
-	/// NOTE: I don't think anything important should go here because at present, the game could exit before
-	/// the animation is complete, but the gate is already marked as destroyed.
-	/// </summary>
-	protected void OnDestroyAnimComplete() {
-		// destroy the object
-		Destroy(gameObject, 2f);
-	}
 }

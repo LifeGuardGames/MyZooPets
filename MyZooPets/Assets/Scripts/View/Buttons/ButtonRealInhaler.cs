@@ -1,4 +1,3 @@
-using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -14,7 +13,6 @@ public class ButtonRealInhaler : ButtonChangeScene{
 	/// Processes the click.
 	/// </summary>
 	public void OnInhalerButtonClicked(){
-		Debug.Log("Clicked");
 		CheckToOpenInhaler();
 	}
 	

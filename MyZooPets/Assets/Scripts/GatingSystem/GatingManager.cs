@@ -39,27 +39,31 @@ public class GatingManager : Singleton<GatingManager> {
 	public Dictionary<int, Gate> activeGates = new Dictionary<int, Gate>(); //gates currently in the game
 
 	void Awake() {
-		// set pan script
-		scriptPan = CameraManager.Instance.PanScript;
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD) {
+			// set pan script
+			scriptPan = CameraManager.Instance.PanScript;
 
-		// Get current zone
-		currentZone = SceneUtils.GetZoneTypeFromSceneName(SceneManager.GetActiveScene().name).ToString();
+			// Get current zone
+			currentZone = SceneUtils.GetZoneTypeFromSceneName(SceneManager.GetActiveScene().name).ToString();
+		}
 	}
 
 	void Start() {
-		// see if the gating system is enabled
-		if(!DataManager.Instance.GameData.GatingProgress.IsEnabled()) {
-			return;
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD) {
+			// see if the gating system is enabled
+			if(!DataManager.Instance.GameData.GatingProgress.IsEnabled()) {
+				return;
+			}
+
+			// listen for partition changing event
+			scriptPan.OnPartitionChanged += EnteredRoom;
+
+			// prior to spawning gates, we need to do some work to see if any recurring gates need to be refreshed
+			RecurringGateCheck();
+
+			// now spawn the gates
+			SpawnGates();
 		}
-
-		// listen for partition changing event
-		scriptPan.OnPartitionChanged += EnteredRoom;
-
-		// prior to spawning gates, we need to do some work to see if any recurring gates need to be refreshed
-		RecurringGateCheck();
-
-		// now spawn the gates
-		SpawnGates();
 	}
 
 	/// <summary>
@@ -331,19 +335,21 @@ public class GatingManager : Singleton<GatingManager> {
 		// then return whether or not the gate has been destroyed
 		bool isDestroyed = hp <= 0;
 
-		// Fire event to notify any UI that GatinProgress data may have been changed
-		if(OnDamageGate != null) {
-			OnDamageGate(this, EventArgs.Empty);
-		}
-
-		if(isDestroyed) {
-			// Fire event to notify gate with gateID has been destroyed
-			if(OnDestroyedGate != null) {
-				OnDestroyedGate(this, null);
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD) {
+			// Fire event to notify any UI that GatinProgress data may have been changed
+			if(OnDamageGate != null) {
+				OnDamageGate(this, EventArgs.Empty);
 			}
 
-			// Recalculate the latest unlocked gate
-			GetLatestUnlockedGate();
+			if(isDestroyed) {
+				// Fire event to notify gate with gateID has been destroyed
+				if(OnDestroyedGate != null) {
+					OnDestroyedGate(this, null);
+				}
+
+				// Recalculate the latest unlocked gate
+				GetLatestUnlockedGate();
+			}
 		}
 		return isDestroyed;
 	}

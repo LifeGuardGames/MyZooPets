@@ -73,7 +73,8 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 
 			// Special cases for checking
 			bool isDraggingFireCrystalToButton = false;
-			if(inventoryData.ItemID == "Usable1" && hit.collider.gameObject.name == "FireButton") {
+			if(inventoryData.ItemID == "Usable1" &&
+				(hit.collider.gameObject.name == "FireButton" || hit.collider.gameObject.name == "FireButtonCanvas")) {
 				isDraggingFireCrystalToButton = true;
             }
 
@@ -83,7 +84,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 
 				// Get the object's interface that handles item processing
 				IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();
-				Debug.Log(dropTarget.ToString());
+				//Debug.Log(dropTarget.ToString());
 				if(dropTarget != null) {
 					dropTarget.OnItemDropped(inventoryData);		// Call the interface, which handles the rest
 				}

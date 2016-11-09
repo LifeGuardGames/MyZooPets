@@ -2,7 +2,8 @@ using System.Collections.Generic;
 
 public class MutableDataMicroMix{
 	public List<string> MicrosCompleted { get; set; }
-	public bool hasWon;
+	public bool HasWon { get; set; }
+	public bool EntranceHasCrystal { get; set; }
 
 	public MutableDataMicroMix(){
 		Init();
@@ -10,6 +11,7 @@ public class MutableDataMicroMix{
 
 	private void Init(){
 		MicrosCompleted = new List<string>();
-		hasWon = false;
+		HasWon = false;
+		EntranceHasCrystal = false;
 	}
 }

@@ -11883,7 +11883,7 @@ RectTransform:
   - {fileID: 822712814}
   - {fileID: 1900079758}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -12154,6 +12154,46 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 99e2835cd98bf4382aa0718252d07d50, type: 2}
   m_PrefabInternal: {fileID: 1655413083}
+--- !u!1 &905008512 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 180288, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
+--- !u!65 &905008513
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 905008512}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!111 &905008514 stripped
+Animation:
+  m_PrefabParentObject: {fileID: 11136444, guid: 461f3c4c378c1934f8b37b0b09d12a61,
+    type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
+--- !u!114 &905008515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 905008512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3544f9fcd5569d04dae034eec8551557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonChargeParticle: {fileID: 2112731879}
+  buttonBurstParticle: {fileID: 1274472616}
+  enableFireButtonAnimation: {fileID: 905008514}
+  imageButton: {fileID: 1532772781}
+  activeFireButtonSprite: {fileID: 21300000, guid: d815f7f1ff7f2b64d9acf4b7cd052a56,
+    type: 3}
+  inactiveFireButtonSprite: {fileID: 21300000, guid: 96417b35f6cb73b45811f8c68b865d54,
+    type: 3}
 --- !u!1 &923684795
 GameObject:
   m_ObjectHideFlags: 0
@@ -14384,7 +14424,7 @@ Transform:
   - {fileID: 219452498}
   - {fileID: 1194285190}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
 --- !u!114 &1184401708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16304,6 +16344,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1867614912}
   m_RootOrder: 0
+--- !u!198 &1274472616 stripped
+ParticleSystem:
+  m_PrefabParentObject: {fileID: 19885892, guid: 461f3c4c378c1934f8b37b0b09d12a61,
+    type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
 --- !u!1001 &1291977419
 Prefab:
   m_ObjectHideFlags: 0
@@ -17346,6 +17391,12 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 400000, guid: 110eff9da2c9f494fafe96db4b106b40, type: 2}
   m_PrefabInternal: {fileID: 586932653}
+--- !u!114 &1532772781 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11452832, guid: 461f3c4c378c1934f8b37b0b09d12a61,
+    type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &1533887010
 GameObject:
   m_ObjectHideFlags: 0
@@ -18523,57 +18574,27 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11421396, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+    - target: {fileID: 11459890, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
       propertyPath: cameraGO
       value: 
       objectReference: {fileID: 1991924275}
-    - target: {fileID: 11421396, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+    - target: {fileID: 11459890, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
       propertyPath: petObject
       value: 
       objectReference: {fileID: 299637103}
+    - target: {fileID: 180288, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+      propertyPath: m_Name
+      value: FireButtonCanvas
+      objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 11421396, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+    - {fileID: 6519972, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
+    - {fileID: 11437782, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1904133078 stripped
 Transform:
   m_PrefabParentObject: {fileID: 433162, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
   m_PrefabInternal: {fileID: 1904133077}
---- !u!114 &1904133079 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11469114, guid: 461f3c4c378c1934f8b37b0b09d12a61,
-    type: 2}
-  m_PrefabInternal: {fileID: 1904133077}
-  m_Script: {fileID: 11500000, guid: 96734679f2d2cac43b16ff80e6112cc8, type: 3}
---- !u!1 &1904133080 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 155994, guid: 461f3c4c378c1934f8b37b0b09d12a61, type: 2}
-  m_PrefabInternal: {fileID: 1904133077}
---- !u!114 &1904133081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1904133080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f65a3bd8ffa9ef4198d8db1c0390a1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modeTypes: 
-  buttonSound: entrancePoof
-  isCheckingClickManager: 1
-  isSprite: 0
-  strScene: MicroMix
-  loadingText: MICRO_TITLE
-  finalPosition: {x: 12.6, y: 2.5, z: 26.4}
-  finalRotation: {x: 0, y: 0, z: 0}
-  shouldSaveSceneData: 1
-  cameraGO: {fileID: 1991924275}
-  petObject: {fileID: 299637103}
-  analyticsEvent: 
-  entranceHelper: {fileID: 1904133079}
-  isCheckMood: 1
 --- !u!1 &1926224080
 GameObject:
   m_ObjectHideFlags: 0
@@ -19124,6 +19145,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2141395968}
   m_RootOrder: 2
+--- !u!198 &2112731879 stripped
+ParticleSystem:
+  m_PrefabParentObject: {fileID: 19822578, guid: 461f3c4c378c1934f8b37b0b09d12a61,
+    type: 2}
+  m_PrefabInternal: {fileID: 1904133077}
 --- !u!1 &2141395967
 GameObject:
   m_ObjectHideFlags: 0

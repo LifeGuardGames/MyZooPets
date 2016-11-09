@@ -69,7 +69,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			LeanTween.scale(speedUpText.rectTransform, Vector3.one, .75f).setEase(LeanTweenType.easeInOutQuad).setOnComplete(OnTweenSpeedUp);
 			//AudioManager.Instance.PlayClip("microSpeedUp");
 		}
-		if(currentScore >= winScore && !DataManager.Instance.GameData.MicroMix.hasWon) {
+		if(currentScore >= winScore && !DataManager.Instance.GameData.MicroMix.HasWon) {
 			StartCoroutine(TransitionIEnum(MonsterAnimation.WIN_FINAL));
 		}
 		else {
@@ -188,6 +188,13 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	protected override void _GameOver() {
 	}
 
+	//void OnGUI() {
+	//	if(GUI.Button(new Rect(200, 100, 100, 100), "WIN")) {
+	//		score = 10;
+	//		GameOver();
+	//	}
+	//}
+
 	// Award the actual xp and money, called when tween is complete
 	protected override void _GameOverReward() {
 		StatsManager.Instance.ChangeStats(
@@ -197,9 +204,9 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
 			animDelay: 0.5f);
 		FireCrystalManager.Instance.RewardShards(rewardShardAux);
-		if(!DataManager.Instance.GameData.MicroMix.hasWon && score >= winScore) {
-			DataManager.Instance.GameData.MicroMix.hasWon = true;
-			BadgeManager.Instance.CheckSingleUnlockProgress("Badge36", 0, true);
+		if(!DataManager.Instance.GameData.MicroMix.HasWon && score >= winScore) {
+			DataManager.Instance.GameData.MicroMix.HasWon = true;
+			BadgeManager.Instance.CheckSingleUnlockProgress("Badge36", 1, true);
 
 			// Do the logic for destroying the final gate here
 			GatingManager.Instance.DamageGate("Gate_Yard_R");

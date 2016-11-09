@@ -16,17 +16,16 @@ public class ButtonChangeScene : LgWorldButton {
 	// related to the camera move
 	public Vector3 finalPosition;       // offset of camera on the target
 	public Vector3 finalRotation;       // how the camera should rotate
-	private float zoomTime = 0.8f;      // how long the tween should last
+	protected float zoomTime = 0.8f;      // how long the tween should last
 
 	public bool shouldSaveSceneData;    // give the option to load scene without saving partition or pet position
 	public GameObject cameraGO;         // needs the camera to record partition # before scene change
 	public GameObject petObject;        // needs to record pet position before scene change
 
-	public string analyticsEvent;
 	public EntranceHelperController entranceHelper;
 
 	public bool isCheckMood = true;
-	private int moodThreshold = 19;
+	protected int moodThreshold = 19;
 
 	protected override void ProcessClick() {
 		if(!isCheckMood || DataManager.Instance.GameData.Stats.Mood > moodThreshold) {
@@ -78,7 +77,7 @@ public class ButtonChangeScene : LgWorldButton {
 	/// <summary>
 	/// Callback for when the camera is done tweening to its target.
 	/// </summary>
-	private void CameraMoveDone() {
+	protected void CameraMoveDone() {
 		// the camera move is complete, so now let's start the transition (if it exists)
 		if(loadingText != "") {
 			LoadLevelManager.Instance.StartLoadTransition(strScene, loadingText);
@@ -88,7 +87,7 @@ public class ButtonChangeScene : LgWorldButton {
 	/// <summary>
 	/// Record the pet's position and camera's partition before switching to new scene.
 	/// </summary>
-	private void RememberCurrentScene() {
+	protected void RememberCurrentScene() {
 		if(shouldSaveSceneData) {
 			int partition = cameraGO.GetComponent<PanToMoveCamera>().currentLocalPartition;
 			Vector3 petPos = petObject.transform.position;

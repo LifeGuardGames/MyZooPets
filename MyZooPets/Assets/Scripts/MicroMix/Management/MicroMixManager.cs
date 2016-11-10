@@ -356,7 +356,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	private void StartMicro() {
 		Debug.Log(currentMicro);
 		currentMicro.gameObject.SetActive(true);
-		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(currentMicro.Title) ||DataManager.Instance.isDebug && Constants.GetConstant<bool>("IsMinigameTutOn")) {
+		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(currentMicro.Title) && DataManager.Instance.isDebug && Constants.GetConstant<bool>("IsMinigameTutOn")) {
 			isTutorial = true;
 			currentMicro.StartTutorial();
 		}

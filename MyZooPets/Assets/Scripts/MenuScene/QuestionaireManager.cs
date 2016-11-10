@@ -9,7 +9,7 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 
 	void Start(){
 		#if DEVELOPMENT_BUILD
-		PlayerPrefs.DeleteAll();
+		//PlayerPrefs.DeleteAll();
 		#endif
 
 		CheckToOpenQuestionaire();
@@ -44,7 +44,7 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 			}
 			else {
-				SceneManager.LoadScene(SceneUtils.BEDROOM);
+				PromotionUiManager.Instance.Show();
 			}
 		}
 		else{

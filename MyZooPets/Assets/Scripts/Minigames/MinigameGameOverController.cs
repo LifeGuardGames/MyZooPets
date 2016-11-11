@@ -61,6 +61,7 @@ public class MinigameGameOverController : MonoBehaviour {
 	public void ShowButtons(object sender, System.EventArgs args) {
 		restartButtonToggle.Show();
 		quitButtonToggle.Show();
+		InventoryUIManager.Instance.HidePanel();
     }
 
 	public void HideButton() {

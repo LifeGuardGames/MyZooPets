@@ -31,9 +31,21 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 
 	//TODO Handle StatHintController
 
+	private bool IsValidScene() {
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 	#region Dragging implementation
 	public void OnBeginDrag(PointerEventData eventData) {
+		if(!IsValidScene()) {
+			return;
+		}
+
 		transform.SetParent(DragItemParentMeta.Instance.DragItemParent);
 		dragAnimator.SetTrigger("PickedUp");
 		itemBeingDragged = gameObject;
@@ -51,6 +63,9 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 	}
 
 	public void OnDrag(PointerEventData eventData) {
+		if(!IsValidScene()) {
+			return;
+		}
 		// Screen space overlay dragging - http://forum.unity3d.com/threads/mouse-position-for-screen-space-camera.294458/
 #if UNITY_EDITOR
 		Vector3 pointerPosition = Input.mousePosition;
@@ -62,6 +77,9 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 	}
 
 	public void OnEndDrag(PointerEventData eventData) {
+		if(!IsValidScene()) {
+			return;
+		}
 		dragAnimator.SetTrigger("Dropped");
 		itemBeingDragged = null;
 

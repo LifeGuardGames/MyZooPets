@@ -4,6 +4,7 @@ public class CigPlayerItem : MicroItem{
 	public Vector3 finishPos;
 	public bool complete;
 	private float speed = .3f;
+	public Animation headPlayer;
 
 	public override void StartItem(){
 		complete = false;
@@ -30,6 +31,7 @@ public class CigPlayerItem : MicroItem{
 	void OnTriggerEnter2D(Collider2D other){
 		if(!complete && other.CompareTag("MicroMixPerfume")){
 			complete = true;
+			headPlayer.Play("MicroMixHeadSad");
 		}
 	}
 }

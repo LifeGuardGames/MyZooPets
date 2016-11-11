@@ -6,6 +6,7 @@ public class CampPlayerItem : MicroItem{
 	private float maxTilt = .5f;
 	private float angularSpeed = Mathf.PI * 2;
 	private bool complete = false;
+	public Animation headPlayer;
 
 	void Update(){
 		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || complete){
@@ -41,6 +42,7 @@ public class CampPlayerItem : MicroItem{
 		}
 		else if(other.CompareTag("MicroMixPerfume")){
 			complete = true;
+			headPlayer.Play("MicroMixHeadSad");
 		}
 	}
 

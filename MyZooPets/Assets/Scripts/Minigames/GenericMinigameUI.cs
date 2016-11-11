@@ -74,6 +74,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 	}
 
 	public void OnRestart() {
+		HUDUIManager.Instance.HidePanel();
 		minigameUIInterface.OnRestart();
 		TogglePauseButton(true);
 	}
@@ -102,6 +103,7 @@ public class GenericMinigameUI : Singleton<GenericMinigameUI> {
 
 	// Actually reward the player, UI logic is separate
 	public void OnReward() {
+		HUDUIManager.Instance.ShowPanel();
 		minigameUIInterface.OnReward();
 	}
 

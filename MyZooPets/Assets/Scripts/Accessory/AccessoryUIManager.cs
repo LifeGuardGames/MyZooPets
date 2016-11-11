@@ -16,6 +16,7 @@ using System.Collections.Generic;
 public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public GameObject accessoryEntryPrefab;
 	public GridLayoutGroup gridParent;
+	public ScrollRect scrollRect;
 	public GameObject zoomItemEntrance;
 	public TweenToggle baseTween;
 	public TweenToggle gridTween;
@@ -129,6 +130,16 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	}
 
 	public void OnGridBackButton(){
+		// Delete all the elements in current grid
+		foreach(Transform child in gridParent.transform) {
+			Destroy(child.gameObject);
+		}
+
+		// Reset the scroll bar
+		scrollRect.StopMovement();
+		Vector2 auxPosition = gridParent.GetComponent<RectTransform>().anchoredPosition;
+		gridParent.GetComponent<RectTransform>().anchoredPosition = new Vector2(auxPosition.x, 0f);
+
 		gridTween.Hide();
 		baseTween.Show();
     }

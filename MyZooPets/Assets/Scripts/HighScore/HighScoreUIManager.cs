@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
-	public GameObject backButton;
+	public TweenToggle backButtonTween;
 	public GameObject highscoreBoard;
 	public GridLayoutGroup scoreBoardGrid;
 
@@ -55,8 +54,8 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			
 			isActive = true;
 			highscoreBoard.GetComponent<Collider>().enabled = false;
-			
-			backButton.SetActive(true);
+
+			backButtonTween.Show();
 		}
 	}
 
@@ -85,7 +84,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
 
-			backButton.SetActive(false);
+			backButtonTween.Hide();
 		}
 	}
 }

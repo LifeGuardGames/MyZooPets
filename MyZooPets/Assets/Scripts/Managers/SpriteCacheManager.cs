@@ -35,6 +35,25 @@ public class SpriteCacheManager : Singleton<SpriteCacheManager> {
 		return Resources.Load<Sprite>(DataLoaderItems.GetItemTextureName(itemID));
 	}
 
+	public static Sprite GetMinigameEntranceSprite(string minigameKey) {
+		switch(minigameKey) {
+			case "CLINIC":
+				return GetSprite("entranceClinic");
+			case "NINJA":
+				return GetSprite("entranceTrigger");
+			case "RUNNER":
+				return GetSprite("entranceRunner");
+			case "MEMORY":
+				return GetSprite("entranceMemory");
+            case "SHOOTER":
+				return GetSprite("entranceShooter");
+			case "MICRO":
+				return GetSprite("entranceMicroMix");
+			default:
+				return null;
+		}
+	}
+
 	public static Sprite GetSprite(string spriteName) {
 		return Resources.Load<Sprite>(spriteName);
 	}

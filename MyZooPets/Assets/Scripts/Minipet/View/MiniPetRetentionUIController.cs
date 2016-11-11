@@ -30,9 +30,9 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 				task = listTasks[1];
 				SetCheckboxSprite(true, slash2);
 				ImmutableDataWellapadTask missionTask2 = DataLoaderWellapadTasks.GetTask(task.TaskID);
-				mission1Localize.text = "Task_" + missionTask.GetTaskID().ToString();
-				mission2Localize.text = "Task_" + missionTask2.GetTaskID().ToString();
-				mission3Localize.gameObject.SetActive(false);
+			mission1Localize.text = Localization.Localize("Task_" + missionTask.GetTaskID());
+			mission2Localize.text = Localization.Localize("Task_" + missionTask2.GetTaskID());
+			mission3Localize.gameObject.SetActive(false);
 				mission4Localize.gameObject.SetActive(false);
 				if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed
 			   		&& WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed){
@@ -60,9 +60,9 @@ public class MiniPetRetentionUIController : MonoBehaviour {
 					if(WellapadMissionController.Instance.GetTaskStatus(listTasks[0]) == WellapadTaskCompletionStates.Completed &&WellapadMissionController.Instance.GetTaskStatus(listTasks[1])  == WellapadTaskCompletionStates.Completed&&WellapadMissionController.Instance.GetTaskStatus(listTasks[2]) == WellapadTaskCompletionStates.Completed ){
 						rewardButton.SetActive(true);
 					}
-					mission1Localize.text = "Task_" + missionTask.GetTaskID().ToString();
-					mission2Localize.text = "Task_" + missionTask2.GetTaskID().ToString();
-					mission3Localize.text = "Task_" + missionTask3.GetTaskID();
+					mission1Localize.text = Localization.Localize("Task_" + missionTask.GetTaskID());
+                    mission2Localize.text = Localization.Localize("Task_" + missionTask2.GetTaskID());
+					mission3Localize.text = Localization.Localize("Task_" + missionTask3.GetTaskID());
 					mission4Localize.gameObject.SetActive(false);
 			}
 		}

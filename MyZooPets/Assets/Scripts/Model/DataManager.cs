@@ -86,9 +86,10 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
-#if DEVELOPMENT_BUILD
-		PlayerPrefs.DeleteAll();
-#endif
+		#if DEVELOPMENT_BUILD
+		//PlayerPrefs.DeleteAll();
+		#endif
+
 		Amplitude amplitude = Amplitude.Instance;
 		//Live Amplitude
 		//amplitude.logging = true;

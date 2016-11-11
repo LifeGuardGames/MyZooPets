@@ -21,7 +21,7 @@ public class MutableDataStats {
 		Points = 0;
 		Stars = 100;
 		Shards = 0;
-		TotalStars = 100;
+		TotalStars = 100000;
 	}
 
 	#region Stat manipulation calls

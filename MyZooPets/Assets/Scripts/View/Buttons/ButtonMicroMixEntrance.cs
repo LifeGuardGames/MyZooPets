@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 public class ButtonMicroMixEntrance : ButtonChangeScene {
 	public TweenToggle canvasToggle;
@@ -22,6 +23,11 @@ public class ButtonMicroMixEntrance : ButtonChangeScene {
 	}
 
 	protected override void ProcessClick() {
+		if(Debug.isDebugBuild) {
+			Debug.LogWarning("DEBUG ENTRANCE, CLEAN UP HERE");
+			Pass();
+			return;
+		}
 		if(!isCanvasShowing) {
 			canvasToggle.Show();
 			isCanvasShowing = true;

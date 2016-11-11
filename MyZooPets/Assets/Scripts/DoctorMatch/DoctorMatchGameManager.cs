@@ -239,6 +239,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		else {
 			comboController.ResetCombo();
 			UpdateScore(-1);
+			BloodPanelManager.Instance.PlayBlood();
 			AudioManager.Instance.PlayClip("minigameError");
 		}
 

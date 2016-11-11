@@ -1,7 +1,3 @@
-using UnityEngine;
-using System;
-using System.Collections;
-
 public class MutableDataPetLevel{
     public Level CurrentLevel {get; set;} //pets current level 
 
@@ -11,7 +7,7 @@ public class MutableDataPetLevel{
     }
 
     private void Init(){
-       CurrentLevel = Level.Level1;
-//    	CurrentLevel = Level.Level8;
+ //      CurrentLevel = Level.Level1;
+    	CurrentLevel = Level.Level8;
     } 
 }

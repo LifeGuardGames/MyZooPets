@@ -78,7 +78,9 @@ public class LoadLevelManager : Singleton<LoadLevelManager> {
 	/// <summary>
 	/// Hide the demux when the new level is loaded
 	void OnLevelWasLoaded() {
-		AudioManager.Instance.PlayClip("loadingSlideOpen");
+		if(SceneUtils.CurrentScene != SceneUtils.MENU) {
+			AudioManager.Instance.PlayClip("loadingSlideOpen");
+		}
 		loadDemux.Hide();
 		loadText.gameObject.SetActive(false);
 	}

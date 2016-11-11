@@ -1,61 +1,64 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PerfumeMicro : Micro{
+public class PerfumeMicro : Micro {
 	public PerfDodgeItem player;
 	public GameObject dashedLine;
 	public GameObject perfumeBottle;
+	public Animation headPlayer;
 	private int count;
 	private PerfParticleItem[] perfumes;
 
-	public override string Title{
-		get{
-			return "Dodge";
-		}
+	public override string Title {
+		get { return "Dodge"; }
 	}
 
-	public override int Background{
-		get{
-			return 2;
-		}
+	public override int Background {
+		get { return 2; }
 	}
 
-	protected override void _StartMicro(int difficulty, bool randomize){
+	protected override void _StartMicro(int difficulty, bool randomize) {
 		perfumes = GetComponentsInChildren<PerfParticleItem>(true);
-		foreach(PerfParticleItem perf in perfumes){
+		foreach(PerfParticleItem perf in perfumes) {
 			perf.GetComponent<ParticleSystem>().Stop();
 			perf.GetComponent<Collider>().enabled = false;
 		}
 		StartCoroutine(SpawnPerfume(randomize));
-
+		headPlayer.Play("MicroMixHeadHappy");
 	}
 
-	protected override void _EndMicro(){
-		if (!player.hit){
+	protected override void _SetWon(bool won) {
+		if(!won) {
+			headPlayer.Play("MicroMixHeadSad");
+		}
+	}
+
+	protected override void _EndMicro() {
+		if(!player.hit) {
 			SetWon(true);
 		}
 	}
 
-	protected override void _Pause(){
-		foreach(Animation anim in GetComponentsInChildren<Animation>()){
+	protected override void _Pause() {
+		foreach(Animation anim in GetComponentsInChildren<Animation>()) {
 			anim.enabled = false;
 		}
-		foreach(ParticleSystem pSystem in GetComponentsInChildren<ParticleSystem>()){
+		foreach(ParticleSystem pSystem in GetComponentsInChildren<ParticleSystem>()) {
 			pSystem.Pause();
 		}
 	}
 
-	protected override void _Resume(){
-		foreach(Animation anim in GetComponentsInChildren<Animation>()){
+	protected override void _Resume() {
+		foreach(Animation anim in GetComponentsInChildren<Animation>()) {
 			anim.enabled = true;
 		}
-		foreach(ParticleSystem pSystem in GetComponentsInChildren<ParticleSystem>()){
+		foreach(ParticleSystem pSystem in GetComponentsInChildren<ParticleSystem>()) {
 			pSystem.Play();
 		}
 	}
 
-	protected override IEnumerator _Tutorial(){
-		Vector3	startPos = GetRandomPositionOnEdge();
+	protected override IEnumerator _Tutorial() {
+		Vector3 startPos = GetRandomPositionOnEdge();
 		Vector3 aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
 		PerfParticleItem perfume = GetComponentInChildren<PerfParticleItem>();
 		perfume.Setup(startPos, aim);
@@ -74,16 +77,16 @@ public class PerfumeMicro : Micro{
 		dashedLine.gameObject.SetActive(false);
 	}
 
-	private IEnumerator SpawnPerfume(bool randomize){ //Not called during tutorial
+	private IEnumerator SpawnPerfume(bool randomize) { //Not called during tutorial
 		Vector3 startPos;
 		Vector3 nextPos;
 		Vector3 aim;
 
-		if(randomize){
+		if(randomize) {
 			nextPos = GetRandomPositionOnEdge();
 			aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
 		}
-		else{
+		else {
 			nextPos = perfumes[0].transform.position;
 			aim = perfumes[0].aim;
 			randomize = true;
@@ -91,7 +94,7 @@ public class PerfumeMicro : Micro{
 
 		perfumeBottle.transform.position = nextPos;
 
-		for(int i = 0; i < perfumes.Length; i++){
+		for(int i = 0; i < perfumes.Length; i++) {
 			PerfParticleItem perf = perfumes[i];
 			startPos = nextPos;
 			perf.GetComponent<ParticleSystem>().Play();
@@ -101,39 +104,35 @@ public class PerfumeMicro : Micro{
 			yield return MicroMixManager.Instance.WaitSecondsPause(.3f);
 
 			perf.Setup(startPos, aim);
-			if(i < perfumes.Length - 1){
+			if(i < perfumes.Length - 1) {
 				nextPos = GetRandomPositionOnEdge();
 				aim = CameraUtils.RandomWorldPointOnScreen(Camera.main, .25f, .25f, 0);
 				perfumeBottle.transform.position = nextPos;
 			}
-
 			yield return MicroMixManager.Instance.WaitSecondsPause(.6f);
-
-
 		}
 	}
 
-	private Vector3 GetRandomPositionOnEdge(){
+	private Vector3 GetRandomPositionOnEdge() {
 		float x;
 		float y;
-		if(Random.value > .5f){
-			if(Random.value > .5f){
+		if(Random.value > .5f) {
+			if(Random.value > .5f) {
 				x = 0;
 			}
-			else{
+			else {
 				x = Screen.width;
 			}
 			y = Random.Range(0, Screen.height);
 		}
-		else{
-			if(Random.value > .5f){
+		else {
+			if(Random.value > .5f) {
 				y = 0;
 			}
-			else{
+			else {
 				y = Screen.height;
 			}
 			x = Random.Range(0, Screen.width);
-
 		}
 		return CameraUtils.ScreenToWorldPointZ(Camera.main, new Vector2(x, y), 0);
 	}

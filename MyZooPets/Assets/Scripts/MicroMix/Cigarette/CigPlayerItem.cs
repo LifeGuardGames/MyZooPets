@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class CigPlayerItem : MicroItem{
 	public Vector3 finishPos;

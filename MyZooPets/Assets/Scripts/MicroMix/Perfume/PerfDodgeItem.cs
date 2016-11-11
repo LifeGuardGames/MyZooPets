@@ -27,5 +27,4 @@ public class PerfDodgeItem : MicroItem{
 		Vector3 currentPos = CameraUtils.ScreenToWorldPointZ(Camera.main, Input.mousePosition, 0);
 		transform.position = Vector3.MoveTowards(transform.position, currentPos, speed);
 	}
-
 }

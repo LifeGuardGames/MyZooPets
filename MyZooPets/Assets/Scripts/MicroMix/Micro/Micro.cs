@@ -10,14 +10,11 @@ using System.Collections.Generic;
  */
 public abstract class Micro : MonoBehaviour{
 	protected abstract void _Pause();
-
 	protected abstract void _Resume();
-
 	protected abstract void _StartMicro(int difficulty, bool randomize);
-
 	protected abstract void _EndMicro();
-
 	protected abstract IEnumerator _Tutorial();
+	protected virtual void _SetWon(bool won) {}
 
 	private bool won = false;
 #pragma warning disable 0414	// Used for now, remove me when used
@@ -41,7 +38,8 @@ public abstract class Micro : MonoBehaviour{
 	}
 
 	public void SetWon(bool won){
-		this.won = won;
+		_SetWon(won);
+        this.won = won;
 		if(won){
 			MicroMixManager.Instance.fireworksController.StartFireworks();
 		}

@@ -28,7 +28,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	public Vector3 zoomRotation;
 
 	private bool isActive = false;
-	private List<AccessoryStoreItemController> accessoryEntryList = new List<AccessoryStoreItemController>();
+	private List<AccessoryStoreItemController> accessoryEntryList;
 	private Vector3 petScale;       //temp variable for pet scale
 
 	protected override void Awake(){
@@ -84,6 +84,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		baseTween.Hide();
 		gridTween.Show();
 		int itemCount = 0;
+
+		// Reset accessory list
+		accessoryEntryList = new List<AccessoryStoreItemController>();
+
 		// Populate the entries with loaded data
 		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
 		foreach(AccessoryItem accessoryData in accessoryList) {

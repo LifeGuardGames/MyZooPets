@@ -8,6 +8,9 @@ public class ButtonMicroMixEntrance : ButtonChangeScene {
 	private bool isCanvasShowing = false;
 
 	void Start () {
+		if(Debug.isDebugBuild) {
+			return;
+		}
 		// Hide the object if you have not beat the game yet
 		if(!DataManager.Instance.GameData.MicroMix.HasWon) {
 			gameObject.SetActive(false);

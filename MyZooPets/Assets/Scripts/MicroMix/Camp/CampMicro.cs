@@ -9,8 +9,8 @@ public class CampMicro : Micro {
 	public CampCollectItem[] mallows;
 	public GameObject phone;
 	public Text tutorialText;
-	public Animation headPlayer;
 	private int toCollect;
+	public Animation headPlayer;
 
 	public override string Title {
 		get { return "Avoid Smoke"; }
@@ -45,7 +45,7 @@ public class CampMicro : Micro {
 
 	protected override void _SetWon(bool won) {
 		if(!won) {
-			headPlayer.Play("MicroMixHeadSad");
+			
 		}
 	}
 

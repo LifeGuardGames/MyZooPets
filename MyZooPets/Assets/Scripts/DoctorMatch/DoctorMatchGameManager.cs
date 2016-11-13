@@ -117,6 +117,8 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		bonusStack = 0;
 		redBar.SetActive(true);
 		toClearText.SetActive(false);
+
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _PauseGame() {

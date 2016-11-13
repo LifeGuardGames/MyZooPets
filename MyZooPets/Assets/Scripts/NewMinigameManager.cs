@@ -157,4 +157,13 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 		_QuitGame();
 		LoadLevelManager.Instance.StartLoadTransition(quitGameScene);
 	}
+
+	protected bool IsContinueCheckDefaultTrue() {
+		if(AdManager.Instance.IsAdReady() && Constants.GetConstant<bool>("IsAdsEnabled")) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 }

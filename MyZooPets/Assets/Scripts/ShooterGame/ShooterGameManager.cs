@@ -61,6 +61,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		shooterSkyController.Reset();
 		PlayerShooterController.Instance.Reset();
 
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _PauseGame() {

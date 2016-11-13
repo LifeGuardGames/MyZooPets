@@ -138,6 +138,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		isGameOver = false;
 
 		uiManager.ResetControlsFade();
+
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _PauseGame() {

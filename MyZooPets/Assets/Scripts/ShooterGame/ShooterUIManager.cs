@@ -10,7 +10,6 @@ public class ShooterUIManager : MonoBehaviour {
 	}
 
 	public void OnShootDown() {
-
 		if(!ShooterGameManager.Instance.isGameOver && !ShooterGameManager.Instance.IsPaused) {
 #if !UNITY_EDITOR
 			Touch pos;
@@ -27,7 +26,6 @@ public class ShooterUIManager : MonoBehaviour {
 			}
 			ShooterGameManager.Instance.InputReceivedShoot(false, pos.position);
 #endif
-
 			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
 			ShooterGameManager.Instance.InputReceivedShoot(false,mousePos);
 		}

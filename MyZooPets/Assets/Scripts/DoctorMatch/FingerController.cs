@@ -4,6 +4,7 @@ using System.Collections;
 public class FingerController : MonoBehaviour {
 	private float shakeTime = .15f;
 	//private float shakeOffset = 20f;
+
 	public IEnumerator Shake(Vector3 shakeOffset, float delay = 0f, bool destroyOnComplete = false) {
 		yield return new WaitForSeconds(delay);
 		LeanTween.cancel(gameObject);

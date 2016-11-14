@@ -336,9 +336,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	}
 
 	private void ResetScore() {
-		rewardXPMultiplier = 1f;
-		rewardMoneyMultiplier = 1f;
-		rewardShardMultiplier = 1f;
+
 		score = 0;
 		comboController.ResetCombo();
 		comboController.UpdateScore(0);

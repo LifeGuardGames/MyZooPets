@@ -7,6 +7,7 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public Button buyButton;
 	public Text cost;
 	public Image itemImage;
+	//BroughtItemTween prefab
 	public GameObject boughtItemTweenPrefab;
 
 	private Item secretItem;
@@ -57,7 +58,6 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public void OnBuyAnimation(Item itemData, GameObject sprite) {
 		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, 0f);
 		Vector3 endPosition = origin;
-
 		// depending on what type of item the user bought, the animation has the item going to different places
 		switch(itemData.Type) {
 			case ItemType.Decorations:

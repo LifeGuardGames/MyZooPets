@@ -202,7 +202,7 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 	public void OnItemDropped(InventoryItem itemData) {
 		if(MiniPetHUDUIManager.Instance.IsOpen) {
 			//check if minipet wants this food
-			if(MiniPetManager.Instance.GetFoodPreference(minipetId) == itemData.ItemID) {
+			if(MiniPetManager.Instance.GetFoodPreference(minipetId) == itemData.ItemID || minipetId == "MiniPet0") {
 				InventoryManager.Instance.UseMiniPetItem(itemData.ItemID);    // Tell inventory logic item is used -> remove
 				FinishEating();
 				animationManager.Eat();

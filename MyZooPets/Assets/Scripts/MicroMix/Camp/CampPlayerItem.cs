@@ -7,11 +7,15 @@ public class CampPlayerItem : MicroItem{
 	private float angularSpeed = Mathf.PI * 2;
 	private bool complete = false;
 	public Animation headPlayer;
+	private float screenOrientationMultiplier = -1;
 
 	void Update(){
 		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial || complete){
 			return;
 		}
+#if !UNITY_EDITOR
+		angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime;
+#endif
 		if(Input.GetKey("left")) {
 			Debug.Log("hi");
 			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
@@ -25,7 +29,6 @@ public class CampPlayerItem : MicroItem{
 		else {
 			angle += 0 * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime;
 		}
-		//angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
 		transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * CampMicro.distance;
 	}
 

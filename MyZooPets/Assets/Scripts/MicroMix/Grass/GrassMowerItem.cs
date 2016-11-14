@@ -2,6 +2,7 @@
 
 public class GrassMowerItem : MicroItem {
 	private float angle;
+	private float screenOrientationMultiplier = -1;
 	//In radians
 	private float angularSpeed = Mathf.PI;
 	private float maxTilt = .5f;
@@ -13,13 +14,16 @@ public class GrassMowerItem : MicroItem {
 		if(MicroMixManager.Instance.IsPaused || MicroMixManager.Instance.IsTutorial) {
 			return;
 		}
+#if !UNITY_EDITOR
+		angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime;
+#endif
 
 		if(Input.GetKey("left")) {
-			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
+			//angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
 			angle += 1f * angularSpeed * Time.deltaTime;
 		}
 		if(Input.GetKey("right")) {
-			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
+			//angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
 			angle += -1f * angularSpeed * Time.deltaTime;
 		}
 		else {
@@ -43,7 +47,9 @@ public class GrassMowerItem : MicroItem {
 	}
 
 	public override void StartItem() {
-		//screenOrientationMultiplier = (Screen.orientation == ScreenOrientation.LandscapeRight) ? 1 : -1;
+#if !UNITY_EDITOR
+		screenOrientationMultiplier = (Screen.orientation == ScreenOrientation.LandscapeRight) ? 1 : -1;
+#endif
 		Debug.LogWarning("Screen orientation not accounted for");
 	}
 

@@ -21,6 +21,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	public GameObject floatyPrefab;
 	public GameObject redBar;
 	public GameObject toClearText;
+	public Canvas mainCanvas;
 
 	private int numOfCorrectDiagnose;
 	public int NumOfCorrectDiagnose {
@@ -58,7 +59,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		if(isTutorial && finger != null && zoneGreen.button.interactable) {
 			lastPress += Time.deltaTime;
 			if(lastPress > timeToShake) {
-				StartCoroutine(finger.Shake(new Vector3(0, 20)));
+				StartCoroutine(finger.Shake(new Vector3(0, 10)));
 				lastPress = 0;
 			}
 		}
@@ -116,6 +117,8 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		bonusStack = 0;
 		redBar.SetActive(true);
 		toClearText.SetActive(false);
+
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _PauseGame() {
@@ -176,8 +179,9 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		lastPress = 0;
 		tutorialZone = zone;
 		if(finger == null) {
-			finger = Instantiate(pointerPrefab).GetComponent<FingerController>();
-		}
+			finger = GameObjectUtils.AddChildGUI(mainCanvas.gameObject, pointerPrefab).GetComponent<FingerController>();
+			finger.transform.SetSiblingIndex(2);
+        }
 		else {
 			LeanTween.cancel(finger.gameObject);
 		}
@@ -294,7 +298,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 			}
 		}
 		else {
-			StartCoroutine(finger.Shake(new Vector3(0, 20), .25f));
+			StartCoroutine(finger.Shake(new Vector3(0, 10), .25f));
 		}
 	}
 

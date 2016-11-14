@@ -157,6 +157,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		Time.timeScale = 1.0f;
 		uiManager.NewGameUI();
 
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _QuitGame() {

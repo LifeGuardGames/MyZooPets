@@ -136,7 +136,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		Time.timeScale = 1f;
 		lifeController.Reset(true);
 		difficulty = 1;
-		isContinueAllowed = true;
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _PauseGame() {

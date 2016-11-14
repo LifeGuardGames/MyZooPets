@@ -95,8 +95,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 				(hit.collider.gameObject.name == "FireButton" || hit.collider.gameObject.name == "FireButtonCanvas")) {
 				isDraggingFireCrystalToButton = true;
             }
-
-			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget"
+			else if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget"
 				|| itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget"
 				|| isDraggingFireCrystalToButton) {
 
@@ -110,19 +109,26 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 					Debug.LogError("Item target does not implement IDropInventoryTarget:" + hit.collider.gameObject.name);
 				}
 			}
+			else {  // Hit an invalid target
+				ItemHitInvalid();
+            }
 		}
 		else {  // Hit nothing
-			if(itemType == ItemType.Foods) {
-				if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen) {
-					PetAnimationManager.Instance.AbortFeeding();
-				}
-			}
-		}
+			ItemHitInvalid();
+        }
 
 		// Cancel all deco drops
 		if(itemType == ItemType.Decorations) {
 			if(OnDecoItemDropped != null) {     // Event call for deco zones
 				OnDecoItemDropped(this, null);
+			}
+		}
+	}
+
+	private void ItemHitInvalid() {
+		if(itemType == ItemType.Foods) {
+			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen) {
+				PetAnimationManager.Instance.AbortFeeding();
 			}
 		}
 	}

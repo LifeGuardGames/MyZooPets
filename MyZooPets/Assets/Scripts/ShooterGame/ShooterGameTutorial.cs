@@ -82,6 +82,7 @@ public class ShooterGameTutorial {
 	}
 
 	private void MoveAlong(object sender, EventArgs args) {
+		Debug.Log("MOVING ALONG");
 		if(currentStep < 10) {
 			currentStep++;
 			ProcessStep(currentStep);

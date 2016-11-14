@@ -26,7 +26,8 @@ GameObject:
   - 224: {fileID: 22404948}
   - 222: {fileID: 22250160}
   - 114: {fileID: 11437838}
-  - 114: {fileID: 11453312}
+  - 225: {fileID: 22565280}
+  - 114: {fileID: 11470840}
   m_Layer: 5
   m_Name: Fade
   m_TagString: Untagged
@@ -48,7 +49,7 @@ MonoBehaviour:
   isLockModeInClickmanager: 1
   isIgnoreTweenLockOnClose: 0
   blockGUI: 1
-  background: {fileID: 11453312}
+  alphaTween: {fileID: 11470840}
   fadeInDuration: 0.5
   pauseBeforePlayDuration: 0.3
   pauseAfterFinishDuration: 0.3
@@ -65,8 +66,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -80,7 +81,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11453312
+--- !u!114 &11470840
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -88,12 +89,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d9692b0e2b3b1a47bd9d6b62b5b214a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a8dab43725f39f479eb758bc13b0cd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tweenIncrement: 0.1
-  blackScreen: {fileID: 11437838}
-  fadeOutText: {fileID: 0}
+  isUsingDemultiplexer: 0
+  startsHidden: 1
+  hideDeltaX: 0
+  hideDeltaY: 0
+  hideDeltaZ: 0
+  showDuration: 0.3
+  hideDuration: 0.3
+  showDelay: 0
+  hideDelay: 0
+  easeHide: 4
+  easeShow: 4
+  isUseEstimatedTime: 0
+  ShowTarget: {fileID: 0}
+  ShowFunctionName: 
+  ShowIncludeChildren: 0
+  HideTarget: {fileID: 0}
+  HideFunctionName: 
+  HideIncludeChildren: 0
+  strSoundShow: 
+  strSoundHide: 
+  hideDeltaAlpha: 1
 --- !u!222 &22250160
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -137,6 +156,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &22565280
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

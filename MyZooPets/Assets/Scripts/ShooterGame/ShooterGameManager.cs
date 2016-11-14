@@ -28,7 +28,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	void Awake() {
 		minigameKey = "SHOOTER";
 		quitGameScene = SceneUtils.YARD;
-        rewardXPMultiplier = 0.1f;
+		rewardXPMultiplier = 0.1f;
 		rewardShardMultiplier = 12;
 		rewardMoneyMultiplier = 8;
 	}
@@ -61,6 +61,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		shooterSkyController.Reset();
 		PlayerShooterController.Instance.Reset();
 
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
 	protected override void _PauseGame() {
@@ -100,10 +101,10 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Shooter, Score, true);
 
 		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
-		
-		#if UNITY_IOS
+
+#if UNITY_IOS
 		LeaderBoardManager.Instance.EnterScore((long)Score, "ShooterLeaderBoard");
-		#endif
+#endif
 	}
 
 	protected override void _QuitGame() {
@@ -118,26 +119,18 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	}
 
 	public void InputReceivedMove(bool isMove) {
-		if(inTutorial) {
-			if(OnTutorialTap != null) {
-				OnTutorialTap(this, EventArgs.Empty);
-			}
-		}
-
-			// this handles mouse look the actual overall picture is
-			// spread across 3 scripts this section deals with getting the input position
+		// this handles mouse look the actual overall picture is
+		// spread across 3 scripts this section deals with getting the input position
 #if !UNITY_EDITOR
 			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
 			if(isMove){
 				PlayerShooterController.Instance.Move(touchPos);
 			}
-		
 #endif
 #if UNITY_EDITOR
-			Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-				PlayerShooterController.Instance.Move(mousePos);	
+		Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
+		PlayerShooterController.Instance.Move(mousePos);
 #endif
-		
 	}
 
 	public void InputReceivedShoot(bool isMove, Vector3 pos) {
@@ -155,8 +148,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 				startTime = Time.time;
 #endif
 #if UNITY_EDITOR
-				PlayerShooterController.Instance.Shoot(pos);
-				startTime = Time.time;
+			PlayerShooterController.Instance.Shoot(pos);
+			startTime = Time.time;
 #endif
 		}
 	}

@@ -35,7 +35,6 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 		rewardXPMultiplier = 0.01f;
 		rewardMoneyMultiplier = 0.04f;
 		rewardShardMultiplier = 0.03f;
-		isContinueAllowed = false;  // Disable continue game functionality for this game
 	}
 
 	protected override void _Start() {
@@ -48,6 +47,8 @@ public class MemoryGameManager : NewMinigameManager<MemoryGameManager> {
 	protected override void _NewGame() {
 		isGameActive = true;
 		Reset();
+
+		isContinueAllowed = false;  // Disable continue game functionality for this game
 	}
 
 	protected override void _PauseGame() {

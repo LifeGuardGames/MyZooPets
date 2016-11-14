@@ -18,6 +18,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
 	public static EventHandler<EventArgs> OnDecorationItemBought;
 	public GridLayoutGroup grid;
+	public ScrollRect scrollRect;
 	public GameObject itemStorePrefab;		//basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
 	public GameObject boughtItemTweenPrefab; 	// Used for tween animation
@@ -232,6 +233,11 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		
 		currentPage = page;
+
+		// Reset the grid and scrolling
+		scrollRect.StopMovement();
+		Vector2 auxPosition = grid.GetComponent<RectTransform>().anchoredPosition;
+		grid.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, auxPosition.y);
 
 		//create the tabs for those sub category
 		if(currentPage == "Food"){

@@ -24,7 +24,7 @@ public class MutableDataTutorial{
 		ListPlayed = new List<string>();
     }
 
-	public void VersionCheck(Version currentDataVersion){
+	public void VersionCheck(string currentDataVersion){
 
 	}
 }

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using System;
 using fastJSON;
 
@@ -13,15 +15,21 @@ public class DataManager : Singleton<DataManager>{
 	public event EventHandler<EventArgs> OnGameDataSaved;
 
 	public string CURRENT_VERSION{
-		get{ return Application.version; }
+		get{
+			return Application.version;
+		}
 	}
 
 	public bool isDebug = false; //turn isDebug to true if working on independent scene
 
 	private static bool isCreated;
+	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
 
 	#region Properties
-	private PetGameData gameData; //Super class that stores all the game data related to a specific petID
+	/// <summary>
+	/// Gets the game data.
+	/// </summary>
+	/// <value>The game data.</value>
 	public PetGameData GameData{
 		get{ return gameData; }
 	}
@@ -60,19 +68,16 @@ public class DataManager : Singleton<DataManager>{
 
 	public bool IsAdsEnabled{
 		get{
-			return Constants.GetConstant<bool>("AdsEnabled");
-			// State-wise tracking, constant for now so commenting out
-			////default set to true
-			//if(!PlayerPrefs.HasKey("AdsEnabled")){
-			//	PlayerPrefs.SetInt("AdsEnabled", 1);
-			//}
-			//return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
+			//default set to true
+			if(!PlayerPrefs.HasKey("AdsEnabled")){
+				PlayerPrefs.SetInt("AdsEnabled", 1);
+			}
+			return PlayerPrefs.GetInt("AdsEnabled", 1) == 1;
 		}
-		//set {
-			// State-wise tracking, constant for now so commenting out
-			//PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
-			//PlayerPrefs.Save();
-		//}
+		set{
+			PlayerPrefs.SetInt("AdsEnabled", value ? 1 : 0);
+			PlayerPrefs.Save();
+		}
 	}
 
 	/// <summary>
@@ -86,10 +91,9 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
-		#if DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD
 		//PlayerPrefs.DeleteAll();
-		#endif
-
+#endif
 		Amplitude amplitude = Amplitude.Instance;
 		//Live Amplitude
 		//amplitude.logging = true;
@@ -116,13 +120,15 @@ public class DataManager : Singleton<DataManager>{
 
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager
-		if(isDebug)
+		if(isDebug && PlayerPrefs.GetInt("IsDebugSaveGameFlag", 0) == 0) {
+			PlayerPrefs.SetInt("IsDebugSaveGameFlag", 1);	// Special case here, dont load from debug if it is debug coming back
 			InitGameDataForDebug();
-		else{
+		}
+		else {
 			// if not first time need to do version check, retrieve old version
-			if(!IsFirstTime){
+			if(!IsFirstTime) {
 				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
-				VersionCheck(new Version(currentDataVersionString));
+				VersionCheck(currentDataVersionString);
 			}
 
 			LoadGameData();
@@ -155,7 +161,7 @@ public class DataManager : Singleton<DataManager>{
 			//any thing that needs saving, so check before saving
 			if(gameData != null){
 				// special case: when we are about to serialize the game, we have to cache the moment it happens so we know when the user stopped
-				GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
+				DataManager.Instance.GameData.PlayPeriod.LastTimeUserPlayedGame = LgDateTime.GetTimeNow();
                 
 				// Save last play period here again..
 				if(PlayPeriodLogic.Instance != null){
@@ -216,7 +222,7 @@ public class DataManager : Singleton<DataManager>{
 			string jsonString = PlayerPrefs.GetString("GameData", "");
 			
 			//Check if json string is actually loaded and not empty
-			if(!string.IsNullOrEmpty(jsonString)){
+			if(!String.IsNullOrEmpty(jsonString)){
 				newGameData = JSON.Instance.ToObject<PetGameData>(jsonString);
 				
 				#if UNITY_EDITOR
@@ -225,7 +231,7 @@ public class DataManager : Singleton<DataManager>{
 				
 				gameData = newGameData;
 
-				if(isDebug && Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
 					Debug.Log("Setting dummy data for second play period");
 					SetDummyDataForSecondPlayPeriod();
 				}
@@ -238,7 +244,7 @@ public class DataManager : Singleton<DataManager>{
 				//initiate game data here because none is found in the PlayerPrefs
 				gameData = new PetGameData();
 
-				if(isDebug && Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
+				if(Constants.GetConstant<bool>("ForceSecondPlayPeriod")){
 					Debug.Log("Setting dummy data for second play period");
 					SetDummyDataForSecondPlayPeriod();
 				}
@@ -270,10 +276,12 @@ public class DataManager : Singleton<DataManager>{
 	public void ModifyBasicPetInfo(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
-		if(!String.IsNullOrEmpty(petName))
+		if(!String.IsNullOrEmpty(petName)){
 			gameData.PetInfo.ChangeName(petName);
-		else
+		}
+		else{
 			gameData.PetInfo.ChangeName("Player1");
+		}
 
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;
@@ -293,16 +301,11 @@ public class DataManager : Singleton<DataManager>{
 	/// NOTE: Dont touch anything in here
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
-	private void VersionCheck(Version currentDataVersion){
+	private void VersionCheck(string currentDataVersion){
 		//Deleting all data that is less than v2.0.0	//DONT TOUCH THIS
-		if(currentDataVersion < new Version("2.0.0")) {
-			PlayerPrefs.DeleteKey("GameData");
-		}
-
-		// Disabling ads for all users below v2.2.0 (premium users)		//DONT TOUCH THIS
-		//if(currentDataVersion < new Version ("2.2.0")) {
-		//	IsAdsEnabled = false;
-		//}
+//		if(currentDataVersion < new Version("2.0.0")) {
+//			PlayerPrefs.DeleteKey("GameData");
+//		}
 	}
 
 	/// <summary>
@@ -313,7 +316,7 @@ public class DataManager : Singleton<DataManager>{
 		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
 
 		if(!IsFirstTime){
-			gameData.VersionCheck(new Version(currentDataVersionString));
+			gameData.VersionCheck(currentDataVersionString);
 		}
 	}
 

@@ -44,7 +44,8 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 			}
 			else {
-				PromotionUiManager.Instance.Show();
+				//PromotionUiManager.Instance.Show();	// Temp change for build
+				SceneManager.LoadScene(SceneUtils.BEDROOM);
 			}
 		}
 		else{

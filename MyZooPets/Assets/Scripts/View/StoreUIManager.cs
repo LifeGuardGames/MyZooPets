@@ -473,7 +473,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	//------------------------------------------
 	private void DestroyGrid(){
 		foreach(Transform child in grid.transform){
-			child.gameObject.SetActive(false);
+			//child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
 		}
 	}

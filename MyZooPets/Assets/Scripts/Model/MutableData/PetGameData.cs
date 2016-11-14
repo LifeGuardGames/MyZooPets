@@ -59,7 +59,7 @@ public class PetGameData{
 	/// This function is called after the game data has been loaded. It will call individual game data
 	/// version checks so that save data can properly be updated when the app is updated.
 	/// </summary>
-	public void VersionCheck(Version currentDataVersion) {
+	public void VersionCheck(string currentDataVersion) {
 		Tutorial.VersionCheck(currentDataVersion);
 	}
 }

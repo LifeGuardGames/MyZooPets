@@ -170,6 +170,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		AudioManager.Instance.PlayClip("runnerDie");
 		PlayerController.Instance.MakePlayerVisible(false);
 		isPaused = false; //HACK: This pause should really be called by our parent but that could break other games, so it will be used here
+		PlayerController.Instance.magnetSystem.Stop();
 						  // play game over sound
 		AudioManager.Instance.PlayClip("runnerGameOver");
 		RunnerLevelManager.Instance.mCurrentLevelGroup.ReportDeath();

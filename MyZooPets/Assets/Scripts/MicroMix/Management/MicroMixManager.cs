@@ -137,6 +137,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		lifeController.Reset(true);
 		difficulty = 1;
 		isContinueAllowed = IsContinueCheckDefaultTrue();
+		ResetScore();
 	}
 
 	protected override void _PauseGame() {

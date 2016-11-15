@@ -90,6 +90,15 @@ public class MutableDataStats {
 		return eMood;
 	}
 
+	public bool IsPetHungry() {
+		if(Mood == 100) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
 	/// <summary>
 	/// Gets the state of the health. Based on the numerical value of the Health stat,
 	/// returns an enum of the pet's health.

@@ -16,6 +16,7 @@ public class CampPlayerItem : MicroItem{
 #if !UNITY_EDITOR
 		angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime;
 #endif
+#if UNITY_EDITOR
 		if(Input.GetKey("left")) {
 			Debug.Log("hi");
 			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
@@ -29,6 +30,7 @@ public class CampPlayerItem : MicroItem{
 		else {
 			angle += 0 * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime;
 		}
+#endif
 		transform.position = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * CampMicro.distance;
 	}
 

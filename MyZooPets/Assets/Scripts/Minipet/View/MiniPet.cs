@@ -94,24 +94,19 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 		}
 	}
 
-	private void OnTap(TapGesture gesture) {
-		// Check to see if object is over UI
-		if(!EventSystem.current.IsPointerOverGameObject()) {
-			ProcessTapOrClick();
-		}
-	}
-
 	private void OnMouseDown() {
 		RaycastHit hitObject;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if(Physics.Raycast(ray, out hitObject)) {
 			if(hitObject.transform == transform) {
-				ProcessTapOrClick();
+				if(!EventSystem.current.IsPointerOverGameObject()) {
+					ProcessClick();
+				}
 			}
 		}
 	}
 
-	private void ProcessTapOrClick() {
+	private void ProcessClick() {
 		if(ClickManager.Instance.CurrentMode != UIModeTypes.MiniPet) {
 			Analytics.Instance.MiniPetVisited(minipetId);
 			if(!isFinishEating) {

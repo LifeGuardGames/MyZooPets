@@ -42,7 +42,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		switch(type) {
 			case MiniPetTypes.Retention:
 				minipetType = MiniPetTypes.Retention;
-				Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString()));
+				//Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString()));
 				if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey(hash[0].ToString())) {
 					//					Debug.Log(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].RewardStatus);
 					if(DataManager.Instance.GameData.Wellapad.CurrentTasks[hash[0].ToString()].isReward == RewardStatuses.Unclaimed
@@ -153,6 +153,7 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 		storeTweenParent.Hide();
 		CheckStoreButtonPulse();
 		SelectedMiniPetGameObject.GetComponent<MiniPetSpeechAI>().BeQuiet();
+		SelectedMiniPetGameObject.GetComponent<MiniPetSpeechAI>().PetSpeechZoomToggle(false);
 
 		//Show other UI Objects
 		NavigationUIManager.Instance.ShowPanel();

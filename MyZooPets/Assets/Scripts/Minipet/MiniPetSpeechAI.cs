@@ -4,6 +4,16 @@ using System.Collections;
 [RequireComponent(typeof(SpeechController))]
 public class MiniPetSpeechAI : MonoBehaviour {
 	public SpeechController speechController;
+	public TweenToggle speechCanvasTween;
+
+	public void PetSpeechZoomToggle(bool isZoomed) {
+		if(isZoomed) {
+			speechCanvasTween.Hide();
+		}
+		else {
+			speechCanvasTween.Show();
+		}
+	}
 
 	public void BeQuiet() {
 		speechController.BeQuiet();
@@ -73,8 +83,8 @@ public class MiniPetSpeechAI : MonoBehaviour {
 		msgOption.Add(SpeechController.SpeechKeys.MessageText, "Feed me this!!");
 
 		msgOption.Add(SpeechController.SpeechKeys.ImageButtonModeType, UIModeTypes.MiniPet);
-		msgOption.Add(SpeechController.SpeechKeys.ImageClickTarget, MiniPetHUDUIManager.Instance.gameObject);
-		msgOption.Add(SpeechController.SpeechKeys.ImageClickFunctionName, "OpenShop");
+		msgOption.Add(SpeechController.SpeechKeys.ImageClickTarget, StoreUIManager.Instance.gameObject);
+		msgOption.Add(SpeechController.SpeechKeys.ImageClickFunctionName, "OpenToSubCategoryFoodWithLockAndCallBack");
 		speechController.TalkMiniPet(msgOption);
 	}
 }

@@ -16,7 +16,6 @@ public class MiniPetMerchantUIController : MonoBehaviour {
 	public void InitializeContent(string itemID, bool isBoughtAlready, ItemType itemType, MiniPetMerchant merchantScript) {
 		this.merchantScript = merchantScript;
 		secretItem = DataLoaderItems.GetItem(itemID);
-
 		itemNameLabel.text = secretItem.Name;
 		descriptionLabel.text = secretItem.Description;
 		itemImage.sprite = SpriteCacheManager.GetItemSprite(secretItem.ID);

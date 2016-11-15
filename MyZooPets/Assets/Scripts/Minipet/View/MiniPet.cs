@@ -147,6 +147,8 @@ public abstract class MiniPet : MonoBehaviour, IDropInventoryTarget {
 		CameraManager.Callback cameraDoneFunction = delegate () {
 			CameraMoveDone();
 		};
+
+		miniPetSpeechAI.PetSpeechZoomToggle(true);
 		CameraManager.Instance.ZoomToTarget(position, zoomRotation, 0.5f, cameraDoneFunction);
 		PetMovement.Instance.OnReachedDest -= ZoomInToMiniPet;
 	}

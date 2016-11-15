@@ -51,7 +51,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 		itemBeingDragged = gameObject;
 
 		if(itemType == ItemType.Foods) {
-			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen) {
+			if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen && DataManager.Instance.GameData.Stats.IsPetHungry() ) {
 				PetAnimationManager.Instance.WaitingToBeFed();
 			}
 		}
@@ -107,6 +107,9 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 				}
 				else {
 					Debug.LogError("Item target does not implement IDropInventoryTarget:" + hit.collider.gameObject.name);
+				}
+				if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget" && hit.collider.gameObject.name != "Pet") {
+					PetAnimationManager.Instance.AbortFeeding();
 				}
 			}
 			else {  // Hit an invalid target

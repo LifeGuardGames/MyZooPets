@@ -23,6 +23,7 @@ public class PetGameData{
 	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataMiniPetLocations MiniPetLocations {get; set;}
 	public MutableDataMicroMix MicroMix {get; set;}
+	public MutableDataAdData AdViews {get; set;}
 
 	private List<MutableData> allMutableData;
 	
@@ -53,6 +54,7 @@ public class PetGameData{
 		MiniPets = new  MutableDataMiniPets();
 		MiniPetLocations = new MutableDataMiniPetLocations();
 		MicroMix = new MutableDataMicroMix();
+		AdViews = new MutableDataAdData();
     }
 
 	/// <summary>

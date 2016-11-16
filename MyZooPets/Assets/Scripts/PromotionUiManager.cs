@@ -7,8 +7,16 @@ public class PromotionUiManager : Singleton<PromotionUiManager> {
 	public List<PositionTweenToggle> adPromo;
 
 	public void Show() {
-		int rand = Random.Range(0, adPromo.Count);
-		adPromo[rand].Show();
+		if(DataManager.Instance.GameData.AdViews.SeanAdViews >= 3) {
+			adPromo.RemoveAt(0);
+		}
+		if(adPromo.Count > 0) {
+			adPromo[0].Show();
+			DataManager.Instance.GameData.AdViews.SeanAdViews++;
+        }
+		else {
+			OnContinueButton();
+		}
 	}
 
 	public void OnContinueButton() {

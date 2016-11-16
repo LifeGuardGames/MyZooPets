@@ -32,6 +32,7 @@ public class CustomizationUIManager : Singleton<CustomizationUIManager> {
 	}
 
 	public void ChangeEggColor(string petColor) {
+		AudioManager.Instance.PlayClip("introChangeColor");
 		poofParticle.Play();
 		EggController.Instance.ChangeColor("egg" + petColor);
 		this.petColor = petColor;

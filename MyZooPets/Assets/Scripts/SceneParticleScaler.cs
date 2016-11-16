@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿//using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -56,6 +56,7 @@ public class SceneParticleScaler : MonoBehaviour {
 		if(ps.gameObject != parent)
 			ps.transform.localPosition *= scalingValue;
 
+		/*
 		SerializedObject psSerial = new SerializedObject(ps);
 
 		//Scale Emission Rate if set on Distance
@@ -190,6 +191,7 @@ public class SceneParticleScaler : MonoBehaviour {
 
 		//Apply Modified Properties
 		psSerial.ApplyModifiedProperties();
+		*/
 	}
 
 	//Iterate and Scale Keys (Animation Curve)

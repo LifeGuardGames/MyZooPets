@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PromotionUIManager : Singleton<PromotionUIManager> {
 
-	public List<PositionTweenToggle> adPromo;
+	public List<TweenToggleDemux> promoDemux;
 
 	public void Show() {
+		Debug.Log("SDF");
 		if(DataManager.Instance.GameData.AdViews.SeanAdViews >= 3) {
-			adPromo.RemoveAt(0);
+			promoDemux.RemoveAt(0);
 		}
-		if(adPromo.Count > 0) {
-			adPromo[0].Show();
+		if(promoDemux.Count > 0) {
+			promoDemux[0].Show();
 			DataManager.Instance.GameData.AdViews.SeanAdViews++;
         }
 		else {
@@ -18,7 +20,6 @@ public class PromotionUIManager : Singleton<PromotionUIManager> {
 	}
 
 	public void OnContinueButton() {
-		LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
+		QuestionaireManager.Instance.ContinueLoading(true);
 	}
-
 }

@@ -159,7 +159,7 @@ public abstract class NewMinigameManager<T> : Singleton<T> where T : MonoBehavio
 	}
 
 	protected bool IsContinueCheckDefaultTrue() {
-		if(AdManager.Instance.IsAdReady() && Constants.GetConstant<bool>("IsAdsEnabled")) {
+		if(AdManager.Instance.IsAdReady() && Constants.GetConstant<bool>("AdsEnabled")) {
 			return true;
 		}
 		else {

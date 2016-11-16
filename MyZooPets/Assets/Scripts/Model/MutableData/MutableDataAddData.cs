@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class MutableDataAdData {
 
 	public Dictionary<string, int> AdViews;
-	public int SeanAdViews;
+	public int SeanAdViews;	// AB Test for sequential adViews - consecutive for 3 times minus first time
 
 	public MutableDataAdData() {
 		Init();

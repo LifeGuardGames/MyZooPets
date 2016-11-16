@@ -195,8 +195,11 @@ public class ClickManager : Singleton<ClickManager> {
 			}
 		}
 
-		// push this latest mode
-		stackModes.Push(mode);
+		// Check if the stack is already in same mode
+		if(stackModes.Count == 0 || stackModes.Peek() != mode) {
+			// push this latest mode
+			stackModes.Push(mode);
+		}
 	}
 
 	/// <summary>

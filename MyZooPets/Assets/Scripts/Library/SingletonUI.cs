@@ -41,8 +41,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 
 	/// <summary>
 	/// When a button wants to open a given UI, this is what should be called.
-	/// From a high level, the UIManager locks clicks/modes,
-	/// the child class implements its own _OpenUI logic
+	/// From a high level, the UIManager locks clicks/modes, the child class implements its own _OpenUI logic
 	/// </summary>
 	public void OpenUI(){
 		if(isLockModeInClickmanager){

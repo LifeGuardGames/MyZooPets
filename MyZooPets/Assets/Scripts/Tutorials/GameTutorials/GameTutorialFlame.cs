@@ -37,7 +37,7 @@ public class GameTutorialFlame : GameTutorial {
 				string tutMessage = string.Format(Localization.Localize(message), petName);
 
 				// show a little popup message telling the user to let go to breath fire
-				ShowPopup(TUTPOPUPTEXT, Constants.GetConstant<Vector3>("FlamePopup"), customMessage: tutMessage);
+				ShowPopup(TUTPOPUPTEXT, new Vector3(150, 219, 0), customMessage: tutMessage);
 				GatingManager.Instance.StartCoroutine(RemovePopupDelay());
 				break;
 		}
@@ -61,8 +61,8 @@ public class GameTutorialFlame : GameTutorial {
 		AddToProcessList(fireButton);
 
 		// show a little popup message telling the user to hold down the flame button
-		ShowPopup(TUTPOPUPTEXT, Constants.GetConstant<Vector3>("FlamePopup"));
-		ShowRetentionPet(false, new Vector3(270, -186, -160));
+		ShowPopup(TUTPOPUPTEXT, new Vector3(150, 219, 0));
+		ShowRetentionPet(false, new Vector3(270, 14, 0));
 	}
 
 	/// <summary>

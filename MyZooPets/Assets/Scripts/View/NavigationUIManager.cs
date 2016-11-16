@@ -27,7 +27,7 @@ public class NavigationUIManager : Singleton<NavigationUIManager> {
 			FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 		}
 		else {
-			FireCrystalUIManager.Instance.OpenUIBasedOnScene();
+			FireCrystalUIManager.Instance.OpenUIBasedOnScene(false);
 		}
 	}
 }

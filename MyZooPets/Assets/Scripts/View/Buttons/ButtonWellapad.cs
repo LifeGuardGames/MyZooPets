@@ -23,7 +23,7 @@ public class ButtonWellapad : LgWorldButton {
 			FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 		}
 		else {
-			FireCrystalUIManager.Instance.OpenUIBasedOnScene();
+			FireCrystalUIManager.Instance.OpenUIBasedOnScene(false);
 			DisableButtonBounce();
 		}
 	}

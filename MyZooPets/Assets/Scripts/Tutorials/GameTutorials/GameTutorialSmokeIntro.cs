@@ -101,7 +101,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 	private void ShowWellapad(){
 		// show the wellapad
-		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene(false);
 		
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();

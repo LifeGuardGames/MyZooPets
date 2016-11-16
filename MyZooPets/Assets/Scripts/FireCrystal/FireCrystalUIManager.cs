@@ -49,7 +49,7 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 		// If scene is in bedroom or yard, combine with wellapad
 		else if((SceneUtils.CurrentScene == SceneUtils.BEDROOM) || SceneUtils.CurrentScene == SceneUtils.YARD) {
 			Vector3 currentPos = panelTween.transform.localPosition;
-			panelTween.transform.localPosition = new Vector3(-272, currentPos.y, currentPos.z);
+			panelTween.transform.localPosition = new Vector3(-250, currentPos.y, currentPos.z);
 		}
 	}
 
@@ -82,15 +82,15 @@ public class FireCrystalUIManager : SingletonUI<FireCrystalUIManager> {
 			// Lock and fire animations
 			isFireCrystalUIAnimating = true;
 
-			OpenUIBasedOnScene();
+			OpenUIBasedOnScene(true);
 
 			StartCoroutine(StartFlyingShards(numberOfShards, 0.5f));
 		}
 	}
 
-	public void OpenUIBasedOnScene() {
+	public void OpenUIBasedOnScene(bool isHideBackButtonInZones) {
 		if((SceneUtils.CurrentScene == SceneUtils.BEDROOM) || SceneUtils.CurrentScene == SceneUtils.YARD) {
-			WellapadUIManager.Instance.OpenUI();
+			WellapadUIManager.Instance.OpenAutomaticUI(isHideBackButtonInZones);
 		}
 		else {
 			OpenUI();

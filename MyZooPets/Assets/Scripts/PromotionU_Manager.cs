@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-public class PromotionUiManager : Singleton<PromotionUiManager> {
+public class PromotionUIManager : Singleton<PromotionUIManager> {
 
 	public List<PositionTweenToggle> adPromo;
 

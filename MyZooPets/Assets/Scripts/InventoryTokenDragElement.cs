@@ -95,7 +95,7 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 				(hit.collider.gameObject.name == "FireButton" || hit.collider.gameObject.name == "FireButtonCanvas")) {
 				isDraggingFireCrystalToButton = true;
             }
-			else if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget"
+			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget"
 				|| itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget"
 				|| isDraggingFireCrystalToButton) {
 

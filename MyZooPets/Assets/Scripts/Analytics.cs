@@ -278,4 +278,25 @@ public class Analytics : Singleton<Analytics> {
 			});
 		}
 	}
+	public void ShowAd(string AdName) {
+		if(isAnalyticsEnabled) {
+			Amplitude.Instance.logEvent("Showing Ad", new Dictionary<string, object>{
+				{ "Ad Name: ", AdName}
+			});
+		}
+	}
+	public void ClickedAd(string AdName) {
+		if(isAnalyticsEnabled) {
+			Amplitude.Instance.logEvent("Clicked Ad", new Dictionary<string, object>{
+				{ "Ad Name: ", AdName}
+			});
+		}
+	}
+	public void ExitAd(string AdName) {
+		if(isAnalyticsEnabled) {
+			Amplitude.Instance.logEvent("Exit Ad", new Dictionary<string, object>{
+				{ "Ad Name: ", AdName}
+			});
+		}
+	}
 }

@@ -4,7 +4,9 @@ public class WizdyDinerPromo : MonoBehaviour {
 	public TweenToggleDemux tweenToggle;
 
 	public void OnOkButton() {
-		OnExitButton();
+		Analytics.Instance.ClickedAd("WizdyDinerPromo");
+		tweenToggle.Hide();
+		PromotionUIManager.Instance.OnContinueButton();
 #if UNITY_ANDROID
 		Application.OpenURL("market://details?id=com.LifeGuardGames.FoodAllergyAndroid");
 #elif UNITY_IPHONE
@@ -13,6 +15,7 @@ public class WizdyDinerPromo : MonoBehaviour {
 	}
 
 	public void OnExitButton() {
+		Analytics.Instance.ExitAd("WizdyDinerPromo");
 		tweenToggle.Hide();
 		PromotionUIManager.Instance.OnContinueButton();
 	}

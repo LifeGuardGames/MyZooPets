@@ -11,6 +11,7 @@ public class PromotionUIManager : Singleton<PromotionUIManager> {
 			promoDemux.RemoveAt(0);
 		}
 		if(promoDemux.Count > 0) {
+			Analytics.Instance.ClickedAd(promoDemux[0].name);
 			promoDemux[0].Show();
 			DataManager.Instance.GameData.AdViews.SeanAdViews++;
         }

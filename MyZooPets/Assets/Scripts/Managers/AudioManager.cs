@@ -1,18 +1,19 @@
 using UnityEngine;
 using System.Collections;
 
-public class AudioManager : LgAudioManager<AudioManager>{
+public class AudioManager : LgAudioManager<AudioManager> {
 	public bool isMusicOn = true;
 	public string backgroundMusic;
 
 	private AudioSource backgroundSource;
-	
-	protected override void Awake(){
+	public string lastLoadedScene;
+
+	protected override void Awake() {
 		base.Awake();
 		backgroundSource = GetComponent<AudioSource>();
 	}
-	
-	protected override void Start(){
+
+	protected override void Start() {
 		// Dont play anything if its in loading scene
 		if(SceneUtils.CurrentScene == SceneUtils.LOADING) {
 			return;
@@ -21,60 +22,61 @@ public class AudioManager : LgAudioManager<AudioManager>{
 		StartCoroutine(PlayBackground());
 	}
 
-	private IEnumerator PlayBackground(){
+	private IEnumerator PlayBackground() {
 		yield return new WaitForSeconds(0.5f);
-		if(isMusicOn){
+		if(isMusicOn) {
 			AudioClip backgroundClip = null;
-			if(backgroundMusic != null){
+			if(backgroundMusic != null) {
 				backgroundClip = Resources.Load(backgroundMusic) as AudioClip;
 			}
 
-			if(backgroundClip != null){
+			if(backgroundClip != null) {
 				backgroundSource.clip = backgroundClip;
 				backgroundSource.Play();
 			}
 		}
 	}
 
-	public void LowerBackgroundVolume(float newVolume){
+	public void LowerBackgroundVolume(float newVolume) {
 		backgroundSource.volume = newVolume;
 	}
 
 	// Pass in null if don't want new music
-	public void FadeOutPlayNewBackground(string newAudioClipName, bool isLoop = true){
+	public void FadeOutPlayNewBackground(string newAudioClipName, bool isLoop = true) {
 		StartCoroutine(FadeOutPlayNewBackgroundHelper(newAudioClipName, isLoop));
 	}
 
-	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName, bool isLoop){
-		for(int i = 9; i >= 0; i--){
+	private IEnumerator FadeOutPlayNewBackgroundHelper(string newAudioClipName, bool isLoop) {
+		for(int i = 9; i >= 0; i--) {
 			backgroundSource.volume = i * .1f;
 			yield return new WaitForSeconds(.01f);
 		}
-		if(newAudioClipName != null){
-			backgroundSource.Stop();
-			backgroundSource.volume = 0.6f;
-			backgroundMusic = newAudioClipName;
-
-			if(!isLoop){
-				backgroundSource.loop = false;
-			}
-
-			StartCoroutine(PlayBackground());
+		if(newAudioClipName != null) {
+			ImmediatelyPlayNewBackground(newAudioClipName, isLoop);
 		}
-		else{
+		else {
 			backgroundSource.Stop();
 		}
+	}
+
+	private void ImmediatelyPlayNewBackground(string newAudioClipName, bool isLoop) {
+		backgroundSource.Stop();
+		backgroundSource.volume = 0.6f;
+		backgroundMusic = newAudioClipName;
+		backgroundSource.loop = isLoop;
+
+		StartCoroutine(PlayBackground());
 	}
 
 	/// <summary>
 	/// Pause all audio sources.
 	/// </summary>
 	/// <param name="isPaused">If set to <c>true</c> is paused.</param>
-	public void PauseBackground(bool isPaused){	
-		if(isPaused){
+	public void PauseBackground(bool isPaused) {
+		if(isPaused) {
 			backgroundSource.Pause();
 		}
-		else{
+		else {
 			backgroundSource.Play();
 		}
 	}
@@ -93,9 +95,13 @@ public class AudioManager : LgAudioManager<AudioManager>{
 			FadeOutPlayNewBackground(backgroundMusic);
 		}
 		else if(currentScene == SceneUtils.BEDROOM) {
-			backgroundSource.loop = true;
 			backgroundMusic = "bgBedroom";
-			FadeOutPlayNewBackground(backgroundMusic);
+			if(lastLoadedScene == SceneUtils.MENU) {		// Edge case, dont allow comic music to loop
+				ImmediatelyPlayNewBackground(backgroundMusic, true);
+			}
+			else {
+				FadeOutPlayNewBackground(backgroundMusic);
+			}
 		}
 		else if(currentScene == SceneUtils.YARD) {
 			backgroundMusic = "bgYard";
@@ -121,5 +127,6 @@ public class AudioManager : LgAudioManager<AudioManager>{
 			backgroundMusic = "bgRunner";
 			FadeOutPlayNewBackground(backgroundMusic);
 		}
+		lastLoadedScene = currentScene;
 	}
 }

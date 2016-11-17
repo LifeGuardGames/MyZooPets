@@ -171,6 +171,11 @@ public class HUDAnimator : MonoBehaviour {
 
 		GameObject tweenParent = null;	//HUDUIManager.Instance.GetTweenParent(Constants.GetConstant<String>(type + "_Anchor"));	// Check which anchor this is in
 
+		// Cap for display purposes, dont want to wait too long for UI to finish
+		if(amount > 150) {
+			amount = 150;	
+		}
+
 		modifier = Math.Abs(fModifier * amount);
 		if(amount > 0) {
 			toPos = Vector3.zero;
@@ -342,7 +347,7 @@ public class HUDAnimator : MonoBehaviour {
 			case StatType.Hunger:
 				return 1;
 			case StatType.Coin:
-				return 1;
+				return 2;
 			default:
 				Debug.LogError("Invalid stat type for step modifier " + statType.ToString());
 				return 0;

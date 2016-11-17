@@ -166,7 +166,7 @@ public class StatsManager : Singleton<StatsManager>{
 			listStats.Add(new StatPair(StatType.Xp, xpDelta, xpPos, xpDelta > 0 ? "XpSingleTick" : null));
             listStats.Add(new StatPair(StatType.Coin, coinsDelta, coinsPos, coinsDelta > 0 ? "CoinSingleTick" : null));
             listStats.Add(new StatPair(StatType.Health, healthDelta, healthPos, healthDelta > 0 ? "HealthSingleTick" : null));
-			listStats.Add(new StatPair(StatType.Hunger, hungerDelta, hungerPos));
+			listStats.Add(new StatPair(StatType.Hunger, hungerDelta, hungerPos, hungerDelta > 0 ? "HungerSingleTick" : null));
 
 			if(hudAnimator != null && !bBeingDestroyed){
 				// Push this into the reward queue
@@ -176,8 +176,8 @@ public class StatsManager : Singleton<StatsManager>{
 				RewardManager.Instance.AddToRewardQueue(function1);
 			}
 
-		//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
-		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, DataManager.Instance.GameData.Stats.TotalStars, true);
+			//Check if there are enough coins/stars to unlock badge, we want to do this last after reward
+			BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Coin, DataManager.Instance.GameData.Stats.TotalStars, true);
 		}
 	}
 
@@ -286,28 +286,28 @@ public class StatsManager : Singleton<StatsManager>{
 	#endregion
 
 	#if UNITY_EDITOR || DEVELOPMENT_BUILD
-	//void OnGUI() {
-	//	if(GUI.Button(new Rect(0, 0, 100, 50), "+health")) {
-	//		ChangeStats(healthDelta: 10);
-	//	}
-	//	if(GUI.Button(new Rect(100, 0, 100, 50), "-health")) {
-	//		ChangeStats(healthDelta: -10);
-	//	}
-	//	if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")) {
-	//		ChangeStats(hungerDelta: 10);
-	//	}
-	//	if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")) {
-	//		ChangeStats(hungerDelta: -10);
-	//	}
-	//	if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")) {
-	//		ChangeStats(xpDelta: 100);
-	//	}
-	//	if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")) {
-	//		ChangeStats(coinsDelta: 50);
-	//	}
-	//	if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")) {
-	//		ChangeStats(coinsDelta: -40);
-	//	}
-	//}
+//	void OnGUI() {
+//		if(GUI.Button(new Rect(0, 0, 100, 50), "+health")) {
+//			ChangeStats(healthDelta: 10);
+//		}
+//		if(GUI.Button(new Rect(100, 0, 100, 50), "-health")) {
+//			ChangeStats(healthDelta: -10);
+//		}
+//		if(GUI.Button(new Rect(200, 0, 100, 50), "+mood")) {
+//			ChangeStats(hungerDelta: 10);
+//		}
+//		if(GUI.Button(new Rect(300, 0, 100, 50), "-mood")) {
+//			ChangeStats(hungerDelta: -10);
+//		}
+//		if(GUI.Button(new Rect(400, 0, 100, 50), "+xp")) {
+//			ChangeStats(xpDelta: 100);
+//		}
+//		if(GUI.Button(new Rect(600, 0, 100, 50), "+Stars")) {
+//			ChangeStats(coinsDelta: 200);
+//		}
+//		if(GUI.Button(new Rect(700, 0, 100, 50), "-Stars")) {
+//			ChangeStats(coinsDelta: -40);
+//		}
+//	}
 	#endif
 }

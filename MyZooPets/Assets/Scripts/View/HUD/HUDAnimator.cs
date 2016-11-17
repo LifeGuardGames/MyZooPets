@@ -164,7 +164,7 @@ public class HUDAnimator : MonoBehaviour {
 	/// </summary>
 	private void TweenMoveToPoint(StatType statType, int amount, Vector3 fromPos, string sound) {
 		Vector3 toPos;
-		float duration = 1f;
+		float duration = 0.5f;
         float modifier = 3f;			// How many to spawn for each change
 		bool isPlusAnimation = false;	// Used for "adding" animation otherwise "substracting" animation
 		float fModifier = GetSpawnCountModifier(statType);
@@ -173,7 +173,7 @@ public class HUDAnimator : MonoBehaviour {
 
 		modifier = Math.Abs(fModifier * amount);
 		if(amount > 0) {
-			toPos = HUDUIManager.Instance.GetStatEndPositions(statType);
+			toPos = Vector3.zero;
 			isPlusAnimation = true;
 		}
 		else {
@@ -207,19 +207,29 @@ public class HUDAnimator : MonoBehaviour {
 
 		// Modify some tweening behaviors based on adding or subtracting a stat
 		if(isPlusAnimation) {
-			GameObject go = GameObjectUtils.AddChildGUI(gameObject, tweenSpritePrefab);
-			go.transform.localPosition = fromPos;
+			GameObject go = GameObjectUtils.AddChildGUI(HUDUIManager.Instance.GetStatTweenParents(statType), tweenSpritePrefab);
+//			GameObject go = GameObjectUtils.AddChildGUI(gameObject, tweenSpritePrefab);
+
+			go.transform.localPosition = GameObjectUtils.GetRandomPointOnCircumference(go.transform.localPosition, 200f);
+//			go.transform.localPosition = fromPos;
+
 			go.GetComponent<Image>().sprite = SpriteCacheManager.GetHudTweenIcon(statType);
 
 			// Addition tweening behavior
-			Vector3[] path = new Vector3[4];
-			path[0] = go.transform.localPosition;
-			Vector3 randomPoint = GameObjectUtils.GetRandomPointOnCircumference(go.transform.localPosition, 200f);
-			path[1] = randomPoint;
-			path[2] = path[1];
-			path[3] = toPos;
+//			Vector3[] path = new Vector3[4];
+//			path[0] = go.transform.localPosition;
+//			Vector3 randomPoint = GameObjectUtils.GetRandomPointOnCircumference(go.transform.localPosition, 200f);
+//			path[1] = randomPoint;
+//			path[2] = path[1];
+//			path[3] = toPos;
 
-			LeanTween.moveLocal(go, path, duration)
+//			LeanTween.moveLocal(go, path, duration)
+//				.setEase(customEaseCurve)
+//				.setOnComplete(StatTick).setOnCompleteParam(statType)
+//				.setDestroyOnComplete(true);
+
+			// Just tweening from circumference for now
+			LeanTween.moveLocal(go, toPos, duration)
 				.setEase(customEaseCurve)
 				.setOnComplete(StatTick).setOnCompleteParam(statType)
 				.setDestroyOnComplete(true);

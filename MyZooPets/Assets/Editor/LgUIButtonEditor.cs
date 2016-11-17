@@ -20,5 +20,10 @@ public class LgUIButtonEditor : UnityEditor.UI.ButtonEditor {
 			component.modeType2 = (UIModeTypes)EditorGUILayout.EnumPopup("Mode Type 2", component.modeType2);
 			component.modeType3 = (UIModeTypes)EditorGUILayout.EnumPopup("Mode Type 3", component.modeType3);
 		}
+
+		component.hasSound = EditorGUILayout.Toggle("Has Audio", component.hasSound);
+		if(component.hasSound) {
+			component.isPositiveSound = EditorGUILayout.Toggle("Positive Audio", component.isPositiveSound);
+		}
 	}
 }

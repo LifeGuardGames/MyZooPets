@@ -18,10 +18,10 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 	public Text hungerLabel;
 	public Text coinLabel;
 
-	public RectTransform levelParent;
-	public RectTransform healthParent;
-	public RectTransform hungerParent;
-	public RectTransform coinParent;
+	public GameObject levelParent;
+	public GameObject healthParent;
+	public GameObject hungerParent;
+	public GameObject coinParent;
 
 	private float levelBarWidth;
 	private float healthBarWidth;
@@ -87,19 +87,19 @@ public class HUDUIManager : Singleton<HUDUIManager>{
 		hudAnimator.PlayNeedCoinAnimation();
     }
 
-	public Vector3 GetStatEndPositions(StatType stat) {
+	public GameObject GetStatTweenParents(StatType stat) {
 		switch(stat) {
 			case StatType.Xp:
-				return levelParent.transform.position;
+				return levelParent;
 			case StatType.Health:
-				return healthParent.transform.position;
+				return healthParent;
 			case StatType.Hunger:
-				return hungerParent.transform.position;
+				return hungerParent;
 			case StatType.Coin:
-				return coinParent.transform.position;
+				return coinParent;
 			default:
 				Debug.LogWarning("Invalid stat");
-				return Vector3.zero;
+				return null;
 		}
 	}
 }

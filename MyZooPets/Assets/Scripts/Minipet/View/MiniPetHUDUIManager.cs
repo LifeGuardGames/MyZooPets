@@ -93,7 +93,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				minipetType = MiniPetTypes.Merchant;
 				contentPrefab = Resources.Load("ContentParentMerchant") as GameObject;
 				content = GameObjectUtils.AddChildWithPositionAndScale(contentParent, contentPrefab);
-
 				ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), hash[1].ToString());
 				MiniPetMerchantUIController minipetMerchantUIController = content.GetComponent<MiniPetMerchantUIController>();
 				minipetMerchantUIController.InitializeContent(hash[0].ToString(), false, itemType, (MiniPetMerchant)baseScript);
@@ -113,7 +112,6 @@ public class MiniPetHUDUIManager : SingletonUI<MiniPetHUDUIManager> {
 				Debug.LogError("No minipet type found: " + type.ToString());
 				return;
 		}
-
 	}
 
 

@@ -31,7 +31,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 		if(DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated < PlayPeriodLogic.GetCurrentPlayPeriod()){
 			DataManager.Instance.GameData.MiniPetLocations.LastestPlayPeriodUpdated = PlayPeriodLogic.GetCurrentPlayPeriod();
 //			Debug.Log("----SPAWN NEW LOCATIONS?: YES");
-			if(UnityEngine.Random.Range(0, 0) == 0){
+			if(UnityEngine.Random.Range(0, 4) == 0){
 				merchantSpawnChance = true;
 				DataManager.Instance.GameData.MiniPetLocations.SetMerchantSpawning(merchantSpawnChance);
 			}

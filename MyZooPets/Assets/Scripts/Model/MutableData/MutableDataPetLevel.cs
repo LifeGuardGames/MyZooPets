@@ -7,7 +7,7 @@ public class MutableDataPetLevel{
     }
 
     private void Init(){
- //      CurrentLevel = Level.Level1;
-    	CurrentLevel = Level.Level8;
+       CurrentLevel = Level.Level1;
+//    	CurrentLevel = Level.Level8;
     } 
 }

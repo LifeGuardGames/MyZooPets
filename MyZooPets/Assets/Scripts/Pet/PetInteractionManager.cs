@@ -88,6 +88,15 @@ public class PetInteractionManager : Singleton<PetInteractionManager>, IDropInve
 			return;
 		}
 
+		if (itemData.ItemID == "Usable0") {
+			if(DataManager.Instance.GameData.Stats.GetHealthState() != PetHealthStates.Healthy) {
+				InventoryManager.Instance.UsePetItem(itemData.ItemID);
+			}
+			else {
+				return;
+			}
+		}
+
 		// check to make sure the item can be used
 		if(ItemManager.Instance.CanUseItem(itemData.ItemID)) {
 			// notify inventory logic that this item is being used

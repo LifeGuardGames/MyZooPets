@@ -95,9 +95,10 @@ public class InventoryTokenDragElement : MonoBehaviour, IBeginDragHandler, IDrag
 				(hit.collider.gameObject.name == "FireButton" || hit.collider.gameObject.name == "FireButtonCanvas")) {
 				isDraggingFireCrystalToButton = true;
             }
+
 			if(itemType == ItemType.Foods && hit.collider.gameObject.tag == "ItemTarget"
 				|| itemType == ItemType.Decorations && hit.collider.gameObject.tag == "DecoItemTarget"
-				|| isDraggingFireCrystalToButton) {
+				|| isDraggingFireCrystalToButton || inventoryData.ItemID == "Usable0" && hit.collider.name == "Pet") {
 
 				// Get the object's interface that handles item processing
 				IDropInventoryTarget dropTarget = hit.collider.gameObject.GetComponent<IDropInventoryTarget>();

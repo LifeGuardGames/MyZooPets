@@ -52,7 +52,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		minigameKey = "NINJA";
 		quitGameScene = SceneUtils.BEDROOM;
 		rewardMoneyMultiplier = 0.22f;
-		rewardShardMultiplier = 0.1f;
+		rewardShardMultiplier = 0.25f;
 		rewardXPMultiplier = 0.2f;
 	}
 

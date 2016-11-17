@@ -29,8 +29,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		minigameKey = "SHOOTER";
 		quitGameScene = SceneUtils.YARD;
 		rewardXPMultiplier = 0.1f;
-		rewardShardMultiplier = 12;
-		rewardMoneyMultiplier = 8;
+		rewardShardMultiplier = 6;
+		rewardMoneyMultiplier = 4;
 	}
 
 	protected override void _Start() {

@@ -313,7 +313,8 @@ public enum MinigameTypes{
 	Shooter,
 	Memory,
 	Clinic,
-	RUNNER
+	Runner,
+	MicroMix
 }
 
 public enum ZoneTypes{

@@ -82,7 +82,7 @@ public class MiniPetGameMaster : MiniPet {
 					return "ScoreShooter";
 			}
 		}
-		else if(type == MinigameTypes.RUNNER) {
+		else if(type == MinigameTypes.Runner) {
 			int rand = UnityEngine.Random.Range(0, 3);
 			switch(rand) {
 				case 0:

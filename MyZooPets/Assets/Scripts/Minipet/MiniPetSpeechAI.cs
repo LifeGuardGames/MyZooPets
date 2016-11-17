@@ -61,7 +61,7 @@ public class MiniPetSpeechAI : MonoBehaviour {
 			case MinigameTypes.Memory:
 				msgOption.Add(SpeechController.SpeechKeys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_MEMORY"));
 				break;
-			case MinigameTypes.RUNNER:
+			case MinigameTypes.Runner:
 				msgOption.Add(SpeechController.SpeechKeys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_RUNNER"));
 				break;
 			case MinigameTypes.Shooter:

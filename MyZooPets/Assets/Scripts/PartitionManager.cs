@@ -134,7 +134,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		case MinigameTypes.Memory:
 			locationType = PartitionLocationTypes.Memory;
 			break;
-		case MinigameTypes.RUNNER:
+		case MinigameTypes.Runner:
 			locationType = PartitionLocationTypes.Runner;
 			break;
 		case MinigameTypes.Shooter:
@@ -142,6 +142,9 @@ public class PartitionManager : Singleton<PartitionManager> {
 			break;
 		case MinigameTypes.TriggerNinja:
 			locationType = PartitionLocationTypes.TriggerNinja;
+			break;
+		case MinigameTypes.MicroMix:
+			locationType = PartitionLocationTypes.MicroMix;
 			break;
 		default:
 			return null;
@@ -200,6 +203,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		}
 		else{
 			// All gates unlocked
+			List<ImmutableDataPartition> list = DataLoaderPartitions.GetDataList();
 			return DataLoaderPartitions.GetDataList().Count - 1;	// Get the gates list count, off by 1
 		}
 	}

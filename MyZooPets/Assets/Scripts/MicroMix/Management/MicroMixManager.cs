@@ -57,7 +57,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 
 	public void WinMicro() {
 		int currentScore = lifeController.AddScore();
-		UpdateScore(currentScore);
+		UpdateScore(1);
 		//AudioManager.Instance.PlayClip("microWin");	
 		if(currentScore % 2 == 0) { //We have completed another 2 minigames, SPEEDUP
 			difficulty++;

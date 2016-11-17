@@ -15,7 +15,7 @@ public class FarmGenerator : MonoBehaviour {
 	public float showButtonThreshold;	// Amount in current when it starts to show the button
 	public float allowTapThreshold;		// Amount in current when you are allowed to tap the collider
 
-	public GameObject buttonParent;
+	public GameObject canvas;
 	public Animation clickAnimation;
 
 	private string itemId;
@@ -93,11 +93,11 @@ public class FarmGenerator : MonoBehaviour {
 	private void CheckShowButton(){
 		// Show the button
 		if(current >= showButtonThreshold){
-			buttonParent.SetActive(true);
+			canvas.SetActive(true);
 		}
 		// Hide the button
 		else{
-			buttonParent.SetActive(false);
+			canvas.SetActive(false);
 		}
 	}
 

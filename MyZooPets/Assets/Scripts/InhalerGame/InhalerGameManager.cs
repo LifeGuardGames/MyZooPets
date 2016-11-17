@@ -59,7 +59,7 @@ public class InhalerGameManager : Singleton<InhalerGameManager> {
 	// Put anything in here that should happen as a result of the pet using the daily inhaler.
 	private void GameDone() {
 		InhalerGameUIManager.Instance.StopShowHintTimer();
-		StatsManager.Instance.ChangeStats(healthDelta: 5, hungerDelta: 100, isInternal: true);
+		StatsManager.Instance.ChangeStats(healthDelta: 20, hungerDelta: 80, isInternal: true);
 		DateTime now = LgDateTime.GetTimeNow();
 		DateTime then = DataManager.Instance.GameData.Inhaler.LastPlayPeriodUsed;
 		TimeSpan lastTimeSinceInhaler = now - then;

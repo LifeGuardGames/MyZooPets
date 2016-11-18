@@ -83,8 +83,17 @@ public class MiniPetSpeechAI : MonoBehaviour {
 		msgOption.Add(SpeechController.SpeechKeys.MessageText, "Feed me this!!");
 
 		msgOption.Add(SpeechController.SpeechKeys.ImageButtonModeType, UIModeTypes.MiniPet);
-		msgOption.Add(SpeechController.SpeechKeys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-		msgOption.Add(SpeechController.SpeechKeys.ImageClickFunctionName, "OpenToSubCategoryFoodWithLockAndCallBack");
+		msgOption.Add(SpeechController.SpeechKeys.ImageClickTarget, gameObject);
+		msgOption.Add(SpeechController.SpeechKeys.ImageClickFunctionName, "FoodPreferenceConditionalCall");
 		speechController.TalkMiniPet(msgOption);
+	}
+
+	public void FoodPreferenceConditionalCall(){
+		if(MiniPetHUDUIManager.Instance.IsOpen){
+			MiniPetHUDUIManager.Instance.OnMiniPetShopButton();
+		}
+		else{
+			StoreUIManager.Instance.OpenToSubCategoryFoodWithLockAndCallBack();
+		}
 	}
 }

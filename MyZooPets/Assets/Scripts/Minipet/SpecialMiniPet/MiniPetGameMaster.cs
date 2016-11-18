@@ -13,7 +13,6 @@ public class MiniPetGameMaster : MiniPet {
 
 	protected override void OpenChildUI() {
 		notifier.SetActive(false);
-		Debug.Log(MiniPetHUDUIManager.Instance.HasContent());
 		if(!MiniPetHUDUIManager.Instance.HasContent()) {
 			if(isFinishEating) {
 				minigameTaskId = DataManager.Instance.GameData.MiniPets.GetTask(minipetId).TaskID;

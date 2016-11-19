@@ -15,7 +15,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 		try{
 			if(Application.isPlaying){	// Exception for execute in edit mode
 				if(isDebug){
-					Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
+					Debug.LogWarning("Debug for pet color is currently on! Make sure to uncheck!");
 				}
 				else{
 					if(SceneUtils.CurrentScene == SceneUtils.MENU){

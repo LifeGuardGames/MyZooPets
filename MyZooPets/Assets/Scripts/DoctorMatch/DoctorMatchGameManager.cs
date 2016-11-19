@@ -133,10 +133,15 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 
 	protected override void _ContinueGame() {
 		lifeBarController.PlusBar(33);
-		assemblyLineController.PopulateQueue(compare: true);
+		lifeBarController.StartDraining();
 		lifeBarController.UpdateCount(-1);
+		assemblyLineController.PopulateQueue(compare: true);
 		redBar.SetActive(true);
 		toClearText.SetActive(false);
+
+		zoneGreen.ToggleButtonInteractable(true);
+		zoneYellow.ToggleButtonInteractable(true);
+		zoneRed.ToggleButtonInteractable(true);
 	}
 
 	protected override void _GameOver() {

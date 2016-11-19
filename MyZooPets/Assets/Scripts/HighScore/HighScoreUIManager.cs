@@ -16,6 +16,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 
 	protected override void Start(){
 		base.Start();
+		DataManager.Instance.GameData.HighScore.UpdateHighScoreToNewVersion();	// Clean up any old data
 		RefreshScoreBoard();
 	}
 

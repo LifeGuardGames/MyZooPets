@@ -38,12 +38,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 	protected override void Start(){
 		base.Start();
-		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
 	}
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
-		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
 
 	// When the zoomItem is clicked and zoomed into
@@ -212,7 +210,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		AccessoryNodeController.Instance.SetAccessory(itemID);		// Equip the node
 		RefreshAccessoryItems();
 
-		AudioManager.Instance.PlayClip("buttonGeneric2");
+		AudioManager.Instance.PlayClip("buttonGeneric3");
 	}
 
 	// Called from AccessoryEntryUIController
@@ -221,7 +219,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
 		RefreshAccessoryItems();
 
-		AudioManager.Instance.PlayClip("buttonGeneric2");
+		AudioManager.Instance.PlayClip("buttonGeneric3");
 	}
 
 	//Check for any UI updateds
@@ -229,10 +227,5 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		foreach(AccessoryStoreItemController entryController in accessoryEntryList){
 			entryController.CheckState();
 		}
-	}
-
-	// Used for unlocking new decos
-	private void RefreshAccessoryItems(object sender, EventArgs args){
-		RefreshAccessoryItems();
 	}
 }

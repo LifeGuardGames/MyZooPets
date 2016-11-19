@@ -18,12 +18,10 @@ public class CampPlayerItem : MicroItem{
 #endif
 #if UNITY_EDITOR
 		if(Input.GetKey("left")) {
-			Debug.Log("hi");
 			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
 			angle += 1f * angularSpeed * Time.deltaTime;
 		}
 		if(Input.GetKey("right")) {
-			Debug.Log("hi");
 			//	angle += screenOrientationMultiplier * Mathf.Clamp(Input.acceleration.x, -maxTilt, maxTilt) * angularSpeed * Time.deltaTime; 
 			angle += -1f * angularSpeed * Time.deltaTime;
 		}

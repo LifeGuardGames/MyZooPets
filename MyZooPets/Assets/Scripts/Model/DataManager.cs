@@ -95,13 +95,15 @@ public class DataManager : Singleton<DataManager>{
 		//PlayerPrefs.DeleteAll();
 #endif
 		Amplitude amplitude = Amplitude.Instance;
-		//Live Amplitude
-		//amplitude.logging = true;
-		//amplitude.init("");
-		//Dev Amplitude
-
-		amplitude.logging = true;
-		amplitude.init("a06f151d06c754bdbbff7bdbaffe12e2");
+		if(Constants.GetConstant<bool>("AnalyticsEnabled")) {
+			amplitude.logging = true;
+			if(Constants.GetConstant<bool>("IsLiveAnalytics")) {		// Live Amplitude
+				amplitude.init("51dc5ebabe7286e547c06afc44302378");
+			}
+			else{														//Dev Amplitude
+				amplitude.init("a06f151d06c754bdbbff7bdbaffe12e2");
+			}
+		}
 
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;

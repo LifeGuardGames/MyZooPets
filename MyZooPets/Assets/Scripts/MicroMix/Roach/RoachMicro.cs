@@ -46,6 +46,7 @@ public class RoachMicro : Micro{
 	}
 
 	protected override IEnumerator _Tutorial(){
+		dashedLine.gameObject.SetActive(true);
 		circle.gameObject.SetActive(true);
 		cockroach.transform.position = CameraUtils.RandomWorldPointOnScreen(Camera.main, .4f, .4f, 0);
 		MicroMixFinger finger = MicroMixManager.Instance.finger;
@@ -67,7 +68,5 @@ public class RoachMicro : Micro{
 		finger.gameObject.SetActive(false);
 		circle.gameObject.SetActive(false);
 		dashedLine.GetComponentInChildren<SpriteRenderer>().enabled = false;
-
 	}
-
 }

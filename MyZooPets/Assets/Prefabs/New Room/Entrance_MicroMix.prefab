@@ -232,6 +232,7 @@ GameObject:
   - 114: {fileID: 11449402}
   - 65: {fileID: 6565826}
   - 114: {fileID: 11486004}
+  - 65: {fileID: 6558668}
   m_Layer: 0
   m_Name: FireButtonCanvas
   m_TagString: Untagged
@@ -335,7 +336,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155994}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.54, y: 0, z: 43.6}
+  m_LocalPosition: {x: 11.540001, y: 0, z: 43.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -453,6 +454,18 @@ Transform:
   - {fileID: 450900}
   m_Father: {fileID: 433162}
   m_RootOrder: 1
+--- !u!65 &6558668
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 180288}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6, y: 6, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6564198
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -618,7 +631,7 @@ MonoBehaviour:
   isSprite: 0
   strScene: MicroMix
   loadingText: MICRO_TITLE
-  finalPosition: {x: 12.6, y: 2.5, z: 26.4}
+  finalPosition: {x: 91.54, y: 2.5, z: 22.8}
   finalRotation: {x: 0, y: 0, z: 0}
   shouldSaveSceneData: 1
   cameraGO: {fileID: 0}
@@ -626,7 +639,7 @@ MonoBehaviour:
   entranceHelper: {fileID: 11469114}
   isCheckMood: 1
   canvasToggle: {fileID: 11449402}
-  microMixEntranceHelper: {fileID: 0}
+  microMixEntranceHelper: {fileID: 11486004}
 --- !u!114 &11469114
 MonoBehaviour:
   m_ObjectHideFlags: 1

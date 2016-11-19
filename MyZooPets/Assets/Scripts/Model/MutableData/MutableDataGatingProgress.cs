@@ -7,7 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public class MutableDataGatingProgress {
 	public Dictionary<string, int> GatingProgress { get; set; } // key: gateID, value: HP remaining for the monster inside
-	public DateTime LastRecurringGateSpawnedPlayPeriod { get; set; }
 
 	/// <summary>
 	/// Determines whether incoming gate is active.
@@ -81,7 +80,6 @@ public class MutableDataGatingProgress {
 	//Populate with dummy data
 	private void Init() {
 		GatingProgress = new Dictionary<string, int>();
-		LastRecurringGateSpawnedPlayPeriod = PlayPeriodLogic.GetCurrentPlayPeriod();
 
 		// load all our gating data from xml
 		LoadFromXML();

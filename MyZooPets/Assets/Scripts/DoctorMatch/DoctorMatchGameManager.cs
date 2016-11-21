@@ -68,7 +68,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	void Awake() {
 		minigameKey = "CLINIC";
 		quitGameScene = SceneUtils.BEDROOM;
-		rewardMoneyMultiplier = 0.7f;
+		rewardMoneyMultiplier = 0.4f;
 		rewardShardMultiplier = 0.3f;
 		rewardXPMultiplier = 0.1f;
 

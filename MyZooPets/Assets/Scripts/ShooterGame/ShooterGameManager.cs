@@ -29,8 +29,8 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		minigameKey = "SHOOTER";
 		quitGameScene = SceneUtils.YARD;
 		rewardXPMultiplier = 0.1f;
-		rewardShardMultiplier = 6;
-		rewardMoneyMultiplier = 4;
+		rewardShardMultiplier = 0.6f;
+		rewardMoneyMultiplier = 0.4f;
 	}
 
 	protected override void _Start() {
@@ -74,10 +74,11 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 
 	protected override void _ContinueGame() {
 		isGameOver = false;
+		isPaused = false;
 		PlayerShooterController.Instance.gameObject.GetComponent<BoxCollider2D>().enabled = true;
 		PlayerShooterController.Instance.playerHealth = 5;
 		PlayerShooterController.Instance.ChangeFire();
-		ShooterGameEnemyController.Instance.BuildEnemyList();
+		//ShooterGameEnemyController.Instance.BuildEnemyList();
 	}
 
 	protected override void _GameOver() {

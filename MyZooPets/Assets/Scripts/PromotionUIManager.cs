@@ -26,12 +26,11 @@ public class PromotionUIManager : Singleton<PromotionUIManager> {
 	/// Returns true all the time if it is Android
 	/// </summary>
 	public bool CheckIosToggle() {
-#if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS
 		bool toggleAux = DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle;
 		DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle = !DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle;
 		return toggleAux;
-#endif
-#if UNITY_ANDROID
+#elif
 		return true;
 #endif
 	}

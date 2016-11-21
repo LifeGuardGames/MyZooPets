@@ -44,7 +44,10 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 			}
 			else {
-				PromotionUIManager.Instance.Show();	// Temp change for build
+				if(DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle) {
+					PromotionUIManager.Instance.TryShow();
+                }
+				DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle = !DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle;
 				//SceneManager.LoadScene(SceneUtils.BEDROOM);
 			}
 		}

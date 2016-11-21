@@ -18,11 +18,20 @@ public class MutableDataPetInfo : MutableData{
 	public int FireBreaths { get; set; } // fire breathing status of the pet
 	public int amountOfFireBreathsDone{get; set;}
 
+	public bool InfiniteFireMode {
+		get {
+			if(DataManager.Instance.isDebug) {
+				return Constants.GetConstant<bool>("InfiniteFireMode");
+			}
+			else {
+				return false;
+			}
+		}
+	}
 
 	/// <summary>
-	/// Changes the name.
+	/// Changes the name
 	/// </summary>
-	/// <param name="petName">Pet name.</param>
 	public void ChangeName(string petName){
 		IsDirty = true;
 		if(!string.IsNullOrEmpty(petName)){
@@ -42,25 +51,16 @@ public class MutableDataPetInfo : MutableData{
 		FireBreaths = amount;
 	
 		// for now, we are capping the max breaths at 1
-		bool isInfiniteMode = IsInfiniteFire();
 		if(FireBreaths > 1)
 			FireBreaths = 1;
-		else if(FireBreaths < 0 && !isInfiniteMode){
+		else if(FireBreaths < 0 && !InfiniteFireMode) {
 			Debug.LogError("Fire breaths somehow going negative.");
 			FireBreaths = 0;
 		}
 	}
 
 	public bool CanBreathFire(){
-		int breaths = FireBreaths;
-		bool isInfiniteFire = IsInfiniteFire();
-		bool canBreathFire = breaths > 0 || isInfiniteFire;
-		return canBreathFire;
-	}
-
-	public bool IsInfiniteFire(){
-		bool isInfinite = Constants.GetConstant<bool>("InfiniteFireMode");
-		return isInfinite;
+		return FireBreaths > 0 || InfiniteFireMode;
 	}
 
 	#region Initialization and override functions
@@ -79,13 +79,6 @@ public class MutableDataPetInfo : MutableData{
 	}
 
 	public override void VersionCheck(Version currentDataVersion){
-		/*
-		Version version131 = new Version("1.3.1");
-		
-		if(currentDataVersion < version131){
-			FireBreaths = nFireBreaths;
-		}
-		 */
 	}
 	#endregion
 }

@@ -1,14 +1,8 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 
-/*
-    Handles exhale (Step 4)
-    Listens to swipe gesture. 
-*/
 public class Exhale : InhalerPart {
-    protected override void Awake(){
-        base.Awake();
+    protected void Awake(){
         gameStepID = 4;
     }
 

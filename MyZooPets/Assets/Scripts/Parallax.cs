@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Parallax. By Sean Chung
@@ -20,9 +19,8 @@ public class Parallax : MonoBehaviour {
 	}
 	
 	private void ResetSelf(){
-		Hashtable optional = new Hashtable();
-		optional.Add("repeat", -1);
-		LeanTween.moveLocal(gameObject, endLocalPos, moveTime * 2f, optional);  // Move to spawn Position and reset
+		// Move to spawn position and reset
+		LeanTween.moveLocal(gameObject, endLocalPos, moveTime * 2f).setRepeat(-1);
 	}
 	
 	public void Pause(){

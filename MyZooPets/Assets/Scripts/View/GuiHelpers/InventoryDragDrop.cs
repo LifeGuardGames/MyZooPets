@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System;
 
 /// <summary>
@@ -7,12 +6,14 @@ using System;
 /// Prefab object that will be instantiated on the DragDropSurface if it receives the OnDrop event.
 /// </summary>
 public class InventoryDragDrop : MonoBehaviour{
+
 	public class InvDragDropArgs : EventArgs{
 		public bool IsValidTarget{get; set;}
 		public Transform ItemTransform{get; set;}
 		public Transform ParentTransform{get; set;}
 		public Collider TargetCollider{get; set;}
 	}
+	/*
 
 	public event EventHandler<InvDragDropArgs> OnItemDrop; //Event will be fired when an item is dropped
 	public event EventHandler<InvDragDropArgs> OnItemPress; //Event will be fired when item is pressed
@@ -56,17 +57,16 @@ public class InventoryDragDrop : MonoBehaviour{
 	}
 
 	public void reAddClick(object sender, EventArgs args){
-		if(this.collider != null){
-			this.collider.enabled = true;
+		if(this.GetComponent<Collider>() != null){
+			this.GetComponent<Collider>().enabled = true;
 		}
 	}
 
 	/// <summary>
 	/// Drop the dragged object.
 	/// </summary>
-
 	private void Drop(){
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
 		if(!isScrolling && !isClickLock){	// Picked up drop
@@ -120,7 +120,8 @@ public class InventoryDragDrop : MonoBehaviour{
 	/// Start the drag event and perform the dragging.
 	/// </summary>
 	void OnDrag(Vector2 delta){
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
 		if(StoreUIManager.Instance.IsOpen()){
@@ -152,7 +153,7 @@ public class InventoryDragDrop : MonoBehaviour{
 				dragScrollScript.enabled = false;
 				savedLocalPosition = gameObject.transform.localPosition;	// Save original position detection failed
 
-				HUDUIManager.Instance.ShowLabels();
+				HUDUIManager.Instance.ToggleLabels(true);
 
 				mIsDragging = true;
 				mParent = mTrans.parent;
@@ -186,7 +187,7 @@ public class InventoryDragDrop : MonoBehaviour{
 			else if(mIsDragging){
 				// if item is being dragged and is not usable items play eat anticipation
 				string invItemID = this.gameObject.name;
-				InventoryItem invItem = InventoryLogic.Instance.GetInvItem(invItemID);
+				InventoryItem invItem = InventoryManager.Instance.GetItemInInventory(invItemID);
 				if(invItem != null && invItem.ItemType != ItemType.Usables){
 					if(MiniPetHUDUIManager.Instance && !MiniPetHUDUIManager.Instance.IsOpen()){
 						PetAnimationManager.Instance.WaitingToBeFed();
@@ -209,14 +210,14 @@ public class InventoryDragDrop : MonoBehaviour{
 				isScrolling = true;
 			}
 		}
+
 	}
 
 	/// <summary>
 	/// Start or stop the drag operation.
 	/// </summary>
-
 	void OnPress(bool isPressed){
-		if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+		if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 			return;
 		}
 		if(StoreUIManager.Instance.IsOpen()){
@@ -250,12 +251,13 @@ public class InventoryDragDrop : MonoBehaviour{
 				UICamera.current.stickyPress = false;
 			}
 			
-			HUDUIManager.Instance.HideLabels();
+			HUDUIManager.Instance.ToggleLabels(false);
 			mIsDragging = false;
-			Collider col = collider;
+			Collider col = GetComponent<Collider>();
 
 			if (col != null) col.enabled = !isPressed;
 			if (!isPressed) Drop();
 		}
 	}
+*/
 }

@@ -9,7 +9,7 @@ public class AccessoryManager : Singleton<AccessoryManager> {
 	/// <returns>The accessory node type.</returns>
 	/// <param name="accessoryID">Accessory ID.</param>
 	public string GetAccessoryNodeType(string accessoryID){
-		AccessoryItem itemDeco = (AccessoryItem)ItemLogic.Instance.GetItem(accessoryID);
+		AccessoryItem itemDeco = (AccessoryItem)DataLoaderItems.GetItem(accessoryID);
 		return itemDeco.AccessoryType.ToString();
 	}
 

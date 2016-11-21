@@ -3,7 +3,8 @@ using UnityEditor;
 using System.Collections;
 using System.Reflection;
 
-// Cartoon FX Easy Editor - (c) 2013, Jean Moreno
+// Cartoon FX Easy Editor
+// (c) 2013, 2014 - Jean Moreno
 
 public class CFXEasyEditor : EditorWindow
 {
@@ -457,8 +458,10 @@ public class CFXEasyEditor : EditorWindow
 		{
 			//Scale Shuriken Particles Values
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -476,8 +479,10 @@ public class CFXEasyEditor : EditorWindow
 		{
 			//Scale Shuriken Particles Values
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -495,8 +500,10 @@ public class CFXEasyEditor : EditorWindow
 		{
 			//Scale Shuriken Particles Values
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -519,8 +526,10 @@ public class CFXEasyEditor : EditorWindow
 		foreach(GameObject go in Selection.gameObjects)
 		{
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -555,8 +564,10 @@ public class CFXEasyEditor : EditorWindow
 		foreach(GameObject go in Selection.gameObjects)
 		{
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -628,13 +639,16 @@ public class CFXEasyEditor : EditorWindow
 		}
 		
 		float lightness = (float)(LightnessStep/100f);
-		if(substract) lightness *= -1f;
+		if(substract)
+			lightness *= -1f;
 		
 		foreach(GameObject go in Selection.gameObjects)
 		{
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -856,8 +870,10 @@ public class CFXEasyEditor : EditorWindow
 		foreach(GameObject go in Selection.gameObjects)
 		{
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			//Scale Lifetime
 			foreach(ParticleSystem ps in systems)
@@ -874,8 +890,10 @@ public class CFXEasyEditor : EditorWindow
 		{
 			//Scale Shuriken Particles Values
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			foreach(ParticleSystem ps in systems)
 			{
@@ -892,8 +910,10 @@ public class CFXEasyEditor : EditorWindow
 		foreach(GameObject go in Selection.gameObjects)
 		{
 			ParticleSystem[] systems;
-			if(pref_IncludeChildren)		systems = go.GetComponentsInChildren<ParticleSystem>(true);
-			else 					systems = go.GetComponents<ParticleSystem>();
+			if(pref_IncludeChildren)
+				systems = go.GetComponentsInChildren<ParticleSystem>(true);
+			else
+				systems = go.GetComponents<ParticleSystem>();
 			
 			//Scale Lifetime
 			foreach(ParticleSystem ps in systems)
@@ -928,7 +948,9 @@ public class CFXEasyEditor : EditorWindow
 			dest.loop = source.loop;
 			dest.playOnAwake = source.playOnAwake;
 			dest.playbackSpeed = source.playbackSpeed;
+#pragma warning disable 0618 // Type or member is obsolete
 			dest.emissionRate = source.emissionRate;
+#pragma warning restore 0618 // Type or member is obsolete
 			dest.startSpeed = source.startSpeed;
 			dest.startSize = source.startSize;
 			dest.startColor = source.startColor;
@@ -1149,11 +1171,18 @@ public class CFXEasyEditor : EditorWindow
 		//Particle System
 		ps.startSize *= ScalingValue;
 		ps.gravityModifier *= ScalingValue;
-		if(ps.startSpeed > 0.01f) ps.startSpeed *= ScalingValue;
+		if(ps.startSpeed > 0.01f)
+			ps.startSpeed *= ScalingValue;
 		if(ps.gameObject != parent)
 			ps.transform.localPosition *= ScalingValue;
 		
 		SerializedObject psSerial = new SerializedObject(ps);
+		
+		//Scale Emission Rate if set on Distance
+		if(psSerial.FindProperty("EmissionModule.enabled").boolValue && psSerial.FindProperty("EmissionModule.m_Type").intValue == 1)
+		{
+			psSerial.FindProperty("EmissionModule.rate.scalar").floatValue /= ScalingValue;
+		}
 		
 		//Scale Size By Speed Module
 		if(psSerial.FindProperty("SizeBySpeedModule.enabled").boolValue)

@@ -3,9 +3,6 @@ using System.Collections;
 using System;
 
 public class LevelUpNotificationListener : MonoBehaviour {
-	// audio to play when notification is shown
-	public string sound;
-	
 	void Start () {
     	HUDAnimator.OnLevelUp += OnLevelUpNotification;
 	}
@@ -16,9 +13,9 @@ public class LevelUpNotificationListener : MonoBehaviour {
 	}
 
     private void OnLevelUpNotification(object senders, EventArgs e){
-    	HUDAnimator.OnLevelUp -= OnLevelUpNotification;	
+    	HUDAnimator.OnLevelUp -= OnLevelUpNotification;
 
-        PopupNotificationNGUI.Callback button1Function = delegate(){
+		PopupController.Callback button1Function = delegate(){
             //unregister before registering listener to prevent multiple registering
             //when using spam click the button
             HUDAnimator.OnLevelUp -= OnLevelUpNotification;
@@ -27,15 +24,15 @@ public class LevelUpNotificationListener : MonoBehaviour {
 
 		// Populate notification entry table
 		Hashtable notificationEntry = new Hashtable();
-		notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.LevelUp);
-		notificationEntry.Add(NotificationPopupFields.Message, LevelLogic.Instance.GetLevelUpMessage()); 
-		notificationEntry.Add(NotificationPopupFields.Button1Callback, button1Function);
-		notificationEntry.Add(NotificationPopupFields.Sound, sound );
-		
+		notificationEntry.Add(NotificationPopupData.PrefabName, "PopupLevelUp");
+		notificationEntry.Add(NotificationPopupData.Title, Localization.Localize("POPUP_LEVEL_TITLE"));
+		notificationEntry.Add(NotificationPopupData.Message, LevelLogic.Instance.GetLevelUpMessage()); // Already localized
+		notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, button1Function);
 		NotificationUIManager.Instance.AddToQueue(notificationEntry);
+
+		AudioManager.Instance.PlayClip("fanfare3");
 
 		//Send Analytics event
 		Analytics.Instance.LevelUnlocked(LevelLogic.Instance.CurrentLevel);
     }
-
 }

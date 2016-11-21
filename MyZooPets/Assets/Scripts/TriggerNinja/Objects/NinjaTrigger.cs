@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Ninja trigger. The actual object that the player can cut.
@@ -39,20 +37,13 @@ public class NinjaTrigger : MonoBehaviour{
 		visibleChildrenCount = children.Length;
 		
 		// we don't want our objects colliding with each other
-		rigidbody.detectCollisions = false;	
+		GetComponent<Rigidbody>().detectCollisions = false;	
 		
-		// event listeners
-		NinjaManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
-		NinjaManager.OnNewGame += OnNewGame;				// new game	
 
 		AudioManager.Instance.PlayClip(strSoundLaunch, variations:3);
 	}
 	
-	void OnDestroy(){
-		// event listeners
-		NinjaManager.OnStateChanged -= OnGameStateChanged; 	// game state changes so the character can react appropriately
-		NinjaManager.OnNewGame -= OnNewGame;				// new game			
-	}
+
 	
 	//---------------------------------------------------
 	// OnCut()
@@ -84,7 +75,7 @@ public class NinjaTrigger : MonoBehaviour{
 		// Directional particle spawn
 		if(goHitDirectionFX != null){
 			GameObject dirParticle = ParticleUtils.CreateParticle(goHitDirectionFX, vPosWorld);
-			Vector2 trailMoveDelta = NinjaManager.Instance.GetTrailDeltaMove();
+			Vector2 trailMoveDelta = NinjaGameManager.Instance.GetTrailDeltaMove();
 			dirParticle.GetComponent<XYComponentRotateObject>().x = trailMoveDelta.x;
 			dirParticle.GetComponent<XYComponentRotateObject>().y = trailMoveDelta.y;	
 		}
@@ -146,15 +137,15 @@ public class NinjaTrigger : MonoBehaviour{
 	private void OnPause(bool bPaused){
 		if(bPaused){
 			// game is pausing, so save velocities and stop movement
-			savedVelocity = rigidbody.velocity;
-			savedAngularVelocity = rigidbody.angularVelocity;
-			rigidbody.isKinematic = true;
+			savedVelocity = GetComponent<Rigidbody>().velocity;
+			savedAngularVelocity = GetComponent<Rigidbody>().angularVelocity;
+			GetComponent<Rigidbody>().isKinematic = true;
 		}
 		else{
 			// game is unpausing, so resume movement and reapply velocities
-			rigidbody.isKinematic = false;
-			rigidbody.AddForce(savedVelocity, ForceMode.VelocityChange);
-			rigidbody.AddTorque(savedAngularVelocity, ForceMode.VelocityChange);			
+			GetComponent<Rigidbody>().isKinematic = false;
+			GetComponent<Rigidbody>().AddForce(savedVelocity, ForceMode.VelocityChange);
+			GetComponent<Rigidbody>().AddTorque(savedAngularVelocity, ForceMode.VelocityChange);			
 		}
 	}
 	
@@ -193,20 +184,20 @@ public class NinjaTrigger : MonoBehaviour{
 	private void TriggerOffScreen(){
 		// check to make sure the proper managers exist.  This check is necessary because this function will be triggered when the editor
 		// quits the game, and also when the user quits the game into another scene.
-		if(!AudioManager.Instance || !NinjaManager.Instance)
+		if(!AudioManager.Instance || !NinjaGameManager.Instance)
 			return;
 
 		// be absolutely sure that the game is playing...this is kind of hacky, but I was running into problems with this being called
 		// despite the game being over (because the object was becoming invisible).
-		MinigameStates eState = NinjaManager.Instance.GetGameState();
-		if(eState == MinigameStates.GameOver || eState == MinigameStates.Restarting)
+
+		if(NinjaGameManager.Instance.isGameOver)
 			return;	
 		
 		// if the object is going invisible and was cut, just destroy it
 		if(isCut)
 			Destroy(gameObject);
 		else{
-			if(transform.position.y <= yVal+5 && !NinjaManager.Instance.isBouncyTime){
+			if(transform.position.y <= yVal+5 && !NinjaGameManager.Instance.isBouncyTime){
 				//if(this.GetComponent<NinjaTriggerBomb>() ==null){
 				// otherwise, it means the object was missed
 					OnMissed();
@@ -214,7 +205,7 @@ public class NinjaTrigger : MonoBehaviour{
 			}
 			else{
 				if(this.GetComponent<NinjaTriggerBomb>() ==null){
-					gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
+					gameObject.GetComponent<Rigidbody>().AddForce(-(gameObject.GetComponent<Rigidbody>().velocity*(100)));
 				}
 			}
 		}		

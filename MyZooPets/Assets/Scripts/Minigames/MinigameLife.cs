@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 //---------------------------------------------------
@@ -8,111 +7,60 @@ using System.Collections.Generic;
 // This is a UI element representing a single life
 // on the HUD of the player in a minigame.
 //---------------------------------------------------
-
 public class MinigameLife : MonoBehaviour{
-	// index of this life
-	public int nIndex;
-	
-	// the sprite that this life is uing
-	public UISprite sprite;
+	public List<Image> Inhalers;
 	
 	// particle systems for this object
 	public ParticleSystemController systemOff;
 	public ParticleSystemController systemOn;
 
-	public DegradAlert bloodPanelControl;
-
-	// the state of this life
-	//private bool bOn;
-	
-	void Start(){
-		// FFFFFFUFUUUUUUUUUUU
-		if(NinjaManager.Instance != null){
-			NinjaManager.OnNewGame += OnNewGame;
-			NinjaManager.OnLivesChanged += OnLivesChanged;			
-		}
-		else if(DoctorMatchManager.Instance != null){
-			DoctorMatchManager.OnNewGame += OnNewGame;
-			DoctorMatchManager.OnLivesChanged += OnLivesChanged;			
-		}
-	}
-
-	void OnDestroy(){
-		if(NinjaManager.Instance != null){
-			NinjaManager.OnNewGame -= OnNewGame;
-			NinjaManager.OnLivesChanged -= OnLivesChanged;			
-		}
-		else if(DoctorMatchManager.Instance != null){
-			DoctorMatchManager.OnNewGame -= OnNewGame;
-			DoctorMatchManager.OnLivesChanged -= OnLivesChanged;			
-		}
-	}
-	
 	//---------------------------------------------------
 	// OnNewGame()
 	// When the user restarts the game and a new game
 	// begins.
 	//---------------------------------------------------
-	private void OnNewGame(object sender, EventArgs args){
+	private void OnNewGame(){
 		// since a new game is beginning, toggle on
-		Toggle(true);
+		//Toggle(true);
 	}	
 	
-	//---------------------------------------------------
-	// OnLivesChanged()
-	//---------------------------------------------------
-	private void OnLivesChanged(object sender, LivesChangedArgs args){
+	public void OnLivesChanged(int deltaLife){
 		// get the number of lives there are
-		int nLives = GetLives();
-		int nChange = args.GetChange();
+		int lifeCount = NinjaGameManager.Instance.LifeCount;
+		int nChange = deltaLife;
 		//Debug.Log("Preparing life..." + nLives + " " + nChange);
-		if(nChange < 0 && nLives + 1 == nIndex){
+		if(nChange < 0 && lifeCount - nChange >= 0){
 			//Debug.Log("----Loosing a life");
 			// if we are LOSING a life and the current lives +1 == this life's index, it means that this life was just lost, so toggle off
-			Toggle(false);
+			ToggleLifeIndicator(false, Inhalers[lifeCount]);
 
 			// Play the camera shake animation
-			if(Camera.main.animation != null){
-				Camera.main.animation.Play();
-			}
-
-			if(bloodPanelControl != null){
-				bloodPanelControl.Play();
+			if(Camera.main.GetComponent<Animation>() != null){
+				Camera.main.GetComponent<Animation>().Play();
+				if(lifeCount == 0) {
+					NinjaGameManager.Instance.GameOver();
+				}
 			}
 		}
-		else if(nChange > 0 && nLives == nIndex){
+		else if(nChange > 0 && lifeCount - nChange >= 0) {
 			//Debug.Log("---Gaining a life");
 			// else if we are GAINING a life and the current lives == this life's index, it means this life was just gained, so toggl eon
-			Toggle(true);
+			ToggleLifeIndicator(true, Inhalers[lifeCount]);
 		}
 	}
 	
-	private int GetLives(){
-		int nLives = 0;
-		if(NinjaManager.Instance != null){
-			nLives = NinjaManager.Instance.GetLives();
+	public void Reset() {
+		foreach(Image inhalerSprite in Inhalers) {
+			ToggleLifeIndicator(true, inhalerSprite);
 		}
-		else if(DoctorMatchManager.Instance != null){
-			nLives = DoctorMatchManager.Instance.GetLives();
-		}
-		return nLives;
 	}
-	
-	//---------------------------------------------------
-	// Toggle()
-	// Turn this life on or off.
-	//---------------------------------------------------	
-	public void Toggle(bool bOn){
-		//Debug.Log("TOGGLING " + bOn);
-		// cache the state of this life
-		//this.bOn = bOn;
-		
+
+	public void ToggleLifeIndicator(bool isOn, Image inhalerSprite){
 		// change the tint based on on/off
-		Color tint = bOn ? new Color(255, 255, 255, 255) : new Color(0, 0, 0, 255);
-		sprite.color = tint;
-		
+		inhalerSprite.color = isOn ? Color.white : Color.black;
+
 		// play the particle system associated with this toggle, if it exists
-		ParticleSystemController system = bOn ? systemOn : systemOff;
+		ParticleSystemController system = isOn ? systemOn : systemOff;
 		if(system){
 			system.Play();
 		}

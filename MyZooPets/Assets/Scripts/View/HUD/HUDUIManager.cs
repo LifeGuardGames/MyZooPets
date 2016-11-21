@@ -1,126 +1,105 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class HUDUIManager : Singleton<HUDUIManager>{
+	public TweenToggleDemux panelTween;
+
 	public HUDAnimator hudAnimator;
-	public bool isDebug;
-	public UISlider healthSlider;
-	public UILabel healthLabel;
-	public UILabel levelNumber;
-	public UILabel levelFraction;
-	public UISlider levelSlider;
-	public UISlider moodSlider;
-	public UILabel moodLabel;
-	public UILabel starLabel;
+	public HUDAnimator HudAnimator {
+		get { return hudAnimator; }
+	}
 
-	// Parent for tweening
-	public GameObject tweenParent;
-	public GameObject anchorTop;
+	public Text levelNumber;
+	public Text levelFraction;
+	public Image levelBar;
+	public Text healthLabel;
+	public Image healthBar;
+	public Image hungerBar;
+	public Text hungerLabel;
+	public Text coinLabel;
 
-	// Icon pulsing
-	public AnimationControl animHealth;
-	public AnimationControl animMood;
-	public AnimationControl animMoney;
-	public AnimationControl animXP;
+	public GameObject levelParent;
+	public GameObject healthParent;
+	public GameObject hungerParent;
+	public GameObject coinParent;
 
-	public Animation needMoneyAnimation;
-
-	private float points;
-	private float mood;
-	private float health;
-	private string level;
+	private float levelBarWidth;
+	private float healthBarWidth;
+	private float hungerBarWidth;
+	
 	private string levelText;
 	private int nextLevelPoints;
 	private string starCount;
-	
-	/// <summary>
-	/// Gets the tween parent.
-	/// </summary>
-	/// <returns>The tween parent.</returns>
-	public GameObject GetTweenParent(){
-		return tweenParent;	
+
+	void Start() {
+		ToggleLabels(false);
+
+		// Save initial data so image bar can be populated properly
+		levelBarWidth = levelBar.rectTransform.sizeDelta.x;
+		healthBarWidth = healthBar.rectTransform.sizeDelta.x;
+		hungerBarWidth = hungerBar.rectTransform.sizeDelta.x;
+
+		if(SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD) {
+			Invoke("ShowPanel", 0.5f);
+		}
+    }
+
+	public void ShowPanel() {
+		panelTween.Show();
 	}
 
-	public GameObject GetTweenParent(string anchor){
-		if(anchor == "Top"){
-			return anchorTop;
-		}
-		else{
-			Debug.LogError("Bad anchor specified for HUD tween");
-			return null;
-		}
-	}
-    
-	// Use this for initialization
-	void Awake(){
-		hudAnimator = GetComponent<HUDAnimator>();
-	}
-
-	void Start(){
-		HideLabels();
+	public void HidePanel() {
+		panelTween.Hide();
 	}
 	
-	// Update is called once per frame
 	void Update(){
+		// Data reading from HUDAnimator
+		int xp = hudAnimator.GetDisplayValue(StatType.Xp);
+		int hunger = hudAnimator.GetDisplayValue(StatType.Hunger);
+		int health = hudAnimator.GetDisplayValue(StatType.Health);
 
-		//Data reading from Data Manager
-		points = hudAnimator.GetDisplayValue(HUDElementType.Points);
-		mood = hudAnimator.GetDisplayValue(HUDElementType.Mood);
-		health = hudAnimator.GetDisplayValue(HUDElementType.Health);
-
-		//points progress bar data
-		level = ((int)hudAnimator.LastLevel).ToString();
+		// Points progress bar data
 		nextLevelPoints = hudAnimator.NextLevelPoints;
 		
-		if(LevelLogic.Instance && LevelLogic.Instance.IsAtMaxLevel())
-			levelText = Localization.Localize("MAX_LEVEL");
-		else
-			levelText = points + "/" + nextLevelPoints;
+		if(LevelLogic.Instance && LevelLogic.Instance.IsAtMaxLevel()) {
+			levelFraction.text = Localization.Localize("MAX_LEVEL");
+		}
+		else {
+			levelFraction.text = xp + "/" + nextLevelPoints;
+		}
 
-		//Star data
-		starCount = hudAnimator.GetDisplayValue(HUDElementType.Stars).ToString();
-
-		levelSlider.sliderValue = points / nextLevelPoints;
-		levelNumber.text = level;
-		levelFraction.text = levelText;
-		moodSlider.sliderValue = mood / 100;
-		moodLabel.text = mood.ToString() + "%";
-		healthSlider.sliderValue = health / 100;
+		levelBar.rectTransform.sizeDelta = new Vector2((xp / (float)nextLevelPoints) * levelBarWidth, 31f);
+		levelNumber.text = ((int)hudAnimator.LastLevel).ToString();
+		healthBar.rectTransform.sizeDelta = new Vector2((health / 100f) * healthBarWidth, 31f);
 		healthLabel.text = health.ToString() + "%";
-		starLabel.text = starCount;
+		hungerBar.rectTransform.sizeDelta = new Vector2((hunger / 100f) * hungerBarWidth, 31f);
+		hungerLabel.text = hunger.ToString() + "%";
+		coinLabel.text = hudAnimator.GetDisplayValue(StatType.Coin).ToString();
+	}
+	
+	public void ToggleLabels(bool isShow){
+		levelFraction.gameObject.SetActive(isShow);
+		healthLabel.gameObject.SetActive(isShow);
+		hungerLabel.gameObject.SetActive(isShow);
 	}
 
-	public void ShowPanel(){
-		gameObject.GetComponent<TweenToggleDemux>().Show();
-	}
+	public void PlayNeedCoinAnimation(){
+		hudAnimator.PlayNeedCoinAnimation();
+    }
 
-	public void HidePanel(){
-		gameObject.GetComponent<TweenToggleDemux>().Hide();
+	public GameObject GetStatTweenParents(StatType stat) {
+		switch(stat) {
+			case StatType.Xp:
+				return levelParent;
+			case StatType.Health:
+				return healthParent;
+			case StatType.Hunger:
+				return hungerParent;
+			case StatType.Coin:
+				return coinParent;
+			default:
+				Debug.LogWarning("Invalid stat");
+				return null;
+		}
 	}
-
-	/// <summary>
-	/// Shows the more detailed HUD labels
-	/// </summary>
-	public void ShowLabels(){
-		levelFraction.gameObject.SetActive(true);
-		healthLabel.gameObject.SetActive(true);
-		moodLabel.gameObject.SetActive(true);
-	}
-
-	public void HideLabels(){
-		levelFraction.gameObject.SetActive(false);
-		healthLabel.gameObject.SetActive(false);
-		moodLabel.gameObject.SetActive(false);
-	}
-
-	public void PlayNeedMoneyAnimation(){
-		needMoneyAnimation.wrapMode = WrapMode.Once;
-		needMoneyAnimation.Play("moneyRequired");
-	}
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "test")){
-//			PlayNeedMoneyAnimation();
-//		}
-//	}
 }

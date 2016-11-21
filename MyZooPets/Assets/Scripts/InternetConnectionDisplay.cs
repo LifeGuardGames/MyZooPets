@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class InternetConnectionDisplay : MonoBehaviour {
-
+	/*
 	public RotateAroundCenter loadingIconSpin;
 	public GameObject labelTweenParent;
 	public UILocalize labelLocalize;
@@ -54,4 +54,5 @@ public class InternetConnectionDisplay : MonoBehaviour {
 //			CloseUI();
 //		}
 //	}
+*/
 }

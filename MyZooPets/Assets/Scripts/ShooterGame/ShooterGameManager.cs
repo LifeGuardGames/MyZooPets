@@ -1,191 +1,182 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 
-public class ShooterGameManager : MinigameManager<ShooterGameManager>{
+public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public EventHandler<EventArgs> OnTutorialStepDone;
 	public EventHandler<EventArgs> OnTutorialTap;
-	public Camera nguiCamera;
+
 	public float shootTime;
 	private float startTime;
 	public int waveNum = 0;
 	public bool inTutorial;
 	public int powerUpScore;
+	public int highestCombo = 0;
+	public GameObject BouncyWalls;
+	public Animator tutUIAnimator;
+	public UILocalize tutUITextLocalize;
+	public bool isGameOver = false;
+	public Text scoreText;
+	public delegate void OnRestart();
+	public static event OnRestart onRestart;
+	public GameObject minipetPowerUp;
+	public bool ShooterTutInhalerStep = false;
 
-	private ShooterUIManager shooterUI;
+	public ShooterSkyController shooterSkyController;
+	public ShooterUIManager uiManager;
 
-	void Awake(){
-		quitGameScene = SceneUtils.BEDROOM;
+	void Awake() {
+		minigameKey = "SHOOTER";
+		quitGameScene = SceneUtils.YARD;
+		rewardXPMultiplier = 0.1f;
+		rewardShardMultiplier = 0.6f;
+		rewardMoneyMultiplier = 0.4f;
 	}
 
-	protected override string GetMinigameKey(){
-		return "Shooter";
+	protected override void _Start() {
 	}
 
-	protected override bool IsTutorialOn(){
-		return Constants.GetConstant<bool>("IsShooterTutorialOn");
-	}
-	
-	public override int GetReward(MinigameRewardTypes eType){
-		return GetStandardReward(eType);
-	}
-
-	protected override void _Start(){
-		shooterUI = ui as ShooterUIManager;
+	protected override void _StartTutorial() {
+		shooterSkyController.Reset();
+		isPaused = false;
+		PlayerShooterController.Instance.Reset();
+		ShooterGameTutorial tut = new ShooterGameTutorial();
+		tut.ProcessStep(0);
 	}
 
-	protected override void _OnDestroy(){
-		Application.targetFrameRate = 30;
-	}
-
-	protected override void _NewGame(){
-		if(IsTutorialOverride() && IsTutorialOn()|| 
-		   !DataManager.Instance.GameData.Tutorial.IsTutorialFinished(ShooterGameTutorial.TUT_KEY)){
-			if(inTutorial){
-				shooterUI.Reset();
-				PlayerShooterController.Instance.Reset();
-				StartTutorial();
-			}
+	protected override void _NewGame() {
+		if(onRestart != null) {
+			onRestart();
 		}
-		else{
-			inTutorial = false;
-			waveNum = 0;
-			ShooterSpawnManager.Instance.Reset();
-			ShooterGameEnemyController.Instance.Reset();
-			shooterUI.Reset();
-			PlayerShooterController.Instance.Reset();
-			RemoveInhalerFingerTutorial();
-		}
+		minipetPowerUp.SetActive(false);
+		StopAllCoroutines();
+		isGameOver = false;
+		inTutorial = false;
+		waveNum = 0;
+		score = 0;
+		scoreText.text = "0";
+		ShooterSpawnManager.Instance.Reset();
+		ShooterGameEnemyController.Instance.Reset();
+		ShooterInhalerManager.Instance.Reset();
+		shooterSkyController.Reset();
+		PlayerShooterController.Instance.Reset();
+
+		isContinueAllowed = IsContinueCheckDefaultTrue();
 	}
 
-	public void MoveTut(){
-		if(inTutorial){
-			if(OnTutorialStepDone != null){
+	protected override void _PauseGame() {
+		// IsPaused tracked by parent
+	}
+
+	protected override void _ResumeGame() {
+		// IsPaused tracked by parent
+	}
+
+	protected override void _ContinueGame() {
+		isGameOver = false;
+		isPaused = false;
+		PlayerShooterController.Instance.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+		PlayerShooterController.Instance.playerHealth = 5;
+		PlayerShooterController.Instance.ChangeFire();
+		//ShooterGameEnemyController.Instance.BuildEnemyList();
+	}
+
+	protected override void _GameOver() {
+		isGameOver = true;
+	}
+
+	// Award the actual xp and money, called when tween is complete (Mission, Stats, Crystal, Badge, Analytics, Leaderboard)
+	protected override void _GameOverReward() {
+		WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
+		WellapadMissionController.Instance.TaskCompleted("ScoreShooter", Score);
+
+		StatsManager.Instance.ChangeStats(
+			xpDelta: rewardXPAux,
+			xpPos: GenericMinigameUI.Instance.GetXPPanelPosition(),
+			coinsDelta: rewardMoneyAux,
+			coinsPos: GenericMinigameUI.Instance.GetCoinPanelPosition(),
+			animDelay: 0.5f);
+
+		FireCrystalManager.Instance.RewardShards(rewardShardAux);
+
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Shooter, Score, true);
+
+		Analytics.Instance.ShooterGameData(DataManager.Instance.GameData.HighScore.MinigameHighScore[minigameKey], ShooterInhalerManager.Instance.missed / (waveNum + 1), ShooterGameEnemyController.Instance.currentWave.Wave, highestCombo);
+
+#if UNITY_IOS
+		LeaderBoardManager.Instance.EnterScore((long)Score, "ShooterLeaderBoard");
+#endif
+	}
+
+	protected override void _QuitGame() {
+	}
+
+	public void MoveTut() {
+		if(inTutorial) {
+			if(OnTutorialStepDone != null) {
 				OnTutorialStepDone(this, EventArgs.Empty);
 			}
 		}
 	}
 
-	public void TriggerGameover(){
-		GameOver();
+	public void InputReceivedMove(bool isMove) {
+		// this handles mouse look the actual overall picture is
+		// spread across 3 scripts this section deals with getting the input position
+#if !UNITY_EDITOR
+			Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
+			if(isMove){
+				PlayerShooterController.Instance.Move(touchPos);
+			}
+#endif
+#if UNITY_EDITOR
+		Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
+		PlayerShooterController.Instance.Move(mousePos);
+#endif
 	}
 
-	protected override void _GameOver(){
-		Analytics.Instance.ShooterHighScore(DataManager.Instance.GameData.HighScore.MinigameHighScore[GetMinigameKey()]);
-		if(waveNum != 0){	// HACK patching this up for now, please fix dylan, when wave num is 0 -> division by zero
-			Analytics.Instance.ShooterPercentageMissed(ShooterInhalerManager.Instance.missed / waveNum+1);
-			WellapadMissionController.Instance.TaskCompleted("SurvivalShooter", waveNum);
-		}
-		Analytics.Instance.ShooterTimesPlayedTick();
-
-		#if UNITY_IOS
-		LeaderBoardManager.Instance.EnterScore((long)GetScore(), "ShooterLeaderBoard");
-		#endif
-	}
-
-	public void OnTapped(TapGesture e){
-		if(inTutorial){
-			if(OnTutorialTap != null){
+	public void InputReceivedShoot(bool isMove, Vector3 pos) {
+		if(inTutorial) {
+			if(OnTutorialTap != null) {
 				OnTutorialTap(this, EventArgs.Empty);
 			}
 		}
-		if(startTime <= Time.time - shootTime){
-			if(!IsTouchingNGUI(e.Position)){
-				// this handles mouse look the actual overall picture is
-				// spread across 3 scripts this section deals with getting the input position
-				#if !UNITY_EDITOR
-				Vector3 touchPos = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 1);
-				if(Camera.main.ScreenToWorldPoint(touchPos).x <= PlayerShooterController.Instance.gameObject.transform.position.x){
-					PlayerShooterController.Instance.Move(touchPos);
-				}
-				else{
-					PlayerShooterController.Instance.Shoot(touchPos);
-					startTime = Time.time;
-				}
-				#endif
-					
-				#if UNITY_EDITOR
-				Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1);
-				if(Camera.main.ScreenToWorldPoint(mousePos).x <= PlayerShooterController.Instance.gameObject.transform.position.x +1.0f){
-					PlayerShooterController.Instance.Move(mousePos);
-				}
-				else{
-					PlayerShooterController.Instance.Shoot(mousePos);
-					startTime = Time.time;
-				}
-				#endif
-			}
+		if(startTime <= Time.time - shootTime) {
+			// this handles mouse look the actual overall picture is
+			// spread across 3 scripts this section deals with getting the input position
+#if !UNITY_EDITOR
+			
+				PlayerShooterController.Instance.Shoot(pos);
+				startTime = Time.time;
+#endif
+#if UNITY_EDITOR
+			PlayerShooterController.Instance.Shoot(pos);
+			startTime = Time.time;
+#endif
 		}
 	}
 
-	public void AddScore(int amount){
+	public void AddScore(int amount) {
 		UpdateScore(amount);
+		scoreText.text = score.ToString();
 		powerUpScore += amount;
-		if(powerUpScore > 75){
+		if(powerUpScore > (75 + 25 * (waveNum / 5))) {
 			powerUpScore = 0;
 			ShooterSpawnManager.Instance.SpawnPowerUp();
 		}
 	}
 
-	public void StartTimeTransition(){
-		shooterUI.StartTimeTransition();
+	public void StartTimeTransition() {
+		shooterSkyController.StartTimeTransition();
 	}
 
-	public void BeginNewWave(){
-		RemoveInhalerFingerTutorial();
-		ShooterInhalerManager.Instance.CanUseInhalerButton = true;
+	public void BeginNewWave() {
 		/*if(ShooterInhalerManager.Instance.hit == false){
 			missed++;
 			if(missed >= 2){
 				PlayerShooterController.Instance.ChangeHealth(-2);
 			}
 		}*/
-		ShooterInhalerManager.Instance.hit = false;
 		waveNum++;
-		this.gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
-	}
-
-	// Soft remove finger if it exists
-	public void RemoveInhalerFingerTutorial(){
-		if(shooterUI.fingerPos != null){
-			Destroy(shooterUI.fingerPos.gameObject);
-		}
-	}
-
-	protected override void _Update(){
-	}
-
-	//True: if finger touches NGUI 
-	/// <summary>
-	/// Determines whether if the touch is touching NGUI element
-	/// </summary>
-	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
-	/// <param name="screenPos">Screen position.</param>
-	private bool IsTouchingNGUI(Vector2 screenPos){
-		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
-		RaycastHit hit;
-		int layerMask = 1 << 10; 
-		bool isOnNGUILayer = false;
-		
-		// Raycast
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
-			isOnNGUILayer = true;
-		}
-		return isOnNGUILayer;
-	}
-
-	public Coroutine Sync(){
-		return StartCoroutine(PauseRoutine()); 
-	}
-
-	public IEnumerator PauseRoutine(){
-		while(ShooterGameManager.Instance.GetGameState() == MinigameStates.Paused){
-			yield return new WaitForFixedUpdate();
-		}
-		yield return new WaitForEndOfFrame();
-	}
-
-	private void StartTutorial(){
-		SetTutorial(new ShooterGameTutorial());
+		gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
 	}
 }

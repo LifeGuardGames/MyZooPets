@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 /// <summary>
@@ -8,7 +9,7 @@ using System.Collections;
 public class FireShardController : MonoBehaviour {
 
 	public ParticleSystem finishParticle;
-	public UISprite sprite;
+	public Image sprite;
 	private bool isFirstSprite = false;
 	private float pitchCount;
 

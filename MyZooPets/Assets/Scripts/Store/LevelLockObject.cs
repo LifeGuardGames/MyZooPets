@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine.UI;
 
 /// <summary>
 /// UI that appears over anything that is locked by level.
 /// </summary>
 public class LevelLockObject : MonoBehaviour {
 	// elements of this UI
-	public UISprite spriteIcon;
-	public UILabel labelLevel;
+	public Image spriteIcon;
+	public Text labelLevel;
 	
 	// level of this lock
 	private int level;
@@ -21,7 +21,7 @@ public class LevelLockObject : MonoBehaviour {
 	/// <param name="prefabName">Prefab name.</param>
 	public static GameObject CreateLock(GameObject parentObject, int level, string prefabName = "LevelLockUI"){
 		GameObject goPrefab = Resources.Load(prefabName) as GameObject;
-		GameObject lockObject = NGUITools.AddChild(parentObject, goPrefab);
+		GameObject lockObject = GameObjectUtils.AddChild(parentObject, goPrefab);
 
 		lockObject.GetComponent<LevelLockObject>().Init(level);
 		return lockObject;

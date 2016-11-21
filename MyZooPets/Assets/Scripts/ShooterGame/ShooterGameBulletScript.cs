@@ -20,7 +20,9 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	
 	// Update is called once per frame
 	void Update(){
-		transform.Translate(speed * Time.deltaTime, 0, 0);
+		if(!ShooterGameManager.Instance.IsPaused) {
+			transform.Translate(speed * Time.deltaTime, 0, 0);
+		}
 	}
 	
 	// when offscreen destroy
@@ -31,15 +33,24 @@ public class ShooterGameBulletScript : MonoBehaviour{
 	
 	// collision handling
 	void OnTriggerEnter2D(Collider2D collider){
-		if(collider.gameObject.tag == "EnemyBullet"){
+		if(collider.gameObject.tag == "ShooterEnemyBullet"){
 			Destroy(collider.gameObject);
 			if(!isPierceing || health < 2){
 				Destroy(this.gameObject);
 			}
 		}
-		else if(collider.gameObject.tag == "EnemyWall"){
+		else if(collider.gameObject.tag == "ShooterEnemyWall"){
 			speed = -speed;
 			canHitPlayer = true;
+		}
+		else if (collider.gameObject.tag == "ShooterBouncyWallTop") {
+			target = new Vector3(target.x, -target.y, target.z);
+			FindTarget();
+		}
+		else if(collider.gameObject.tag == "ShooterBouncyWallBottom") {
+			target = new Vector3(target.x, target.y+ 500, target.z);
+			FindTarget();
+			target = new Vector3(target.x, target.y - 500, target.z);
 		}
 		else if(collider.gameObject.tag == "Player"){
 			if(canHitPlayer){

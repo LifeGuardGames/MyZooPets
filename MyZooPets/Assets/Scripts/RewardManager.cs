@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Reward manager.
@@ -68,13 +67,12 @@ public class RewardManager : Singleton<RewardManager> {
 			RewardQueueData.GenericDelegate functionToCall = RewardQueueData.PopReward();
 			functionToCall();
 		}
-		else{	// End condition here
+		else{   // End condition here
 			isRewardingActive = false;
 
 			// Called only when it has animated and finished
 			if(isDoAnimationDoneCheck){
 				isDoAnimationDoneCheck = false;
-//				Debug.Log("ALL REWARDS DONE");
 				if(OnAllRewardsDone != null){
 					OnAllRewardsDone(this, EventArgs.Empty);
 				}

@@ -44,7 +44,7 @@ public class ShooterEnemyBossWaller : ShooterEnemy {
 		}
 	}
 	
-	// gives a 2 sec breather between shots
+	// gives a 1.2 sec breather between shots
 	IEnumerator WaitASecond(){
 		yield return new WaitForSeconds(1.2f);
 		ShootSmogBall();
@@ -60,6 +60,7 @@ public class ShooterEnemyBossWaller : ShooterEnemy {
 	}
 	
 	void OnDestroy(){
+		ShooterSpawnManager.Instance.BossDead();
 		LeanTween.cancel(gameObject);
 		
 		if(bulletAux != null){

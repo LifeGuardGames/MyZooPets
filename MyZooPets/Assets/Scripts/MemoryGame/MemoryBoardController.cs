@@ -11,7 +11,7 @@ using System.Collections.Generic;
 public class MemoryBoardController : MonoBehaviour{
 	public static int ROW_COUNT = 4;
 	public static int COLUMN_COUNT = 4;
-	const float DISTANCE_UNIT = 2.2f;
+	const float DISTANCE_UNIT = 150f;
 
 	private List<GameObject> cardList = new List<GameObject>(); // Card array, there is 20 of them
 	public GameObject memoryCardPrefab;
@@ -41,13 +41,13 @@ public class MemoryBoardController : MonoBehaviour{
 			cardList.Add(cardObject2);
 		}
 		cardList.Shuffle();
-		
 		for(int i=0; i<cardList.Count; i++){
 			cardList[i].transform.localPosition = new Vector3(
 					(i % COLUMN_COUNT) * DISTANCE_UNIT,
 					-1f * (i / COLUMN_COUNT) * DISTANCE_UNIT,
 					0f
 				);
+			cardList[i].transform.localScale = new Vector3(1, 1, 1);
 		}
 	}
 }

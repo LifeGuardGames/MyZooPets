@@ -1,38 +1,35 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
 /// Accessory user interface manager.
 /// 
 /// ARCHITECTURE:
-/// 
 /// Controlling "store" buttons and entries:
 /// 	AccessoryUIManager -> AccessoryEntryUIController
 /// 
 /// Controlling equipping accessory on pet:
 /// 	AccessoryUIManager -> AccessoryNodeController -> AccessoryNode
-/// 
 /// </summary>
 public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
-	public UIGrid grid;
-	public GameObject accessoryTitlePrefab;
 	public GameObject accessoryEntryPrefab;
-	public GameObject backButton;
-	public GameObject zoomItem;
+	public GridLayoutGroup gridParent;
+	public ScrollRect scrollRect;
+	public GameObject zoomItemEntrance;
+	public TweenToggle baseTween;
+	public TweenToggle gridTween;
+	public UILocalize categoryBanner;
 
 	// related to zooming into the badge board
-	private float zoomTime  = 0.5f;
+	private float zoomTime = 0.5f;
 	public Vector3 zoomOffset;
 	public Vector3 zoomRotation;
-	public string soundBuy;
-	public string soundUnequip;
-	public string soundEquip;
-	private List<AccessoryEntryUIController> accessoryEntryList = new List<AccessoryEntryUIController>();
+
 	private bool isActive = false;
-	//temp variable for pet scale
-	private Vector3 petScale;
+	private List<AccessoryStoreItemController> accessoryEntryList;
+	private Vector3 petScale;       //temp variable for pet scale
 
 	protected override void Awake(){
 		base.Awake();
@@ -41,46 +38,10 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 
 	protected override void Start(){
 		base.Start();
-		HUDAnimator.OnLevelUp += RefreshAccessoryItems; //listen to level up so we can unlock items
-
-		// Populate the entries with loaded data
-		List<Item> accessoryList = ItemLogic.Instance.AccessoryList;
-		AccessoryTypes lastCategory = AccessoryTypes.Hat;
-		bool isFirstTitle = true;
-		foreach(AccessoryItem accessory in accessoryList){
-			// Create a new accessory type label if lastCategory has changed
-			if(lastCategory != accessory.AccessoryType || isFirstTitle){
-				isFirstTitle = false;
-				GameObject itemUIObject = GameObjectUtils.AddChildWithPositionAndScale(grid.gameObject, accessoryTitlePrefab);
-				UILocalize localize = itemUIObject.GetComponent<UILocalize>();
-
-				switch((AccessoryTypes)accessory.AccessoryType){
-				case AccessoryTypes.Hat:
-					localize.key = "ACCESSORIES_TYPE_HAT";
-					break;
-				case AccessoryTypes.Glasses:
-					localize.key = "ACCESSORIES_TYPE_GLASSES";
-					break;
-				case AccessoryTypes.Color:
-					localize.key = "ACCESSORIES_TYPE_COLOR";
-					break;
-				default:
-					Debug.LogError("Invalid accessory type");
-					break;
-				}
-				localize.Localize();	// Force relocalize
-				lastCategory = accessory.AccessoryType;
-			}
-
-			GameObject entry = AccessoryEntryUIController.CreateEntry(grid.gameObject, accessoryEntryPrefab, accessory);
-			accessoryEntryList.Add(entry.GetComponent<AccessoryEntryUIController>());
-		}
-		grid.Reposition();
 	}
 
 	protected override void OnDestroy(){
 		base.OnDestroy();
-		HUDAnimator.OnLevelUp -= RefreshAccessoryItems;
 	}
 
 	// When the zoomItem is clicked and zoomed into
@@ -89,13 +50,12 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			AudioManager.Instance.PlayClip("subMenu");
 
 			// Zoom into the item
-			Vector3 targetPosition = zoomItem.transform.position + zoomOffset;
+			Vector3 targetPosition = zoomItemEntrance.transform.position + zoomOffset;
 
 			CameraManager.Callback cameraDoneFunction = delegate(){
 				CameraMoveDone();
 			};
 			CameraManager.Instance.ZoomToTarget(targetPosition, zoomRotation, zoomTime, cameraDoneFunction);
-
 
 			// Hide other UI objects
 			NavigationUIManager.Instance.HidePanel();
@@ -106,10 +66,55 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			PetAnimationManager.Instance.DisableIdleAnimation();
 			PetMovement.Instance.canMove = false;
 			isActive = true;
-			zoomItem.collider.enabled = false;
-			
-			backButton.SetActive(true);
+			zoomItemEntrance.GetComponent<Collider>().enabled = false;
+			}
+	}
+
+	public void OnHatsButton(){
+		ShowCategory(AccessoryTypes.Hat);
+	}
+
+	public void OnGlassesButton(){
+		ShowCategory(AccessoryTypes.Glasses);
+	}
+
+	public void ShowCategory(AccessoryTypes type){
+		baseTween.Hide();
+		gridTween.Show();
+		int itemCount = 0;
+
+		// Reset accessory list
+		accessoryEntryList = new List<AccessoryStoreItemController>();
+
+		// Populate the entries with loaded data
+		List<Item> accessoryList = ItemManager.Instance.AccessoryList;
+		foreach(AccessoryItem accessoryData in accessoryList) {
+			if(accessoryData.AccessoryType == type) {
+				// Change the title of the category
+				switch(accessoryData.AccessoryType) {
+					case AccessoryTypes.Hat:
+						categoryBanner.key = "ACCESSORIES_TYPE_HAT";
+						break;
+					case AccessoryTypes.Glasses:
+						categoryBanner.key = "ACCESSORIES_TYPE_GLASSES";
+						break;
+					default:
+						Debug.LogError("Invalid accessory type");
+						break;
+				}
+				categoryBanner.Localize();    // Force relocalize
+
+				GameObject accessoryEntry = GameObjectUtils.AddChild(gridParent.gameObject, accessoryEntryPrefab);
+				AccessoryStoreItemController entryController = accessoryEntry.GetComponent<AccessoryStoreItemController>();
+				entryController.Init(accessoryData);
+				accessoryEntryList.Add(entryController);
+				itemCount++;
+			}
 		}
+
+		// Adjust the grid height based on the height of the cell and spacing
+		float gridHeight = itemCount * (gridParent.cellSize.y + gridParent.spacing.y);
+		gridParent.GetComponent<RectTransform>().sizeDelta = new Vector2(gridParent.cellSize.x, gridHeight);
 	}
 
 	/// <summary>
@@ -122,13 +127,32 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 		toggleDemux.ShowFunctionName = "MovePet";
 	}
 
+	public void OnBaseBackButton() {
+		CloseUI();
+	}
+
+	public void OnGridBackButton(){
+		// Delete all the elements in current grid
+		foreach(Transform child in gridParent.transform) {
+			Destroy(child.gameObject);
+		}
+
+		// Reset the scroll bar
+		scrollRect.StopMovement();
+		Vector2 auxPosition = gridParent.GetComponent<RectTransform>().anchoredPosition;
+		gridParent.GetComponent<RectTransform>().anchoredPosition = new Vector2(auxPosition.x, 0f);
+
+		gridTween.Hide();
+		baseTween.Show();
+    }
+
 	// The back button on the left top corner is clicked to zoom out of the zoom item
 	protected override void _CloseUI(){
 		if(isActive){
 			this.GetComponent<TweenToggleDemux>().Hide();
 			PetMovement.Instance.canMove = true;
 			isActive = false;
-			zoomItem.collider.enabled = true;
+			zoomItemEntrance.GetComponent<Collider>().enabled = true;
 
 			CameraManager.Instance.ZoomOutMove();
 			PetAnimationManager.Instance.EnableIdleAnimation();
@@ -137,8 +161,6 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			NavigationUIManager.Instance.ShowPanel();
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
-			
-			backButton.SetActive(false);
 		}
 	}
 
@@ -148,106 +170,62 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	private void MovePet(){
 		GameObject pet = GameObject.Find("Pet");
 		//teleport first then walk into view
-		if(!pet.renderer.isVisible)
+		if(!pet.GetComponent<Renderer>().isVisible)
 		PetMovement.Instance.petSprite.transform.position = new Vector3(-4f, 0, 26.65529f);
 		PetMovement.Instance.MovePetFromAccessory(new Vector3(-8f, 0, 26.65529f));
-
 	}
 
-	/// <summary>
-	/// Raises the buy button event.
-	/// </summary>
-	/// <param name="button">Button.</param>
-	public void OnBuyButton(GameObject button){
-		Transform buttonParent = button.transform.parent;
-		string itemID = buttonParent.name;
-		Item itemData = ItemLogic.Instance.GetItem(itemID);
-		
+	// Called from AccessoryEntryUIController, returns success state for button toggling
+	public void BuyAccessory(Item itemData){
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
-			if(StatsController.Instance.GetStat(HUDElementType.Stars) >= itemData.Cost){
-
-				//Disable the buy button so user can't buy the same wallpaper anymore 
-				UIImageButton buyButton = button.GetComponent<UIImageButton>();
-				buyButton.isEnabled = false;
+			if(StatsManager.Instance.GetStat(StatType.Coin) >= itemData.Cost){
 				
-				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
+				InventoryManager.Instance.AddItemToInventory(itemData.ID);
+				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
+				EquipAccessory(itemData.ID);
 
-				// Change the state of the button
-				button.transform.parent.gameObject.GetComponent<AccessoryEntryUIController>().SetState(AccessoryButtonType.BoughtEquipped);
-
-				// Equip item
-				Equip(itemID);
-
-				//Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 
 				//Check for badge unlock
 				int totalNumOfAccessories = DataManager.Instance.GameData.Inventory.AccessoryItems.Count;
-				BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
+				BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Accessory, totalNumOfAccessories, true);
 
-				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
+				AudioManager.Instance.PlayClip("shopBuy");
+
+				RefreshAccessoryItems();
 			}
 			else{
-				HUDUIManager.Instance.PlayNeedMoneyAnimation();
+				HUDUIManager.Instance.PlayNeedCoinAnimation();
 				AudioManager.Instance.PlayClip("buttonDontClick");
 			}
 			break;
 		}
 	}
 
-	public void OnEquipButton(GameObject button){
-		Transform buttonParent = button.transform.parent;
-		string itemID = buttonParent.name;
-
-		Equip(itemID);
-
-		AudioManager.Instance.PlayClip(soundEquip);
-	}
-
-	public void OnUnequipButton(GameObject button){
-		Transform buttonParent = button.transform.parent;
-		string itemID = buttonParent.name;
-
-		Unequip(itemID);
-
-		AudioManager.Instance.PlayClip(soundUnequip);
-	}
-
-	public void Equip(string itemID){
-
-		// Unequip anything first
-		Unequip(itemID);
-
-		// Set the mutable data
-		AccessoryManager.Instance.SetAccessoryAtNode(itemID);
-
-		// Equip the node
-		AccessoryNodeController.Instance.SetAccessory(itemID);
-
+	// Called from AccessoryEntryUIController
+	public void EquipAccessory(string itemID){
+		UnequipAccessory(itemID);									// Unequip anything first
+		AccessoryManager.Instance.SetAccessoryAtNode(itemID);		// Set the mutable data
+		AccessoryNodeController.Instance.SetAccessory(itemID);		// Equip the node
 		RefreshAccessoryItems();
+
+		AudioManager.Instance.PlayClip("buttonGeneric3");
 	}
 
-	public void Unequip(string itemID){
-		// Set the mutable data
-		AccessoryManager.Instance.RemoveAccessoryAtNode(itemID);
-
-		// Unequip the node
+	// Called from AccessoryEntryUIController
+	public void UnequipAccessory(string itemID){
+		AccessoryManager.Instance.RemoveAccessoryAtNode(itemID);	// Set the mutable data
 		AccessoryNodeController.Instance.RemoveAccessory(itemID);	// Still need item ID to know which node to remove
-
 		RefreshAccessoryItems();
+
+		AudioManager.Instance.PlayClip("buttonGeneric3");
 	}
 
 	//Check for any UI updateds
 	private void RefreshAccessoryItems(){
-		foreach(AccessoryEntryUIController entryController in accessoryEntryList){
+		foreach(AccessoryStoreItemController entryController in accessoryEntryList){
 			entryController.CheckState();
 		}
-	}
-
-	private void RefreshAccessoryItems(object sender, EventArgs args){
-		RefreshAccessoryItems();
 	}
 }

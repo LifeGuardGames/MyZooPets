@@ -1,7 +1,5 @@
-using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Attack gate. Script put on a pet when it is ready to attack a gate
@@ -9,22 +7,19 @@ using System.Collections.Generic;
 public class AttackGate : Singleton<AttackGate>{
 
 	private Gate gateTarget; // gate to attack
-	private int damage; // damage to deal
-
+	//private int damage; // damage to deal
 
 	void Start(){
 		PetAnimationManager.OnBreathEnded += ExecutePostAttackLogic;
-
 	}
 
 	void OnDestroy(){
-
 		PetAnimationManager.OnBreathEnded -= ExecutePostAttackLogic;
 	}
 
-	public void Init(Gate gateTarget, int damage){
+	public void Init(Gate gateTarget){
 		this.gateTarget = gateTarget;
-		this.damage = damage;
+		//this.damage = 1;
 	}
 
 	/// <summary>
@@ -33,12 +28,13 @@ public class AttackGate : Singleton<AttackGate>{
 	public void Cancel(){
 		PetAnimationManager.Instance.AbortFireBlow();
 	
-		FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
+		//FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
 
 		//release lock if fire breathing lock was called previously
 		UIModeTypes currentLockMode = ClickManager.Instance.CurrentMode;
-		if(currentLockMode == UIModeTypes.FireBreathing)
+		if(currentLockMode == UIModeTypes.FireBreathing) {
 			ClickManager.Instance.ReleaseLock();
+		}
 		
 		Destroy(this);
 	}
@@ -48,8 +44,6 @@ public class AttackGate : Singleton<AttackGate>{
 	/// </summary>
 	public void FinishAttack(){
 		PetAnimationManager.Instance.FinishFireBlow();
-
-		FireButtonUIManager.Instance.FireButtonCollider.enabled = false;
 		ClickManager.Instance.Lock(mode:UIModeTypes.FireBreathing);
 	}
 
@@ -57,8 +51,6 @@ public class AttackGate : Singleton<AttackGate>{
 	/// Executes the post attack logic.
 	/// </summary>
 	public void ExecutePostAttackLogic(object sender, EventArgs args){
-
-
 		StartCoroutine(PostAttackLogic());
 	}
 
@@ -68,22 +60,21 @@ public class AttackGate : Singleton<AttackGate>{
 	/// </summary> 
 	private IEnumerator PostAttackLogic(){
 		// and decrement the user's fire breaths
-		StatsController.Instance.ChangeFireBreaths(-1);
+		StatsManager.Instance.UpdateFireBreaths(-1);
 
 		// damage the gate
-		gateTarget.DamageGate(damage);
+		gateTarget.DamageGate();
+		
+		// Tell FireButtonManager that the firebreathing is complete
+		// Note: Make sure gate damage is updated
+		FireButtonManager.Instance.Step5_FinishBlowingFire();
 
 		// also mark the player as having attack the monster (for wellapad tasks)
 		WellapadMissionController.Instance.TaskCompleted("FightMonster");
 		
 		// wait a frame to do our other stuff because the fire breathing animation is still technically playing
 		yield return 0;
-
-		//make button clickable again
-		if(FireButtonUIManager.Instance){
-			FireButtonUIManager.Instance.FireButtonCollider.enabled = true;
-		}
-
+		
 		// release fire breathing lock
 		ClickManager.Instance.ReleaseLock();
 

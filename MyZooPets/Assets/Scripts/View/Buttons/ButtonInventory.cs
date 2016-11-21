@@ -6,7 +6,7 @@ using System.Collections;
 // Button for expanding/contracting player inventory.
 //---------------------------------------------------
 
-public class ButtonInventory : LgButton {
+public class ButtonInventory : LgWorldButton {
 	
 	//---------------------------------------------------
 	// ProcessClick()

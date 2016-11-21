@@ -6,6 +6,6 @@ public class CameraSortMode : MonoBehaviour {
 	public TransparencySortMode sortMode;
 	
 	void Start () {
-		gameObject.camera.transparencySortMode = sortMode;
+		gameObject.GetComponent<Camera>().transparencySortMode = sortMode;
 	}
 }

@@ -1,26 +1,26 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Wellapad user interface manager
 /// NOTE: This will open up with the fire crystal ui manager as well
 /// </summary>
-public class WellapadUIManager : SingletonUI<WellapadUIManager>{
+public class WellapadUIManager : SingletonUI<WellapadUIManager> {
 	public TweenToggle wellapadTweenParent;
-
+	public GameObject backButtonParent;
+	private bool isHideBackButton = false;
 	private WellapadScreenUIController wellapadScreenUIController; //script that handles wellapad screen state
 
-	protected override void Awake(){
+	protected override void Awake() {
 		eModeType = UIModeTypes.Wellapad;
 	}
 
 	//Return WellapadScreenUIController script
-	public WellapadScreenUIController GetScreenManager(){
+	public WellapadScreenUIController GetScreenManager() {
 		return wellapadScreenUIController;
 	}
-	
-	protected override void Start(){
+
+	protected override void Start() {
 		// set the tween target on the wellapad object to this object
 		wellapadTweenParent.ShowTarget = gameObject;
 		wellapadScreenUIController = GetComponent<WellapadScreenUIController>();
@@ -31,15 +31,23 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 
 	/// <summary>
 	/// NOTE: Called from Fire Crystal UI Manager!!!
+	/// Special case to hide the back button since it is automatic
 	/// </summary>
-	protected override void _OpenUI(){
+	public void OpenAutomaticUI(bool _isHideBackButton) {
+		isHideBackButton = _isHideBackButton;
+		OpenUI();
+	}
+
+	protected override void _OpenUI() {
+		backButtonParent.SetActive(!isHideBackButton);
+
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		InventoryUIManager.Instance.HidePanel();
 		RoomArrowsUIManager.Instance.HidePanel();
 
-		// Open the fire crystal UI manager together  with special settings
-		FireCrystalUIManager.Instance.isLockModeInClickmanager = false;	// Temporary unlock
+		// Open the fire crystal UI manager together with special settings
+		FireCrystalUIManager.Instance.isLockModeInClickmanager = false; // Temporary unlock
 		FireCrystalUIManager.Instance.isIgnoreTweenLockOnClose = true;
 		FireCrystalUIManager.Instance.OpenUI();
 
@@ -48,18 +56,18 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 		RefreshScreen();
 	}
 
-	public void CloseUIProperly(){
+	public void CloseUIProperly() {
 		FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 	}
 
 	/// <summary>
 	/// NOTE: Called from Fire Crystal UI Manager!!!
 	/// </summary>
-	protected override void _CloseUI(){
+	protected override void _CloseUI() {
 		//Show other UI objects
-		if(!ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){	// If in deco mode dont show these
+		if(!ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)) { // If in deco mode dont show these
 			NavigationUIManager.Instance.ShowPanel();
-			InventoryUIManager.Instance.ShowPanel();
+			InventoryUIManager.Instance.ShowPanel(false);
 		}
 		RoomArrowsUIManager.Instance.ShowPanel();
 
@@ -76,11 +84,11 @@ public class WellapadUIManager : SingletonUI<WellapadUIManager>{
 	// RefreshScreen()
 	// Sets the proper screen on the wellapad.
 	//---------------------------------------------------	
-	public void RefreshScreen(){
+	public void RefreshScreen() {
 		wellapadScreenUIController.SetScreen();
 	}
 
-	private void RefreshScreen(object sender, EventArgs args){
+	private void RefreshScreen(object sender, EventArgs args) {
 		RefreshScreen();
 	}
 }

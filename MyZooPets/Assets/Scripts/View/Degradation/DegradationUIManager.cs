@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 //Instantiate all the degradation asthma triggers if there are any
@@ -17,28 +16,17 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 
 	private List<GameObject> currentSpawnTriggers; //keep a reference of all the triggers spawned
 
-	public bool IsTesting(){
-		bool bTesting = Constants.GetConstant<bool>("TestingDegrad");
-		return bTesting;
-	}
-
 	void Awake(){
 		currentSpawnTriggers = new List<GameObject>();
 	}
 
-	void Start(){
+	void Start() {
 		DegradationLogic.OnRefreshTriggers += PlaceTriggers;
 		PlaceTriggers(this, EventArgs.Empty); //required for first initialization
 	}
 
 	void OnDestroy(){
 		DegradationLogic.OnRefreshTriggers -= PlaceTriggers;
-	}
-
-	void OnApplicationPause(bool isPaused){
-		//need to remove 
-//         if(isPaused)
-//             CleanupExistingTriggers();
 	}
 	
 	//Use this to turn on all particle effects in triggers
@@ -76,38 +64,30 @@ public class DegradationUIManager : Singleton<DegradationUIManager>{
 		}
 		currentSpawnTriggers = new List<GameObject>();
 	}
-
-	//---------------------------------------------------
-	// PlaceTriggers()
-	//---------------------------------------------------       
+  
 	private void PlaceTriggers(object sender, EventArgs args){
-		// if the player has not yet played the trigger tutorial yet, we don't want to go spawning triggers
-		bool areTutorialsFinished = DataManager.Instance.GameData.Tutorial.AreTutorialsFinished();
-		if(!areTutorialsFinished && !IsTesting()){
-			return;
-		}
-
 		//to make sure no left over triggers exists. clean up first
 		CleanupExistingTriggers();
         
 		// loop through and place all defined triggers
 		List<DegradData> degradTriggers = DegradationLogic.Instance.DegradationTriggers;
-		for(int i = 0; i < degradTriggers.Count; i++){
-			PlaceTrigger(degradTriggers[i]);        
+		if(degradTriggers == null || degradTriggers.Count == 0) {
+			return;
+		}
+		else {
+			for(int i = 0; i < degradTriggers.Count; i++) {
+				PlaceTrigger(degradTriggers[i]);
+			}
 		}
 	}
-	
-	//---------------------------------------------------
-	// PlaceTrigger()
-	// Note that this function assumes it is okay to be
-	// spawning triggers.
-	//---------------------------------------------------		
+
+	// Note that this function assumes it is okay to be spawning triggers.
 	private DegradTrigger PlaceTrigger(DegradData degradData){		
 		string triggerID = degradData.TriggerID;
 		int partition = degradData.Partition;
 		Vector3 position = degradData.Position;
 
-		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTrigger(triggerID);
+		ImmutableDataTrigger triggerData = DataLoaderTriggers.GetTriggerData(triggerID);
 
 		//instantiate all the triggers saved in DataManager
 		Transform parent = PartitionManager.Instance.GetInteractableParent(partition);

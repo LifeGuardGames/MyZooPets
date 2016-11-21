@@ -28,29 +28,32 @@ public class LevelComponent : MonoBehaviour{
 	private List<PointGroup> mPointGroups = new List<PointGroup>();
 	[SerializeField]
 	private List<Bundle> mBundles = new List<Bundle>();
-	private List<RunnerItem> mSpawnedItems = new List<RunnerItem>(); //all the spawned items in this component
+	private List<RunnerItem> mSpawnedItems = new List<RunnerItem>();
+	//all the spawned items in this component
 	
 
 	public List<PointGroup> PointGroups { get { return mPointGroups; } }
+
 	public List<Bundle> Bundles { get { return mBundles; } }
+
 	public LevelGroup ParentGroup { get; set; }
 
 	//Destroy all the items for this component
 	public void DestroyItems(){
-		ItemManager itemManager = ItemManager.Instance; 
+		RunnerItemManager runnerItemManager = RunnerItemManager.Instance; 
 		foreach(RunnerItem currentItem in mSpawnedItems){
 			if(currentItem != null){
-				itemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
+				runnerItemManager.StoreOrDisposeItem(currentItem, ParentGroup.LevelGroupID);
 			}
 		}
 	}
-
+	
 	//Destroys this level component and all its items
-    public void Destroy(){
-    	DestroyItems();
+	public void Destroy(){
+		DestroyItems();
 		this.gameObject.SetActive(false);
         
-    }
+	}
 
 	public PointGroup GetGroup(int index){
 		PointGroup pointGroup = null;
@@ -104,7 +107,7 @@ public class LevelComponent : MonoBehaviour{
 
 	public void DeletePointInfo(PointGroup inParentPointGroup, PointInfo inInfoToDelete){
 		if(mPointGroups.Contains(inParentPointGroup)
-			&& inParentPointGroup.mPoints.Contains(inInfoToDelete)){
+		   && inParentPointGroup.mPoints.Contains(inInfoToDelete)){
 			inParentPointGroup.mPoints.Remove(inInfoToDelete);
 		}
 	}
@@ -141,6 +144,7 @@ public class LevelComponent : MonoBehaviour{
 			mBundles.Add(bundleToModify);
 		}
 	}
+
 }
 
 //====================================================================

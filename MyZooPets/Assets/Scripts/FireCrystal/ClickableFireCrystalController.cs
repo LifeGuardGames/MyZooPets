@@ -10,20 +10,23 @@ public class ClickableFireCrystalController : MonoBehaviour{
 		animControl.Play();
 	}
 
-	public void ObjectClicked(){
+	void OnMouseUpAsButton(){
 		thisCollider.enabled = false;
-		LeanTween.move(this.gameObject, InventoryUIManager.Instance.GetItemFlyToPosition(), 1f)
+		LeanTween.move(gameObject, InventoryUIManager.Instance.itemFlyToTransform, 1f)
 			.setEase(LeanTweenType.easeOutQuad)
 			.setOnComplete(RewardPlayerFireCrystal);
 	}
 
 	public void RewardPlayerFireCrystal(){
-		InventoryLogic.Instance.AddItem("Usable1", 1);
+		InventoryManager.Instance.AddItemToInventory("Usable1");
+		InventoryUIManager.Instance.PulseInventory();
+		InventoryUIManager.Instance.RefreshPage();
+
+		animParent.SetActive(false);
 		StartCoroutine(CloseFireCrystalUIManager());
 	}
 
 	private IEnumerator CloseFireCrystalUIManager(){
-		animParent.SetActive(false);
 		yield return new WaitForSeconds(1);
 		FireCrystalUIManager.Instance.CloseUIBasedOnScene();
 	}

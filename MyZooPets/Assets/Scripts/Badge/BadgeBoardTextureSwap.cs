@@ -17,7 +17,7 @@ public class BadgeBoardTextureSwap : MonoBehaviour {
 	private int badgeCount2Threshold = 24;
 
 	void Start(){
-		int badgeCount = BadgeLogic.Instance.GetUnlockedBadgesCount();
+		int badgeCount = BadgeManager.Instance.GetUnlockedBadgesCount();
 		string selectedTexture = texture1Name;
 		if(badgeCount < badgeCount1Threshold){
 			selectedTexture = texture1Name;

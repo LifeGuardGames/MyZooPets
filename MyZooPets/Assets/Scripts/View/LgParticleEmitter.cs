@@ -43,7 +43,7 @@ public class LgParticleEmitter : MonoBehaviour{
 				generatedValue = Random.Range(minInterval, maxInterval);
 				
 				// Do the action here
-				GameObject emittedObject = NGUITools.AddChild(gameObject, particleObject);
+				GameObject emittedObject = GameObjectUtils.AddChild(gameObject, particleObject);
 				ExtendedAction(emittedObject);
 			}
 		}

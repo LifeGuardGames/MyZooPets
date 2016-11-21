@@ -69,7 +69,7 @@ public class AccessoryNode : MonoBehaviour{
 
 			// Load and place the actual accessory
 			// build the prefab from the id of the decoration
-			string strResource = ItemLogic.Instance.GetAccessoryItemPrefabName(placedAccessoryID);
+			string strResource = DataLoaderItems.GetAccessoryItemPrefabName(placedAccessoryID);
 			GameObject goPrefab = Resources.Load(strResource) as GameObject;
 
 			if(goPrefab){

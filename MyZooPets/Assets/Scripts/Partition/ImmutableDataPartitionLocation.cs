@@ -10,6 +10,7 @@ public enum PartitionLocationTypes{
 	Memory,
 	Clinic,
 	Runner,
+	MicroMix
 }
 
 // A partition location in the specific scene

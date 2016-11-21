@@ -10,7 +10,6 @@ public class ShooterEnemyHard : ShooterEnemy{
 
 	// Use this for initialization
 	void Start(){
-		animator.SetBool("IsSpitMode", true);
 		// movement positions
 		upper = GameObject.Find("Upper");
 		lower = GameObject.Find("Lower");
@@ -32,8 +31,6 @@ public class ShooterEnemyHard : ShooterEnemy{
 	void ShootSmogBall(){
 		if(!isDead){	
 			AudioManager.Instance.PlayClip("shooterEnemySpit");
-			animator.SetBool("Spit",true);
-			animator.SetBool("IsSpitMode", false);
 			bulletAux = GameObjectUtils.AddChild(null, bulletPrefab);
 			bulletAux.transform.position = transform.position;
 			LeanTween.move(bulletAux, player.transform.position, 2.0f);
@@ -63,10 +60,4 @@ public class ShooterEnemyHard : ShooterEnemy{
 			Destroy(bulletAux);
 		}
 	}
-
-//	void OnGUI(){
-//		if(GUI.Button(new Rect(100, 100, 100, 100), "sdfsf")){
-//			ShootSmogBall();
-//		}
-//	}
 }

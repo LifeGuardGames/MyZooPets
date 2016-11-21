@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-/// <summary>
+﻿/// <summary>
 /// Items that are stored in the inventory. 
 /// Mutable data but contains reference to immutable data
 /// </summary>
@@ -31,7 +28,7 @@ public class InventoryItem{
 	/// </summary>
 	/// <value>The item data.</value>
 	public Item ItemData{
-		get{return ItemLogic.Instance.GetItem(ItemID);}
+		get{return DataLoaderItems.GetItem(ItemID);}
 	}
 
     public InventoryItem(string itemID, ItemType itemType, string textureName){

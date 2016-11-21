@@ -15,18 +15,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LevelGroup : MonoBehaviour {
-    public eLevelGroupID LevelGroupID;
-    public int levelGroupDifficulty = 0; //spawning timing or difficulty. Higher number = more difficult
-    // public LevelComponent startingLevelComponent; //the component to start the level group
-    // public int startLevelComponentIndex;
-    public ParallaxingBackgroundGroup parallaxBackgroundPrefab; 
+public class LevelGroup : MonoBehaviour{
+	public eLevelGroupID LevelGroupID;
+	public int levelGroupDifficulty = 0;
+	//spawning timing or difficulty. Higher number = more difficult
+	// public LevelComponent startingLevelComponent; //the component to start the level group
+	// public int startLevelComponentIndex;
+	public ParallaxingBackgroundGroup parallaxBackgroundPrefab;
 
-    public List<GameObject> levelComponentsGO; //list of ready to use components
+	public List<GameObject> levelComponentsGO;
+	//list of ready to use components
   
-    //components currently in the scene. should not be spawned again
-    //because we don't want duplicates in the cache
-    private HashSet<string> componentsInScene = new HashSet<string>(); 
+	//components currently in the scene. should not be spawned again
+	//because we don't want duplicates in the cache
+	private HashSet<string> componentsInScene = new HashSet<string>();
 
 	/// <summary>
 	/// Reset the cached components
@@ -35,15 +37,15 @@ public class LevelGroup : MonoBehaviour {
 		componentsInScene = new HashSet<string>();
 	}
 
-	public void ReportDeath(){
+	public string ReportDeath(){
 		if(LevelGroupID == LevelGroup.eLevelGroupID.City){
-			Analytics.Instance.RunnerDied("City");
+			return "City";
 		}
-		else if (LevelGroupID == LevelGroup.eLevelGroupID.CityNight){
-			Analytics.Instance.RunnerDied("CityNight");
+		else if(LevelGroupID == LevelGroup.eLevelGroupID.CityNight){
+			return "CityNight";
 		}
-		else if(LevelGroupID == LevelGroup.eLevelGroupID.Forest){
-			Analytics.Instance.RunnerDied("Forest");
+		else{ 
+			return "Forest";
 		}	
 	}
 
@@ -56,13 +58,11 @@ public class LevelGroup : MonoBehaviour {
 
 		try{
 			GameObject tutComponent = levelComponentsGO[0];
-			GameObject newTutComponent = (GameObject) Instantiate(tutComponent);
+			GameObject newTutComponent = (GameObject)Instantiate(tutComponent);
 			retVal = newTutComponent.GetComponent<LevelComponent>();
-		}
-		catch(ArgumentOutOfRangeException e){
+		} catch(ArgumentOutOfRangeException e){
 			Debug.Log("Error message: " + e.Message);
-		}
-		catch(ArgumentNullException e){
+		} catch(ArgumentNullException e){
 			Debug.Log("Error message: " + e.Message);
 		}
 
@@ -74,13 +74,13 @@ public class LevelGroup : MonoBehaviour {
 	/// Gets the start level component.
 	/// </summary>
 	/// <returns>The start level component.</returns>
-    public LevelComponent GetStartLevelComponent(){
+	public LevelComponent GetStartLevelComponent(){
 		LevelComponent retVal = null;
 
 		retVal = GetComponent(0);
 
 		return retVal;
-    }
+	}
 
 	/// <summary>
 	/// Gets the component.
@@ -104,8 +104,7 @@ public class LevelGroup : MonoBehaviour {
 				componentsInScene.Add(lvComponentObj.name);
 				retVal = lvComponentObj.GetComponent<LevelComponent>();
 			}
-		}
-		catch(ArgumentOutOfRangeException e){
+		} catch(ArgumentOutOfRangeException e){
 			Debug.Log("Error message: " + e.Message);
 		}
 
@@ -116,30 +115,30 @@ public class LevelGroup : MonoBehaviour {
 	/// Gets the random component.
 	/// </summary>
 	/// <returns>The random component.</returns>
-    public LevelComponent GetRandomComponent(){
+	public LevelComponent GetRandomComponent(){
 		LevelComponent retVal = null;
 		int randomIndex = UnityEngine.Random.Range(0, levelComponentsGO.Count); //get a random index
 
 		retVal = GetComponent(randomIndex);
 
-        return retVal; 
-    }
-	
-    /// <summary>
+		return retVal; 
+	}
+
+	/// <summary>
 	/// If GameObject is not in cache add it; otherwise, remove
-    /// </summary>
-    /// <param name="lvComponentObj">Lv component object.</param>
-    public void DestroyAndCache(GameObject lvComponentObj){
-        lvComponentObj.GetComponent<LevelComponent>().DestroyItems();
-        componentsInScene.Remove(lvComponentObj.name);
+	/// </summary>
+	/// <param name="lvComponentObj">Lv component object.</param>
+	public void DestroyAndCache(GameObject lvComponentObj){
+		lvComponentObj.GetComponent<LevelComponent>().DestroyItems();
+		componentsInScene.Remove(lvComponentObj.name);
 
 		lvComponentObj.SetActive(false);
 
-    }
+	}
 
-    public enum eLevelGroupID{
-        Forest,
-        City,
-        CityNight,
-    }
+	public enum eLevelGroupID{
+		Forest,
+		City,
+		CityNight,
+	}
 }

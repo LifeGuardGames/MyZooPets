@@ -1,12 +1,12 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 public class NinjaTutorial : MinigameTutorial {
     public static string TUT_KEY = "NINJA_TUT";
 
-	private Animation swipeTutAnimation;
+	private Animator swipeTutAnimator;
 	private GameObject swipeTutObject;
+
 	// one game object for each type of trigger
 	private GameObject trigger1Object;
 	private GameObject trigger2Object;
@@ -14,41 +14,43 @@ public class NinjaTutorial : MinigameTutorial {
 	private GameObject trigger4Object;
 	private GameObject trigger5Object;
 	private GameObject trigger6Object;
+
 	// number of triggers cut, this is a subsitute from having more steps
 	private int numOfTriggersCut;
 	  
-    protected override void SetMaxSteps(){
+    protected override void SetKey(){
+        tutorialKey = "NINJA_TUT";
+    }
+
+	protected override void SetMaxSteps(){
         maxSteps = 1;
     }
-	     
-    protected override void SetKey(){
-        tutorialKey = TUT_KEY;
-    }
 
-	protected override void _End(bool isFinished){
-		if(!isFinished){
-			if(trigger1Object){
+	protected override void _End(bool isFinished) {
+		if(!isFinished) {
+			if(trigger1Object) {
 				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut -= NinjaTriggerFirstCutEventHandler;
-				GameObject.Destroy(trigger1Object);
+				UnityEngine.Object.Destroy(trigger1Object);
 			}
 		}
-
-		if(swipeTutObject != null)
-			GameObject.Destroy(swipeTutObject);
+		NinjaGameManager.Instance.LifeCount = 3;
+		NinjaGameManager.Instance.isTutorialRunning = false;
+		if(swipeTutObject != null) {
+			UnityEngine.Object.Destroy(swipeTutObject);
+		}
+		NinjaGameManager.Instance.NewGame();
 	}
 
     protected override void ProcessStep(int step){
         switch(step){
             case 0:
 				// spawn each trigger
-				trigger1Object = NinjaManager.Instance.SpawnTriggersTutorial(1);
-				trigger2Object = NinjaManager.Instance.SpawnTriggersTutorial(2);
-				trigger3Object = NinjaManager.Instance.SpawnTriggersTutorial(3);
-				trigger4Object = NinjaManager.Instance.SpawnTriggersTutorial(4);
-				trigger5Object = NinjaManager.Instance.SpawnTriggersTutorial(5);
-				trigger6Object = NinjaManager.Instance.SpawnTriggersTutorial(6);
-				GameObject swipeTut = (GameObject) Resources.Load("NinjaSwipeTut");
-				swipeTutObject = GameObjectUtils.AddChildWithPositionAndScale(GameObject.Find("Anchor-Center"), swipeTut);
+				trigger1Object = NinjaGameManager.Instance.SpawnTriggersTutorial(1);
+				trigger2Object = NinjaGameManager.Instance.SpawnTriggersTutorial(2);
+				trigger3Object = NinjaGameManager.Instance.SpawnTriggersTutorial(3);
+				trigger4Object = NinjaGameManager.Instance.SpawnTriggersTutorial(4);
+				trigger5Object = NinjaGameManager.Instance.SpawnTriggersTutorial(5);
+				trigger6Object = NinjaGameManager.Instance.SpawnTriggersTutorial(6);
 
 				//listen to when trigger gets cut
 				trigger1Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
@@ -57,15 +59,12 @@ public class NinjaTutorial : MinigameTutorial {
 				trigger4Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
 				trigger5Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
 				trigger6Object.GetComponent<NinjaTrigger>().NinjaTriggerCut += NinjaTriggerFirstCutEventHandler;
+				
 				//play swipe tutorial
-				try{
-					swipeTutAnimation = swipeTutObject.FindInChildren("AnimationParent").GetComponent<Animation>();
-					swipeTutAnimation.Play("NinjaSwipeTut1");
-				}
-				catch(NullReferenceException e){
-					Debug.LogException(e);
-				}
-
+				GameObject swipeTutPrefab = (GameObject) Resources.Load("NinjaTutorialUI");
+				swipeTutObject = GameObjectUtils.AddChildGUI(GameObject.Find("Canvas"), swipeTutPrefab);
+				swipeTutAnimator = swipeTutObject.FindInChildren("AnimationParent").GetComponent<Animator>();
+				swipeTutAnimator.Play("NinjaTutorialUI");
                 break;
             default:
                 Debug.LogError("Ninja tutorial has an unhandled step: " + step);

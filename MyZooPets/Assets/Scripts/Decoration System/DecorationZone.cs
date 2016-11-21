@@ -1,28 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 
-/// <summary>
-/// Decoration zone.
-/// This is the replacement for decoration nodes in V1.3.4 update
-/// This is the zone that the inventory will be dragged and dropped on.
-/// </summary>
-public abstract class DecorationZone : MonoBehaviour {
-
+// This is the zone that the inventory will be dragged and dropped on.
+public abstract class DecorationZone : MonoBehaviour, IDropInventoryTarget {
 	// what type of decorations can go on this node?
 	public DecorationTypes nodeType;
-	public DecorationTypes GetDecoType(){
+	public DecorationTypes GetDecoType() {
 		return nodeType;
 	}
 
-	public UISprite spriteIcon;
-	public UISprite spriteOutline;
-	public UISprite spriteFill;
-	public Color neutralColorOutline;
+	public Image spriteIcon;
+	public Image spriteFill;
 	public Color neutralColorFill;
-	public Color activeColorOutline;
 	public Color activeColorFill;
-	public Color inactiveColorOutline;
 	public Color inactiveColorFill;
 
 	public Animation activeHoverAnimation;
@@ -31,59 +22,33 @@ public abstract class DecorationZone : MonoBehaviour {
 	private string nodeID;
 	private string placedDecoID = string.Empty;
 
-	protected abstract void _RemoveDecoration();										// removes the decoration
-	protected abstract void _SetDecoration(string decoID, bool isPlacedFromDecoMode);	// set the deco to this node
+	protected abstract void _RemoveDecoration();                                        // removes the decoration
+	protected abstract void _SetDecoration(string decoID, bool isPlacedFromDecoMode);   // set the deco to this node
 
-	void Start(){ 
-		DecoInventoryUIManager.OnDecoDroppedOnTarget += OnDecorationDroppedInZone;
-		DecoInventoryUIManager.OnDecoPickedUp += OnDecorationPickedUp;
-		DecoInventoryUIManager.OnDecoDropped += OnDecorationDropped;
+	void Start() {
+		DecoModeUIManager.Instance.OnManagerOpen += ShowDecoZones;
+		InventoryTokenDragElement.OnDecoItemPickedUp += OnDecorationPickedUp;
+		InventoryTokenDragElement.OnDecoItemDropped += OnDecorationDropped;
 
-		DecoInventoryUIManager.Instance.OnManagerOpen += OnDecoMode;
-
-		// Set the decoration icon
-		switch(nodeType){
-		case DecorationTypes.Carpet:
-			spriteIcon.spriteName = "iconDecoCarpet2";
-			break;
-		case DecorationTypes.Poster:
-			spriteIcon.spriteName = "iconDecoPoster2";
-			break;
-		case DecorationTypes.SmallPlant:
-			spriteIcon.spriteName = "iconDecoSmallPlant2";
-			break;
-		case DecorationTypes.Wallpaper:
-			spriteIcon.spriteName = "iconDecoWallpaper2";
-			break;
-		case DecorationTypes.BigFurniture:
-			spriteIcon.spriteName = "iconDecoBigFurniture2";
-			break;
-		}
-
-		// Turn on resizer and resize
-		SpriteResizer resizer = spriteIcon.GetComponent<SpriteResizer>();
-		resizer.enabled = true;	// Resize automatically
-
+        spriteIcon.sprite = SpriteCacheManager.GetDecoIconSprite(nodeType);
 		nodeID = transform.parent.name;
-
 		CheckSaveData();
 	}
 
-	void OnDestroy(){
-		DecoInventoryUIManager.OnDecoPickedUp -= OnDecorationPickedUp;
-		DecoInventoryUIManager.OnDecoDropped -= OnDecorationDropped;
-		DecoInventoryUIManager.OnDecoDroppedOnTarget -= OnDecorationDroppedInZone;
-		if(DecoInventoryUIManager.Instance){
-			DecoInventoryUIManager.Instance.OnManagerOpen -= OnDecoMode;
+	void OnDestroy() {
+		if(DecoModeUIManager.Instance) {
+			DecoModeUIManager.Instance.OnManagerOpen -= ShowDecoZones;
 		}
+		InventoryTokenDragElement.OnDecoItemPickedUp -= OnDecorationPickedUp;
+		InventoryTokenDragElement.OnDecoItemDropped -= OnDecorationDropped;
 	}
-	
+
 	/// <summary>
 	/// Checks save data to see if this node has any decoration saved there.  If it does, place that decoration
 	/// </summary>
-	private void CheckSaveData(){
+	private void CheckSaveData() {
 		// If the saved data contains this node's id, it means there was a decoration placed here
-		if(DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey(nodeID)){
+		if(DataManager.Instance.GameData.Decorations.PlacedDecorations.ContainsKey(nodeID)) {
 			string savedDeco = DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID];
 			SetDecoration(savedDeco, false);
 		}
@@ -94,116 +59,102 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// </summary>
 	/// <returns>The decoration item from inventory.</returns>
 	/// <param name="itemID">Item ID</param>
-	private DecorationItem GetDecorationItemFromInventory(string itemID){
-		InventoryItem item = InventoryLogic.Instance.GetDecoInvItem(itemID);
-		if(item == null){
+	private DecorationItem GetDecorationItemFromInventory(string itemID) {
+		InventoryItem item = InventoryManager.Instance.GetDecoInInventory(itemID);
+		if(item == null) {
 			return null;
 		}
-		else{
+		else {
 			return (DecorationItem)item.ItemData;
 		}
 	}
 
-	/// <summary>
-	/// Raises the dropped in zone event.
-	/// </summary>
-	/// <param name="sender">Sender.</param>
-	/// <param name="args">Arguments.</param>
-	private void OnDecorationDroppedInZone(object sender, InventoryDragDrop.InvDragDropArgs args){
-		// Weed out everything but the target node due to event call
-		if(args.TargetCollider.gameObject == this.gameObject){
-			// Double check the item
-			DecorationItem decoItem = GetDecorationItemFromInventory(args.ItemTransform.gameObject.name);
-			if(args.TargetCollider.GetComponent<DecorationZone>().nodeType == decoItem.DecorationType){
-				args.IsValidTarget = true;
-				SetDecoration(args.ItemTransform.gameObject.name, true);	// TODO refactor this item Name???
-			}
+	// Implementation for IDropInventoryTarget
+	public void OnItemDropped(InventoryItem item) {
+		if(CanPlaceDecoration(item.ItemID)) {
+			SetDecoration(item.ItemID, true);
 		}
 	}
 
-	public void SetDecoration(string itemID, bool isPlacedFromDecoMode){
+	public void SetDecoration(string itemID, bool isPlacedFromDecoMode) {
 		// Do one last check
-		if(!CanPlaceDecoration(itemID)){
+		if(!CanPlaceDecoration(itemID)) {
 			Debug.LogError("Illegal deco placement for " + itemID + " on node " + gameObject);
 			return;
 		}
 
 		// If there was already a decoration here, remove it
-		if(HasDecoration()){
+		if(HasDecoration()) {
 			RemoveDecoration();
 		}
 
 		placedDecoID = itemID;
 
 		// update the save data with the new decoration id
-		DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID] = itemID;		
-		
+		DataManager.Instance.GameData.Decorations.PlacedDecorations[nodeID] = itemID;
+
 		// Notify inventory logic that this item is being used
-		InventoryLogic.Instance.UsePetItem(itemID);
+		InventoryManager.Instance.UsePetItem(itemID);
 
 		_SetDecoration(itemID, isPlacedFromDecoMode);
 
 		// Play a sound
-		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
-		if(isPlacedFromDecoMode){
-			if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper){
+		DecorationItem itemDeco = (DecorationItem)DataLoaderItems.GetItem(itemID);
+		if(isPlacedFromDecoMode) {
+			if(itemDeco.DecorationType == DecorationTypes.Poster || itemDeco.DecorationType == DecorationTypes.Wallpaper) {
 				AudioManager.Instance.PlayClip("decoPlacePaper");
 			}
-			else{
+			else {
 				AudioManager.Instance.PlayClip("decoPlaceFurniture");
 			}
 
 			// play an FX
 			Vector3 particlePos = transform.position;
 			string particlePrefabName = Constants.GetConstant<string>("Deco_PlaceParticle");
-			ParticleUtils.CreateParticle(particlePrefabName, particlePos);	
+			ParticleUtils.CreateParticle(particlePrefabName, particlePos);
 		}
 
 		//Check for badge unlock
 		int totalNumOfDecorations = DataManager.Instance.GameData.Decorations.PlacedDecorations.Count;
-		BadgeLogic.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
+		BadgeManager.Instance.CheckSeriesUnlockProgress(BadgeType.Decoration, totalNumOfDecorations, true);
 	}
-	
-	/// <summary>
-	/// Checks to see if the decoration with strID may be placed on this node.
-	/// </summary>
-	/// <param name="strID">String ID</param>
-	private bool CanPlaceDecoration(string itemID){
-		bool isPlaceable = true;	// Start optimistic
-		
+
+	private bool CanPlaceDecoration(string itemID) {
+		bool isPlaceable = true;    // Start optimistic
+
 		// Compare the node type to the decoration type
-		DecorationItem itemDeco = (DecorationItem)ItemLogic.Instance.GetItem(itemID);
+		DecorationItem itemDeco = (DecorationItem)DataLoaderItems.GetItem(itemID);
 		DecorationTypes nodeType = GetDecoType();
 		DecorationTypes decoType = itemDeco.DecorationType;
 		isPlaceable = (nodeType == decoType);
 		return isPlaceable;
 	}
-	
+
 	/// <summary>
 	/// Does this node currently have a decoration on it?
 	/// </summary>
 	/// <returns><c>true</c> if this node has decoration; otherwise, <c>false</c>.</returns>
-	public virtual bool HasDecoration(){
+	public virtual bool HasDecoration() {
 		return placedDecoID != string.Empty;
 	}
-	
+
 	/// <summary>
 	/// Removes the decoration from this node.
 	/// Assuming that the user has inventory placed
 	/// </summary>
-	public void RemoveDecoration(){
+	public void RemoveDecoration() {
 		// call child function to actually remove the decoration
 		_RemoveDecoration();
-		
+
 		// give the user the decoration back in their inventory
 		if(placedDecoID != null)
-			InventoryLogic.Instance.AddItem(placedDecoID, 1);
+			InventoryManager.Instance.AddItemToInventory(placedDecoID);
 		else
-			Debug.LogError("Just removed an illegal decoration?");		
-		
+			Debug.LogError("Just removed an illegal decoration?");
+
 		// update the save data since this node is now empty
 		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove(placedDecoID);
-		
+
 		// reset the deco id on this node
 		placedDecoID = string.Empty;
 	}
@@ -213,16 +164,16 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// <summary>
 	/// Raises the decoration picked up event.
 	/// </summary>
-	private void OnDecorationPickedUp(object sender, EventArgs args){
-		DecorationItem decoItem = GetDecorationItemFromInventory(((GameObject)sender).name);
+	private void OnDecorationPickedUp(object sender, EventArgs args) {
+		DecorationItem decoItem = (DecorationItem)InventoryTokenDragElement.itemBeingDragged.GetComponent<InventoryTokenDragElement>().InventoryData.ItemData;
 		SetState(decoItem.DecorationType.ToString());
 	}
 
 	/// <summary>
 	/// Raises the decoration dropped event.
-	/// This applies to all nodes, just rever the node back to normal
+	/// This applies to all nodes, just revert the node back to normal
 	/// </summary>
-	private void OnDecorationDropped(object sender, EventArgs args){
+	private void OnDecorationDropped(object sender, EventArgs args) {
 		SetState(null);
 	}
 
@@ -231,46 +182,37 @@ public abstract class DecorationZone : MonoBehaviour {
 	/// NOTE: Only for object picked up! hovering will be done with raycasting
 	/// </summary>
 	/// <param name="typeName">Type name.</param>
-	private void SetState(string nodeTypeName){
-		// Neutral state, play idle state
-		if(nodeTypeName == null){
+	private void SetState(string nodeTypeName) {
+		if(nodeTypeName == null) {							// Neutral state, play idle state
 			isAnimationPlaying = false;
-			if(!isAnimationPlaying){
-				animation.Stop();
+			if(!isAnimationPlaying) {
+				GetComponent<Animation>().Stop();
 			}
-			
-			spriteOutline.color = neutralColorOutline;
 			spriteFill.color = neutralColorFill;
 			GameObjectUtils.ResetLocalScale(gameObject);
 		}
-		// Wrong state, play the inactive state
-		else if(nodeTypeName != nodeType.ToString()){
+		else if(nodeTypeName != nodeType.ToString()) {      // Wrong state, play the inactive state
 			isAnimationPlaying = false;
-			if(!isAnimationPlaying){
-				animation.Stop();
+			if(!isAnimationPlaying) {
+				GetComponent<Animation>().Stop();
 			}
-
-			spriteOutline.color = inactiveColorOutline;
 			spriteFill.color = inactiveColorFill;
 		}
-		// Correct state, play the active state
-		else{
-			animation.Play();
+		else {                                              // Correct state, play the active state
+			GetComponent<Animation>().Play();
 			isAnimationPlaying = true;
-
-			spriteOutline.color = activeColorOutline;
 			spriteFill.color = activeColorFill;
 		}
 	}
 
 	// Event listener. listening to when decoration mode is enabled/disabled
-	private void OnDecoMode(object sender, UIManagerEventArgs e){
+	private void ShowDecoZones(object sender, UIManagerEventArgs args) {
 		TweenToggle toggle = GetComponent<ScaleTweenToggle>();
-		if(e.Opening){
-			toggle.Show();		// edit mode is opening, so turn this node on
+		if(args.Opening) {
+			toggle.Show();      // edit mode is opening, so turn this node on
 		}
-		else{
-			toggle.Hide();		// edit mode is closing so turn this node off
+		else {
+			toggle.Hide();      // edit mode is closing so turn this node off
 		}
 	}
 }

@@ -48,8 +48,10 @@ public enum ItemType{
 }
 
 public enum StatType{
-    Mood,
-    Health,
+	Xp,
+	Coin,
+	Health,
+	Hunger,
 	Fire
 }
 
@@ -59,34 +61,21 @@ public enum ChallengeType{
 }
 
 public enum NotificationPopupType{
-	OneButton,
-	TwoButtons,
-	GameOverRewardOneButton,
-	GameOverRewardTwoButton,
 	TipWithImage,
 	LevelUp,
-    BadgeUnlocked,
     FireLevelUp,
-//	InhalerRecharging,
 	SuperWellaInhaler,
 	SuperWellaSickReminder,
-	MiniGameQuitCheck,
 	ZeroHealth,
-	NeedFoodTutorial,
+	NeedFoodTutorial
 }
 
-public enum NotificationPopupFields{
-	Type,
+public enum NotificationPopupData{
+	PrefabName,
+	Title,
 	Message,
-	Button1Callback,
-    Button2Callback,
-	DeltaStars,
-	DeltaPoints,
-	SpriteName,
-	StartsHidden,
-	HideImmediately,
-	Badge,
-	Sound
+	SpecialButtonCallback,
+	ExtraInfo
 }
 
 public enum TutorialPopupFields{
@@ -110,6 +99,8 @@ public enum BadgeType{
     Runner,
 	Shooter,
 	Retention,
+	MicroMix,
+	BeatGame
 }
 
 // NOTE if you add/change these enums make sure to add/change the string key associated with it across ALL string tables!!!
@@ -120,23 +111,18 @@ public enum TalkImageType{
 // various type of modes the UI could be in
 // ONLY add enums to the end. Inserting enum will break existing LgButtonMessageClass
 public enum UIModeTypes {
-	NotInited,	// the variable was not initialized; should throw an error
 	None,		// means there is no lock on the click manager
 	Generic,	// used by most things that will lock the click manager; this is just a generic lock
 	Store,
 	EditDecos,
     Tutorial,
     CustomizePet,
-    IntroComic,
 	MenuSettings,
 	GatingSystem,
 	MiniPet,
 	FireBreathing,
 	Accessory,
 	Cutscene,
-	ParentPortal,
-	Friends,
-	MembershipCheck,
 	Badge,
 	FireCrystal,
 	Wellapad
@@ -156,8 +142,7 @@ public enum DecorationTypes {
 
 public enum AccessoryTypes{
 	Hat,
-	Glasses,
-	Color
+	Glasses
 }
 
 // mini game states
@@ -252,14 +237,6 @@ public enum MinigamePopups {
 	GameOver
 }
 
-// if you refactor these, look for the names in xml, because they are referenced there as well
-public enum HUDElementType{
-	Points, 
-	Stars, 
-	Health, 
-	Mood
-}
-
 // types of button clicks
 public enum ButtonClickTypes {
 	Tap,
@@ -336,11 +313,18 @@ public enum MinigameTypes{
 	Shooter,
 	Memory,
 	Clinic,
-	Runner
+	Runner,
+	MicroMix
 }
 
 public enum ZoneTypes{
 	None,	// Default value
 	Bedroom,
 	Yard
+}
+
+public enum MiniGameCategory {
+	None,
+	Critical,
+	Regular,
 }

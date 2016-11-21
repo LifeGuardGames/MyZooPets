@@ -1,13 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-/// <summary>
-/// Cutscene user interface manager.
-/// Need CutsceneManager? probably not yet...
-/// </summary>
 public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
-
-	public NGUIAlphaTween background;
+	public TweenToggle alphaTween;
 
 	public float fadeInDuration = 0.5f;				// Time for screen to black out for cutscene
 	public float pauseBeforePlayDuration = 0.3f;	// Time to wait after black out to playing animations
@@ -19,7 +13,6 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 	protected override void Awake(){
 		base.Awake();
 		eModeType = UIModeTypes.Cutscene;
-		background.gameObject.SetActive(false);
 	}
 
 	/// <summary>
@@ -30,7 +23,6 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 	public void PlayCutscene(string cutscenePrefabName){
 		if(currentCutscene == null){
 			currentCutscene = cutscenePrefabName;
-			background.gameObject.SetActive(true);
 			OpenUI();	// Fade in the black background
 			Invoke("StartAnimation", fadeInDuration + pauseBeforePlayDuration);
 		}
@@ -41,9 +33,7 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 
 	private void StartAnimation(){
 		GameObject loadedObject = Resources.Load(currentCutscene) as GameObject;
-		GameObject go = Instantiate(loadedObject) as GameObject;
-		go.transform.parent = this.transform;
-		GameObjectUtils.ResetLocalTransform(go);
+		GameObject go = GameObjectUtils.AddChildGUI(gameObject, loadedObject);
 		go.GetComponent<CutsceneController>().Play();
 	}
 
@@ -56,17 +46,11 @@ public class CutsceneUIManager : SingletonUI<CutsceneUIManager> {
 	}
 
 	protected override void _OpenUI(){
-		background.StartAlphaTween(0f, 1f, 0f, fadeInDuration);
+		alphaTween.Show();
 	}
 
 	protected override void _CloseUI(){
-		background.StartAlphaTween(1f, 0f, 0f, fadeOutDuration);
-		Invoke("DisableBackground", fadeOutDuration + 0.5f);
-	}
-
-	private void DisableBackground(){
-		currentCutscene = null; // HACK Not sure if best place to do this or callback
-		background.gameObject.SetActive(false);
+		alphaTween.Hide();
 	}
 
 //	void OnGUI(){

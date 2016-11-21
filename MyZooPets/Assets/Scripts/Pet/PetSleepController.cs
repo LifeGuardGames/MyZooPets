@@ -1,41 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PetSleepController : MonoBehaviour {
 
 	public GameObject blackScreen;
 	public bool isNight;
-	public void OnTapped(){
+	private Color c;
+    public void OnTapped(){
 		if(!isNight){
 				PetSpeechAI.Instance.ShowSleepingMessageMsg();
 				blackScreen.SetActive(true);
-				StartCoroutine(NightTimer());
+			LeanTween.alpha(blackScreen.GetComponent<RectTransform>(),1.0f,2.0f).setOnComplete(NightTime);
 		}
 		else{
-			StartCoroutine(WakeUP());
+			LeanTween.alpha(blackScreen.GetComponent<RectTransform>(), 0.0f, 2.0f).setOnComplete(NightTime);
 		}
 	}
 
-	IEnumerator NightTimer(){
-		yield return new WaitForSeconds(0.1f);
-		blackScreen.GetComponent<UISprite>().alpha += 0.1f;
-		if(blackScreen.GetComponent<UISprite>().alpha <= 1){
-			StartCoroutine(NightTimer());
-		}
-		else{
-			isNight = true;
-		}
+	private void NightTime(){
+		isNight = true;	
 	}
 
-	IEnumerator WakeUP(){
-		yield return new WaitForSeconds(0.1f);
-		blackScreen.GetComponent<UISprite>().alpha -= 0.1f;
-		if(blackScreen.GetComponent<UISprite>().alpha > 0){
-			StartCoroutine(WakeUP());
-		}
-		else if (blackScreen.GetComponent<UISprite>().alpha <= 1){
-			blackScreen.SetActive(false);
-			isNight = false;
-		}
+	private void WakeUP(){
+		isNight = false;
 	}
+
+
 }

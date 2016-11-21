@@ -1,14 +1,14 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
-/*
-    Rescue Inhaler Cap (Rescue Step 1).
-    Listens to swipe gesture from FingerGesture.
-*/
+/// <summary>
+/// Rescue Inhaler Cap (Rescue Step 1)
+/// Listens to swipe gesture from FingerGesture
+/// </summary>
 public class RescueCap : InhalerPart{
-    protected override void Awake(){
-        base.Awake();
+	public Vector3 targetPositionTween;
+
+    protected void Awake(){
         gameStepID = 1;
     }
 
@@ -18,17 +18,15 @@ public class RescueCap : InhalerPart{
             direction == FingerGestures.SwipeDirection.LowerLeftDiagonal){
 
             //If current step is the right sequence
-            if(InhalerLogic.Instance.IsCurrentStepCorrect(gameStepID)){
+            if(InhalerGameManager.Instance.IsCurrentStepCorrect(gameStepID)){
 
 				if(!isGestureRecognized){
 					isGestureRecognized = true;
 
 					//Lean tween cap
-					Vector3 to = new Vector3(2, -6, 0); //off the screen
-					Hashtable optional = new Hashtable();
-					optional.Add("onCompleteTarget", gameObject);
-					optional.Add("onComplete", "NextStep");
-					LeanTween.move(gameObject, to, 0.5f, optional);
+					LeanTween.moveLocal(gameObject, targetPositionTween, 0.5f)
+						.setEase(LeanTweenType.easeOutQuad)
+						.setOnComplete(NextStep);
 				}
             }
         }

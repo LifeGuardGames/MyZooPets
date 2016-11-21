@@ -37,9 +37,9 @@ public class LgAudioSource : MonoBehaviour{
 			volume = (float)option["Volume"];
 		
 		float pitch = sound.GetPitch();
-		if(option.Contains("Pitch"))
+		if(option.Contains("Pitch")) {
 			pitch = (float)option["Pitch"];
-
+		}
 		bool loop = false;
 		if(option.Contains("Loop"))
 			loop = (bool)option["Loop"];

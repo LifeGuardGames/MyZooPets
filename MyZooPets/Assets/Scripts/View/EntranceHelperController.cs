@@ -22,13 +22,15 @@ public class EntranceHelperController : MonoBehaviour {
 	void Start(){
 		RefreshState();
 
-		if(MiniPetHUDUIManager.Instance)
+		if(MiniPetHUDUIManager.Instance) {
 			MiniPetHUDUIManager.Instance.OnManagerOpen += OnManagerOpenEventHandler;
+		}
 	}
 
-	void OnDestroy(){
-		if(MiniPetHUDUIManager.Instance)
+	void OnDestroy() {
+		if(MiniPetHUDUIManager.Instance){
 			MiniPetHUDUIManager.Instance.OnManagerOpen -= OnManagerOpenEventHandler;
+		}
 		GatingManager.OnDestroyedGate -= OpenTheGates;
 	}
 
@@ -56,7 +58,6 @@ public class EntranceHelperController : MonoBehaviour {
 	
 	public void EntranceUsed(){
 		DataManager.Instance.GameData.FirstTimeEntrance.EntranceUsed(entranceKey);
-
 		RefreshState();
 	}
 
@@ -66,12 +67,14 @@ public class EntranceHelperController : MonoBehaviour {
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
 	private void OnManagerOpenEventHandler(object sender, UIManagerEventArgs args){
-		if(args.Opening)
+		if(args.Opening){
 			arrowGameObject.SetActive(false);
+		}
 		else{
 			bool isFirstTime = DataManager.Instance.GameData.FirstTimeEntrance.IsFirstTimeEntrance(entranceKey);
-			if(isFirstTime)
+			if(isFirstTime){
 				ShowArrow();
+			}
 		}
 	}
 }

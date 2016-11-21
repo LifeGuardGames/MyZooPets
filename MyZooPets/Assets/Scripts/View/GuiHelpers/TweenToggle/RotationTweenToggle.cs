@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//// Copyright (c) 2015 LifeGuard Games Inc.
+
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -8,13 +10,24 @@ using System.Collections;
 public class RotationTweenToggle : TweenToggle {
 
 	protected override void RememberPositions(){
-		showingPos = gameObject.transform.localEulerAngles;
-		hiddenPos = gameObject.transform.localEulerAngles + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+		if(isGUI){
+			showingPos = GUIRectTransform.localEulerAngles;
+			hiddenPos = GUIRectTransform.localEulerAngles + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+		}
+		else{
+			showingPos = gameObject.transform.localEulerAngles;
+			hiddenPos = gameObject.transform.localEulerAngles + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+		}
 	}
 	
 	public override void Reset(){
 		if (startsHidden){
-			gameObject.transform.localEulerAngles = hiddenPos;
+			if(isGUI){
+				GUIRectTransform.localEulerAngles = hiddenPos;
+			}
+			else{
+				gameObject.transform.localEulerAngles = hiddenPos;
+			}
 
 		 	// Need to call show first
 			isShown = false;
@@ -29,65 +42,55 @@ public class RotationTweenToggle : TweenToggle {
 	
 	public override void Show(float time){
 		if(!isShown){
-			// If this tween locks the UI, properly increment the counter
-			if(blockUI){
-				ClickManager.Instance.IncrementTweenCount();
-
-				// Already tweening, and want to abort and decrement
-				if(isMoving){
-					ClickManager.Instance.DecrementTweenCount();
-				}
-			}
-				
 			isShown = true;
 			isMoving = true;
-			
-			Hashtable completeParamHash = new Hashtable();
-			completeParamHash.Add("selfCaller", gameObject);
 
 			LeanTween.cancel(gameObject);
-			Hashtable optional = new Hashtable();
-			optional.Add("ease", easeShow);
-			optional.Add("delay", showDelay);
-			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onCompleteParam", completeParamHash);
-			optional.Add("onComplete", "ShowUnlockCallback");
-			if (ignoreTimeScale){
-				optional.Add("useEstimatedTime", true);
+
+			if(isGUI){
+				if(showingPos.x != 0f || showingPos.z != 0f){
+					Debug.LogWarning("GUI rotation will only rotate z-axis");
+				}
+				LeanTween.rotate(GUIRectTransform, showingPos.z, time)
+					.setEase(easeShow)
+						.setDelay(showDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(ShowSendCallback);
 			}
-			LeanTween.rotateLocal(gameObject, showingPos, time, optional);
+			else{
+				LeanTween.rotateLocal(gameObject, showingPos, time)
+					.setEase(easeShow)
+						.setDelay(showDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(ShowSendCallback);
+			}
 		}
 	}
 
 	public override void Hide(float time){
 		if(isShown){
-			// If this tween locks the UI, properly increment the counter
-			if(blockUI){
-				ClickManager.Instance.IncrementTweenCount();
-
-				// Already tweening, and want to abort and decrement
-				if(isMoving){
-					ClickManager.Instance.DecrementTweenCount();
-				}
-			}
-			
 			isShown = false;
 			isMoving = true;
-
-			Hashtable completeParamHash = new Hashtable();
-			completeParamHash.Add("selfCaller", gameObject);
             
 			LeanTween.cancel(gameObject);
-			Hashtable optional = new Hashtable();
-			optional.Add("ease", easeHide);
-			optional.Add("delay", hideDelay);
-			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onCompleteParam", completeParamHash);
-			optional.Add("onComplete", "HideUnlockCallback");
-			if (ignoreTimeScale){
-				optional.Add("useEstimatedTime", true);
+
+			if(isGUI){
+				if(showingPos.x != 0f || showingPos.z != 0f){
+					Debug.LogWarning("GUI rotation will only rotate z-axis");
+				}
+				LeanTween.rotate(GUIRectTransform, hiddenPos.z, time)
+					.setEase(easeHide)
+						.setDelay(hideDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(ShowSendCallback);
 			}
-			LeanTween.rotateLocal(gameObject, hiddenPos, time, optional);
+			else{
+				LeanTween.rotateLocal(gameObject, hiddenPos, time)
+					.setEase(easeHide)
+						.setDelay(hideDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(HideSendCallback);
+			}
 		}
 	}
 }

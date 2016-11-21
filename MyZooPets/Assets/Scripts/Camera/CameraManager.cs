@@ -1,12 +1,11 @@
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
-/// Camera manager.
-/// Two parts to this class one camera movement and one that handles camera utility for screen conversion
+/// Two parts to this class:
+///		-Camera movement
+///		-Handles camera utility for screen conversion
 /// </summary>
 public class CameraManager : Singleton<CameraManager>{
-
 	public Camera cameraMain;
 	public Camera CameraMain{
 		get{ return cameraMain; }
@@ -21,6 +20,8 @@ public class CameraManager : Singleton<CameraManager>{
 	public PanToMoveCamera PanScript{
 		get { return scriptPan; }
 	}
+
+	public Animation cameraShakeAnimation;
 
 	private bool isZoomed;		// Is the camera zoomed in
 	private bool isZoomingAux;	// Intermediate check to track if zoomed in or out when zoom is finished
@@ -124,25 +125,14 @@ public class CameraManager : Singleton<CameraManager>{
 		// Make sure to subtract the camera's parent's position from the vPos because the parent moves as the partitions pan
 		position -= gameObject.transform.parent.position;
 		
-		Hashtable hashMove = new Hashtable();
-
 		// If the incoming object isn't null, set up a callback
 		if(cameraDoneCallback != null){
 			FinishCameraMoveCallback = cameraDoneCallback;	// Cache the callback
 		}
 
-		hashMove.Add("onCompleteTarget", gameObject);
-		hashMove.Add("onComplete", "MoveCameraDone");
-		
-		hashMove.Add("ease", LeanTweenType.easeInOutQuad);
-		
-		// Set up the rotation hash
-		Hashtable hashRotation = new Hashtable();
-		hashRotation.Add("ease", LeanTweenType.easeInOutQuad);
-		
 		// Kick off the move and rotation tweens
-		LeanTween.moveLocal(gameObject, position, time, hashMove);
-		LeanTween.rotateLocal(gameObject, rotation, time, hashRotation);	
+		LeanTween.moveLocal(gameObject, position, time).setEase(LeanTweenType.easeInOutQuad).setOnComplete(MoveCameraDone);
+		LeanTween.rotateLocal(gameObject, rotation, time).setEase(LeanTweenType.easeInOutQuad);	
 	}
 
 	private void MoveCameraDone(){
@@ -153,6 +143,10 @@ public class CameraManager : Singleton<CameraManager>{
 			FinishCameraMoveCallback();			// Call the callback
 			FinishCameraMoveCallback = null;	// Unassign the callback once it is called
 		}
+	}
+
+	public void ShakeCamera() {
+		cameraShakeAnimation.Play();
 	}
 	#endregion
 
@@ -167,24 +161,10 @@ public class CameraManager : Singleton<CameraManager>{
 	/// Only use this to transform world position for use with NGUI! 
 	/// </summary>
 	/// <returns>screen position.</returns>
-	/// <param name="cam">Cam.</param>
-	/// <param name="vPos">position.</param>
 	public Vector3 WorldToScreen(Camera cam, Vector3 position){
 		// Accomodate for screen ratio scale
 		Vector3 trueRatioScreenPos = cam.WorldToScreenPoint(position);
 		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
-		return scaledRatioScreenPos;
-	}
-
-	public Vector3 ViewportToScreen(Camera cam, Vector3 vPos){
-		// Accomodate for screen ratio scale
-		Vector3 trueRatioScreenPos = cam.ViewportToScreenPoint(vPos);
-		Vector3 scaledRatioScreenPos = new Vector3(trueRatioScreenPos.x * ratioX, trueRatioScreenPos.y * ratioY, 0);
-		return scaledRatioScreenPos;
-	}
-
-	private Vector3 ScalePositionForNGUI(Vector3 vPos){
-		Vector3 scaledRatioScreenPos = new Vector3(vPos.x * ratioX, vPos.y * ratioY, 0);
 		return scaledRatioScreenPos;
 	}
 
@@ -202,8 +182,9 @@ public class CameraManager : Singleton<CameraManager>{
 	/// <param name="targetAnchor">Target anchor.</param>
 	public Vector3 TransformAnchorPosition(Vector3 position, InterfaceAnchors baseAnchor, InterfaceAnchors targetAnchor){
 		// no need to do any transforming if the two anchors are the same
-		if(baseAnchor == targetAnchor)
+		if(baseAnchor == targetAnchor) {
 			return position;
+		}
 		
 		Vector3 transformedPosition = position;
 		

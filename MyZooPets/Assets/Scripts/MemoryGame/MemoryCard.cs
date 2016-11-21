@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /// <summary>
 /// Memory card controller.
@@ -11,10 +12,10 @@ public class MemoryCard : MonoBehaviour {
 	public string TriggerName{
 		get{ return triggerName; }
 	}
-	public UISprite coverSprite;
-	public UISprite triggerSprite;
+	public Image coverSprite;
+	public Image triggerSprite;
 	public UILocalize triggerLabelLocalize;
-	public GameObject NGUIParent;
+	public GameObject cardParent;
 
 	public float pressDownScale = 0.9f;
 	public float activeTweenTime = 0.2f;
@@ -36,9 +37,7 @@ public class MemoryCard : MonoBehaviour {
 
 		// Set components on start
 		if(isSprite){
-			triggerSprite.type = UISprite.Type.Simple;
-			triggerSprite.spriteName = triggerData.SpriteName;
-			triggerSprite.MakePixelPerfect();
+			triggerSprite.sprite = SpriteCacheManager.GetSprite(triggerData.SpriteName);
 			triggerSprite.name = triggerData.SpriteName;
 			tweeningContentParent = triggerSprite.transform.parent.parent.gameObject;	// Get grandfather
 			triggerLabelLocalize.transform.parent.gameObject.SetActive(false);	// Disable the unused half
@@ -55,23 +54,23 @@ public class MemoryCard : MonoBehaviour {
 
 		// Assign the respective trigger type particle
 		GameObject particlePrefab = Resources.Load(triggerData.TypeParticlePrefab) as GameObject;
-		triggerTypeParticle = GameObjectUtils.AddChildWithTransform(this.gameObject, particlePrefab).particleSystem;
+		triggerTypeParticle = GameObjectUtils.AddChild(gameObject, particlePrefab).GetComponent<ParticleSystem>();
 	}
 
 	void OnTap(TapGesture gesture){
-		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(isClickable && MemoryGameManager.Instance.IsGameActive) {
 			CardFlipped();
 		}
 	}
 
 	void OnFingerDown(FingerDownEvent e){
-		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(isClickable && MemoryGameManager.Instance.IsGameActive) {
 			gameObject.transform.localScale = new Vector3(pressDownScale, pressDownScale, 1f);
 		}
 	}
 
 	void OnFingerHover( FingerHoverEvent e){
-		if(isClickable && MemoryGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(isClickable && MemoryGameManager.Instance.IsGameActive) {
 			if( e.Phase == FingerHoverPhase.Exit){
 				GameObjectUtils.ResetLocalScale(this.gameObject);
 			}
@@ -138,7 +137,7 @@ public class MemoryCard : MonoBehaviour {
 	/// <param name="isSuccess">If set to <c>true</c> is success.</param>
 	public void FlipResult(bool isSuccess){
 		if(isSuccess){
-			LeanTween.scale(NGUIParent, new Vector3(0, 0, 0), 0.1f).setOnComplete(SuccessHelper);
+			LeanTween.scale(cardParent, new Vector3(0, 0, 0), 0.1f).setOnComplete(SuccessHelper);
 		}
 		else{
 			PlayFlipSequenceClose();

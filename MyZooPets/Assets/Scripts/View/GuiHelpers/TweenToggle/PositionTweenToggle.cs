@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//// Copyright (c) 2015 LifeGuard Games Inc.
+
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -8,13 +10,40 @@ using System.Collections;
 public class PositionTweenToggle : TweenToggle {
 	
 	protected override void RememberPositions(){
-		showingPos = gameObject.transform.localPosition;
-		hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+		if(isGUI){
+			showingPos = GUIRectTransform.anchoredPosition3D;
+			hiddenPos = GUIRectTransform.anchoredPosition3D + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+
+		}
+		else{
+			showingPos = gameObject.transform.localPosition;
+			hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+		}
+	}
+
+	public void UpdateHideDelta() {
+		if(isShown) {
+			if(isGUI) {
+				hiddenPos = GUIRectTransform.anchoredPosition3D + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+
+			}
+			else {
+				hiddenPos = gameObject.transform.localPosition + new Vector3(hideDeltaX, hideDeltaY, hideDeltaZ);
+			}
+		}
+		else {
+			Debug.LogError("delta hide changed while hidden");
+		}
 	}
 	
 	public override void Reset(){
-		if (startsHidden){
-			gameObject.transform.localPosition = hiddenPos;
+		if(startsHidden){
+			if(isGUI){
+				GUIRectTransform.anchoredPosition3D = hiddenPos;
+			}
+			else{
+				gameObject.transform.localPosition = hiddenPos;
+			}
 			
 		 	// Need to call show first
 			isShown = false;
@@ -29,65 +58,49 @@ public class PositionTweenToggle : TweenToggle {
 	
 	public override void Show(float time){
 		if(!isShown){
-			// If this tween locks the UI, properly increment the counter
-			if(blockUI){
-				ClickManager.Instance.IncrementTweenCount();
-
-				// Already tweening, and want to abort and decrement
-				if(isMoving){
-					ClickManager.Instance.DecrementTweenCount();
-				}
-			}
-				
 			isShown = true;
 			isMoving = true;
-
-			Hashtable completeParamHash = new Hashtable();
-			completeParamHash.Add("selfCaller", gameObject);
 			
 			LeanTween.cancel(gameObject);
-			Hashtable optional = new Hashtable();
-			optional.Add("ease", easeShow);
-			optional.Add("delay", showDelay);
-			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onCompleteParam", completeParamHash);
-			optional.Add("onComplete", "ShowUnlockCallback");
-			if (ignoreTimeScale){
-				optional.Add("useEstimatedTime", true);
+
+			if(isGUI){
+				LeanTween.move(GUIRectTransform, showingPos, time)
+					.setEase(easeShow)
+						.setDelay(showDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(ShowSendCallback);
 			}
-			LeanTween.moveLocal(gameObject, showingPos, time, optional);
+			else{
+				LeanTween.moveLocal(gameObject, showingPos, time)
+					.setEase(easeShow)
+						.setDelay(showDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(ShowSendCallback);
+			}
 		}
 	}
 
 	public override void Hide(float time){
 		if(isShown){
-			// If this tween locks the UI, properly increment the counter
-			if(blockUI){
-				ClickManager.Instance.IncrementTweenCount();
-
-				// Already tweening, and want to abort and decrement
-				if(isMoving){
-					ClickManager.Instance.DecrementTweenCount();
-				}
-			}
-			
 			isShown = false;
 			isMoving = true;
-						
-			Hashtable completeParamHash = new Hashtable();
-			completeParamHash.Add("selfCaller", gameObject);
-			
+
 			LeanTween.cancel(gameObject);
-			Hashtable optional = new Hashtable();
-			optional.Add("ease", easeHide);
-			optional.Add("delay", hideDelay);
-			optional.Add("onCompleteTarget", gameObject);
-			optional.Add("onCompleteParam", completeParamHash);
-			optional.Add("onComplete", "HideUnlockCallback");
-			if (ignoreTimeScale){
-				optional.Add("useEstimatedTime", true);
+
+			if(isGUI){
+				LeanTween.move(GUIRectTransform, hiddenPos, time)
+					.setEase(easeHide)
+						.setDelay(hideDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(HideSendCallback);
 			}
-			LeanTween.moveLocal(gameObject, hiddenPos, time, optional);
+			else{
+				LeanTween.moveLocal(gameObject, hiddenPos, time)
+					.setEase(easeHide)
+						.setDelay(hideDelay)
+							.setUseEstimatedTime(isUseEstimatedTime)
+								.setOnComplete(HideSendCallback);
+			}
 		}
 	}
 }

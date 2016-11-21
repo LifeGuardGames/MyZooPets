@@ -1,14 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 // Shortcut mode types into store sub panel
 public enum StoreShortcutType{
 	None,
-//	FlameCrystalNeededNotification,
 	DecorationUIStoreButton,
-	DecorationUIStoreButtonTutorial,
 	MinipetUIStoreButton,
 	NeedFoodPetSpeech,
 	NeedFoodTutorial,
@@ -19,28 +17,24 @@ public enum StoreShortcutType{
 public class StoreUIManager : SingletonUI<StoreUIManager>{
 	public static EventHandler<EventArgs> OnShortcutModeEnd;
 	public static EventHandler<EventArgs> OnDecorationItemBought;
-	public GameObject grid;
+	public GridLayoutGroup grid;
+	public ScrollRect scrollRect;
 	public GameObject itemStorePrefab;		//basic ui setup for an individual item
 	public GameObject itemStorePrefabStats;	// a stats item entry
-	public GameObject itemSpritePrefab; 	// item sprite for inventory
+	public GameObject boughtItemTweenPrefab; 	// Used for tween animation
 	public GameObject storeBasePanel; 		//Where you choose item category
 	public GameObject storeSubPanel; 		//Where you choose item sub category
-	public GameObject storeSubPanelBg;
 	public GameObject itemArea; 			//Where the items will be display
 	public GameObject tabArea; 				//Where all the tabs for sub category are
 	public GameObject storeBgPanel;			// the bg of the store (sub panel and base panel)
-	public GameObject backButton; 			// exit button reference
-	public GameObject prevTab; 
-	// store related sounds
-	public string soundChangeTab;
-	public string soundBuy;
+	private float gridStartPositionX;
+
 	private bool isShortcutMode; 			//True: open store directly to specific item category
 											//False: open the store base panel first	
 	private StoreShortcutType shortcutType = StoreShortcutType.None;	// Store where shortcut was from
 
 	private bool changePage;
-	private string currentPage; //The current category. i.e food, usable, decorations
-	private string currentTab; //The current sub category. only decorations have sub cat right now
+	private string currentPage;	//The current category. i.e food, usable, decorations
 
 	protected override void Awake(){
 		base.Awake();
@@ -51,7 +45,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		base.Start();
 		// Reposition all the things nicely to stretch to the end of the screen
 		
-		// Position the UIPanel clipping range
+		/*// Position the UIPanel clipping range
 		UIPanel itemAreaPanel = itemArea.GetComponent<UIPanel>();
 		Vector4 oldRange = itemAreaPanel.clipRange;
 		
@@ -63,15 +57,9 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		Vector3 gridPosition = grid.transform.localPosition;
 		grid.transform.localPosition = new Vector3(
 			(-1f * (CameraManager.Instance.NativeWidth / 2)) - itemArea.transform.localPosition.x,
-			gridPosition.y, gridPosition.z);
-	}
+			gridPosition.y, gridPosition.z);*/
 
-	/// <summary>
-	/// Gets the exit button.
-	/// </summary>
-	/// <returns>The exit button.</returns>
-	public GameObject GetBackButton(){
-		return backButton;
+		gridStartPositionX = grid.GetComponent<RectTransform>().position.x;
 	}
 
 	/// <summary>
@@ -96,17 +84,21 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		//Hide other UI objects
 		NavigationUIManager.Instance.HidePanel();
 		RoomArrowsUIManager.Instance.HidePanel();
-		HUDUIManager.Instance.ShowLabels();
+		HUDUIManager.Instance.ToggleLabels(true);
 		storeBasePanel.GetComponent<TweenToggleDemux>().Show();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Show();
+	}
+
+	public void OnCloseButton() {
+		CloseUI();
 	}
 
 	protected override void _CloseUI(){
 		//Show other UI object
 		NavigationUIManager.Instance.ShowPanel();
 		RoomArrowsUIManager.Instance.ShowPanel();
-		InventoryUIManager.Instance.ShowPanel();
-		HUDUIManager.Instance.HideLabels();
+		InventoryUIManager.Instance.ShowPanel(false);
+		HUDUIManager.Instance.ToggleLabels(false);
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
 		storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 		storeSubPanel.GetComponent<TweenToggleDemux>().Hide();
@@ -160,144 +152,62 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		CreateSubCategoryItemsWithString(category, shortcutType); 
 	}
 	
-	/// <summary>
-	/// This function is called when buying an item. I creates an icon for the item
-	/// and move it to Inventory
-	/// </summary>
-	/// <param name="itemData">Item data.</param>
-	/// <param name="sprite">Sprite.</param>
-	public void OnBuyAnimation(Item itemData, GameObject sprite){
-		Vector3 origin = new Vector3(sprite.transform.position.x, sprite.transform.position.y, -0.1f);
-		string itemID = sprite.transform.parent.transform.parent.name;
-		Vector3 itemPosition = origin;
+	// Called when item bought, creates a sprite for the item and move it to correct inventory
+	public void OnBuyAnimation(StoreItemController storeItemScript){
+		Vector3 origin = storeItemScript.GetSpritePosition();
+		Vector3 endPosition = InventoryUIManager.Instance.itemFlyToTransform.position; // TODO change this
 
-		//-0.22
-		// depending on what type of item the user bought, the animation has the item going to different places
-		ItemType eType = itemData.Type;
-		switch(eType){
-		case ItemType.Decorations:
-			itemPosition = DecoInventoryUIManager.Instance.GetPositionOfDecoInvItem(itemID);
-			break;
-		default:
-			itemPosition = InventoryUIManager.Instance.GetPositionOfInvItem(itemID);
-			break;
-		}
-		
-		//adjust moving speed here
-		float speed = 1f;
-
-		//Change the 3 V3 to where icon should move
-		Vector3[] path = new Vector3[4];
-		path[0] = origin;
-		path[1] = origin + new Vector3(0f, 1.5f, -0.1f);
-		path[2] = origin;
-		path[3] = itemPosition;
-
-
-		Hashtable optional = new Hashtable();
-		GameObject animationSprite = NGUITools.AddChild(storeSubPanel, itemSpritePrefab);
-		
-		// hashtable for completion params for the callback (stash the icon we are animating)
-		Hashtable completeParamHash = new Hashtable();
-		completeParamHash.Add("Icon", animationSprite);		
-
-		optional.Add("ease", LeanTweenType.easeOutQuad);
-		optional.Add("onComplete", "DestroySprite");
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onCompleteParam", completeParamHash);
+		GameObject animationSprite = GameObjectUtils.AddChild(storeSubPanel, boughtItemTweenPrefab);
+		animationSprite.GetComponentInChildren<Image>().sprite = SpriteCacheManager.GetItemSprite(storeItemScript.ItemData.ID);
 		animationSprite.transform.position = origin;
-		animationSprite.transform.localScale = new Vector3(90, 90, 1);
-		animationSprite.GetComponent<UISprite>().spriteName = sprite.GetComponent<UISprite>().spriteName;
-		LeanTween.move(animationSprite, path, speed, optional);
+		animationSprite.name = storeItemScript.ItemData.ID;
+
+		LeanTween.move(animationSprite, endPosition, 0.666f)
+			.setEase(LeanTweenType.easeOutQuad)
+			.setOnComplete(OnBuyAnimationDone)
+			.setOnCompleteParam(animationSprite);
 	}
 
-	//---------------------------------------------------
-	// DestroySprite()
-	// Callback for buy animation -- will destroy the
-	// sprite icon clone we create and animated.
-	//---------------------------------------------------
-	public void DestroySprite(Hashtable hash){
-		// delete the icon we moved
-		if(hash.ContainsKey("Icon")){
-			GameObject goSprite = (GameObject)hash["Icon"];
-			Destroy(goSprite);
-		}	
+	// Show the updated inventory bar with new item and destroy the tweening sprite
+	private void OnBuyAnimationDone(object obj) {
+		string itemID = ((GameObject)obj).name;
+		ItemType type = DataLoaderItems.GetItem(itemID).Type;
+        if(type == ItemType.Foods || type == ItemType.Usables) {
+			InventoryUIManager.Instance.PulseInventory();
+			InventoryUIManager.Instance.RefreshPage();
+		}
+		else if(type == ItemType.Decorations) {
+			DecoInventoryUIManager.Instance.PulseInventory();
+			DecoInventoryUIManager.Instance.RefreshPage();
+		}
+		Destroy((GameObject)obj);
 	}
 
 	/// <summary>
-	/// Raises the buy button event.
+	/// Called from buy StoreItemController OnBuyButton
 	/// </summary>
-	/// <param name="button">Button.</param>
-	public void OnBuyButton(GameObject button){
-		Transform buttonParent = button.transform.parent.parent;
-		string itemID = buttonParent.name;
-		Item itemData = ItemLogic.Instance.GetItem(itemID);
+	/// <param name="button"></param>
+	public void BuyButtonLogic(StoreItemController storeItemScript){
+		Item itemData = storeItemScript.ItemData;
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
-				//Special case to handle here. Since only one wallpaper can be used at anytime
-				//There is no point for the user to buy more than one of each diff wallpaper
-				if(itemData.Type == ItemType.Decorations){
-					DecorationItem decoItem = (DecorationItem)itemData;
-					
-					if(decoItem.DecorationType == DecorationTypes.Wallpaper){
-						UIImageButton buyButton = button.GetComponent<UIImageButton>();
-						
-						//Disable the buy button so user can't buy the same wallpaper anymore 
-						if(buyButton)
-							buyButton.isEnabled = false;
-					}
-				}
+				// Check for any special cases we need to account for (ie. wallpaper buying)
+				storeItemScript.BuyButtonStateCheck();
 				
-				InventoryLogic.Instance.AddItem(itemID, 1);
-				StatsController.Instance.ChangeStats(deltaStars: itemData.Cost * -1);
-				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
+				InventoryManager.Instance.AddItemToInventory(itemData.ID);
+				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
+				OnBuyAnimation(storeItemScript);
 				
-				//Analytics
+				// Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
 				
-				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
-			}
+				// Play a sound since an item was bought
+				AudioManager.Instance.PlayClip("shopBuy");
+            }
 			else{
-				HUDUIManager.Instance.PlayNeedMoneyAnimation();
+				HUDUIManager.Instance.PlayNeedCoinAnimation();
 				AudioManager.Instance.PlayClip("buttonDontClick");
-			}
-			break;
-		}
-	}
-
-	/// <summary>
-	/// This buy button is used only during tutorial. It doesn't check for wella coins
-	/// but user will only be limited to one item in GameTutorialDecoration.cs
-	/// </summary>
-	/// <param name="button">Button.</param>
-	public void OnBuyButtonTutorial(GameObject button){
-		Transform buttonParent = button.transform.parent.parent;
-		string itemID = buttonParent.name;
-		Item itemData = ItemLogic.Instance.GetItem(itemID);
-
-		switch(itemData.CurrencyType){
-		case CurrencyTypes.WellaCoin:
-			if(itemData.Type == ItemType.Decorations){
-//				DecorationItem decoItem = (DecorationItem)itemData;
-
-				//Use for tutorial to notify tutorial manager when deco item has been bought
-				bool isDecorationTutorialDone = DataManager.Instance.GameData.
-					Tutorial.IsTutorialFinished(TutorialManagerBedroom.TUT_DECOS);
-				
-				if(!isDecorationTutorialDone && OnDecorationItemBought != null)
-					OnDecorationItemBought(this, EventArgs.Empty);
-					
-				InventoryLogic.Instance.AddItem(itemID, 1);
-
-				OnBuyAnimation(itemData, buttonParent.gameObject.FindInChildren("ItemTexture"));
-				
-				//Analytics
-				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);
-				
-				// play a sound since an item was bought
-				AudioManager.Instance.PlayClip(soundBuy);
 			}
 			break;
 		}
@@ -308,8 +218,8 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// Then call other methods to create the items
 	/// </summary>
 	/// <param name="page">Page.</param>
-	public void CreateSubCategoryItems(GameObject page){
-		CreateSubCategoryItemsWithString(page.name);
+	public void CreateSubCategoryItems(string page){
+		CreateSubCategoryItemsWithString(page);
 	}
 
 	/// <summary>
@@ -324,30 +234,35 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		
 		currentPage = page;
 
+		// Reset the grid and scrolling
+		scrollRect.StopMovement();
+		Vector2 auxPosition = grid.GetComponent<RectTransform>().anchoredPosition;
+		grid.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, auxPosition.y);
+
 		//create the tabs for those sub category
 		if(currentPage == "Food"){
-			InventoryUIManager.Instance.ShowPanel();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+			InventoryUIManager.Instance.ShowPanel(true);
+			DecoInventoryUIManager.Instance.HidePanel();
 
-			foreach(Transform tabParent in tabArea.transform){
-				HideUnuseTab(tabParent.FindChild("Tab"));
+			foreach(Transform tab in tabArea.transform){
+				ToggleTab(tab, false);
 			}
 
-			CreateSubCategoryItemsTab("foodDefaultTab", Color.white, shortcutType);
+			CreateSubCategoryItemsTab("foodDefaultTab", shortcutType);
 		}
 		else if(currentPage == "Items"){
-			InventoryUIManager.Instance.ShowPanel();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+			InventoryUIManager.Instance.ShowPanel(true);
+			DecoInventoryUIManager.Instance.HidePanel();
 
-			foreach(Transform tabParent in tabArea.transform){
-				HideUnuseTab(tabParent.FindChild("Tab"));
+			foreach(Transform tab in tabArea.transform){
+				ToggleTab(tab, false);
 			}
 
-			CreateSubCategoryItemsTab("itemsDefaultTab", Color.white, shortcutType);
+			CreateSubCategoryItemsTab("itemsDefaultTab", shortcutType);
 		}
 		else if(currentPage == "Decorations"){
 			InventoryUIManager.Instance.HidePanel();
-			DecoInventoryUIManager.Instance.ShowDecoInventory();
+			DecoInventoryUIManager.Instance.ShowPanel();
 
 			//Get a list of decoration types from Enum
 			string[] decorationEnums = Enum.GetNames(typeof(DecorationTypes));
@@ -355,147 +270,121 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 
 			// Set the default category
 			string defaultTabName = "Carpet";	
-			if(Application.loadedLevelName == SceneUtils.YARD){
+			if(SceneUtils.CurrentScene == SceneUtils.YARD){
 				defaultTabName = "SmallPlant";
 			}
 
 			List<string> unlockedDecoList = PartitionManager.Instance.GetAllowedDecoTypeFromLatestPartition();
 
 			//Rename the tab to reflect the sub category name
-			foreach(Transform tabParent in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
+			foreach(Transform tab in tabArea.transform){		// TODO-s CHANGE THIS TO FIT TABS
 				if(counter < decorationEnums.Length){
-					tabParent.name = decorationEnums[counter];
-					
-					UISprite imageSprite = tabParent.FindChild("Tab/TabImage").gameObject.GetComponent<UISprite>();
-					imageSprite.spriteName = "iconDeco" + tabParent.name + "2";
+					tab.name = decorationEnums[counter];
+					if(tab.name == defaultTabName) {
+						tab.GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("buttonCategoryActive");
+					}
+					Image imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<Image>();
+					imageSprite.sprite = SpriteCacheManager.GetDecoIconSprite((DecorationTypes)Enum.Parse(typeof(DecorationTypes), tab.name));
 
-					// Call resizer
-					SpriteResizer resizer = imageSprite.GetComponent<SpriteResizer>();
-					resizer.enabled = true;	// Resize automatically
-
+					//Debug.Log(tabParent.name);
 					// If the gate xml has the deco type allowed, enable button
-					if(unlockedDecoList.Contains(tabParent.name)){
-						ShowActiveTab(tabParent.FindChild("Tab"));
+					if(unlockedDecoList.Contains(tab.name)){
+						ToggleTab(tab, true);
 					}
 					// Else disable button
 					else{
-						ShowInactiveTab(tabParent.FindChild("Tab"));
+						ToggleTab(tab, false);
 					}
 				}
 				else{
-					tabParent.name = "";
-
-					HideUnuseTab(tabParent.FindChild("Tab"));
+					tab.name = "";
+					ToggleTab(tab, false);
 				}
 				counter++;
 			}
 
 			//After tabs have been set up create items for the first/default tab
-			CreateSubCategoryItemsTab(defaultTabName, Color.white, shortcutType);
+			CreateSubCategoryItemsTab(defaultTabName, shortcutType);
 		}
 		ShowStoreSubPanel();
 	}
 
-	
-	//----------------------------------------------------
-	// CreateSubCategoryItemsTab()
-	// Create items for sub category.
-	// public method to be called by button
-	//----------------------------------------------------
+	// Create items for sub category, public method to be called by button
 	public void CreateSubCategoryItemsTab(GameObject tab){
-		UISprite backgroundSprite = tab.transform.FindChild("TabBackground").gameObject.GetComponent<UISprite>();
-		Color tabColor = backgroundSprite.color;
-		CreateSubCategoryItemsTab(tab.GetParent().name, tabColor);
+		CreateSubCategoryItemsTab(tab.name);
 	}
 	
 	//----------------------------------------------------
 	// CreateSubCategoryItemsTab()
 	// Create items for sub category 
 	//----------------------------------------------------
-	public void CreateSubCategoryItemsTab(string tabName, Color tabColor, StoreShortcutType shortcutType = StoreShortcutType.None){
-//		Debug.Log("OPENING STORE MODE " + shortcutType.ToString());
-		
+	public void CreateSubCategoryItemsTab(string tabName, StoreShortcutType shortcutType = StoreShortcutType.None){
+		//		Debug.Log("OPENING STORE MODE " + shortcutType.ToString());
+
 		//Destroy existing items first
 		DestroyGrid();
 		
 		//Reset clip range so scrolling will start from beginning again
 		ResetUIPanelClipRange();
 
-		AudioManager.Instance.PlayClip(soundChangeTab);
-		
-		//set current tab
-		prevTab = GameObject.Find(currentTab);
-		currentTab = tabName;
-		
-		//set panel background color
-		storeSubPanelBg.GetComponent<UISprite>().color = tabColor;
-		
+		AudioManager.Instance.PlayClip("shopChangeTab");
+
+		int itemCount = 0;
+
 		//base on the tab name and the page name, create proper set of item in the store
 		if(currentPage == "Food"){
 			//No sub category so retrieve a list of all food
-			List<Item> foodList = ItemLogic.Instance.FoodList;
-			
+			List<Item> foodList = ItemManager.Instance.FoodList;
 			foreach(Item itemData in foodList){
 				if(!itemData.IsSecretItem){
-					StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+					CreateStoreItem(grid.gameObject, itemStorePrefabStats, itemData);
+					itemCount++;
 				}
 			}
 		}
+
 		else if(currentPage == "Items"){
 			//No sub category so retrieve a list of all item
-			List<Item> usableList = ItemLogic.Instance.UsableList;
+			List<Item> usableList = ItemManager.Instance.UsableList;
 			
 			foreach(Item itemData in usableList){
 				if(!itemData.IsSecretItem){
 					// Need emergency inhaler shortcut, only show emergency inhaler
 					if(shortcutType == StoreShortcutType.SickNotification || shortcutType == StoreShortcutType.NeedEmergencyInhalerPetSpeech){
 						if(itemData.ID == "Usable0"){
-							StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+							itemCount++;
+							CreateStoreItem(grid.gameObject, itemStorePrefabStats, itemData);
 							break;
 						}
 						continue;
 					}
 					// Default case, show everything
 					else{	
-						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefabStats, itemData);
+						CreateStoreItem(grid.gameObject, itemStorePrefabStats, itemData);
+						itemCount++;
 					}
 				}
 			}
 		}
 		else if(currentPage == "Decorations"){
-			// our currently selected tab
-			GameObject selectedTab = GameObject.Find(tabName);
 			//Retrieve decoration items base on the tab name (sub category)
-			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemLogic.Instance.DecorationSubCatList;	
+			Dictionary<DecorationTypes, List<DecorationItem>> decoDict = ItemManager.Instance.DecorationSubCatList;	
 			DecorationTypes decoType = (DecorationTypes)Enum.Parse(typeof(DecorationTypes), tabName);
 			if(decoDict.ContainsKey(decoType)){
 				List<DecorationItem> decoList = decoDict[decoType];
-
-				// If we havent changed tabs, dont set reset anything
-				if(prevTab != null){
-					UIImageButton imageButtonPrev = prevTab.transform.Find("Tab").GetComponent<UIImageButton>();
-					imageButtonPrev.normalSprite = "buttonCategory";
-					imageButtonPrev.hoverSprite = "buttonCategory";
-					imageButtonPrev.pressedSprite = "buttonCategory";
-					imageButtonPrev.enabled = false;
-					imageButtonPrev.enabled = true;
-				}
-				// Change the sprite of the current tab to active
-				UIImageButton imageButtonSeletected = selectedTab.transform.Find("Tab").GetComponent<UIImageButton>();
-				imageButtonSeletected.normalSprite = "buttonCategoryActive";
-				imageButtonSeletected.hoverSprite = "buttonCategoryActive";
-				imageButtonSeletected.pressedSprite = "buttonCategoryActive";
-				imageButtonSeletected.enabled = false;
-				imageButtonSeletected.enabled = true;
-
 				foreach(DecorationItem decoItemData in decoList){
 					if(!decoItemData.IsSecretItem){
-						StoreItemEntryUIController.CreateEntry(grid, itemStorePrefab, (Item)decoItemData);
+						CreateStoreItem(grid.gameObject, itemStorePrefab, (Item)decoItemData);
+						itemCount++;
 					}
 				}
 			}
 		}
-		grid.GetComponent<UIGrid>().Reposition();
+
+		// Adjust the grid width based on the width of the cell and spacing
+		itemCount = (itemCount % 2 == 1) ? itemCount + 1 : itemCount;	// Dividing by 2 later, so make sure even
+		float gridWidth = itemCount * 0.5f * (grid.cellSize.x + grid.spacing.x);
+		grid.GetComponent<RectTransform>().sizeDelta = new Vector2(gridWidth, grid.GetComponent<RectTransform>().sizeDelta.y);
 	}
 
 	//------------------------------------------
@@ -506,7 +395,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private void ShowStoreSubPanel(){
 		storeSubPanel.GetComponent<TweenToggleDemux>().Show();
 		storeBasePanel.GetComponent<TweenToggleDemux>().Hide();
-		HUDUIManager.Instance.ShowLabels();
+		HUDUIManager.Instance.ToggleLabels(true);
 	}
 
 	//------------------------------------------
@@ -520,25 +409,10 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 			switch(shortcutType){
 			// Exit back to decoration UI
 			case StoreShortcutType.DecorationUIStoreButton:
-			case StoreShortcutType.DecorationUIStoreButtonTutorial:
-				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-				DecoInventoryUIManager.Instance.ShowDecoInventory();
-				InventoryUIManager.Instance.HidePanel();
-				HUDUIManager.Instance.HidePanel();
-				break;
-
 			case StoreShortcutType.MinipetUIStoreButton:
 				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
 				NavigationUIManager.Instance.HidePanel();
 				break;
-
-			// Exit back to fireblowing room UI
-//			case StoreShortcutType.FlameCrystalNeededNotification:
-//				storeBgPanel.GetComponent<TweenToggleDemux>().Hide();
-//				InventoryUIManager.Instance.ShowPanel();
-//				RoomArrowsUIManager.Instance.ShowPanel();
-//				DecoInventoryUIManager.Instance.HideDecoInventory();
-//				break;
 
 			// Exit back to default UI
 			case StoreShortcutType.NeedFoodTutorial:
@@ -588,7 +462,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		}
 		else{
 			storeBasePanel.GetComponent<TweenToggleDemux>().Show();
-			DecoInventoryUIManager.Instance.HideDecoInventory();
+			DecoInventoryUIManager.Instance.HidePanel();
 			InventoryUIManager.Instance.HidePanel();
 		}
 	}
@@ -599,59 +473,25 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	//------------------------------------------
 	private void DestroyGrid(){
 		foreach(Transform child in grid.transform){
-			child.gameObject.SetActive(false);
+			//child.gameObject.SetActive(false);
 			Destroy(child.gameObject);
 		}
 	}
 
-	//-----------------------------------------
-	// HideUnuseTab()
-	// If the tab is not used. turn the UISprite 
-	// script and the collider off
-	//------------------------------------------
-	private void HideUnuseTab(Transform tab){
-		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = false;
-		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = false;
-		tab.collider.enabled = false;
-	}
-
-	/// <summary>
-	/// If tab is valid and unlocked
-	/// </summary>
-	/// <param name="tab">Tab transform</param>
-	private void ShowActiveTab(Transform tab){
-		tab.GetComponent<UIImageButton>().isEnabled = true;
-		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.collider.enabled = true;
-	}
-
-	/// <summary>
-	/// If tab is valid but locked
-	/// </summary>
-	/// <param name="tab">Tab transform</param>
-	private void ShowInactiveTab(Transform tab){
-		tab.GetComponent<UIImageButton>().isEnabled = false;
-		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.collider.enabled = false;
-	}
+	private void ToggleTab(Transform tab, bool isOn) {
+		tab.gameObject.SetActive(isOn);
+    }
 
 	//------------------------------------------
 	// ResetUIPanelClipRange()
 	// reset the clip range for the item area so that scrolling starts from the beginning
 	//------------------------------------------
 	private void ResetUIPanelClipRange(){
-		Vector4 clipRange = itemArea.GetComponent<UIPanel>().clipRange;
-		
-		// Stop the springing action when switching
-		SpringPanel spring = itemArea.GetComponent<SpringPanel>();
-		if(spring != null){
-			spring.enabled = false;	
-		}
-		
-		// Reset the localposition and clipping position
-		itemArea.transform.localPosition = new Vector3(52f, itemArea.transform.localPosition.y, itemArea.transform.localPosition.z);
-		itemArea.GetComponent<UIPanel>().clipRange = new Vector4(-52f, clipRange.y, clipRange.z, clipRange.w);
+		grid.transform.position = new Vector3 (gridStartPositionX, grid.transform.position.y, grid.transform.position.z);
+	}
+
+	private void CreateStoreItem(GameObject goGrid, GameObject goPrefab, Item item) {
+		GameObject itemUIObject = GameObjectUtils.AddChildGUI(goGrid, goPrefab);
+		itemUIObject.GetComponent<StoreItemController>().Init(item);
 	}
 }

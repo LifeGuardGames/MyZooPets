@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class BonusVisualController : MonoBehaviour {
 	public Animation labelAnimation;
@@ -8,16 +8,17 @@ public class BonusVisualController : MonoBehaviour {
 
 	public void PlayBonusVisuals(){
 		if(!isPlaying){
-			isPlaying = true;
+			labelAnimation.gameObject.SetActive(true);
 			labelAnimation.Play("BonusLabelPop");
+			isPlaying = true;
 			bonusVisualParticle.Play();
 		}
 	}
 
 	public void StopBonusVisuals(){
 		if(isPlaying){
+			labelAnimation.gameObject.SetActive(false);
 			isPlaying = false;
-			labelAnimation.Play("BonusLabelExit");
 			bonusVisualParticle.Stop();
 		}
 	}

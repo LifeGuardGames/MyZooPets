@@ -1,38 +1,44 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
-//-----------------------------------------
-// Starts the floating tween and alpha tween
-// self destructs when it's completed
-//-----------------------------------------
-public class FloatyController : MonoBehaviour {
-    public Vector3 floatingUpPos;
-    public float floatingTime;
-    public List<NGUIAlphaTween> alphaScripts = new List<NGUIAlphaTween>(); //all the alpha script in this floaty prefab
+[RequireComponent(typeof(CanvasGroup))]
+public class FloatyController : MonoBehaviour{
+	public float duration = 1f;
+	public Vector2 positionDelta = new Vector3(0f, 50f);
+	public Text textLabel;
+	public Image image;
 
-	void Start () {
-        FloatUp();
-        foreach(NGUIAlphaTween alphaScript in alphaScripts){
-			if(alphaScript.gameObject.activeSelf){	// NOTE: Floaty stats will bypass this funtion call
-            	alphaScript.StartAlphaTween();
-			}
-        }
+	private RectTransform rectTrans;
+
+	public void InitAndActivate(Vector3 UIPosition, string customText = null, Sprite spriteData = null){
+		gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(UIPosition.x, UIPosition.y);
+		
+		// Set default CanvasGroup behaviour
+		CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+		canvasGroup.interactable = false;
+		canvasGroup.blocksRaycasts = false;
+		rectTrans = GetComponent<RectTransform>();
+
+		// Initialize if there are dynamic inputs (stats, etc.)
+		if(customText != null){
+			textLabel.text = customText;
+		}
+		if(spriteData != null){
+			image.sprite = spriteData;
+		}
+
+		// Activate
+		LeanTween.value(gameObject, ReduceVisibility, 1.0f, 0.0f, duration);
+		LeanTween.value(gameObject, Move, rectTrans.anchoredPosition,
+			rectTrans.anchoredPosition + positionDelta, duration)
+			.setDestroyOnComplete(true);
 	}
 
-    private void FloatUp(){
-        Hashtable optional = new Hashtable();
-        optional.Add("onCompleteTarget", gameObject);
-        optional.Add("onComplete", "SelfDestruct");
-		
-		// Lean tween doesn't have a move by, so what we really want to do is move the object to its current position + the floating vector
-		Vector3 vTarget = gameObject.transform.localPosition;
-		vTarget += floatingUpPos;
-		
-        LeanTween.moveLocal(gameObject, vTarget, floatingTime, optional);
-    }
+	private void ReduceVisibility(float amount){
+		gameObject.GetComponent<CanvasGroup>().alpha = amount;
+	}
 
-    private void SelfDestruct(){
-        Destroy(gameObject);
-    }
+	private void Move(Vector2 pos){
+		rectTrans.anchoredPosition = pos;
+	}
 }

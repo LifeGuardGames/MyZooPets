@@ -13,20 +13,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class TouchDetectorManager : MonoBehaviour {
-    public List<MonoBehaviour> ListeningScripts = new List<MonoBehaviour>();
+	public List<MonoBehaviour> ListeningScripts = new List<MonoBehaviour>();
 
-    void OnSwipe(SwipeGesture gesture) {
-       // Approximate swipe direction
-        FingerGestures.SwipeDirection direction = gesture.Direction; 
-        if(direction == FingerGestures.SwipeDirection.Down){
-            foreach(MonoBehaviour currentScript in ListeningScripts)
-                currentScript.SendMessage("onSwipeDown", SendMessageOptions.DontRequireReceiver);
-        }
-    }	
+	void OnSwipe(SwipeGesture gesture) {
+		// Approximate swipe direction
+		FingerGestures.SwipeDirection direction = gesture.Direction; 
+		if (direction == FingerGestures.SwipeDirection.Down) {
+			foreach (MonoBehaviour currentScript in ListeningScripts)
+				currentScript.SendMessage("onSwipeDown", SendMessageOptions.DontRequireReceiver);
+		}
+	}
 
-    void OnTap(TapGesture gesture) {
-        foreach(MonoBehaviour currentScript in ListeningScripts)
-            if(RunnerGameManager.Instance.GameRunning)
-                currentScript.SendMessage("onTap", SendMessageOptions.DontRequireReceiver);
-    } 
+	void OnTap(TapGesture gesture) {
+		foreach (MonoBehaviour currentScript in ListeningScripts)
+			currentScript.SendMessage("onTap", SendMessageOptions.DontRequireReceiver);
+	}
 }

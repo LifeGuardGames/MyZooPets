@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
-	public GameObject backButton;
+	public TweenToggle backButtonTween;
 	public GameObject highscoreBoard;
-	public UIGrid scoreBoardGrid;
+	public GridLayoutGroup scoreBoardGrid;
 
 	// related to the camera move
 	public Vector3 finalPosition;		// offset of camera on the target
@@ -16,6 +16,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 
 	protected override void Start(){
 		base.Start();
+		DataManager.Instance.GameData.HighScore.UpdateHighScoreToNewVersion();	// Clean up any old data
 		RefreshScoreBoard();
 	}
 
@@ -25,7 +26,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 		Dictionary<string, int> highScoreDict = HighScoreManager.Instance.MinigameHighScore;
 
 		foreach(KeyValuePair<string, int> score in highScoreDict){
-			GameObject highScoreEntryGO = NGUITools.AddChild(scoreBoardGrid.gameObject, highScoreEntryPrefab);
+			GameObject highScoreEntryGO = GameObjectUtils.AddChildGUI(scoreBoardGrid.gameObject, highScoreEntryPrefab);
 			highScoreEntryGO.GetComponent<HighScoreEntryUIController>().Init(score.Key, score.Value);
 		}
 	}
@@ -53,9 +54,9 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			RoomArrowsUIManager.Instance.HidePanel();
 			
 			isActive = true;
-			highscoreBoard.collider.enabled = false;
-			
-			backButton.SetActive(true);
+			highscoreBoard.GetComponent<Collider>().enabled = false;
+
+			backButtonTween.Show();
 		}
 	}
 
@@ -66,11 +67,15 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 
 	}
 
+	public void OnBackButton() {
+		CloseUI();
+	}
+
 	//The back button on the left top corner is clicked to zoom out of the highscore board
 	protected override void _CloseUI(){
 		if(isActive){
 			isActive = false;
-			highscoreBoard.collider.enabled = true;
+			highscoreBoard.GetComponent<Collider>().enabled = true;
 			
 			CameraManager.Instance.ZoomOutMove();
 			
@@ -80,7 +85,7 @@ public class HighScoreUIManager : SingletonUI<HighScoreUIManager>{
 			InventoryUIManager.Instance.ShowPanel();
 			RoomArrowsUIManager.Instance.ShowPanel();
 
-			backButton.SetActive(false);
+			backButtonTween.Hide();
 		}
 	}
 }

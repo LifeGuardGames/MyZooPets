@@ -15,11 +15,11 @@ public class PetSpriteColorLoader : MonoBehaviour {
 		try{
 			if(Application.isPlaying){	// Exception for execute in edit mode
 				if(isDebug){
-					Debug.LogError("Debug for pet color is currently on! Make sure to uncheck!");
+					Debug.LogWarning("Debug for pet color is currently on! Make sure to uncheck!");
 				}
 				else{
-					if(Application.loadedLevelName == SceneUtils.MENU){
-						MutableDataPetInfo petMenuInfo = SelectionManager.Instance.PetMenuInfo;
+					if(SceneUtils.CurrentScene == SceneUtils.MENU){
+						MutableDataPetInfo petMenuInfo = MenuSceneManager.Instance.PetMenuInfo;
 						LoadAndSetColor(petMenuInfo.PetColor);
 					}
 					else{
@@ -34,6 +34,7 @@ public class PetSpriteColorLoader : MonoBehaviour {
 	}
 
 	private void LoadAndSetColor(string petColor){
+
 //		Debug.Log("Loading Colors...");
 		Sprite[] sprites = Resources.LoadAll<Sprite>(spriteSetPrefix + petColor);
 
@@ -44,7 +45,9 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			// Set their sprites according to index from metadata
 			spriteRenderer.sprite = sprites[atlasIndex];
 		}
-
+		if(SceneUtils.CurrentScene == SceneUtils.RUNNER){
+			PlayerController.Instance.SetRenderers(spriteRendererList);
+		}
 //		Debug.Log("Loading Colors done...");
 	}
 
@@ -66,4 +69,9 @@ public class PetSpriteColorLoader : MonoBehaviour {
 			isDebugInternal = isDebug;
 		}
 	}
+	// For Salon Manager
+	public void ChangeStyle(string colorName) {
+		LoadAndSetColor(colorName);
+	}
+
 }

@@ -1,26 +1,33 @@
-using UnityEngine;
-using System.Collections;
-
 public class NavigationUIManager : Singleton<NavigationUIManager> {
-	public GameObject navigationPanel;
+	public TweenToggleDemux demux;
 	
-	// used with tutorials
-	public GameObject decoButton;
-	public GameObject DecoButton{
-		get{ return decoButton; }
-	}
-
-	public GameObject decoButtonShine;
-
-	public void ToggleShineDecoButton(bool isOn){
-		decoButtonShine.SetActive(isOn);
-	}
-
 	public void ShowPanel(){
-		navigationPanel.GetComponent<TweenToggleDemux>().Show();
+		demux.Show();
 	}
 
 	public void HidePanel(){
-		navigationPanel.GetComponent<TweenToggleDemux>().Hide();
+		demux.Hide();
+	}
+
+	// Modetype notInited, check CM
+	public void OnEditRoomButton() {
+		// if we are currently in edit deco mode, close the UI, otherwise, open it
+		DecoModeUIManager.Instance.OpenUI();
+	}
+
+	// Modetype notInited, check CM
+	public void OnStoreButton() {
+		StoreUIManager.Instance.OpenUI();
+	}
+
+	// Modetype generic, check CM
+	public void OnMissionsButton() {
+		// Call from fire crystal ui manager > opens wellapad uimanager > opens fire crystal ui
+		if(FireCrystalUIManager.Instance.IsOpen) {
+			FireCrystalUIManager.Instance.CloseUIBasedOnScene();
+		}
+		else {
+			FireCrystalUIManager.Instance.OpenUIBasedOnScene(false);
+		}
 	}
 }

@@ -3,211 +3,320 @@ using System;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerPhysics))]
-public class PlayerController : Singleton<PlayerController>{
+public class PlayerController : Singleton<PlayerController> {
 	public static EventHandler<EventArgs> OnJump;
 	public static EventHandler<EventArgs> OnDrop;
 
-	[System.Serializable]
-	public class PlatformerControllerMovement{
-
-		public float defaultTargetSpeed = 15f; //The default running speed
-		[System.NonSerialized]
-		public float currentSpeed = 0f; //current movement speed after it gets smoothed by acceleration
-		public float targetSpeed; //The speed you want the character to reach to
-		public float acceleration = 5f; //How fast does the character change speed? higher is faster
-		public float jumpHeight = 9;
-		[System.NonSerialized]
+	[Serializable]
+	public class PlatformerControllerMovement {
+		[NonSerialized]
+		public float maxHeight = 18;
+		public float minHeight = 9;
+		public float maxSpeed = 45;
+		public float minSpeed = 15;
+		public float starSpeed = 50;                //Speed when we go invicible
+		public float slowdownRate = 10;
+		public float currentSpeed = 0f;             //current movement speed after it gets smoothed by acceleration
+		public float targetSpeed;                   //The speed you want the character to reach to
+		public float acceleration = 5f;             //How fast does the character change speed? higher is faster
+		public float jumpHeight = 150;
+		[NonSerialized]
 		public float verticalSpeed = 0f;
-		public float maxFallSpeed = 100f; //maximum speed the player is allowed to fall
+		public float maxFallSpeed = 100f;           //maximum speed the player is allowed to fall
 
-//		private float gravity = 130f; //gravity is calculated based on the target speed
-       
-		/// <summary>
-		/// Gets the gravity. Dependent on the target speed
-		/// </summary>
-		/// <value>The gravity.</value>
-		public float Gravity{
-			get{
-				return this.targetSpeed * 10;
-			}
+		public bool starMode = false;               //Although both starMode and publicStarMode are public, this one is used internally
+		public bool publicStarMode = false;         //And this one is set after a delay and accessed externally through the property StarMode
+
+		public bool invincible = false;
+
+
+		private float gravity;                      //gravity is calculated based on the target speed
+		public float Gravity {                      //Set when you jump
+			get { return gravity; }
+			set { gravity = 10 * value; }
 		}
 
 		/// <summary>
 		/// Increases the target speed.
 		/// </summary>
 		/// <param name="isNormal">If set to <c>true</c> is normal.</param>
-		public void IncreaseTargetSpeed(bool isNormal){
-			if(isNormal)
-				this.targetSpeed += 5; //speed increases by an increment of 5
-			else
-				this.targetSpeed += 10;
-
-			//cap the speed at 45
-			if(this.targetSpeed >= 45)
-				this.targetSpeed = 45;
+		public void IncreaseTargetSpeed(float increment) {
+			this.targetSpeed += increment;
+			if(this.targetSpeed >= maxSpeed) {      //cap the speed at 45
+				this.targetSpeed = maxSpeed;
+			}
 		}
 
 		/// <summary>
 		/// Resets the target speed.
 		/// </summary>
-		public void ResetTargetSpeed(){
-			targetSpeed = defaultTargetSpeed; 
+		public void ResetTargetSpeed() {
+			targetSpeed = minSpeed;
 		}
 	}
 
 	public PlatformerControllerMovement movement = new PlatformerControllerMovement();
 	public float timeUntilTargetSpeedIncrease = 30f;
+	public ParticleSystem magnetSystem;
 	public Animator anim;
-	private Vector2 amountToMove; //How much you want the player to move
-	private PlayerPhysics playerPhysics; //Reference to physics
-	private float speedIncreaseCounter = 0f; //Time till we speed up the game
-	private Vector2 initialPosition; //Where the player start
+	public float minAnimSpeed = .6f;
+	public float maxAnimSpeed = 1.5f;
+	private Vector2 amountToMove;                   //How much you want the player to move
+	private PlayerPhysics playerPhysics;            //Reference to physics
+	private Vector2 initialPosition;                //Where the player start
+	private bool poolJump = false;
 	private GameObject floatyLocation;
-	public Camera nguiCamera;
-
-#if UNITY_EDITOR	
-	// used just for testing keyboard input in unity editor
-	private bool bDelay = false;
-#endif
-
-	public GameObject FloatyLocation{
-		get{
-			return floatyLocation;
-		}
+	public GameObject FloatyLocation {
+		get { return floatyLocation; }
 	}
-	
-	void Start(){
+
+	private SpriteRenderer[] spriteRendererList;    //List of SpriteRenderers loaded by PetSpriteColorLoader
+
+	//TODO: colorList is not actually necessary. When we reset, just go to all white instead
+	private Color[] colorList;                      //Used by spriteRendererList to revert colors back to original
+	private IEnumerator currentColor;
+
+	private float magnetTime = 0;                   //How long until magnet is disabled
+	private float magnetTimeIncrease = 5f;          //How much extra time a magnet gives
+
+	private bool isPlayerAlive = false;         // Check if physics needs to update
+
+	public float Speed {
+		get { return movement.currentSpeed; }
+	}
+
+	public float MinSpeed {
+		get { return movement.minSpeed; }
+	}
+
+	public float MaxSpeed {
+		get { return movement.maxSpeed; }
+	}
+
+	public bool StarMode {
+		get { return movement.publicStarMode; }
+	}
+
+	public bool Invincible {
+		get { return movement.invincible || movement.publicStarMode; }
+	}
+
+	void Start() {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		initialPosition = this.transform.position;
 		floatyLocation = this.transform.Find("FloatyLocation").gameObject;
-		RunnerGameManager.OnStateChanged += GameStateChanged;
-
 		Reset();
 	}
-    
-	void Update(){
-		if(!RunnerGameManager.Instance.GameRunning)
+
+	void Update() {
+		if(RunnerGameManager.Instance.IsPaused && !RunnerGameManager.Instance.AcceptInput || !isPlayerAlive) {
 			return;
+		}
+		CheckKeyMovement();
+		UpdateMagnet();
 
-#if UNITY_EDITOR    
-        CheckKeyMovement();
-#endif
-
-		UpdateSpeed();
-		CheckAndActOnDeath();
+		// Death condition
+		if(transform.position.y < RunnerLevelManager.Instance.LevelTooLowYValueGameOver && !RunnerGameManager.Instance.isGameOver) {
+			isPlayerAlive = false;
+			RunnerGameManager.Instance.GameOver();
+		}
 	}
 
-	void OnDestroy(){
-		RunnerGameManager.OnStateChanged -= GameStateChanged;
-	}
-
-#if UNITY_EDITOR    
-//	void OnGUI(){
-//		GUI.contentColor = Color.black;
-//		 if(GUI.Button(new Rect(0, 0, 100, 100), "+speed")){
-//			movement.targetSpeed += 5;
-//		 }
-//
-//		if(GUI.Button(new Rect(100, 0, 100, 100), "-speed")){
-//			movement.targetSpeed -= 5;
-//		}
-
-//		GUI.Label(new Rect(200, 0, 100, 100), movement.Gravity.ToString());
-//	}
-#endif
-
-	void FixedUpdate(){
-		if(!RunnerGameManager.Instance.GameRunning)
+	void FixedUpdate() {
+		if(RunnerGameManager.Instance.IsPaused || !isPlayerAlive) {
 			return;
+		}
 
-		//update runner horizontal movement
 		UpdateHorizontalMovement();
-
-		//apply game gravity
-		ApplyGravity(); 
+		ApplyGravity();
+		if(poolJump) {
+			Jump();
+		}
 
 		amountToMove = new Vector2(movement.currentSpeed, movement.verticalSpeed);
-
-		//always want movement to be framerate independent
-		amountToMove *= Time.deltaTime;
+		amountToMove *= Time.deltaTime;     //always want movement to be framerate independent
 
 		playerPhysics.Move(amountToMove);
 	}
 
-	// Listen to finger down gesture
-	void OnTap(TapGesture e){ 
 
-		if(RunnerGameManager.Instance.GameRunning ){
-			if(e.Position.y > Screen.height/2){
-				Jump();
-				if(OnJump != null)
-					OnJump(this, EventArgs.Empty);
-			}
-			else{
-				Drop();
-				
-				if(OnDrop != null)
-					OnDrop(this, EventArgs.Empty);
-			}
-
-		}
-	}
-	
-	/*// Listen to swipe down gesture
-	void OnSwipe(SwipeGesture gesture){
-		if(RunnerGameManager.Instance.GetGameState() == MinigameStates.Playing){
-			FingerGestures.SwipeDirection direction = gesture.Direction;
-			if(direction == FingerGestures.SwipeDirection.Down){
-				Drop();
-				
-				if(OnDrop != null)
-					OnDrop(this, EventArgs.Empty);
-			}
-			else if (direction == FingerGestures.SwipeDirection.Up){
-				Jump();
-			
-			if(OnJump != null)
-				OnJump(this, EventArgs.Empty);
-			
-		}
-		}
-	}*/
-	
 	/// <summary>
-	/// Reset player position and physics
+	/// Reset player position, physics, and isAlive condition
 	/// </summary>
-	public void Reset(){
-		speedIncreaseCounter = 0f;
+	public void Reset() {
 		transform.position = initialPosition;
-
+		magnetTime = 0;
+		MagneticField.Instance.ToggleMagnetize(false);
+		magnetSystem.Stop();
 		movement.verticalSpeed = 0f;
 		movement.currentSpeed = 0f;
-		movement.ResetTargetSpeed();
+		ResetSpeedAndAlive();
+		PlayAnimation();
+		magnetSystem.Stop();
+		movement.publicStarMode = false;
+		movement.invincible = false;
+		movement.starMode = false;
+		RevertColor();
 	}
 
-	//---------------------------------------------------
-	// TriggerSlowdown()
-	// Slow down the game and decrease the distance between 
-	// player and megahazard
-	//---------------------------------------------------
-	public void TriggerSlowdown(float inDivisor){
+	/// <summary>
+	/// Reset player speed and physics
+	/// </summary>
+	public void ResetSpeedAndAlive() {
+		isPlayerAlive = true;
+		anim.speed = minAnimSpeed;
 		movement.ResetTargetSpeed();
-		anim.speed = 1; //reset animation playback speed to normal
-		MegaHazard.Instance.TriggerPlayerSlowdown();
-		
+		movement.Gravity = movement.targetSpeed;
+	}
+
+	/// <summary>
+	/// Passes the body's renderer for coloring effects
+	/// </summary>
+	public void SetRenderers(SpriteRenderer[] spriteRendererList) {
+		this.spriteRendererList = spriteRendererList;
+		colorList = new Color[spriteRendererList.Length];
+		for(int i = 0; i < colorList.Length; i++) {
+			colorList[i] = spriteRendererList[i].color;
+		}
+	}
+
+	/// <summary>
+	/// Increases the player's target speed which causes the player to speed up over time
+	/// </summary>
+	public void IncreaseSpeed(float increment) {
+		movement.IncreaseTargetSpeed(increment);
+	}
+
+	public void StartStarMode() {
+		SolidColor(c: new Color(.8f, .8f, 0, .8f));
+	}
+
+	public void StartMagnet() { //TODO: Add some visual effect when magnet is enabled
+		if(magnetTime <= 0) {
+			magnetTime = magnetTimeIncrease;
+		}
+		else {
+			magnetTime += magnetTimeIncrease;
+		}
+		MagneticField.Instance.ToggleMagnetize(true);
+		magnetSystem.Play();
 	}
 
 	/// <summary>
 	/// Makes the player visible.
 	/// </summary>
 	/// <param name="isVisible">If set to <c>true</c> is visible.</param>
-	public void MakePlayerVisible(bool isVisible){
-		this.transform.Find("Body").gameObject.SetActive(isVisible);
+	public void MakePlayerVisible(bool isVisible) {
+		transform.Find("Body").gameObject.SetActive(isVisible);
 	}
-	
-	private void UpdateHorizontalMovement(){
-		movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.targetSpeed, 
-            movement.acceleration * Time.deltaTime); 
+
+	public void PlayAnimation() {
+		anim.enabled = true;
+		if(magnetTime > 0) {
+			magnetSystem.Play();
+		}
+	}
+
+	public void PauseAnimation() {
+		anim.enabled = false;
+		if(magnetTime > 0) {
+			magnetSystem.Pause();
+		}
+	}
+
+	//---------------------------------------------------
+	// TriggerSlowdown()
+	// Slow down the game and decrease the distance between
+	// player and megahazard
+	//---------------------------------------------------
+	public void TriggerSlowdown(float inDivisor) {
+		movement.ResetTargetSpeed();
+		MegaHazard.Instance.TriggerSlowdown();
+		FlashColor(Color.red);
+	}
+
+	public void SolidColor(Color c, float time = 3f) {
+		if(currentColor != null) { //If there is a coroutine running right now
+			StopCoroutine(currentColor);
+		}
+		RevertColor();
+		currentColor = SolidIEnumerator(c, time);
+		StartCoroutine(currentColor);
+	}
+
+	public void FlashColor(Color c) {
+		if(currentColor != null) { //If there is a coroutine running right now
+			StopCoroutine(currentColor);
+		}
+		RevertColor();
+		currentColor = FlashIEnumerator(c);
+		StartCoroutine(currentColor);
+	}
+
+	private IEnumerator FlashIEnumerator(Color c) { //HACK: Both flash and solid have code extra to simply changing the color. Still, this seems better than having to pass a function to this coroutine
+		movement.invincible = true;
+		for(int i = 0; i < 3; i++) {
+			TurnColor(c);
+			yield return WaitSecondsPause(.2f);
+
+			RevertColor();
+			yield return WaitSecondsPause(.3f);
+		}
+		movement.invincible = false;
+	}
+
+	private IEnumerator SolidIEnumerator(Color c, float time) {
+		movement.invincible = true;
+		movement.starMode = true;
+		movement.publicStarMode = true;
+		TurnColor(c);
+		yield return WaitSecondsPause(time);
+
+		movement.starMode = false;
+		yield return WaitSecondsPause(1f); //Give them a second to get oriented with slowdown and avoid smoke clouds
+
+		RevertColor();
+		movement.invincible = false;
+
+	}
+
+	private IEnumerator WaitSecondsPause(float time) { //Like wait for seconds, but pauses w/ RunnerGameManager
+		for(float i = 0; i <= time; i += .1f) {
+			yield return new WaitForSeconds(.1f);
+			while(RunnerGameManager.Instance.IsPaused) {
+				yield return 0;
+			}
+		}
+	}
+
+	private void TurnColor(Color c) {
+		for(int i = 0; i < colorList.Length; i++) {
+			spriteRendererList[i].color = c;
+		}
+	}
+
+	private void RevertColor() {
+		if(spriteRendererList != null) {
+			for(int i = 0; i < colorList.Length; i++) {
+				spriteRendererList[i].color = colorList[i];
+			}
+		}
+	}
+
+	private void UpdateHorizontalMovement() {
+		if(movement.starMode) {
+			movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.starSpeed, movement.acceleration * Time.deltaTime);
+		}
+		else {
+			movement.currentSpeed = Mathf.Lerp(movement.currentSpeed, movement.targetSpeed, movement.acceleration * Time.deltaTime);
+			if(!movement.starMode && movement.publicStarMode && Mathf.Abs(movement.currentSpeed / movement.targetSpeed - 1) < .1) { //If we are waiting to turn of publicStarMode
+				movement.publicStarMode = false;
+			}
+		}
+		float speedPercentage = (movement.currentSpeed - MinSpeed) / (MaxSpeed - MinSpeed);
+		speedPercentage = (speedPercentage < 0) ? 0 : speedPercentage; //Make sure we are greater than 0.
+		float targetAnimSpeed = minAnimSpeed + (maxAnimSpeed - minAnimSpeed) * speedPercentage;
+		anim.speed = Mathf.Lerp(anim.speed, targetAnimSpeed, movement.acceleration * Time.deltaTime);
 	}
 
 	/// <summary>
@@ -215,18 +324,17 @@ public class PlayerController : Singleton<PlayerController>{
 	/// gravity will be changed manually depending on the speed of the horizontal
 	/// movement
 	/// </summary>
-	private void ApplyGravity(){
-
+	private void ApplyGravity() {
 		//if grounded just set speed to gravity speed
-		if(playerPhysics.Grounded && !playerPhysics.Jumping){
+		if(playerPhysics.Grounded && !playerPhysics.Jumping) {
 			movement.verticalSpeed = -movement.Gravity * Time.deltaTime;
 		}
-        //if jumping keep decreasing the vertical speed by gravity
-        else{
+		//if jumping keep decreasing the vertical speed by gravity
+		else {
 			movement.verticalSpeed -= movement.Gravity * Time.deltaTime;
 		}
 
-		//make sure we don't fall nay faster than maxFallSpeed
+		//make sure we don't fall any faster than maxFallSpeed
 		movement.verticalSpeed = Mathf.Max(movement.verticalSpeed, -movement.maxFallSpeed);
 	}
 
@@ -235,49 +343,55 @@ public class PlayerController : Singleton<PlayerController>{
 	/// </summary>
 	/// <returns>The vertical speed.</returns>
 	/// <param name="targetJumpHeight">Target jump height.</param>
-	private float CalculateJumpVerticalSpeed(float targetJumpHeight){
-		// from jump height and gravity we deduce the upwards speed for character
-		// at apex
+	private float CalculateJumpVerticalSpeed(float targetJumpHeight) {
+		// from jump height and gravity we deduce the upwards speed for character at apex
 		return Mathf.Sqrt(2 * targetJumpHeight * movement.Gravity);
 	}
 
-	private void Jump(){
-		if(playerPhysics.Grounded){
-         //   AudioManager.Instance.PlayClip("runnerJumpUp", variations: 3);
+	//heightMultiplier multiplies movement.jumpHeight to increase speed and max heiht achieved.
+	public void Jump() {
+		bool validInput = (RunnerGameManager.Instance.AcceptInput && (!RunnerGameManager.Instance.IsPaused || (RunnerGameManager.Instance.SpecialInput && OnJump != null)));
+		if(playerPhysics.Grounded && validInput) {
+			if(OnJump != null) {
+				OnJump(this, EventArgs.Empty);
+			}
 			AudioManager.Instance.PlayClip("runnerJumpUp");
+			movement.Gravity = movement.targetSpeed;
 			movement.verticalSpeed = CalculateJumpVerticalSpeed(movement.jumpHeight);
 			playerPhysics.Jumping = true;
 		}
+		else {
+			poolJump = true;
+			StartCoroutine("PoolJump");
+		}
 	}
 
-	private void Drop(){
+	/// <summary>
+	/// Queue up a jump if youre just about to land, give more leeway for frame-precise jumping
+	/// </summary>
+	IEnumerator PoolJump() {
+		yield return new WaitForSeconds(0.3f);
+		poolJump = false;
+	}
+
+	public void Drop() {
+		bool validInput = (RunnerGameManager.Instance.AcceptInput && (!RunnerGameManager.Instance.IsPaused || (RunnerGameManager.Instance.SpecialInput && OnDrop != null)));
+		if(!validInput) {
+			return;
+		}
 		AudioManager.Instance.PlayClip("runnerJumpDown");
 
+		if(OnDrop != null) {
+			OnDrop(this, EventArgs.Empty);
+		}
 		playerPhysics.AllowPassThroughLayer = true;
 
 		// Immediately tween down
-		if(movement.verticalSpeed >= 0){
+		if(movement.verticalSpeed >= 0) {
 			movement.verticalSpeed = -10f;
 		}
-		else{
+		else {
 			movement.verticalSpeed += -10f;
-		}
-	}
-	
-	//---------------------------------------------------
-	// UpdateSpeed()
-	// Increase the pace of the game
-	//---------------------------------------------------
-	private void UpdateSpeed(){
-		if(!RunnerGameManager.Instance.IsTutorialRunning()){
-			speedIncreaseCounter += Time.deltaTime;
-
-			if(speedIncreaseCounter >= timeUntilTargetSpeedIncrease){
-				//increase time
-				movement.IncreaseTargetSpeed(true);
-				anim.speed += 0.2f;
-				speedIncreaseCounter = 0; 
-			}
 		}
 	}
 
@@ -286,63 +400,34 @@ public class PlayerController : Singleton<PlayerController>{
 	/// </summary>
 	/// <param name="sender">Sender.</param>
 	/// <param name="args">Arguments.</param>
-	private void GameStateChanged(object sender, GameStateArgs args){
+	private void GameStateChanged(object sender, GameStateArgs args) {
 		MinigameStates gameState = args.GetGameState();
-		if(gameState == MinigameStates.Paused){
+		if(gameState == MinigameStates.Paused) {
 			MakePlayerVisible(false);
-		}else if(gameState == MinigameStates.Playing){
+		}
+		else if(gameState == MinigameStates.Playing) {
 			MakePlayerVisible(true);
 		}
 	}
 
-	//---------------------------------------------------
-	// CheckAndActOnDeath()
-	// If player falls below the "Dead line" than the player dies
-	//---------------------------------------------------
-	private void CheckAndActOnDeath(){
-		RunnerLevelManager runnerLevelManager = RunnerLevelManager.Instance;
-		if(transform.position.y < runnerLevelManager.LevelTooLowYValueGameOver){
-			runnerLevelManager.mCurrentLevelGroup.ReportDeath();
-			AudioManager.Instance.PlayClip("runnerDie");
-			RunnerGameManager.Instance.ActivateGameOver();    
-
-		} 
+	private void UpdateMagnet() {
+		if(magnetTime >= 0) {
+			magnetTime -= Time.deltaTime;
+		}
+		else {
+			MagneticField.Instance.ToggleMagnetize(false);
+			magnetSystem.Stop();
+		}
 	}
-
-	#if UNITY_EDITOR
-	//---------------------------------------------------
-	// UpdateMovement()
-	// Moves the player along the x axis with default speed. 
-	// Check for jumping and falling physics as well.
-	//---------------------------------------------------
-	private void CheckKeyMovement(){
-		
-		if(Input.GetKey("up")) Jump();
-		if(Input.GetKey("down") && !playerPhysics.Falling && !bDelay) {
-			bDelay = true;
+	
+	private void CheckKeyMovement() {
+#if UNITY_EDITOR
+		if(Input.GetKeyDown("up")) {
+			Jump();
+		}
+		if(Input.GetKeyDown("down") && !playerPhysics.Falling) {
 			Drop();
 		}
-		else
-			bDelay = false;
-	}
-	#endif
-
-	//True: if finger touches NGUI 
-	/// <summary>
-	/// Determines whether if the touch is touching NGUI element
-	/// </summary>
-	/// <returns><c>true</c> if this instance is touching NGUI; otherwise, <c>false</c>.</returns>
-	/// <param name="screenPos">Screen position.</param>
-	private bool IsTouchingNGUI(Vector2 screenPos){
-		Ray ray = nguiCamera.ScreenPointToRay(screenPos);
-		RaycastHit hit;
-		int layerMask = 1 << 10; 
-		bool isOnNGUILayer = false;
-		
-		// Raycast
-		if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
-			isOnNGUILayer = true;
-		}
-		return isOnNGUILayer;
+#endif
 	}
 }

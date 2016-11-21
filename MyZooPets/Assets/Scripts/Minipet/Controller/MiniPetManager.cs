@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class MiniPetManager : Singleton<MiniPetManager>{
 	public Dictionary<string, GameObject> MiniPetTable = new Dictionary<string, GameObject>();
@@ -63,7 +64,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 			}
 
 			// Only spawn the retention pet in the bedroom
-			if(Application.loadedLevelName == SceneUtils.BEDROOM){
+			if(SceneManager.GetActiveScene().name == SceneUtils.BEDROOM){
 
 				// Calculate the MP location
 				LgTuple<Vector3, string> retentionLocation = PartitionManager.Instance.GetBasePositionInBedroom();
@@ -82,7 +83,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 				MiniPetRetentionPet retentionScript = goMiniPet.GetComponent<MiniPetRetentionPet>();
 				retentionScript.Init(data);
 				retentionScript.FigureOutMissions();
-				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")&& !DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("Critical")){
+				if(!DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("DailyInhaler")){
 					retentionScript.GiveOutMission();
 				}
 
@@ -208,7 +209,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 							// Get relevant info to populate with given saved location ID
 							int partition = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
 							Vector3 pos = DataLoaderPartitionLocations.GetOffsetFromLocationId(locationId);
-							MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
+							//MinigameTypes minigameType = DataLoaderPartitionLocations.GetMinigameTypeFromLocationId(locationId);
 							
 							goMiniPet = GameObjectUtils.AddChild(PartitionManager.Instance.GetInteractableParent(partition).gameObject, prefab);
 							goMiniPet.transform.localPosition = pos;
@@ -333,9 +334,33 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 	/// </summary>
 	public string GetFoodPreference(string miniPetID){
 		Level currentLevel = GetCurrentLevel(miniPetID);
-		ImmutableDataMiniPet data = DataLoaderMiniPet.GetData(miniPetID);
-		ImmutableDataFoodPreferences foodPreferenceData = DataLoaderFoodPreferences.GetData(data.FoodPreferenceID);
-		return foodPreferenceData.GetFoodPreference(currentLevel);;
+		string foodID = "";
+		int rand;
+		if(DataManager.Instance.GameData.MiniPets.GetMiniPetFoodChoice(miniPetID) == null) {
+			switch(currentLevel) {
+				case Level.Level1:
+					rand = UnityEngine.Random.Range(0, 4);
+					foodID = "Food" + rand.ToString();
+					break;
+				case Level.Level2:
+					rand = UnityEngine.Random.Range(4, 9);
+					foodID = "Food" + rand;
+					break;
+				case Level.Level3:
+					rand = UnityEngine.Random.Range(9, 14);
+					foodID = "Food" + rand;
+					break;
+				default:
+					rand = UnityEngine.Random.Range(0, 4);
+					foodID = "Food" + rand;
+					break;
+			}
+			DataManager.Instance.GameData.MiniPets.SetMiniPetFoodChoice(miniPetID, rand);
+        }
+		else {
+			foodID = "Food" + DataManager.Instance.GameData.MiniPets.GetMiniPetFoodChoice(miniPetID);
+        }
+		return foodID;
 	}
 
 	/// <summary>

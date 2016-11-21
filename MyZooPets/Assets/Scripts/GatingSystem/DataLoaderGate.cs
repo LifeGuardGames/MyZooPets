@@ -34,8 +34,7 @@ public class DataLoaderGate : XMLLoaderGeneric<DataLoaderGate>{
 		instance.ForceSetup();
 		
 		ImmutableDataGate dataGate = null;
-		
-		if(zoneDictionary.ContainsKey(zoneID)){
+		if(zoneID != null && zoneDictionary.ContainsKey(zoneID)){
 			Hashtable zone = (Hashtable) zoneDictionary[zoneID];
 			if(zone.ContainsKey(localPartition)){
 				dataGate = (ImmutableDataGate) zone[localPartition];

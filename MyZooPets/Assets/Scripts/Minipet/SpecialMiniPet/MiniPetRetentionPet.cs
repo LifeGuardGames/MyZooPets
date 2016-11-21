@@ -1,30 +1,32 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class MiniPetRetentionPet : MiniPet {
 
 	string missionID;
+	public GameObject notifier;
 
 	void Awake(){
 		minipetType = MiniPetTypes.Retention;
 	}
 
 	public void FigureOutMissions(){
-		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
-			missionID = "TutorialPart1";
+		if(!DataManager.Instance.GameData.Tutorial.IsFlameTutorialDone()){
+			missionID = "DailyInhaler";
 		}
 		else{
-			missionID = "Critical";
+			missionID = "DailyInhaler";
 		}
 	}
 
 	protected override void ShowFoodPreferenceMessage(){
-		if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
-			base.ShowFoodPreferenceMessage();
-		}
+	//	if(!PlayPeriodLogic.Instance.IsFirstPlayPeriod()){
+	//		base.ShowFoodPreferenceMessage();
+	//	}
 	}
 
 	protected override void OpenChildUI(){
+		notifier.SetActive(false);
 		if(!TutorialManager.Instance.IsTutorialActive()){
 			miniPetSpeechAI.ShowTipMsg();
 			Hashtable hash = new Hashtable();
@@ -43,16 +45,20 @@ public class MiniPetRetentionPet : MiniPet {
 		}
 	}
 
+	public void OnTurnInButton() {
+		TurnInMission();
+	}
+
 	private void TurnInMission(){
 		if(isFinishEating){
-			MutableDataMission mission;
+			List <MutableDataWellapadTask>  mission;
 			if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")){
-				mission = WellapadMissionController.Instance.GetMission("TutorialPart1");
+				mission = WellapadMissionController.Instance.GetTaskGroup("TutorialPart1");
 			}
 			else{
-				mission = WellapadMissionController.Instance.GetMission("Critical");
+				mission = WellapadMissionController.Instance.GetTaskGroup("Critical");
 			}
-			if(mission != null && mission.RewardStatus == RewardStatuses.Unclaimed){
+			if(mission != null && WellapadMissionController.Instance.CheckGroupReward() == RewardStatuses.Unclaimed){
 				// Claim the reward
 				MiniPetManager.Instance.IncreaseXp(minipetId);
 				MiniPetRetentionUIController retentionUI = (MiniPetRetentionUIController)MiniPetHUDUIManager.Instance.SelectedMiniPetContentUIScript;
@@ -64,11 +70,21 @@ public class MiniPetRetentionPet : MiniPet {
 	}
 
 	public void GiveOutMission(){
-		isPetCanGainXP = true;
+		WellapadMissionController.Instance.AddTask("DailyInhaler");
+		WellapadMissionController.Instance.AddTask("FightMonster");
 
-		WellapadMissionController.Instance.UnlockTask("Critical");
-		WellapadMissionController.Instance.needMission = true;
-		WellapadMissionController.Instance.AddMission("Critical");
+	}
 
+	void OnBecameVisible() {
+		List<MutableDataWellapadTask> mission;
+		if(DataManager.Instance.GameData.Wellapad.CurrentTasks.ContainsKey("TutorialPart1")) {
+			mission = WellapadMissionController.Instance.GetTaskGroup("TutorialPart1");
+		}
+		else {
+			mission = WellapadMissionController.Instance.GetTaskGroup("Critical");
+		}
+		if(mission != null && WellapadMissionController.Instance.CheckGroupReward() == RewardStatuses.Unclaimed) {
+			notifier.SetActive(true);
+		}
 	}
 }

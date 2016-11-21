@@ -1,21 +1,37 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-public class DoctorMatchLifeBarController : MonoBehaviour {
+public class DoctorMatchLifeBarController : MonoBehaviour{
 	public RectTransform barTransform;
+	public AssemblyLineController lineController;
+	public Text barCount;
+	//X Left to clear
 	private Vector2 barSize;
 	private float barPercentage = 1f;
-	private float hurtPercentage = -0.03f;
-	private float plusPercentage = 0.05f;
-	private float startDrainSpeed = 0.1f;
-
+	private float plusPercentage = 0.01f;
+	private float startDrainSpeed = .03333f;
+	//Takes 30 seconds
 	private float currentDrainSpeed;
 	private bool isDraining = false;
 
+	public float Percentage{
+		get{
+			return barPercentage;
+		}
+	}
+
+	public float Speed{
+		get{
+			return currentDrainSpeed;
+		}
+	}
+
+	public bool IsEmpty{
+		get { return barPercentage <= 0f; }
+	}
+
 	void Start(){
 		barSize = barTransform.sizeDelta;
-		ResetBar();
 	}
 
 	public void ResetBar(){
@@ -35,39 +51,42 @@ public class DoctorMatchLifeBarController : MonoBehaviour {
 	// Want uniform calls in between
 	void FixedUpdate(){
 		if(isDraining){
-			barPercentage -= Time.deltaTime * startDrainSpeed;
+			barPercentage -= Time.deltaTime * currentDrainSpeed;
 			barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
-
 			if(barPercentage <= 0f){
 				NotifyEmpty();
 			}
 		}
 	}
 
-	public void HurtBar(){
-		if(isDraining){
-			UpdateBarPercentage(hurtPercentage);
-		}
+	public void PlusBar(float multiplier = 1f){
+		UpdateBarPercentage(plusPercentage * multiplier);
 	}
 
-	public void PlusBar(){
-		if(isDraining){
-			UpdateBarPercentage(plusPercentage);
-		}
+	public void UpdateCount(int count){
+		if(isDraining || count == -1)
+			barCount.text = "";
+		else
+			barCount.text = count + " Left";
+	}
+
+	public void KillBar(){
+		UpdateBarPercentage(-1f);
 	}
 
 	private void UpdateBarPercentage(float deltaPercent){
 		barPercentage += deltaPercent;
-		barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
-
 		if(barPercentage <= 0f){
 			NotifyEmpty();
 		}
+		else if(barPercentage > 1){
+			barPercentage = 1f;
+		}
+		barTransform.sizeDelta = new Vector2(barSize.x * barPercentage, barSize.y);
 	}
 
 	private void NotifyEmpty(){
-		Debug.Log("Notify empty");
 		StopDraining();
-		DoctorMatchManager.Instance.OnTimerBarEmpty();
+		DoctorMatchGameManager.Instance.OnTimerBarEmpty();
 	}
 }

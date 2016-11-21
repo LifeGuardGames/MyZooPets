@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 
 /// <summary>
 /// Lg inhaler animation event handler.
@@ -12,21 +11,20 @@ public class LgInhalerAnimationEventHandler : MonoBehaviour {
 	public static EventHandler<EventArgs> BreatheInEndEvent;
 	public static EventHandler<EventArgs> InhalerHappy1EndEvent;
 
-
-	public void InhalerAnimationEvent(string eventName){
-		switch(eventName){
-		case "BreatheOut":
-			if(BreatheOutEndEvent != null)
-				BreatheOutEndEvent(this, EventArgs.Empty);
-			break;
-		case "BreatheIn":
-			if(BreatheInEndEvent != null)
-				BreatheInEndEvent(this, EventArgs.Empty);
-			break;
-		case "InhalerHappy1":
-			if(InhalerHappy1EndEvent != null)
-				InhalerHappy1EndEvent(this, EventArgs.Empty);
-			break;
+	public void InhalerAnimationEvent(string eventName) {
+		switch(eventName) {
+			case "BreatheOut":
+				if(BreatheOutEndEvent != null)
+					BreatheOutEndEvent(this, EventArgs.Empty);
+				break;
+			case "BreatheIn":
+				if(BreatheInEndEvent != null)
+					BreatheInEndEvent(this, EventArgs.Empty);
+				break;
+			case "InhalerHappy1":
+				if(InhalerHappy1EndEvent != null)
+					InhalerHappy1EndEvent(this, EventArgs.Empty);
+				break;
 		}
 	}
 }

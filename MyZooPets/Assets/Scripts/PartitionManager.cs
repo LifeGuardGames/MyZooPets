@@ -13,11 +13,13 @@ using System.Collections.Generic;
 /// </summary>
 public class PartitionManager : Singleton<PartitionManager> {
 	public Transform partitionParent;
-
+	public List<Transform> petWanderPoints;
 	private Dictionary<int, Transform> partitionInteractableDictionary = new Dictionary<int, Transform>();
 	private List<ImmutableDataPartitionLocation> openMinipetLocationsList;
 	private bool isOpenLocationsInitalized = false;
 	private bool isMinigameRandomCallLocked = false;
+	public PanToMoveCamera cameraGO;
+	private int lastKnownWanderPoint;
 
 	public void Awake(){
 		// Populate the partition interactable parent dictionary, only for ones existing
@@ -120,7 +122,6 @@ public class PartitionManager : Singleton<PartitionManager> {
 	/// NOTE: GetRandomUnlockedMinigameType() does not keep track of local, if picked already
 	/// </summary>
 	/// <returns>The unused position next to minigame.</returns>
-	/// <param name="minigameType">Minigame type.</param>
 	public LgTuple<Vector3, string> GetPositionNextToMinigame(MinigameTypes minigameType){
 		CheckInitializeOpenLocations();
 
@@ -141,6 +142,9 @@ public class PartitionManager : Singleton<PartitionManager> {
 			break;
 		case MinigameTypes.TriggerNinja:
 			locationType = PartitionLocationTypes.TriggerNinja;
+			break;
+		case MinigameTypes.MicroMix:
+			locationType = PartitionLocationTypes.MicroMix;
 			break;
 		default:
 			return null;
@@ -199,6 +203,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 		}
 		else{
 			// All gates unlocked
+			List<ImmutableDataPartition> list = DataLoaderPartitions.GetDataList();
 			return DataLoaderPartitions.GetDataList().Count - 1;	// Get the gates list count, off by 1
 		}
 	}
@@ -206,7 +211,7 @@ public class PartitionManager : Singleton<PartitionManager> {
 	public bool IsPartitionInCurrentZone(int absolutePartitionNumber){
 		string craftedId = "Partition" + StringUtils.FormatIntToDoubleDigitString(absolutePartitionNumber);
 		ImmutableDataPartition partition = DataLoaderPartitions.GetData(craftedId);
-		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(Application.loadedLevelName)) ? true : false;
+		return (partition.Zone == SceneUtils.GetZoneTypeFromSceneName(SceneUtils.CurrentScene)) ? true : false;
 	}
 
 	/// <summary>
@@ -220,6 +225,21 @@ public class PartitionManager : Singleton<PartitionManager> {
 		return new List<string>(partitionData.DecoCategoriesStore);
 	}
 
+	public Vector3 GetWanderPoint() {
+		int currentPartition = cameraGO.currentLocalPartition;
+		Vector3 wanderPoint;
+		int rand = UnityEngine.Random.Range(0,4);
+		while (rand == lastKnownWanderPoint) {
+			rand = UnityEngine.Random.Range(0, 4);
+		}
+		lastKnownWanderPoint = rand;
+		wanderPoint = petWanderPoints[currentPartition].GetChild(rand).position;
+        return wanderPoint;
+	}
+	public int GetCurrentPartition() {
+		int currentPartition = cameraGO.currentLocalPartition;
+		return currentPartition;
+	}
 //	void OnGUI(){
 //		if(GUI.Button(new Rect(100, 100, 100, 100), "base")){
 //			Debug.Log(GetBasePositionInBedroom());

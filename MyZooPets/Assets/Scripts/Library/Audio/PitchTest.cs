@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PitchTest : LgButton {
+public class PitchTest : LgWorldButton {
 
 	public float pitchStart;
 	public float pitchChange;

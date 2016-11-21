@@ -32,9 +32,8 @@ public class MiniPetMerchant : MiniPet{
 	public override void FinishEating(){
 		if(!isFinishEating){
 			base.FinishEating();
-			isPetCanGainXP = true;
-			isFinishEating = true; 
-			PetSpeechManager.Instance.BeQuiet();
+			isFinishEating = true;
+			miniPetSpeechAI.BeQuiet();
 			miniPetSpeechAI.ShowMerchantShopMessage();
 			OpenMerchantContent();
 		}
@@ -51,10 +50,10 @@ public class MiniPetMerchant : MiniPet{
 	public void BuyItem(){
 		isItemBought = true;
 		DataManager.Instance.GameData.MiniPets.SetItemBoughtInPP(MinipetId, true);
-		InventoryLogic.Instance.AddItem(secretMerchantItem.ItemId, 1);
+		InventoryManager.Instance.AddItemToInventory(secretMerchantItem.ItemId);
 
 		int cost = DataLoaderItems.GetCost(secretMerchantItem.ItemId);
-		StatsController.Instance.ChangeStats(deltaStars: cost * -1);
+		StatsManager.Instance.ChangeStats(coinsDelta: cost * -1);
 
 		MiniPetManager.Instance.IncreaseXp(MinipetId);
 	}

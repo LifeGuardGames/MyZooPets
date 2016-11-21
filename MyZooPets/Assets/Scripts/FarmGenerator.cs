@@ -15,7 +15,7 @@ public class FarmGenerator : MonoBehaviour {
 	public float showButtonThreshold;	// Amount in current when it starts to show the button
 	public float allowTapThreshold;		// Amount in current when you are allowed to tap the collider
 
-	public GameObject buttonParent;
+	public GameObject canvas;
 	public Animation clickAnimation;
 
 	private string itemId;
@@ -43,11 +43,11 @@ public class FarmGenerator : MonoBehaviour {
 
 		DateTime lastRedeemTime;
 		if(isFlagResetWhenStart){	// Start from zero
-			ItemLogic.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
+			ItemManager.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
 			lastRedeemTime = LgDateTime.GetTimeNow();
 		}
 		else{						// Get last redeemed time and calculate
-			lastRedeemTime = ItemLogic.Instance.GetFarmLastRedeemTime(itemId);
+			lastRedeemTime = ItemManager.Instance.GetFarmLastRedeemTime(itemId);
 		}
 
 		RefreshLastTimeSinceLastPlayed(lastRedeemTime);
@@ -56,7 +56,7 @@ public class FarmGenerator : MonoBehaviour {
 
 	void OnApplicationPause(bool isPaused){
 		if(isPaused == false){
-			DateTime lastRedeemTime = ItemLogic.Instance.GetFarmLastRedeemTime(itemId);
+			DateTime lastRedeemTime = ItemManager.Instance.GetFarmLastRedeemTime(itemId);
 			RefreshLastTimeSinceLastPlayed(lastRedeemTime);
 		}
 	}
@@ -93,11 +93,11 @@ public class FarmGenerator : MonoBehaviour {
 	private void CheckShowButton(){
 		// Show the button
 		if(current >= showButtonThreshold){
-			buttonParent.SetActive(true);
+			canvas.SetActive(true);
 		}
 		// Hide the button
 		else{
-			buttonParent.SetActive(false);
+			canvas.SetActive(false);
 		}
 	}
 
@@ -110,10 +110,10 @@ public class FarmGenerator : MonoBehaviour {
 			}
 			
 			// Spew out the reward here
-			StatsController.Instance.ChangeStats(deltaStars: (int)current, starsLoc: transform.position, is3DObject: true);
+			StatsManager.Instance.ChangeStats(coinsDelta: (int)current, coinsPos: transform.position, is3DObject: true);
 
 			// Update mutable datas
-			ItemLogic.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
+			ItemManager.Instance.UpdateFarmLastRedeemTime(itemId, LgDateTime.GetTimeNow());
 
 			// Reset the generator
 			CancelInvoke("RepeatFarm");	// Clear previous invoke before starting new one 

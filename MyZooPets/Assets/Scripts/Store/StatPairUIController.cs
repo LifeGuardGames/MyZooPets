@@ -1,31 +1,26 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
-/// <summary>
-/// Stat pair user interface controller.
-/// </summary>
 public class StatPairUIController : MonoBehaviour{
 	// the sprite and label for this stat pair
-	public UISprite spriteIcon;
-	public UILabel labelAmount;
+	public Image spriteIcon;
+	public Text labelAmount;
 
-	/// <summary>
-	/// Init the specified eStat and nAmount.
-	/// </summary>
-	/// <param name="eStat">E stat.</param>
-	/// <param name="nAmount">N amount.</param>
-	public void Init(StatType eStat, int nAmount){
+	public void Init(StatType statType, int amount){
 		// set the icon of the stat (a little hacky unless we need to expand further)
-		if(eStat == StatType.Mood)
-			spriteIcon.spriteName = "iconHunger";
-		else if(eStat == StatType.Health)
-			spriteIcon.spriteName = "iconHeart";
-		else if(eStat == StatType.Fire)
-			spriteIcon.spriteName = "iconFire";
-		else{}
+		if(statType == StatType.Hunger) {
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconHungerBlank");
+		}
+		else if(statType == StatType.Health) {
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconHealthBlank");
+		}
+		else if(statType == StatType.Fire) {
+			spriteIcon.sprite = SpriteCacheManager.GetSprite("iconFire");
+		}
+		else { }
 		
 		// set the label to whatever the amount is, with a + or -, and then add the amount for the text
-		string strModifier = nAmount > 0 ? "+" : "";
-		labelAmount.text = strModifier + nAmount;
+		string prefix = amount > 0 ? "+" : "";
+		labelAmount.text = prefix + amount;
 	}
 }

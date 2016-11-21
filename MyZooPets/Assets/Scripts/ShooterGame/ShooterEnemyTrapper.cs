@@ -37,7 +37,7 @@ public class ShooterEnemyTrapper : ShooterEnemy {
 			animator.SetBool("IsSpitMode", false);
 			bulletAux = GameObjectUtils.AddChild(null, bulletPrefab);
 			bulletAux.transform.position = transform.position;
-			bulletAux.GetComponent<EnemyBulletCollision>().isTrap = true;
+			bulletAux.GetComponent<ShooterEnemyBulletCollision>().isTrap = true;
 			LeanTween.move(bulletAux, player.transform.position, 2.0f);
 			StartCoroutine(WaitASecond());
 		}

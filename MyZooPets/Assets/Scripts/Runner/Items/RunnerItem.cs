@@ -1,63 +1,46 @@
-﻿/* Sean Duane
- * RunnerItem.cs
- * 8:26:2013   14:24
- * Description:
- * The basis for all player items.
- * It just checks when the collider hits the player, then does OnPickup.
- */
+﻿using UnityEngine;
 
-using UnityEngine;
-using System.Collections;
-
+/// <summary>
+/// The basis for all player items.
+/// It just checks when the collider hits the player, then does OnPickup.
+/// </summary>
 public abstract class RunnerItem : MonoBehaviour {
-	public string ID = "";
 	public int pointValue = 0;
-	public string strSoundPickup;  	// sound to play on pickup, if any
-	public bool hasTutorial; //Whether this item has a tutorial or not 
+	public string strSoundPickup;   // Sound to play on pickup, if any
+	public bool hasTutorial;        // Whether this item has a tutorial or not
+	protected bool hazard = false;
 
-	// Use this for initialization
-	public virtual void Start() { }
-	
-	// Update is called once per frame
-	public virtual void Update() { }
-	
 	void OnTriggerEnter(Collider inOther) {
-		if (inOther.gameObject.tag == "Player") {
+		//Make sure we are either not a hazard, or that we are a hazard and the player is vulnerable
+		if(inOther.gameObject.tag == "Player" && (!hazard || (hazard && !PlayerController.Instance.Invincible))) {
+			//Each item handles their own pickup
 			OnPickup();
-		
-			//Display tutorial if needed	
-			if(hasTutorial)
-				ItemManager.Instance.DisplayTutorial(ID);
 
-			//Add to minus points depending on trigger
-            ScoreManager.Instance.AddPoints(pointValue);
-
-
-            //Play sound
-			if ( !string.IsNullOrEmpty(strSoundPickup) )
-				AudioManager.Instance.PlayClip( strSoundPickup );
+			//If this sound exists, play it if we are not a hazard
+			if(!string.IsNullOrEmpty(strSoundPickup)) {
+				AudioManager.Instance.PlayClip(strSoundPickup);
+			}
 		}
 	}
-	
+
 	/// <summary>
 	/// Raises the pickup event.
 	/// </summary>
 	public abstract void OnPickup();
 
-	/// <summary>
-	/// Spawns the floaty text. Replace the tutorial messages
-	/// </summary>
-	protected void SpawnFloatyText(int coinValue = 0){
-		Hashtable floatyOption = new Hashtable();
-//		string hintMessage = Localization.Localize(ID + "_HINT_MESSAGE");
+	protected void SpawnFloatyText(string toDisplay = "") {
+		Vector3 playerPos = PlayerController.Instance.FloatyLocation.transform.position;
+		GameObject starFloaty = GameObjectUtils.AddChildGUI(RunnerGameManager.Instance.floatyParent.gameObject, RunnerGameManager.Instance.floatyPrefabText);
 
-		floatyOption.Add("prefab", "FloatyTextRunner");
-		floatyOption.Add("parent", PlayerController.Instance.FloatyLocation);
-		floatyOption.Add("floatingUpPos", new Vector3(0, 4, 0));
-		floatyOption.Add("floatingTime", 0.5f);
-		floatyOption.Add("textSize", 2f);
-		floatyOption.Add("text", "+" + coinValue);
+		//Because Canvas is a Screen Space - Camera there is no need for WorldToScreenSpace
+		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, toDisplay, 0.5f, new Vector3(0, 10));
+	}
 
-		FloatyUtil.SpawnFloatyText(floatyOption);
+	protected void SpawnFloatyCoin() {
+		Vector3 playerPos = PlayerController.Instance.FloatyLocation.transform.position;
+		GameObject starFloaty = GameObjectUtils.AddChildGUI(RunnerGameManager.Instance.floatyParent.gameObject, RunnerGameManager.Instance.floatyPrefabCoin);
+
+		//Because Canvas is a Screen Space - Camera there is no need for WorldToScreenSpace
+		starFloaty.GetComponent<UGUIFloaty>().StartFloaty(playerPos, "", 0.5f, new Vector3(0, 10));
 	}
 }

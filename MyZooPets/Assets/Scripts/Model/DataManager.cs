@@ -16,7 +16,7 @@ public class DataManager : Singleton<DataManager>{
 
 	public string CURRENT_VERSION{
 		get{
-			return Constants.GetConstant<string>("BuildVersion");
+			return Application.version;
 		}
 	}
 
@@ -81,27 +81,6 @@ public class DataManager : Singleton<DataManager>{
 	}
 
 	/// <summary>
-	/// Gets or sets the last play session date. Use to determine whether the game
-	/// should be force start from LoadingScene.unity
-	/// </summary>
-	/// <value>The last play session date.</value>
-//	public DateTime LastPlaySessionDate{
-//		get{
-//			string timeString = PlayerPrefs.GetString("LastPlaySessionDate", "");
-//			DateTime lastSessionTime = LgDateTime.GetTimeNow();
-//
-//			if(!string.IsNullOrEmpty(timeString))
-//				lastSessionTime = Convert.ToDateTime(timeString);
-//		
-//			return lastSessionTime;
-//		}
-//		set{
-//			string timeString = value.ToString("o");
-//			PlayerPrefs.SetString("LastPlaySessionDate", timeString);
-//		}
-//	}
-
-	/// <summary>
 	/// Use this to check if there is data loaded into gameData at anypoint
 	/// in the menuscene
 	/// </summary>
@@ -112,9 +91,19 @@ public class DataManager : Singleton<DataManager>{
 
 	#region Unity MonoBehaviours
 	void Awake(){
-		#if DEVELOPMENT_BUILD
-		PlayerPrefs.DeleteAll();
-		#endif
+#if DEVELOPMENT_BUILD
+		//PlayerPrefs.DeleteAll();
+#endif
+		Amplitude amplitude = Amplitude.Instance;
+		if(Constants.GetConstant<bool>("AnalyticsEnabled")) {
+			amplitude.logging = true;
+			if(Constants.GetConstant<bool>("IsLiveAnalytics")) {		// Live Amplitude
+				amplitude.init("51dc5ebabe7286e547c06afc44302378");
+			}
+			else{														//Dev Amplitude
+				amplitude.init("a06f151d06c754bdbbff7bdbaffe12e2");
+			}
+		}
 
 		//JSON serializer setting
 		JSON.Instance.Parameters.UseExtensions = false;
@@ -133,13 +122,15 @@ public class DataManager : Singleton<DataManager>{
 
 		//Use this when developing on an independent scene. Will initialize all the data
 		//before other classes call DataManager
-		if(isDebug)
+		if(isDebug && PlayerPrefs.GetInt("IsDebugSaveGameFlag", 0) == 0) {
+			PlayerPrefs.SetInt("IsDebugSaveGameFlag", 1);	// Special case here, dont load from debug if it is debug coming back
 			InitGameDataForDebug();
-		else{
+		}
+		else {
 			// if not first time need to do version check, retrieve old version
-			if(!IsFirstTime){
+			if(!IsFirstTime) {
 				string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
-				VersionCheck(new Version(currentDataVersionString));
+				VersionCheck(currentDataVersionString);
 			}
 
 			LoadGameData();
@@ -163,7 +154,7 @@ public class DataManager : Singleton<DataManager>{
 			
 			// also early out if we happen to be in the inhaler game.  Ultimately we may want to create a more elaborate hash/list
 			// of scenes it is okay to save in, if we ever create more scenes that shouldn't serialize data
-			if(Application.loadedLevelName == SceneUtils.INHALERGAME){
+			if(SceneUtils.CurrentScene == SceneUtils.INHALERGAME){
 				Debug.Log("Not saving the game because its inhaler scene");
 				return;
 			}
@@ -179,7 +170,7 @@ public class DataManager : Singleton<DataManager>{
 					PlayPeriodLogic.Instance.SetLastPlayPeriod();
 				}
 
-				Analytics.Instance.QuitGame(Application.loadedLevelName);
+				Analytics.Instance.QuitGame(SceneUtils.CurrentScene);
 				SaveGameData();
 
 				//No longer first time
@@ -287,10 +278,12 @@ public class DataManager : Singleton<DataManager>{
 	public void ModifyBasicPetInfo(string petID = "Pet0", string petName = "", 
 	                                        string petSpecies = "Basic", string petColor = "OrangeYellow"){
 
-		if(!String.IsNullOrEmpty(petName))
+		if(!String.IsNullOrEmpty(petName)){
 			gameData.PetInfo.ChangeName(petName);
-		else
+		}
+		else{
 			gameData.PetInfo.ChangeName("Player1");
+		}
 
 		gameData.PetInfo.PetColor = petColor;
 		gameData.PetInfo.IsHatched = true;
@@ -310,16 +303,11 @@ public class DataManager : Singleton<DataManager>{
 	/// NOTE: Dont touch anything in here
 	/// </summary>
 	/// <param name="currentDataVersion">Current data version.</param>
-	private void VersionCheck(Version currentDataVersion){
+	private void VersionCheck(string currentDataVersion){
 		//Deleting all data that is less than v2.0.0	//DONT TOUCH THIS
-		if(currentDataVersion < new Version("2.0.0")) {
-			PlayerPrefs.DeleteKey("GameData");
-		}
-
-		// Disabling ads for all users below v2.2.0 (premium users)		//DONT TOUCH THIS
-		if(currentDataVersion < new Version ("2.2.0")) {
-			IsAdsEnabled = false;
-		}
+//		if(currentDataVersion < new Version("2.0.0")) {
+//			PlayerPrefs.DeleteKey("GameData");
+//		}
 	}
 
 	/// <summary>
@@ -330,7 +318,7 @@ public class DataManager : Singleton<DataManager>{
 		string currentDataVersionString = PlayerPrefs.GetString("CurrentDataVersion", CURRENT_VERSION);
 
 		if(!IsFirstTime){
-			gameData.VersionCheck(new Version(currentDataVersionString));
+			gameData.VersionCheck(currentDataVersionString);
 		}
 	}
 

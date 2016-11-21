@@ -2,56 +2,142 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AssemblyLineController : MonoBehaviour {
-	public List<Transform> positionList;
+public class AssemblyLineController : MonoBehaviour{
+	public Transform StartPosition;
+	public Transform ThirdPosition;
+	public Transform OffscreenPosition;
 	public GameObject itemParent;
 	public GameObject itemPrefab;
-
+	public GameObject particlePrefab;
+	public bool growsLowHealth = true;
+	//Line grows as you decrease in health
+	private int visibleCount = 2;
+	public bool constantCount = false;
 	private Queue<AssemblyLineItem> itemQueue;
-
+	private float distanceBetween = -84;
+	private int startingCount = 4;
+	private float clearTime = .05f;
+	private const float moveTime = .2f;
 	// Fill the list with items and in the right positions
-	public void Initialize(){
-		if(positionList == null || positionList.Count == 0){
-			Debug.LogError("Position list not initialized or empty");
-			return;
+	public float ClearTime{
+		get{
+			return visibleCount * clearTime * 4 + moveTime;
 		}
+	}
 
+	public bool LineComplete{
+		get{
+			return itemQueue.Count == 0;
+		}
+	}
+
+	public int Count{
+		get{
+			return itemQueue.Count;
+		}
+	}
+
+	public IEnumerator Initialize(bool isTutorial){
+		DestroyItems();
+		yield return new WaitForEndOfFrame();
 		itemQueue = new Queue<AssemblyLineItem>();
-
-		// Init and throw it into the queue
-		for(int i = 0; i < positionList.Count; i++){
-			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
-			item.transform.position = positionList[i].position;
-			AssemblyLineItem itemScript = item.GetComponent<AssemblyLineItem>();
-			itemScript.Init(i);
-			itemQueue.Enqueue(itemScript);
-		}
+		if(!isTutorial)
+			PopulateQueue(compare: true);
 	}
 
 	public AssemblyLineItem PopFirstItem(){
-		AssemblyLineItem poppedItem = itemQueue.Dequeue();
-		return poppedItem;
+		return itemQueue.Dequeue();
+	}
+
+	public AssemblyLineItem PeekFirstItem(){
+		return itemQueue.Peek();
 	}
 
 	public void ShiftAndAddNewItem(){
-		foreach(AssemblyLineItem itemScript in itemQueue){
-			int newIndex = itemScript.GetIncrementIndex();
-			LeanTween.cancel(itemScript.gameObject);
-			LeanTween.move(itemScript.gameObject, positionList[newIndex].position, 0.1f);
-		}
-
+		MoveUpLine();
 		// Add new item
 		GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
-		int newItemIndex = positionList.Count - 1;
-		item.transform.position = positionList[newItemIndex].position;
+		int newItemIndex = itemQueue.Count;
+		item.transform.position = GetPosition(index: newItemIndex);//StartPosition.position + newItemIndex * new Vector3(distanceBetween, 0);
 		AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
 		newItemScript.Init(newItemIndex);
 		itemQueue.Enqueue(newItemScript);
+		newItemScript.CompareVisible(visibleCount,true);
+	}
+
+	public void SpawnTutorialSet(int stage){
+		for(int i = 1; i < AssemblyLineItem.SPRITE_COUNT; i++){
+			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
+			item.transform.position = GetPosition(index: i, indexOffset: -1);//StartPosition.position + (i - 1) * new Vector3(distanceBetween, 0);
+			AssemblyLineItem newItemScript = item.GetComponent<AssemblyLineItem>();
+			newItemScript.Init(i - 1, stage, i); 
+			itemQueue.Enqueue(newItemScript);
+			newItemScript.CompareVisible(visibleCount,false);
+		}
 	}
 
 	public void DestroyItems(){
-		foreach (Transform child in itemParent.transform) {
-			GameObject.Destroy(child.gameObject);
+		foreach(Transform child in itemParent.transform){
+			Destroy(child.gameObject);
+		}
+		if(itemQueue != null)
+			itemQueue.Clear();
+	}
+
+	public void MoveUpLine(bool compare = true){
+		UpdateVisibleCount();
+		foreach(AssemblyLineItem itemScript in itemQueue){
+			int newIndex = itemScript.GetIncrementIndex();
+			LeanTween.cancel(itemScript.gameObject);
+			LeanTween.move(itemScript.gameObject, GetPosition(index: newIndex), moveTime);//StartPosition.position + newIndex * new Vector3(distanceBetween, 0), moveTime);
+			itemScript.CompareVisible(visibleCount, compare);
+		}
+	}
+
+	public void PopulateQueue(bool compare = false, int count = -1, int indexOffset = 0){
+		UpdateVisibleCount();
+		int toSpawn = (count == -1) ? startingCount + 1 : count;
+		for(int i = 0; i < toSpawn; i++){
+			GameObject item = GameObjectUtils.AddChild(itemParent, itemPrefab);
+			item.transform.position = GetPosition(index: i, indexOffset: indexOffset);
+			AssemblyLineItem itemScript = item.GetComponent<AssemblyLineItem>();
+			itemScript.Init((i + indexOffset));
+			itemQueue.Enqueue(itemScript);
+			itemScript.CompareVisible(visibleCount, compare);
+		}
+	}
+
+	private void UpdateVisibleCount(){
+		float percentage = DoctorMatchGameManager.Instance.lifeBarController.Percentage; //Connection w/o manager
+		if(constantCount || itemQueue == null || DoctorMatchGameManager.Instance.IsPaused)
+			return;
+		if(percentage < .2f){
+			visibleCount = (growsLowHealth) ? 5 : 1;
+		}
+		else if(percentage < .4f){
+			visibleCount = (growsLowHealth) ? 4 : 2;
+		}
+		else if(percentage < .6f){
+			visibleCount = (growsLowHealth) ? 3 : 3;
+		}
+		else if(percentage < .8f){
+			visibleCount = (growsLowHealth) ? 2 : 4;
+		}
+		else{
+			visibleCount = (growsLowHealth) ? 1 : 5;
+		}
+	}
+
+	private Vector3 GetPosition(int index, int indexOffset = 0){
+		index += indexOffset;
+		if(index < 3){
+			return StartPosition.position + index * new Vector3(distanceBetween, 0);
+		}
+		else if(index == 3){
+			return ThirdPosition.position;
+		}
+		else{
+			return OffscreenPosition.position;
 		}
 	}
 }

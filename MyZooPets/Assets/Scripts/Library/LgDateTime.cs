@@ -18,9 +18,8 @@ public class LgDateTime{
 
     public static DateTime GetTimeNow(){
         DateTime now = DateTime.Now; 
-        bool morphTime = Constants.GetConstant<bool>("MorphTime");
         
-        if(morphTime){
+        if(DataManager.Instance.isDebug && Constants.GetConstant<bool>("MorphTime")) {
             try{
                 string testTime = Constants.GetConstant<string>("TestTime");
                 now = DateTime.Parse(testTime);

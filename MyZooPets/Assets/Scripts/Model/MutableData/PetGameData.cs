@@ -15,15 +15,15 @@ public class PetGameData{
     public MutableDataInhaler Inhaler {get; set;}
     public MutableDataTutorial Tutorial {get; set;}
     public MutableDataInventory Inventory {get; set;}
-    public MutableDataSkill Flame {get; set;}
     public MutableDataBadge Badge {get; set;}
     public MutableDataGatingProgress GatingProgress {get; set;}
-    public MutableDataRunnerGame RunnerGame {get; set;}
     public MutableDataHighScore HighScore {get; set;}
 	public MutableDataFirstTimeEntrance FirstTimeEntrance {get; set;}
 	public MutableDataSickNotification SickNotification {get; set;}
 	public MutableDataMiniPets MiniPets {get; set;}
 	public MutableDataMiniPetLocations MiniPetLocations {get; set;}
+	public MutableDataMicroMix MicroMix {get; set;}
+	public MutableDataAdData AdViews {get; set;}
 
 	private List<MutableData> allMutableData;
 	
@@ -46,25 +46,22 @@ public class PetGameData{
         Inhaler = new MutableDataInhaler();
         Tutorial = new MutableDataTutorial();
         Inventory = new MutableDataInventory();
-        Flame = new MutableDataSkill(); 
         Badge = new MutableDataBadge();
         GatingProgress = new MutableDataGatingProgress();
-        RunnerGame = new MutableDataRunnerGame();
         HighScore = new MutableDataHighScore();
 		FirstTimeEntrance = new MutableDataFirstTimeEntrance();
 		SickNotification = new MutableDataSickNotification();
 		MiniPets = new  MutableDataMiniPets();
 		MiniPetLocations = new MutableDataMiniPetLocations();
+		MicroMix = new MutableDataMicroMix();
+		AdViews = new MutableDataAdData();
     }
 
 	/// <summary>
 	/// This function is called after the game data has been loaded. It will call individual game data
 	/// version checks so that save data can properly be updated when the app is updated.
 	/// </summary>
-	public void VersionCheck(Version currentDataVersion) {
+	public void VersionCheck(string currentDataVersion) {
 		Tutorial.VersionCheck(currentDataVersion);
-//		GatingProgress.VersionCheck(currentDataVersion);
-//		Calendar.VersionCheck(currentDataVersion);
-//		PetInfo.VersionCheck(currentDataVersion);
 	}
 }

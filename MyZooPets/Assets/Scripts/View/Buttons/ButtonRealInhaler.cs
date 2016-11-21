@@ -1,17 +1,18 @@
-using UnityEngine;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Button class that loads up the real inhaler game
 /// </summary>
 public class ButtonRealInhaler : ButtonChangeScene{
-	
+
+	protected override void ProcessClick() {
+		OnInhalerButtonClicked();
+	}
+
 	/// <summary>
 	/// Processes the click.
 	/// </summary>
-	protected override void ProcessClick(){
+	public void OnInhalerButtonClicked(){
 		CheckToOpenInhaler();
 	}
 	
@@ -24,32 +25,25 @@ public class ButtonRealInhaler : ButtonChangeScene{
 			OpenRealInhaler();
 		}
 		else{
-//			PlayNotProcessSound();
-			string soundToPlay;
 			TimeFrames currentTimeFrame = PlayPeriodLogic.GetTimeFrame(LgDateTime.GetTimeNow());
-			string popupMessage = "TUT_SUPERWELLA_INHALER";
+			string popupMessage;
 
 			if(currentTimeFrame == TimeFrames.Morning){
-				popupMessage = "NOTIFICATION_INHALER_TONIGHT";
-				soundToPlay = "superWellaInhalerTonight";
+				popupMessage = "POPUP_INHALER_TONIGHT";
+				AudioManager.Instance.PlayClip("superWellaInhalerTonight");
 			}
 			else{
-				popupMessage = "NOTIFICATION_INHALER_MORNING";
-				soundToPlay = "superWellaInhalerMorning";
+				popupMessage = "POPUP_INHALER_MORNING";
+				AudioManager.Instance.PlayClip("superWellaInhalerMorning");
 			}
-				
-			PopupNotificationNGUI.Callback okButtonCallback = delegate(){	
-			};
 			
-			//Display tutorial notification
+			// Display tutorial notification
 			Hashtable notificationEntry = new Hashtable();
-			notificationEntry.Add(NotificationPopupFields.Type, NotificationPopupType.SuperWellaInhaler);
-			notificationEntry.Add(NotificationPopupFields.Message, Localization.Localize(popupMessage));
-			notificationEntry.Add(NotificationPopupFields.Button1Callback, okButtonCallback);
-			
+			notificationEntry.Add(NotificationPopupData.PrefabName, "PopupInhalerRecharging");
+			notificationEntry.Add(NotificationPopupData.Title, null);
+			notificationEntry.Add(NotificationPopupData.Message, Localization.Localize(popupMessage));
+			notificationEntry.Add(NotificationPopupData.SpecialButtonCallback, null);
 			NotificationUIManager.Instance.AddToQueue(notificationEntry);
-
-			AudioManager.Instance.PlayClip(soundToPlay);
 		}
 	}
 

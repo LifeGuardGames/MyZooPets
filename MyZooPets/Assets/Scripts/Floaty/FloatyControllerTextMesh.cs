@@ -26,29 +26,25 @@ public class FloatyControllerTextMesh : MonoBehaviour{
 			}
 		}
 		textColor = textMesh.color;
-		textMesh.renderer.sortingLayerName = rendererLayer;
+		textMesh.GetComponent<Renderer>().sortingLayerName = rendererLayer;
 
 		FloatUp();
 	}
 
 	private void FloatUp(){
-		Hashtable optional = new Hashtable();
-		optional.Add("ease", floatingEase);
-		optional.Add("onCompleteTarget", gameObject);
-		optional.Add("onComplete", "SelfDestruct");
-		
 		// Lean tween doesn't have a move by, so what we really want to do is move the object to its current position + the floating vector
 		Vector3 vTarget = gameObject.transform.localPosition;
 		vTarget += floatingUpPos;
 		
-		LeanTween.moveLocal(gameObject, vTarget, floatingTime, optional);
-
-		Hashtable optional2 = new Hashtable();
-		optional2.Add("ease", colorEase);
-		LeanTween.value(gameObject, "updateValueCallback", 1f, 0, floatingTime, optional2);
+		LeanTween.moveLocal(gameObject, vTarget, floatingTime)
+			.setEase(floatingEase)
+			.setOnComplete(SelfDestruct);
+		
+		LeanTween.value(gameObject, UpdateValueCallback, 1f, 0, floatingTime)
+			.setEase(colorEase);
 	}
 
-	void updateValueCallback(float val){
+	void UpdateValueCallback(float val){
 		textColor = new Color(textColor.r, textColor.g, textColor.b, val);
 		textMesh.color = textColor;
 	}

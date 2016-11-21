@@ -3,9 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ImmutableDataFoodPreferences{
-
+public class ImmutableDataFoodPreferences {
+#pragma warning disable 0414
 	private string id;
+#pragma warning restore 0414
 	private Dictionary<Level, string> foodPreferences;
 
 	/// <summary>

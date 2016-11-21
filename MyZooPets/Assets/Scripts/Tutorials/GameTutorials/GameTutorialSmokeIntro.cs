@@ -1,13 +1,13 @@
 using UnityEngine;
-using System;
+using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 
 //---------------------------------------------------
 // GameTutorial_SmokeIntro
 // Tutorial that introduces the smoke monster.
 //---------------------------------------------------
 public class GameTutorialSmokeIntro : GameTutorial{
+	private Button rightArrowButton;
 
 	public GameTutorialSmokeIntro() : base(){
 	}
@@ -101,7 +101,7 @@ public class GameTutorialSmokeIntro : GameTutorial{
 
 	private void ShowWellapad(){
 		// show the wellapad
-		FireCrystalUIManager.Instance.OpenUIBasedOnScene();
+		FireCrystalUIManager.Instance.OpenUIBasedOnScene(false);
 		
 		// enable the close button		
 		GameObject goBack = WellapadUIManager.Instance.GetScreenManager().GetBackButton();
@@ -112,38 +112,31 @@ public class GameTutorialSmokeIntro : GameTutorial{
 	}
 
 	private void FocusOnRightArrow(){
-		string tutKey = GetKey() + "_" + GetStep();
-
 		//Start showing the right arrow
-		RoomArrowsUIManager.Instance.ShowRightArrow();
+		RoomArrowsUIManager.Instance.ShowRightArrowOnly();
 
 		// begin listening for when the inhaler is clicked
-		LgButton rightArrowButton = RoomArrowsUIManager.Instance.GetRightArrowReference();
+		rightArrowButton = RoomArrowsUIManager.Instance.RightArrowObject;
 
 		// the inhaler is the only object that can be clicked
 		AddToProcessList(rightArrowButton.gameObject, true);
 
-		rightArrowButton.OnProcessed += RightArrowClicked;
+		rightArrowButton.onClick.AddListener(() => { RightArrowClicked(); });
 
 		// spotlight the arrow
-		SpotlightObject(rightArrowButton.gameObject, true, InterfaceAnchors.Right, 
-		                fingerHint: true, fingerHintPrefab: "PressTutWithDelay", fingerHintFlip: false, delay: 0f);
+		SpotlightObject(isGUI: true, GUIanchor: InterfaceAnchors.Right,
+						hasFingerHint: true, fingerState: BedroomTutFingerController.FingerState.DelayPress,
+						spotlightOffsetX: -40, spotlightOffsetY: 70, fingerHintFlip: false, delay: 0f);
 
-		// show message
 		Vector3 location = Constants.GetConstant<Vector3>("SmogIntroPopupLoc");
-		string tutMessage = Localization.Localize(tutKey);
 
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, tutMessage);
-		ShowPopup(Tutorial.POPUP_STD, location, option: option);
+		ShowPopup(TUTPOPUPTEXT, location);
 
 		ShowRetentionPet(true, new Vector3(-281, -86, -160));
 	}
 
-	private void RightArrowClicked(object sender, EventArgs args){
-		LgButton button = (LgButton)sender;
-		button.OnProcessed -= RightArrowClicked;
+	private void RightArrowClicked(){
+		rightArrowButton.onClick.RemoveListener(() => { RightArrowClicked(); });
 
 		RemoveSpotlight();
 		RemoveFingerHint();

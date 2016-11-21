@@ -36,23 +36,8 @@ public class GestureTrail : MonoBehaviour{
 		return true;	
 	}
 
-	void Start(){
-		NinjaManager.OnStateChanged += GameStateChange;
-	}
-	
-	void OnDestroy(){
-		NinjaManager.OnStateChanged -= GameStateChange;
-	}
 
-	private void GameStateChange(object sender, GameStateArgs args){
-		switch(args.GetGameState()){
-		case MinigameStates.GameOver:
-			Destroy(goTrail);
-			break;
-		default:
-			break;
-		}
-	}
+
 
 	/// <summary>
 	/// Drags the started.

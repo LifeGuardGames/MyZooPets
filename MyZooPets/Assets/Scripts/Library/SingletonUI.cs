@@ -14,6 +14,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 
 	// is this ui open?
 	private bool isOpen = false;
+	public bool IsOpen {
+		get { return isOpen; }
+	}
 
 	// the mode type of this manager
 	protected UIModeTypes eModeType = UIModeTypes.Generic;
@@ -27,14 +30,6 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 	// if true, opening this UI will lock the GUI (put up giant box collider blocking input)
 	public bool blockGUI;
 
-	/// <summary>
-	/// Determines whether this UI is opened.
-	/// </summary>
-	/// <returns><c>true</c> if this instance is open; otherwise, <c>false</c>.</returns>
-	public bool IsOpen(){
-		return isOpen;	
-	}
-
 	protected virtual void Awake(){
 	}
 
@@ -45,10 +40,8 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 	}
 
 	/// <summary>
-	/// When a button wants to open a given UI, this is
-	/// what should be called.  From a high level, the UI
-	/// manager locks clicks/modes, and then the child
-	/// class does its unique thing via _OpenUI.
+	/// When a button wants to open a given UI, this is what should be called.
+	/// From a high level, the UIManager locks clicks/modes, the child class implements its own _OpenUI logic
 	/// </summary>
 	public void OpenUI(){
 		if(isLockModeInClickmanager){
@@ -58,7 +51,8 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		}
 
 		if(blockGUI){
-			ClickManager.SetActiveGUIModeLock(true);
+			Debug.LogWarning("ACTIVE MODE LOCK BYPASS");
+			//ClickManager.SetActiveGUIModeLock(true);
 		}
 
 		// fire callback
@@ -82,8 +76,9 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		// send callback
 		UIManagerEventArgs args = new UIManagerEventArgs();
 		args.Opening = true;
-		if(OnTweenDone != null)
-			OnTweenDone(this, args);			
+		if(OnTweenDone != null) {
+			OnTweenDone(this, args);
+		}		
 	}
 
 	/// <summary>
@@ -102,7 +97,8 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 		}
 		
 		if(blockGUI){
-			ClickManager.SetActiveGUIModeLock(false);
+			Debug.LogWarning("ACTIVE MODE LOCK BYPASS");
+			//ClickManager.SetActiveGUIModeLock(false);
 		}
 		
 		// fire callback
@@ -133,7 +129,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 
 		default:	// Default to base mode
 			// Only run this chunk if in bedroom or yard scene
-			if((Application.loadedLevelName == SceneUtils.BEDROOM || Application.loadedLevelName == SceneUtils.YARD)){
+			if((SceneUtils.CurrentScene == SceneUtils.BEDROOM || SceneUtils.CurrentScene == SceneUtils.YARD)){
 				// Editdeco mode check
 				if(ClickManager.Instance.IsStackContainsType(UIModeTypes.EditDecos)){
 					if(RoomArrowsUIManager.Instance != null){
@@ -148,7 +144,7 @@ public abstract class SingletonUI<T> : Singleton<T> where T : MonoBehaviour{
 					HUDUIManager.Instance.ShowPanel();
 				}
 				// Fireblowing room check
-				else if(FireButtonUIManager.Instance.IsActive){
+				else if(FireButtonManager.Instance.IsActive){
 					if(RoomArrowsUIManager.Instance != null){
 						RoomArrowsUIManager.Instance.ShowPanel();
 						HUDUIManager.Instance.ShowPanel();

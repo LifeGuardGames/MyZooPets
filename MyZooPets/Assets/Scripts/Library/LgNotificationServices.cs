@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+#if UNITY_IOS
+using NotificationServices = UnityEngine.iOS.NotificationServices;
+using NotificationType = UnityEngine.iOS.NotificationType;
+#elif UNITY_ANDROID
 using Area730.Notifications;
+#endif
 
 public class LgNotificationServices : Singleton<LgNotificationServices> {
 	
 	void Start(){
-#if UNITY_IOS && !UNITY_EDITOR
+		#if UNITY_IOS
 		// Register for iOS local notifications
 		Debug.Log("Registering iOS notifications");
-		NotificationServices.RegisterForLocalNotificationTypes(LocalNotificationType.Alert | LocalNotificationType.Badge | LocalNotificationType.Sound);
+		NotificationServices.RegisterForNotifications(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
 #endif
 
 		// Schedule notification on start
@@ -21,17 +26,17 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 	/// Also populates rate app notification
 	/// </summary>
 	public void ScheduleLocalNotification(){
-#if UNITY_IOS && !UNITY_EDITOR
+		#if UNITY_IOS
 		// Reset the badge icon
-		LocalNotification resetNotif = new LocalNotification();
+		UnityEngine.iOS.LocalNotification resetNotif = new UnityEngine.iOS.LocalNotification();
 		resetNotif.applicationIconBadgeNumber = -1;
 		resetNotif.hasAction = false;
 		NotificationServices.PresentLocalNotificationNow(resetNotif);
 
 		// Clear and cancel
 		NotificationServices.ClearLocalNotifications();				// Clear all received notifications
-		foreach(LocalNotification localNotif in NotificationServices.scheduledLocalNotifications){		// Remove reminder notifications
-			if(localNotif.repeatInterval == CalendarUnit.Week){
+		foreach(UnityEngine.iOS.LocalNotification localNotif in NotificationServices.scheduledLocalNotifications){		// Remove reminder notifications
+			if(localNotif.repeatInterval == UnityEngine.iOS.CalendarUnit.Week){
 				NotificationServices.CancelLocalNotification(localNotif);
 				Debug.Log("CANCELLING RECURRING NOTIFICATIONS");
 			}
@@ -43,12 +48,12 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 
 		DateTime fireDate = LgDateTime.GetTimeNow().AddDays(7);		// Schedule for 7 days from now
 
-		LocalNotification notif = new LocalNotification();
+		UnityEngine.iOS.LocalNotification notif = new UnityEngine.iOS.LocalNotification();
         notif.fireDate = fireDate;
 		notif.alertAction = iOSAction;
 		notif.alertBody = iOSBody;
-		notif.soundName = LocalNotification.defaultSoundName;
-		notif.repeatInterval = CalendarUnit.Week;
+		notif.soundName = UnityEngine.iOS.LocalNotification.defaultSoundName;
+		notif.repeatInterval = UnityEngine.iOS.CalendarUnit.Week;
 		notif.applicationIconBadgeNumber = -1;
         NotificationServices.ScheduleLocalNotification(notif);
 
@@ -60,7 +65,7 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 			&& DataManager.Instance.GameData.PlayPeriod.IsFirstPlayPeriodAux			// Started first play session in
 			&& difference > new TimeSpan(7, 0, 0 ,0)){									// Past 7 days
 
-			LocalNotification rateNotif = new LocalNotification();
+			UnityEngine.iOS.LocalNotification rateNotif = new UnityEngine.iOS.LocalNotification();
 
 			// Shoot for next 8:47am
 			DateTime now = LgDateTime.GetTimeNow();
@@ -70,7 +75,7 @@ public class LgNotificationServices : Singleton<LgNotificationServices> {
 			rateNotif.fireDate = next847am;
 			rateNotif.alertAction = "open game";
 			rateNotif.alertBody = "Is 'Wizdy Pets' helping your kids with asthma? Leave us a review in the AppStore!";
-			rateNotif.soundName = LocalNotification.defaultSoundName;
+			rateNotif.soundName = UnityEngine.iOS.LocalNotification.defaultSoundName;
 			rateNotif.applicationIconBadgeNumber = -1;
 
 			NotificationServices.ScheduleLocalNotification(rateNotif);

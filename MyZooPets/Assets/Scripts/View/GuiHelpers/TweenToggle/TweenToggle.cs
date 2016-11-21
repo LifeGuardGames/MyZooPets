@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//// Copyright (c) 2015 LifeGuard Games Inc.
+
+using UnityEngine;
 using System.Collections;
 
 /// <summary>
@@ -9,29 +11,31 @@ using System.Collections;
 public class TweenToggle : MonoBehaviour{
 
 	protected bool isMoving;
-	public bool IsMoving{ get { return isMoving; } }
+	public bool IsMoving{
+		get{ return isMoving; }
+	}
 
-	public bool isShown;
-	public bool IsShowing{ get { return isShown; } }
+	protected bool isShown;
+	public bool IsShown{
+		get{ return isShown; }
+	}
 
 	//////////////////////////////////////////////////////
 	
-	public bool ignoreTimeScale = false;
 	public bool isUsingDemultiplexer = false;
-	public bool blockUI = true;		// If true, when this object is tweening it will lock the UI
 	public bool startsHidden = false;
-	public float hideDeltaX; 		//Position, Scale, or Rotation depending on subclass
+	public float hideDeltaX; //Position, Scale, or Rotation depending on subclass
 	public float hideDeltaY;
 	public float hideDeltaZ;
 	public float showDuration = 0.5f;
 	public float hideDuration = 0.5f;
 	public float showDelay = 0.0f;
 	public float hideDelay = 0.0f;
-	public LeanTweenType easeHide = LeanTweenType.easeInBack;
-	public LeanTweenType easeShow = LeanTweenType.easeOutBack;
+	public LeanTweenType easeHide = LeanTweenType.easeInOutQuad;
+	public LeanTweenType easeShow = LeanTweenType.easeInOutQuad;
 	protected Vector3 hiddenPos;
 	protected Vector3 showingPos;
-
+	public bool isUseEstimatedTime = false;
 	public Vector3 GetShowPos(){
 		return showingPos;
 	}
@@ -55,19 +59,23 @@ public class TweenToggle : MonoBehaviour{
 	public string strSoundShow;
 	public string strSoundHide;
 
-	public bool isDebug = false;
-	public Vector2 testButtonPos; 			// Set base positions of test buttons
-
-	private bool isProperlyInited = false;	// Boolean to check that initializing is done before tweening
+	protected bool isGUI;				// Check if Unity GUI, will be set on awake
+	protected RectTransform GUIRectTransform;	// Local cache of rect transform if GUI
 
 	protected void Awake(){
-		isProperlyInited = false;
+		GUIRectTransform = gameObject.GetComponent<RectTransform>();
+		if(GUIRectTransform != null){
+			isGUI = true;
+		}
+		else{
+			isGUI = false;
+		}
+
 		RememberPositions();
 	}
 	
 	protected void Start(){
 		Reset();
-		isProperlyInited = true;			// Properly initialized now
 	}
 	
 	protected virtual void RememberPositions(){
@@ -90,19 +98,21 @@ public class TweenToggle : MonoBehaviour{
 //	}
 
 	public void Show(){
-		if(!isProperlyInited){
-			Debug.LogWarning(gameObject.name + " - Demux not properly inited before show call, skip a frame before tweening!");
-		}
-
-		// play sound (if it exists)
-		if(!string.IsNullOrEmpty(strSoundShow))
-			AudioManager.Instance.PlayClip(strSoundShow);
-		
 		Show(showDuration);
 	}
 	
 	public virtual void Show(float time){
 		// Implement in child
+	}
+
+	// Wait one frame and then show
+	public void ShowAfterInit() {
+		StartCoroutine(ShowAfterInitHelper());
+	}
+
+	private IEnumerator ShowAfterInitHelper() {
+		yield return 0;
+		Show();
 	}
 	
 	// Since Hide() only saves its show/hide position in the beginning,
@@ -116,14 +126,6 @@ public class TweenToggle : MonoBehaviour{
 	}
 	
 	public void Hide(){
-		if(!isProperlyInited){
-			Debug.LogWarning(gameObject.name + " - Demux not properly inited before hide call, skip a frame before tweening!");
-		}
-		
-		// play sound (if it exists)
-		if(!string.IsNullOrEmpty(strSoundHide))
-			AudioManager.Instance.PlayClip(strSoundHide);		
-		
 		Hide(hideDuration);
 	}
 
@@ -131,33 +133,19 @@ public class TweenToggle : MonoBehaviour{
 		// Implement in child
 	}
 
+	// Wait one frame and then show
+	public void HideAfterInit() {
+		StartCoroutine(HideAfterInitHelper());
+	}
+
+	private IEnumerator HideAfterInitHelper() {
+		yield return 0;
+		Hide();
+	}
+
 	///////////////////////// CALLBACKS ///////////////////////////////
-
-	protected void ShowUnlockCallback(Hashtable hash){
-		// Since LeanTween uses BroadcastMessage, it applies to all children, check for self object
-		if(hash["selfCaller"] == this.gameObject){
-			// If this tween locks the UI, now that the tween is finished, decrement the counter
-			if(blockUI){
-				ClickManager.Instance.DecrementTweenCount();
-			}
-			isMoving = false;
-			ShowSendCallback();
-		}
-	}
-
-	protected void HideUnlockCallback(Hashtable hash){
-		// Since LeanTween uses BroadcastMessage, it applies to all children, check for self object
-		if(hash["selfCaller"] == this.gameObject){
-			// If this tween locks the UI, now that the tween is finished, decrement the counter
-			if(blockUI){
-				ClickManager.Instance.DecrementTweenCount();
-			}
-			isMoving = false;
-			HideSendCallback();
-		}
-	}
-
-	protected void ShowSendCallback(){		
+	protected void ShowSendCallback(){	
+		isMoving = false;
 		if(string.IsNullOrEmpty(ShowFunctionName)){
 			return;
 		}
@@ -177,6 +165,7 @@ public class TweenToggle : MonoBehaviour{
 	}
 
 	protected void HideSendCallback(){
+		isMoving = false;
 		if(string.IsNullOrEmpty(HideFunctionName)){
 			return;
 		}

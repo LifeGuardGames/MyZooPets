@@ -45,14 +45,14 @@ public class GameTutorialFocusInhaler : GameTutorial{
 
 	private void FocusInhaler(){
 		// begin listening for when the inhaler is clicked
-		LgButton button = goInhaler.GetComponent<LgButton>();
+		LgWorldButton button = goInhaler.GetComponent<LgWorldButton>();
 		button.OnProcessed += InhalerClicked;
 		
 		// the inhaler is the only object that can be clicked
 		AddToProcessList(goInhaler);
 	
 		// spotlight the inhaler
-		SpotlightObject(goInhaler, fingerHint: true, fingerHintFlip: true);
+		SpotlightObject(goInhaler, hasFingerHint: true, fingerHintFlip: true);
 
 		TutorialManager.Instance.StartCoroutine(CreateFocusInhalerTutMessage());
 	}
@@ -60,18 +60,14 @@ public class GameTutorialFocusInhaler : GameTutorial{
 	private IEnumerator CreateFocusInhalerTutMessage(){
 		yield return new WaitForSeconds(0.5f);
 
-		string tutKey = GetKey() + "_" + GetStep();
+		// Create a custom message with the pet's name
+		string tutKey = GetKey() + "_" + CurrentStep;
 		string petName = DataManager.Instance.GameData.PetInfo.PetName;
-		string message = String.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
+		string message = string.Format(Localization.Localize(tutKey), StringUtils.FormatStringPossession(petName));
 		
-		// show popup message
 		Vector3 popupLoc = Constants.GetConstant<Vector3>("InhalerPopupLoc");
 		
-		Hashtable option = new Hashtable();
-		option.Add(TutorialPopupFields.ShrinkBgToFitText, true);
-		option.Add(TutorialPopupFields.Message, message);
-		
-		ShowPopup(Tutorial.POPUP_STD, popupLoc, option: option);
+		ShowPopup(TUTPOPUPTEXT, popupLoc, customMessage: message);
 	}
 
 	/// <summary>
@@ -82,7 +78,7 @@ public class GameTutorialFocusInhaler : GameTutorial{
 	/// <param name="args">Arguments.</param>
 	private void InhalerClicked(object sender, EventArgs args){
 		// stop listening for this event
-		LgButton button = (LgButton)sender;
+		LgWorldButton button = (LgWorldButton)sender;
 		button.OnProcessed -= InhalerClicked;
 		
 		// go to the next step

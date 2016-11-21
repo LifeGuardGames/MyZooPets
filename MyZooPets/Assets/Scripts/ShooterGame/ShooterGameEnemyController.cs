@@ -7,7 +7,7 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 	public EventHandler<EventArgs> OnTutorialStepDone;					//tutorial event handeler
 	public List<ImmutableDataShooterArmy> enemyList;		// list of the various enemy types
 	public int enemiesInWave = 0;							// the number of enemies in the current wave											
-	private ImmutableDataWave currentWave;					// our current wave
+	public ImmutableDataWave currentWave;					// our current wave
 
 	public void Reset(){
 		enemiesInWave = 0;
@@ -21,7 +21,9 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 	// builds a list of waves
 	public ImmutableDataWave buildWave(int waveNumber){
 		int difficulty = 0;
-		if(waveNumber % 10 == 0 && waveNumber !=0){
+		if(waveNumber % 5 == 0 && waveNumber !=0){
+		//Debug.Log(waveNumber);
+		//if(waveNumber == 1) {
 			return DataLoaderWaves.GetData("Boss Wave_1");
 		}
 		if(waveNumber == 0){
@@ -80,21 +82,22 @@ public class ShooterGameEnemyController : Singleton<ShooterGameEnemyController>{
 		}
 		else{
 			ShooterSpawnManager.Instance.SpawnTriggers(waveEnemies);
+			
 		}
 	}
 
 	// checks if all enemies are dead and if yes, begin day transition
 	public void CheckEnemiesInWave(){
-		if(ShooterGameManager.Instance.GetGameState() == MinigameStates.Playing){
+		if(!ShooterGameManager.Instance.isGameOver){
 			if(enemiesInWave == 0){
 				if(ShooterGameManager.Instance.inTutorial){
 					if(OnTutorialStepDone != null){
 						OnTutorialStepDone(this, EventArgs.Empty);
 					}
 				}
-				ShooterInhalerManager.Instance.CanUseInhalerButton = false;
-				ShooterGameManager.Instance.StartTimeTransition();
 			}
 		}
 	}
+
+
 }

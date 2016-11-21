@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public static class GameObjectUtils{
 
@@ -39,7 +38,7 @@ public static class GameObjectUtils{
 			Transform t = go.transform;
 
 			if(parent != null){
-				t.parent = parent.transform;
+				t.SetParent(parent.transform);
 
 				if(!isPreserveLayer){
 					go.layer = parent.layer;
@@ -143,5 +142,23 @@ public static class GameObjectUtils{
 	static public Vector2 GetRandomPointOnCircumference(Vector2 center, float radius){
 		Vector3 position = GetRandomPointOnCircumference(new Vector3(center.x, center.y, 0f), radius);
 		return new Vector2(position.x, position.y);
+	}
+
+	// Pass by reference
+	static public void SetAnchor(ref RectTransform rect, InterfaceAnchors anchor) {
+		switch(anchor) {
+			case InterfaceAnchors.BottomLeft:
+				rect.anchorMax = Vector2.zero;
+				rect.anchorMin = Vector2.zero;
+				break;
+			case InterfaceAnchors.Right:
+				rect.anchorMax = new Vector2(1f, 0.5f);
+				rect.anchorMin = new Vector2(1f, 0.5f);
+				break;
+			default:
+				// Nothing implemented yet
+				Debug.LogWarning("NOTHING IMPLEMENTED");
+				break;
+		}
 	}
 }

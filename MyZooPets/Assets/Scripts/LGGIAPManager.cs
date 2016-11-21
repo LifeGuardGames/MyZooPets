@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 
+/*
 public class IAPEventArgs : EventArgs{
 	public InAppPurchaseState purchaseState;
 
@@ -9,8 +10,10 @@ public class IAPEventArgs : EventArgs{
 		purchaseState = state;
 	}
 }
+*/
 
 public class LGGIAPManager : Singleton<LGGIAPManager>{
+	/*
 	public static EventHandler<IAPEventArgs> OnTransactionFinishedUI;
 
 	public const string IAP_REMOVE_ADS = "com.LifeGuardGames.WellapetsAsthma.IAP.RemoveAds";
@@ -124,4 +127,5 @@ public class LGGIAPManager : Singleton<LGGIAPManager>{
 	public string GetCurrencySymbol(string productID){
 		return IOSInAppPurchaseManager.Instance.GetProductById(productID).CurrencySymbol;
 	}
+	*/
 }

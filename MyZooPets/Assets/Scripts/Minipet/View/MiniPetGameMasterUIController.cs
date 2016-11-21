@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class MiniPetGameMasterUIController : MonoBehaviour{
-	public UILabel label;
-	public UISprite spriteIcon;
+	public Text label;
+	public Image spriteIcon;
 	public GameObject rewardButton;
 
 	// tween object for when the task is completed
@@ -16,19 +17,15 @@ public class MiniPetGameMasterUIController : MonoBehaviour{
 
 	public void InitializeContent(string taskID, MinigameTypes type, MiniPetGameMaster gameMasterScript){
 		this.gameMasterScript = gameMasterScript;
-		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(taskID); 
-		task = listTasks[0];
+		task = WellapadMissionController.Instance.GetTask(taskID); 
 		ImmutableDataWellapadTask missionTask = DataLoaderWellapadTasks.GetTask(task.TaskID);
 		string desc = missionTask.GetText();
-		rewardButton.GetComponent<LgButtonMessage>().target = MiniPetManager.Instance.MiniPetTable["MiniPet1"];
 		if(task.Amount > 0){
 			desc = String.Format(desc, task.Amount);
 		}
 		label.text = desc;
-
-		spriteIcon.spriteName = "mapIcons" + type.ToString();
-		spriteIcon.MakePixelPerfect();
-
+		spriteIcon.sprite = SpriteCacheManager.GetSprite("mapIcons" + type.ToString());
+		rewardButton.SetActive(false);
 		SetCheckboxSprite(true);
 	}
 

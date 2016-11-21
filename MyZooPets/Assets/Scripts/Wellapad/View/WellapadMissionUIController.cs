@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 //---------------------------------------------------
@@ -41,7 +40,7 @@ public class WellapadMissionUIController : MonoBehaviour {
 	// Creates the mission entries for the Wellapad.
 	//---------------------------------------------------	
 	private void CreateMissions() {		
-		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentMissions();
+		List<string> currentMissions = WellapadMissionController.Instance.GetCurrentTasks();
 		// create our missions
 		if(currentMissions.Count > 0)
 			foreach (string strMission in currentMissions)
@@ -56,16 +55,13 @@ public class WellapadMissionUIController : MonoBehaviour {
 	//---------------------------------------------------	
 	private void CreateMission(string missionType){	
 		// find the available tasks for the mission and add them
-		List<MutableDataWellapadTask> listTasks = WellapadMissionController.Instance.GetTasks(missionType);
-		for ( int i = 0; i < listTasks.Count; i++ ){
-			MutableDataWellapadTask task = listTasks[i];
+		MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(missionType);
+	
+		GameObject goTask = GameObjectUtils.AddChild(goGrid, prefabTask);
+		SetNameForGrid( goTask );
 			
-			GameObject goTask = NGUITools.AddChild(goGrid, prefabTask);
-			SetNameForGrid( goTask );
-			
-			// init this task UI with the task itself
-			goTask.GetComponent<WellapadTaskUI>().Init(task);
-		}
+		// init this task UI with the task itself
+		goTask.GetComponent<WellapadTaskUI>().Init(task);
 	}
 	
 	//---------------------------------------------------
@@ -107,11 +103,11 @@ public class WellapadMissionUIController : MonoBehaviour {
 		// and create the missions anew
 		CreateMissions();
 	
-		StartCoroutine(GridRepo());
+	//	StartCoroutine(GridRepo());
 	}
 
-	private IEnumerator GridRepo(){
-		yield return 0; 
-		goGrid.GetComponent<UIGrid>().Reposition();
-	}
+//	private IEnumerator GridRepo(){
+//		yield return 0; 
+//		goGrid.GetComponent<UIGrid>().Reposition();
+	//}
 }

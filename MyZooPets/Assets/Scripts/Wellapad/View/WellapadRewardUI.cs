@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 //---------------------------------------------------
 // WellapadRewardUI
@@ -7,7 +6,6 @@ using System.Collections;
 // missions list.  This is basically just the text
 // and button for the rewerad.
 //---------------------------------------------------
-
 public class WellapadRewardUI : MonoBehaviour {
 	// mission ID of this reward
 	private string strMissionID;
@@ -15,9 +13,6 @@ public class WellapadRewardUI : MonoBehaviour {
 	// button for the reward
 	//public WellapadRewardButton buttonReward;
 	
-	//---------------------------------------------------
-	// Init()
-	//---------------------------------------------------	
 	public void Init( string strMissionID ) {
 		// cache the task
 		this.strMissionID = strMissionID;

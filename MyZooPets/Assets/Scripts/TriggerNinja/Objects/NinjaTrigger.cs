@@ -39,7 +39,7 @@ public class NinjaTrigger : MonoBehaviour{
 		visibleChildrenCount = children.Length;
 		
 		// we don't want our objects colliding with each other
-		GetComponent<Rigidbody>().detectCollisions = false;	
+		rigidbody.detectCollisions = false;	
 		
 		// event listeners
 		NinjaManager.OnStateChanged += OnGameStateChanged; 	// game state changes so the character can react appropriately
@@ -146,15 +146,15 @@ public class NinjaTrigger : MonoBehaviour{
 	private void OnPause(bool bPaused){
 		if(bPaused){
 			// game is pausing, so save velocities and stop movement
-			savedVelocity = GetComponent<Rigidbody>().velocity;
-			savedAngularVelocity = GetComponent<Rigidbody>().angularVelocity;
-			GetComponent<Rigidbody>().isKinematic = true;
+			savedVelocity = rigidbody.velocity;
+			savedAngularVelocity = rigidbody.angularVelocity;
+			rigidbody.isKinematic = true;
 		}
 		else{
 			// game is unpausing, so resume movement and reapply velocities
-			GetComponent<Rigidbody>().isKinematic = false;
-			GetComponent<Rigidbody>().AddForce(savedVelocity, ForceMode.VelocityChange);
-			GetComponent<Rigidbody>().AddTorque(savedAngularVelocity, ForceMode.VelocityChange);			
+			rigidbody.isKinematic = false;
+			rigidbody.AddForce(savedVelocity, ForceMode.VelocityChange);
+			rigidbody.AddTorque(savedAngularVelocity, ForceMode.VelocityChange);			
 		}
 	}
 	
@@ -214,7 +214,7 @@ public class NinjaTrigger : MonoBehaviour{
 			}
 			else{
 				if(this.GetComponent<NinjaTriggerBomb>() ==null){
-					gameObject.GetComponent<Rigidbody>().AddForce(-(gameObject.GetComponent<Rigidbody>().velocity*(100)));
+					gameObject.rigidbody.AddForce(-(gameObject.rigidbody.velocity*(100)));
 				}
 			}
 		}		

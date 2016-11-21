@@ -69,7 +69,7 @@ public class AdvairDragToRotate : MonoBehaviour {
             completelyOpened = true;
             if(InhalerLogic.Instance.IsCurrentStepCorrect(advairStepID)){
                 InhalerLogic.Instance.NextStep();
-                GetComponent<Collider>().enabled = false;
+                collider.enabled = false;
             }
         }
     }

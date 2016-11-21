@@ -643,7 +643,7 @@ public class tk2dStaticSpriteBatcher : MonoBehaviour, tk2dRuntime.ISpriteCollect
 			mesh.RecalculateBounds();
 		}
 		
-		GetComponent<Renderer>().sharedMaterials = materials.ToArray();
+		renderer.sharedMaterials = materials.ToArray();
 	}
 
 	void BuildPhysicsMesh()
@@ -653,7 +653,7 @@ public class tk2dStaticSpriteBatcher : MonoBehaviour, tk2dRuntime.ISpriteCollect
 		MeshCollider meshCollider = GetComponent<MeshCollider>();
 		if (meshCollider != null)
 		{
-			if (GetComponent<Collider>() != meshCollider) {
+			if (collider != meshCollider) {
 				// Already has a collider
 				return;
 			}

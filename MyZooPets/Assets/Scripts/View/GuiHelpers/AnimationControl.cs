@@ -33,7 +33,7 @@ public class AnimationControl : MonoBehaviour {
 		}
 
 		if(thisAnimation == null){
-			thisAnimation = GetComponent<Animation>();
+			thisAnimation = animation;
 		}
 	}
 

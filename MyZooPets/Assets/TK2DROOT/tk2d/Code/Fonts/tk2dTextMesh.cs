@@ -380,7 +380,7 @@ public class tk2dTextMesh : MonoBehaviour, tk2dRuntime.ISpriteCollectionForceBui
 	Renderer CachedRenderer {
 		get {
 			if (_cachedRenderer == null) {
-				_cachedRenderer = GetComponent<Renderer>();
+				_cachedRenderer = renderer;
 			}
 			return _cachedRenderer;
 		}
@@ -704,7 +704,7 @@ public class tk2dTextMesh : MonoBehaviour, tk2dRuntime.ISpriteCollectionForceBui
 		}
 		else if (Camera.main)
 		{
-			if (Camera.main.orthographic)
+			if (Camera.main.isOrthoGraphic)
 			{
 				s = Camera.main.orthographicSize;
 			}
@@ -730,8 +730,8 @@ public class tk2dTextMesh : MonoBehaviour, tk2dRuntime.ISpriteCollectionForceBui
 	
 	void UpdateMaterial()
 	{
-		if (GetComponent<Renderer>().sharedMaterial != _fontInst.materialInst)
-			GetComponent<Renderer>().material = _fontInst.materialInst;
+		if (renderer.sharedMaterial != _fontInst.materialInst)
+			renderer.material = _fontInst.materialInst;
 	}
 	
 	public void ForceBuild()

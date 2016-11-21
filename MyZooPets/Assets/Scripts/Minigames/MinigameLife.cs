@@ -72,8 +72,8 @@ public class MinigameLife : MonoBehaviour{
 			Toggle(false);
 
 			// Play the camera shake animation
-			if(Camera.main.GetComponent<Animation>() != null){
-				Camera.main.GetComponent<Animation>().Play();
+			if(Camera.main.animation != null){
+				Camera.main.animation.Play();
 			}
 
 			if(bloodPanelControl != null){

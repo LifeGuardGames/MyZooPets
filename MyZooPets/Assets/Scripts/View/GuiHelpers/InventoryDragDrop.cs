@@ -56,8 +56,8 @@ public class InventoryDragDrop : MonoBehaviour{
 	}
 
 	public void reAddClick(object sender, EventArgs args){
-		if(this.GetComponent<Collider>() != null){
-			this.GetComponent<Collider>().enabled = true;
+		if(this.collider != null){
+			this.collider.enabled = true;
 		}
 	}
 
@@ -252,7 +252,7 @@ public class InventoryDragDrop : MonoBehaviour{
 			
 			HUDUIManager.Instance.HideLabels();
 			mIsDragging = false;
-			Collider col = GetComponent<Collider>();
+			Collider col = collider;
 
 			if (col != null) col.enabled = !isPressed;
 			if (!isPressed) Drop();

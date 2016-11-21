@@ -612,7 +612,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	private void HideUnuseTab(Transform tab){
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = false;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = false;
-		tab.GetComponent<Collider>().enabled = false;
+		tab.collider.enabled = false;
 	}
 
 	/// <summary>
@@ -623,7 +623,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		tab.GetComponent<UIImageButton>().isEnabled = true;
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.GetComponent<Collider>().enabled = true;
+		tab.collider.enabled = true;
 	}
 
 	/// <summary>
@@ -634,7 +634,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		tab.GetComponent<UIImageButton>().isEnabled = false;
 		tab.FindChild("TabBackground").gameObject.GetComponent<UISprite>().enabled = true;
 		tab.FindChild("TabImage").gameObject.GetComponent<UISprite>().enabled = true;
-		tab.GetComponent<Collider>().enabled = false;
+		tab.collider.enabled = false;
 	}
 
 	//------------------------------------------

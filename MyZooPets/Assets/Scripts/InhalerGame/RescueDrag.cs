@@ -57,7 +57,7 @@ public class RescueDrag : InhalerPart{
     }
 
     protected override void Enable(){
-        transform.GetComponent<Collider>().enabled = true;
+        transform.collider.enabled = true;
 
         foreach(GameObject targetCollider in targetColliders)
             targetCollider.SetActive(true);
@@ -70,7 +70,7 @@ public class RescueDrag : InhalerPart{
 		AudioManager.Instance.PlayClip( "inhalerToMouth" );
 		
         base.NextStep();
-        transform.GetComponent<Collider>().enabled = false;
+        transform.collider.enabled = false;
 
         foreach(GameObject targetCollider in targetColliders)
             targetCollider.SetActive(false);

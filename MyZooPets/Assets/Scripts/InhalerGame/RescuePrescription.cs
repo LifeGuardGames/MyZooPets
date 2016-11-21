@@ -53,11 +53,11 @@ public class RescuePrescription : InhalerPart{
     }
 
     protected override void Disable(){
-        transform.GetComponent<Collider>().enabled = false;
+        transform.collider.enabled = false;
     }
 
     protected override void Enable(){
-        transform.GetComponent<Collider>().enabled = true;
+        transform.collider.enabled = true;
     }
 
     protected override void NextStep(){

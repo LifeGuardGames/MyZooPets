@@ -26,7 +26,7 @@ public class FloatyControllerTextMesh : MonoBehaviour{
 			}
 		}
 		textColor = textMesh.color;
-		textMesh.GetComponent<Renderer>().sortingLayerName = rendererLayer;
+		textMesh.renderer.sortingLayerName = rendererLayer;
 
 		FloatUp();
 	}

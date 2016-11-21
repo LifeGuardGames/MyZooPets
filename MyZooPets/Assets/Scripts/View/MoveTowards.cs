@@ -27,8 +27,8 @@ public class MoveTowards : MonoBehaviour {
 			if(isDestroyOnTouch){
 				if(transform.position == target.transform.position && finished == false){
 					finished = true;
-					if(gameObject.GetComponent<Renderer>() != null){
-						gameObject.GetComponent<Renderer>().enabled = false;
+					if(gameObject.renderer != null){
+						gameObject.renderer.enabled = false;
 					}
 					DoCallback();
 					Destroy(gameObject, destroyDelay);

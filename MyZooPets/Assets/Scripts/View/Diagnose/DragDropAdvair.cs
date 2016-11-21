@@ -22,7 +22,7 @@ public class DragDropAdvair : MonoBehaviour {
             }
 
             mIsDragging = false;
-            Collider col = GetComponent<Collider>();
+            Collider col = collider;
             
             //collider needs to be disabled while dragging otherwise it will catch the OnDrop event
             if(col != null) col.enabled = !isPressed; 

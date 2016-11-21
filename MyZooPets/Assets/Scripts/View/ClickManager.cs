@@ -80,8 +80,8 @@ public class ClickManager : Singleton<ClickManager>{
 		if(UIRoot == null){
 			UIRoot = GameObject.Find("UI Root (2D)");
 		}
-		BoxCollider col = UIRoot.GetComponent<Collider>() as BoxCollider;
-		if(UIRoot.GetComponent<Collider>() == null){
+		BoxCollider col = UIRoot.collider as BoxCollider;
+		if(UIRoot.collider == null){
 			col = UIRoot.AddComponent<BoxCollider>();
 			col.center = new Vector3(0, 0, 50); // so this collider is behind all actual GUI elements and won't interfere with them
 			col.size = new Vector3(3000, 3000, 1); // this should be big enough to account for all different resolutions

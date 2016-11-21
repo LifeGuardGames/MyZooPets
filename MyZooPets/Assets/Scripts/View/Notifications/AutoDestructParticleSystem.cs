@@ -7,7 +7,7 @@ public class AutoDestructParticleSystem : MonoBehaviour
 {
     void LateUpdate ()
     {
-        if (!GetComponent<ParticleSystem>().IsAlive())
+        if (!particleSystem.IsAlive())
             Object.Destroy (this.gameObject);
     }
 }

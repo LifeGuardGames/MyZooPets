@@ -28,7 +28,7 @@ public class BallBouncing : MonoBehaviour {
 	private void MovePet(){
 		GameObject pet = GameObject.Find("Pet");
 		//teleport first then walk into view
-		if(!pet.GetComponent<Renderer>().isVisible)
+		if(!pet.renderer.isVisible)
 			PetMovement.Instance.petSprite.transform.position = new Vector3(transform.position.x-4f, 0, 26.65529f);
 		PetMovement.Instance.MovePet(this.gameObject.transform.position);
 	}
@@ -37,7 +37,7 @@ public class BallBouncing : MonoBehaviour {
 		Debug.Log("working");
 		combo++;
 		Debug.Log(new Vector2 ((transform.position.x - e.Position.x),force.y));
-		transform.GetComponent<Rigidbody>().AddForceAtPosition(new Vector2 (((transform.position.x - e.Position.x)+300),force.y), e.Position);
+		transform.rigidbody.AddForceAtPosition(new Vector2 (((transform.position.x - e.Position.x)+300),force.y), e.Position);
 	}
 
 	void OnCollisionEnter (Collision col){

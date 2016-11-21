@@ -9,7 +9,7 @@ public class LookAtCamera : MonoBehaviour {
 	
 	void Start(){
 		if(!camera)
-			camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+			camera = GameObject.Find("Main Camera").camera;
 
 		// Flip the camera because we are using look at which looks at the back of it..
 		transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);

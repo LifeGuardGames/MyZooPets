@@ -106,7 +106,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			PetAnimationManager.Instance.DisableIdleAnimation();
 			PetMovement.Instance.canMove = false;
 			isActive = true;
-			zoomItem.GetComponent<Collider>().enabled = false;
+			zoomItem.collider.enabled = false;
 			
 			backButton.SetActive(true);
 		}
@@ -128,7 +128,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 			this.GetComponent<TweenToggleDemux>().Hide();
 			PetMovement.Instance.canMove = true;
 			isActive = false;
-			zoomItem.GetComponent<Collider>().enabled = true;
+			zoomItem.collider.enabled = true;
 
 			CameraManager.Instance.ZoomOutMove();
 			PetAnimationManager.Instance.EnableIdleAnimation();
@@ -148,7 +148,7 @@ public class AccessoryUIManager : SingletonUI<AccessoryUIManager>{
 	private void MovePet(){
 		GameObject pet = GameObject.Find("Pet");
 		//teleport first then walk into view
-		if(!pet.GetComponent<Renderer>().isVisible)
+		if(!pet.renderer.isVisible)
 		PetMovement.Instance.petSprite.transform.position = new Vector3(-4f, 0, 26.65529f);
 		PetMovement.Instance.MovePetFromAccessory(new Vector3(-8f, 0, 26.65529f));
 

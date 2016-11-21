@@ -22,9 +22,9 @@ public class BGController : Singleton<BGController> {
 	
 	public void AssignMaterial(string material){
 		if(material == "blue")
-			GetComponent<Renderer>().material = blue;
+			renderer.material = blue;
 		if(material == "black")
-			GetComponent<Renderer>().material = black;
+			renderer.material = black;
 	}
 	
 	public void Hide(){

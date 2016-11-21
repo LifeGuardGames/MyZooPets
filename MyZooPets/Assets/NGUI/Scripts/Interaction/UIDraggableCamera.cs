@@ -70,7 +70,7 @@ public class UIDraggableCamera : IgnoreTimeScale
 
 	void Awake ()
 	{
-		mCam = GetComponent<Camera>();
+		mCam = camera;
 		mTrans = transform;
 
 		if (rootForBounds == null)

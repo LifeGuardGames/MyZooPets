@@ -23,7 +23,7 @@ public class MinipetEggClickController : MonoBehaviour {
 				MiniPetManager.Instance.StartHatchSequence(minipet.MinipetId);
 
 				// Tidy up
-				Destroy(this.GetComponent<Collider>());
+				Destroy(this.collider);
 				Destroy(this);
 			}
 		}

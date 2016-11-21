@@ -27,7 +27,7 @@ public class FlameChartUIManager : SingletonUI<FlameChartUIManager> {
 		InventoryUIManager.Instance.HidePanel();
 		
 		// disable the collider so the user can't click the chart again
-		gameObject.GetComponent<Collider>().enabled = false;
+		gameObject.collider.enabled = false;
 
 		// enable the back button for the user to back out
 		goBackButton.SetActive(true);
@@ -38,7 +38,7 @@ public class FlameChartUIManager : SingletonUI<FlameChartUIManager> {
 	//---------------------------------------------------
 	protected override void _CloseUI(){
 		// enable the collider so that the board can be clicked again
-		gameObject.GetComponent<Collider>().enabled = true;
+		gameObject.collider.enabled = true;
 		
 		// zoom out
 		CameraManager.Instance.ZoomOutMove();

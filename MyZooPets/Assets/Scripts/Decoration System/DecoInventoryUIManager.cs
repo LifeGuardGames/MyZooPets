@@ -382,11 +382,11 @@ public class DecoInventoryUIManager : SingletonUI<DecoInventoryUIManager> {
 		}
 
 		if(isPulseShopButton){
-			shopButtonParent.GetComponent<Animation>().Play();
+			shopButtonParent.animation.Play();
 			sunbeamObject.SetActive(true);
 		}
 		else{
-			shopButtonParent.GetComponent<Animation>().Stop();
+			shopButtonParent.animation.Stop();
 			GameObjectUtils.ResetLocalScale(shopButtonParent);
 			sunbeamObject.SetActive(false);
 		}

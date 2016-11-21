@@ -29,38 +29,38 @@ public class RememberClickableItems : MonoBehaviour {
     public GameObject firstTrophy;
 
     public void ActivatePartition1(){
-        notebook.GetComponent<Collider>().enabled = true;
-        calendar.GetComponent<Collider>().enabled = true;
-        laptop.GetComponent<Collider>().enabled = true;
-        realInhaler.GetComponent<Collider>().enabled = true;
-        practiceInhaler.GetComponent<Collider>().enabled = true;
-        slotMachine.GetComponent<Collider>().enabled = true;
+        notebook.collider.enabled = true;
+        calendar.collider.enabled = true;
+        laptop.collider.enabled = true;
+        realInhaler.collider.enabled = true;
+        practiceInhaler.collider.enabled = true;
+        slotMachine.collider.enabled = true;
 
-        trophyShelf.GetComponent<Collider>().enabled = false;
-        firstTrophy.GetComponent<Collider>().enabled = false;
+        trophyShelf.collider.enabled = false;
+        firstTrophy.collider.enabled = false;
     }
 
     public void ActivatePartition2(){
-        notebook.GetComponent<Collider>().enabled = false;
-        calendar.GetComponent<Collider>().enabled = false;
-        laptop.GetComponent<Collider>().enabled = false;
-        realInhaler.GetComponent<Collider>().enabled = false;
-        practiceInhaler.GetComponent<Collider>().enabled = false;
-        slotMachine.GetComponent<Collider>().enabled = false;
+        notebook.collider.enabled = false;
+        calendar.collider.enabled = false;
+        laptop.collider.enabled = false;
+        realInhaler.collider.enabled = false;
+        practiceInhaler.collider.enabled = false;
+        slotMachine.collider.enabled = false;
 
-        trophyShelf.GetComponent<Collider>().enabled = true;
-        firstTrophy.GetComponent<Collider>().enabled = true;
+        trophyShelf.collider.enabled = true;
+        firstTrophy.collider.enabled = true;
     }
 
     public void ActivatePartition3(){
-        notebook.GetComponent<Collider>().enabled = false;
-        calendar.GetComponent<Collider>().enabled = false;
-        laptop.GetComponent<Collider>().enabled = false;
-        realInhaler.GetComponent<Collider>().enabled = false;
-        practiceInhaler.GetComponent<Collider>().enabled = false;
-        slotMachine.GetComponent<Collider>().enabled = false;
+        notebook.collider.enabled = false;
+        calendar.collider.enabled = false;
+        laptop.collider.enabled = false;
+        realInhaler.collider.enabled = false;
+        practiceInhaler.collider.enabled = false;
+        slotMachine.collider.enabled = false;
 
-        trophyShelf.GetComponent<Collider>().enabled = false;
-        firstTrophy.GetComponent<Collider>().enabled = false;
+        trophyShelf.collider.enabled = false;
+        firstTrophy.collider.enabled = false;
     }
 }

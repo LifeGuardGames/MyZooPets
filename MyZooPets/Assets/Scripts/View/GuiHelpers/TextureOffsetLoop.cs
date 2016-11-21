@@ -8,6 +8,6 @@ public class TextureOffsetLoop : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector2 offset = new Vector2(increment.x * Time.time, increment.y * Time.time);
-		GetComponent<Renderer>().material.mainTextureOffset = offset;
+		renderer.material.mainTextureOffset = offset;
 	}
 }

@@ -105,7 +105,7 @@ public class UITextList : MonoBehaviour
 		if (textLabel == null) textLabel = GetComponentInChildren<UILabel>();
 		if (textLabel != null) textLabel.lineWidth = 0;
 
-		Collider col = GetComponent<Collider>();
+		Collider col = collider;
 
 		if (col != null)
 		{

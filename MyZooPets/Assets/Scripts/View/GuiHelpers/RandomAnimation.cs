@@ -42,7 +42,7 @@ public class RandomAnimation : MonoBehaviour {
 				generatedValue = Random.Range(minInterval, maxInterval);
 				
 				// Do the action here
-				GetComponent<Animation>().Play();
+				animation.Play();
 			}
 		}
 	}

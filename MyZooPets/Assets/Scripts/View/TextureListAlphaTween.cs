@@ -21,9 +21,9 @@ public class TextureListAlphaTween : MonoBehaviour {
 
 		foreach(GameObject go in gameObjectList){
 			LeanTween.cancel(go);
-			go.GetComponent<Renderer>().material.color = new Color(go.GetComponent<Renderer>().material.color.r,
-			                                       go.GetComponent<Renderer>().material.color.g,
-			                                       go.GetComponent<Renderer>().material.color.b,
+			go.renderer.material.color = new Color(go.renderer.material.color.r,
+			                                       go.renderer.material.color.g,
+			                                       go.renderer.material.color.b,
 			                                       hideAlpha);
 		}
 	}
@@ -31,9 +31,9 @@ public class TextureListAlphaTween : MonoBehaviour {
 	public void InstantShow(){
 		foreach(GameObject go in gameObjectList){
 			LeanTween.cancel(go);
-			go.GetComponent<Renderer>().material.color = new Color(go.GetComponent<Renderer>().material.color.r,
-			                                       go.GetComponent<Renderer>().material.color.g,
-			                                       go.GetComponent<Renderer>().material.color.b,
+			go.renderer.material.color = new Color(go.renderer.material.color.r,
+			                                       go.renderer.material.color.g,
+			                                       go.renderer.material.color.b,
 			                                       showAlpha);
 		}
 	}

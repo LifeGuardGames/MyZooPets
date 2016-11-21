@@ -118,7 +118,7 @@ public class tk2dCamera : MonoBehaviour
 	private Camera UnityCamera {
 		get {
 			if (_unityCamera == null) {
-				_unityCamera = GetComponent<Camera>();
+				_unityCamera = camera;
 				if (_unityCamera == null) {
 					Debug.LogError("A unity camera must be attached to the tk2dCamera script");
 				}
@@ -275,7 +275,7 @@ public class tk2dCamera : MonoBehaviour
 			UpdateCameraMatrix();
 		}
 		else {
-			this.GetComponent<Camera>().enabled = false;
+			this.camera.enabled = false;
 		}
 		
 		if (!viewportClippingEnabled) // the main camera can't display rect
@@ -724,10 +724,10 @@ public class tk2dCamera : MonoBehaviour
 				}
 
 				// Mirror camera settings
-				Camera unityCamera = GetComponent<Camera>();
+				Camera unityCamera = camera;
 				if (unityCamera != null) {
 					cameraSettings.rect = unityCamera.rect;
-					if (!unityCamera.orthographic) {
+					if (!unityCamera.isOrthoGraphic) {
 						cameraSettings.projection = tk2dCameraSettings.ProjectionType.Perspective;
 						cameraSettings.fieldOfView = unityCamera.fieldOfView * ZoomFactor;
 					}

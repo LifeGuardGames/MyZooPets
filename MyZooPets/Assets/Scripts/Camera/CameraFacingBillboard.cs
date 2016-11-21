@@ -6,7 +6,7 @@ public class CameraFacingBillboard : MonoBehaviour{
 
 	void Start(){
 		if(!camera)
-			camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+			camera = GameObject.Find("Main Camera").camera;
 		transform.LookAt(transform.position + camera.transform.rotation * Vector3.forward,
             camera.transform.rotation * Vector3.up);
 	}

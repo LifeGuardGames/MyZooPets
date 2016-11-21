@@ -55,7 +55,7 @@ public class MemoryCard : MonoBehaviour {
 
 		// Assign the respective trigger type particle
 		GameObject particlePrefab = Resources.Load(triggerData.TypeParticlePrefab) as GameObject;
-		triggerTypeParticle = GameObjectUtils.AddChildWithTransform(this.gameObject, particlePrefab).GetComponent<ParticleSystem>();
+		triggerTypeParticle = GameObjectUtils.AddChildWithTransform(this.gameObject, particlePrefab).particleSystem;
 	}
 
 	void OnTap(TapGesture gesture){

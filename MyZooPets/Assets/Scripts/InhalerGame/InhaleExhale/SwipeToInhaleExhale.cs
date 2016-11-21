@@ -61,12 +61,12 @@ public class SwipeToInhaleExhale : MonoBehaviour {
     //Event Listener
     private void CheckAndEnable(object sender, EventArgs args){
         if(gameStepID == InhalerLogic.Instance.CurrentStep){
-            GetComponent<Collider>().enabled = true;  
+            collider.enabled = true;  
         }
     }
 
     private void Disable(){
-        GetComponent<Collider>().enabled = false;
+        collider.enabled = false;
     }
 
     //True: finger swiping down. Can be overridden by child class

@@ -88,7 +88,7 @@ public class ShooterEnemy : MonoBehaviour{
 			yield return new WaitForEndOfFrame();
 
 			isDead = true;
-			GetComponent<Collider2D>().enabled = false;
+			collider2D.enabled = false;
 			LeanTween.cancel(this.gameObject);
 			ShooterGameEnemyController.Instance.enemiesInWave--;
 			ShooterGameEnemyController.Instance.CheckEnemiesInWave();

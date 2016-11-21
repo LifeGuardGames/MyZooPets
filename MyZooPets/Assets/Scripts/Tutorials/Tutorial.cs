@@ -325,14 +325,14 @@ public abstract class Tutorial{
 		}
 
 		if(isButton){
-			goRetentionPet.GetComponent<Collider>().enabled = true;
+			goRetentionPet.collider.enabled = true;
 			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
 			message.enabled = true;
 			message.target = buttonTarget;
 			message.functionName = buttonFunctionName;
 		}
 		else{
-			goRetentionPet.GetComponent<Collider>().enabled = false;
+			goRetentionPet.collider.enabled = false;
 			UIButtonMessage message = goRetentionPet.GetComponent<UIButtonMessage>();
 			message.enabled = false;
 		}

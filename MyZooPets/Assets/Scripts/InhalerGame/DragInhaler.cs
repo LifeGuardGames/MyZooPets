@@ -21,12 +21,12 @@ public class DragInhaler : MonoBehaviour {
     }
 
     void Start(){
-       GetComponent<Collider>().enabled = false;
+       collider.enabled = false;
     }
 
     void Update(){
         if(InhalerLogic.Instance.CurrentStep != advairStepID) return;
-        if(!GetComponent<Collider>().enabled) GetComponent<Collider>().enabled = true;
+        if(!collider.enabled) collider.enabled = true;
         if(Input.touchCount > 0){
             Touch touch = Input.touches[0];
             switch(touch.phase){

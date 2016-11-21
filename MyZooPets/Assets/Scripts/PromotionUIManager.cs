@@ -30,7 +30,7 @@ public class PromotionUIManager : Singleton<PromotionUIManager> {
 		bool toggleAux = DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle;
 		DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle = !DataManager.Instance.GameData.AdViews.SeanAdViewsIosAlternateToggle;
 		return toggleAux;
-#elif
+#else
 		return true;
 #endif
 	}

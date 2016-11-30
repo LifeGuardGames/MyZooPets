@@ -50,6 +50,8 @@ public class AlphaTweenToggle : TweenToggle {
 			isShown = true;
 			isMoving = false;
 		}
+
+		ResetFinish();
 	}
 	
 	public override void Show(float time){

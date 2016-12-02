@@ -16,7 +16,7 @@ public class MoodAndHealthNotificationListener : MonoBehaviour {
 		PetHealthStates healthState = DataManager.Instance.GameData.Stats.GetHealthState();
 		if(healthState == PetHealthStates.Sick || healthState == PetHealthStates.VerySick) {
 			if(isReminderActive && !isRemindedThisPlayPeriod)
-				Invoke("ShowSuperWellaSickReminder", 0.25f);
+				Invoke("ShowPopupPetSick", 0.25f);
 		}
 		//else register for health state change and check if mood needs a notification
 		else {

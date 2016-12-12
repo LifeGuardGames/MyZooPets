@@ -75,8 +75,6 @@ public class PetSpeechAI : Singleton<PetSpeechAI> {
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(SpeechController.SpeechKeys.MessageText, Localization.Localize("NO_FIRE_FIRE_ORB"));
 		msgOption.Add(SpeechController.SpeechKeys.ImageTextureName, "itemFireCrystal");
-		msgOption.Add(SpeechController.SpeechKeys.ImageClickTarget, StoreUIManager.Instance.gameObject);
-		msgOption.Add(SpeechController.SpeechKeys.ImageClickFunctionName, "OpenToSubCategoryItemsWithLockAndCallBack");
 		speechController.Talk(msgOption);
 	}
 
@@ -84,13 +82,6 @@ public class PetSpeechAI : Singleton<PetSpeechAI> {
 		Hashtable msgOption = new Hashtable();
 		msgOption.Add(SpeechController.SpeechKeys.MessageText, Localization.Localize("NO_FIRE_INHALER_0"));
 		msgOption.Add(SpeechController.SpeechKeys.ImageTextureName, "itemInhalerMain");
-		speechController.Talk(msgOption);
-	}
-
-	public void ShowOutOfFireMsg() {
-		Hashtable msgOption = new Hashtable();
-		msgOption.Add(SpeechController.SpeechKeys.MessageText, Localization.Localize("NO_FIRE_INHALER_1"));
-		msgOption.Add(SpeechController.SpeechKeys.ImageTextureName, "progressFireCrystal");
 		speechController.Talk(msgOption);
 	}
 

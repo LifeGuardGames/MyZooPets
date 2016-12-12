@@ -24,6 +24,7 @@ public class TweenToggle : MonoBehaviour{
 	
 	public bool isUsingDemultiplexer = false;
 	public bool startsHidden = false;
+	public bool ignoreDisable = false;	// Do not disable when object is hidden
 	public float hideDeltaX; //Position, Scale, or Rotation depending on subclass
 	public float hideDeltaY;
 	public float hideDeltaZ;
@@ -87,7 +88,9 @@ public class TweenToggle : MonoBehaviour{
 	}
 
 	protected void ResetFinish() {
-		gameObject.SetActive(!startsHidden);
+		if(!ignoreDisable) {
+			gameObject.SetActive(!startsHidden);
+		}
 	}
 
 	//	void OnGUI(){
@@ -173,7 +176,9 @@ public class TweenToggle : MonoBehaviour{
 		isMoving = false;
 		if(string.IsNullOrEmpty(HideFunctionName)){
 			// Toggle object off
-			gameObject.SetActive(false);
+			if(!ignoreDisable) {
+				gameObject.SetActive(false);
+			}
 			return;
 		}
 		if(HideTarget == null){
@@ -191,6 +196,8 @@ public class TweenToggle : MonoBehaviour{
 		}
 
 		// Toggle object off
-		gameObject.SetActive(false);
+		if(!ignoreDisable) {
+			gameObject.SetActive(false);
+		}
 	}
 }

@@ -1,12 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 //---------------------------------------------------
 // DecorationItem
 // An item that is a decoration.
 //---------------------------------------------------
-
 public class DecorationItem : Item{
 
     // the type of decoration this is
@@ -24,8 +21,13 @@ public class DecorationItem : Item{
 	public string MaterialName{
 		get{ return materialName; }
 	}
-	
-    public DecorationItem(string id, ItemType type, Hashtable hashItemData) : base (id, type, hashItemData){
+
+	private bool inSeason = true;
+	public bool InSeason {
+		get { return inSeason; }
+	}
+
+	public DecorationItem(string id, ItemType type, Hashtable hashItemData) : base (id, type, hashItemData){
 		
 		// get the type of this decoration
     	string strType = XMLUtils.GetString(hashItemData["DecorationType"] as IXMLNode);
@@ -37,5 +39,8 @@ public class DecorationItem : Item{
 		if(hashItemData.Contains("MaterialName")){
 			materialName = XMLUtils.GetString(hashItemData["MaterialName"] as IXMLNode);
 		}
-    }
+		if(hashItemData.Contains("InSeason")) {
+			inSeason = XMLUtils.GetBool(hashItemData["InSeason"] as IXMLNode);
+		}
+	}
 }

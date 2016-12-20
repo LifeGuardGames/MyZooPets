@@ -77,6 +77,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		isPaused = false;
 		PlayerShooterController.Instance.gameObject.GetComponent<BoxCollider2D>().enabled = true;
 		PlayerShooterController.Instance.playerHealth = 5;
+		PlayerShooterController.Instance.ChangeState(PlayerShooterController.PlayerStateTypes.Neutral);
 		PlayerShooterController.Instance.ChangeFire();
 		//ShooterGameEnemyController.Instance.BuildEnemyList();
 	}

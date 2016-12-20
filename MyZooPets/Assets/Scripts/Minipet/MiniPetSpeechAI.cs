@@ -8,10 +8,10 @@ public class MiniPetSpeechAI : MonoBehaviour {
 
 	public void PetSpeechZoomToggle(bool isZoomed) {
 		if(isZoomed) {
-			speechCanvasTween.Hide();
+			speechCanvasTween.Show();
 		}
 		else {
-			speechCanvasTween.Show();
+			speechCanvasTween.Hide();
 		}
 	}
 

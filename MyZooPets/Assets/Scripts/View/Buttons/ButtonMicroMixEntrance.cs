@@ -8,9 +8,9 @@ public class ButtonMicroMixEntrance : ButtonChangeScene {
 	private bool isCanvasShowing = false;
 
 	void Start () {
-//		if(Debug.isDebugBuild) {
-//			return;
-//		}
+		if(Debug.isDebugBuild) {
+			return;
+		}
 		// Hide the object if you have not beat the game yet
 		if(!DataManager.Instance.GameData.MicroMix.HasWon) {
 			gameObject.SetActive(false);
@@ -26,11 +26,11 @@ public class ButtonMicroMixEntrance : ButtonChangeScene {
 	}
 
 	protected override void ProcessClick() {
-//		if(Debug.isDebugBuild) {
-//			Debug.LogWarning("DEBUG ENTRANCE, CLEAN UP HERE");
-//			Pass();
-//			return;
-//		}
+		if(Debug.isDebugBuild) {
+			Debug.LogWarning("DEBUG ENTRANCE, CLEAN UP HERE");
+			Pass();
+			return;
+		}
 		if(!isCanvasShowing) {
 			canvasToggle.Show();
 			isCanvasShowing = true;

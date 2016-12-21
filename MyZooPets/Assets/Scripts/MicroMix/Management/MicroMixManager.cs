@@ -278,6 +278,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		}
 		else {
 			ChangeMicro();
+			petAnim.animator.Play(petAnim.happyIdleAnimations[0], 0, 0);
 			yield return OutTransitionHelper();
 
 			isTransitioning = false;

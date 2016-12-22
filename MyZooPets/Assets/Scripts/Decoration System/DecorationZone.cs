@@ -20,7 +20,7 @@ public abstract class DecorationZone : MonoBehaviour, IDropInventoryTarget {
 
 	private bool isAnimationPlaying = false;
 	private string nodeID;
-	private string placedDecoID = string.Empty;
+	protected string placedDecoID = string.Empty;
 
 	protected abstract void _RemoveDecoration();                                        // removes the decoration
 	protected abstract void _SetDecoration(string decoID, bool isPlacedFromDecoMode);   // set the deco to this node
@@ -82,9 +82,11 @@ public abstract class DecorationZone : MonoBehaviour, IDropInventoryTarget {
 			Debug.LogError("Illegal deco placement for " + itemID + " on node " + gameObject);
 			return;
 		}
-
-		// If there was already a decoration here, remove it
-		if(HasDecoration()) {
+		
+		if(nodeType == DecorationTypes.Wallpaper) {	// Wallpapers always needs to be removed
+			RemoveDecoration();
+		}
+		else if(HasDecoration()) {  // If there was already a decoration here, remove it
 			RemoveDecoration();
 		}
 
@@ -146,14 +148,18 @@ public abstract class DecorationZone : MonoBehaviour, IDropInventoryTarget {
 		// call child function to actually remove the decoration
 		_RemoveDecoration();
 
-		// give the user the decoration back in their inventory
-		if(placedDecoID != null)
-			InventoryManager.Instance.AddItemToInventory(placedDecoID);
-		else
-			Debug.LogError("Just removed an illegal decoration?");
+		if(nodeType != DecorationTypes.Wallpaper) {
+			// give the user the decoration back in their inventory
+			if(placedDecoID != null) {
+				InventoryManager.Instance.AddItemToInventory(placedDecoID);
+			}
+			else {
+				Debug.LogError("Just removed an illegal decoration?");
+			}
 
-		// update the save data since this node is now empty
-		DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove(placedDecoID);
+			// update the save data since this node is now empty
+			DataManager.Instance.GameData.Decorations.PlacedDecorations.Remove(placedDecoID);
+		}
 
 		// reset the deco id on this node
 		placedDecoID = string.Empty;

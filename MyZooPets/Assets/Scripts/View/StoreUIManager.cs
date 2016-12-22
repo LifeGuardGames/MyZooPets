@@ -192,12 +192,12 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 		switch(itemData.CurrencyType){
 		case CurrencyTypes.WellaCoin:
 			if(DataManager.Instance.GameData.Stats.Stars >= itemData.Cost){
-				// Check for any special cases we need to account for (ie. wallpaper buying)
-				storeItemScript.BuyButtonStateCheck();
-				
 				InventoryManager.Instance.AddItemToInventory(itemData.ID);
 				StatsManager.Instance.ChangeStats(coinsDelta: itemData.Cost * -1);
 				OnBuyAnimation(storeItemScript);
+				
+				// Check for any special cases we need to account for (ie. wallpaper buying)
+				storeItemScript.BuyButtonStateCheck();
 				
 				// Analytics
 				Analytics.Instance.ItemEvent(Analytics.ITEM_STATUS_BOUGHT, itemData.Type, itemData.ID);

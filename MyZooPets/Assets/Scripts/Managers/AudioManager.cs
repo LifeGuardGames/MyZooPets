@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : LgAudioManager<AudioManager> {
 	public bool isMusicOn = true;
@@ -11,6 +12,7 @@ public class AudioManager : LgAudioManager<AudioManager> {
 	protected override void Awake() {
 		base.Awake();
 		backgroundSource = GetComponent<AudioSource>();
+		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
 	protected override void Start() {
@@ -81,7 +83,7 @@ public class AudioManager : LgAudioManager<AudioManager> {
 		}
 	}
 
-	void OnLevelWasLoaded() {
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 		string currentScene = SceneUtils.CurrentScene;
 		if(currentScene == SceneUtils.LOADING) {
 			isMusicOn = true;

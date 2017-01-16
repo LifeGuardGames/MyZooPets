@@ -25,6 +25,7 @@ public class LoadLevelManager : Singleton<LoadLevelManager> {
 		}
 		DontDestroyOnLoad(gameObject);
 		isCreated = true;
+		SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
 	/// <summary>
@@ -77,7 +78,7 @@ public class LoadLevelManager : Singleton<LoadLevelManager> {
 
 	/// <summary>
 	/// Hide the demux when the new level is loaded
-	void OnLevelWasLoaded() {
+	void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 		if(SceneUtils.CurrentScene != SceneUtils.MENU) {
 			AudioManager.Instance.PlayClip("loadingSlideOpen");
 		}

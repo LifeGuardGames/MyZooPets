@@ -27,7 +27,7 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 
 	void Awake() {
 		minigameKey = "SHOOTER";
-		quitGameScene = SceneUtils.YARD;
+		quitGameScene = SceneUtils.MINIGAMECHOOSE;
 		rewardXPMultiplier = 0.1f;
 		rewardShardMultiplier = 0.6f;
 		rewardMoneyMultiplier = 0.4f;

@@ -83,9 +83,9 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 
 	void Awake() {
 		minigameKey = "RUNNER";
-		quitGameScene = SceneUtils.BEDROOM;
+		quitGameScene = SceneUtils.MINIGAMECHOOSE;
 		rewardXPMultiplier = 0.01f;
-		rewardMoneyMultiplier = 0.1f;
+		rewardMoneyMultiplier = 0.005f;
 		rewardShardMultiplier = 0.02f;
 		ResetScore();
 	}

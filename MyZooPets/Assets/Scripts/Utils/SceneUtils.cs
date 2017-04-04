@@ -15,6 +15,9 @@ public static class SceneUtils{
 	public static string TRIGGERNINJA = "TriggerNinja";
 	public static string MICROMIX = "MicroMix";
 
+	// Branch specific
+	public static string MINIGAMECHOOSE = "MinigameChoose";
+
 	// Not really convention but hey
 	public static string CurrentScene {
 		get { return SceneManager.GetActiveScene().name; }

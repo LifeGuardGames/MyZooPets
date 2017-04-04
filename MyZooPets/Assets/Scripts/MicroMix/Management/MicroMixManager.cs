@@ -51,7 +51,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 
 	void Awake() {
 		minigameKey = "MICRO"; //
-		quitGameScene = SceneUtils.YARD;
+		quitGameScene = SceneUtils.MINIGAMECHOOSE;
 		ResetScore();
 	}
 

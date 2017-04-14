@@ -125,7 +125,8 @@ public enum UIModeTypes {
 	Cutscene,
 	Badge,
 	FireCrystal,
-	Wellapad
+	Wellapad,
+	Debug		// Used by debug console
 }
 
 // decoration node anchor types

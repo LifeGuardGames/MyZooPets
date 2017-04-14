@@ -21,7 +21,6 @@ public class AudioManager : LgAudioManager<AudioManager> {
 			return;
 		}
 		base.Start();
-		StartCoroutine(PlayBackground());
 	}
 
 	private IEnumerator PlayBackground() {

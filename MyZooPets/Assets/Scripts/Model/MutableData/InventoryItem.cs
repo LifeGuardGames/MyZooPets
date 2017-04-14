@@ -31,11 +31,11 @@ public class InventoryItem{
 		get{return DataLoaderItems.GetItem(ItemID);}
 	}
 
-    public InventoryItem(string itemID, ItemType itemType, string textureName){
+    public InventoryItem(string itemID, ItemType itemType, string textureName, int amount = 1){
         ItemID = itemID;
         ItemType = itemType;
         ItemTextureName = textureName;
-        Amount = 1;
+        Amount = amount;
     }
 
     public InventoryItem(){}

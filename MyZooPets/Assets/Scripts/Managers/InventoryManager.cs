@@ -101,9 +101,15 @@ public class InventoryManager : Singleton<InventoryManager> {
 				}
 			}
 			//special case: keep track of all bought accessories in another list.
-			if(itemData.Type == ItemType.Accessories) {
+			else if(itemData.Type == ItemType.Accessories) {
 				List<string> oneTimePurchasedInv = DataManager.Instance.GameData.Inventory.OneTimePurchasedItems;
 				oneTimePurchasedInv.Add(itemData.ID);
+			}
+			// Account for item amount
+			else {
+				if(count > 1) {
+					specificTypeInventory[itemID].Amount += (count - 1);	// We already have one, so minus one
+				}
 			}
 		}
 

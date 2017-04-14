@@ -128,6 +128,10 @@ public class AudioManager : LgAudioManager<AudioManager> {
 			backgroundMusic = "bgRunner";
 			FadeOutPlayNewBackground(backgroundMusic);
 		}
+		else if(currentScene == SceneUtils.MICROMIX) {
+			backgroundMusic = "bgRunner";
+			FadeOutPlayNewBackground(backgroundMusic);
+		}
 		lastLoadedScene = currentScene;
 	}
 }

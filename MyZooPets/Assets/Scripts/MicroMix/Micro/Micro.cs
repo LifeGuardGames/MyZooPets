@@ -41,6 +41,7 @@ public abstract class Micro : MonoBehaviour{
 		_SetWon(won);
         this.won = won;
 		if(won){
+			AudioManager.Instance.PlayClip("fanfare", variations:3);	
 			MicroMixManager.Instance.fireworksController.StartFireworks();
 		}
 	}

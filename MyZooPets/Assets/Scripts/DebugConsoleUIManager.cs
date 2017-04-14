@@ -16,10 +16,11 @@ public class DebugConsoleUIManager : SingletonUI<DebugConsoleUIManager> {
 
 	public void OnEndEdit(string text) {
 		Debug.Log(text);
-		if(text == "FIR3UNLOCK") {
+		if(text == "FIREUNLOCK") {
 			InventoryManager.Instance.AddItemToInventory("Usable1", count:20);
 			InventoryUIManager.Instance.PulseInventory();
 			InventoryUIManager.Instance.RefreshPage();
+			Analytics.Instance.DebugTriggered("FIREUNLOCK");
 		}
 		CloseUI();
 	}

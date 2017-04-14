@@ -58,7 +58,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	public void WinMicro() {
 		int currentScore = lifeController.AddScore();
 		UpdateScore(1);
-		//AudioManager.Instance.PlayClip("microWin");	
 		if(currentScore % 2 == 0) { //We have completed another 2 minigames, SPEEDUP
 			difficulty++;
 			if(Time.timeScale < maxTimeScale) {
@@ -90,7 +89,7 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 		else {
 			StartCoroutine(TransitionIEnum(MonsterAnimation.LOSE));
 		}
-		//AudioManager.Instance.PlayClip("microLose");	
+		AudioManager.Instance.PlayClip("buttonNegative");	
 	}
 
 	public void CompleteTutorial() {
@@ -356,7 +355,6 @@ public class MicroMixManager : NewMinigameManager<MicroMixManager> {
 	}
 
 	private void StartMicro() {
-		Debug.Log(currentMicro);
 		currentMicro.gameObject.SetActive(true);
 		if(!DataManager.Instance.GameData.MicroMix.MicrosCompleted.Contains(currentMicro.Title) && DataManager.Instance.isDebug && Constants.GetConstant<bool>("IsMinigameTutOn")) {
 			isTutorial = true;

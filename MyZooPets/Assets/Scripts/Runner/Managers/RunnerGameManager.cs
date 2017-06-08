@@ -20,6 +20,8 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	private bool acceptInput = true;
 	public bool isGameOver;
 
+	public MiniGameModes mode = MiniGameModes.None;
+	public float time = 60.0f;
 	//Used for the start of the tutorial, we are not allowed to jump or drop
 	private bool specialInput = false;
 
@@ -84,10 +86,24 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 	void Awake() {
 		minigameKey = "RUNNER";
 		quitGameScene = SceneUtils.BEDROOM;
-		rewardXPMultiplier = 0.01f;
-		rewardMoneyMultiplier = 0.1f;
-		rewardShardMultiplier = 0.02f;
+		if(DataManager.Instance.GameData.MinGames.minGame == minigameKey) {
+			mode = DataManager.Instance.GameData.MinGames.mode;
+		}
+		if(mode == MiniGameModes.Time) {
+			uiManager.ShowTimer();
+		}
+		if(mode == MiniGameModes.None) {
+			rewardXPMultiplier = 0.01f;
+			rewardMoneyMultiplier = 0.1f;
+			rewardShardMultiplier = 0.02f;
+		}
+		else {
+			rewardXPMultiplier = 0.01f * 2.0f;
+			rewardMoneyMultiplier = 0.1f * 2.0f;
+			rewardShardMultiplier = 0.02f * 2.0f;
+		}
 		ResetScore();
+		Debug.Log(mode);
 	}
 
 	// Use this for initialization
@@ -135,6 +151,7 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 		RunnerItemManager.Instance.Reset();
 		FindObjectOfType<CameraFollow>().Reset();
 		ResetScore();
+		time = 60.0f;
 		isGameOver = false;
 
 		uiManager.ResetControlsFade();
@@ -260,6 +277,13 @@ public class RunnerGameManager : NewMinigameManager<RunnerGameManager> {
 				}
 			}
 			uiManager.UpdateUI(distanceTraveled, coins, combo);
+		}
+		if(mode == MiniGameModes.Time && !isGameOver) {
+			time -= Time.deltaTime;
+			uiManager.UpdateTimer(time);
+			if (time < 0) {
+				GameOver();
+			}
 		}
 	}
 

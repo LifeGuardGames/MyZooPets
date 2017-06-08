@@ -6,6 +6,8 @@ public class MiniPetGameMaster : MiniPet {
 	public MinigameTypes minigameType;
 	public string minigameTaskId;
 	public GameObject notifier;
+	public int chanceOfMode = 0;
+	private bool IsChallengeMode = false;
 
 	void Awake() {
 		minipetType = MiniPetTypes.GameMaster;
@@ -32,14 +34,33 @@ public class MiniPetGameMaster : MiniPet {
 			base.FinishEating();
 			isFinishEating = true;
 			miniPetSpeechAI.BeQuiet();
-			miniPetSpeechAI.ShowChallengeMsg(minigameType);
-			minigameTaskId = PickMinigameMissionKey(minigameType);
+			int rand = Random.Range(0, 100);
+			chanceOfMode = DataManager.Instance.GameData.MinGames.chanceOfMinigameMode;
 
-			WellapadMissionController.Instance.AddTask(minigameTaskId);
+			if(rand < chanceOfMode && minigameType != MinigameTypes.Memory) {
+				Debug.Log("called");
+				DataManager.Instance.GameData.MinGames.mode = PickMinigameMode(minigameType);
 
-			MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(minigameTaskId);
-			DataManager.Instance.GameData.MiniPets.SetTask(minipetId, task);
+				minigameTaskId = PickMinigameMissionKey(minigameType);
 
+				WellapadMissionController.Instance.AddTask(minigameTaskId);
+
+				MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(minigameTaskId);
+				DataManager.Instance.GameData.MiniPets.SetTask(minipetId, task);
+			}
+			else {
+				Debug.Log("csadfasdg");
+				chanceOfMode += 5;
+				DataManager.Instance.GameData.MinGames.chanceOfMinigameMode = chanceOfMode;
+
+				miniPetSpeechAI.ShowChallengeMsg(minigameType);
+				minigameTaskId = PickMinigameMissionKey(minigameType);
+
+				WellapadMissionController.Instance.AddTask(minigameTaskId);
+
+				MutableDataWellapadTask task = WellapadMissionController.Instance.GetTask(minigameTaskId);
+				DataManager.Instance.GameData.MiniPets.SetTask(minipetId, task);
+			}
 			OpenGameMasterContent();
 		}
 		MiniPetHUDUIManager.Instance.CheckStoreButtonPulse();
@@ -85,13 +106,13 @@ public class MiniPetGameMaster : MiniPet {
 			int rand = UnityEngine.Random.Range(0, 3);
 			switch(rand) {
 				case 0:
-					return "ScoreRUNNER";
+					return "ScoreRunner";
 				case 1:
-					return "CoinsRUNNER";
+					return "CoinsRunner";
 				case 2:
-					return "DistanceRUNNER";
+					return "DistanceRunner";
 				default:
-					return "CoinsRUNNER";
+					return "CoinsRunner";
 			}
 		}
 		else {
@@ -122,5 +143,47 @@ public class MiniPetGameMaster : MiniPet {
 			notifier.SetActive(true);
 		}
 	}
+	private MiniGameModes PickMinigameMode(MinigameTypes type) {
+		if(type == MinigameTypes.TriggerNinja) {
+			DataManager.Instance.GameData.MinGames.minGame = "NINJA";
+			int rand = UnityEngine.Random.Range(0, 3);
+			switch(rand) {
+				case 0:
+					return MiniGameModes.Time;
+				case 1:
+					return MiniGameModes.Life;
+				case 2:
+					return MiniGameModes.Speed;
+				default:
+					return MiniGameModes.Time;
+			}
+		}
 
+		else if(type == MinigameTypes.Clinic) {
+			DataManager.Instance.GameData.MinGames.minGame = "CLINIC";
+			return MiniGameModes.Speed;
+		}
+		else if(type == MinigameTypes.Shooter) {
+			DataManager.Instance.GameData.MinGames.minGame = "SHOOTER";
+            int rand = UnityEngine.Random.Range(0, 3);
+			switch(rand) {
+				case 0:
+					return MiniGameModes.Time;
+				case 1:
+					return MiniGameModes.Life;
+				case 2:
+					return MiniGameModes.Speed;
+				default:
+					return MiniGameModes.Time;
+			}
+		}
+		else if(type == MinigameTypes.Runner) {
+			DataManager.Instance.GameData.MinGames.minGame = "RUNNER";
+			return MiniGameModes.Time;
+		}
+		else {
+			Debug.LogError("Invalid minigame type detected");
+			return MiniGameModes.Time;
+        }
+	}
 }

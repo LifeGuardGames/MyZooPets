@@ -70,6 +70,11 @@ public class MiniPetSpeechAI : MonoBehaviour {
 		}
 		speechController.TalkMiniPet(msgOption);
 	}
+	public void ShowModeMsg() {
+		Hashtable msgOption = new Hashtable();
+		msgOption.Add(SpeechController.SpeechKeys.MessageText, Localization.Localize("MINIPET_GAMEMASTER_MODE"));	
+		speechController.TalkMiniPet(msgOption);
+	}
 
 	public void ShowMerchantShopMessage() {
 		Hashtable msgOption = new Hashtable();

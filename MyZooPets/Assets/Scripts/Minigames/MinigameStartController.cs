@@ -12,7 +12,18 @@ public class MinigameStartController : MonoBehaviour {
 
 	public void Start() {
 		minigameTitle.text = Localization.Localize(UIManager.GetMinigameKey() + "_TITLE");
-		minigameOpening.text = Localization.Localize(UIManager.GetMinigameKey() + "_OPENING");
+		if(DataManager.Instance.GameData.MinGames.mode == MiniGameModes.None) { 
+			minigameOpening.text = Localization.Localize(UIManager.GetMinigameKey() + "_OPENING");
+		}
+		else if (DataManager.Instance.GameData.MinGames.mode == MiniGameModes.Time) {
+			minigameOpening.text = Localization.Localize(UIManager.GetMinigameKey() + "_TIME");
+		}
+		else if(DataManager.Instance.GameData.MinGames.mode == MiniGameModes.Life) {
+			minigameOpening.text = Localization.Localize(UIManager.GetMinigameKey() + "_LIFE");
+		}
+		else if(DataManager.Instance.GameData.MinGames.mode == MiniGameModes.Speed) {
+			minigameOpening.text = Localization.Localize(UIManager.GetMinigameKey() + "_SPEED");
+		}
 	}
 
 	#region Button calls

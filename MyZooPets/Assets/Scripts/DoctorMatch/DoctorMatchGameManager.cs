@@ -22,6 +22,7 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	public GameObject redBar;
 	public GameObject toClearText;
 	public Canvas mainCanvas;
+	public MiniGameModes mode = MiniGameModes.None;
 
 	private int numOfCorrectDiagnose;
 	public int NumOfCorrectDiagnose {
@@ -68,6 +69,14 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 	void Awake() {
 		minigameKey = "CLINIC";
 		quitGameScene = SceneUtils.BEDROOM;
+		if(DataManager.Instance.GameData.MinGames.minGame == minigameKey) {
+			mode = DataManager.Instance.GameData.MinGames.mode;
+		}
+		if(mode != MiniGameModes.None) {
+			rewardMoneyMultiplier = 0.4f * 2;
+			rewardShardMultiplier = 0.3f * 2;
+			rewardXPMultiplier = 0.1f * 2;
+		}
 		rewardMoneyMultiplier = 0.4f;
 		rewardShardMultiplier = 0.3f;
 		rewardXPMultiplier = 0.1f;
@@ -105,7 +114,9 @@ public class DoctorMatchGameManager : NewMinigameManager<DoctorMatchGameManager>
 		if(finger) {						//Called if we complete the tutorial or restart early
 			BarFinger();
 		}
-
+		if(mode  == MiniGameModes.Speed) {
+			Time.timeScale = 2.0f;
+		}
 		isTutorial = false;
 		StartCoroutine(assemblyLineController.Initialize(false));
 		lifeBarController.ResetBar();

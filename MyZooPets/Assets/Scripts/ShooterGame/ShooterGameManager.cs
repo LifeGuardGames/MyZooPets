@@ -22,15 +22,34 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	public GameObject minipetPowerUp;
 	public bool ShooterTutInhalerStep = false;
 
+	//Time Attack
+	public float time = 60.0f;
+
 	public ShooterSkyController shooterSkyController;
 	public ShooterUIManager uiManager;
+	public MiniGameModes mode = MiniGameModes.None;
 
 	void Awake() {
 		minigameKey = "SHOOTER";
 		quitGameScene = SceneUtils.YARD;
-		rewardXPMultiplier = 0.1f;
-		rewardShardMultiplier = 0.6f;
-		rewardMoneyMultiplier = 0.4f;
+		if(DataManager.Instance.GameData.MinGames.minGame == minigameKey) {
+			mode = DataManager.Instance.GameData.MinGames.mode;
+		}
+		if(mode == MiniGameModes.None) {
+			rewardXPMultiplier = 0.1f;
+			rewardShardMultiplier = 0.6f;
+			rewardMoneyMultiplier = 0.4f;
+		}
+		else {
+			rewardXPMultiplier = 0.1f * 2;
+			rewardShardMultiplier = 0.6f * 2;
+			rewardMoneyMultiplier = 0.4f * 2;
+		}
+
+		if(mode == MiniGameModes.Time) {
+			uiManager.ShowTimer();
+		}
+
 	}
 
 	protected override void _Start() {
@@ -47,6 +66,9 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	protected override void _NewGame() {
 		if(onRestart != null) {
 			onRestart();
+		}
+		if(mode == MiniGameModes.Speed) {
+			Time.timeScale = 1.5f;
 		}
 		minipetPowerUp.SetActive(false);
 		StopAllCoroutines();
@@ -179,5 +201,14 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 		}*/
 		waveNum++;
 		gameObject.GetComponent<ShooterGameEnemyController>().GenerateWave(waveNum);
+	}
+
+	void Update() {
+		if(mode == MiniGameModes.Time && !isGameOver) { }
+		time -= Time.deltaTime;
+		uiManager.UpdateTimer(time);
+		if(time < 0) {
+			GameOver();
+		}
 	}
 }

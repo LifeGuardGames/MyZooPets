@@ -329,3 +329,10 @@ public enum MiniGameCategory {
 	Critical,
 	Regular,
 }
+
+public enum MiniGameModes {
+	None,
+	Time,
+	Life,
+	Speed,
+}

@@ -47,7 +47,12 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 
 	// on reset change health to 10 and state to neutral
 	public void Reset() {
-		playerHealth = 5;
+		if(ShooterGameManager.Instance.mode == MiniGameModes.Life) {
+			playerHealth = 1;
+		}
+		else {
+			playerHealth = 5;
+		}
 		ChangeState(PlayerStateTypes.Neutral);
 		ChangeFire();
 		this.GetComponent<Collider2D>().enabled = true;
@@ -137,8 +142,11 @@ public class PlayerShooterController : Singleton<PlayerShooterController> {
 				BloodPanelManager.Instance.PlayBlood();
 			}
 			else {
-				if(playerHealth < deltaHealth && deltaHealth < 14) {
+				if(playerHealth < deltaHealth && deltaHealth < 14 ) {
 					playerHealth = deltaHealth;
+				}
+				if(ShooterGameManager.Instance.mode == MiniGameModes.Life) {
+					playerHealth = 1;
 				}
 			}
 

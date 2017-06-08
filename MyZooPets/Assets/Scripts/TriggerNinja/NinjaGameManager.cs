@@ -26,8 +26,11 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 	private bool isPlaying = false;
 	public bool isGameOver = true;
 	public GameObject spawnParent;
-
+	public MiniGameModes mode = MiniGameModes.None;
 	public NinjaUIManager uiManager;
+
+	//time attack
+	public float time = 60;
 
 	private int lifeCount;
 	public int LifeCount {
@@ -51,9 +54,29 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		Application.targetFrameRate = 60;
 		minigameKey = "NINJA";
 		quitGameScene = SceneUtils.BEDROOM;
-		rewardMoneyMultiplier = 0.22f;
-		rewardShardMultiplier = 0.25f;
-		rewardXPMultiplier = 0.2f;
+		//mode = MiniGameModes.Time;
+	if(DataManager.Instance.GameData.MinGames.minGame == minigameKey) {
+		mode = DataManager.Instance.GameData.MinGames.mode;
+      }
+		if(mode == MiniGameModes.Time) {
+			uiManager.ShowTimer();
+		}
+		if(mode == MiniGameModes.None) {
+			rewardMoneyMultiplier = 0.22f;
+			rewardShardMultiplier = 0.25f;
+			rewardXPMultiplier = 0.2f;
+		}
+		else if (mode == MiniGameModes.Speed) {
+			rewardMoneyMultiplier = 0.22f * 2;
+			rewardShardMultiplier = 0.25f * 2;
+			rewardXPMultiplier = 0.2f * 2;
+			Time.timeScale = 2.0f;
+		}
+		else {
+			rewardMoneyMultiplier = 0.22f * 2;
+			rewardShardMultiplier = 0.25f * 2;
+			rewardXPMultiplier = 0.2f * 2;
+		}
 	}
 
 	protected override void _Start() {
@@ -139,12 +162,20 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 			Destroy(trig.gameObject);
 		}
 		// reset variables
-		score = 0; 
-		lifeCount = 3;
+		score = 0;
+		if(mode != MiniGameModes.Life) {
+			lifeCount = 3;
+		}
+		else {
+			lifeCount = 1;
+		}
 		comboTime = 0;
 		combo = 0;
 		bestCombo = 0;
 		timeCount = 0;
+		if(mode == MiniGameModes.Time) {
+			time = 60f;
+		}
 		ResetChain();
 		currentTriggerEntries = null;
 
@@ -154,7 +185,12 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		spawning = true;
 		isPlaying = true;
 		isGameOver = false;
-		Time.timeScale = 1.0f;
+		if(mode != MiniGameModes.Speed) {
+			Time.timeScale = 1.0f;
+		}
+		else {
+			Time.timeScale = 1.5f;
+		}
 		uiManager.NewGameUI();
 
 		isContinueAllowed = IsContinueCheckDefaultTrue();
@@ -219,6 +255,14 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 	void Update() {
 		if(isTutorialRunning || isGameOver) {
 			return;
+		}
+
+		if(!isGameOver && mode == MiniGameModes.Time) {
+			time -= Time.deltaTime;
+			uiManager.UpdateTimer(time);
+			if (time < 0) {
+				GameOver();
+			}
 		}
 
 		float deltaTime = Time.deltaTime;

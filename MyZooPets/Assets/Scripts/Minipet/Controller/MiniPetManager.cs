@@ -110,6 +110,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 					Vector3 locationPosition = gameMasterLocation.Item1;
 					string locationId = gameMasterLocation.Item2;
 					int partitionNumber = DataLoaderPartitionLocations.GetAbsolutePartitionNumberFromLocationId(locationId);
+					
 
 					// Save information for minipet
 					DataManager.Instance.GameData.MiniPetLocations.SaveLocationId(miniPetId, locationId);
@@ -123,7 +124,7 @@ public class MiniPetManager : Singleton<MiniPetManager>{
 
 						MiniPetGameMaster gameMasterScript = goMiniPet.GetComponent<MiniPetGameMaster>();
 						gameMasterScript.minigameType = type;
-						gameMasterScript.Init(data);
+                        gameMasterScript.Init(data);
 						gameMasterScript.isFinishEating = false;
 
 						// Add the pet into the dictionary to keep track

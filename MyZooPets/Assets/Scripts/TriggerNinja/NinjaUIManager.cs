@@ -7,6 +7,8 @@ public class NinjaUIManager : MonoBehaviour {
 	public List<Image> InhalerLifeList;
 	public GameObject FloatyParent;
 	public GameObject FloatyComboPrefab;
+	public Text TimerText;
+	public Image Timer;
 
 	public void NewGameUI() {
 		// Set all life to true
@@ -56,5 +58,13 @@ public class NinjaUIManager : MonoBehaviour {
 		string comboText = string.Format(Localization.Localize("NINJA_COMBO"), combo);
 		GameObject floatyObject = GameObjectUtils.AddChildGUI(FloatyParent, FloatyComboPrefab);
         floatyObject.GetComponent<FloatyController>().InitAndActivate(position, customText:comboText);
+	}
+
+	public void ShowTimer() {
+		Timer.gameObject.SetActive(true);
+	}
+	public void UpdateTimer(float time) {
+		string tempTime = time.ToString();
+		TimerText.text = "Time: " + tempTime.Substring(0,2);
 	}
 }

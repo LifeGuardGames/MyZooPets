@@ -12,6 +12,8 @@ public class RunnerGameUIManager : MonoBehaviour {
 
 	public GameObject jumpFinger;
 	public GameObject fallFinger;
+	public GameObject Timer;
+	public Text timeText;
 
 	private bool isDemuxSet = false;
 
@@ -50,5 +52,13 @@ public class RunnerGameUIManager : MonoBehaviour {
 
 	public void ToggleFallFinger(bool isShowing) {
 		fallFinger.SetActive(isShowing);
+	}
+
+	public void ShowTimer() {
+		Timer.gameObject.SetActive(true);
+	}
+	public void UpdateTimer(float time) {
+		string tempTime = time.ToString();
+		timeText.text = "Time: " + tempTime.Substring(0,2);
 	}
 }

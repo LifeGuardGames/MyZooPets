@@ -1,12 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class ShooterUIManager : MonoBehaviour {
 
+	public GameObject Timer;
+	public Text timerText;
 	// Controls for shooter
 	public void OnMoveDown() {
 		if(!ShooterGameManager.Instance.isGameOver && !ShooterGameManager.Instance.IsPaused) {
 			ShooterGameManager.Instance.InputReceivedMove(true);
 		}
+	}
+
+	public void ShowTimer() {
+		Timer.gameObject.SetActive(true);
+	}
+	public void UpdateTimer(float time) {
+		string tempTime = time.ToString();
+		timerText.text = "Time: " +  tempTime.Substring(0,2);
 	}
 
 	public void OnShootDown() {

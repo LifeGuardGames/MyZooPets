@@ -28,7 +28,10 @@ public class TutorialManagerBedroom : TutorialManager {
 		base.Start();
 		bool isFocusWellapadTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_WELLAPAD);
 		bool isFlameTutorialDone = DataManager.Instance.GameData.Tutorial.IsTutorialFinished(TUT_FLAME);
-
+		if(!GatingManager.Instance.HasActiveGate(1)) {
+			isFlameTutorialDone = true;
+			DataManager.Instance.GameData.Tutorial.ListPlayed.Add(TUT_FLAME);
+        }
 		// Reset the to at most introSmokeMonster if they have not completed tutorial 1 and came back
 		if(isFocusWellapadTutorialDone && !isFlameTutorialDone) {
 			DataManager.Instance.GameData.Tutorial.ListPlayed.Remove(TUT_SMOKE_INTRO);

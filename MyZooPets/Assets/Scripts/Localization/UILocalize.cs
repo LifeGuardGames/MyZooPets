@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using ArabicSupport;
 
 /// <summary>
 /// Modified NGUI localize script to work for uGUI instead
@@ -54,7 +55,7 @@ public class UILocalize : MonoBehaviour {
 		string val = string.IsNullOrEmpty(key) ? "" : loc.Get(key);
 
 		if(textComponent != null) {
-			textComponent.text = val;
+			textComponent.text = ArabicFixer.Fix(val);
 		}
 		mLanguage = loc.currentLanguage;
 	}

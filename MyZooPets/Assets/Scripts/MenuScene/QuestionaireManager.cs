@@ -39,22 +39,6 @@ public class QuestionaireManager : Singleton<QuestionaireManager> {
 	}
 
 	public void ContinueLoading(bool doTransition){
-		if(DataManager.Instance.GameData.PetInfo.IsHatched){
-			if(doTransition) {
-				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
-			}
-			else {
-				PromotionUIManager.Instance.TryShow();
-				//SceneManager.LoadScene(SceneUtils.BEDROOM);
-			}
-		}
-		else{
-			if(doTransition) {
-				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.MENU);
-			}
-			else {
-				SceneManager.LoadScene(SceneUtils.MENU);
-			}
-		}
+		LoadLevelManager.Instance.StartLoadTransition(SceneUtils.SPLASH);
 	}
 }

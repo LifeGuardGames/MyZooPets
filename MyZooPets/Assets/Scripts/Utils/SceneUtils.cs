@@ -6,6 +6,7 @@ public static class SceneUtils{
 	public static string YARD = "ZoneYard";
 	public static string LOADING = "LoadingScene";
 	public static string INHALERGAME = "InhalerGame";
+	public static string SPLASH = "SplashScene";
 
 	// Minigames
 	public static string DOCTORMATCH = "DoctorMatch";

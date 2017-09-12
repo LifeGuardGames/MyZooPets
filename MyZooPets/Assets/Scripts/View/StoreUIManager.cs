@@ -67,7 +67,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	public void EnableTabArea(){
 		foreach(Transform tabTransform in tabArea.transform){
-			tabTransform.FindChild("Tab").gameObject.SetActive(true);
+			tabTransform.Find("Tab").gameObject.SetActive(true);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 	/// </summary>
 	public void DisableTabArea(){
 		foreach(Transform tabTransform in tabArea.transform){
-			tabTransform.FindChild("Tab").gameObject.SetActive(false);
+			tabTransform.Find("Tab").gameObject.SetActive(false);
 		}
 	}
 
@@ -283,7 +283,7 @@ public class StoreUIManager : SingletonUI<StoreUIManager>{
 					if(tab.name == defaultTabName) {
 						tab.GetComponent<Image>().sprite = SpriteCacheManager.GetSprite("buttonCategoryActive");
 					}
-					Image imageSprite = tab.FindChild("TabImage").gameObject.GetComponent<Image>();
+					Image imageSprite = tab.Find("TabImage").gameObject.GetComponent<Image>();
 					imageSprite.sprite = SpriteCacheManager.GetDecoIconSprite((DecorationTypes)Enum.Parse(typeof(DecorationTypes), tab.name));
 
 					//Debug.Log(tabParent.name);

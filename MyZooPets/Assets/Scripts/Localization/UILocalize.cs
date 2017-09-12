@@ -51,11 +51,28 @@ public class UILocalize : MonoBehaviour {
 			key = textComponent.text;
 		}
 
+	
 		// If we still don't have a key, leave the value as blank
 		string val = string.IsNullOrEmpty(key) ? "" : loc.Get(key);
 
 		if(textComponent != null) {
-			textComponent.text = ArabicFixer.Fix(val);
+			if(key == "INHALER_FLOATY_HOLD_BREATH") {
+				string final = "";
+				val = string.IsNullOrEmpty("INHALER_FLOATY_HOLD_BREATHP1") ? "" : loc.Get("INHALER_FLOATY_HOLD_BREATHP1");
+				final = final + ArabicFixer.Fix(val);
+				final = final + " 10 ";
+				val = string.IsNullOrEmpty("INHALER_FLOATY_HOLD_BREATHP3") ? "" : loc.Get("INHALER_FLOATY_HOLD_BREATHP3");
+				final = final + ArabicFixer.Fix(val);
+				val = string.IsNullOrEmpty("INHALER_FLOATY_HOLD_BREATHP4") ? "" : loc.Get("INHALER_FLOATY_HOLD_BREATHP4");
+				final = final + " " + val;
+				textComponent.text = final;
+			}
+			else if(LoadLevelManager.Instance.GetCurrentSceneName() == SceneUtils.INHALERGAME) { 
+				textComponent.text = ArabicFixer.Fix(val);
+			}
+			else {
+				textComponent.text = val;
+			}
 		}
 		mLanguage = loc.currentLanguage;
 	}

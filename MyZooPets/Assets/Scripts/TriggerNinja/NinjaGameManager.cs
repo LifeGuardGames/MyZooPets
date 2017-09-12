@@ -163,6 +163,7 @@ public class NinjaGameManager : NewMinigameManager<NinjaGameManager> {
 		}
 		// reset variables
 		score = 0;
+		scoreText.text = Score.ToString();
 		if(mode != MiniGameModes.Life) {
 			lifeCount = 3;
 		}

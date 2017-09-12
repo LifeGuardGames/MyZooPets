@@ -5,15 +5,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22463584}
-  - 114: {fileID: 11472772}
-  - 223: {fileID: 22362408}
-  - 222: {fileID: 22205946}
-  - 114: {fileID: 11485198}
-  - 225: {fileID: 22546788}
-  - 114: {fileID: 11408488}
+  - component: {fileID: 22463584}
+  - component: {fileID: 11472772}
+  - component: {fileID: 22362408}
+  - component: {fileID: 22205946}
+  - component: {fileID: 11485198}
+  - component: {fileID: 22546788}
+  - component: {fileID: 11408488}
+  - component: {fileID: 114299107968345186}
   m_Layer: 5
   m_Name: InhalerFloatyBreathe
   m_TagString: Untagged
@@ -94,7 +95,7 @@ Canvas:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 196762}
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
@@ -103,6 +104,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: -1750732329
   m_SortingOrder: 10
   m_TargetDisplay: 0
@@ -115,10 +117,10 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -146,3 +148,15 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 196762}
   m_IsPrefabParent: 1
+--- !u!114 &114299107968345186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa69d5b40401f77469779cf7f6fc94a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: INHALER_FLOATY_HOLD_BREATH

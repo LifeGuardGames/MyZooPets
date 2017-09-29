@@ -206,7 +206,9 @@ public class ShooterGameManager : NewMinigameManager<ShooterGameManager> {
 	void Update() {
 		if(mode == MiniGameModes.Time && !isGameOver) { }
 		time -= Time.deltaTime;
-		uiManager.UpdateTimer(time);
+		if(mode == MiniGameModes.Time) {
+			uiManager.UpdateTimer(time);
+		}
 		if(time < 0) {
 			GameOver();
 		}

@@ -21,8 +21,8 @@ public class SplashSceneManager : MonoBehaviour {
 				LoadLevelManager.Instance.StartLoadTransition(SceneUtils.BEDROOM);
 			}
 			else {
-				PromotionUIManager.Instance.TryShow();
-				//SceneManager.LoadScene(SceneUtils.BEDROOM);
+				//PromotionUIManager.Instance.TryShow();
+				SceneManager.LoadScene(SceneUtils.BEDROOM);
 			}
 		}
 		else {

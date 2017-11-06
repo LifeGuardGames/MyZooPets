@@ -97,8 +97,11 @@ public class DataManager : Singleton<DataManager>{
 		Amplitude amplitude = Amplitude.Instance;
 		if(Constants.GetConstant<bool>("AnalyticsEnabled")) {
 			amplitude.logging = true;
-			if(Constants.GetConstant<bool>("IsLiveAnalytics")) {		// Live Amplitude
-				amplitude.init("51dc5ebabe7286e547c06afc44302378");
+			if(Constants.GetConstant<bool>("IsLiveAnalytics")) {        // Live Amplitude
+				//GSK
+				amplitude.init("f8f8a456a4e76b1873398f2c71ce7416");
+				//Regular
+				//amplitude.init("51dc5ebabe7286e547c06afc44302378");
 			}
 			else{														//Dev Amplitude
 				amplitude.init("a06f151d06c754bdbbff7bdbaffe12e2");

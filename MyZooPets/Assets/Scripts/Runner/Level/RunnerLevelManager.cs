@@ -50,14 +50,14 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 		if(mLevelComponentQueue.Count > 0 && playerController != null){
 			Vector3 currentRunnerPosition = playerController.transform.position;
 			LevelComponent frontLevelComponent = mLevelComponentQueue.Peek();
-			Transform minAnchor = frontLevelComponent.transform.FindChild("AnchorMin");
+			Transform minAnchor = frontLevelComponent.transform.Find("AnchorMin");
 			Vector3 frontLevelPosition = minAnchor.position;
 
 			// Different between the runner position and the min anchor of the first component in queue 
 			float distanceBetween = Mathf.Abs(currentRunnerPosition.x - frontLevelPosition.x);
 
-			float distanceToUpdateLevel = (frontLevelComponent.transform.FindChild("AnchorMax").position.x -
-			                              frontLevelComponent.transform.FindChild("AnchorMin").position.x) * 2f;
+			float distanceToUpdateLevel = (frontLevelComponent.transform.Find("AnchorMax").position.x -
+			                              frontLevelComponent.transform.Find("AnchorMin").position.x) * 2f;
 
 			//if the minimum anchor position is behind the player position and the distance between the player
 			//and the minimum anchor is greater than the preset distance to update
@@ -217,7 +217,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 		newComponent.transform.position = mLastCenterPosition;
 
 		// Get the min of the new component
-		Transform minAnchor = newComponent.transform.FindChild("AnchorMin");
+		Transform minAnchor = newComponent.transform.Find("AnchorMin");
 
 		// Determine the vector that we need to push the center by
 		Vector3 pushVector = newComponent.transform.position - minAnchor.position;
@@ -226,7 +226,7 @@ public class RunnerLevelManager : Singleton<RunnerLevelManager>{
 		newComponent.transform.position += pushVector;
 		
 		// Update the next position as this ones max anchor
-		Transform maxAnchor = newComponent.transform.FindChild("AnchorMax");
+		Transform maxAnchor = newComponent.transform.Find("AnchorMax");
 		mLastCenterPosition = maxAnchor.position;
 			
 		mLevelComponentQueue.Enqueue(newComponent);
